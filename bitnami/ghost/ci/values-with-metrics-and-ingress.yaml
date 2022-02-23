@@ -1,0 +1,12 @@
+# Test values file for generating all of the yaml and check that
+# the rendering is correct
+service:
+  type: ClusterIP
+ingress:
+  enabled: true
+  tls: true
+  hostname: ghost.local
+volumePermissions:
+  enabled: true
+metrics:
+  enabled: true

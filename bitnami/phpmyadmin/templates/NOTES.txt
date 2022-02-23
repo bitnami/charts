@@ -1,3 +1,6 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
 
 ** Please be patient while the chart is being deployed **
 
@@ -14,9 +17,9 @@
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-  {{- $port:=.Values.service.port | toString }}
-  echo "phpMyAdmin URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+  {{- $port:=( coalesce .Values.service.ports.http .Values.service.port) | toString }}
+  echo "phpMyAdmin URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{coalesce .Values.service.ports.http .Values.service.port }}{{ end }}/"
 
 {{- else if contains "NodePort" .Values.service.type }}
 
@@ -26,16 +29,16 @@
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-  echo "phpMyAdmin URL: http://127.0.0.1:{{ .Values.service.port }}"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }}
+  echo "phpMyAdmin URL: http://127.0.0.1:{{coalesce .Values.service.ports.http .Values.service.port }}"
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{coalesce .Values.service.ports.http .Values.service.port }}:{{coalesce .Values.service.ports.http .Values.service.port }}
 
 {{- end }}
 
 2. How to log in
 {{- if or (.Values.db.chartName) (.Values.db.host) }}
 
-phpMyAdmin has been configured to connect to a database in {{ if .Values.db.chartName}}{{template "phpmyadmin.dbfullname" .}}{{ else }}{{.Values.db.host}}{{end}}
-{{- if .Values.db.port}}with port {{.Values.db.port}} {{end }}
+phpMyAdmin has been configured to connect to a database in {{ if .Values.db.chartName }}{{ template "phpmyadmin.dbfullname" . }}{{ else }}{{ .Values.db.host }}{{ end }}
+{{- if .Values.db.port }}with port {{ .Values.db.port }} {{ end }}
 Please login using a database username and password.
 {{- else if .Values.db.bundleTestDB }}
 For testing purposes, phpMyAdmin has been configured to point to a test MariaDB
@@ -48,7 +51,7 @@ instance. Please login using the following credentials:
 phpMyAdmin has not been configure to point to a specific database. Please provide the db host,
 username and password at log in or upgrade the release with a specific database:
 
-$ helm upgrade {{.Release.Name}} bitnami/phpmyadmin --set db.host=mydb
+$ helm upgrade {{ .Release.Name }} bitnami/phpmyadmin --set db.host=mydb
 
 {{- end }}
 

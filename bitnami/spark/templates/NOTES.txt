@@ -1,3 +1,29 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/spark/entrypoint.sh /opt/bitnami/scripts/spark/run.sh
+
+{{- else }}
+
 1. Get the Spark master WebUI URL by running these commands:
 {{- if .Values.ingress.enabled }}
 
@@ -70,9 +96,7 @@
 {{- end }}
 
 ** IMPORTANT: When submit an application the --master parameter should be set to the service IP, if not, the application will not resolve the master. **
-
-** Please be patient while the chart is being deployed **
+{{- end }}
 
 {{ include "spark.checkRollingTags" . }}
-
 {{ include "spark.validateValues" . }}

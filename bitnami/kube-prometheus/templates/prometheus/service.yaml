@@ -39,6 +39,6 @@ spec:
       nodePort: {{ .Values.prometheus.service.nodePort }}
       {{- end }}
   selector:
-    app: prometheus
+    app.kubernetes.io/name: prometheus
     prometheus: {{ template "kube-prometheus.prometheus.fullname" . }}
 {{- end }}

@@ -1,7 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "kafka.fullname" . }}-headless
+  name: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: kafka
     {{- if .Values.commonLabels }}
@@ -15,11 +16,11 @@ spec:
   clusterIP: None
   ports:
     - name: tcp-client
-      port: {{ .Values.service.port }}
+      port: {{ .Values.service.ports.client }}
       protocol: TCP
       targetPort: kafka-client
     - name: tcp-internal
-      port: {{ .Values.service.internalPort }}
+      port: {{ .Values.service.ports.internal }}
       protocol: TCP
       targetPort: kafka-internal
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

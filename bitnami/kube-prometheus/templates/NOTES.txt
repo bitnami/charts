@@ -1,3 +1,7 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 ** Please be patient while the chart is being deployed **
 
 Watch the Prometheus Operator Deployment status using the command:
@@ -31,7 +35,7 @@ To access Prometheus from outside the cluster execute the following commands:
 
 {{- $port:=.Values.prometheus.service.port | toString }}
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "kube-prometheus.prometheus.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "kube-prometheus.prometheus.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     echo "Prometheus URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.prometheus.service.port }}{{ end }}/"
 
 {{- else if contains "ClusterIP"  .Values.prometheus.service.type }}
@@ -92,7 +96,7 @@ To access Alertmanager from outside the cluster execute the following commands:
 
 {{- $port:=.Values.alertmanager.service.port | toString }}
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "kube-prometheus.alertmanager.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "kube-prometheus.alertmanager.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     echo "Alertmanager URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.alertmanager.service.port }}{{ end }}/"
 
 {{- else if contains "ClusterIP"  .Values.alertmanager.service.type }}

@@ -15,17 +15,6 @@ Return the proper Docker Image Registry Secret Names for Node Exporter image
 {{- end -}}
 
 {{/*
-Return the appropriate apiVersion for PodSecurityPolicy.
-*/}}
-{{- define "podSecurityPolicy.apiVersion" -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "policy/v1beta1" -}}
-{{- else -}}
-{{- print "extensions/v1beta1" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Create the name of the service account to use
 */}}
 {{- define "node-exporter.serviceAccountName" -}}

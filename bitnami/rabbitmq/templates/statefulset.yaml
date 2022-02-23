@@ -7,6 +7,9 @@ metadata:
     {{- if .Values.statefulsetLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.statefulsetLabels "context" $) | nindent 4 }}
     {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   serviceName: {{ template "rabbitmq.fullname" . }}-headless
   podManagementPolicy: {{ .Values.podManagementPolicy }}
@@ -25,12 +28,12 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
         checksum/config: {{ include (print $.Template.BasePath "/configuration.yaml") . | sha256sum }}
         {{- if or (not .Values.auth.existingErlangSecret) (not .Values.auth.existingPasswordSecret) .Values.extraSecrets }}
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
-        {{- end }}
-        {{- if and .Values.auth.tls.enabled (not .Values.auth.tls.existingSecret) }}
-        checksum/secret-cert: {{ include (print $.Template.BasePath "/certs.yaml") . | sha256sum }}
         {{- end }}
         {{- if or .Values.podAnnotations .Values.metrics.enabled }}
         {{- include "rabbitmq.podAnnotations" . | nindent 8 }}
@@ -79,8 +82,8 @@ spec:
           args:
             - -ec
             - |
-              mkdir -p "/bitnami/rabbitmq/mnesia"
-              chown -R "{{ .Values.podSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/rabbitmq/mnesia"
+              mkdir -p "{{ .Values.persistence.mountPath }}"
+              chown -R "{{ .Values.podSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "{{ .Values.persistence.mountPath }}"
           securityContext:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
@@ -88,7 +91,10 @@ spec:
           {{- end }}
           volumeMounts:
             - name: data
-              mountPath: /bitnami/rabbitmq/mnesia
+              mountPath: {{ .Values.persistence.mountPath }}
+              {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+              {{- end }}
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -101,15 +107,19 @@ spec:
           {{- if .Values.containerSecurityContext }}
           securityContext: {{- toYaml .Values.containerSecurityContext | nindent 12 }}
           {{- end }}
-          {{- if .Values.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: MY_POD_IP
               valueFrom:
                 fieldRef:
@@ -138,7 +148,7 @@ spec:
               value: "rabbit@$(MY_POD_NAME)"
             {{- end }}
             - name: RABBITMQ_MNESIA_DIR
-              value: "/bitnami/rabbitmq/mnesia/$(RABBITMQ_NODE_NAME)"
+              value: "{{ .Values.persistence.mountPath }}/$(RABBITMQ_NODE_NAME)"
             - name: RABBITMQ_LDAP_ENABLE
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
             {{- if .Values.ldap.enabled }}
@@ -166,6 +176,20 @@ spec:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretErlangName" . }}
                   key: rabbitmq-erlang-cookie
+            {{- if and .Values.clustering.rebalance (gt (.Values.replicaCount | int) 1) }}
+            - name: RABBITMQ_CLUSTER_REBALANCE
+              value: "true"
+            {{- end }}
+            {{- if .Values.loadDefinition.enabled }}
+            - name: RABBITMQ_LOAD_DEFINITIONS
+              value: "yes"
+            - name: RABBITMQ_SECURE_PASSWORD
+              value: "no"
+            {{- else }}
+            - name: RABBITMQ_LOAD_DEFINITIONS
+              value: "no"
+            - name: RABBITMQ_SECURE_PASSWORD
+              value: "yes"
             - name: RABBITMQ_USERNAME
               value: {{ .Values.auth.username | quote }}
             - name: RABBITMQ_PASSWORD
@@ -173,6 +197,7 @@ spec:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretPasswordName" . }}
                   key: rabbitmq-password
+            {{- end }}
             - name: RABBITMQ_PLUGINS
               value: {{ include "rabbitmq.plugins" . | quote }}
             {{- if .Values.communityPlugins }}
@@ -194,11 +219,13 @@ spec:
             {{- end }}
           {{- end }}
           ports:
+            {{- if or (.Values.service.portEnabled) (not .Values.auth.tls.enabled) }}
             - name: amqp
               containerPort: 5672
+            {{- end }}
             {{- if .Values.auth.tls.enabled }}
             - name: amqp-ssl
-              containerPort: 5671
+              containerPort: {{ .Values.service.tlsPort }}
             {{- end }}
             - name: dist
               containerPort: 25672
@@ -213,6 +240,7 @@ spec:
             {{- if .Values.extraContainerPorts }}
             {{- toYaml .Values.extraContainerPorts | nindent 12 }}
             {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -246,23 +274,7 @@ spec:
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
-          {{- end }}
           lifecycle:
-          {{- if and .Values.clustering.rebalance (gt (.Values.replicaCount | int) 1) }}
-            postStart:
-              exec:
-                command:
-                  - /bin/bash
-                  - -ec
-                  - |
-                    until rabbitmqctl cluster_status >/dev/null; do
-                        echo "Waiting for cluster readiness..."
-                        sleep 5
-                    done
-                    rabbitmq-queues rebalance "all"
-          {{- end }}
             preStop:
               exec:
                 command:
@@ -274,11 +286,18 @@ spec:
                     else
                         rabbitmqctl stop_app
                     fi
+          {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: configuration
               mountPath: /bitnami/rabbitmq/conf
             - name: data
-              mountPath: /bitnami/rabbitmq/mnesia
+              mountPath: {{ .Values.persistence.mountPath }}
+              {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+              {{- end }}
             {{- if .Values.auth.tls.enabled }}
             - name: certs
               mountPath: /opt/bitnami/rabbitmq/certs
@@ -301,7 +320,7 @@ spec:
         {{- if .Values.auth.tls.enabled }}
         - name: certs
           secret:
-            secretName: {{ template "rabbitmq.secretTLSName" . }}
+            secretName: {{ template "rabbitmq.tlsSecretName" . }}
             items:
               - key: {{ ternary "tls.crt" "ca.crt" .Values.auth.tls.existingSecretFullChain }}
                 path: ca_certificate.pem
@@ -316,7 +335,7 @@ spec:
             items:
               - key: rabbitmq.conf
                 path: rabbitmq.conf
-              {{- if .Values.advancedConfiguration}}
+              {{- if .Values.advancedConfiguration }}
               - key: advanced.config
                 path: advanced.config
               {{- end }}
@@ -343,6 +362,10 @@ spec:
     - metadata:
         name: data
         labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+        {{- if .Values.persistence.annotations }}
+        annotations:
+          {{- include "common.tplvalues.render" ( dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
           - {{ .Values.persistence.accessMode | quote }}

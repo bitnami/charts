@@ -1,0 +1,71 @@
+{{- if .Values.singleuser.networkPolicy.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: singleuser
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ printf "%s-singleuser" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: singleuser
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    {{- if .Values.singleuser.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+    # Pods with label "hub.jupyter.org/network-access-singleuser" --> Single User
+    - ports:
+        - port: {{ .Values.singleuser.containerPort }}
+      from:
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-singleuser: "true"
+        {{- if .Values.singleuser.networkPolicy.allowInterspaceAccess }}
+          namespaceSelector:
+            matchLabels: {}
+        - namespaceSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-singleuser: "true"
+        {{- end }}
+  egress:
+    # Single User --> Hub
+    - ports:
+        - port: {{ .Values.hub.containerPort }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
+              app.kubernetes.io/component: hub
+    {{- if not .Values.singleuser.networkPolicy.allowCloudMetadataAccess }}
+    ## Limit access to the Cloud Metadata API
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 169.254.169.254/32
+    {{- end }}
+    ## DNS access
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    ## PostgreSQL access
+    - ports:
+        - protocol: UDP
+          port: {{ .Values.postgresql.service.port }}
+        - protocol: TCP
+          port: {{ .Values.postgresql.service.port }}
+    {{- if .Values.singleuser.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

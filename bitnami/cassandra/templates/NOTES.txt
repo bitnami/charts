@@ -1,12 +1,35 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- $cassandraPasswordKey := ( include "common.secrets.key" (dict "existingSecret" .Values.dbUser.existingSecret "key" "cassandra-password") ) -}}
 {{- $cassandraSecretName := ( include "common.secrets.name" (dict "existingSecret" .Values.dbUser.existingSecret "context" $) ) -}}
 
 ** Please be patient while the chart is being deployed **
 
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/cassandra/entrypoint.sh /opt/bitnami/scripts/cassandra/run.sh
+
+{{- else }}
+
 Cassandra can be accessed through the following URLs from within the cluster:
 
-  - CQL: {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }}
-  - Thrift: {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.thriftPort }}
+  - CQL: {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.ports.cql }}
 
 To get your password run:
 
@@ -50,21 +73,19 @@ To connect to your database from outside the cluster execute the following comma
    NOTE: It may take a few minutes for the LoadBalancer IP to be available.
          Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
 
-   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
    cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD $SERVICE_IP
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
-   cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD 127.0.0.1 {{ .Values.service.port }}
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.ports.cql }}:{{ .Values.service.ports.cql }} &
+   cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD 127.0.0.1 {{ .Values.service.ports.cql }}
 
+{{- end }}
 {{- end }}
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "cassandra.validateValues" . }}
-
-{{- $secretName := include "common.names.fullname" . }}
-{{- $passwordValidationErrors := include "common.validations.values.cassandra.passwords" (dict "secret" $secretName "context" $) -}}
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $passwordValidationErrors) "context" $) -}}

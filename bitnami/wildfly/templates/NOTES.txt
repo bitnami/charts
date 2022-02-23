@@ -1,13 +1,34 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
 
 ** Please be patient while the chart is being deployed **
 
-{{- if .Values.ingress.enabled }}
+{{- if and .Values.exposeManagementConsole (or (eq "NodePort" .Values.service.type) (eq "LoadBalancer" .Values.service.type) .Values.mgmtIngress.enabled) }}
+-------------------------------------------------------------------------------
+ WARNING
+
+    By specifying "exposeManagementConsole=true" you have most likely exposed
+    the WildFly Management console externally.
+
+    Please note this is not recommended for production environments since
+    you are exposing your WildFly server to potential attacks.
+-------------------------------------------------------------------------------
+{{- end }}
+
+{{- if or .Values.ingress.enabled (and .Values.mgmtIngress.enabled .Values.exposeManagementConsole) }}
 
 1. Get the Wildfly URL and associate its hostname to your cluster external IP:
 
    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   {{- if .Values.ingress.enabled }}
    echo "Wildfly URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}"
    echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
+   {{- end }}
+   {{- if and .Values.mgmtIngress.enabled .Values.exposeManagementConsole }}
+   echo "Wildfly Management URL: http{{ if .Values.mgmtIngress.tls }}s{{ end }}://{{ .Values.mgmtIngress.hostname }}"
+   echo "$CLUSTER_IP  {{ .Values.mgmtIngress.hostname }}" | sudo tee -a /etc/hosts
+   {{- end }}
 
 {{- else }}
 
@@ -16,21 +37,25 @@
 {{- if contains "NodePort" .Values.service.type }}
 
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
-  export NODE_MGMT_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[1].nodePort}" services {{ template "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo "WildFly URL:            http://$NODE_IP:$NODE_PORT"
+  {{- if .Values.exposeManagementConsole }}
+  export NODE_MGMT_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[1].nodePort}" services {{ template "common.names.fullname" . }})
   echo "WildFly Management URL: http://$NODE_IP:$NODE_MGMT_PORT"
+  {{- end }}
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
   {{- $port:=.Values.service.port | toString }}
-  {{- $mgmtPort:=.Values.service.mgmtPort | toString }}
   echo "WildFly URL:            http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/
+  {{- if .Values.exposeManagementConsole }}
+  {{- $mgmtPort:=.Values.service.mgmtPort | toString }}
   echo "WildFly Management URL: http://$SERVICE_IP{{- if ne $mgmtPort "80" }}:{{ .Values.service.mgmtPort }}{{ end }}/
+  {{- end }}
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 

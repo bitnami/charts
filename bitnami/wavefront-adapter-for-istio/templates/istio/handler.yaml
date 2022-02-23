@@ -1,0 +1,93 @@
+{{- if .Values.istio.create }}
+apiVersion: {{ include "wfafi.istio.apiVersion" . }}
+kind: handler
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: wavefront-adapter-for-istio
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ include "common.names.fullname" . }}-wavefront-handler
+  namespace: {{ .Values.istio.namespace }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  adapter: {{ include "common.names.fullname" . }}-wavefront
+  connection:
+    address: {{ printf "%s.%s.svc.%s:%d" (include "common.names.fullname" .) .Release.Namespace .Values.clusterDomain (int .Values.service.port) }}
+  params:
+    {{- if  .Values.wavefront.proxy.enabled }}
+    proxy:
+      address: {{ printf "%s.%s.svc.%s:%d" (include "wfafi.proxy.fullname" .) .Release.Namespace .Values.clusterDomain (int .Values.wavefront.proxy.port) }}
+    {{- else if .Values.externalProxy.host }}
+    proxy:
+      address: {{ printf "%s:%s" .Values.externalProxy.host (int .Values.externalProxy.port) }}
+    {{- else }}
+    direct:
+      server: {{ .Values.wavefront.wavefront.url }}
+      token: {{ .Values.wavefront.wavefront.token }}
+    {{- end }}
+    flushInterval: {{ .Values.metrics.flushInterval }}
+    source: {{ .Values.metrics.source }}
+    prefix: {{ .Values.metrics.prefix }}
+    metrics:
+    {{- if eq .Values.metrics.http true }}
+      - name: requestsize
+        instanceName: {{ include "common.names.fullname" . }}-requestsize.instance.{{ .Release.Namespace }}
+        type: HISTOGRAM
+        sample:
+          expDecay:
+            reservoirSize: 1024
+            alpha: 0.015
+      - name: requestcount
+        instanceName: {{ include "common.names.fullname" . }}-requestcount.instance.{{ .Release.Namespace }}
+        type: DELTA_COUNTER
+      - name: requestduration
+        instanceName: {{ include "common.names.fullname" . }}-requestduration.instance.{{ .Release.Namespace }}
+        type: HISTOGRAM
+        sample:
+          expDecay:
+            reservoirSize: 1024
+            alpha: 0.015
+      - name: responsesize
+        instanceName: {{ include "common.names.fullname" . }}-responsesize.instance.{{ .Release.Namespace }}
+        type: HISTOGRAM
+        sample:
+          expDecay:
+            reservoirSize: 1024
+            alpha: 0.015
+    {{- end }}
+    {{- if eq .Values.metrics.tcp true }}
+      - name: tcpsentbytes
+        instanceName: {{ include "common.names.fullname" . }}-tcpsentbytes.instance.{{ .Release.Namespace }}
+        type: HISTOGRAM
+        sample:
+          expDecay:
+            reservoirSize: 1024
+            alpha: 0.015
+      - name: tcpreceivedbytes
+        instanceName: {{ include "common.names.fullname" . }}-tcpreceivedbytes.instance.{{ .Release.Namespace }}
+        type: HISTOGRAM
+        sample:
+          expDecay:
+            reservoirSize: 1024
+            alpha: 0.015
+      - name: tcpconnectionsopened
+        instanceName: {{ include "common.names.fullname" . }}-tcpconnectionsopened.instance.{{ .Release.Namespace }}
+        type: HISTOGRAM
+        sample:
+          expDecay:
+            reservoirSize: 1024
+            alpha: 0.015
+      - name: tcpconnectionsclosed
+        instanceName: {{ include "common.names.fullname" . }}-tcpconnectionsclosed.instance.{{ .Release.Namespace }}
+        type: HISTOGRAM
+        sample:
+          expDecay:
+            reservoirSize: 1024
+            alpha: 0.015
+    {{- end }}
+    logs:
+      level: {{ .Values.adapterLogLevel }}
+{{- end }}

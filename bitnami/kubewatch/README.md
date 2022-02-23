@@ -1,7 +1,13 @@
-# kubewatch
+<!--- app-name: Kubewatch -->
 
-[kubewatch](https://github.com/bitnami-labs/kubewatch) is a Kubernetes watcher that currently publishes notification to Slack. Run it in your k8s cluster, and you will get event notifications in a slack channel.
+# Kubewatch packaged by Bitnami
 
+Kubewatch is a Kubernetes watcher that currently publishes notification to Slack. Run it in your k8s cluster, and you will get event notifications in a slack channel.
+
+[Overview of Kubewatch](https://github.com/bitnami-labs/kubewatch)
+
+
+                           
 ## TL;DR
 
 ```console
@@ -11,12 +17,12 @@ $ helm install my-release bitnami/kubewatch
 
 ## Introduction
 
-This chart bootstraps a kubewatch deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a kubewatch deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -40,115 +46,147 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Parameters
 
-The following tables lists the configurable parameters of the Kubewatch chart and their default values per section/component:
-
 ### Global parameters
 
-| Parameter                 | Description                                     | Default                                                 |
-|---------------------------|-------------------------------------------------|---------------------------------------------------------|
-| `global.imageRegistry`    | Global Docker image registry                    | `nil`                                                   |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` (does not add image pull secrets to deployed pods) |
+| Name                      | Description                                     | Value |
+| ------------------------- | ----------------------------------------------- | ----- |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+
 
 ### Common parameters
 
-| Parameter           | Description                                        | Default                        |
-|---------------------|----------------------------------------------------|--------------------------------|
-| `nameOverride`      | String to partially override common.names.fullname | `nil`                          |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `nil`                          |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`                           |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                           |
-| `clusterDomain`     | Default Kubernetes cluster domain                  | `cluster.local`                |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]` (evaluated as a template) |
+| Name                     | Description                                                                             | Value          |
+| ------------------------ | --------------------------------------------------------------------------------------- | -------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`           |
+| `nameOverride`           | String to partially override common.names.fullname template                             | `""`           |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                 | `""`           |
+| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`           |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)              | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                 | `["infinity"]` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`           |
+
 
 ### Kubewatch parameters
 
-| Parameter                                | Description                                                          | Default                                                 |
-|------------------------------------------|----------------------------------------------------------------------|---------------------------------------------------------|
-| `image.registry`                         | Kubewatch image registry                                             | `docker.io`                                             |
-| `image.repository`                       | Kubewatch image name                                                 | `bitnami/kubewatch`                                     |
-| `image.tag`                              | Kubewatch image tag                                                  | `{TAG_NAME}`                                            |
-| `image.pullPolicy`                       | Kubewatch image pull policy                                          | `IfNotPresent`                                          |
-| `image.pullSecrets`                      | Specify docker-registry secret names as an array                     | `[]` (does not add image pull secrets to deployed pods) |
-| `hostAliases`                            | Add deployment host aliases                                          | `[]`                                                    |
-| `slack.enabled`                          | Enable Slack notifications                                           | `true`                                                  |
-| `slack.channel`                          | Slack channel to notify                                              | `""`                                                    |
-| `slack.token`                            | Slack API token                                                      | `""`                                                    |
-| `hipchat.enabled`                        | Enable HipChat notifications                                         | `false`                                                 |
-| `hipchat.url`                            | HipChat URL                                                          | `""`                                                    |
-| `hipchat.room`                           | HipChat room to notify                                               | `""`                                                    |
-| `hipchat.token`                          | HipChat token                                                        | `""`                                                    |
-| `mattermost.enabled`                     | Enable Mattermost notifications                                      | `false`                                                 |
-| `mattermost.channel`                     | Mattermost channel to notify                                         | `""`                                                    |
-| `mattermost.username`                    | Mattermost user to notify                                            | `""`                                                    |
-| `mattermost.url`                         | Mattermost URL                                                       | `""`                                                    |
-| `flock.enabled`                          | Enable Flock notifications                                           | `false`                                                 |
-| `flock.url`                              | Flock URL                                                            | `""`                                                    |
-| `msteams.enabled`                        | Enable Microsoft Teams notifications                                 | `false`                                                 |
-| `msteams.webhookurl`                     | Microsoft Teams webhook URL                                          | `""`                                                    |
-| `webhook.enabled`                        | Enable Webhook notifications                                         | `false`                                                 |
-| `webhook.url`                            | Webhook URL                                                          | `""`                                                    |
-| `smtp.enabled`                           | Enable SMTP (email) notifications                                    | `false`                                                 |
-| `smtp.to`                                | Destination email address (required)                                 | `""`                                                    |
-| `smtp.from`                              | Source email address (required)                                      | `""`                                                    |
-| `smtp.smarthost`                         | SMTP server address (name:port) (required)                           | `""`                                                    |
-| `smtp.hello`                             | SMTP hello field (optional)                                          | `""`                                                    |
-| `smtp.auth.username`                     | Username for LOGIN and PLAIN auth mech                               | `""`                                                    |
-| `smtp.auth.password`                     | Password for LOGIN and PLAIN auth mech                               | `""`                                                    |
-| `smtp.auth.identity`                     | Identity for PLAIN auth mech                                         | `""`                                                    |
-| `smtp.auth.secret`                       | Secret for CRAM-MD5 auth mech                                        | `""`                                                    |
-| `smtp.requireTLS`                        | Force STARTTLS                                                       | `false`                                                 |
-| `namespaceToWatch`                       | namespace to watch, leave it empty for watching all                  | `""`                                                    |
-| `resourcesToWatch`                       | list of resources which kubewatch should watch and notify slack      | `{pod: true, deployment: true}`                         |
-| `resourcesToWatch.pod`                   | watch changes to Pods                                                | `true`                                                  |
-| `resourcesToWatch.deployment`            | watch changes to Deployments                                         | `true`                                                  |
-| `resourcesToWatch.replicationcontroller` | watch changes to ReplicationControllers                              | `false`                                                 |
-| `resourcesToWatch.replicaset`            | watch changes to ReplicaSets                                         | `false`                                                 |
-| `resourcesToWatch.daemonset`             | watch changes to DaemonSets                                          | `false`                                                 |
-| `resourcesToWatch.services`              | watch changes to Services                                            | `false`                                                 |
-| `resourcesToWatch.job`                   | watch changes to Jobs                                                | `false`                                                 |
-| `resourcesToWatch.persistentvolume`      | watch changes to PersistentVolumes                                   | `false`                                                 |
-| `command`                                | Override default container command (useful when using custom images) | `nil`                                                   |
-| `args`                                   | Override default container args (useful when using custom images)    | `nil`                                                   |
-| `extraEnvVars`                           | Extra environment variables to be set on Kubewatch container         | `{}`                                                    |
-| `extraEnvVarsCM`                         | Name of existing ConfigMap containing extra env vars                 | `nil`                                                   |
-| `extraEnvVarsSecret`                     | Name of existing Secret containing extra env vars                    | `nil`                                                   |
+| Name                                     | Description                                                                      | Value                  |
+| ---------------------------------------- | -------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`                         | Kubewatch image registry                                                         | `docker.io`            |
+| `image.repository`                       | Kubewatch image repository                                                       | `bitnami/kubewatch`    |
+| `image.tag`                              | Kubewatch image tag (immutable tags are recommended)                             | `0.1.0-debian-10-r513` |
+| `image.pullPolicy`                       | Kubewatch image pull policy                                                      | `IfNotPresent`         |
+| `image.pullSecrets`                      | Specify docker-registry secret names as an array                                 | `[]`                   |
+| `hostAliases`                            | Add deployment host aliases                                                      | `[]`                   |
+| `slack.enabled`                          | Enable Slack notifications                                                       | `true`                 |
+| `slack.channel`                          | Slack channel to notify                                                          | `XXXX`                 |
+| `slack.token`                            | Slack API token                                                                  | `XXXX`                 |
+| `hipchat.enabled`                        | Enable HipChat notifications                                                     | `false`                |
+| `hipchat.room`                           | HipChat room to notify                                                           | `""`                   |
+| `hipchat.token`                          | HipChat token                                                                    | `""`                   |
+| `hipchat.url`                            | HipChat URL                                                                      | `""`                   |
+| `mattermost.enabled`                     | Enable Mattermost notifications                                                  | `false`                |
+| `mattermost.channel`                     | Mattermost channel to notify                                                     | `""`                   |
+| `mattermost.url`                         | Mattermost URL                                                                   | `""`                   |
+| `mattermost.username`                    | Mattermost user to notify                                                        | `""`                   |
+| `flock.enabled`                          | Enable Flock notifications                                                       | `false`                |
+| `flock.url`                              | Flock URL                                                                        | `""`                   |
+| `msteams.enabled`                        | Enable Microsoft Teams notifications                                             | `false`                |
+| `msteams.webhookurl`                     | Microsoft Teams webhook URL                                                      | `""`                   |
+| `webhook.enabled`                        | Enable Webhook notifications                                                     | `false`                |
+| `webhook.url`                            | Webhook URL                                                                      | `""`                   |
+| `smtp.enabled`                           | Enable SMTP (email) notifications                                                | `false`                |
+| `smtp.to`                                | Destination email address (required)                                             | `""`                   |
+| `smtp.from`                              | Source email address (required)                                                  | `""`                   |
+| `smtp.hello`                             | SMTP hello field (optional)                                                      | `""`                   |
+| `smtp.smarthost`                         | SMTP server address (name:port) (required)                                       | `""`                   |
+| `smtp.subject`                           | Source email subject                                                             | `""`                   |
+| `smtp.auth.username`                     | Username for LOGIN and PLAIN auth mech                                           | `""`                   |
+| `smtp.auth.password`                     | Password for LOGIN and PLAIN auth mech                                           | `""`                   |
+| `smtp.auth.secret`                       | Secret for CRAM-MD5 auth mech                                                    | `""`                   |
+| `smtp.auth.identity`                     | Identity for PLAIN auth mech                                                     | `""`                   |
+| `smtp.requireTLS`                        | Force STARTTLS. Set to `true` or `false`                                         | `""`                   |
+| `namespaceToWatch`                       | Namespace to watch, leave it empty for watching all                              | `""`                   |
+| `resourcesToWatch.deployment`            | Watch changes to Deployments                                                     | `true`                 |
+| `resourcesToWatch.replicationcontroller` | Watch changes to ReplicationControllers                                          | `false`                |
+| `resourcesToWatch.replicaset`            | Watch changes to ReplicaSets                                                     | `false`                |
+| `resourcesToWatch.daemonset`             | Watch changes to DaemonSets                                                      | `false`                |
+| `resourcesToWatch.services`              | Watch changes to Services                                                        | `false`                |
+| `resourcesToWatch.pod`                   | Watch changes to Pods                                                            | `true`                 |
+| `resourcesToWatch.job`                   | Watch changes to Jobs                                                            | `false`                |
+| `resourcesToWatch.persistentvolume`      | Watch changes to PersistentVolumes                                               | `false`                |
+| `command`                                | Override default container command (useful when using custom images)             | `[]`                   |
+| `args`                                   | Override default container args (useful when using custom images)                | `[]`                   |
+| `lifecycleHooks`                         | for the Kubewatch container(s) to automate configuration before or after startup | `{}`                   |
+| `extraEnvVars`                           | Extra environment variables to be set on Kubewatch container                     | `[]`                   |
+| `extraEnvVarsCM`                         | Name of existing ConfigMap containing extra env vars                             | `""`                   |
+| `extraEnvVarsSecret`                     | Name of existing Secret containing extra env vars                                | `""`                   |
+
 
 ### Kubewatch deployment parameters
 
-| Parameter                   | Description                                                                               | Default                        |
-|-----------------------------|-------------------------------------------------------------------------------------------|--------------------------------|
-| `replicaCount`              | Number of Kubewatch replicas to deploy                                                    | `1`                            |
-| `podSecurityContext`        | Kubewatch pods' Security Context                                                          | Check `values.yaml` file       |
-| `containerSecurityContext`  | Kubewatch containers' Security Context                                                    | Check `values.yaml` file       |
-| `resources.limits`          | The resources limits for the Kubewatch container                                          | `{}`                           |
-| `resources.requests`        | The requested resources for the Kubewatch container                                       | `{}`                           |
-| `livenessProbe`             | Liveness probe configuration for Kubewatch                                                | Check `values.yaml` file       |
-| `readinessProbe`            | Readiness probe configuration for Kubewatch                                               | Check `values.yaml` file       |
-| `customLivenessProbe`       | Override default liveness probe                                                           | `nil`                          |
-| `customReadinessProbe`      | Override default readiness probe                                                          | `nil`                          |
-| `podAffinityPreset`         | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                           |
-| `podAntiAffinityPreset`     | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                         |
-| `nodeAffinityPreset.type`   | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                           |
-| `nodeAffinityPreset.key`    | Node label key to match. Ignored if `affinity` is set.                                    | `""`                           |
-| `nodeAffinityPreset.values` | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                           |
-| `affinity`                  | Affinity for pod assignment                                                               | `{}` (evaluated as a template) |
-| `nodeSelector`              | Node labels for pod assignment                                                            | `{}` (evaluated as a template) |
-| `tolerations`               | Tolerations for pod assignment                                                            | `[]` (evaluated as a template) |
-| `priorityClassName`         | Controller priorityClassName                                                              | `nil`                          |
-| `podLabels`                 | Extra labels for Kubewatch pods                                                           | `{}`                           |
-| `podAnnotations`            | Annotations for Kubewatch pods                                                            | `{}`                           |
-| `extraVolumeMounts`         | Optionally specify extra list of additional volumeMounts for Kubewatch container(s)       | `[]`                           |
-| `extraVolumes`              | Optionally specify extra list of additional volumes for Kubewatch pods                    | `[]`                           |
-| `initContainers`            | Add additional init containers to the Kubewatch pods                                      | `{}` (evaluated as a template) |
-| `sidecars`                  | Add additional sidecar containers to the Kubewatch pods                                   | `{}` (evaluated as a template) |
+| Name                                    | Description                                                                               | Value           |
+| --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
+| `replicaCount`                          | Number of Kubewatch replicas to deploy                                                    | `1`             |
+| `podSecurityContext.enabled`            | Enable Kubewatch containers' SecurityContext                                              | `false`         |
+| `podSecurityContext.fsGroup`            | Set Kubewatch containers' SecurityContext fsGroup                                         | `""`            |
+| `containerSecurityContext.enabled`      | Enable Kubewatch pods' Security Context                                                   | `false`         |
+| `containerSecurityContext.runAsUser`    | Set Kubewatch pods' SecurityContext runAsUser                                             | `""`            |
+| `containerSecurityContext.runAsNonRoot` | Set Kubewatch pods' SecurityContext runAsNonRoot                                          | `""`            |
+| `resources.limits`                      | The resources limits for the Kubewatch container                                          | `{}`            |
+| `resources.requests`                    | The requested resources for the Kubewatch container                                       | `{}`            |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`         |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `10`            |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`            |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `1`             |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `3`             |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`             |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `false`         |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `10`            |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`            |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `1`             |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `3`             |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`             |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `false`         |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `10`            |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `10`            |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `1`             |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `3`             |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`             |
+| `customStartupProbe`                    | Override default startup probe                                                            | `{}`            |
+| `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`            |
+| `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`            |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                    | `""`            |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`            |
+| `affinity`                              | Affinity for pod assignment                                                               | `{}`            |
+| `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
+| `tolerations`                           | Tolerations for pod assignment                                                            | `[]`            |
+| `priorityClassName`                     | Controller priorityClassName                                                              | `""`            |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`            |
+| `podLabels`                             | Extra labels for Kubewatch pods                                                           | `{}`            |
+| `podAnnotations`                        | Annotations for Kubewatch pods                                                            | `{}`            |
+| `extraVolumes`                          | Optionally specify extra list of additional volumes for Kubewatch pods                    | `[]`            |
+| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Kubewatch container(s)       | `[]`            |
+| `updateStrategy.type`                   | Deployment strategy type.                                                                 | `RollingUpdate` |
+| `initContainers`                        | Add additional init containers to the Kubewatch pods                                      | `[]`            |
+| `sidecars`                              | Add additional sidecar containers to the Kubewatch pods                                   | `[]`            |
+
 
 ### RBAC parameters
 
-| Parameter               | Description                                                | Default                                              |
-|-------------------------|------------------------------------------------------------|------------------------------------------------------|
-| `serviceAccount.create` | Enable the creation of a ServiceAccount for Kubewatch pods | `true`                                               |
-| `serviceAccount.name`   | Name of the created ServiceAccount                         | Generated using the `common.names.fullname` template |
-| `rbac.create`           | Weather to create & use RBAC resources or not              | `false`                                              |
+| Name                                          | Description                                                                                                         | Value   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `rbac.create`                                 | Whether to create & use RBAC resources or not                                                                       | `false` |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`  |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true`  |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`    |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -230,7 +268,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
@@ -271,3 +309,19 @@ Helm performs a lookup for the object based on its group (apps), version (v1), a
 In https://github.com/helm/charts/pull/17285 the `apiVersion` of the deployment resources was updated to `apps/v1` in tune with the api's deprecated, resulting in compatibility breakage.
 
 This major version signifies this change.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

@@ -1,8 +1,10 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- $secretName := include "odoo.secretName" . -}}
 
-*******************************************************************
-*** PLEASE BE PATIENT: Odoo may take a few minutes to install   ***
-*******************************************************************
+** Please be patient while the chart is being deployed **
 
 {{- if .Values.ingress.enabled }}
 
@@ -28,7 +30,7 @@
 ** Please ensure an external IP is associated to the {{ template "odoo.fullname" . }} service before proceeding **
 ** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "odoo.fullname" . }} **
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "odoo.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "odoo.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
 {{- $port:=.Values.service.port | toString }}
   echo "Odoo URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"

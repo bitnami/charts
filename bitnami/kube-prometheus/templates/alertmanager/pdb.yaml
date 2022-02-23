@@ -1,5 +1,5 @@
 {{- if and .Values.alertmanager.enabled .Values.alertmanager.podDisruptionBudget.enabled }}
-apiVersion: policy/v1beta1
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
   name: {{ template "kube-prometheus.alertmanager.fullname" . }}
@@ -8,7 +8,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: alertmanager
+      app.kubernetes.io/name: alertmanager
       alertmanager: {{ template "kube-prometheus.alertmanager.fullname" . }}
   {{- if .Values.alertmanager.podDisruptionBudget.minAvailable }}
   minAvailable: {{ .Values.alertmanager.podDisruptionBudget.minAvailable }}

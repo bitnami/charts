@@ -1,4 +1,8 @@
-** Data Platform Blueprint 1 is being deployed, it could take some time to be ready **
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
 
 The following components are being deployed to your cluster:
 

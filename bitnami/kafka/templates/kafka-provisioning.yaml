@@ -1,8 +1,10 @@
 {{- if .Values.provisioning.enabled }}
+{{- $replicaCount := int .Values.replicaCount }}
 kind: Job
 apiVersion: batch/v1
 metadata:
-  name: {{ include "kafka.fullname" . }}-provisioning
+  name: {{ printf "%s-provisioning" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: kafka-provisioning
     {{- if .Values.commonLabels }}
@@ -10,7 +12,7 @@ metadata:
     {{- end }}
   annotations:
     helm.sh/hook: post-install,post-upgrade
-    helm.sh/hook-delete-policy: before-hook-creation
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
@@ -19,67 +21,89 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: kafka-provisioning
-        {{- if .Values.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
+        {{- if .Values.provisioning.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
+        {{- if .Values.provisioning.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "kafka.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.provisioning.schedulerName }}
       schedulerName: {{ .Values.provisioning.schedulerName | quote }}
       {{- end }}
+      {{- if .Values.provisioning.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.provisioning.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
       restartPolicy: OnFailure
       terminationGracePeriodSeconds: 0
       initContainers:
         - name: wait-for-available-kafka
-          image: {{ include "kafka.provisioning.image" . }}
-          imagePullPolicy: {{ .Values.provisioning.image.pullPolicy | quote }}
+          image: {{ include "kafka.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.provisioning.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.provisioning.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           command:
             - /bin/bash
-            - -c
-            - >-
-              set -e;
-              wait-for-port \
-                --host={{ include "kafka.fullname" . }} \
-                --state=inuse \
-                --timeout=120 \
-                {{ .Values.service.port | int64 }};
-              echo "Kafka is available";
-      containers:
-        - name: kafka-provisioning
-          image: {{ include "kafka.provisioning.image" . }}
-          imagePullPolicy: {{ .Values.provisioning.image.pullPolicy | quote }}
-          command:
-            {{- if .Values.provisioning.command }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.command "context" $) | nindent 12 }}
-            {{- else }}
-            - /bin/bash
-            {{- end }}
           args:
-            {{- if .Values.provisioning.args }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.args "context" $) | nindent 12 }}
-            {{- else }}
             - -ec
             - |
-              {{- $bootstrapServer := printf "%s:%d" (include "kafka.fullname" .) (.Values.service.port | int64) }}
+              wait-for-port \
+                --host={{ include "common.names.fullname" . }} \
+                --state=inuse \
+                --timeout=120 \
+                {{ .Values.service.ports.client | int64 }};
+              echo "Kafka is available";
+          {{- if .Values.provisioning.resources }}
+          resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
+          {{- end }}
+        {{- if .Values.provisioning.initContainers }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.provisioning.initContainers "context" $ ) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: kafka-provisioning
+          image: {{ include "kafka.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.provisioning.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.provisioning.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.provisioning.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /bin/bash
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.provisioning.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -ec
+            - |
+              {{- $bootstrapServer := printf "%s:%d" (include "common.names.fullname" .) (.Values.service.ports.client | int64) }}
               {{- range $topic := .Values.provisioning.topics }}
               echo "Ensure topic '{{ $topic.name }}' exists"
               /opt/bitnami/kafka/bin/kafka-topics.sh \
                 --create \
                 --if-not-exists \
                 --bootstrap-server {{ $bootstrapServer }} \
-                --replication-factor {{ $topic.replicationFactor }} \
-                --partitions {{ $topic.partitions }} \
+                --replication-factor {{ $topic.replicationFactor | default $.Values.provisioning.replicationFactor }} \
+                --partitions {{ $topic.partitions | default $.Values.provisioning.numPartitions }} \
                 {{- range $name, $value := $topic.config }}
                 --config {{ $name }}={{ $value }} \
                 {{- end }}
                 --topic {{ $topic.name }}
               {{- end }}
               echo "Provisioning succeeded"
-            {{- end }}
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.provisioning.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
           {{- if .Values.provisioning.resources }}
           resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
           {{- end }}
@@ -95,10 +119,26 @@ spec:
               subPath: log4j.properties
             {{- end }}
             {{- if (include "kafka.tlsEncryption" .) }}
-            - name: kafka-certificates
-              mountPath: /certs
+            {{- if not (empty .Values.auth.tls.existingSecrets) }}
+            {{- range $index, $_ := .Values.auth.tls.existingSecrets }}
+            - name: kafka-certs-{{ $index }}
+              mountPath: /certs-{{ $index }}
               readOnly: true
             {{- end }}
+            {{- else if .Values.auth.tls.autoGenerated }}
+            {{- range $index := until $replicaCount }}
+            - name: kafka-certs-{{ $index }}
+              mountPath: /certs-{{ $index }}
+              readOnly: true
+            {{- end }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.provisioning.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.provisioning.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if or .Values.config .Values.existingConfigmap }}
         - name: kafka-config
@@ -111,9 +151,23 @@ spec:
             name: {{ include "kafka.log4j.configMapName" . }}
         {{ end }}
         {{- if (include "kafka.tlsEncryption" .) }}
-        - name: kafka-certificates
+        {{- if not (empty .Values.auth.tls.existingSecrets) }}
+        {{- range $index, $secret := .Values.auth.tls.existingSecrets }}
+        - name: kafka-certs-{{ $index }}
           secret:
-            secretName: {{ include "kafka.tlsSecretName" . }}
+            secretName: {{ tpl $secret $ }}
             defaultMode: 256
+        {{- end }}
+        {{- else if .Values.auth.tls.autoGenerated }}
+        {{- range $index := until $replicaCount }}
+        - name: kafka-certs-{{ $index }}
+          secret:
+            secretName: {{ printf "%s-%d-tls" (include "common.names.fullname" $) $index }}
+            defaultMode: 256
+        {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.provisioning.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
 {{- end }}

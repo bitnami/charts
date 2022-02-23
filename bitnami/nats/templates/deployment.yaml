@@ -13,31 +13,28 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  strategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+  {{- if .Values.updateStrategy }}
+  strategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         {{- if .Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
-      {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
+        {{- if (include "nats.createSecret" .) }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      {{- end }}
     spec:
       {{- include "nats.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if .Values.priorityClassName }}
-      priorityClassName: {{ .Values.priorityClassName | quote }}
-      {{- end }}
-      {{- if .Values.schedulerName }}
-      schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
@@ -53,6 +50,15 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
@@ -63,29 +69,27 @@ spec:
         - name: nats
           image: {{ template "nats.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command:
-            {{- if .Values.command }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
-            {{- else }}
-            - {{ .Values.natsFilename }}
-            {{- end }}
-          args:
-            {{- if .Values.args }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
-            {{- else }}
-            - -c
-            - /opt/bitnami/nats/{{ .Values.natsFilename }}.conf
-            # to ensure nats could run with non-root user, we put the configuration
-            # file under `/opt/bitnami/nats/{{ .Values.natsFilename }}.conf`, please check the link below
-            # for the implementation inside Dockerfile:
-            # - https://github.com/bitnami/bitnami-docker-nats#configuration
-            {{- range $key, $value := .Values.extraFlags }}
-            - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
-            {{- end }}
-            {{- end }}
-          {{- if .Values.extraEnvVars }}
-          env: {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: NATS_FILENAME
+              value: {{ .Values.natsFilename | quote }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
@@ -99,27 +103,45 @@ spec:
           {{- end }}
           ports:
             - name: client
-              containerPort: {{ .Values.client.service.port }}
+              containerPort: {{ .Values.containerPorts.client }}
             - name: cluster
-              containerPort: {{ .Values.cluster.service.port }}
+              containerPort: {{ .Values.containerPorts.cluster }}
             - name: monitoring
-              containerPort: {{ .Values.monitoring.service.port }}
+              containerPort: {{ .Values.containerPorts.monitoring }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: monitoring
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: monitoring
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: monitoring
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: config
-              mountPath: /opt/bitnami/nats/{{ .Values.natsFilename }}.conf
+              mountPath: /bitnami/nats/conf/{{ .Values.natsFilename }}.conf
               subPath: {{ .Values.natsFilename }}.conf
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
@@ -128,11 +150,17 @@ spec:
         - name: metrics
           image: {{ template "nats.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.flags "context" $) | nindent 12 }}
-            - "http://localhost:{{ .Values.monitoring.service.port }}"
+            - "http://localhost:{{ .Values.containerPorts.monitoring }}"
+          {{- end }}
           ports:
             - name: metrics
               containerPort: {{ .Values.metrics.containerPort }}
+          {{- if not .Values.diagnosticMode.enabled }}
           livenessProbe:
             httpGet:
               path: /metrics
@@ -145,6 +173,7 @@ spec:
               port: metrics
             initialDelaySeconds: 5
             timeoutSeconds: 1
+          {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
@@ -154,8 +183,8 @@ spec:
         {{- end }}
       volumes:
         - name: config
-          configMap:
-            name: {{ template "common.names.fullname" . }}
+          secret:
+            secretName: {{ include "nats.secretName" . }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

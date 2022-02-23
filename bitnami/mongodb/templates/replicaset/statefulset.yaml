@@ -9,11 +9,20 @@ metadata:
   namespace: {{ include "mongodb.namespace" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: mongodb
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     {{- if .Values.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.labels "context" $) | nindent 4 }}
     {{- end }}
-  {{- if .Values.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.annotations "context" $) | nindent 4 }}
+  {{- if or .Values.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   serviceName: {{ include "mongodb.service.nameOverride" . }}
@@ -66,8 +75,14 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{- if .Values.runtimeClassName }}
+      runtimeClassName: {{ .Values.runtimeClassName }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
@@ -111,6 +126,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: MY_POD_HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
           volumeMounts:
           - name: certs-volume
             mountPath: /certs/CAs
@@ -122,7 +141,7 @@ spec:
             - |
               /bin/bash <<'EOF'
               my_hostname=$(hostname)
-              svc=$(echo -n "$my_hostname" | sed s/-[0-9]*$//)-headless
+              svc={{ include "mongodb.service.nameOverride" . }}
               cp /certs/CAs/* /certs/
               cat >/certs/openssl.cnf <<EOL
               [req]
@@ -136,13 +155,20 @@ spec:
               [alt_names]
               DNS.1 = $svc
               DNS.2 = $my_hostname
-              DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.cluster.local
+              DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.{{ .Values.clusterDomain }}
               DNS.4 = localhost
               DNS.5 = 127.0.0.1
+              {{- if .Values.tls.extraDnsNames }}
+              {{- range $key, $dnsName := .Values.tls.extraDnsNames }}
+              {{ $key }} = {{ $dnsName }}
+              {{- end }}
+              {{- end }}
               {{- if .Values.externalAccess.service.loadBalancerIPs }}
               {{- range $key, $val := .Values.externalAccess.service.loadBalancerIPs }}
               IP.{{ $key }} = {{ $val | quote }}
               {{- end }}
+              {{- else }}
+              IP.0 = {{ "$MY_POD_HOST_IP" | quote }}
               {{- end }}
               EOL
 
@@ -191,18 +217,22 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /scripts/setup.sh
           {{- end }}
-          {{- if .Values.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.service.type "LoadBalancer") }}
             - name: SHARED_FILE
               value: "/shared/info.txt"
@@ -215,6 +245,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: MY_POD_HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
             - name: K8S_SERVICE_NAME
               value: "{{ include "mongodb.service.nameOverride" . }}"
             - name: MONGODB_INITIAL_PRIMARY_HOST
@@ -225,22 +259,26 @@ spec:
             - name: MONGODB_ADVERTISED_HOSTNAME
               value: "$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             {{- end }}
-            {{- if .Values.auth.username }}
-            - name: MONGODB_USERNAME
-              value: {{ .Values.auth.username | quote }}
+            {{- $customUsers := include "mongodb.customUsers" . -}}
+            {{- $customDatabases := include "mongodb.customDatabases" . -}}
+            {{- if not (empty $customUsers) }}
+            - name: MONGODB_EXTRA_USERNAMES
+              value: {{ $customUsers | quote }}
             {{- end }}
-            {{- if .Values.auth.database }}
-            - name: MONGODB_DATABASE
-              value: {{ .Values.auth.database | quote }}
+            {{- if not (empty $customDatabases) }}
+            - name: MONGODB_EXTRA_DATABASES
+              value: {{ $customDatabases | quote }}
             {{- end }}
             {{- if .Values.auth.enabled }}
-            {{- if and .Values.auth.username .Values.auth.database }}
-            - name: MONGODB_PASSWORD
+            {{- if and (not (empty $customUsers)) (not (empty $customDatabases)) }}
+            - name: MONGODB_EXTRA_PASSWORDS
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
-                  key: mongodb-password
+                  key: mongodb-passwords
             {{- end }}
+            - name: MONGODB_ROOT_USER
+              value: {{ .Values.auth.rootUser | quote }}
             - name: MONGODB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -252,6 +290,17 @@ spec:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-replica-set-key
             {{- end }}
+            {{- if and .Values.metrics.enabled (not (empty .Values.metrics.username)) }}
+            - name: MONGODB_METRICS_USERNAME
+              value: {{ .Values.metrics.username | quote }}
+            {{- if .Values.auth.enabled }}
+            - name: MONGODB_METRICS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mongodb.secretName" . }}
+                  key: mongodb-metrics-password
+            {{- end }}
+            {{- end }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
             - name: MONGODB_SYSTEM_LOG_VERBOSITY
@@ -260,15 +309,17 @@ spec:
               value: {{ ternary "yes" "no" .Values.disableSystemLog | quote }}
             - name: MONGODB_DISABLE_JAVASCRIPT
               value: {{ ternary "yes" "no" .Values.disableJavascript | quote }}
+            - name: MONGODB_ENABLE_JOURNAL
+              value: {{ ternary "yes" "no" .Values.enableJournal | quote  }}
             - name: MONGODB_ENABLE_IPV6
               value: {{ ternary "yes" "no" .Values.enableIPv6 | quote }}
             - name: MONGODB_ENABLE_DIRECTORY_PER_DB
               value: {{ ternary "yes" "no" .Values.directoryPerDB | quote }}
             {{- $extraFlags := .Values.extraFlags | join " " -}}
             {{- if .Values.tls.enabled }}
-              {{- $extraFlags = printf "%s %s" "--tlsMode=requireTLS --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert" $extraFlags  }}
+              {{- $extraFlags = printf "--tlsMode=%s --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert %s" .Values.tls.mode $extraFlags  }}
             {{- end }}
-            {{- if ne $extraFlags ""}}
+            {{- if ne $extraFlags "" }}
             - name: MONGODB_EXTRA_FLAGS
               value: {{ $extraFlags | quote }}
             {{- end }}
@@ -293,6 +344,7 @@ spec:
           ports:
             - containerPort: 27017
               name: mongodb
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
@@ -324,7 +376,17 @@ spec:
                   {{- if .Values.tls.enabled }}
                   TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert'
                   {{- end }}
-                  mongo --disableImplicitSessions $TLS_OPTIONS --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
+                  # Run the proper check depending on the version
+                  [[ $(mongo --version | grep "MongoDB shell") =~ ([0-9]+\.[0-9]+\.[0-9]+) ]] && VERSION=${BASH_REMATCH[1]}
+                  . /opt/bitnami/scripts/libversion.sh
+                  VERSION_MAJOR="$(get_sematic_version "$VERSION" 1)"
+                  VERSION_MINOR="$(get_sematic_version "$VERSION" 2)"
+                  VERSION_PATCH="$(get_sematic_version "$VERSION" 3)"
+                  if [[ "$VERSION_MAJOR" -ge 4 ]] && [[ "$VERSION_MINOR" -ge 4 ]] && [[ "$VERSION_PATCH" -ge 2 ]]; then
+                      mongo --disableImplicitSessions $TLS_OPTIONS --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
+                  else
+                      mongo --disableImplicitSessions $TLS_OPTIONS --eval 'db.isMaster().ismaster || db.isMaster().secondary' | grep -q 'true'
+                  fi
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -332,6 +394,26 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            exec:
+              command:
+                - bash
+                - -ec
+                - |
+                  {{- if .Values.tls.enabled }}
+                  TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert'
+                  {{- end }}
+                  mongo --disableImplicitSessions $TLS_OPTIONS --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
@@ -352,6 +434,11 @@ spec:
             - name: scripts
               mountPath: /scripts/setup.sh
               subPath: setup.sh
+            {{ if .Values.replicaSetConfigurationSettings.enabled }}
+            - name: scripts
+              mountPath: /scripts/replicaSetConfigurationSettings.sh
+              subPath: replicaSetConfigurationSettings.sh
+            {{- end }}
             {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.service.type "LoadBalancer") }}
             - name: shared
               mountPath: /shared
@@ -370,19 +457,39 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           args:
             - |
               /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
+          {{- end }}
           env:
           {{- if .Values.auth.enabled }}
+          {{- if not .Values.metrics.username }}
+          - name: MONGODB_ROOT_USER
+            value: {{ .Values.auth.rootUser | quote }}
           - name: MONGODB_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: {{ include "mongodb.secretName" . }}
                 key: mongodb-root-password
+          {{- else }}
+          - name: MONGODB_METRICS_USERNAME
+            value: {{ .Values.metrics.username | quote }}
+          - name: MONGODB_METRICS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "mongodb.secretName" . }}
+                key: mongodb-metrics-password
+          {{- end }}
           {{- end }}
           volumeMounts:
           {{- if .Values.tls.enabled }}
@@ -392,6 +499,7 @@ spec:
           ports:
             - name: metrics
               containerPort: {{ .Values.metrics.containerPort }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -413,6 +521,7 @@ spec:
             timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
             successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
+          {{- end }}
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
@@ -448,7 +557,7 @@ spec:
           emptyDir: {}
         - name: certs-volume
           secret:
-            secretName: {{ template "mongodb.caSecretName" . }}
+            secretName: {{ template "mongodb.tlsSecretName" . }}
             items:
             - key: mongodb-ca-cert
               path: mongodb-ca-cert
@@ -459,7 +568,12 @@ spec:
         {{- end }}
   {{- if not .Values.persistence.enabled }}
         - name: datadir
+          {{- if .Values.persistence.medium }}
+          emptyDir:
+            medium: {{ .Values.persistence.medium | quote }}
+          {{- else }}
           emptyDir: {}
+          {{- end }}
   {{- else }}
   volumeClaimTemplates:
     - metadata:
@@ -478,6 +592,9 @@ spec:
             {{- if .Values.persistence.volumeClaimTemplates.requests }}
             {{- include "common.tplvalues.render" (dict "value" .Values.persistence.volumeClaimTemplates.requests "context" $) | nindent 12 }}
             {{- end }}
+        {{- if .Values.persistence.volumeClaimTemplates.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.volumeClaimTemplates.dataSource "context" $) | nindent 10 }}
+        {{- end }}
         {{- if .Values.persistence.volumeClaimTemplates.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.volumeClaimTemplates.selector "context" $) | nindent 10 }}
         {{- end }}

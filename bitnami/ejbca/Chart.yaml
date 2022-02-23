@@ -1,7 +1,7 @@
 annotations:
   category: CertificateAuthority
 apiVersion: v2
-appVersion: 6.15.2-6
+appVersion: 7.4.3-2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -13,7 +13,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - ejbca-database
-    version: 9.x.x
+    version: 10.x.x
 description: Enterprise class PKI Certificate Authority built on JEE technology.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/ejbca
@@ -30,4 +30,4 @@ name: ejbca
 sources:
   - https://github.com/bitnami/bitnami-docker-ejbca
   - https://www.ejbca.org/
-version: 2.2.2
+version: 5.1.2

@@ -72,16 +72,6 @@
             "value": false,
             "path": "ingress/enabled"
           }
-        },
-        "certManager": {
-          "type": "boolean",
-          "form": true,
-          "title": "Use cert-manager to auto-generate the TLS certificate",
-          "description": "Add the corresponding annotations for cert-manager to auto-generate the TLS certificate",
-          "hidden": {
-            "value": false,
-            "path": "ingress/enabled"
-          }
         }
       }
     },

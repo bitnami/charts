@@ -5,12 +5,14 @@
 
 {{- range $i, $e := until $nodesCount }}
 {{- $targetPod := printf "%s-%d" (printf "%s" $fullName) $i }}
+{{- $_ := set $ "targetPod" $targetPod }}
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "common.names.fullname" $ }}-{{ $i }}-svc
+  namespace: {{ $.Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     pod: {{ $targetPod }}
     {{- if $root.Values.commonLabels }}
@@ -34,7 +36,7 @@ spec:
       targetPort: tcp-redis
     - name: tcp-redis-bus
       targetPort: tcp-redis-bus
-      port: {{ $root.Values.redis.busPort }}
+      port: {{ $root.Values.redis.containerPorts.bus }}
   selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}
 ---

@@ -16,7 +16,7 @@ data:
   application.yaml: |-
     {{- if .Values.metrics.enabled }}
     {{- $fullname := include "scdf.fullname" . }}
-    {{- $rsocketPort := int .Values.metrics.service.rsocketPort }}
+    {{- $rsocketPort := int (coalesce .Values.metrics.service.ports.rsocket .Values.metrics.service.rsocketPort) }}
     management:
       metrics:
          export:
@@ -30,14 +30,18 @@ data:
     spring:
       cloud:
         dataflow:
+          {{- if .Values.server.applicationProperties }}
+          applicationProperties: {{- include "common.tplvalues.render" (dict "value" .Values.server.applicationProperties "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.server.configuration.batchEnabled }}
           task:
             platform:
               kubernetes:
                 accounts:
                   {{ .Values.server.configuration.accountName }}:
-                    {{- if .Values.deployer.environmentVariables }}
-                    environmentVariables: '{{ .Values.deployer.environmentVariables | trim }}'
+                    {{- $environmentVariables := include "scdf.deployer.environmentVariables" . }}
+                    {{- if $environmentVariables }}
+                    environmentVariables: {{- $environmentVariables | trim | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.resources.limits }}
                     limits: {{- toYaml .Values.deployer.resources.limits | trim | nindent 22 }}
@@ -66,6 +70,12 @@ data:
                     {{- if .Values.deployer.podSecurityContext }}
                     podSecurityContext: {{- toYaml .Values.deployer.podSecurityContext | nindent 22 }}
                     {{- end }}
+                    {{- if .Values.deployer.imagePullSecrets }}
+                    imagePullSecrets: {{- toYaml .Values.deployer.imagePullSecrets | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.secretRefs }}
+                    secretRefs: {{- toYaml .Values.deployer.secretRefs | nindent 22 }}
+                    {{- end }}
           {{- end }}
           {{- if .Values.server.configuration.containerRegistries }}
           container:
@@ -78,6 +88,8 @@ data:
           metrics.dashboard:
             url: {{ .Values.server.configuration.grafanaInfo }}
           {{- end }}
+        task:
+          closecontextEnabled: true
       {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}
       {{- if $hibernateDialect }}
       jpa:
@@ -96,4 +108,6 @@ data:
         {{- end }}
         testOnBorrow: true
         validationQuery: "SELECT 1"
+      flyway:
+        enabled: {{ .Values.flyway.enabled }}
 {{ end }}

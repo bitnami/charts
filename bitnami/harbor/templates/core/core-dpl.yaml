@@ -42,7 +42,10 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: false
+      automountServiceAccountToken: {{ .Values.core.automountServiceAccountToken }}
+      {{- if .Values.core.priorityClassName }}
+      priorityClassName: {{ .Values.core.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.core.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.core.affinity "context" $) | nindent 8 }}
       {{- else }}

@@ -108,6 +108,7 @@ Return the Parse Cloud Clode scripts configmap.
 {{- define "parse.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.server.image }}
 {{- include "common.warnings.rollingTag" .Values.dashboard.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}
 
 {{/*

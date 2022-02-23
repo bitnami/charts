@@ -46,6 +46,13 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
@@ -178,9 +185,9 @@ spec:
                   key: {{ include "prestashop.databasePasswordKey" . }}
             - name: PRESTASHOP_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.prestashopSkipInstall | quote }}
-            {{- $port:=.Values.service.port | toString }}
+            {{- $port:=( coalesce .Values.service.ports.http .Values.service.port) | toString }}
             - name: PRESTASHOP_HOST
-              value: "{{ include "prestashop.host" . }}{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}"
+              value: "{{ include "prestashop.host" . }}{{- if ne $port "80" }}:{{ coalesce .Values.service.ports.http .Values.service.port }}{{ end }}"
             - name: PRESTASHOP_USERNAME
               value: {{ .Values.prestashopUsername | quote }}
             - name: PRESTASHOP_PASSWORD

@@ -1,6 +1,6 @@
 {{- if .Values.networkPolicy.enabled }}
 kind: NetworkPolicy
-apiVersion: {{ template "networkPolicy.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ .Release.Namespace }}
@@ -15,9 +15,8 @@ spec:
   podSelector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
   ingress:
-    # Allow inbound connections
     - ports:
-        - port: {{ .Values.client.service.port }}
+        - port: {{ .Values.service.ports.client }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
@@ -25,7 +24,7 @@ spec:
               {{ template "common.names.fullname" . }}-client: "true"
       {{- end }}
     - ports:
-        - port: {{ .Values.cluster.service.port }}
+        - port: {{ .Values.service.ports.client }}
     - ports:
-        - port: {{ .Values.monitoring.service.port }}
+        - port: {{ .Values.service.ports.monitoring }}
 {{- end }}

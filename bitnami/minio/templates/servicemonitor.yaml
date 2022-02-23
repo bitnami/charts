@@ -9,8 +9,8 @@ metadata:
   namespace: {{ .Release.Namespace }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.metrics.serviceMonitor.additionalLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.additionalLabels "context" $) | nindent 4 }}
+    {{- if .Values.metrics.serviceMonitor.labels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.labels "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -20,7 +20,7 @@ metadata:
   {{- end }}
 spec:
   endpoints:
-    - port: minio
+    - port: minio-api
       path: {{ .Values.metrics.serviceMonitor.path }}
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
@@ -31,12 +31,21 @@ spec:
       {{- if .Values.metrics.serviceMonitor.honorLabels }}
       honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
       {{- end }}
-      {{- if .Values.metrics.serviceMonitor.relabellings }}
-      metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.relabellings | nindent 6 }}
+      {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.metricRelabelings | nindent 6 }}
       {{- end }}
+      {{- if .Values.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- toYaml .Values.metrics.serviceMonitor.relabelings | nindent 6 }}
+      {{- end }}
+  {{- if .Values.metrics.serviceMonitor.jobLabel }}
+  jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel }}
+  {{- end }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      {{- if .Values.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
 {{- end }}

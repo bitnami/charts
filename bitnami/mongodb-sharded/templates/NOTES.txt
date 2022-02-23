@@ -1,6 +1,30 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 ** Please be patient while the chart is being deployed **
 
-The MongoDB(R) Sharded cluster can be accessed via the Mongos instances in port {{ .Values.service.port }} on the following DNS name from within your cluster:
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/mongodb-sharded/entrypoint.sh /opt/bitnami/scripts/mongodb-sharded/run.sh
+
+{{- else }}
+
+The MongoDB&reg; Sharded cluster can be accessed via the Mongos instances in port {{ .Values.service.port }} on the following DNS name from within your cluster:
 
     {{ include "mongodb-sharded.serviceName" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
@@ -35,7 +59,7 @@ To connect to your database from outside the cluster execute the following comma
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "mongodb-sharded.serviceName" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "mongodb-sharded.serviceName" . }} --include "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "mongodb-sharded.serviceName" . }} --include "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     mongo --host $SERVICE_IP --port {{ .Values.service.port }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD
 
 {{- else if contains "ClusterIP" .Values.service.type }}
@@ -43,6 +67,7 @@ To connect to your database from outside the cluster execute the following comma
     kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "mongodb-sharded.serviceName" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
     mongo --host 127.0.0.1 --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD
 
+{{- end }}
 {{- end }}
 
 {{- include "mongodb-sharded.validateValues" . -}}

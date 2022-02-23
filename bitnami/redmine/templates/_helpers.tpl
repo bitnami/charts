@@ -26,7 +26,7 @@ Return the proper Redmine image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "redmine.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.mailReceiver.image .Values.volumePermissions.image .Values.certificates.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.certificates.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -74,13 +74,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Return the proper Redmine mail Receiver image name
-*/}}
-{{- define "redmine.mailReceiver.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.mailReceiver.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
 Return whether to use the external DB or the built-in subcharts
 */}}
 {{- define "redmine.useExternalDB" -}}
@@ -113,6 +106,19 @@ Return the database host for Redmine
 {{- end -}}
 
 {{/*
+Return the database port for Redmine
+*/}}
+{{- define "redmine.database.port" -}}
+{{- if and (eq .Values.databaseType "mariadb") (.Values.mariadb.enabled) -}}
+    {{- printf "3306" -}}
+{{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
+    {{- printf "5432" -}}
+{{- else }}
+    {{- .Values.externalDatabase.port }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the database name for Redmine
 */}}
 {{- define "redmine.database.name" -}}
@@ -121,7 +127,7 @@ Return the database name for Redmine
 {{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
     {{- .Values.postgresql.postgresqlDatabase | quote }}
 {{- else }}
-    {{- .Values.externalDatabase.name | quote }}
+    {{- .Values.externalDatabase.database | quote }}
 {{- end -}}
 {{- end -}}
 
@@ -161,11 +167,4 @@ Return the name of the database secret with its credentials
         {{- printf "%s-%s" (include "common.names.fullname" .) "externaldb" -}}
     {{- end -}}
 {{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper image name (for the init container volume-permissions image)
-*/}}
-{{- define "redmine.volumePermissions.image" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}

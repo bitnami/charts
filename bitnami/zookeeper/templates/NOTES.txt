@@ -1,3 +1,7 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- if contains .Values.service.type "LoadBalancer" }}
 {{- if not .Values.auth.clientPassword }}
 -------------------------------------------------------------------------------
@@ -17,7 +21,27 @@
 
 ** Please be patient while the chart is being deployed **
 
-ZooKeeper can be accessed via port 2181 on the following DNS name from within your cluster:
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/zookeeper/entrypoint.sh /opt/bitnami/scripts/zookeeper/run.sh
+
+{{- else }}
+
+ZooKeeper can be accessed via port {{ .Values.service.ports.client }} on the following DNS name from within your cluster:
 
     {{ template "common.names.fullname" . }}.{{ template "zookeeper.namespace" . }}.svc.{{ .Values.clusterDomain }}
 
@@ -39,14 +63,16 @@ To connect to your ZooKeeper server from outside the cluster execute the followi
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ template "zookeeper.namespace" . }} -w {{ template "common.names.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ template "zookeeper.namespace" . }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-    zkCli.sh $SERVICE_IP:2181
+    export SERVICE_IP=$(kubectl get svc --namespace {{ template "zookeeper.namespace" . }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    zkCli.sh $SERVICE_IP:{{ .Values.service.ports.client }}
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-    kubectl port-forward --namespace {{ template "zookeeper.namespace" . }} svc/{{ template "common.names.fullname" . }} 2181:2181 &
-    zkCli.sh 127.0.0.1:2181
+    kubectl port-forward --namespace {{ template "zookeeper.namespace" . }} svc/{{ template "common.names.fullname" . }} {{ .Values.service.ports.client }}:{{ .Values.containerPort }} &
+    zkCli.sh 127.0.0.1:{{ .Values.service.ports.client }}
 
 {{- end }}
+{{- end }}
 
+{{- include "zookeeper.validateValues" . }}
 {{- include "zookeeper.checkRollingTags" . }}

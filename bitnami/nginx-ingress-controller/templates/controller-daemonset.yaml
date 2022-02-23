@@ -55,7 +55,7 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
-      {{- if .Values.podSecurityContext }}
+      {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       hostNetwork: {{ .Values.hostNetwork }}
@@ -92,7 +92,7 @@ spec:
             - --publish-service={{ include "nginx-ingress-controller.publishServicePath" . }}
           {{- end }}
             - --election-id={{ .Values.electionID }}
-            - --ingress-class={{ .Values.ingressClass }}
+            - --controller-class={{ .Values.ingressClassResource.controllerClass }}
             - --configmap={{ .Release.Namespace }}/{{ include "common.names.fullname" . }}
           {{- if .Values.tcp }}
             - --tcp-services-configmap={{ .Release.Namespace }}/{{ include "common.names.fullname" . }}-tcp
@@ -106,8 +106,11 @@ spec:
           {{- if .Values.maxmindLicenseKey }}
             - --maxmind-license-key={{ .Values.maxmindLicenseKey }}
           {{- end }}
-          {{- if and (.Values.reportNodeInternalIp) (.Values.hostNetwork)}}
+          {{- if and (.Values.reportNodeInternalIp) (.Values.hostNetwork) }}
             - --report-node-internal-ip-address={{ .Values.reportNodeInternalIp }}
+          {{- end }}
+          {{- if .Values.watchIngressWithoutClass }}
+            - --watch-ingress-without-class=true
           {{- end }}
           {{- range $key, $value := .Values.extraArgs }}
             {{- if $value }}

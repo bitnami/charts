@@ -49,4 +49,6 @@ Return  the proper Storage Class
 {{- define "dokuwiki.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image -}}
 {{- include "common.warnings.rollingTag" .Values.metrics.image -}}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image -}}
+{{- include "common.warnings.rollingTag" .Values.certificates.image -}}
 {{- end -}}

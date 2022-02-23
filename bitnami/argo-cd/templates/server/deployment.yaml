@@ -1,0 +1,292 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "argocd.server" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.server.replicaCount }}
+  {{- if .Values.server.updateStrategy }}
+  strategy: {{- toYaml .Values.server.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: server
+  template:
+    metadata:
+      {{- if .Values.server.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.server.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: server
+        {{- if .Values.server.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.server.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "argocd.server.serviceAccountName" . }}
+      {{- include "argocd.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.server.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.server.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.server.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.server.podAffinityPreset "component" "server" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.server.podAntiAffinityPreset "component" "server" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.server.nodeAffinityPreset.type "key" .Values.server.nodeAffinityPreset.key "values" .Values.server.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.server.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.server.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.server.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.schedulerName }}
+      schedulerName: {{ .Values.server.schedulerName }}
+      {{- end }}
+      {{- if .Values.server.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.controller.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.priorityClassName }}
+      priorityClassName: {{ .Values.server.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.server.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.server.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.volumePermissions.enabled }}
+        - name: volume-permissions
+          image: {{ include "argocd.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              chown -R {{ .Values.server.containerSecurityContext.runAsUser }}:{{ .Values.server.containerSecurityContext.fsGroup }} /opt/bitnami/argo-cd/app
+          securityContext:
+            runAsUser: {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: static-assets
+              mountPath: /opt/bitnami/argo-cd/app
+        {{- end }}
+        {{- if .Values.server.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.server.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        - name: wait-for-redis
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.redis.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.redis.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+                #!/bin/bash
+
+                set -o errexit
+                set -o nounset
+                set -o pipefail
+
+                . /opt/bitnami/scripts/libos.sh
+                . /opt/bitnami/scripts/liblog.sh
+
+                check_redis_connection() {
+                  local result="$(redis-cli -h {{ include "argocd.redisHost" . }} -p {{ include "argocd.redisPort" . }} PING)"
+                  if [[ "$result" != "PONG" ]]; then
+                    false
+                  fi
+                }
+
+                info "Checking redis connection..."
+                if ! retry_while "check_redis_connection"; then
+                    error "Could not connect to the Redis server"
+                    return 1
+                else
+                    info "Connected to the Redis instance"
+                fi
+          {{- if include "argocd.redis.auth.enabled" . }}
+          env:
+            - name: REDISCLI_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "argocd.redis.secretName" . }}
+                  key: {{ include "argocd.redis.secretPasswordKey" . }}
+          {{- end }}
+      containers:
+        - name: argocd-server
+          image: {{ include "argocd.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.server.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.server.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.server.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.server.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - argocd-server
+          {{- end }}
+          {{- if .Values.server.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.server.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - --staticassets
+            - /opt/bitnami/argo-cd/app
+            - --repo-server
+            - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
+            {{- if .Values.dex.enabled }}
+            - --dex-server
+            - http://{{ include "argocd.dex" . }}:{{ .Values.dex.service.ports.http }}
+            {{- end }}
+            - --logformat
+            - {{ .Values.server.logFormat }}
+            - --loglevel
+            - {{ .Values.server.logLevel }}
+            # TODO(miguelaeh): Test the chart using redis sentinel enabled: https://github.com/argoproj/argo-cd/blob/2a410187565e15633b6f2a8c8d8da22cf02b257d/util/cache/cache.go#L40
+            - --redis
+            - {{ include "argocd.redisHost" . }}:{{ include "argocd.redisPort" . }}
+            {{- if .Values.server.insecure }}
+            - --insecure
+            {{- end }}
+            {{- if .Values.server.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.server.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.server.containerPorts.http }}
+              protocol: TCP
+            {{- if .Values.server.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.server.containerPorts.metrics }}
+              protocol: TCP
+            {{- end }}
+          env:
+            {{- if and .Values.redis.enabled (include "argocd.redis.auth.enabled" .) }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "argocd.redis.secretName" . }}
+                  key: {{ include "argocd.redis.secretPasswordKey" . }}
+            {{- end }}
+            {{- if .Values.server.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.server.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.server.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.server.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.server.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.server.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.server.resources }}
+          resources: {{- toYaml .Values.server.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.server.containerPorts.http }}
+            initialDelaySeconds: {{ .Values.server.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.server.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.server.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.server.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.server.startupProbe.failureThreshold }}
+          {{- else if .Values.server.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.server.containerPorts.http }}
+            initialDelaySeconds: {{ .Values.server.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.server.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.server.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.server.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.server.livenessProbe.failureThreshold }}
+          {{- else if .Values.server.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.server.containerPorts.http }}
+            initialDelaySeconds: {{ .Values.server.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.server.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.server.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.server.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.server.readinessProbe.failureThreshold }}
+          {{- else if .Values.server.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            # Mounting into a path that will be read by Argo CD
+            # Ref: https://argoproj.github.io/argo-cd/operator-manual/declarative-setup/#ssh-known-host-public-keys
+            - name: ssh-known-hosts
+              mountPath: /app/config/ssh
+            {{- if .Values.config.styles }}
+            - mountPath: "/bitnami/argocd/app/custom/custom.styles.css"
+              subPath: "custom.styles.css"
+              name: custom-styles
+            {{- end }}
+            {{- if .Values.config.tlsCerts }}
+            # Mounting into a path that will be read by Argo CD
+            # Ref: https://argoproj.github.io/argo-cd/operator-manual/declarative-setup/#repositories-using-self-signed-tls-certificates-or-are-signed-by-custom-ca
+            - mountPath: /app/config/tls
+              name: tls-certs
+            {{- end }}
+            # Mounting into a path that will be read by Argo CD.
+            # This secret will be autogenerated by Argo CD repo server unless it already exists. Users can create its own certificate to override it.
+            # Ref: https://argoproj.github.io/argo-cd/operator-manual/tls/#inbound-tls-certificates-used-by-argocd-repo-sever
+            - mountPath: /app/config/server/tls
+              name: argocd-repo-server-tls
+          {{- if .Values.server.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.server.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.server.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.server.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: ssh-known-hosts
+          configMap:
+            name: argocd-ssh-known-hosts-cm
+        {{- if .Values.config.styles }}
+        - configMap:
+            name: {{ include "argocd.custom-styles.fullname" . }}
+          name: custom-styles
+        {{- end }}
+        {{- if .Values.config.tlsCerts }}
+        - configMap:
+            name: argocd-tls-certs-cm
+          name: tls-certs
+        {{- end }}
+        - name: argocd-repo-server-tls
+          secret:
+            items:
+              - key: tls.crt
+                path: tls.crt
+              - key: tls.key
+                path: tls.key
+              - key: ca.crt
+                path: ca.crt
+            optional: true
+            secretName: argocd-repo-server-tls
+        {{- if .Values.server.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.server.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

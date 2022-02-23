@@ -4,14 +4,20 @@ metadata:
   name: {{ include "common.names.fullname" . }}-envvars
   namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     app.kubernetes.io/component: grafana
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   GF_SECURITY_ADMIN_USER: {{ .Values.admin.user | quote }}
   {{- if .Values.imageRenderer.enabled }}
   {{- $domain := .Values.clusterDomain }}
   {{- $namespace := .Release.Namespace }}
-  GF_RENDERING_SERVER_URL: "http://{{ include "common.names.fullname" . }}-image-renderer.{{ $namespace }}.svc.{{ $domain }}:{{ .Values.imageRenderer.service.port }}/render"
-  GF_RENDERING_CALLBACK_URL: "http://{{ include "common.names.fullname" . }}.{{ $namespace }}.svc.{{ $domain }}:{{ .Values.service.port }}/"
+  GF_RENDERING_SERVER_URL: "http://{{ include "common.names.fullname" . }}-image-renderer.{{ $namespace }}.svc.{{ $domain }}:{{ .Values.imageRenderer.service.ports.imageRenderer }}/render"
+  GF_RENDERING_CALLBACK_URL: "http://{{ include "common.names.fullname" . }}.{{ $namespace }}.svc.{{ $domain }}:{{ .Values.service.ports.grafana }}/"
   {{- end }}
   {{- if .Values.plugins }}
   GF_INSTALL_PLUGINS: {{ .Values.plugins | quote }}

@@ -1,5 +1,6 @@
-{{- if and .Values.curator.enabled .Values.curator.psp.create }}
-apiVersion: {{ include "podsecuritypolicy.apiVersion" . }}
+{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+{{- if and $pspAvailable .Values.curator.enabled .Values.curator.psp.create }}
+apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: {{ include "elasticsearch.curator.fullname" . }}

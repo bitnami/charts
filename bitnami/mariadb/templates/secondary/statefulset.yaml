@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "mariadb.secondary.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: secondary
     {{- if .Values.commonLabels }}
@@ -14,18 +14,15 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.secondary.replicaCount }}
+  revisionHistoryLimit: {{ .Values.secondary.revisionHistoryLimit }}
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: secondary
   serviceName: {{ include "mariadb.secondary.fullname" . }}
-  updateStrategy:
-    type: {{ .Values.secondary.updateStrategy }}
-    {{- if (eq "Recreate" .Values.secondary.updateStrategy) }}
-    rollingUpdate: null
-    {{- else if .Values.secondary.rollingUpdatePartition }}
-    rollingUpdate:
-      partition: {{ .Values.secondary.rollingUpdatePartition }}
-    {{- end }}
+  podManagementPolicy: {{ .Values.secondary.podManagementPolicy }}
+  {{- if .Values.secondary.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.secondary.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       annotations:
@@ -37,13 +34,16 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: secondary
+        {{- if .Values.secondary.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.secondary.podLabels "context" $) | nindent 8 }}
+        {{- end }}
         {{- if .Values.commonLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "mariadb.imagePullSecrets" . | nindent 6 }}
-      {{- if .Values.schedulerName }}
-      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- if or .Values.secondary.schedulerName .Values.schedulerName }}
+      schedulerName: {{ (coalesce .Values.secondary.schedulerName .Values.schedulerName) | quote }}
       {{- end }}
       serviceAccountName: {{ template "mariadb.serviceAccountName" . }}
       {{- if .Values.secondary.hostAliases }}
@@ -62,6 +62,9 @@ spec:
       {{- end }}
       {{- if .Values.secondary.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.secondary.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.secondary.priorityClassName }}
       priorityClassName: {{ .Values.secondary.priorityClassName | quote }}
@@ -105,21 +108,28 @@ spec:
           {{- if .Values.secondary.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.secondary.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.secondary.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.secondary.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.secondary.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.secondary.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.secondary.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: MARIADB_REPLICATION_MODE
               value: "slave"
             - name: MARIADB_MASTER_HOST
               value: {{ include "mariadb.primary.fullname" . }}
             - name: MARIADB_MASTER_PORT_NUMBER
-              value: {{ .Values.primary.service.port | quote }}
+              value: {{ coalesce .Values.primary.service.ports.mysql .Values.primary.service.port | quote }}
             - name: MARIADB_MASTER_ROOT_USER
               value: "root"
             {{- if .Values.auth.usePasswordFiles }}
@@ -148,6 +158,12 @@ spec:
             - name: MARIADB_EXTRA_FLAGS
               value: "{{ .Values.secondary.extraFlags }}"
             {{- end }}
+            {{- if .Values.secondary.startupWaitOptions }}
+            - name: MARIADB_STARTUP_WAIT_RETRIES
+              value: "{{ .Values.secondary.startupWaitOptions.retries | default 300 }}"
+            - name: MARIADB_STARTUP_WAIT_SLEEP_TIME
+              value: "{{ .Values.secondary.startupWaitOptions.sleepTime | default 2 }}"
+            {{- end }}
             {{- if .Values.secondary.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.secondary.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -165,6 +181,22 @@ spec:
           ports:
             - name: mysql
               containerPort: 3306
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.secondary.startupProbe.enabled }}
+          startupProbe: {{- omit .Values.secondary.startupProbe "enabled" | toYaml | nindent 12 }}
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  password_aux="${MARIADB_MASTER_ROOT_PASSWORD:-}"
+                  if [[ -f "${MARIADB_MASTER_ROOT_PASSWORD_FILE:-}" ]]; then
+                      password_aux=$(cat "$MARIADB_MASTER_ROOT_PASSWORD_FILE")
+                  fi
+                  mysqladmin status -uroot -p"${password_aux}"
+          {{- else if .Values.secondary.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.secondary.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.secondary.livenessProbe "enabled" | toYaml | nindent 12 }}
             exec:
@@ -195,6 +227,7 @@ spec:
           {{- else if .Values.secondary.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- end }}
           {{- if .Values.secondary.resources }}
           resources: {{ toYaml .Values.secondary.resources | nindent 12 }}
           {{- end }}
@@ -220,6 +253,9 @@ spec:
         - name: metrics
           image: {{ include "mariadb.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           env:
             {{- if .Values.auth.usePasswordFiles }}
             - name: MARIADB_ROOT_PASSWORD_FILE
@@ -231,6 +267,10 @@ spec:
                   name: {{ template "mariadb.secretName" . }}
                   key: mariadb-root-password
             {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
@@ -240,9 +280,11 @@ spec:
                   password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
               fi
               DATA_SOURCE_NAME="root:${password_aux}@(localhost:3306)/" /bin/mysqld_exporter {{- range .Values.metrics.extraArgs.secondary }} {{ . }} {{- end }}
+          {{- end }}
           ports:
             - name: metrics
               containerPort: 9104
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.metrics.livenessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
@@ -254,6 +296,7 @@ spec:
             httpGet:
               path: /metrics
               port: metrics
+          {{- end }}
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
@@ -295,6 +338,9 @@ spec:
         name: data
         labels: {{ include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/component: secondary
+        {{- if .Values.secondary.persistence.annotations }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.secondary.persistence.annotations "context" $ ) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
           {{- range .Values.secondary.persistence.accessModes }}

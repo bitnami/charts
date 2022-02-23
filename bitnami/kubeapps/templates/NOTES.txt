@@ -1,3 +1,11 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+{{- $postgresqlSecretName := include "kubeapps.postgresql.secretName" . -}}
+
+{{- $redisSecretName := include "kubeapps.redis.secretName" . -}}
+
 ** Please be patient while the chart is being deployed **
 
 Tip:
@@ -43,8 +51,8 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
        Watch the status by running 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-   echo "Kubeapps URL: http://$SERVICE_IP:{{ .Values.frontend.service.port }}"
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   echo "Kubeapps URL: http{{ if eq ( .Values.frontend.service.port | toString ) "443" }}s{{ end }}://$SERVICE_IP:{{ .Values.frontend.service.port }}"
 
 {{- else if contains "ClusterIP" .Values.frontend.service.type }}
 
@@ -56,3 +64,27 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
 {{- end }}
 
 2. Open a browser and access Kubeapps using the obtained URL.
+
+{{ if and (not .Values.postgresql.existingSecret) (empty .Values.postgresql.postgresqlPassword) -}}
+##########################################################################################################
+### WARNING: You did not provide a value for the postgresqlPassword so one has been generated randomly ###
+##########################################################################################################
+{{- end }}
+
+{{ if and (.Values.packaging.flux.enabled) (not .Values.redis.existingSecret) (empty .Values.redis.redisPassword) -}}
+##########################################################################################################
+### WARNING: You did not provide a value for the redisPassword so one has been generated randomly      ###
+##########################################################################################################
+{{- end }}
+
+{{- $passwordValidationErrors := list -}}
+
+{{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $postgresqlPasswordValidationErrors -}}
+
+{{- $redisPasswordValidationErrors := include "common.validations.values.redis.passwords" (dict "secret" $redisSecretName "subchart" true "context" $) -}}
+{{- $passwordValidationErrors = append $passwordValidationErrors $redisPasswordValidationErrors -}}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
+{{- include "kubeapps.checkRollingTags" . }}
+{{- include "kubeapps.validateValues" . }}

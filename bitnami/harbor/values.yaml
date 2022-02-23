@@ -1,326 +1,62 @@
+## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry and imagePullSecrets
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global storage class for dynamic provisioning
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
-
-## Bitnami Harbor Core image
-## ref: https://hub.docker.com/r/bitnami/harbor-core/tags/
-##
-coreImage:
-  registry: docker.io
-  repository: bitnami/harbor-core
-  tag: 2.2.0-debian-10-r11
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  pullSecrets: []
-  #  - myRegistryKeySecretName
-
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and/or NAMI debugging in the image
-  ##
-  debug: false
-
-## Bitnami Harbor Portal image
-## ref: https://hub.docker.com/r/bitnami/harbor-portal/tags/
-##
-portalImage:
-  registry: docker.io
-  repository: bitnami/harbor-portal
-  tag: 2.2.0-debian-10-r0
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  pullSecrets: []
-  ##  - myRegistryKeySecretName
-  ##
-
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and/or NAMI debugging in the image
-  ##
-  debug: false
-
-## Bitnami Harbor Job Service image
-## ref: https://hub.docker.com/r/bitnami/harbor-jobservice/tags/
-##
-jobserviceImage:
-  registry: docker.io
-  repository: bitnami/harbor-jobservice
-  tag: 2.2.0-debian-10-r14
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  pullSecrets: []
-  #  - myRegistryKeySecretName
-
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and/or NAMI debugging in the image
-  ##
-  debug: false
-
-## Bitnami ChartMuseum image
-## ref: https://hub.docker.com/r/bitnami/chartmuseum/tags/
-##
-chartMuseumImage:
-  registry: docker.io
-  repository: bitnami/chartmuseum
-  tag: 0.13.0-debian-10-r33
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  pullSecrets: []
-  #  - myRegistryKeySecretName
-
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and/or NAMI debugging in the image
-  ##
-  debug: false
-
-## Bitnami Harbor Registry image
-## ref: https://hub.docker.com/r/bitnami/harbor-registry/tags/
-##
-registryImage:
-  registry: docker.io
-  repository: bitnami/harbor-registry
-  tag: 2.2.0-debian-10-r13
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  pullSecrets: []
-  #  - myRegistryKeySecretName
-
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and/or NAMI debugging in the image
-  ##
-  debug: false
-
-## Bitnami Harbor Registryctl image
-## ref: https://hub.docker.com/r/bitnami/harbor-registryctl/tags/
-##
-registryctlImage:
-  registry: docker.io
-  repository: bitnami/harbor-registryctl
-  tag: 2.2.0-debian-10-r13
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  pullSecrets: []
-  #  - myRegistryKeySecretName
-
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and/or NAMI debugging in the image
-  ##
-  debug: false
-
-## Bitnami Harbor Trivy image
-## ref: https://hub.docker.com/r/bitnami/harbor-trivy-adapter/tags/
-##
-trivyImage:
-  registry: docker.io
-  repository: bitnami/harbor-adapter-trivy
-  tag: 2.2.0-debian-10-r13
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  pullSecrets: []
-  #   - myRegistryKeySecretName
-
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and/or NAMI debugging in the image
-  ##
-  debug: false
-
-## Bitnami Harbor Clair image
-## ref: https://hub.docker.com/r/bitnami/harbor-clair/tags/
-##
-clairImage:
-  registry: docker.io
-  repository: bitnami/harbor-clair
-  tag: 2.2.0-debian-10-r0
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  pullSecrets: []
-  ##  - myRegistryKeySecretName
-  ##
-
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and/or NAMI debugging in the image
-  ##
-  debug: false
-
-## Bitnami Harbor Adapter Clair image
-## ref: https://hub.docker.com/r/bitnami/harbor-adapter-clair/tags/
-##
-clairAdapterImage:
-  registry: docker.io
-  repository: bitnami/harbor-adapter-clair
-  tag: 2.2.0-debian-10-r0
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  pullSecrets: []
-  #  - myRegistryKeySecretName
-
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and/or NAMI debugging in the image
-  ##
-  debug: false
-
-## Bitnami Harbor Notary Server image
-## ref: https://hub.docker.com/r/bitnami/harbor-notary-server/tags/
-##
-notaryServerImage:
-  registry: docker.io
-  repository: bitnami/harbor-notary-server
-  tag: 2.2.0-debian-10-r10
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  pullSecrets: []
-  #  - myRegistryKeySecretName
-
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and/or NAMI debugging in the image
-  ##
-  debug: false
-
-## Bitnami Harbor Notary Signer image
-## ref: https://hub.docker.com/r/bitnami/harbor-notary-signer/tags/
-##
-notarySignerImage:
-  registry: docker.io
-  repository: bitnami/harbor-notary-signer
-  tag: 2.2.0-debian-10-r10
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  pullSecrets: []
-  #   - myRegistryKeySecretName
-
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and/or NAMI debugging in the image
-  ##
-  debug: false
-
-## Bitnami Nginx image
-## ref: https://hub.docker.com/r/bitnami/nginx/tags/
-##
-nginxImage:
-  registry: docker.io
-  repository: bitnami/nginx
-  tag: 1.19.8-debian-10-r1
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
-  pullSecrets: []
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
+  imagePullSecrets: []
+  storageClass: ""
 
-  ## Set to true if you would like to see extra information on logs
-  ## It turns BASH and/or NAMI debugging in the image
-  ##
-  debug: false
+## @section Common Parameters
 
-## String to partially override common.names.fullname template (will maintain the release name)
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
-nameOverride:
-
-## String to fully override common.names.fullname template
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname template with a string
 ##
-fullnameOverride:
-
-## Force target Kubernetes version (using Helm capabilites if not set)
+fullnameOverride: ""
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
-kubeVersion:
+kubeVersion: ""
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
+##
+extraDeploy: []
+
+## @section Harbor parameters
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
 volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work)
+  ##
   enabled: false
+  ## @param volumePermissions.image.registry Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository Init container volume-permissions image name
+  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+  ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
+  ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: "10"
-    pullPolicy: Always
+    tag: 10-debian-10-r338
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -328,129 +64,48 @@ volumePermissions:
     pullSecrets: []
     ##   - myRegistryKeySecretName
   ## Init containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param volumePermissions.resources.limits The resources limits for the container
+  ## @param volumePermissions.resources.requests The requested resources for the container
   ##
   resources:
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ##
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     limits: {}
-    ##   cpu: 100m
-    ##   memory: 128Mi
-    ##
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
     requests: {}
-    ##   cpu: 100m
-    ##   memory: 128Mi
-    ##
-
-## The internal TLS used for harbor components secure communicating. In order to enable https
-## in each components tls cert files need to provided in advance.
+## @param internalTLS.enabled Use TLS in all the supported containers: chartmuseum, clair, core, jobservice, portal, registry and trivy
+## In order to enable https in each components tls cert files need to provided in advance.
 ##
 internalTLS:
   enabled: false
 
-## The custom ca bundle secret, the secret must contain key named "ca.crt"
-## which will be injected into the trust store for chartmuseum, clair, core, jobservice, registry, trivy components
-##
-# caBundleSecretName: ""
-
-## Service parameters
-##
-service:
-  ## K8s service type
-  ## Allowed values are "ClusterIP", "NodePort" or "LoadBalancer"
-  ##
-  type: LoadBalancer
-  ## TLS parameters
-  ##
-  tls:
-    ## Enable TLS for external access
-    ## Note: When type is "Ingress" and TLS is disabled, the port must be included
-    ## in the command when pulling/pushing images.
-    ## ref: https://github.com/goharbor/harbor/issues/5291
-    ##
+ipFamily:
+  ## Enable listening on IPv6 ([::]) for nginx-based components (nginx,portal)
+  ## Note that enabling ipv6 will cause nginx to crash on start on systems
+  ## with IPv6 disabled using the `ipv6.disable` kernel flag)
+  ## @param ipFamily.ipv6.enabled Enable listening on IPv6 ([::]) for nginx-based components (nginx,portal)
+  ipv6:
     enabled: true
-    ## Existing secret name containing your own TLS certificates.
-    ## The secret contains keys named:
-    ## "tls.crt" - the certificate (required)
-    ## "tls.key" - the private key (required)
-    ## "ca.crt" - the certificate of CA (optional)
-    ## Self-signed TLS certificates will be used otherwise.
-    ##
-    existingSecret: ''
-    ## By default, the Notary service will use the same certificate described above.
-    ## Fill the name of secret if you want to use a separated on for Notary.
-    ##
-    notaryExistingSecret: ''
-    ## The common name used to automatically generate the certificates.
-    ## Mandatory when "secretName" is not provided or type is not "Ingress".
-    ##
-    commonName: 'core.harbor.domain'
-  ## Service parameters when type is "clusterIP"
-  ##
-  ports:
-    ## The service port Harbor listens on when serving with HTTP
-    ##
-    http: 80
-    ## The service port Harbor listens on when serving with HTTPS
-    ##
-    https: 443
-    ## The service port Notary listens on. Only needed when notary.enabled
-    ## is set to true
-    ##
-    notary: 4443
-  ## Service parameters when type is "nodePort"
-  ##
-  nodePorts:
-    http:
-    https:
-    notary:
-  loadBalancerIP:
-  annotations: {}
-  loadBalancerSourceRanges: []
-  externalTrafficPolicy:
+  ## ipv4Enabled set to true if ipv4 is enabled in cluster
+  ## @param ipFamily.ipv4.enabled Enable listening on IPv4 for nginx-based components (nginx,portal)
+  ipv4:
+    enabled: true
 
-## Ingress parameters
+## @param caBundleSecretName The custom ca bundle secret name, the secret must contain key named "ca.crt" which will be injected into the trust store for chartmuseum, clair, core, jobservice, registry, trivy components.
 ##
-ingress:
-  enabled: false
-
-  ## Ingress Path type
-  ##
-  pathType: ImplementationSpecific
-
-  ## Override API Version (automatically detected if not set)
-  ##
-  apiVersion:
-
-  ## Set this to true in order to add the corresponding annotations for cert-manager
-  ##
-  certManager: false
-
-  ## The list of hostnames to be covered with this ingress record
-  ##
-  hosts:
-    core: core.harbor.domain
-    notary: notary.harbor.domain
-  ## Set to the type of ingress controller if it has specific requirements.
-  ## leave as `default` for most ingress controllers.
-  ## set to `gce` if using the GCE ingress controller
-  ## set to `ncp` if using the NCP (NSX-T Container Plugin) ingress controller
-  ##
-  controller: default
-  ## Ingress annotations done as key:value pairs
-  ## For a full list of possible ingress annotations, please see
-  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-  ##
-  annotations:
-    ingress.kubernetes.io/ssl-redirect: 'true'
-    ingress.kubernetes.io/proxy-body-size: '0'
-    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
-    nginx.ingress.kubernetes.io/proxy-body-size: '0'
-
-## The external URL for Harbor core service. It is used to
+caBundleSecretName: ""
+## @param externalURL The external URL for Harbor core service
+## It is used to
 ## 1) populate the docker/helm commands showed on portal
 ## 2) populate the token service URL returned to docker/notary client
 ##
@@ -464,16 +119,144 @@ ingress:
 ## set it as the URL of proxy
 ##
 externalURL: https://core.harbor.domain
-
 ## SecurityContext configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## @param containerSecurityContext.runAsUser Set container's Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   runAsUser: 1001
   runAsNonRoot: true
-
+## @param podSecurityContext.fsGroup Set pod's Security Context fsGroup
+##
 podSecurityContext:
   fsGroup: 1001
+## @param logLevel The log level used for Harbor services. Allowed values are [ fatal | error | warn | info | debug | trace ]
+##
+logLevel: debug
+## @param forcePassword Option to force users to specify passwords (core.secret, harborAdminPassword, and secretKey). That is required for 'helm upgrade' to work properly.
+## If it is not forced, random values will be generated.
+##
+forcePassword: false
+## @param harborAdminPassword The initial password of Harbor admin. Change it from portal after launching Harbor
+##
+harborAdminPassword: ""
+## If expose the service via Ingress, the NGINX server will not be used
+##
+## The proxy settings for updating clair vulnerabilities from the Internet and replicating
+## artifacts from/to the registries that cannot be reached directly
+## @param proxy.httpProxy The URL of the HTTP proxy server
+## @param proxy.httpsProxy The URL of the HTTPS proxy server
+## @param proxy.noProxy The URLs that the proxy settings not apply to
+## @param proxy.components The component list that the proxy settings apply to
+##
+proxy:
+  httpProxy: ""
+  httpsProxy: ""
+  noProxy: 127.0.0.1,localhost,.local,.internal
+  components:
+    - core
+    - jobservice
+    - clair
+    - trivy
+
+## @section Traffic Exposure Parameters
+
+## Service parameters
+##
+service:
+  ## @param service.type The way how to expose the service: `Ingress`, `ClusterIP`, `NodePort` or `LoadBalancer`
+  ##
+  type: LoadBalancer
+  ## TLS parameters
+  ##
+  tls:
+    ## @param service.tls.enabled Enable the tls or not (for external access)
+    ## Note: When type is "Ingress" and TLS is disabled, the port must be included
+    ## in the command when pulling/pushing images.
+    ## ref: https://github.com/goharbor/harbor/issues/5291
+    ##
+    enabled: true
+    ## @param service.tls.existingSecret Existing secret name containing your own TLS certificates. The secret must contain the keys: `tls.crt` - the certificate (required), `tls.key` - the private key (required), `ca.crt` - the certificate of CA (optional). Self-signed TLS certificates will be used otherwise.
+    ##
+    existingSecret: ""
+    ## @param service.tls.notaryExistingSecret By default, the Notary service will use the same cert and key as described above. Fill the name of secret if you want to use a separated one. Only needed when the `service.type` is `ingress`.
+    ##
+    notaryExistingSecret: ""
+    ## @param service.tls.commonName The common name used to generate the certificate, it's necessary when the `service.type` is `ClusterIP` or `NodePort` and `service.tls.existingSecret` is null
+    ## Mandatory when "secretName" is not provided or type is not "Ingress".
+    ##
+    commonName: 'core.harbor.domain'
+  ## Service parameters when type is "clusterIP"
+  ##
+  ports:
+    ## @param service.ports.http The service port Harbor listens on when serving with HTTP
+    ##
+    http: 80
+    ## @param service.ports.https The service port Harbor listens on when serving with HTTPS
+    ##
+    https: 443
+    ## @param service.ports.notary The service port Notary listens on. Only needed when `notary.enabled` is set to `true`
+    ##
+    notary: 4443
+  ## @param service.nodePorts [object] Service parameters when type is "nodePort"
+  ##
+  nodePorts:
+    http: ""
+    https: ""
+    notary: ""
+  ## @param service.loadBalancerIP Load Balancer IP
+  ##
+  loadBalancerIP: ""
+  ## @param service.annotations The annotations attached to the loadBalancer service
+  ##
+  annotations: {}
+  ## @param service.loadBalancerSourceRanges List of IP address ranges to assign to loadBalancerSourceRanges
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy Enable client source IP preservation
+  ##
+  externalTrafficPolicy: ""
+## Ingress parameters
+##
+ingress:
+  ## @param ingress.enabled Deploy ingress rules
+  ##
+  enabled: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Override ingress api version
+  ##
+  apiVersion: ""
+  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
+  ## certManager: false
+  ##
+
+  ## @param ingress.hosts [object] The list of hostnames to be covered with this ingress record
+  ##
+  hosts:
+    core: core.harbor.domain
+    notary: notary.harbor.domain
+  ## @param ingress.controller The ingress controller type. Currently supports `default`, `gce` and `ncp`
+  ## leave as `default` for most ingress controllers.
+  ## set to `gce` if using the GCE ingress controller
+  ## set to `ncp` if using the NCP (NSX-T Container Plugin) ingress controller
+  ##
+  controller: default
+  ## @param ingress.annotations [object] Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ##
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: 'true'
+    ingress.kubernetes.io/proxy-body-size: '0'
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/proxy-body-size: '0'
+
+## @section Persistence Parameters
 
 ## The persistence is enabled by default and a default StorageClass
 ## is needed in the k8s cluster to provision volumes dynamically.
@@ -484,76 +267,85 @@ podSecurityContext:
 ## "swift" or "oss". Set it in the "imageChartStorage" section
 ##
 persistence:
+  ## @param persistence.enabled Enable the data persistence or not
+  ##
   enabled: true
   ## Resource Policy
-  ## Setting it to "keep" to avoid removing PVCs during a helm delete operation
+  ## @param persistence.resourcePolicy Setting it to `keep` to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
   ##
   resourcePolicy: 'keep'
   persistentVolumeClaim:
+    ## @param persistence.persistentVolumeClaim.registry.existingClaim Use the existing PVC which must be created manually before bound, and specify the `subPath` if the PVC is shared with other components
+    ## @param persistence.persistentVolumeClaim.registry.storageClass Specify the `storageClass` used to provision the volume. Or the default StorageClass will be used (the default). Set it to `-` to disable dynamic provisioning
+    ## @param persistence.persistentVolumeClaim.registry.subPath The sub path used in the volume
+    ## @param persistence.persistentVolumeClaim.registry.accessMode The access mode of the volume
+    ## @param persistence.persistentVolumeClaim.registry.size The size of the volume
+    ##
     registry:
-      ## If you want to reuse an existing claim, you can pass the name of the PVC using
-      ## the existingClaim variable
-      ##
-      existingClaim: ''
-      ## Specify the "storageClass" used to provision the volume.
-      ## Set it to "-" to disable dynamic provisioning
-      ##
-      storageClass: ''
-      subPath: ''
+      existingClaim: ""
+      storageClass: ""
+      subPath: ""
       accessMode: ReadWriteOnce
       size: 5Gi
+    ## @param persistence.persistentVolumeClaim.jobservice.existingClaim Use the existing PVC which must be created manually before bound, and specify the `subPath` if the PVC is shared with other components
+    ## @param persistence.persistentVolumeClaim.jobservice.storageClass Specify the `storageClass` used to provision the volume. Or the default StorageClass will be used(the default). Set it to `-` to disable dynamic provisioning
+    ## @param persistence.persistentVolumeClaim.jobservice.subPath The sub path used in the volume
+    ## @param persistence.persistentVolumeClaim.jobservice.accessMode The access mode of the volume
+    ## @param persistence.persistentVolumeClaim.jobservice.size The size of the volume
+    ##
     jobservice:
-      ## If you want to reuse an existing claim, you can pass the name of the PVC using
-      ## the existingClaim variable
-      ##
-      existingClaim: ''
-      ## Specify the "storageClass" used to provision the volume.
-      ## Set it to "-" to disable dynamic provisioning
-      ##
-      storageClass: ''
-      subPath: ''
+      existingClaim: ""
+      storageClass: ""
+      subPath: ""
       accessMode: ReadWriteOnce
       size: 1Gi
+    ## @param persistence.persistentVolumeClaim.chartmuseum.existingClaim Use the existing PVC which must be created manually before bound, and specify the `subPath` if the PVC is shared with other components
+    ## @param persistence.persistentVolumeClaim.chartmuseum.storageClass Specify the `storageClass` used to provision the volume. Or the default StorageClass will be used(the default). Set it to `-` to disable dynamic provisioning
+    ## @param persistence.persistentVolumeClaim.chartmuseum.subPath The sub path used in the volume
+    ## @param persistence.persistentVolumeClaim.chartmuseum.accessMode The access mode of the volume
+    ## @param persistence.persistentVolumeClaim.chartmuseum.size The size of the volume
+    ##
     chartmuseum:
-      ## If you want to reuse an existing claim, you can pass the name of the PVC using
-      ## the existingClaim variable
-      ##
-      existingClaim: ''
-      ## Specify the "storageClass" used to provision the volume.
-      ## Set it to "-" to disable dynamic provisioning
-      ##
-      storageClass: ''
-      subPath: ''
+      existingClaim: ""
+      storageClass: ""
+      subPath: ""
       accessMode: ReadWriteOnce
       size: 5Gi
+    ## @param persistence.persistentVolumeClaim.trivy.storageClass Specify the `storageClass` used to provision the volume. Or the default StorageClass will be used(the default). Set it to `-` to disable dynamic provisioning
+    ## @param persistence.persistentVolumeClaim.trivy.accessMode The access mode of the volume
+    ## @param persistence.persistentVolumeClaim.trivy.size The size of the volume
+    ##
     trivy:
-      storageClass: ''
+      storageClass: ""
       accessMode: ReadWriteOnce
       size: 5Gi
-
   ## Define which storage backend is used for registry and chartmuseum to store
   ## images and charts.
   ## ref: https://github.com/docker/distribution/blob/master/docs/configuration.md#storage
   ##
   imageChartStorage:
-    ## Name of a secret containing the CA bundle
+    ## @param persistence.imageChartStorage.caBundleSecretName Specify the `caBundleSecretName` if the storage service uses a self-signed certificate. The secret must contain keys named `ca.crt` which will be injected into the trust store  of registry's and chartmuseum's containers.
     ##
-    caBundleSecretName:
-    ## Specify whether to disable `redirect` for images and chart storage, for
-    ## backends which not supported it (such as using MinIO(R) for `s3` storage type), please disable
-    ## it. To disable redirects, simply set `disableredirect` to `true` instead.
-    ## ref: https://github.com/docker/distribution/blob/master/docs/configuration.md#redirect
+    caBundleSecretName: ""
+    ## @param persistence.imageChartStorage.disableredirect The configuration for managing redirects from content backends. For backends which do not supported it (such as using MinIO&reg; for `s3` storage type), please set it to `true` to disable redirects. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#redirect) for more information about the detail
     ##
     disableredirect: false
-    ## Specify the type of storage. Allowed values are [ filesystem | azure | gcs | s3 | swift | oss ]
+    ## @param persistence.imageChartStorage.type The type of storage for images and charts: `filesystem`, `azure`, `gcs`, `s3`, `swift` or `oss`. The type must be `filesystem` if you want to use persistent volumes for registry and chartmuseum. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#storage) for more information about the detail
     ##
     type: filesystem
     ## Images/charts storage parameters when type is "filesystem"
+    ## @param persistence.imageChartStorage.filesystem.rootdirectory Filesystem storage type setting: Storage root directory
+    ## @param persistence.imageChartStorage.filesystem.maxthreads Filesystem storage type setting: Maximum threads directory
     ##
     filesystem:
       rootdirectory: /storage
-      maxthreads:
+      maxthreads: ""
     ## Images/charts storage parameters when type is "azure"
+    ## @param persistence.imageChartStorage.azure.accountname Azure storage type setting: Name of the Azure account
+    ## @param persistence.imageChartStorage.azure.accountkey Azure storage type setting: Key of the Azure account
+    ## @param persistence.imageChartStorage.azure.container Azure storage type setting: Container
+    ## @param persistence.imageChartStorage.azure.storagePrefix Azure storage type setting: Storage prefix
+    ## @param persistence.imageChartStorage.azure.realm Azure storage type setting: Realm of the Azure account
     ##
     azure:
       accountname: accountname
@@ -561,244 +353,295 @@ persistence:
       container: containername
       storagePrefix: /azure/harbor/charts
       ## Example realm
-      # realm: core.windows.net
-      realm:
+      ## realm: core.windows.net
+      ##
+      realm: ""
     ## Images/charts storage parameters when type is "gcs"
+    ## @param persistence.imageChartStorage.gcs.bucket GCS storage type setting: Bucket name
+    ## @param persistence.imageChartStorage.gcs.encodedkey GCS storage type setting: Base64 encoded key
+    ## @param persistence.imageChartStorage.gcs.rootdirectory GCS storage type setting: Root directory name
+    ## @param persistence.imageChartStorage.gcs.chunksize GCS storage type setting: Chunk size name
     ##
     gcs:
       bucket: bucketname
       ## The base64 encoded json file which contains the gcs key (file's content)
       ##
       encodedkey: base64-encoded-json-key-file
-      rootdirectory:
-      chunksize:
+      rootdirectory: ""
+      chunksize: ""
     ## Images/charts storage parameters when type is "s3"
+    ## ref: https://docs.docker.com/registry/storage-drivers/s3/
+    ## @param persistence.imageChartStorage.s3.region S3 storage type setting: Region
+    ## @param persistence.imageChartStorage.s3.bucket S3 storage type setting: Bucket name
+    ## @param persistence.imageChartStorage.s3.accesskey S3 storage type setting: Access key name
+    ## @param persistence.imageChartStorage.s3.secretkey S3 storage type setting: Secret Key name
+    ## @param persistence.imageChartStorage.s3.regionendpoint S3 storage type setting: Region Endpoint
+    ## @param persistence.imageChartStorage.s3.encrypt S3 storage type setting: Encrypt
+    ## @param persistence.imageChartStorage.s3.keyid S3 storage type setting: Key ID
+    ## @param persistence.imageChartStorage.s3.secure S3 storage type setting: Secure
+    ## @param persistence.imageChartStorage.s3.skipverify S3 storage type setting: TLS skip verification
+    ## @param persistence.imageChartStorage.s3.v4auth S3 storage type setting: V4 authorization
+    ## @param persistence.imageChartStorage.s3.chunksize S3 storage type setting: V4 authorization
+    ## @param persistence.imageChartStorage.s3.rootdirectory S3 storage type setting: Root directory name
+    ## @param persistence.imageChartStorage.s3.storageClass S3 storage type setting: Storage class
+    ## @param persistence.imageChartStorage.s3.sse S3 storage type setting: SSE name
     ##
     s3:
       region: us-west-1
       bucket: bucketname
-      accesskey:
-      secretkey:
-      regionendpoint:
-      encrypt:
-      keyid:
-      secure:
-      v4auth:
-      chunksize:
-      rootdirectory:
-      storageclass:
-      sse:
+      accesskey: ""
+      secretkey: ""
+      regionendpoint: ""
+      encrypt: ""
+      keyid: ""
+      secure: ""
+      skipverify: ""
+      v4auth: ""
+      chunksize: ""
+      rootdirectory: ""
+      storageClass: ""
+      sse: ""
     ## Images/charts storage parameters when type is "swift"
+    ## @param persistence.imageChartStorage.swift.authurl Swift storage type setting: Authentication url
+    ## @param persistence.imageChartStorage.swift.username Swift storage type setting: Authentication url
+    ## @param persistence.imageChartStorage.swift.password Swift storage type setting: Password
+    ## @param persistence.imageChartStorage.swift.container Swift storage type setting: Container
+    ## @param persistence.imageChartStorage.swift.region Swift storage type setting: Region
+    ## @param persistence.imageChartStorage.swift.tenant Swift storage type setting: Tenant
+    ## @param persistence.imageChartStorage.swift.tenantid Swift storage type setting: TenantID
+    ## @param persistence.imageChartStorage.swift.domain Swift storage type setting: Domain
+    ## @param persistence.imageChartStorage.swift.domainid Swift storage type setting: DomainID
+    ## @param persistence.imageChartStorage.swift.trustid Swift storage type setting: TrustID
+    ## @param persistence.imageChartStorage.swift.insecureskipverify Swift storage type setting: Verification
+    ## @param persistence.imageChartStorage.swift.chunksize Swift storage type setting: Chunk
+    ## @param persistence.imageChartStorage.swift.prefix Swift storage type setting: Prefix
+    ## @param persistence.imageChartStorage.swift.secretkey Swift storage type setting: Secre Key
+    ## @param persistence.imageChartStorage.swift.accesskey Swift storage type setting: Access Key
+    ## @param persistence.imageChartStorage.swift.authversion Swift storage type setting: Auth
+    ## @param persistence.imageChartStorage.swift.endpointtype Swift storage type setting: Endpoint
+    ## @param persistence.imageChartStorage.swift.tempurlcontainerkey Swift storage type setting: Temp URL container key
+    ## @param persistence.imageChartStorage.swift.tempurlmethods Swift storage type setting: Temp URL methods
     ##
     swift:
       authurl: https://storage.myprovider.com/v3/auth
-      username:
-      password:
-      container:
-      region:
-      tenant:
-      tenantid:
-      domain:
-      domainid:
-      trustid:
-      insecureskipverify:
-      chunksize:
-      prefix:
-      secretkey:
-      accesskey:
-      authversion:
-      endpointtype:
-      tempurlcontainerkey:
-      tempurlmethods:
+      username: ""
+      password: ""
+      container: ""
+      region: ""
+      tenant: ""
+      tenantid: ""
+      domain: ""
+      domainid: ""
+      trustid: ""
+      insecureskipverify: ""
+      chunksize: ""
+      prefix: ""
+      secretkey: ""
+      accesskey: ""
+      authversion: ""
+      endpointtype: ""
+      tempurlcontainerkey: ""
+      tempurlmethods: ""
     ## Images/charts storage parameters when type is "oss"
+    ## @param persistence.imageChartStorage.oss.accesskeyid OSS storage type setting: Access key ID
+    ## @param persistence.imageChartStorage.oss.accesskeysecret OSS storage type setting: Access key secret name containing the token
+    ## @param persistence.imageChartStorage.oss.region OSS storage type setting: Region name
+    ## @param persistence.imageChartStorage.oss.bucket OSS storage type setting: Bucket name
+    ## @param persistence.imageChartStorage.oss.endpoint OSS storage type setting: Endpoint
+    ## @param persistence.imageChartStorage.oss.internal OSS storage type setting: Internal
+    ## @param persistence.imageChartStorage.oss.encrypt OSS storage type setting: Encrypt
+    ## @param persistence.imageChartStorage.oss.secure OSS storage type setting: Secure
+    ## @param persistence.imageChartStorage.oss.chunksize OSS storage type setting: Chunk
+    ## @param persistence.imageChartStorage.oss.rootdirectory OSS storage type setting: Directory
+    ## @param persistence.imageChartStorage.oss.secretkey OSS storage type setting: Secret key
     ##
     oss:
-      accesskeyid:
-      accesskeysecret:
-      region:
-      bucket:
-      endpoint:
-      internal:
-      encrypt:
-      secure:
-      chunksize:
-      rootdirectory:
-      secretkey:
+      accesskeyid: ""
+      accesskeysecret: ""
+      region: ""
+      bucket: ""
+      endpoint: ""
+      internal: ""
+      encrypt: ""
+      secure: ""
+      chunksize: ""
+      rootdirectory: ""
+      secretkey: ""
 
-## The log level used for Harbor services. Allowed values are [ fatal | error | warn | info | debug | trace ]
+## @section Nginx Parameters
+
+## Bitnami Nginx image
+## ref: https://hub.docker.com/r/bitnami/nginx/tags/
 ##
-logLevel: debug
-
-## Option to force users to specify passwords (core.secret, harborAdminPassword, and secretKey). That is required for 'helm upgrade' to work properly.
-## If it is not forced, random values will be generated.
+nginxImage:
+  ## @param nginxImage.registry Registry for Nginx image
+  ## @param nginxImage.repository Repository for Nginx image
+  ## @param nginxImage.tag Tag for Nginx image
+  ## @param nginxImage.pullPolicy Harbor Portal image pull policy
+  ## @param nginxImage.pullSecrets Specify docker-registry secret names as an array
+  ## @param nginxImage.debug Specify if debug logs should be enabled
+  ##
+  registry: docker.io
+  repository: bitnami/nginx
+  tag: 1.21.6-debian-10-r19
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
+  debug: false
+## Nginx Parameters
 ##
-forcePassword: false
-
-## The initial password of Harbor admin. Change it from portal after launching Harbor
-##
-harborAdminPassword:
-
-## If expose the service via Ingress, the NGINX server will not be used
-##
-
-## The proxy settings for updating clair vulnerabilities from the Internet and replicating
-## artifacts from/to the registries that cannot be reached directly
-##
-proxy:
-  httpProxy: ''
-  httpsProxy: ''
-  noProxy: 127.0.0.1,localhost,.local,.internal
-  components:
-    - core
-    - jobservice
-    - clair
-    - trivy
-
 nginx:
-  ## NGINX container command (using container default if not set)
+  ## @param nginx.command Override default container command (useful when using custom images)
   ##
-  command:
-  ## NGINX container args (using container default if not set)
+  command: []
+  ## @param nginx.args Override default container args (useful when using custom images)
   ##
-  args:
+  args: []
+  ## @param nginx.replicas The replica count
+  ##
   replicas: 1
-  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## @param nginx.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
   updateStrategy:
     type: RollingUpdate
-  ## Custom Liveness probe
+  ## @param nginx.customLivenessProbe Override default liveness probe
   ##
   customLivenessProbe: {}
-
-  ## Custom Rediness probe
+  ## @param nginx.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
-
-  ## An array to add extra env vars
+  ## @param nginx.extraEnvVars Array containing extra env vars
   ## For example:
+  ##  - name: BEARER_AUTH
+  ##    value: true
   ##
   extraEnvVars: []
-  #  - name: BEARER_AUTH
-  #    value: true
-
-  ## ConfigMap with extra environment variables
+  ## @param nginx.extraEnvVarsCM ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
-
-  ## Secret with extra environment variables
+  extraEnvVarsCM: ""
+  ## @param nginx.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
   ##
-  extraEnvVarsSecret:
-
-  ## Extra volumes to add to the deployment
+  extraEnvVarsSecret: ""
+  ## @param nginx.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
   ##
   extraVolumes: []
-
-  ## Extra volume mounts to add to the container
+  ## @param nginx.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.
   ##
   extraVolumeMounts: []
-
-  ## HostAliases to add to the deployment
+  ## @param nginx.hostAliases Specify hostAliases for the Pod to use
   ##
   hostAliases: []
-
-  ## Extra init containers to add to the deployment
+  ## @param nginx.initContainers Add additional init containers to the pod (evaluated as a template)
   ##
   initContainers: []
-
-  ## Extra sidecar containers to add to the deployment
+  ## @param nginx.sidecars Attach additional containers to the pod (evaluated as a template)
   ##
   sidecars: []
   ## NGINX containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param nginx.resources.limits The resources limits for the container
+  ## @param nginx.resources.requests The requested resources for the container
   ##
   resources:
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ##
+    ## Example:
+    ## limits:
+    ##    cpu: 500m
+    ##    memory: 1Gi
     limits: {}
-    ##   cpu: 500m
-    ##   memory: 1Gi
-    ##
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
     requests: {}
-    ##   cpu: 250m
-    ##   memory: 256Mi
-    ##
-
-  ## Pod affinity preset
+  ## @param nginx.podAffinityPreset NGINX Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param nginx.podAntiAffinityPreset NGINX Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param nginx.nodeAffinityPreset.type NGINX Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
+    ## @param nginx.nodeAffinityPreset.key NGINX Node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param nginx.nodeAffinityPreset.values NGINX Node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
+  ## @param nginx.affinity NGINX Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param nginx.priorityClassName NGINX pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
+  ## @param nginx.nodeSelector NGINX Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param nginx.tolerations NGINX Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Pod extra labels
+  ## @param nginx.podLabels Add additional labels to the pod (evaluated as a template)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
-  ## Pod annotations
+  ## @param nginx.podAnnotations Annotations to add to the nginx pod
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
-  ## When setting up Harbor behind another reverse proxy, such as a nginx instance, set this value to true
+  ## @param nginx.behindReverseProxy If nginx is behind another reverse proxy, set to true
   ## if the reverse proxy already provides the 'X-Forwarded-Proto' header field.
   ## This is, for example, the case for the OpenShift HAProxy router.
   ##
   behindReverseProxy: false
-  ## lifecycleHooks for the container to automate configuration before or after startup.
+  ## @param nginx.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
   ##
-  lifecycleHooks:
-  ## NGINX containers' liveness and readiness probes
+  lifecycleHooks: {}
+  ## NGINX containers' liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param nginx.livenessProbe.enabled Enable livenessProbe
+  ## @param nginx.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param nginx.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param nginx.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param nginx.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param nginx.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -807,6 +650,15 @@ nginx:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## NGINX containers' readiness probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param nginx.readinessProbe.enabled Enable readinessProbe
+  ## @param nginx.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param nginx.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param nginx.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param nginx.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param nginx.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 20
@@ -815,160 +667,184 @@ nginx:
     failureThreshold: 6
     successThreshold: 1
 
-## Harbor Portal parameters
+## @section Harbor Portal Parameters
+
+## Bitnami Harbor Portal image
+## ref: https://hub.docker.com/r/bitnami/harbor-portal/tags/
+##
+portalImage:
+  ## @param portalImage.registry Registry for portal image
+  ## @param portalImage.repository Repository for portal image
+  ## @param portalImage.tag Tag for portal image
+  ## @param portalImage.pullPolicy Harbor Portal image pull policy
+  ## @param portalImage.pullSecrets Specify docker-registry secret names as an array
+  ## @param portalImage.debug Specify if debug logs should be enabled
+  ##
+  registry: docker.io
+  repository: bitnami/harbor-portal
+  tag: 2.4.1-debian-10-r56
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
+  debug: false
+## Portal Parameters
 ##
 portal:
-  ## Harbor portal container command (using container default if not set)
+  ## @param portal.command Override default container command (useful when using custom images)
   ##
-  command:
-  ## Harbor portal container args (using container default if not set)
+  command: []
+  ## @param portal.args Override default container args (useful when using custom images)
   ##
-  args:
-
+  args: []
+  ## @param portal.replicas The replica count
+  ##
   replicas: 1
-  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## @param portal.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
   updateStrategy:
     type: RollingUpdate
-
   ## Use TLS in the container
   ##
   tls:
-    ## Name of a secret containing the certificates
+    ## @param portal.tls.existingSecret Name of a secret with the certificates for internal TLS access. Requires internalTLS.enabled to be set to true. If this values is not set it will be automatically generated
     ## Otherwise, it will generate a cert automatically
     ##
-    existingSecret:
-
-  ## lifecycleHooks for the container to automate configuration before or after startup.
+    existingSecret: ""
+  ## @param portal.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
   ##
-  lifecycleHooks:
-
-  ## Custom Liveness probe
+  lifecycleHooks: {}
+  ## @param portal.customLivenessProbe Override default liveness probe
   ##
   customLivenessProbe: {}
-
-  ## Custom Rediness probe
+  ## @param portal.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
-
-  ## An array to add extra env vars
+  ## @param portal.extraEnvVars Array containing extra env vars
   ## For example:
+  ##  - name: BEARER_AUTH
+  ##    value: true
   ##
   extraEnvVars: []
-  #  - name: BEARER_AUTH
-  #    value: true
-
-  ## ConfigMap with extra environment variables
+  ## @param portal.extraEnvVarsCM ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
-
-  ## Secret with extra environment variables
+  extraEnvVarsCM: ""
+  ## @param portal.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
   ##
-  extraEnvVarsSecret:
-
-  ## Extra volumes to add to the deployment
+  extraEnvVarsSecret: ""
+  ## @param portal.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
   ##
   extraVolumes: []
-
-  ## Extra volume mounts to add to the container
+  ## @param portal.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.
   ##
   extraVolumeMounts: []
-
-  ## HostAliases to add to the deployment
+  ## @param portal.hostAliases Specify hostAliases for the Pod to use
   ##
   hostAliases: []
-
-  ## Extra init containers to add to the deployment
+  ## @param portal.initContainers Add additional init containers to the pod (evaluated as a template)
   ##
   initContainers: []
-
-  ## Extra sidecar containers to add to the deployment
+  ## @param portal.sidecars Attach additional containers to the pod (evaluated as a template)
   ##
   sidecars: []
-
   ## Harbor Portal containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param portal.resources.limits The resources limits for the container
+  ## @param portal.resources.requests The requested resources for the container
   ##
   resources:
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ##
+    ## Example:
+    ## limits:
+    ##    cpu: 500m
+    ##    memory: 1Gi
     limits: {}
-    ##   cpu: 500m
-    ##   memory: 1Gi
-    ##
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
     requests: {}
-    ##   cpu: 250m
-    ##   memory: 256Mi
-    ##
-
-  ## Pod affinity preset
+  ## @param portal.podAffinityPreset Harbor Portal Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param portal.podAntiAffinityPreset Harbor Portal Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param portal.nodeAffinityPreset.type Harbor Portal Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
+    ## @param portal.nodeAffinityPreset.key Harbor Portal Node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param portal.nodeAffinityPreset.values Harbor Portal Node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
+  ## @param portal.affinity Harbor Portal Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param portal.priorityClassName Portal pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
+  ## @param portal.nodeSelector Harbor Portal Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param portal.tolerations Harbor Portal Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Pod extra labels
+  ## @param portal.podLabels Add additional labels to the pod (evaluated as a template)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
-  ## Pod annotations
+  ## @param portal.podAnnotations Annotations to add to the portal pod
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
-  ## Harbor Portal containers' liveness and readiness probes
+  ## @param portal.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
+  ## Harbor Portal containers' liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param portal.livenessProbe.enabled Enable livenessProbe
+  ## @param portal.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param portal.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param portal.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param portal.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param portal.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -977,6 +853,15 @@ portal:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## Harbor Portal containers' readiness probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param portal.readinessProbe.enabled Enable readinessProbe
+  ## @param portal.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param portal.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param portal.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param portal.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param portal.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 20
@@ -985,192 +870,204 @@ portal:
     failureThreshold: 6
     successThreshold: 1
 
-## Harbor Core parameters
+## @section Harbor Core Parameters
+
+## Bitnami Harbor Core image
+## ref: https://hub.docker.com/r/bitnami/harbor-core/tags/
+##
+coreImage:
+  ## @param coreImage.registry Registry for core image
+  ## @param coreImage.repository Repository for Harbor core image
+  ## @param coreImage.tag Tag for Harbor core image
+  ## @param coreImage.pullPolicy Harbor Core image pull policy
+  ## @param coreImage.pullSecrets Specify docker-registry secret names as an array
+  ## @param coreImage.debug Specify if debug logs should be enabled
+  ##
+  registry: docker.io
+  repository: bitnami/harbor-core
+  tag: 2.4.1-debian-10-r55
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
+  debug: false
+## Harbor Core Parameters
 ##
 core:
-  ## Harbor core container command (using container default if not set)
+  ## @param core.command Override default container command (useful when using custom images)
   ##
-  command:
-  ## Harbor core container args (using container default if not set)
+  command: []
+  ## @param core.args Override default container args (useful when using custom images)
   ##
-  args:
-
-  ## UAA Authentication Options
-  ## If you're using UAA for authentication behind a self-signed
-  ## certificate you will need to provide the CA Cert.
-  ## Set uaaSecretName below to provide a pre-created secret that
-  ## contains a base64 encoded CA Certificate named `ca.crt`.
+  args: []
+  ## @param core.uaaSecretName If using external UAA auth which has a self signed cert, you can provide a pre-created secret containing it under the key `ca.crt`.
   ##
-  uaaSecretName:
-
-  ## The secret key used for encryption. Must be a string of 16 chars.
+  uaaSecretName: ""
+  ## @param core.secretKey The key used for encryption. Must be a string of 16 chars
+  ## e.g:
+  ## secretKey: "not-a-secure-string"
   ##
-  # secretKey: "not-a-secure-string"
-  secretKey:
-
-  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  secretKey: ""
+  ## @param core.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
   updateStrategy:
     type: RollingUpdate
-
+  ## @param core.replicas The replica count
+  ##
   replicas: 1
-
   ## Use TLS in the container
   ##
   tls:
-    ## Name of a secret containing the certificates
+    ## @param core.tls.existingSecret Name of a secret with the certificates for internal TLS access. Requires internalTLS.enabled to be set to true. If this values is not set it will be automatically generated
     ## Otherwise, it will generate a cert automatically
     ##
-    existingSecret:
-
-  ## Custom Liveness probe
+    existingSecret: ""
+  ## @param core.customLivenessProbe Override default liveness probe
   ##
   customLivenessProbe: {}
-
-  ## Custom Rediness probe
+  ## @param core.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
-
-  ## Custom Startup probe
+  ## @param core.customStartupProbe Override default Startup Probe probe
   ##
   customStartupProbe: {}
-
-  ## An array to add extra env vars
+  ## @param core.extraEnvVars Array containing extra env vars
   ## For example:
+  ##  - name: BEARER_AUTH
+  ##    value: true
   ##
   extraEnvVars: []
-  #  - name: BEARER_AUTH
-  #    value: true
-
-  ## ConfigMap with extra environment variables
+  ## @param core.extraEnvVarsCM ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
-
-  ## Secret with extra environment variables
+  extraEnvVarsCM: ""
+  ## @param core.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
   ##
-  extraEnvVarsSecret:
-
-  ## Extra volumes to add to the deployment
+  extraEnvVarsSecret: ""
+  ## @param core.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
   ##
   extraVolumes: []
-
-  ## Extra volume mounts to add to the container
+  ## @param core.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.
   ##
   extraVolumeMounts: []
-
-  ## HostAliases to add to the deployment
+  ## @param core.hostAliases Specify hostAliases for the Pod to use
   ##
   hostAliases: []
-
-  ## Extra init containers to add to the deployment
+  ## @param core.initContainers Add additional init containers to the pod (evaluated as a template)
   ##
   initContainers: []
-
-  ## Extra sidecar containers to add to the deployment
+  ## @param core.sidecars Attach additional containers to the pod (evaluated as a template)
   ##
   sidecars: []
-
   ## Harbor Core containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param core.resources.limits The resources limits for the container
+  ## @param core.resources.requests The requested resources for the container
   ##
   resources:
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ##
+    ## Example:
+    ## limits:
+    ##    cpu: 500m
+    ##    memory: 1Gi
     limits: {}
-    #  cpu: 500m
-    #  memory: 1Gi
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
     requests: {}
-    #  cpu: 250m
-    #  memory: 256Mi
-
-  ## Pod affinity preset
+  ## @param core.podAffinityPreset Harbor core Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param core.podAntiAffinityPreset Harbor core Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param core.nodeAffinityPreset.type Harbor core Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
+    ## @param core.nodeAffinityPreset.key Harbor core Node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param core.nodeAffinityPreset.values Harbor core Node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
+  ## @param core.affinity Harbor core Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param core.priorityClassName Core pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
+  ## @param core.nodeSelector Harbor core Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param core.tolerations Harbor core Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Pod extra labels
+  ## @param core.podLabels Add additional labels to the pod (evaluated as a template)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
-  ## Pod annotations
+  ## @param core.podAnnotations Annotations to add to the core pod
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
-  ## Secret is used when core server communicates with other components.
-  ## If a secret key is not specified, Helm will generate one.
-  ## Must be a string of 16 chars.
+  ## @param core.secret Secret used when the core server communicates with other components. If a secret key is not specified, Helm will generate one. Must be a string of 16 chars.
   ##
-  secret: ''
-  ## Fill the name of a kubernetes secret if you want to use your own
-  ## TLS certificate and private key for token encryption/decryption.
-  ## The secret must contain keys named:
-  ## "tls.crt" - the certificate
-  ## "tls.key" - the private key
-  ## The default key pair will be used if it isn't set
+  secret: ""
+  ## @param core.secretName Fill the name of a kubernetes secret if you want to use your own TLS certificate and private key for token encryption/decryption. The secret must contain two keys named: `tls.crt` - the certificate and `tls.key` - the private key. The default key pair will be used if it isn't set
   ##
-  secretName: ''
-  ## The CSRF key. Will be generated automatically if it isn't specified
+  secretName: ""
+  ## @param core.csrfKey The CSRF key. Will be generated automatically if it isn't specified
   ##
-  csrfKey: ''
-  ## lifecycleHooks for the container to automate configuration before or after startup.
+  csrfKey: ""
+  ## @param core.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
   ##
-  lifecycleHooks:
-
-  ## Harbor Core containers' liveness and readiness probes
+  lifecycleHooks: {}
+  ## @param core.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
+  ## Harbor Core containers' liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param core.livenessProbe.enabled Enable livenessProbe
+  ## @param core.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param core.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param core.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param core.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param core.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -1179,6 +1076,15 @@ core:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## Harbor Core containers' readiness probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param core.readinessProbe.enabled Enable readinessProbe
+  ## @param core.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param core.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param core.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param core.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param core.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 20
@@ -1186,6 +1092,15 @@ core:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## Harbor Core containers' startup probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param core.startupProbe.enabled Enable startupProbe
+  ## @param core.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param core.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param core.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param core.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param core.startupProbe.successThreshold Success threshold for startupProbe
+  ##
   startupProbe:
     enabled: true
     initialDelaySeconds: 10
@@ -1194,170 +1109,194 @@ core:
     failureThreshold: 30
     successThreshold: 1
 
-## Harbor Jobservice parameters
+## @section Harbor Jobservice Parameters
+
+## Bitnami Harbor Job Service image
+## ref: https://hub.docker.com/r/bitnami/harbor-jobservice/tags/
+##
+jobserviceImage:
+  ## @param jobserviceImage.registry Registry for jobservice image
+  ## @param jobserviceImage.repository Repository for jobservice image
+  ## @param jobserviceImage.tag Tag for jobservice image
+  ## @param jobserviceImage.pullPolicy Harbor Jobservice image pull policy
+  ## @param jobserviceImage.pullSecrets Specify docker-registry secret names as an array
+  ## @param jobserviceImage.debug Specify if debug logs should be enabled
+  ##
+  registry: docker.io
+  repository: bitnami/harbor-jobservice
+  tag: 2.4.1-debian-10-r54
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
+  debug: false
+## Jobservice Parameters
 ##
 jobservice:
-  ## Harbor Jobservice container command (using container default if not set)
+  ## @param jobservice.command Override default container command (useful when using custom images)
   ##
-  command:
-  ## Harbor Jobservice container args (using container default if not set)
+  command: []
+  ## @param jobservice.args Override default container args (useful when using custom images)
   ##
-  args:
+  args: []
+  ## @param jobservice.replicas The replica count
+  ##
   replicas: 1
-  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## @param jobservice.updateStrategy.type The update strategy for deployments with persistent volumes: RollingUpdate or Recreate. Set it as Recreate when RWM for volumes isn't supported
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
   updateStrategy:
     type: RollingUpdate
-
+  ## @param jobservice.maxJobWorkers The max job workers
+  ##
   maxJobWorkers: 10
-  ## The logger for jobs: "file", "database" or "stdout"
+  ## @param jobservice.jobLogger The logger for jobs: `file`, `database` or `stdout`
   ##
   jobLogger: file
-
   ## Use TLS in the container
   ##
   tls:
-    ## Name of a secret containing the certificates
-    ## Otherwise, it will generate a cert automatically
+    ## @param jobservice.tls.existingSecret Name of a secret with the certificates for internal TLS access. Requires internalTLS.enabled to be set to true. If this values is not set it will be automatically generated
     ##
-    existingSecret:
-
-  ## lifecycleHooks for the container to automate configuration before or after startup.
+    existingSecret: ""
+  ## @param jobservice.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
   ##
-  lifecycleHooks:
-
-  ## Custom Liveness probe
+  lifecycleHooks: {}
+  ## @param jobservice.customLivenessProbe Override default liveness probe
   ##
   customLivenessProbe: {}
-
-  ## Custom Rediness probe
+  ## @param jobservice.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
-
-  ## An array to add extra env vars
+  ## @param jobservice.extraEnvVars Array containing extra env vars
   ## For example:
+  ##  - name: BEARER_AUTH
+  ##    value: true
   ##
   extraEnvVars: []
-  #  - name: BEARER_AUTH
-  #    value: true
-
-  ## ConfigMap with extra environment variables
+  ## @param jobservice.extraEnvVarsCM ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
-
-  ## Secret with extra environment variables
+  extraEnvVarsCM: ""
+  ## @param jobservice.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
   ##
-  extraEnvVarsSecret:
-
-  ## Extra volumes to add to the deployment
+  extraEnvVarsSecret: ""
+  ## @param jobservice.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
   ##
   extraVolumes: []
-
-  ## Extra volume mounts to add to the container
+  ## @param jobservice.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.
   ##
   extraVolumeMounts: []
-
-  ## HostAliases to add to the deployment
+  ## @param jobservice.hostAliases Specify hostAliases for the Pod to use
   ##
   hostAliases: []
-
-  ## Extra init containers to add to the deployment
+  ## @param jobservice.initContainers Add additional init containers to the pod (evaluated as a template)
   ##
   initContainers: []
-
-  ## Extra sidecar containers to add to the deployment
+  ## @param jobservice.sidecars Attach additional containers to the pod (evaluated as a template)
   ##
   sidecars: []
-
   ## Harbor Jobservice containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param jobservice.resources.limits The resources limits for the container
+  ## @param jobservice.resources.requests The requested resources for the container
   ##
   resources:
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ##
+    ## Example:
+    ## limits:
+    ##    cpu: 500m
+    ##    memory: 1Gi
     limits: {}
-    ##   cpu: 500m
-    ##   memory: 1Gi
-    ##
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
     requests: {}
-    ##   cpu: 250m
-    ##   memory: 256Mi
-    ##
-
-  ## Pod affinity preset
+  ## @param jobservice.podAffinityPreset Harbor Jobservice Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param jobservice.podAntiAffinityPreset Harbor Jobservice Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param jobservice.nodeAffinityPreset.type Harbor Jobservice Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
+    ## @param jobservice.nodeAffinityPreset.key Harbor Jobservice Node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param jobservice.nodeAffinityPreset.values Harbor Jobservice Node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
+  ## @param jobservice.affinity Harbor Jobservice Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param jobservice.priorityClassName Jobservice pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
+  ## @param jobservice.nodeSelector Harbor Jobservice Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param jobservice.tolerations Harbor Jobservice Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Pod extra labels
+  ## @param jobservice.podLabels Add additional labels to the pod (evaluated as a template)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
-  ## Pod annotations
+  ## @param jobservice.podAnnotations Annotations to add to the jobservice pod
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
-  ## Secret is used when job service communicates with other components.
+  ## @param jobservice.secret Secret used when the job service communicates with other components. If a secret key is not specified, Helm will generate one. Must be a string of 16 chars.
   ## If a secret key is not specified, Helm will generate one.
   ## Must be a string of 16 chars.
   ##
-  secret: ''
-
-  ## Harbor Jobservice containers' liveness and readiness probes
+  secret: ""
+  ## @param jobservice.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
+  ## Harbor Jobservice containers' liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param jobservice.livenessProbe.enabled Enable livenessProbe
+  ## @param jobservice.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param jobservice.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param jobservice.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param jobservice.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param jobservice.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -1366,6 +1305,15 @@ jobservice:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## Harbor Jobservice containers' readiness probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param jobservice.readinessProbe.enabled Enable readinessProbe
+  ## @param jobservice.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param jobservice.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param jobservice.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param jobservice.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param jobservice.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 20
@@ -1374,71 +1322,141 @@ jobservice:
     failureThreshold: 6
     successThreshold: 1
 
+## @section Harbor Registry Parameters
+
+## Bitnami Harbor Registry image
+## ref: https://hub.docker.com/r/bitnami/harbor-registry/tags/
+##
+registryImage:
+  ## @param registryImage.registry Registry for registry image
+  ## @param registryImage.repository Repository for registry image
+  ## @param registryImage.tag Tag for registry image
+  ## @param registryImage.pullPolicy Harbor Registry image pull policy
+  ## @param registryImage.pullSecrets Specify docker-registry secret names as an array
+  ## @param registryImage.debug Specify if debug logs should be enabled
+  ##
+  registry: docker.io
+  repository: bitnami/harbor-registry
+  tag: 2.4.1-debian-10-r58
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
+  debug: false
+## Bitnami Harbor Registryctl image
+## ref: https://hub.docker.com/r/bitnami/harbor-registryctl/tags/
+##
+registryctlImage:
+  ## @param registryctlImage.registry Registry for registryctl image
+  ## @param registryctlImage.repository Repository for registryctl controller image
+  ## @param registryctlImage.tag Tag for registrycrtl controller image
+  ## @param registryctlImage.pullPolicy Harbor Registryctl image pull policy
+  ## @param registryctlImage.pullSecrets Specify docker-registry secret names as an array
+  ## @param registryctlImage.debug Specify if debug logs should be enabled
+  ##
+  registry: docker.io
+  repository: bitnami/harbor-registryctl
+  tag: 2.4.1-debian-10-r59
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
+  debug: false
+## Registry Parameters
+##
 registry:
+  ## @param registry.replicas The replica count
+  ##
   replicas: 1
-  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## @param registry.updateStrategy.type The update strategy for deployments with persistent volumes: RollingUpdate or Recreate. Set it as Recreate when RWM for volumes isn't supported
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
   updateStrategy:
     type: RollingUpdate
-
   ## Use TLS in the containers
   ##
   tls:
-    ## Name of a secret containing the certificates
-    ## Otherwise, it will generate a cert automatically
+    ## @param registry.tls.existingSecret Name of a secret with the certificates for internal TLS access. Requires internalTLS.enabled to be set to true. If this values is not set it will be automatically generated
     ##
-    existingSecret:
-
+    existingSecret: ""
   ## Harbor Registry main container parameters
   ##
   server:
-    ## Container command (using container default if not set)
+    ## @param registry.server.command Override default container command (useful when using custom images)
     ##
-    command:
-    ## Container args (using container default if not set)
+    command: []
+    ## @param registry.server.args Override default container args (useful when using custom images)
     ##
-    args:
-    ## An array to add extra env vars
+    args: []
+    ## @param registry.server.extraEnvVars Array containing extra env vars
     ##
     extraEnvVars: []
-
-    ## ConfigMap with extra environment variables
+    ## @param registry.server.extraEnvVarsCM ConfigMap containing extra env vars
     ##
-    extraEnvVarsCM:
-
-    ## Secret with extra environment variables
+    extraEnvVarsCM: ""
+    ## @param registry.server.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
     ##
-    extraEnvVarsSecret:
-
-    ## Extra volume mounts to add to the container
+    extraEnvVarsSecret: ""
+    ## @param registry.server.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.
     ##
     extraVolumeMounts: []
-
-    ## lifecycleHooks for the container to automate configuration before or after startup.
+    ## @param registry.server.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
     ##
-    lifecycleHooks:
-
+    lifecycleHooks: {}
     ## Harbor Registry containers' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param registry.server.resources.limits The resources limits for the container
+    ## @param registry.server.resources.requests The requested resources for the container
     ##
     resources:
-      ## We usually recommend not to specify default resources and to leave this as a conscious
-      ## choice for the user. This also increases chances charts run on environments with little
-      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-      ##
+      ## Example:
+      ## limits:
+      ##    cpu: 500m
+      ##    memory: 1Gi
       limits: {}
-      ##   cpu: 500m
-      ##   memory: 1Gi
-      ##
+      ## Examples:
+      ## requests:
+      ##    cpu: 250m
+      ##    memory: 256Mi
       requests: {}
-      ##   cpu: 250m
-      ##   memory: 256Mi
     ## Harbor Registry containers' liveness and readiness probes
     ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ## @param registry.server.livenessProbe.enabled Enable livenessProbe
+    ## @param registry.server.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param registry.server.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param registry.server.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param registry.server.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param registry.server.livenessProbe.successThreshold Success threshold for livenessProbe
     ##
     livenessProbe:
       enabled: true
@@ -1447,6 +1465,15 @@ registry:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
+    ## Harbor Registry containers' readiness probe
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ## @param registry.server.readinessProbe.enabled Enable readinessProbe
+    ## @param registry.server.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param registry.server.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param registry.server.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param registry.server.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param registry.server.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
     readinessProbe:
       enabled: true
       initialDelaySeconds: 10
@@ -1454,62 +1481,64 @@ registry:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
-
-    ## Custom Liveness probe
+    ## @param registry.server.customLivenessProbe Override default liveness probe
     ##
     customLivenessProbe: {}
-
-    ## Custom Rediness probe
+    ## @param registry.server.customReadinessProbe Override default readiness probe
     ##
     customReadinessProbe: {}
-
   ## Harbor Registryctl parameters
   ##
   controller:
-    ## Container command (using container default if not set)
+    ## @param registry.controller.command Override default container command (useful when using custom images)
     ##
-    command:
-    ## Container args (using container default if not set)
+    command: []
+    ## @param registry.controller.args Override default container args (useful when using custom images)
     ##
-    args:
-    ## An array to add extra env vars
+    args: []
+    ## @param registry.controller.extraEnvVars Array containing extra env vars
     ##
     extraEnvVars: []
-
-    ## ConfigMap with extra environment variables
+    ## @param registry.controller.extraEnvVarsCM ConfigMap containing extra env vars
     ##
-    extraEnvVarsCM:
-
-    ## Secret with extra environment variables
+    extraEnvVarsCM: ""
+    ## @param registry.controller.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
     ##
-    extraEnvVarsSecret:
-
-    ## Extra volume mounts to add to the container
+    extraEnvVarsSecret: ""
+    ## @param registry.controller.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.
     ##
     extraVolumeMounts: []
-
-    ## lifecycleHooks for the container to automate configuration before or after startup.
+    ## @param registry.controller.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
     ##
-    lifecycleHooks:
-
+    lifecycleHooks: {}
     ## Harbor Registryctl containers' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param registry.controller.resources.limits The resources limits for the container
+    ## @param registry.controller.resources.requests The requested resources for the container
     ##
     resources:
-      ## We usually recommend not to specify default resources and to leave this as a conscious
-      ## choice for the user. This also increases chances charts run on environments with little
-      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-      ##
+      ## Example:
+      ## limits:
+      ##    cpu: 500m
+      ##    memory: 1Gi
       limits: {}
-      ##   cpu: 500m
-      ##   memory: 1Gi
-      ##
+      ## Examples:
+      ## requests:
+      ##    cpu: 250m
+      ##    memory: 256Mi
       requests: {}
-      ##   cpu: 250m
-      ##   memory: 256Mi
-    ## Harbor Registryctl containers' liveness and readiness probes
+    ## Harbor Registryctl containers' liveness probes
     ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ## @param registry.controller.livenessProbe.enabled Enable livenessProbe
+    ## @param registry.controller.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param registry.controller.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param registry.controller.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param registry.controller.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param registry.controller.livenessProbe.successThreshold Success threshold for livenessProbe
     ##
     livenessProbe:
       enabled: true
@@ -1518,6 +1547,15 @@ registry:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
+    ## Harbor Registryctl containers' readiness probes
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ## @param registry.controller.readinessProbe.enabled Enable readinessProbe
+    ## @param registry.controller.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param registry.controller.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param registry.controller.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param registry.controller.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param registry.controller.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
     readinessProbe:
       enabled: true
       initialDelaySeconds: 10
@@ -1525,101 +1563,93 @@ registry:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
-
-    ## Custom Liveness probe
+    ## @param registry.controller.customLivenessProbe Override default liveness probe
     ##
     customLivenessProbe: {}
-
-    ## Custom Rediness probe
+    ## @param registry.controller.customReadinessProbe Override default readiness probe
     ##
     customReadinessProbe: {}
-
-  ## Extra volumes to add to the deployment
+  ## @param registry.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
   ##
   extraVolumes: []
-
-  ## HostAliases to add to the deployment
+  ## @param registry.hostAliases Specify hostAliases for the Pod to use
   ##
   hostAliases: []
-
-  ## Extra init containers to add to the deployment
+  ## @param registry.initContainers Add additional init containers to the pod (evaluated as a template)
   ##
   initContainers: []
-
-  ## Extra sidecar containers to add to the deployment
+  ## @param registry.sidecars Attach additional containers to the pod (evaluated as a template)
   ##
   sidecars: []
-
-  ## Pod affinity preset
+  ## @param registry.podAffinityPreset Harbor Registry Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param registry.podAntiAffinityPreset Harbor Registry Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param registry.nodeAffinityPreset.type Harbor Registry Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
+    ## @param registry.nodeAffinityPreset.key Harbor Registry Node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param registry.nodeAffinityPreset.values Harbor Registry Node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
+  ## @param registry.affinity Harbor Registry Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param registry.priorityClassName Registry pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
+  ## @param registry.nodeSelector Harbor Registry Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param registry.tolerations Harbor Registry Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Pod extra labels. Evaluated as a template.
+  ## @param registry.podLabels Add additional labels to the pod (evaluated as a template)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
-  ## Pod annotations
+  ## @param registry.podAnnotations Annotations to add to the registry pod
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
-  ## Secret is used to secure the upload state from client
+  ## @param registry.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
+  ## @param registry.secret Secret is used to secure the upload state from client and registry storage backend. See: https://github.com/docker/distribution/blob/master/docs/configuration.md
   ## and registry storage backend.
   ## See: https://github.com/docker/distribution/blob/master/docs/configuration.md#http
   ## If a secret key is not specified, Helm will generate one.
   ## Must be a string of 16 chars.
   ##
-  secret: ''
-  ## If true, the registry returns relative URLs in Location headers. The client is responsible for resolving the correct URL.
+  secret: ""
+  ## @param registry.relativeurls Make the registry return relative URLs in Location headers. The client is responsible for resolving the correct URL.
   ##
   relativeurls: false
+  ## @param registry.credentials.username The username for accessing the registry instance, which is hosted by htpasswd auth mode.  More details see [official docs](https://github.com/docker/distribution/blob/master/docs/configuration.md#htpasswd)
+  ## @param registry.credentials.password The password for accessing the registry instance, which is hosted by htpasswd auth mode.  More details see [official docs](https://github.com/docker/distribution/blob/master/docs/configuration.md#htpasswd). It is suggested you update this value before installation.
+  ## @param registry.credentials.htpasswd The content of htpasswd file based on the value of `registry.credentials.username` `registry.credentials.password`.  Currently `helm` does not support bcrypt in the template script, if the credential is updated you need to manually generated by calling
+  ##
   credentials:
     username: 'harbor_registry_user'
     password: 'harbor_registry_password'
@@ -1627,10 +1657,19 @@ registry:
     ## e.g. "htpasswd -nbBC10 $username $password"
     ##
     htpasswd: 'harbor_registry_user:$2y$10$9L4Tc0DJbFFMB6RdSCunrOpTHdwhid4ktBJmLD00bYgqkkGOvll3m'
-
   middleware:
+    ## @param registry.middleware.enabled Middleware is used to add support for a CDN between backend storage and `docker pull` recipient.  See
+    ##
     enabled: false
+    ## @param registry.middleware.type CDN type for the middleware
+    ##
     type: cloudFront
+    ## @param registry.middleware.cloudFront.baseurl CloudFront CDN settings: Base URL
+    ## @param registry.middleware.cloudFront.keypairid CloudFront CDN settings: Keypair ID
+    ## @param registry.middleware.cloudFront.duration CloudFront CDN settings: Duration
+    ## @param registry.middleware.cloudFront.ipfilteredby CloudFront CDN settings: IP filters
+    ## @param registry.middleware.cloudFront.privateKeySecret CloudFront CDN settings: Secret name with the private key
+    ##
     cloudFront:
       baseurl: example.cloudfront.net
       keypairid: KEYPAIRID
@@ -1641,187 +1680,233 @@ registry:
       ##
       privateKeySecret: 'my-secret'
 
-## Chartmuseum parameters
+## @section ChartMuseum Parameters
+
+## Bitnami ChartMuseum image
+## ref: https://hub.docker.com/r/bitnami/chartmuseum/tags/
+##
+chartMuseumImage:
+  ## @param chartMuseumImage.registry Registry for ChartMuseum image
+  ## @param chartMuseumImage.repository Repository for clair image
+  ## @param chartMuseumImage.tag Tag for ChartMuseum image
+  ## @param chartMuseumImage.pullPolicy ChartMuseum image pull policy
+  ## @param chartMuseumImage.pullSecrets Specify docker-registry secret names as an array
+  ## @param chartMuseumImage.debug Specify if debug logs should be enabled
+  ##
+  registry: docker.io
+  repository: bitnami/chartmuseum
+  tag: 0.14.0-debian-10-r13
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
+  debug: false
+## ChartMuseum Parameters
 ##
 chartmuseum:
+  ## @param chartmuseum.enabled Enable ChartMuseum
+  ##
   enabled: true
-  ## Chartmuseum container command (using container default if not set)
+  ## @param chartmuseum.command Override default container command (useful when using custom images)
   ##
-  command:
-  ## Chartmuseum container args (using container default if not set)
+  command: []
+  ## @param chartmuseum.args Override default container args (useful when using custom images)
   ##
-  args:
+  args: []
+  ## @param chartmuseum.replicas Number of ChartMuseum replicas
+  ##
   replicas: 1
-  ## Update strategy - only really applicable for deployments with RWO PVs attached
+  ## @param chartmuseum.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
   updateStrategy:
     type: RollingUpdate
-
-  ## Set the use of the Redis(TM) cache.
+  ## @param chartmuseum.useRedisCache Specify if ChartMuseum will use redis cache
   ##
   useRedisCache: true
-
-  ## Set the absolute URL to access the chartmuseum repository and the
-  ## endpoint where it will be available.
+  ## Set the absolute URL to access the chartmuseum repository and the endpoint where it will be available.
+  ## @param chartmuseum.absoluteUrl Specify an absolute URL for ChartMuseum registry
+  ## @param chartmuseum.chartRepoName Specify the endpoint for the chartmuseum registry. Only applicable if `chartmuseum.absoluteUrl` is `true`
   ##
   absoluteUrl: false
   chartRepoName: 'chartsRepo'
-
+  ## @param chartmuseum.depth Support for multitenancy. More info [here](https://chartmuseum.com/docs/#multitenancy)
+  ##
   depth: 1
+  ## @param chartmuseum.logJson Print logs on JSON format
+  ##
   logJson: false
+  ## @param chartmuseum.disableMetrics Disable prometheus metrics exposure
+  ##
   disableMetrics: false
+  ## @param chartmuseum.disableApi Disable all the routes prefixed with `/api`
+  ##
   disableApi: false
+  ## @param chartmuseum.disableStatefiles Disable use of index-cache.yaml
+  ##
   disableStatefiles: false
+  ## @param chartmuseum.allowOverwrite Allow chart versions to be re-uploaded without force querystring
+  ##
   allowOverwrite: true
+  ## @param chartmuseum.anonymousGet Allow anonymous GET operations
+  ##
   anonymousGet: false
-
   ## Use TLS in the container
   ##
   tls:
-    ## Name of a secret containing the certificates
-    ## Otherwise, it will generate a cert automatically
+    ## @param chartmuseum.tls.existingSecret Name of a secret with the certificates for internal TLS access. Requires internalTLS.enabled to be set to true. If this values is not set it will be automatically generated
     ##
-    existingSecret:
-
+    existingSecret: ""
   ## Optional parameters for ChartMuseum not used by default.
   ## ref: https://chartmuseum.com/docs/#other-cli-options
+  ## @param chartmuseum.contextPath Set the base context path for ChartMuseum
+  ## @param chartmuseum.indexLimit Limit the number of parallels indexes for ChartMuseum
+  ## @param chartmuseum.chartPostFormFieldName Form field which will be queried for the chart file content
+  ## @param chartmuseum.provPostFormFieldName Form field which will be queried for the provenance file content
+  ## @param chartmuseum.maxStorageObjects Maximum storage objects
+  ## @param chartmuseum.maxUploadSize Maximum upload size
+  ## @param chartmuseum.storageTimestampTolerance Timestamp tolerance size
   ##
-  contextPath:
-  indexLimit:
-  chartPostFormFieldName:
-  provPostFormFieldName:
-  maxStorageObjects:
-  maxUploadSize:
+  contextPath: ""
+  indexLimit: ""
+  chartPostFormFieldName: ""
+  provPostFormFieldName: ""
+  maxStorageObjects: ""
+  maxUploadSize: ""
   storageTimestampTolerance: "1s"
-
-  ## lifecycleHooks for the container to automate configuration before or after startup.
+  ## @param chartmuseum.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
   ##
-  lifecycleHooks:
-
-  ## Custom Liveness probe
+  lifecycleHooks: {}
+  ## @param chartmuseum.customLivenessProbe Override default liveness probe
   ##
   customLivenessProbe: {}
-
-  ## Custom Rediness probe
+  ## @param chartmuseum.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
-
-  ## An array to add extra env vars to chartmuseum
+  ## @param chartmuseum.extraEnvVars Array containing extra env vars
   ## For example:
+  ##  - name: BEARER_AUTH
+  ##    value: true
   ##
   extraEnvVars: []
-  #  - name: BEARER_AUTH
-  #    value: true
-
-  ## ConfigMap with extra environment variables
+  ## @param chartmuseum.extraEnvVarsCM ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
-
-  ## Secret with extra environment variables
+  extraEnvVarsCM: ""
+  ## @param chartmuseum.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
   ##
-  extraEnvVarsSecret:
-
-  ## Extra volumes to add to the deployment
+  extraEnvVarsSecret: ""
+  ## @param chartmuseum.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
   ##
   extraVolumes: []
-
-  ## Extra volume mounts to add to the container
+  ## @param chartmuseum.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.
   ##
   extraVolumeMounts: []
-
-  ## HostAliases to add to the deployment
+  ## @param chartmuseum.hostAliases Specify hostAliases for the Pod to use
   ##
   hostAliases: []
-
-  ## Extra init containers to add to the deployment
+  ## @param chartmuseum.initContainers Add additional init containers to the pod (evaluated as a template)
   ##
   initContainers: []
-
-  ## Extra sidecar containers to add to the deployment
+  ## @param chartmuseum.sidecars Attach additional containers to the pod (evaluated as a template)
   ##
   sidecars: []
-
   ## Chartmuseum containers' resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param chartmuseum.resources.limits The resources limits for the container
+  ## @param chartmuseum.resources.requests The requested resources for the container
   ##
   resources:
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ##
+    ## Example:
+    ## limits:
+    ##    cpu: 500m
+    ##    memory: 1Gi
     limits: {}
-    #  cpu: 500m
-    #  memory: 1Gi
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
     requests: {}
-    #  cpu: 250m
-    #  memory: 256Mi
-
-  ## Pod affinity preset
+  ## @param chartmuseum.podAffinityPreset ChartMuseum Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param chartmuseum.podAntiAffinityPreset ChartMuseum Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param chartmuseum.nodeAffinityPreset.type ChartMuseum Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
+    ## @param chartmuseum.nodeAffinityPreset.key ChartMuseum Node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param chartmuseum.nodeAffinityPreset.values ChartMuseum Node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
+  ## @param chartmuseum.affinity ChartMuseum Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param chartmuseum.priorityClassName Chartmuseum pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
+  ## @param chartmuseum.nodeSelector ChartMuseum Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param chartmuseum.tolerations ChartMuseum Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Pod extra labels
+  ## @param chartmuseum.podLabels Add additional labels to the pod (evaluated as a template)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
-  ## Pod annotations
+  ## @param chartmuseum.podAnnotations Annotations to add to the chartmuseum pod
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
-  ## Chartmuseum containers' liveness and readiness probes
+  ## @param chartmuseum.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
+  ## Chartmuseum containers' liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param chartmuseum.livenessProbe.enabled Enable livenessProbe
+  ## @param chartmuseum.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param chartmuseum.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param chartmuseum.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param chartmuseum.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param chartmuseum.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -1830,6 +1915,15 @@ chartmuseum:
     timeoutSeconds: 20
     failureThreshold: 10
     successThreshold: 1
+  ## Chartmuseum containers' readiness probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param chartmuseum.readinessProbe.enabled Enable readinessProbe
+  ## @param chartmuseum.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param chartmuseum.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param chartmuseum.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param chartmuseum.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param chartmuseum.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 30
@@ -1838,66 +1932,131 @@ chartmuseum:
     failureThreshold: 10
     successThreshold: 1
 
-## Clair parameters
+## @section Clair Parameters
+
+## Bitnami Harbor Clair image
+## ref: https://hub.docker.com/r/bitnami/harbor-clair/tags/
+##
+clairImage:
+  ## @param clairImage.registry Registry for clair image
+  ## @param clairImage.repository Repository for clair image
+  ## @param clairImage.tag Tag for clair image
+  ## @param clairImage.pullPolicy Harbor clair image pull policy
+  ## @param clairImage.pullSecrets Specify docker-registry secret names as an array
+  ## @param clairImage.debug Specify if debug logs should be enabled
+  ##
+  registry: docker.io
+  repository: bitnami/harbor-clair
+  tag: 2.4.1-debian-10-r60
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  pullSecrets: []
+  ##  - myRegistryKeySecretName
+  ##
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
+  debug: false
+## Bitnami Harbor Adapter Clair image
+## ref: https://hub.docker.com/r/bitnami/harbor-adapter-clair/tags/
+##
+clairAdapterImage:
+  ## @param clairAdapterImage.registry Registry for clair adapter image
+  ## @param clairAdapterImage.repository Repository for clair adapter image
+  ## @param clairAdapterImage.tag Tag for clair adapter image
+  ## @param clairAdapterImage.pullPolicy Harbor clair adapter image pull policy
+  ## @param clairAdapterImage.pullSecrets Specify docker-registry secret names as an array
+  ## @param clairAdapterImage.debug Specify if debug logs should be enabled
+  ##
+  registry: docker.io
+  repository: bitnami/harbor-adapter-clair
+  tag: 2.4.1-debian-10-r60
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
+  debug: false
+## Clair Parameters
 ##
 clair:
+  ## @param clair.enabled Enable Clair scanner. Add it as an additional interrogation service by following https://goharbor.io/docs/latest/administration/vulnerability-scanning/pluggable-scanners
+  ##
   enabled: false
-
+  ## @param clair.replicas The replica count
+  ##
   replicas: 1
-
   ## Use TLS in the container
   ##
   tls:
-    ## Name of a secret containing the certificates
+    ## @param clair.tls.existingSecret Name of a secret with the certificates for internal TLS access. Requires internalTLS.enabled to be set to true. If this values is not set it will be automatically generated
     ## Otherwise, it will generate a cert automatically
     ##
-    existingSecret:
-
-  ## Update strategy - only really applicable for deployments with RWO PVs attached
+    existingSecret: ""
+  ## @param clair.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
   updateStrategy:
     type: RollingUpdate
-
   ## The http(s) proxy used to update vulnerabilities database from internet
+  ## @param clair.httpProxy The http proxy used to update vulnerabilities database from internet
+  ## @param clair.httpsProxy The https proxy used to update vulnerabilities database from internet
   ##
-  httpProxy:
-  httpsProxy:
-
-  ## The interval of clair updaters, the unit is hour, set to 0 to
+  httpProxy: ""
+  httpsProxy: ""
+  ## @param clair.updatersInterval The interval of clair updaters (hours), set to 0 to disable
   ## disable the updaters
   ##
   updatersInterval: 12
-
   ## Harbor needs Clair adapter to communicate with Clair API.
   ##
   adapter:
-    ## Clair adapter container command (using container default if not set)
+    ## @param clair.adapter.command Override default container command (useful when using custom images)
     ##
-    command:
-    ## Clair adapter container args (using container default if not set)
+    command: []
+    ## @param clair.adapter.args Override default container args (useful when using custom images)
     ##
-    args:
-    ## An array to add extra env vars
+    args: []
+    ## @param clair.adapter.extraEnvVars Array containing extra env vars
     ##
     extraEnvVars: []
-
-    ## ConfigMap with extra environment variables
+    ## @param clair.adapter.extraEnvVarsCM ConfigMap containing extra env vars
     ##
-    extraEnvVarsCM:
-
-    ## Secret with extra environment variables
+    extraEnvVarsCM: ""
+    ## @param clair.adapter.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
     ##
-    extraEnvVarsSecret:
-
-    ## Extra volume mounts to add to the container
+    extraEnvVarsSecret: ""
+    ## @param clair.adapter.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.
     ##
     extraVolumeMounts: []
-
-    ## Clair containers' liveness and readiness probes
+    ## Clair containers' liveness probes
     ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ## @param clair.adapter.livenessProbe.enabled Enable livenessProbe
+    ## @param clair.adapter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param clair.adapter.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param clair.adapter.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param clair.adapter.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param clair.adapter.livenessProbe.successThreshold Success threshold for livenessProbe
     ##
     livenessProbe:
       enabled: true
@@ -1906,6 +2065,15 @@ clair:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
+    ## Clair containers' readiness probes
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ## @param clair.adapter.readinessProbe.enabled Enable readinessProbe
+    ## @param clair.adapter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param clair.adapter.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param clair.adapter.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param clair.adapter.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param clair.adapter.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
     readinessProbe:
       enabled: true
       initialDelaySeconds: 20
@@ -1913,47 +2081,52 @@ clair:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
-
-    ## lifecycleHooks for the container to automate configuration before or after startup.
+    ## @param clair.adapter.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
     ##
-    lifecycleHooks:
-
-    ## Custom Liveness probe
+    lifecycleHooks: {}
+    ## @param clair.adapter.customLivenessProbe Override default liveness probe
     ##
     customLivenessProbe: {}
-
-    ## Custom Rediness probe
+    ## @param clair.adapter.customReadinessProbe Override default readiness probe
     ##
     customReadinessProbe: {}
-
     ## Clair containers' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param clair.adapter.resources.limits The resources limits for the container
+    ## @param clair.adapter.resources.requests The requested resources for the container
     ##
     resources:
-      ## We usually recommend not to specify default resources and to leave this as a conscious
-      ## choice for the user. This also increases chances charts run on environments with little
-      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-      ##
+      ## Example:
+      ## limits:
+      ##    cpu: 500m
+      ##    memory: 1Gi
       limits: {}
-      #   cpu: 500m
-      #   memory: 1Gi
+      ## Examples:
+      ## requests:
+      ##    cpu: 250m
+      ##    memory: 256Mi
       requests: {}
-      #   cpu: 250m
-      #   memory: 256Mi
-
   ## Clair main container properties
   ##
   server:
-    ## Clair container command (using container default if not set)
+    ## @param clair.server.command Override default container command (useful when using custom images)
     ##
-    command:
-    ## Clair container args (using container default if not set)
+    command: []
+    ## @param clair.server.args Override default container args (useful when using custom images)
     ##
-    args:
-
+    args: []
     ## Clair containers' liveness and readiness probes
     ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ## @param clair.server.livenessProbe.enabled Enable livenessProbe
+    ## @param clair.server.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param clair.server.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param clair.server.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param clair.server.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param clair.server.livenessProbe.successThreshold Success threshold for livenessProbe
     ##
     livenessProbe:
       enabled: true
@@ -1962,6 +2135,15 @@ clair:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
+    ## Clair containers' readiness probe
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ## @param clair.server.readinessProbe.enabled Enable readinessProbe
+    ## @param clair.server.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param clair.server.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param clair.server.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param clair.server.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param clair.server.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
     readinessProbe:
       enabled: true
       initialDelaySeconds: 20
@@ -1969,177 +2151,596 @@ clair:
       timeoutSeconds: 5
       failureThreshold: 6
       successThreshold: 1
-
-    ## lifecycleHooks for the container to automate configuration before or after startup.
+    ## @param clair.server.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
     ##
-    lifecycleHooks:
-
-    ## Custom Liveness probe
+    lifecycleHooks: {}
+    ## @param clair.server.customLivenessProbe Override default liveness probe
     ##
     customLivenessProbe: {}
-
-    ## Custom Rediness probe
+    ## @param clair.server.customReadinessProbe Override default readiness probe
     ##
     customReadinessProbe: {}
-
-    ## An array to add extra env vars
+    ## @param clair.server.extraEnvVars Array containing extra env vars
     ##
     extraEnvVars: []
-
-    ## ConfigMap with extra environment variables
+    ## @param clair.server.extraEnvVarsCM ConfigMap containing extra env vars
     ##
-    extraEnvVarsCM:
-
-    ## Secret with extra environment variables
+    extraEnvVarsCM: ""
+    ## @param clair.server.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
     ##
-    extraEnvVarsSecret:
-
-    ## Extra volume mounts to add to the container
+    extraEnvVarsSecret: ""
+    ## @param clair.server.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.
     ##
     extraVolumeMounts: []
-
     ## Clair containers' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param clair.server.resources.limits The resources limits for the container
+    ## @param clair.server.resources.requests The requested resources for the container
     ##
     resources:
-      ## We usually recommend not to specify default resources and to leave this as a conscious
-      ## choice for the user. This also increases chances charts run on environments with little
-      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-      ##
+      ## Example:
+      ## limits:
+      ##    cpu: 500m
+      ##    memory: 1Gi
       limits: {}
-      ##   cpu: 500m
-      ##   memory: 1Gi
-      ##
+      ## Examples:
+      ## requests:
+      ##    cpu: 250m
+      ##    memory: 256Mi
       requests: {}
-      ##   cpu: 250m
-      ##   memory: 256Mi
-      ##
-
-  ## Extra volumes to add to the deployment
+  ## @param clair.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
   ##
   extraVolumes: []
-
-  ## HostAliases to add to the deployment
+  ## @param clair.hostAliases Specify hostAliases for the Pod to use
   ##
   hostAliases: []
-
-  ## Extra init containers to add to the deployment
+  ## @param clair.initContainers Add additional init containers to the pod (evaluated as a template)
   ##
   initContainers: []
-
-  ## Extra sidecar containers to add to the deployment
+  ## @param clair.sidecars Attach additional containers to the pod (evaluated as a template)
   ##
   sidecars: []
-
-  ## Pod affinity preset
+  ## @param clair.podAffinityPreset Harbor Clair Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param clair.podAntiAffinityPreset Harbor Clair Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param clair.nodeAffinityPreset.type Harbor Clair Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
+    ## @param clair.nodeAffinityPreset.key Harbor Clair Node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param clair.nodeAffinityPreset.values Harbor Clair Node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
+  ## @param clair.affinity Harbor Clair Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param clair.priorityClassName Clair pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
+  ## @param clair.nodeSelector Harbor Clair Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param clair.tolerations Harbor Clair Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Pod extra labels. Evaluated as a template.
+  ## @param clair.podLabels Add additional labels to the pod (evaluated as a template)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
-  ## Pod annotations. Evaluated as a template.
+  ## @param clair.podAnnotations Annotations to add to the clair pod
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param clair.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
 
+## @section Notary Parameters
+
+## Bitnami Harbor Notary Server image
+## ref: https://hub.docker.com/r/bitnami/harbor-notary-server/tags/
+##
+notaryServerImage:
+  ## @param notaryServerImage.registry Registry for notary server image
+  ## @param notaryServerImage.repository Repository for notary server image
+  ## @param notaryServerImage.tag Tag for notary server image
+  ## @param notaryServerImage.pullPolicy Harbor notary server image pull policy
+  ## @param notaryServerImage.pullSecrets Specify docker-registry secret names as an array
+  ## @param notaryServerImage.debug Specify if debug logs should be enabled
+  ##
+  registry: docker.io
+  repository: bitnami/harbor-notary-server
+  tag: 2.4.1-debian-10-r59
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
+  debug: false
+## Bitnami Harbor Notary Signer image
+## ref: https://hub.docker.com/r/bitnami/harbor-notary-signer/tags/
+##
+notarySignerImage:
+  ## @param notarySignerImage.registry Registry for notary signer images
+  ## @param notarySignerImage.repository Repository for notary signer image
+  ## @param notarySignerImage.tag Tag for notary signer image
+  ## @param notarySignerImage.pullPolicy Harbor notary signer image pull policy
+  ## @param notarySignerImage.pullSecrets Specify docker-registry secret names as an array
+  ## @param notarySignerImage.debug Specify if debug logs should be enabled
+  ##
+  registry: docker.io
+  repository: bitnami/harbor-notary-signer
+  tag: 2.4.1-debian-10-r58
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
+  debug: false
+## Notary Parameters
+##
+notary:
+  ## @param notary.enabled Enable Notary
+  ##
+  enabled: true
+  server:
+    ## @param notary.server.command Override default container command (useful when using custom images)
+    ##
+    command: []
+    ## @param notary.server.args Override default container args (useful when using custom images)
+    ##
+    args: []
+    ## @param notary.server.replicas The replica count
+    ##
+    replicas: 1
+    ## @param notary.server.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
+    ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+    ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+    ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+    ##
+    updateStrategy:
+      type: RollingUpdate
+    ## @param notary.server.extraEnvVars Array containing extra env vars
+    ## For example:
+    ##  - name: BEARER_AUTH
+    ##    value: true
+    ##
+    extraEnvVars: []
+    ## @param notary.server.extraEnvVarsCM ConfigMap containing extra env vars
+    ##
+    extraEnvVarsCM: ""
+    ## @param notary.server.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
+    ##
+    extraEnvVarsSecret: ""
+    ## @param notary.server.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.
+    ##
+    extraVolumeMounts: []
+    ## @param notary.server.hostAliases HostAliases to add to the deployment
+    ##
+    hostAliases: []
+    ## @param notary.server.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
+    ##
+    lifecycleHooks: {}
+    ## Notary server containers' resource requests and limits
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param notary.server.resources.limits The resources limits for the container
+    ## @param notary.server.resources.requests The requested resources for the container
+    ##
+    resources:
+      ## Example:
+      ## limits:
+      ##    cpu: 500m
+      ##    memory: 1Gi
+      limits: {}
+      ## Examples:
+      ## requests:
+      ##    cpu: 250m
+      ##    memory: 256Mi
+      requests: {}
+    ## Notary server containers' liveness probe
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ## @param notary.server.livenessProbe.enabled Enable livenessProbe
+    ## @param notary.server.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param notary.server.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param notary.server.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param notary.server.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param notary.server.livenessProbe.successThreshold Success threshold for livenessProbe
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+    ## Notary server containers' readiness probe
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ## @param notary.server.readinessProbe.enabled Enable readinessProbe
+    ## @param notary.server.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param notary.server.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param notary.server.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param notary.server.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param notary.server.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+    ## @param notary.server.customLivenessProbe Override default liveness probe
+    ##
+    customLivenessProbe: {}
+    ## @param notary.server.customReadinessProbe Override default readiness probe
+    ##
+    customReadinessProbe: {}
+    ## @param notary.server.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
+    ##
+    extraVolumes: []
+    ## @param notary.server.initContainers Add additional init containers to the pod (evaluated as a template)
+    ##
+    initContainers: []
+    ## @param notary.server.sidecars Attach additional containers to the pod (evaluated as a template)
+    ##
+    sidecars: []
+    ## @param notary.server.podAffinityPreset Notary server Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ##
+    podAffinityPreset: ""
+    ## @param notary.server.podAntiAffinityPreset Notary server Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ##
+    podAntiAffinityPreset: soft
+    ## Node affinity preset
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+    ##
+    nodeAffinityPreset:
+      ## @param notary.server.nodeAffinityPreset.type Notary server Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+      ##
+      type: ""
+      ## @param notary.server.nodeAffinityPreset.key Notary server Node label key to match Ignored if `affinity` is set.
+      ## E.g.
+      ## key: "kubernetes.io/e2e-az-name"
+      ##
+      key: ""
+      ## @param notary.server.nodeAffinityPreset.values Notary server Node label values to match. Ignored if `affinity` is set.
+      ## E.g.
+      ## values:
+      ##   - e2e-az1
+      ##   - e2e-az2
+      ##
+      values: []
+    ## @param notary.server.affinity Notary server Affinity for pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+    ##
+    affinity: {}
+    ## @param notary.server.priorityClassName Notary server pods Priority Class Name
+    ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+    ##
+    priorityClassName: ""
+    ## @param notary.server.nodeSelector Notary server Node labels for pod assignment
+    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
+    ## @param notary.server.tolerations Notary server Tolerations for pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+    ## @param notary.server.podLabels Add additional labels to the pod (evaluated as a template)
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+    ##
+    podLabels: {}
+    ## @param notary.server.podAnnotations Annotations to add to the notary pod
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    podAnnotations: {}
+    ## @param notary.server.automountServiceAccountToken Automount service account token
+    ##
+    automountServiceAccountToken: false
+  signer:
+    ## @param notary.signer.command Override default container command (useful when using custom images)
+    ##
+    command: []
+    ## @param notary.signer.args Override default container args (useful when using custom images)
+    ##
+    args: []
+    ## @param notary.signer.replicas The replica count
+    ##
+    replicas: 1
+    ## @param notary.signer.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
+    ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+    ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+    ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+    ##
+    updateStrategy:
+      type: RollingUpdate
+    ## @param notary.signer.extraEnvVars Array containing extra env vars
+    ## For example:
+    ## extraEnvVars:
+    ##   - name: BEARER_AUTH
+    ##     value: true
+    ##
+    extraEnvVars: []
+    ## @param notary.signer.extraEnvVarsCM ConfigMap containing extra env vars
+    ##
+    extraEnvVarsCM: ""
+    ## @param notary.signer.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
+    ##
+    extraEnvVarsSecret: ""
+    ## @param notary.signer.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.
+    ##
+    extraVolumeMounts: []
+    ## Notary signer containers' resource requests and limits
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param notary.signer.resources.limits The resources limits for the container
+    ## @param notary.signer.resources.requests The requested resources for the container
+    ##
+    resources:
+      ## Example:
+      ## limits:
+      ##    cpu: 500m
+      ##    memory: 1Gi
+      limits: {}
+      ## Examples:
+      ## requests:
+      ##    cpu: 250m
+      ##    memory: 256Mi
+      requests: {}
+    ## @param notary.signer.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
+    ##
+    extraVolumes: []
+    ## @param notary.signer.hostAliases HostAliases to add to the deployment
+    ##
+    hostAliases: []
+    ## @param notary.signer.initContainers Add additional init containers to the pod (evaluated as a template)
+    ##
+    initContainers: []
+    ## @param notary.signer.sidecars Attach additional containers to the pod (evaluated as a template)
+    ##
+    sidecars: []
+    ## @param notary.signer.podAffinityPreset Notary signer Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ## Allowed values: soft, hard
+    ##
+    podAffinityPreset: ""
+    ## @param notary.signer.podAntiAffinityPreset Notary signer Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ## Allowed values: soft, hard
+    ##
+    podAntiAffinityPreset: soft
+    ## Node affinity preset
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+    ## Allowed values: soft, hard
+    ##
+    nodeAffinityPreset:
+      ## @param notary.signer.nodeAffinityPreset.type Notary signer Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+      ## Allowed values: soft, hard
+      ##
+      type: ""
+      ## @param notary.signer.nodeAffinityPreset.key Notary signer Node label key to match Ignored if `affinity` is set.
+      ## E.g.
+      ## key: "kubernetes.io/e2e-az-name"
+      ##
+      key: ""
+      ## @param notary.signer.nodeAffinityPreset.values Notary signer Node label values to match. Ignored if `affinity` is set.
+      ## E.g.
+      ## values:
+      ##   - e2e-az1
+      ##   - e2e-az2
+      ##
+      values: []
+    ## @param notary.signer.affinity Notary signer Affinity for pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+    ##
+    affinity: {}
+    ## @param notary.signer.priorityClassName Notary signer pods Priority Class Name
+    ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+    ##
+    priorityClassName: ""
+    ## @param notary.signer.nodeSelector Notary signer Node labels for pod assignment
+    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
+    ## @param notary.signer.tolerations Notary signer Tolerations for pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+    ## @param notary.signer.podLabels Add additional labels to the pod (evaluated as a template)
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+    ##
+    podLabels: {}
+    ## @param notary.signer.podAnnotations Annotations to add to the notary.signer pod
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    podAnnotations: {}
+    ## Notary signer containers' liveness probes
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ## @param notary.signer.livenessProbe.enabled Enable livenessProbe
+    ## @param notary.signer.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param notary.signer.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param notary.signer.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param notary.signer.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param notary.signer.livenessProbe.successThreshold Success threshold for livenessProbe
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+    ## Notary signer containers' readiness probes
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ## @param notary.signer.readinessProbe.enabled Enable readinessProbe
+    ## @param notary.signer.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param notary.signer.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param notary.signer.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param notary.signer.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param notary.signer.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+    ## @param notary.signer.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
+    ##
+    lifecycleHooks: {}
+    ## @param notary.signer.customLivenessProbe Override default liveness probe
+    ##
+    customLivenessProbe: {}
+    ## @param notary.signer.customReadinessProbe Override default readiness probe
+    ##
+    customReadinessProbe: {}
+    ## @param notary.signer.automountServiceAccountToken Automount service account token
+    ##
+    automountServiceAccountToken: false
+  ## @param notary.secretName Fill the name of a kubernetes secret if you want to use your own TLS certificate authority, certificate and private key for notary communications. The secret must contain keys named `notary-signer-ca.crt`, `notary-signer.key` and `notary-signer.crt` that contain the CA, certificate and private key. They will be generated if not set.
+  ## TLS certificate authority, certificate and private key for notary
+  ## communications.
+  ## The secret must contain keys named ca.crt, tls.crt and tls.key that
+  ## contain the CA, certificate and private key.
+  ## They will be generated if not set.
+  ##
+  secretName: ""
+
+## @section Harbor Trivy Parameters
+
+## Bitnami Harbor Trivy image
+## ref: https://hub.docker.com/r/bitnami/harbor-trivy-adapter/tags/
+##
+trivyImage:
+  ## @param trivyImage.registry Registry for trivy image
+  ## @param trivyImage.repository Repository for trivy image
+  ## @param trivyImage.tag Tag for trivy image
+  ## @param trivyImage.pullPolicy Harbor trivy image pull policy
+  ## @param trivyImage.pullSecrets Specify docker-registry secret names as an array
+  ## @param trivyImage.debug Specify if debug logs should be enabled
+  ##
+  registry: docker.io
+  repository: bitnami/harbor-adapter-trivy
+  tag: 2.4.1-debian-10-r57
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
+  debug: false
 ## Trivy adapter parameters
 ##
 trivy:
-  ## enabled the flag to enable Trivy scanner
+  ## @param trivy.enabled Enable Trivy
   ##
   enabled: true
-  ## replicas the number of Pod replicas
+  ## @param trivy.replicas The replica count
   ##
   replicas: 1
-
-  ## Harbor Trivy container command (using container default if not set)
+  ## @param trivy.command Override default container command (useful when using custom images)
   ##
-  command:
-  ## Harbor Trivy container args (using container default if not set)
+  command: []
+  ## @param trivy.args Override default container args (useful when using custom images)
   ##
-  args:
-
+  args: []
   ## Use TLS in the container
   ##
   tls:
-    ## Name of a secret containing the certificates
-    ## Otherwise, it will generate a cert automatically
+    ## @param trivy.tls.existingSecret Name of a secret with the certificates for internal TLS access. Requires internalTLS.enabled to be set to true. If this values is not set it will be automatically generated
     ##
-    existingSecret:
-
-  ## Update strategy
+    existingSecret: ""
+  ## @param trivy.updateStrategy.type Update strategy
   ##
   updateStrategy:
     type: RollingUpdate
-  ## debugMode the flag to enable Trivy debug mode with more verbose scanning log
+  ## @param trivy.debugMode The flag to enable Trivy debug mode
   ##
   debugMode: false
-  ## vulnType a comma-separated list of vulnerability types. Possible values are `os` and `library`.
+  ## @param trivy.vulnType Comma-separated list of vulnerability types. Possible values `os` and `library`.
   ##
   vulnType: 'os,library'
-  ## Automount service account token
+  ## @param trivy.automountServiceAccountToken Automount service account token in the Trivy containers
   ##
   automountServiceAccountToken: false
-  ## severity a comma-separated list of severities to be checked
+  ## @param trivy.severity Comma-separated list of severities to be checked
   ##
   severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
-  ## ignoreUnfixed the flag to display only fixed vulnerabilities
+  ## @param trivy.ignoreUnfixed The flag to display only fixed vulnerabilities
   ##
   ignoreUnfixed: false
-  ## insecure the flag to skip verifying registry certificate
+  ## @param trivy.insecure The flag to skip verifying registry certificate
   ##
   insecure: false
-  ## gitHubToken the GitHub access token to download Trivy DB
+  ## @param trivy.gitHubToken The GitHub access token to download Trivy DB
   ##
   ## Trivy DB contains vulnerability information from NVD, Red Hat, and many other upstream vulnerability databases.
   ## It is downloaded by Trivy from the GitHub release page https://github.com/aquasecurity/trivy-db/releases and cached
@@ -2155,14 +2756,18 @@ trivy:
   ## You can create a GitHub token by following the instructions in
   ## https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
   ##
-  gitHubToken: ''
-  ## skipUpdate the flag to disable Trivy DB downloads from GitHub
+  gitHubToken: ""
+  ## @param trivy.skipUpdate The flag to disable Trivy DB downloads from GitHub
   ## You might want to set the value of this flag to `true` in test or CI/CD environments to avoid GitHub rate limiting issues.
   ## If the value is set to `true` you have to manually download the `trivy.db` file and mount it in the
   ## `/home/scanner/.cache/trivy/db/trivy.db` path.
   ##
   skipUpdate: false
+  ## @param trivy.cacheDir Directory to store the cache
+  ##
   cacheDir: '/bitnami/harbor-adapter-trivy/.cache'
+  ## @param trivy.resources [object] The resources to allocate for container
+  ##
   resources:
     requests:
       cpu: 200m
@@ -2170,44 +2775,41 @@ trivy:
     limits:
       cpu: 1
       memory: 1Gi
-
-  ## An array to add extra env vars
+  ## @param trivy.extraEnvVars Array containing extra env vars
   ## For example:
+  ##  - name: BEARER_AUTH
+  ##    value: true
   ##
   extraEnvVars: []
-  #  - name: BEARER_AUTH
-  #    value: true
-
-  ## ConfigMap with extra environment variables
+  ## @param trivy.extraEnvVarsCM ConfigMap containing extra env vars
   ##
-  extraEnvVarsCM:
-
-  ## Secret with extra environment variables
+  extraEnvVarsCM: ""
+  ## @param trivy.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
   ##
-  extraEnvVarsSecret:
-
-  ## Extra volumes to add to the deployment
+  extraEnvVarsSecret: ""
+  ## @param trivy.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
   ##
   extraVolumes: []
-
-  ## Extra volume mounts to add to the container
+  ## @param trivy.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.
   ##
   extraVolumeMounts: []
-
-  ## HostAliases to add to the deployment
+  ## @param trivy.hostAliases Specify hostAliases for the Pod to use
   ##
   hostAliases: []
-
-  ## Extra init containers to add to the deployment
+  ## @param trivy.initContainers Add additional init containers to the pod (evaluated as a template)
   ##
   initContainers: []
-
-  ## Extra sidecar containers to add to the deployment
+  ## @param trivy.sidecars Attach additional containers to the pod (evaluated as a template)
   ##
   sidecars: []
-
-  ## Trivy containers' liveness and readiness probes
+  ## Trivy containers' liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param trivy.livenessProbe.enabled Enable livenessProbe
+  ## @param trivy.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param trivy.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param trivy.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param trivy.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param trivy.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -2216,6 +2818,15 @@ trivy:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## Trivy containers' readiness probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param trivy.readinessProbe.enabled Enable readinessProbe
+  ## @param trivy.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param trivy.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param trivy.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param trivy.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param trivy.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
   readinessProbe:
     enabled: true
     initialDelaySeconds: 20
@@ -2223,471 +2834,84 @@ trivy:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-
-  ## lifecycleHooks for the container to automate configuration before or after startup.
+  ## @param trivy.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
   ##
-  lifecycleHooks:
-
-  ## Custom Liveness probe
+  lifecycleHooks: {}
+  ## @param trivy.customLivenessProbe Override default liveness probe
   ##
   customLivenessProbe: {}
-
-  ## Custom Rediness probe
+  ## @param trivy.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
-
-  ## Pod affinity preset
+  ## @param trivy.podAffinityPreset Trivy Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAffinityPreset: ""
-
-  ## Pod anti-affinity preset
+  ## @param trivy.podAntiAffinityPreset Trivy Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
   ##
   podAntiAffinityPreset: soft
-
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ## Allowed values: soft, hard
   ##
   nodeAffinityPreset:
-    ## Node affinity type
-    ## Allowed values: soft, hard
+    ## @param trivy.nodeAffinityPreset.type Trivy Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## Node label key to match
+    ## @param trivy.nodeAffinityPreset.key Trivy Node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## Node label values to match
+    ## @param trivy.nodeAffinityPreset.values Trivy Node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-
-  ## Affinity for pod assignment
+  ## @param trivy.affinity Trivy Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-
-  ## Node labels for pod assignment
+  ## @param trivy.priorityClassName Trivy pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
+  ## @param trivy.nodeSelector Trivy Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-
-  ## Tolerations for pod assignment
+  ## @param trivy.tolerations Trivy Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-
-  ## Pod extra labels
+  ## @param trivy.podLabels Add additional labels to the pod (evaluated as a template)
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-
-  ## Pod annotations
+  ## @param trivy.podAnnotations Annotations to add to the trivy pod
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
 
-## Notary parameters
-##
-notary:
-  enabled: true
-  server:
-    ## Notary server container command (using container default if not set)
-    ##
-    command:
-    ## Notary server container args (using container default if not set)
-    ##
-    args:
-    replicas: 1
-    ## Notary server containers' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-    ##
-    ## Update strategy - only really applicable for deployments with RWO PVs attached
-    ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
-    ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
-    ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
-    ##
-    updateStrategy:
-      type: RollingUpdate
-    ## An array to add extra env vars
-    ## For example:
-    ##
-    extraEnvVars: []
-    #  - name: BEARER_AUTH
-    #    value: true
-
-    ## ConfigMap with extra environment variables
-    ##
-    extraEnvVarsCM:
-
-    ## Secret with extra environment variables
-    ##
-    extraEnvVarsSecret:
-
-    ## Extra volume mounts to add to the container
-    ##
-    extraVolumeMounts: []
-
-    ## HostAliases to add to the deployment
-    ##
-    hostAliases: []
-
-    ## lifecycleHooks for the container to automate configuration before or after startup.
-    ##
-    lifecycleHooks:
-
-    resources:
-      ## We usually recommend not to specify default resources and to leave this as a conscious
-      ## choice for the user. This also increases chances charts run on environments with little
-      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-      ##
-      limits: {}
-      ##   cpu: 500m
-      ##   memory: 1Gi
-      ##
-      requests: {}
-      ##   cpu: 250m
-      ##   memory: 256Mi
-    ## Notary server containers' liveness and readiness probes
-    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-    ##
-    livenessProbe:
-      enabled: true
-      initialDelaySeconds: 10
-      periodSeconds: 10
-      timeoutSeconds: 5
-      failureThreshold: 6
-      successThreshold: 1
-    readinessProbe:
-      enabled: true
-      initialDelaySeconds: 10
-      periodSeconds: 10
-      timeoutSeconds: 5
-      failureThreshold: 6
-      successThreshold: 1
-
-    ## Custom Liveness probe
-    ##
-    customLivenessProbe: {}
-
-    ## Custom Rediness probe
-    ##
-    customReadinessProbe: {}
-
-    ## Extra volumes to add to the deployment
-    ##
-    extraVolumes: []
-
-    ## Extra init containers to add to the deployment
-    ##
-    initContainers: []
-
-    ## Extra sidecar containers to add to the deployment
-    ##
-    sidecars: []
-
-    ## Pod affinity preset
-    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-    ## Allowed values: soft, hard
-    ##
-    podAffinityPreset: ""
-
-    ## Pod anti-affinity preset
-    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-    ## Allowed values: soft, hard
-    ##
-    podAntiAffinityPreset: soft
-
-    ## Node affinity preset
-    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-    ## Allowed values: soft, hard
-    ##
-    nodeAffinityPreset:
-      ## Node affinity type
-      ## Allowed values: soft, hard
-      ##
-      type: ""
-      ## Node label key to match
-      ## E.g.
-      ## key: "kubernetes.io/e2e-az-name"
-      ##
-      key: ""
-      ## Node label values to match
-      ## E.g.
-      ## values:
-      ##   - e2e-az1
-      ##   - e2e-az2
-      ##
-      values: []
-
-    ## Affinity for pod assignment
-    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-    ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
-    ##
-    affinity: {}
-
-    ## Node labels for pod assignment
-    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-    ##
-    nodeSelector: {}
-
-    ## Tolerations for pod assignment
-    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-    ##
-    tolerations: []
-
-    ## Pod extra labels. Evaluated as a template.
-    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-    ##
-    podLabels: {}
-
-    ## Pod annotations. Evaluated as a template.
-    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-    ##
-    podAnnotations: {}
-
-  signer:
-    ## Notary signer container command (using container default if not set)
-    ##
-    command:
-    ## Notary signer container args (using container default if not set)
-    ##
-    args:
-    replicas: 1
-    ## Update strategy - only really applicable for deployments with RWO PVs attached
-    ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
-    ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
-    ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
-    ##
-    updateStrategy:
-      type: RollingUpdate
-    ## An array to add extra env vars
-    ## For example:
-    ##
-    extraEnvVars: []
-    #  - name: BEARER_AUTH
-    #    value: true
-
-    ## ConfigMap with extra environment variables
-    ##
-    extraEnvVarsCM:
-
-    ## Secret with extra environment variables
-    ##
-    extraEnvVarsSecret:
-
-    ## Extra volume mounts to add to the container
-    ##
-    extraVolumeMounts: []
-
-    ## Notary signer containers' resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-    ##
-    resources:
-      ## We usually recommend not to specify default resources and to leave this as a conscious
-      ## choice for the user. This also increases chances charts run on environments with little
-      ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-      ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-      ##
-      limits: {}
-      ##   cpu: 500m
-      ##   memory: 1Gi
-      ##
-      requests: {}
-      ##   cpu: 250m
-      ##   memory: 256Mi
-    ## Extra volumes to add to the deployment
-    ##
-    extraVolumes: []
-
-    ## HostAliases to add to the deployment
-    ##
-    hostAliases: []
-
-    ## Extra init containers to add to the deployment
-    ##
-    initContainers: []
-
-    ## Extra sidecar containers to add to the deployment
-    ##
-    sidecars: []
-
-    ## Pod affinity preset
-    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-    ## Allowed values: soft, hard
-    ##
-    podAffinityPreset: ""
-
-    ## Pod anti-affinity preset
-    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-    ## Allowed values: soft, hard
-    ##
-    podAntiAffinityPreset: soft
-
-    ## Node affinity preset
-    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-    ## Allowed values: soft, hard
-    ##
-    nodeAffinityPreset:
-      ## Node affinity type
-      ## Allowed values: soft, hard
-      ##
-      type: ""
-      ## Node label key to match
-      ## E.g.
-      ## key: "kubernetes.io/e2e-az-name"
-      ##
-      key: ""
-      ## Node label values to match
-      ## E.g.
-      ## values:
-      ##   - e2e-az1
-      ##   - e2e-az2
-      ##
-      values: []
-
-    ## Affinity for pod assignment
-    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-    ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
-    ##
-    affinity: {}
-
-    ## Node labels for pod assignment
-    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-    ##
-    nodeSelector: {}
-
-    ## Tolerations for pod assignment
-    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-    ##
-    tolerations: []
-
-    ## Pod extra labels. Evaluated as a template.
-    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-    ##
-    podLabels: {}
-
-    ## Pod annotations. Evaluated as a template.
-    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-    ##
-    podAnnotations: {}
-
-    ## Notary signer containers' liveness and readiness probes
-    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-    ##
-    livenessProbe:
-      enabled: true
-      initialDelaySeconds: 10
-      periodSeconds: 10
-      timeoutSeconds: 5
-      failureThreshold: 6
-      successThreshold: 1
-    readinessProbe:
-      enabled: true
-      initialDelaySeconds: 10
-      periodSeconds: 10
-      timeoutSeconds: 5
-      failureThreshold: 6
-      successThreshold: 1
-
-    ## lifecycleHooks for the container to automate configuration before or after startup.
-    ##
-    lifecycleHooks:
-
-    ## Custom Liveness probe
-    ##
-    customLivenessProbe: {}
-
-    ## Custom Rediness probe
-    ##
-    customReadinessProbe: {}
-
-  ## Fill the name of a kubernetes secret if you want to use your own
-  ## TLS certificate authority, certificate and private key for notary
-  ## communications.
-  ## The secret must contain keys named ca.crt, tls.crt and tls.key that
-  ## contain the CA, certificate and private key.
-  ## They will be generated if not set.
-  ##
-  secretName: ''
-
-## Common annotations to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
-##
-commonAnnotations: {}
-
-## Common labels to add to all Harbor resources (sub-charts are not considered). Evaluated as a template
-##
-commonLabels: {}
-
-## Redis(TM) chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
-##
-redis:
-  enabled: true
-  nameOverride:
-  ## image:
-  ##   tag:
-  ## password: ""
-  ##
-  usePassword: false
-  cluster:
-    enabled: false
-  master:
-    persistence:
-      enabled: true
-  slave:
-    persistence:
-      enabled: true
-
-## If the Redis(TM) included in the chart is disabled, Harbor will use below
-## Redis(TM) parameters to connect to an external Redis(TM) server.
-## Support for both Redis(TM) and Redis+Sentinel(TM)
-##
-externalRedis:
-  ## Redis(TM) host
-  ##
-  host: localhost
-  ## Redis(TM) port number
-  ##
-  port: 6379
-
-  ## Redis(TM) sentinel configuration
-  ## If sentinel is enabled the below sentinel configurations are used as the hostname
-  ##
-  sentinel:
-    enabled: false
-    masterSet: 'mymaster'
-    ## Configure redis sentinel hostnames in the following pattern
-    ## <host_sentinal1>:<port_sentinel1>,<host_sentinal2>:<port_sentinel2>,<host_sentinal2>:<port_sentinel3>
-    ##
-    hosts: ''
-
-  ## Redis(TM) password
-  ##
-  password: ''
-  coreDatabaseIndex: '0'
-  jobserviceDatabaseIndex: '1'
-  registryDatabaseIndex: '2'
-  chartmuseumDatabaseIndex: '3'
-  clairAdapterDatabaseIndex: '4'
-  trivyAdapterDatabaseIndex: '5'
+## @section PostgreSQL Parameters
 
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+## @param postgresql.enabled If external database is used, set it to `false`
+## @param postgresql.nameOverride String to partially override common.names.fullname template with a string (will prepend the release name)
+## @param postgresql.postgresqlUsername Postgresql username
+## @param postgresql.postgresqlPassword Postgresql password
+## @param postgresql.existingSecret Set Postgresql password via an existing secret
+## @param postgresql.postgresqlExtendedConf [object] Extended runtime config parameters (appended to main or default configuration)
+## @param postgresql.replication.enabled Enable replicated postgresql
+## @param postgresql.persistence.enabled Enable persistence for PostgreSQL
 ##
 postgresql:
   enabled: true
-  nameOverride:
+  nameOverride: ""
   postgresqlUsername: postgres
   postgresqlPassword: not-secure-database-password
   ## Name of existing secret to use for PostgreSQL passwords.
@@ -2703,14 +2927,14 @@ postgresql:
   ## data:
   ##   postgresqlUsername: YWRtaW4=
   ##   postgresqlPassword: MWYyZDFlMmU2N2Rm
-  # existingSecret: secret
+  existingSecret: ""
   postgresqlExtendedConf:
     maxConnections: 1024
   replication:
     enabled: false
   persistence:
     enabled: true
-  ## PostgreSQL initdb initdbScripts
+  ## @param postgresql.initdbScripts [object] Initdb scripts to create Harbor databases
   ##
   initdbScripts:
     initial-notaryserver.sql: |
@@ -2727,57 +2951,137 @@ postgresql:
       CREATE DATABASE registry ENCODING 'UTF8';
       \c registry;
       CREATE TABLE schema_migrations(version bigint not null primary key, dirty boolean not null);
-
 ## If the PostgreSQL database included in the chart is disabled, Harbor will
 ## use below parameters to connect to an external PostgreSQL server.
 ##
 externalDatabase:
-  ## Database host
+  ## @param externalDatabase.host Host of the external database
   ##
   host: localhost
-  ## non-root Username for portal Database
+  ## @param externalDatabase.user Existing username in the external db
   ##
   user: bn_harbor
-  ## Database password
+  ## @param externalDatabase.password Password for the above username
   ##
-  password: ''
-  ## Database port number
+  password: ""
+  ## @param externalDatabase.port Port of the external database
   ##
   port: 5432
-  ## External database ssl mode
+  ## @param externalDatabase.sslmode External database ssl mode
   ##
   sslmode: disable
-  ## External database name for core
+  ## @param externalDatabase.coreDatabase External database name for core
   ##
-  coreDatabase:
-  ## External database name for clair
+  coreDatabase: ""
+  ## @param externalDatabase.clairDatabase External database name for clair
   ##
-  clairDatabase:
-  ## if not set, database.external.user is used
+  clairDatabase: ""
+  ## @param externalDatabase.clairUsername External database username for clair
   ##
-  clairUsername:
-  ## if not set, database.external.password is used
+  clairUsername: ""
+  ## @param externalDatabase.clairPassword External database password for clair
   ##
-  clairPassword:
-  ## External database name for notaryserver
+  clairPassword: ""
+  ## @param externalDatabase.notaryServerDatabase External database name for notary server
   ##
-  notaryServerDatabase:
-  ## if not set, database.external.user is used
+  notaryServerDatabase: ""
+  ## @param externalDatabase.notaryServerUsername External database username for notary server
   ##
-  notaryServerUsername:
-  ## if not set, database.external.password is used
+  notaryServerUsername: ""
+  ## @param externalDatabase.notaryServerPassword External database password for notary server
   ##
-  notaryServerPassword:
-  ## External database name for notarysigner
+  notaryServerPassword: ""
+  ## @param externalDatabase.notarySignerDatabase External database name for notary signer
   ##
-  notarySignerDatabase:
-  ## if not set, database.external.user is used
+  notarySignerDatabase: ""
+  ## @param externalDatabase.notarySignerUsername External database username for notary signer
   ##
-  notarySignerUsername:
-  ## if not set, database.external.password is used
+  notarySignerUsername: ""
+  ## @param externalDatabase.notarySignerPassword External database password for notary signer
   ##
-  notarySignerPassword:
+  notarySignerPassword: ""
 
-## Array with extra yaml to deploy with the chart. Evaluated as a template
+## @section Redis&trade; Parameters
+
+## Redis&trade; chart configuration
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
-extraDeploy: []
+redis:
+  ## @param redis.enabled If external redis is used, set it to `false`
+  ##
+  enabled: true
+  ## @param redis.nameOverride String to partially override common.names.fullname template with a string (will prepend the release name)
+  ##
+  nameOverride: ""
+  ## image:
+  ##   tag:
+  auth:
+    ## @param redis.auth.enabled Use redis password
+    ##
+    enabled: false
+    ## @param redis.auth.password Redis password
+    ## Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
+    ## It should always be set using the password value or in the existingSecret to avoid issues
+    ## with Harbor.
+    ## The password value is ignored if existingSecret is set
+    password: ""
+  ## @param redis.architecture Cluster settings
+  ##
+  architecture: standalone
+  ## Redis&trade; Master parameters
+  ## @param redis.master.persistence.enabled Enable persistence for master Redis
+  ##
+  master:
+    persistence:
+      enabled: true
+    ## @param redis.master.priorityClassName Redis pods Priority Class Name
+    ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+    ##
+    priorityClassName: ""
+  ## Redis&trade; Replica parameters
+  ## @param redis.replica.persistence.enabled Enable persistence for replica Redis
+  ##
+  replica:
+    persistence:
+      enabled: true
+## If the Redis&trade; included in the chart is disabled, Harbor will use below
+## Redis&trade; parameters to connect to an external Redis&trade; server.
+## Support for both Redis&trade; and Redis+Sentinel&trade;
+##
+externalRedis:
+  ## @param externalRedis.host Host of the external redis
+  ##
+  host: localhost
+  ## @param externalRedis.port Port of the external redis
+  ##
+  port: 6379
+  ## Redis&trade; sentinel configuration
+  ## If sentinel is enabled the below sentinel configurations are used as the hostname
+  ##
+  sentinel:
+    ## @param externalRedis.sentinel.enabled If external redis with sentinal is used, set it to `true`
+    ##
+    enabled: false
+    ## @param externalRedis.sentinel.masterSet Name of sentinel masterSet if sentinel is used
+    ##
+    masterSet: 'mymaster'
+    ## @param externalRedis.sentinel.hosts Sentinel hosts and ports in the format
+    ## <host_sentinal1>:<port_sentinel1>,<host_sentinal2>:<port_sentinel2>,<host_sentinal2>:<port_sentinel3>
+    ##
+    hosts: ""
+  ## @param externalRedis.password Password for the external redis
+  ##
+  password: ""
+  ## @param externalRedis.coreDatabaseIndex Index for core database
+  ## @param externalRedis.jobserviceDatabaseIndex Index for jobservice database
+  ## @param externalRedis.registryDatabaseIndex Index for registry database
+  ## @param externalRedis.chartmuseumDatabaseIndex Index for chartmuseum database
+  ## @param externalRedis.clairAdapterDatabaseIndex Index for chartmuseum database
+  ## @param externalRedis.trivyAdapterDatabaseIndex Index for chartmuseum database
+  ##
+  coreDatabaseIndex: '0'
+  jobserviceDatabaseIndex: '1'
+  registryDatabaseIndex: '2'
+  chartmuseumDatabaseIndex: '3'
+  clairAdapterDatabaseIndex: '4'
+  trivyAdapterDatabaseIndex: '5'

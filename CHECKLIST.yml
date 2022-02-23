@@ -1,4 +1,0 @@
-paths:
-  "bitnami/*/values.yaml":
-    - "Is the PR adding a new container? Please reviewer, add it to the models (internal process)"
-    - "Is the PR adding a new parameter? Please, ensure it’s documented in the README.md"

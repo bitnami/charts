@@ -1,0 +1,16 @@
+# Test values file for generating all of the yaml and check that
+# the rendering is correct
+configuration: |
+  test_configuration
+
+redis:
+  enabled: false
+externalRedis:
+  password: test
+
+postgresql:
+  enabled: false
+externalDatabase:
+  password: test
+
+

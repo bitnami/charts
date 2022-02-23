@@ -7,12 +7,12 @@ metadata:
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- range $key, $value := .Values.metrics.serviceMonitor.selector }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
 spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      {{- if .Values.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
   endpoints:
   - port: http
     path: "/_prometheus/metrics"

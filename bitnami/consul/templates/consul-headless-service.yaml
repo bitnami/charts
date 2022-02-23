@@ -8,12 +8,12 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
-    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
   clusterIP: None
+  publishNotReadyAddresses: true
   ports:
     - name: http
       protocol: TCP

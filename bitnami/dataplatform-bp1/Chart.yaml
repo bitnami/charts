@@ -1,12 +1,12 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 1.0.0
+appVersion: 1.0.1
 dependencies:
   - condition: kafka.enabled
     name: kafka
     repository: https://charts.bitnami.com/bitnami
-    version: 12.x.x
+    version: 14.x.x
   - condition: spark.enabled
     name: spark
     repository: https://charts.bitnami.com/bitnami
@@ -14,15 +14,15 @@ dependencies:
   - condition: solr.enabled
     name: solr
     repository: https://charts.bitnami.com/bitnami
-    version: 0.x.x
+    version: 2.x.x
   - condition: zookeeper.enabled
     name: zookeeper
     repository: https://charts.bitnami.com/bitnami
-    version: 6.x.x
+    version: 7.x.x
   - condition: wavefront.enabled
     name: wavefront
     repository: https://charts.bitnami.com/bitnami
-    version: 1.x.x
+    version: 3.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -41,6 +41,7 @@ keywords:
   - wavefront
   - observability
   - apache
+  - tanzuobservability
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
@@ -58,4 +59,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-wavefront-proxy
   - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
   - https://github.com/wavefrontHQ/wavefront-proxy
-version: 0.2.0
+version: 9.0.8

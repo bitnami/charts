@@ -3,11 +3,19 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}-compactor
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: compactor
-  {{- if .Values.compactor.service.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.service.annotations "context" $) | nindent 4 }}
-  {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.compactor.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.compactor.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.compactor.service.type }}
   {{- if and .Values.compactor.service.clusterIP (eq .Values.compactor.service.type "ClusterIP") }}
@@ -23,14 +31,18 @@ spec:
   loadBalancerSourceRanges: {{- toYaml .Values.compactor.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ .Values.compactor.service.http.port }}
+    - port: {{ if .Values.compactor.service.http }}{{ coalesce .Values.compactor.service.ports.http .Values.compactor.service.http.port }}{{ else }}{{ .Values.compactor.service.ports.http }}{{ end }}
       targetPort: http
       protocol: TCP
       name: http
-      {{- if (and (or (eq .Values.compactor.service.type "NodePort") (eq .Values.compactor.service.type "LoadBalancer")) .Values.compactor.service.http.nodePort) }}
+      {{- if and (or (eq .Values.compactor.service.type "NodePort") (eq .Values.compactor.service.type "LoadBalancer")) .Values.compactor.service.nodePorts.http }}
+      nodePort: {{ .Values.compactor.service.nodePorts.http }}
       {{- else if eq .Values.compactor.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.compactor.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.compactor.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector:
     {{- if .Values.compactor.service.labelSelectorsOverride }}
     {{- include "common.tplvalues.render" (dict "value" .Values.compactor.service.labelSelectorsOverride "context" $) | nindent 4 }}

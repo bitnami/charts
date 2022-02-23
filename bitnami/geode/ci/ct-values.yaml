@@ -1,0 +1,4 @@
+locator:
+  replicaCount: 1
+server:
+  replicaCount: 1

@@ -6,20 +6,23 @@
   {{- $_ := set . "v2_path" "/v2/*" -}}
   {{- $_ := set . "chartrepo_path" "/chartrepo/*" -}}
   {{- $_ := set . "controller_path" "/c/*" -}}
+  {{- $_ := set . "notary_path" "/" -}}
 {{- else if eq .Values.ingress.controller "ncp" }}
-  {{- $_ := set . "portal_path" "/" -}}
+  {{- $_ := set . "portal_path" "/.*" -}}
   {{- $_ := set . "api_path" "/api/.*" -}}
   {{- $_ := set . "service_path" "/service/.*" -}}
   {{- $_ := set . "v2_path" "/v2/.*" -}}
   {{- $_ := set . "chartrepo_path" "/chartrepo/.*" -}}
   {{- $_ := set . "controller_path" "/c/.*" -}}
+  {{- $_ := set . "notary_path" "/.*" -}}
 {{- else }}
   {{- $_ := set . "portal_path" "/" -}}
-  {{- $_ := set . "api_path" "/api" -}}
-  {{- $_ := set . "service_path" "/service" -}}
+  {{- $_ := set . "api_path" "/api/" -}}
+  {{- $_ := set . "service_path" "/service/" -}}
   {{- $_ := set . "v2_path" "/v2" -}}
-  {{- $_ := set . "chartrepo_path" "/chartrepo" -}}
-  {{- $_ := set . "controller_path" "/c" -}}
+  {{- $_ := set . "chartrepo_path" "/chartrepo/" -}}
+  {{- $_ := set . "controller_path" "/c/" -}}
+  {{- $_ := set . "notary_path" "/" -}}
 {{- end }}
 
 ---
@@ -37,6 +40,12 @@ metadata:
   {{- end }}
   {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
+  {{- end }}
+  {{- if eq .Values.ingress.controller "ncp" }}
+    ncp/use-regex: "true"
+    {{- if .Values.internalTLS.enabled }}
+    ncp/http-redirect: "true"
+    {{- end }}
   {{- end }}
   {{- if .Values.ingress.annotations }}
    {{- toYaml .Values.ingress.annotations | nindent 4 }}
@@ -108,6 +117,12 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
+  {{- if eq .Values.ingress.controller "ncp" }}
+    ncp/use-regex: "true"
+    {{- if .Values.internalTLS.enabled }}
+    ncp/http-redirect: "true"
+    {{- end }}
+  {{- end }}
   {{- if .Values.ingress.annotations }}
    {{- toYaml .Values.ingress.annotations | nindent 4 }}
   {{- end }}
@@ -122,7 +137,7 @@ spec:
     {{- else if .Values.service.tls.existingSecret }}
     - secretName: {{ .Values.service.tls.existingSecret }}
     {{- else }}
-    - secretName: {{ include "harbor.ingress" . }}
+    - secretName: {{ include "harbor.ingress-notary" . }}
     {{- end }}
       {{- if .Values.ingress.hosts.notary }}
       hosts:
@@ -135,7 +150,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: /
+          - path: {{ .notary_path }}
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.pathType }}
             {{- end }}

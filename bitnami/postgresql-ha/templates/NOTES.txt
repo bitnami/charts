@@ -1,6 +1,35 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- $clusterDomain:= .Values.clusterDomain }}
 ** Please be patient while the chart is being deployed **
 
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts, check the /opt/bitnami/scripts folder.
+
+  Default PostgreSQL startup command
+
+    /opt/bitnami/scripts/postgresql-repmgr/entrypoint.sh /opt/bitnami/scripts/postgresql-repmgr/run.sh
+
+  Default PgPool startup command
+
+    /opt/bitnami/scripts/pgpool/entrypoint.sh /opt/bitnami/scripts/pgpool/run.sh
+
+{{- else }}
 PostgreSQL can be accessed through Pgpool via port {{ .Values.service.port }} on the following DNS name from within your cluster:
 
     {{ include "postgresql-ha.pgpool" . }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}
@@ -39,7 +68,7 @@ To connect to your database from outside the cluster execute the following comma
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "postgresql-ha.pgpool" . }}
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "postgresql-ha.pgpool" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "postgresql-ha.pgpool" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     PGPASSWORD="$POSTGRES_PASSWORD" psql -h $SERVICE_IP -p {{ .Values.service.port }}  -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
 
 {{- else if contains "ClusterIP" .Values.service.type }}
@@ -48,6 +77,25 @@ To connect to your database from outside the cluster execute the following comma
     psql -h 127.0.0.1 -p {{ .Values.service.port }} -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
 
 {{- end }}
+{{- end }}
 
 {{- include "postgresql-ha.validateValues" . }}
 {{- include "postgresql-ha.checkRollingTags" . }}
+
+{{- $passwordValidationErrors := list -}}
+{{- $requiredPasswords := list -}}
+{{- if not (include "postgresql-ha.postgresql.existingSecretProvided" . ) }}
+{{- $secretName := include "postgresql-ha.postgresqlSecretName" . -}}
+{{- $requiredPostgresqlPassword := dict "valueKey" "postgresql.password" "secret" $secretName "field" "postgresql-password" "context" $ -}}
+{{- $requiredPasswords = append $requiredPasswords $requiredPostgresqlPassword -}}
+{{- $requiredRepmgrPassword := dict "valueKey" "postgresql.repmgrPassword" "secret" $secretName "field" "repmgr-password" "context" $ -}}
+{{- $requiredPasswords = append $requiredPasswords $requiredRepmgrPassword -}}
+{{- end }}
+{{- if not (include "postgresql-ha.pgpool.existingSecretProvided" . ) }}
+{{- $secretName := include "postgresql-ha.pgpoolSecretName" . -}}
+{{- $requiredPgpoolPassword := dict "valueKey" "pgpool.adminPassword" "secret" $secretName "field" "admin-password" "context" $ -}}
+{{- $requiredPasswords = append $requiredPasswords $requiredPgpoolPassword -}}
+{{- end }}
+{{- $passwordValidationErrors = include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" .) -}}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

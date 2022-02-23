@@ -1,7 +1,31 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- $databaseSecretName := include "ejbca.databaseSecretName" . -}}
 {{- $secretName := include "ejbca.secretName" . -}}
 
 ** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/ejbca/entrypoint.sh /opt/bitnami/scripts/ejbca/run.sh
+
+{{- else }}
 
 To access your EJBCA site from outside the cluster follow the steps below:
 
@@ -22,7 +46,7 @@ To access your EJBCA site from outside the cluster follow the steps below:
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
    echo "EJBCA Public URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca"
    echo "EJBCA Admin URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca/adminweb"
    echo "EJBCA Enrol URL: https://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.httpsPort }}{{ end }}/ejbca/enrol/keystore.jsp"
@@ -60,3 +84,7 @@ To access your EJBCA site from outside the cluster follow the steps below:
 {{- $passwordErrors = append $passwordErrors $mariadbPasswordValidationErrors -}}
 
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
+
+{{- end -}}
+
+{{- include "common.warnings.rollingTag" .Values.image }}

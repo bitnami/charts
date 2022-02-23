@@ -1,3 +1,9 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
 {{- if eq .Values.envoy.service.type "LoadBalancer" }}
 1. Get Contours's load balancer IP/hostname:
 
@@ -14,7 +20,7 @@
 2. Configure DNS records corresponding to Kubernetes ingress resources to point to the load balancer IP/hostname found in step 1
 {{- end }}
 {{- if eq .Values.envoy.service.type "NodePort" }}
-{{- if (and (not (empty .Values.envoy.service.nodePorts.https)) (not (empty .Values.envoy.service.nodePorts.http)))}}
+{{- if (and (not (empty .Values.envoy.service.nodePorts.https)) (not (empty .Values.envoy.service.nodePorts.http))) }}
 1. Contour is listening on the following ports on the host machine:
 
      http - {{ .Values.envoy.service.nodePorts.http }}
@@ -29,5 +35,6 @@
 2. Configure DNS records corresponding to Kubernetes ingress resources to point to the NODE_IP/NODE_HOST
 {{- end }}
 
-{{ include "common.warnings.rollingTag" .Values.contour.image }}
-{{ include "common.warnings.rollingTag" .Values.envoy.image }}
+{{- include "contour.validateValues" . }}
+{{- include "common.warnings.rollingTag" .Values.contour.image }}
+{{- include "common.warnings.rollingTag" .Values.envoy.image }}

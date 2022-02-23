@@ -1,4 +1,4 @@
-{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (not (eq .Values.externalAccess.service.type "ClusterIP"))}}
+{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (not (eq .Values.externalAccess.service.type "ClusterIP")) }}
 {{- $fullName := include "mongodb.fullname" . }}
 {{- $replicaCount := .Values.replicaCount | int }}
 {{- $root := . }}
@@ -14,6 +14,9 @@ metadata:
   namespace: {{ include "mongodb.namespace" $ }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     app.kubernetes.io/component: mongodb
+    {{- if $root.Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $root.Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     pod: {{ $targetPod }}
   {{- if $root.Values.externalAccess.service.annotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $root.Values.externalAccess.service.annotations "context" $) | nindent 4 }}
@@ -34,8 +37,6 @@ spec:
       port: {{ $root.Values.externalAccess.service.port }}
       {{- if not (empty $root.Values.externalAccess.service.nodePorts) }}
       nodePort: {{ index $root.Values.externalAccess.service.nodePorts $i }}
-      {{- else }}
-      nodePort: null
       {{- end }}
       targetPort: mongodb
   selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}

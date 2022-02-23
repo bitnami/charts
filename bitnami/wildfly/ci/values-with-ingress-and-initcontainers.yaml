@@ -2,9 +2,14 @@
 # the rendering is correct
 service:
   type: ClusterIP
+exposeManagementConsole: true
 ingress:
   enabled: true
   tls: true
   hostname: wildfly.local
+mgmtIngress:
+  enabled: true
+  tls: true
+  hostname: management.hostname
 volumePermissions:
   enabled: true

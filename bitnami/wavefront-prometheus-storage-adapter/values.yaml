@@ -5,27 +5,30 @@
 ## @section Global parameters
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
-# global:
-#   imageRegistry: myRegistryName
-#   imagePullSecrets:
-#     - myRegistryKeySecretName
-#   storageClass: myStorageClass
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  storageClass: ""
 
 ## Override Kubernetes version
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion:
+kubeVersion: ""
 
 ## String to partially override common.names.fullname template (will maintain the release name)
 ## @param nameOverride String to partially override common.names.fullname
 ##
-nameOverride:
+nameOverride: ""
 
 ## String to fully override common.names.fullname template
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
-fullnameOverride:
+fullnameOverride: ""
 
 ## Add labels to all the deployed resources
 ## @param commonLabels  Labels to add to all deployed objects
@@ -58,10 +61,10 @@ image:
   repository: bitnami/wavefront-prometheus-storage-adapter
   ## @param image.tag Adapter image tag (immutabe tags are recommended)
   ##
-  tag: 1.0.3-debian-10-r14
+  tag: 1.0.5-debian-10-r84
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   ## @param image.pullPolicy Adapter image pull policy
   ##
@@ -126,7 +129,7 @@ args: []
 hostAliases: []
 
 ## wavefront-prometheus-storage-adapter resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ##
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -280,12 +283,12 @@ extraEnvVars: []
 ## ConfigMap with extra environment variables
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
-extraEnvVarsCM:
+extraEnvVarsCM: ""
 
 ## Secret with extra environment variables
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
-extraEnvVarsSecret:
+extraEnvVarsSecret: ""
 
 ## Extra volumes to add to the deployment
 ## @param extraVolumes  Optionally specify extra list of additional volumes for Adapter pods
@@ -308,7 +311,7 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ## @param initContainers  Add additional init containers to the Adapter pods
 ##
-initContainers: {}
+initContainers: []
 
 ## Add sidecars to the wavefront-prometheus-storage-adapter pods.
 ## Example:
@@ -322,14 +325,14 @@ initContainers: {}
 ##
 ## @param sidecars  Add additional sidecar containers to the Adapter pod
 ##
-sidecars: {}
+sidecars: []
 
 ## Use an external wavefront-proxy host
 ##
 externalProxy:
   ## @param externalProxy.host Host of a wavefront-proxy instance (required if wavefront.enabled = false)
   ##
-  host:
+  host: ""
   ## @param externalProxy.port Host of a wavefront-proxy instance (required if wavefront.enabled = false)
   ##
   port: 2878
@@ -337,12 +340,12 @@ externalProxy:
 ## Adapter prefix parameter
 ## @param adapterPrefix Adapter `prefix` parameter
 ##
-adapterPrefix:
+adapterPrefix: ""
 
 ## Adapter tags parameter
 ## @param adapterTags Adapter `tags` parameter
 ##
-adapterTags:
+adapterTags: ""
 
 ## @section Traffic Exposure Parameters
 ## Service parameters
@@ -356,14 +359,18 @@ service:
   ##
   port: 1234
   ## loadBalancerIP for the Service (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ## @param service.loadBalancerIP Adapter service LoadBalancer IP
   ##
-  loadBalancerIP:
+  loadBalancerIP: ""
   ## loadBalancerIP source ranges for the Service
   ## @param service.loadBalancerSourceRanges loadBalancerIP source ranges for the Service
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
   ##
-  loadBalancerSourceRanges:
+  loadBalancerSourceRanges: []
   ##
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
@@ -373,7 +380,7 @@ service:
   nodePorts:
     http: ""
   ## Enable client source IP preservation
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ## @param service.externalTrafficPolicy External traffic policy for the service
   ##
   externalTrafficPolicy: Cluster

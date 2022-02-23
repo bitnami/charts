@@ -1,16 +1,22 @@
-{{- if and .Values.scheduler.podDisruptionBudget.enabled }}
+{{- if .Values.scheduler.pdb.create }}
 kind: PodDisruptionBudget
-apiVersion: policy/v1beta1
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 metadata:
-  name: {{ include "common.names.fullname" . }}-scheduler
+  name: {{ printf "%s-scheduler" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: scheduler
     {{- if .Values.commonLabels }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
 spec:
+  {{- if .Values.scheduler.pdb.minAvailable }}
+  minAvailable: {{ .Values.scheduler.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.scheduler.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.scheduler.pdb.maxUnavailable }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: scheduler
-  {{- include "common.tplvalues.render" (dict "value" (omit .Values.scheduler.podDisruptionBudget "enabled") "context" $) | nindent 2 }}
 {{- end }}

@@ -10,7 +10,8 @@ rules:
   - apiGroups: [""]
     resources: ["configmaps"]
     verbs: ["update", "patch"]
-  {{- if .Values.curator.psp.create }}
+  {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+  {{- if and $pspAvailable .Values.curator.psp.create }}
   - apiGroups: ["extensions"]
     resources: ["podsecuritypolicies"]
     verbs: ["use"]

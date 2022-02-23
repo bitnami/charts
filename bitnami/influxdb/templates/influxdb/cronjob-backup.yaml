@@ -12,7 +12,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  schedule: {{.Values.backup.cronjob.schedule | quote }}
+  schedule: {{ .Values.backup.cronjob.schedule | quote }}
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: {{ .Values.backup.cronjob.historyLimit }}
   failedJobsHistoryLimit: {{ .Values.backup.cronjob.historyLimit }}
@@ -50,8 +50,22 @@ spec:
               persistentVolumeClaim:
                 claimName: {{ include "common.names.fullname" . }}-backups
             {{- else }}
-                emptyDir: {}
+              emptyDir: {}
             {{- end }}
+          {{- if .Values.backup.affinity }}
+          affinity: {{- include "common.tplvalues.render" (dict "value" .Values.backup.affinity "context" $) | nindent 12 }}
+          {{- else }}
+          affinity:
+            podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.backup.podAffinityPreset "component" "influxdb" "context" $) | nindent 14 }}
+            podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.backup.podAntiAffinityPreset "component" "influxdb" "context" $) | nindent 14 }}
+            nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.backup.nodeAffinityPreset.type "key" .Values.backup.nodeAffinityPreset.key "values" .Values.backup.nodeAffinityPreset.values) | nindent 14 }}
+          {{- end }}
+          {{- if .Values.backup.nodeSelector }}
+          nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.backup.nodeSelector "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.backup.tolerations }}
+          tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.backup.tolerations "context" $) | nindent 10 }}
+          {{- end }}
           initContainers:
             - name: influxdb-backup
               image: {{ include "influxdb.image" . | quote }}
@@ -76,14 +90,24 @@ spec:
                   subPath: backup.sh
           containers:
             - name: influxdb-backup-dummy-container
-              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              image: {{ include "influxdb.image" . | quote }}
+              {{- if .Values.diagnosticMode.enabled }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
+              {{- else }}
               command:
                 - "/bin/true"
+              {{- end }}
             {{- if .Values.backup.uploadProviders.google.enabled }}
             - name: gsutil-cp
               image: {{ include "gcloudSdk.image" . }}
+              {{- if .Values.diagnosticMode.enabled }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
+              {{- else }}
               command:
                 - "/tmp/upload-google.sh"
+              {{- end }}
               volumeMounts:
                 - name: {{ include "common.names.fullname" . }}-backups
                   mountPath: {{ .Values.backup.directory | quote }}
@@ -96,8 +120,13 @@ spec:
             {{- if .Values.backup.uploadProviders.azure.enabled }}
             - name: azure-cli
               image: {{ include "azureCli.image" . }}
+              {{- if .Values.diagnosticMode.enabled }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
+              {{- else }}
               command:
               - "/tmp/upload-azure.sh"
+              {{- end }}
               env:
                 - name: AZURE_STORAGE_CONNECTION_STRING
                   valueFrom:
@@ -114,5 +143,50 @@ spec:
                 - name: backup-scripts
                   mountPath: /tmp/upload-azure.sh
                   subPath: upload-azure.sh
+            {{- end }}
+            {{- if .Values.backup.uploadProviders.aws.enabled }}
+            - name: aws-cli
+              image: {{ include "awsCli.image" . }}
+              {{- if .Values.diagnosticMode.enabled }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
+              {{- else }}
+              command:
+              - "/tmp/upload-aws.sh"
+              {{- end }}
+              env:
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      {{- if .Values.backup.uploadProviders.aws.existingSecret }}
+                      name: {{ .Values.backup.uploadProviders.aws.existingSecret | quote }}
+                      {{- else }}
+                      name: {{ include "common.names.fullname" . }}-backup-aws
+                      {{- end }}
+                      key: accessKeyID
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      {{- if .Values.backup.uploadProviders.aws.existingSecret }}
+                      name: {{ .Values.backup.uploadProviders.aws.existingSecret | quote }}
+                      {{- else }}
+                      name: {{ include "common.names.fullname" . }}-backup-aws
+                      {{- end }}
+                      key: secretAccessKey
+                - name: AWS_DEFAULT_REGION
+                  valueFrom:
+                    secretKeyRef:
+                      {{- if .Values.backup.uploadProviders.aws.existingSecret }}
+                      name: {{ .Values.backup.uploadProviders.aws.existingSecret | quote }}
+                      {{- else }}
+                      name: {{ include "common.names.fullname" . }}-backup-aws
+                      {{- end }}
+                      key: region
+              volumeMounts:
+                - name: {{ include "common.names.fullname" . }}-backups
+                  mountPath: {{ .Values.backup.directory | quote }}
+                - name: backup-scripts
+                  mountPath: /tmp/upload-aws.sh
+                  subPath: upload-aws.sh
             {{- end }}
 {{- end }}

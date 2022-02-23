@@ -1,15 +1,14 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 3.4.15
+appVersion: 3.5.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
     version: 1.x.x
-description: etcd is a distributed key value store that provides a reliable way to store data across a cluster of machines
-engine: gotpl
+description: etcd is a distributed key-value store designed to securely store data across a cluster. etcd is widely used in production on account of its reliability, fault-tolerance and ease of use.
 home: https://github.com/bitnami/charts/tree/master/bitnami/etcd
 icon: https://bitnami.com/assets/stacks/etcd/img/etcd-stack-220x234.png
 keywords:
@@ -25,4 +24,4 @@ name: etcd
 sources:
   - https://github.com/bitnami/bitnami-docker-etcd
   - https://coreos.com/etcd/
-version: 6.1.3
+version: 6.13.4

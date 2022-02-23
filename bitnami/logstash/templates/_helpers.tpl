@@ -38,6 +38,7 @@ Check if there are rolling tags in the images
 {{- define "logstash.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}
 
 {{/*
@@ -61,4 +62,11 @@ logstash: metrics
     The Logstash Monitoring API must be enabled when metrics are enabled (metrics.enabled=true).
     Please enable the Montoring API (--set enableMonitoringAPI="true")
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "logstash.volumePermissions.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}

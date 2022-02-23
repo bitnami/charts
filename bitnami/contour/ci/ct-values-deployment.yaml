@@ -1,0 +1,5 @@
+kind: Deployment
+envoy:
+  service:
+    type: ClusterIP
+    externalTrafficPolicy: null

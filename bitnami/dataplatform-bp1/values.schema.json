@@ -74,47 +74,47 @@
     },    
       "wavefront": {
         "type": "object",
-        "title": "Wavefront Observability Details",
+        "title": "Tanzu Observability Details",
         "form": true,
         "properties": {
           "enabled": {
             "type": "boolean",
-            "title": "Deploy Wavefront observability for the data platform cluster including configuration for metrics exporters for all the components",
+            "title": "Deploy Tanzu observability for the data platform cluster including configuration for metrics exporters for all the components. Check https://docs.wavefront.com/kubernetes.html for more details",
             "form": true,
-            "description": "Whether to deploy a Wavefront observability as part of data platform. Switch this off in case Wavefront is not needed"
+            "description": "Whether to deploy a Tanzu observability as part of data platform. Switch this off in case Tanzu Observability is not needed. Check https://docs.wavefront.com/kubernetes.html for more details."
           },
           "clusterName": {
             "type": "string",
-            "title": "Provide the kubernetes cluster name to be configured in wavefront",
+            "title": "Provide the kubernetes cluster name to be configured in Tanzu Observability",
             "form": true,
             "hidden": {
               "value": false,
               "path": "wavefront/enabled"
             },            
-            "description": "Kubernetes cluster name to be configured in wavefront, if not provided it will be defaulted to KUBERNETES_CLUSTER_NAME"
+            "description": "Kubernetes cluster name to be configured in Tanzu Observability, if not provided it will be defaulted to KUBERNETES_CLUSTER_NAME"
           },          
           "wavefront": {
             "type": "object",
             "properties": {
               "url": {
                 "type": "string",
-                "title": "Provide the wavefront cluster url to be configured",
+                "title": "Provide the Tanzu Observability cluster url to be configured",
                 "form": true,
                 "hidden": {
                   "value": false,
                   "path": "wavefront/enabled"
                 },                
-                "description": "Wavefront cluster url to be configured to export the metrics to"
+                "description": "Tanzu Observability cluster url to be configured to export the metrics to"
                 },
               "token": {
                 "type": "string",
-                "title": "Provide the wavefront user API token to be used for the cluster url provided above",
+                "title": "Provide the Tanzu Observability user API token to be used for the cluster url provided above",
                 "form": true,
                 "hidden": {
                   "value": false,
                   "path": "wavefront/enabled"
                 },                
-                "description": "Wavefront user API token to be used for the cluster url provided above"
+                "description": "Tanzu Observability user API token to be used for the cluster url provided above"
                 }
             }
           }            

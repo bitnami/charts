@@ -1,0 +1,48 @@
+{{- if and .Values.mongos.useStatefulSet .Values.mongos.servicePerReplica.enabled }}
+{{- range $i := until (.Values.mongos.replicas | int) }}
+{{- $context := deepCopy $ | merge (dict "index" $i) }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mongodb-sharded.serviceName" $ }}-{{ $i }}
+  labels: {{ include "common.labels.standard" $ | nindent 4 }}
+    app.kubernetes.io/component: mongos
+  annotations: {{- include "common.tplvalues.render" (dict "value" $.Values.mongos.servicePerReplica.annotations "context" $context) | nindent 4 }}
+spec:
+  type: {{ $.Values.mongos.servicePerReplica.type }}
+  {{- if and $.Values.mongos.servicePerReplica.loadBalancerIP (eq $.Values.mongos.servicePerReplica.type "LoadBalancer") }}
+  loadBalancerIP: {{ $.Values.mongos.servicePerReplica.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq $.Values.mongos.servicePerReplica.type "LoadBalancer") $.Values.mongos.servicePerReplica.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+  {{ with $.Values.mongos.servicePerReplica.loadBalancerSourceRanges }}
+  {{ include "common.tplvalues.render" . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- if and (eq $.Values.mongos.servicePerReplica.type "ClusterIP") $.Values.mongos.servicePerReplica.clusterIP }}
+  clusterIP: {{ $.Values.mongos.servicePerReplica.clusterIP }}
+  {{- end }}
+  ports:
+    - name: mongodb
+      port: {{ $.Values.mongos.servicePerReplica.port }}
+      targetPort: mongodb
+      {{- if $.Values.mongos.servicePerReplica.nodePort }}
+      nodePort: {{ $.Values.mongos.servicePerReplica.nodePort }}
+      {{- else if eq $.Values.mongos.servicePerReplica.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if $.Values.metrics.enabled }}
+    - name: metrics
+      port: 9216
+      targetPort: metrics
+    {{- end }}
+    {{- if $.Values.mongos.servicePerReplica.extraPorts }}
+      {{- include "common.tplvalues.render" (dict "value" $.Values.mongos.servicePerReplica.extraPorts "context" $context) | nindent 4 }}
+    {{- end }}
+  selector: {{ include "common.labels.matchLabels" $ | nindent 4 }}
+    app.kubernetes.io/component: mongos
+    statefulset.kubernetes.io/pod-name: {{ include "common.names.fullname" $ }}-mongos-{{ $i }}
+  sessionAffinity: {{ default "None" $.Values.mongos.servicePerReplica.sessionAffinity }}
+{{- end }}
+{{- end }}

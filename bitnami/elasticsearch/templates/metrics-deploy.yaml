@@ -36,30 +36,54 @@ spec:
         - name: metrics
           image: {{ include "elasticsearch.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           args:
             {{- if gt (int .Values.coordinating.replicas) 0 }}
             # Prefer coordinating only nodes to do the initial metrics query
-            - --es.uri=http://{{ template "elasticsearch.coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}
+            - --es.uri=http://{{- if .Values.security.enabled }}elastic:{{ .Values.security.elasticPassword }}@{{- end }}{{ template "elasticsearch.coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}
             {{- else }}
             # Using master nodes as there are no coordinating only nodes
-            - --es.uri=http://{{ include "elasticsearch.master.fullname" . }}:{{ .Values.master.service.port }}
+            - --es.uri=http://{{- if .Values.security.enabled }}elastic:{{ .Values.security.elasticPassword }}@{{- end }}{{ include "elasticsearch.master.fullname" . }}:{{ .Values.master.service.port }}
             {{- end }}
             - --es.all
+            {{- if .Values.metrics.extraArgs }}
+            {{- toYaml .Values.metrics.extraArgs | nindent 12 }}
+            {{- end }}
+          {{- end }}
           ports:
             - name: metrics
               containerPort: 9114
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe:
+            initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: 60
-            timeoutSeconds: 5
+          {{- else if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.metrics.readinessProbe.enabled }}
           readinessProbe:
+            initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
+          {{- else if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
@@ -76,5 +100,8 @@ spec:
       {{- end }}
       {{- if .Values.metrics.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
 {{- end }}

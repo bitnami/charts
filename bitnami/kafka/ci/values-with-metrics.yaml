@@ -1,0 +1,11 @@
+# Test values file for generating hidden section of the yaml
+# and check that the rendering is correct
+replicaCount: 3
+metrics:
+  kafka:
+    enabled: true
+  jmx:
+    enabled: true
+  serviceMonitor:
+    enabled: true
+    namespace: monitoring

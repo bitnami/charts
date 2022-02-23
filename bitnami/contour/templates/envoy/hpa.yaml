@@ -1,0 +1,35 @@
+{{- if and .Values.envoy.enabled .Values.envoy.autoscaling.enabled (eq .Values.envoy.kind "deployment") }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "common.names.fullname" . }}-envoy
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: envoy
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: {{ include "common.names.fullname" . }}-envoy
+  minReplicas: {{ .Values.envoy.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.envoy.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.envoy.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.envoy.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.envoy.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.envoy.autoscaling.targetMemory }}
+    {{- end }}
+{{- end }}

@@ -38,6 +38,6 @@ spec:
       nodePort: {{ .Values.alertmanager.service.nodePort }}
       {{- end }}
   selector:
-    app: alertmanager
+    app.kubernetes.io/name: alertmanager
     alertmanager: {{ template "kube-prometheus.alertmanager.fullname" . }}
 {{- end }}

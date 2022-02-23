@@ -384,7 +384,11 @@ Return Deployer Environment Variables. Empty string or variables started with co
 */}}
 {{- define "scdf.deployer.environmentVariables" -}}
   {{- if .Values.deployer.environmentVariables -}}
-    {{- printf ",%s" .Values.deployer.environmentVariables | trim -}}
+    {{- if kindIs "string" .Values.deployer.environmentVariables -}}
+      {{- printf "- %s" .Values.deployer.environmentVariables | trim -}}
+    {{- else -}}
+      {{- toYaml .Values.deployer.environmentVariables -}}
+    {{- end -}}
   {{- else -}}
     {{- printf "" -}}
   {{- end -}}

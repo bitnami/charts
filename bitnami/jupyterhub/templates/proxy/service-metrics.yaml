@@ -1,0 +1,39 @@
+
+{{- if .Values.proxy.metrics.serviceMonitor.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: proxy
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  name: {{ printf "%s-proxy-metrics" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.proxy.service.metrics.type }}
+  {{- if (or (eq .Values.proxy.service.metrics.type "LoadBalancer") (eq .Values.proxy.service.metrics.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.proxy.service.metrics.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{ if eq .Values.proxy.service.metrics.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.proxy.service.metrics.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.proxy.service.metrics.type "LoadBalancer") (not (empty .Values.proxy.service.metrics.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.proxy.service.metrics.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.proxy.service.metrics.port }}
+      targetPort: metrics
+      protocol: TCP
+      {{- if (and (or (eq .Values.proxy.service.metrics.type "NodePort") (eq .Values.proxy.service.metrics.type "LoadBalancer")) (not (empty .Values.proxy.service.metrics.nodePorts.http))) }}
+      nodePort: {{ .Values.proxy.service.metrics.nodePorts.http }}
+      {{- else if eq .Values.proxy.service.metrics.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: proxy
+{{- end }}

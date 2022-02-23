@@ -1,4 +1,4 @@
-{{- if and .Values.persistence.enabled .Values.persistence.hostPath (not .Values.persistence.existingClaim) -}}
+{{- if and (include "prestashop.host" .) .Values.persistence.enabled .Values.persistence.hostPath (not .Values.persistence.existingClaim) -}}
 apiVersion: v1
 kind: PersistentVolume
 metadata:

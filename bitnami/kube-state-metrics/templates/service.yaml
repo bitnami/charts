@@ -7,10 +7,16 @@ metadata:
     {{- if not .Values.serviceMonitor.enabled }}
     prometheus.io/scrape: "true"
     {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
     {{- if .Values.service.annotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
     {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     {{- if .Values.service.labels }}
     {{- toYaml .Values.service.labels | nindent 4 }}
     {{- end }}

@@ -4,13 +4,14 @@ metadata:
   name: {{ include "elasticsearch.data.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: data
+  annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.data.service.annotations "context" $) | nindent 4 }}
 spec:
   type: ClusterIP
   publishNotReadyAddresses: true
   ports:
-    - name: http
+    - name: {{ include "elasticsearch.httpPortName" . }}
       port: 9200
-      targetPort: http
+      targetPort: {{ include "elasticsearch.httpPortName" . }}
     - name: tcp-transport
       port: 9300
       targetPort: transport

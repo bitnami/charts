@@ -26,6 +26,9 @@ data:
     . /opt/bitnami/scripts/libpostgresql.sh
     . /opt/bitnami/scripts/librepmgr.sh
 
+    # Load PostgreSQL & repmgr environment variables
+    . /opt/bitnami/scripts/postgresql-env.sh
+
     # Auxiliary functions
     is_new_primary_ready() {
         return_value=1
@@ -52,19 +55,16 @@ data:
         exec 2>/dev/null
     fi
 
-    # Load PostgreSQL & repmgr environment variables
-    . /opt/bitnami/scripts/postgresql-env.sh
-
     postgresql_enable_nss_wrapper
 
     # Prepare env vars for managing roles
-    primary_node="$(repmgr_get_primary_node)"
-    primary_host="$(echo $primary_node | awk '{print $1}')"
+    readarray -t primary_node < <(repmgr_get_upstream_node)
+    primary_host="${primary_node[0]}"
 
     # Stop postgresql for graceful exit.
     postgresql_stop
 
-    if [[ "$primary_host" == "$REPMGR_NODE_NETWORK_NAME" ]]; then
+    if [[ -z "$primary_host" ]] || [[ "$primary_host" == "$REPMGR_NODE_NETWORK_NAME" ]]; then
         info "Primary node need to wait for a new primary node before leaving the cluster"
         retry_while is_new_primary_ready 10 5
     else

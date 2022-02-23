@@ -1,0 +1,48 @@
+{{- if and .Values.networkPolicy.enabled (eq .Values.architecture "replication") (or .Values.networkPolicy.metrics.enabled .Values.networkPolicy.ingressRules.secondaryAccessOnlyFrom.enabled) }}
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+kind: NetworkPolicy
+metadata:
+  name: {{ printf "%s-ingress-secondary" (include "common.names.fullname" .) }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: secondary
+      {{- include "common.labels.standard" . | nindent 6 }}
+  ingress:
+    {{- if and .Values.metrics.enabled .Values.networkPolicy.metrics.enabled (or .Values.networkPolicy.metrics.namespaceSelector .Values.networkPolicy.metrics.podSelector) }}
+    - from:
+        {{- if .Values.networkPolicy.metrics.namespaceSelector }}
+        - namespaceSelector:
+            matchLabels:
+              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.metrics.namespaceSelector "context" $) | nindent 14 }}
+        {{- end }}
+        {{- if .Values.networkPolicy.metrics.podSelector }}
+        - podSelector:
+            matchLabels:
+              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.metrics.podSelector "context" $) | nindent 14 }}
+        {{- end }}
+    {{- end }}
+    {{- if and .Values.networkPolicy.ingressRules.secondaryAccessOnlyFrom.enabled (or .Values.networkPolicy.ingressRules.secondaryAccessOnlyFrom.namespaceSelector .Values.networkPolicy.ingressRules.secondaryAccessOnlyFrom.podSelector) }}
+    - from:
+        {{- if .Values.networkPolicy.ingressRules.secondaryAccessOnlyFrom.namespaceSelector }}
+        - namespaceSelector:
+            matchLabels:
+              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressRules.secondaryAccessOnlyFrom.namespaceSelector "context" $) | nindent 14 }}
+        {{- end }}
+        {{- if .Values.networkPolicy.ingressRules.secondaryAccessOnlyFrom.podSelector }}
+        - podSelector:
+            matchLabels:
+              {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressRules.secondaryAccessOnlyFrom.podSelector "context" $) | nindent 14 }}
+        {{- end }}
+    {{- end }}
+    {{- if .Values.networkPolicy.ingressRules.secondaryAccessOnlyFrom.customRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressRules.secondaryAccessOnlyFrom.customRules "context" $) | nindent 4 }}
+    {{- end }}
+{{- end }}

@@ -18,7 +18,7 @@ data:
     pid /opt/bitnami/nginx/tmp/nginx.pid;
 
     events {
-      worker_connections 1024;
+      worker_connections 3096;
       use epoll;
       multi_accept on;
     }
@@ -58,7 +58,12 @@ data:
 
       {{- if .Values.notary.enabled }}
       server {
+        {{- if .Values.ipFamily.ipv4.enabled }}
         listen 4443 ssl;
+        {{- end }}
+        {{- if .Values.ipFamily.ipv6.enabled }}
+        listen [::]:4443 ssl;
+        {{- end }}
         server_tokens off;
         # ssl
         ssl_certificate /etc/nginx/cert/tls.crt;
@@ -93,7 +98,12 @@ data:
       {{- end }}
 
       server {
+        {{- if .Values.ipFamily.ipv4.enabled }}
         listen 8443 ssl;
+        {{- end }}
+        {{- if .Values.ipFamily.ipv6.enabled }}
+        listen [::]:8443 ssl;
+        {{- end }}
         server_tokens off;
         # SSL
         ssl_certificate /etc/nginx/cert/tls.crt;
@@ -224,7 +234,12 @@ data:
         }
       }
       server {
+          {{- if .Values.ipFamily.ipv4.enabled }}
           listen 8080;
+          {{- end }}
+          {{- if .Values.ipFamily.ipv6.enabled }}
+          listen [::]:8080;
+          {{- end }}
           return 301 https://$host$request_uri;
       }
     }

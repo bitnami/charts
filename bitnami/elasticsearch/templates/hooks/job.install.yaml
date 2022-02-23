@@ -47,8 +47,13 @@ spec:
         - name: {{ template "elasticsearch.curator.fullname" . }}
           image: {{ template "elasticsearch.curator.image" . }}
           imagePullPolicy: {{ .Values.curator.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
           command: [ "curator" ]
           args: [ "--config", "/etc/es-curator/config.yml", "/etc/es-curator/action_file.yml" ]
+          {{- end }}
           resources: {{- toYaml $.Values.curator.resources | nindent 12 }}
           volumeMounts:
             - name: config-volume

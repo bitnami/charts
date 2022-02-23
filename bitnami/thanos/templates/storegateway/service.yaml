@@ -1,16 +1,24 @@
-{{- if .Values.storegateway.enabled -}}
+{{- if and .Values.storegateway.enabled (not .Values.storegateway.sharded.enabled) }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}-storegateway
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: storegateway
     {{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
     prometheus-operator/monitor: 'true'
     {{- end }}
-  {{- if .Values.storegateway.service.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.service.annotations "context" $) | nindent 4 }}
-  {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.storegateway.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.storegateway.service.type }}
   {{- if and .Values.storegateway.service.clusterIP (eq .Values.storegateway.service.type "ClusterIP") }}
@@ -26,24 +34,27 @@ spec:
   loadBalancerSourceRanges: {{- toYaml .Values.storegateway.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ .Values.storegateway.service.http.port }}
+    - port: {{ if .Values.storegateway.service.http }}{{ coalesce .Values.storegateway.service.ports.http .Values.storegateway.service.http.port }}{{ else }}{{ .Values.storegateway.service.ports.http }}{{ end }}
       targetPort: http
       protocol: TCP
       name: http
-      {{- if (and (or (eq .Values.storegateway.service.type "NodePort") (eq .Values.storegateway.service.type "LoadBalancer")) .Values.storegateway.service.http.nodePort) }}
-      nodePort: {{ .Values.storegateway.service.http.nodePort }}
+      {{- if and (or (eq .Values.storegateway.service.type "NodePort") (eq .Values.storegateway.service.type "LoadBalancer")) .Values.storegateway.service.nodePorts.http }}
+      nodePort: {{ .Values.storegateway.service.nodePorts.http }}
       {{- else if eq .Values.storegateway.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - port: {{ .Values.storegateway.service.grpc.port }}
+    - port: {{ if .Values.storegateway.service.grpc }}{{ coalesce .Values.storegateway.service.ports.grpc .Values.storegateway.service.grpc.port }}{{ else }}{{ .Values.storegateway.service.ports.grpc }}{{ end }}
       targetPort: grpc
       protocol: TCP
       name: grpc
-      {{- if (and (or (eq .Values.storegateway.service.type "NodePort") (eq .Values.storegateway.service.type "LoadBalancer")) .Values.storegateway.service.grpc.nodePort) }}
-      nodePort: {{ .Values.storegateway.service.grpc.nodePort }}
+      {{- if and (or (eq .Values.storegateway.service.type "NodePort") (eq .Values.storegateway.service.type "LoadBalancer")) .Values.storegateway.service.nodePorts.grpc }}
+      nodePort: {{ .Values.storegateway.service.nodePorts.grpc }}
       {{- else if eq .Values.storegateway.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.storegateway.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector:
     {{- if .Values.storegateway.service.labelSelectorsOverride }}
     {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.service.labelSelectorsOverride "context" $) | nindent 4 }}

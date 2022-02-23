@@ -18,7 +18,7 @@ data:
     pid /opt/bitnami/nginx/tmp/nginx.pid;
 
     events {
-      worker_connections 1024;
+      worker_connections 3096;
       use epoll;
       multi_accept on;
     }
@@ -50,7 +50,12 @@ data:
       access_log /dev/stdout timed_combined;
 
       server {
+        {{- if .Values.ipFamily.ipv4.enabled }}
         listen 8080;
+        {{- end }}
+        {{- if .Values.ipFamily.ipv6.enabled }}
+        listen [::]:8080;
+        {{- end }}
         server_tokens off;
         # disable any limits to avoid HTTP 413 for large image uploads
         client_max_body_size 0;

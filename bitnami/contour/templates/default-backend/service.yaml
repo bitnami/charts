@@ -22,7 +22,7 @@ spec:
   type: {{ .Values.defaultBackend.service.type }}
   ports:
     - name: http
-      port: {{ .Values.defaultBackend.service.port }}
+      port: {{ .Values.defaultBackend.service.ports.http }}
       protocol: TCP
       targetPort: http
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

@@ -46,6 +46,11 @@ spec:
           imagePullPolicy: {{ .Values.keycloakConfigCli.image.pullPolicy }}
           {{- if .Values.keycloakConfigCli.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - java
+            - -jar
+            - {{ printf "/opt/bitnami/keycloak-config-cli/keycloak-config-cli-%s.jar" .Chart.AppVersion }}
           {{- end }}
           {{- if .Values.keycloakConfigCli.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.args "context" $) | nindent 12 }}

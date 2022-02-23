@@ -15,9 +15,13 @@ Note, returns 127.0.0.1 if using ClusterIP.
 {{/*
 Gets the host to be used for this application.
 If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
+When using Ingress, it will be set to the Ingress hostname.
 */}}
 {{- define "mediawiki.host" -}}
 {{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}
+{{- if .Values.ingress.enabled }}
+{{- $host := .Values.ingress.hostname | default "" -}}
+{{- end -}}
 {{- default (include "mediawiki.serviceIP" .) $host -}}
 {{- end -}}
 
@@ -107,7 +111,7 @@ Return the MariaDB Secret Name
 {{- else if .Values.externalDatabase.existingSecret -}}
     {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
-    {{- printf "%s-%s" .Release.Name "externaldb" -}}
+    {{- printf "%s-externaldb" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 

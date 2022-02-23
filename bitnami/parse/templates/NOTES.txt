@@ -1,8 +1,10 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
 {{- $dbSecretName := include "parse.mongodb.fullname" . -}}
 
-******************************************************************
-*** PLEASE BE PATIENT: Parse may take a few minutes to install ***
-******************************************************************
+** Please be patient while the chart is being deployed **
 
 Parse Server
 ------------
@@ -27,7 +29,7 @@ Parse Server
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
 
-  export SERVICE_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}"):{{ .Values.server.port }}
+  export SERVICE_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}"):{{ .Values.server.port }}
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
@@ -62,11 +64,11 @@ service:
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
 
-  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
 2. Complete your Parse Dashboard deployment by running:
 
-  helm upgrade {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
     --set server.host=$APP_HOST,server.port={{ .Values.server.port }},server.masterKey=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.master-key}" | base64 --decode),dashboard.username={{ .Values.dashboard.username }},dashboard.password=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.parse-dashboard-password}" | base64 --decode){{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 
 {{- else }}

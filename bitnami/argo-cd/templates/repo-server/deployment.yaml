@@ -1,0 +1,275 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "argocd.repo-server" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: repo-server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.repoServer.replicaCount }}
+  {{- if .Values.repoServer.updateStrategy }}
+  strategy: {{- toYaml .Values.repoServer.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: repo-server
+  template:
+    metadata:
+      {{- if .Values.repoServer.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: repo-server
+        {{- if .Values.repoServer.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "argocd.repo-server.serviceAccountName" . }}
+      {{- include "argocd.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.repoServer.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.repoServer.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.repoServer.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.repoServer.podAffinityPreset "component" "repo-server" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.repoServer.podAntiAffinityPreset "component" "repo-server" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.repoServer.nodeAffinityPreset.type "key" .Values.repoServer.nodeAffinityPreset.key "values" .Values.repoServer.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.repoServer.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.repoServer.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.repoServer.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.repoServer.schedulerName }}
+      schedulerName: {{ .Values.repoServer.schedulerName }}
+      {{- end }}
+      {{- if .Values.repoServer.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.controller.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.repoServer.priorityClassName }}
+      priorityClassName: {{ .Values.repoServer.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.repoServer.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.repoServer.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.volumePermissions.enabled }}
+        - name: volume-permissions
+          image: {{ include "argocd.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              chown -R {{ .Values.repoServer.containerSecurityContext.runAsUser }}:{{ .Values.repoServer.containerSecurityContext.fsGroup }} /tmp
+          securityContext:
+            runAsUser: {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: tmp-dir
+              mountPath: /tmp
+        {{- end }}
+        - name: wait-for-redis
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.redis.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.redis.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+                #!/bin/bash
+
+                set -o errexit
+                set -o nounset
+                set -o pipefail
+
+                . /opt/bitnami/scripts/libos.sh
+                . /opt/bitnami/scripts/liblog.sh
+
+                check_redis_connection() {
+                  local result="$(redis-cli -h {{ include "argocd.redisHost" . }} -p {{ include "argocd.redisPort" . }} PING)"
+                  if [[ "$result" != "PONG" ]]; then
+                    false
+                  fi
+                }
+
+                info "Checking redis connection..."
+                if ! retry_while "check_redis_connection"; then
+                    error "Could not connect to the Redis server"
+                    return 1
+                else
+                    info "Connected to the Redis instance"
+                fi
+          {{- if include "argocd.redis.auth.enabled" . }}
+          env:
+            - name: REDISCLI_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "argocd.redis.secretName" . }}
+                  key: {{ include "argocd.redis.secretPasswordKey" . }}
+          {{- end }}
+        {{- if .Values.repoServer.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: argocd-repo-server
+          image: {{ include "argocd.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.repoServer.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.repoServer.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.repoServer.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.repoServer.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - argocd-repo-server
+          {{- end }}
+          {{- if .Values.repoServer.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - --logformat
+            - {{ .Values.repoServer.logFormat }}
+            - --loglevel
+            - {{ .Values.repoServer.logLevel }}
+            - --redis
+            - {{ include "argocd.redisHost" . }}:{{ include "argocd.redisPort" . }}
+            {{- if .Values.repoServer.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: repo-server
+              containerPort: {{ .Values.repoServer.containerPorts.repoServer }}
+              protocol: TCP
+            {{- if .Values.repoServer.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.repoServer.containerPorts.metrics }}
+              protocol: TCP
+            {{- end }}
+          env:
+            {{- if and .Values.redis.enabled (include "argocd.redis.auth.enabled" .) }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "argocd.redis.secretName" . }}
+                  key: {{ include "argocd.redis.secretPasswordKey" . }}
+            {{- end }}
+            {{- if .Values.repoServer.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.repoServer.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.repoServer.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.repoServer.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.repoServer.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.repoServer.resources }}
+          resources: {{- toYaml .Values.repoServer.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.repoServer.startupProbe.enabled }}
+          startupProbe:
+            tcpSocket:
+              port: {{ .Values.repoServer.containerPorts.repoServer }}
+            initialDelaySeconds: {{ .Values.repoServer.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.repoServer.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.repoServer.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.repoServer.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.repoServer.startupProbe.failureThreshold }}
+          {{- else if .Values.repoServer.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.repoServer.livenessProbe.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.repoServer.containerPorts.repoServer }}
+            initialDelaySeconds: {{ .Values.repoServer.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.repoServer.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.repoServer.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.repoServer.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.repoServer.livenessProbe.failureThreshold }}
+          {{- else if .Values.repoServer.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.repoServer.readinessProbe.enabled }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.repoServer.containerPorts.repoServer }}
+            initialDelaySeconds: {{ .Values.repoServer.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.repoServer.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.repoServer.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.repoServer.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.repoServer.readinessProbe.failureThreshold }}
+          {{- else if .Values.repoServer.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            # Mounting into a path that will be read by Argo CD
+            # Ref: https://argoproj.github.io/argo-cd/operator-manual/declarative-setup/#ssh-known-host-public-keys
+            - name: ssh-known-hosts
+              mountPath: /app/config/ssh
+            {{- if .Values.config.tlsCerts }}
+            # Mounting into a path that will be read by Argo CD
+            # Ref: https://argoproj.github.io/argo-cd/operator-manual/declarative-setup/#repositories-using-self-signed-tls-certificates-or-are-signed-by-custom-ca
+            - mountPath: /app/config/tls
+              name: tls-certs
+            {{- end }}
+            # Mounting into a path that will be read by Argo CD.
+            # This secret will be autogenerated by Argo CD repo server unless it already exists. Users can create its own certificate to override it.
+            # Ref: https://argoproj.github.io/argo-cd/operator-manual/tls/#inbound-tls-certificates-used-by-argocd-repo-sever
+            - mountPath: /app/config/server/tls
+              name: argocd-repo-server-tls
+            - mountPath: /app/config/gpg/keys
+              name: gpg-keyring
+            - mountPath: /tmp
+              name: tmp-dir
+          {{- if .Values.repoServer.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.repoServer.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.repoServer.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: ssh-known-hosts
+          configMap:
+            name: argocd-ssh-known-hosts-cm
+        {{- if .Values.config.tlsCerts }}
+        - configMap:
+            name: argocd-tls-certs-cm
+          name: tls-certs
+        {{- end }}
+        - name: argocd-repo-server-tls
+          secret:
+            items:
+              - key: tls.crt
+                path: tls.crt
+              - key: tls.key
+                path: tls.key
+              - key: ca.crt
+                path: ca.crt
+            optional: true
+            secretName: argocd-repo-server-tls
+        - emptyDir: {}
+          name: tmp-dir
+        - emptyDir: {}
+          name: gpg-keyring
+        {{- if .Values.repoServer.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

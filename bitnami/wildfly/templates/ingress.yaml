@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -23,9 +23,12 @@ metadata:
 spec:
   rules:
     {{- if .Values.ingress.hostname }}
-    - host: {{ .Values.ingress.hostname }}
+    - host: {{ .Values.ingress.hostname | quote }}
       http:
         paths:
+          {{- if .Values.ingress.extraPaths }}
+          {{- toYaml .Values.ingress.extraPaths | nindent 10 }}
+          {{- end }}
           - path: {{ .Values.ingress.path }}
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.pathType }}
@@ -33,7 +36,7 @@ spec:
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.ingress.extraHosts }}
-    - host: {{ .name }}
+    - host: {{ .name | quote }}
       http:
         paths:
           - path: {{ default "/" .path }}
@@ -46,7 +49,10 @@ spec:
   tls:
     {{- if .Values.ingress.tls }}
     - hosts:
-        - {{ .Values.ingress.hostname }}
+        - {{ .Values.ingress.hostname | quote }}
+        {{- range .Values.ingress.extraHosts }}
+        - {{ .name | quote }}
+        {{- end }}
       secretName: {{ printf "%s-tls" .Values.ingress.hostname }}
     {{- end }}
     {{- if .Values.ingress.extraTls }}

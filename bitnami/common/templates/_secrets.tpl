@@ -81,10 +81,12 @@ Params:
 {{- $passwordLength := default 10 .length }}
 {{- $providedPasswordKey := include "common.utils.getKeyFromList" (dict "keys" .providedValues "context" $.context) }}
 {{- $providedPasswordValue := include "common.utils.getValueFromKey" (dict "key" $providedPasswordKey "context" $.context) }}
-{{- $secret := (lookup "v1" "Secret" $.context.Release.Namespace .secret) }}
-{{- if $secret }}
-  {{- if index $secret.data .key }}
-  {{- $password = index $secret.data .key }}
+{{- $secretData := (lookup "v1" "Secret" $.context.Release.Namespace .secret).data }}
+{{- if $secretData }}
+  {{- if hasKey $secretData .key }}
+    {{- $password = index $secretData .key }}
+  {{- else }}
+    {{- printf "\nPASSWORDS ERROR: The secret \"%s\" does not contain the key \"%s\"\n" .secret .key | fail -}}
   {{- end -}}
 {{- else if $providedPasswordValue }}
   {{- $password = $providedPasswordValue | toString | b64enc | quote }}
@@ -98,7 +100,7 @@ Params:
   {{- $requiredPasswordError := include "common.validations.values.single.empty" $requiredPassword -}}
   {{- $passwordValidationErrors := list $requiredPasswordError -}}
   {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $.context) -}}
-  
+
   {{- if .strong }}
     {{- $subStr := list (lower (randAlpha 1)) (randNumeric 1) (upper (randAlpha 1)) | join "_" }}
     {{- $password = randAscii $passwordLength }}

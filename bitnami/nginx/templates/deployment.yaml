@@ -11,6 +11,9 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  {{- if .Values.updateStrategy }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   template:
@@ -33,6 +36,8 @@ spec:
       {{- end }}
     spec:
       {{- include "nginx.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.autoMount }}
+      shareProcessNamespace: {{ .Values.sidecarSingleProcessNamespace }}
       serviceAccountName: {{ template "nginx.serviceAccountName" . }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
@@ -44,6 +49,10 @@ spec:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      hostNetwork: {{ .Values.hostNetwork }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
@@ -59,12 +68,22 @@ spec:
         - name: git-clone-repository
           image: {{ include "nginx.cloneStaticSiteFromGit.image" . }}
           imagePullPolicy: {{ .Values.cloneStaticSiteFromGit.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cloneStaticSiteFromGit.gitClone.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitClone.command "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
             - |
               [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
               git clone {{ .Values.cloneStaticSiteFromGit.repository }} --branch {{ .Values.cloneStaticSiteFromGit.branch }} /app
+          {{- end }}
+          {{- if .Values.cloneStaticSiteFromGit.gitClone.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitClone.args "context" $) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: staticsite
               mountPath: /app
@@ -79,6 +98,12 @@ spec:
         - name: git-repo-syncer
           image: {{ include "nginx.cloneStaticSiteFromGit.image" . }}
           imagePullPolicy: {{ .Values.cloneStaticSiteFromGit.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cloneStaticSiteFromGit.gitSync.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitSync.command "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
@@ -88,6 +113,10 @@ spec:
                   cd /app && git pull origin {{ .Values.cloneStaticSiteFromGit.branch }}
                   sleep {{ .Values.cloneStaticSiteFromGit.interval }}
               done
+          {{- end }}
+          {{- if .Values.cloneStaticSiteFromGit.gitSync.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitSync.args "context" $) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: staticsite
               mountPath: /app
@@ -101,7 +130,7 @@ spec:
       {{- else }}
       {{- with .Values.initContainers }}
       initContainers:
-      {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+      {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
       {{- end }}
       containers:
       {{- end }}
@@ -168,8 +197,10 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.ldapDaemon.enabled }}
             - name: nginx-server-block-paths
               mountPath: /opt/bitnami/nginx/conf/server_blocks
+            {{- end }}
             {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
             - name: nginx-server-block
               mountPath: /opt/bitnami/nginx/conf/server_blocks/common
@@ -191,7 +222,7 @@ spec:
           imagePullPolicy: {{ .Values.ldapDaemon.image.pullPolicy | quote }}
           env:
             - name: NGINXLDAP_PORT_NUMBER
-              value: {{ .Values.ldapDaemon.port | quote}}
+              value: {{ .Values.ldapDaemon.port | quote }}
             - name: NGINXLDAP_LDAP_URI
               value: {{ .Values.ldapDaemon.ldapConfig.uri | quote }}
             - name: NGINXLDAP_LDAP_BASE_DN
@@ -240,7 +271,10 @@ spec:
         - name: metrics
           image: {{ include "nginx.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          command: ['/usr/bin/exporter', '-nginx.scrape-uri', 'http://127.0.0.1:8080/status']
+          {{- if .Values.metrics.securityContext.enabled }}
+          securityContext: {{- omit .Values.metrics.securityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command: ['/usr/bin/exporter', '-nginx.scrape-uri', 'http://127.0.0.1:{{- default .Values.containerPorts.http .Values.metrics.port }}/status']
           ports:
             - name: metrics
               containerPort: 9113
@@ -261,7 +295,7 @@ spec:
           {{- end }}
         {{- end }}
         {{- with .Values.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
         - name: nginx-server-block-paths

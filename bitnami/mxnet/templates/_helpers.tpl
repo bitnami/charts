@@ -59,7 +59,7 @@ sleep infinity
 {{ toYaml $env.valueFrom | indent 4 }}
 {{- else }} {{/* Leave this for future compatibility */}}
 -
-{{ toYaml $env | indent 2}}
+{{ toYaml $env | indent 2 }}
 {{- end }}
 {{- end }}
 {{- end }}
@@ -123,4 +123,5 @@ mxnet: missing-extra-volume-mounts
 {{- define "mxnet.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.git }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}

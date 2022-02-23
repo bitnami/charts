@@ -16,6 +16,39 @@ Return the target Kubernetes version
 {{- end -}}
 
 {{/*
+Return the appropriate apiVersion for poddisruptionbudget.
+*/}}
+{{- define "common.capabilities.policy.apiVersion" -}}
+{{- if semverCompare "<1.21-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "policy/v1beta1" -}}
+{{- else -}}
+{{- print "policy/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for networkpolicy.
+*/}}
+{{- define "common.capabilities.networkPolicy.apiVersion" -}}
+{{- if semverCompare "<1.7-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "extensions/v1beta1" -}}
+{{- else -}}
+{{- print "networking.k8s.io/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for cronjob.
+*/}}
+{{- define "common.capabilities.cronjob.apiVersion" -}}
+{{- if semverCompare "<1.21-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "batch/v1beta1" -}}
+{{- else -}}
+{{- print "batch/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the appropriate apiVersion for deployment.
 */}}
 {{- define "common.capabilities.deployment.apiVersion" -}}

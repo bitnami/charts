@@ -1,6 +1,6 @@
 {{- if .Values.networkPolicy.enabled }}
 kind: NetworkPolicy
-apiVersion: {{ include "networkPolicy.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace }}
@@ -16,10 +16,9 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   ingress:
     # Allow inbound connections
-    # CQL and Thrift ports
+    # CQL port
     - ports:
-        - port: {{ .Values.service.port }}
-        - port: {{ .Values.service.thriftPort }}
+        - port: {{ .Values.service.ports.cql }}
       from:
       {{- if not .Values.networkPolicy.allowExternal }}
         - podSelector:

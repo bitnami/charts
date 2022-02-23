@@ -40,6 +40,9 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.trivy.priorityClassName }}
+      priorityClassName: {{ .Values.trivy.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.trivy.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.affinity "context" $) | nindent 8 }}
       {{- else }}

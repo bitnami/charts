@@ -9,12 +9,13 @@ spec:
   type: {{ .Values.coordinating.service.type | quote }}
   {{- if and (eq .Values.coordinating.service.type "LoadBalancer") (not (empty .Values.coordinating.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.coordinating.service.loadBalancerIP }}
+  externalTrafficPolicy: {{ .Values.coordinating.service.externalTrafficPolicy | quote }}
   {{- end }}
   publishNotReadyAddresses: true
   ports:
-    - name: http
+    - name: {{ include "elasticsearch.httpPortName" . }}
       port: {{ .Values.coordinating.service.port }}
-      targetPort: http
+      targetPort: {{ include "elasticsearch.httpPortName" . }}
       {{- if and (or (eq .Values.coordinating.service.type "NodePort") (eq .Values.coordinating.service.type "LoadBalancer")) (not (empty .Values.coordinating.service.nodePort)) }}
       nodePort: {{ .Values.coordinating.service.nodePort }}
       {{- else if eq .Values.coordinating.service.type "ClusterIP" }}

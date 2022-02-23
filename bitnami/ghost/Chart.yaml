@@ -1,7 +1,7 @@
 annotations:
   category: CMS
 apiVersion: v2
-appVersion: 3.42.4
+appVersion: 4.36.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -13,8 +13,8 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - ghost-database
-    version: 9.x.x
-description: A simple, powerful publishing platform that allows you to share your stories with the world
+    version: 10.x.x
+description: Ghost is an open source publishing platform designed to create blogs, magazines, and news sites. It includes a simple markdown editor with preview, theming, and SEO built-in to simplify editing.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/ghost
 icon: https://bitnami.com/assets/stacks/ghost/img/ghost-stack-220x234.png
@@ -32,5 +32,5 @@ maintainers:
 name: ghost
 sources:
   - https://github.com/bitnami/bitnami-docker-ghost
-  - http://www.ghost.org/
-version: 12.3.8
+  - https://www.ghost.org/
+version: 16.0.10

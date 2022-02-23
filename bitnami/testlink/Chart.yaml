@@ -6,13 +6,13 @@ dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
-    version: 9.x.x
+    version: 10.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
     version: 1.x.x
-description: Web-based test management system that facilitates software quality assurance.
+description: TestLink is test management software that facilitates software quality assurance. It suppors test cases, test suites, test plans, test projects and user management, and stats reporting.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/testlink
 icon: https://bitnami.com/assets/stacks/testlink/img/testlink-stack-220x234.png
@@ -27,5 +27,5 @@ maintainers:
 name: testlink
 sources:
   - https://github.com/bitnami/bitnami-docker-testlink
-  - http://www.testlink.org/
-version: 9.2.4
+  - https://www.testlink.org/
+version: 10.0.7

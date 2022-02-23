@@ -49,9 +49,9 @@ spec:
               if [ -f /seed/.initialized ]; then
                 echo "Already initialized. Skipping"
               else
-                curl -o /seed/resnet_v2_fp32_savedmodel_NHWC_jpg.tar.gz http://download.tensorflow.org/models/official/20181001_resnet/savedmodels/resnet_v2_fp32_savedmodel_NHWC_jpg.tar.gz
-                cd /seed/ && tar -xzf resnet_v2_fp32_savedmodel_NHWC_jpg.tar.gz --strip-components=2
-                rm resnet_v2_fp32_savedmodel_NHWC_jpg.tar.gz
+                curl -o /seed/resnet_50_classification_1.tar.gz https://storage.googleapis.com/tfhub-modules/tensorflow/resnet_50/classification/1.tar.gz
+                cd /seed/ && mkdir 1 && tar -xzf resnet_50_classification_1.tar.gz -C 1
+                rm resnet_50_classification_1.tar.gz
                 touch /seed/.initialized
               fi
           volumeMounts:

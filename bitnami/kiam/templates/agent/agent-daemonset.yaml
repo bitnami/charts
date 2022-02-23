@@ -202,7 +202,7 @@ spec:
           secret:
             {{- if .Values.agent.tlsSecret }}
             secretName: {{ .Values.agent.tlsSecret }}
-            {{else}}
+            {{ else }}
             secretName: {{ template "common.names.fullname" . }}-agent
             {{- end }}
         {{- if .Values.server.sslCertHostPath }}

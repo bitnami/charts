@@ -1,3 +1,9 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
 MetalLB is now running in the cluster
 
 LoadBalancer Services in your cluster are now available on the IPs you
@@ -31,9 +37,9 @@ If it is missing create it with:
 WARNING: you specified a secretName that isn't managed by
 Helm. The MetalLB speakers will not join without the secret in place.
 
-    kubectl get secrets --namespace {{ .Release.Namespace }} | grep --color=never -E "{{ include "metallb.speaker.secretName" .}}|NAME"
+    kubectl get secrets --namespace {{ .Release.Namespace }} | grep --color=never -E "{{ include "metallb.speaker.secretName" . }}|NAME"
 
 If it is missing create it with:
 
-    kubectl create secret {{ include "metallb.speaker.secretName" .}} --from-file={{ include "metallb.speaker.secretKey" . }}
+    kubectl create secret {{ include "metallb.speaker.secretName" . }} --from-file={{ include "metallb.speaker.secretKey" . }}
 {{- end }}
