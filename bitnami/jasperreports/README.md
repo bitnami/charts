@@ -1,10 +1,10 @@
-<!--- app-name: Jasper&reg;eports -->
+<!--- app-name: JasperReports -->
 
 # JasperReports packaged by Bitnami
 
 JasperReports Server is a stand-alone and embeddable reporting server. It is a central information hub, with reporting and analytics that can be embedded into web and mobile applications.
 
-[Overview of Jasper&reg;eports](http://community.jaspersoft.com/project/jasperreports-server)
+[Overview of JasperReports](http://community.jaspersoft.com/project/jasperreports-server)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
                            
@@ -17,9 +17,9 @@ $ helm install my-release bitnami/jasperreports
 
 ## Introduction
 
-This chart bootstraps a [Jasper&reg;eports](https://github.com/bitnami/bitnami-docker-jasperreports) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [JasperReports](https://github.com/bitnami/bitnami-docker-jasperreports) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which bootstraps a MariaDB deployment required by the Jasper&reg;eports application.
+It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which bootstraps a MariaDB deployment required by the JasperReports application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
@@ -38,7 +38,7 @@ To install the chart with the release name `my-release`:
 $ helm install my-release bitnami/jasperreports
 ```
 
-The command deploys Jasper&reg;eports on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys JasperReports on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -76,18 +76,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]`            |
 
 
-### Jasper&reg;eports parameters
+### JasperReports parameters
 
 | Name                    | Description                                                            | Value                   |
 | ----------------------- | ---------------------------------------------------------------------- | ----------------------- |
-| `image.registry`        | Jasper&reg;eports image registry                                           | `docker.io`             |
-| `image.repository`      | Jasper&reg;eports image repository                                         | `bitnami/jasperreports` |
-| `image.tag`             | Jasper&reg;eports image tag (immutable tags are recommended)               | `7.8.1-debian-10-r57`   |
-| `image.pullPolicy`      | Jasper&reg;eports image pull policy                                        | `IfNotPresent`          |
+| `image.registry`        | JasperReports image registry                                           | `docker.io`             |
+| `image.repository`      | JasperReports image repository                                         | `bitnami/jasperreports` |
+| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.1-debian-10-r57`   |
+| `image.pullPolicy`      | JasperReports image pull policy                                        | `IfNotPresent`          |
 | `image.pullSecrets`     | Specify docker-registry secret names as an array                       | `[]`                    |
-| `jasperreportsUsername` | Jasper&reg;eports user                                                     | `jasperadmin`           |
-| `jasperreportsPassword` | Jasper&reg;eports password                                                 | `""`                    |
-| `jasperreportsEmail`    | Jasper&reg;eports user email                                               | `user@example.com`      |
+| `jasperreportsUsername` | JasperReports user                                                     | `jasperadmin`           |
+| `jasperreportsPassword` | JasperReports password                                                 | `""`                    |
+| `jasperreportsEmail`    | JasperReports user email                                               | `user@example.com`      |
 | `allowEmptyPassword`    | Set to `yes` to allow the container to be started with blank passwords | `no`                    |
 | `smtpHost`              | SMTP host                                                              | `""`                    |
 | `smtpPort`              | SMTP port                                                              | `""`                    |
@@ -150,7 +150,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                              | Affinity for pod assignment                                                               | `{}`                       |
 | `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`                       |
 | `tolerations`                           | Tolerations for pod assignment                                                            | `[]`                       |
-| `priorityClassName`                     | Jasper&reg;eports pods' priorityClassName                                                     | `""`                       |
+| `priorityClassName`                     | JasperReports pods' priorityClassName                                                     | `""`                       |
 | `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`                       |
 | `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`                       |
 | `lifecycleHooks`                        | LifecycleHooks to set additional configuration at startup.                                | `{}`                       |
@@ -247,7 +247,7 @@ $ helm install my-release \
     bitnami/jasperreports
 ```
 
-The above command sets the Jasper&reg;eports administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
+The above command sets the JasperReports administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
 
 > NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
@@ -269,7 +269,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ## Persistence
 
-The [Bitnami Jasper&reg;eports](https://github.com/bitnami/bitnami-docker-jasperreports) image stores the Jasper&reg;eports data and configurations at the `/bitnami/jasperreports` path of the container.
+The [Bitnami JasperReports](https://github.com/bitnami/bitnami-docker-jasperreports) image stores the JasperReports data and configurations at the `/bitnami/jasperreports` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -288,7 +288,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as the Jasper&reg;eports app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as the JasperReports app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:
@@ -338,14 +338,14 @@ Additionally updates the MariaDB subchart to it newest major, 10.0.0, which cont
 
 ### To 11.0.0
 
-The [Bitnami Jasper&reg;eports](https://github.com/bitnami/bitnami-docker-jasperreports) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Tomcat daemon was started as the `tomcat` user. From now on, both the container and the Tomcat daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+The [Bitnami JasperReports](https://github.com/bitnami/bitnami-docker-jasperreports) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Tomcat daemon was started as the `tomcat` user. From now on, both the container and the Tomcat daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
 
 Consequences:
 
 - The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
 - Backwards compatibility is not guaranteed.
 
-To upgrade to `11.0.0`, backup Jasper&reg;eports data and the previous MariaDB databases, install a new Jasper&reg;eports chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume.
+To upgrade to `11.0.0`, backup JasperReports data and the previous MariaDB databases, install a new JasperReports chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume.
 
 In addition to this, the image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-jasperreports/tree/master/7/debian-10/rootfs) folder of the container image.
 
@@ -358,7 +358,7 @@ We also fixed a regression with readiness and liveness probes. Now the kind of p
 
 Consequences:
 
-- Backwards compatibility is not guaranteed. However, you can easily workaround this issue by removing Jasper&reg;eports deployment before upgrading (the following example assumes that the release name is `jasperreports`):
+- Backwards compatibility is not guaranteed. However, you can easily workaround this issue by removing JasperReports deployment before upgrading (the following example assumes that the release name is `jasperreports`):
 
 ```console
 $ export JASPER_PASSWORD=$(kubectl get secret --namespace default jasperreports -o jsonpath="{.data.jasperreports-password}" | base64 --decode)
@@ -404,11 +404,11 @@ Please read the update notes carefully.
 
 In this major the MariaDB dependency version was also bumped to a new major version that introduces several incompatilibites. Therefore, backwards compatibility is not guaranteed unless an external database is used. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-800) for more information.
 
-To upgrade to `9.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and Jasper&reg;eports data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `jasperreports` and that a `rootUser.password` was defined for MariaDB in `values.yaml` when the chart was first installed):
+To upgrade to `9.0.0`, it should be done reusing the PVCs used to hold both the MariaDB and JasperReports data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `jasperreports` and that a `rootUser.password` was defined for MariaDB in `values.yaml` when the chart was first installed):
 
 > NOTE: Please, create a backup of your database before running any of those actions. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
 
-Obtain the credentials and the names of the PVCs used to hold both the MariaDB and Jasper&reg;eports data on your current release:
+Obtain the credentials and the names of the PVCs used to hold both the MariaDB and JasperReports data on your current release:
 
 ```console
 export JASPERREPORTS_PASSWORD=$(kubectl get secret --namespace default jasperreports -o jsonpath="{.data.jasperreports-password}" | base64 --decode)
@@ -417,7 +417,7 @@ export MARIADB_PASSWORD=$(kubectl get secret --namespace default jasperreports-m
 export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=jasperreports -o jsonpath="{.items[0].metadata.name}")
 ```
 
-Delete the Jasper&reg;eports deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter:
+Delete the JasperReports deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter:
 
 ```console
   $ kubectl delete deployments.apps jasperreports
@@ -449,7 +449,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ### To 8.0.0
 
-Jasper&reg;eports 7.5.0 includes some new configuration options that are required to be added if you upgrade from previous versions. Please check the [official community guide](https://community.jaspersoft.com/documentation/tibco-jasperreports-server-upgrade-guide/v750/upgrading-72-75) to upgrade your previous Jasper&reg;eports installation.
+JasperReports 7.5.0 includes some new configuration options that are required to be added if you upgrade from previous versions. Please check the [official community guide](https://community.jaspersoft.com/documentation/tibco-jasperreports-server-upgrade-guide/v750/upgrading-72-75) to upgrade your previous JasperReports installation.
 
 ### To 7.0.0
 
