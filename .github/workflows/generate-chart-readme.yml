@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: 'bitnami-labs/readme-generator-for-helm'
-          ref: '967764dacee72c05fc5d01c84c13ebb5dab7ac8b'
+          ref: '1af12881436b1f58f0643d733fd5196b4a11caa8'
           path: readme-generator-for-helm
 
       - name: Cache node modules
