@@ -2,15 +2,36 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $clusterDomain := .Values.clusterDomain }}
+{{- $fullname := include "common.names.fullname" . }}
+{{- $secretName := include "discourse.secretName" . }}
+
 ** Please be patient while the chart is being deployed **
 
-{{- $secretName := include "discourse.secretName" . -}}
-{{- $postgresqlSecretName := include "discourse.postgresql.secretName" . -}}
-{{- $redisSecretName := include "discourse.redis.secretName" . -}}
+{{- if .Values.diagnosticMode.enabled }}
 
-{{- if or .Values.postgresql.enabled .Values.externalDatabase.host -}}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
 
-{{- if empty (include "discourse.host" .) -}}
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+    kubectl get pods --namespace {{ $releaseNamespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+    kubectl exec --namespace {{ $releaseNamespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/discourse/entrypoint.sh /opt/bitnami/scripts/discourse/run.sh
+
+{{- else }}
+
+{{- if empty (include "discourse.host" .) }}
+
 ###############################################################################
 ### ERROR: You did not provide an external host in your 'helm install' call ###
 ###############################################################################
@@ -20,150 +41,83 @@ This deployment will be incomplete until you configure Discourse with a resolvab
 1. Get the discourse URL by running:
 
   {{- if contains "NodePort" .Values.service.type }}
-  export DISCOURSE_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}"):$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.spec.ports[0].nodePort}")
-  {{- else if contains "LoadBalancer" .Values.service.type }}
-  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-  export DISCOURSE_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-  {{- end }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "discourse-password" "context" $) }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $postgresqlSecretName "field" "postgresql-password" "context" $) }}
-  {{- if (include "discourse.redis.auth.enabled" .) }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $redisSecretName "field" "redis-password" "context" $) }}
+    export DISCOURSE_HOST=$(kubectl get nodes --namespace {{ $releaseNamespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export DISCOURSE_PORT=$(kubectl get svc {{ $fullname }} --namespace {{ $releaseNamespace }} -o jsonpath="{.spec.ports[0].nodePort}")
+
+  {{- else if contains "LoadBalancer" .Values.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ $releaseNamespace }} -w {{ $fullname }}'
+
+    export DISCOURSE_HOST=$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullname }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    export DISCOURSE_PORT={{ .Values.service.ports.http }}
+
   {{- end }}
 
 2. Complete your Discourse deployment by running:
 
-{{- if .Values.postgresql.enabled }}
-
-  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    --set discourse.host=$DISCOURSE_HOST \
-    --set discourse.password=$DISCOURSE_PASSWORD \
-    {{- if .Values.global }}{{- if .Values.global.imagePullSecrets }}
-    --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \
-    {{- end }}{{- end }}
-    {{- if and .Values.redis.enabled .Values.redis.auth.enabled (not .Values.redis.auth.existingSecret) (not .Values.redis.auth.password) }}
-    --set redis.auth.password=$REDIS_PASSWORD \
-    {{- end }}
-    --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
-
-{{- else }}
-
-  ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
-
-  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    --set discourse.host=$DISCOURSE_HOST \
-    --set discourse.password=$DISCOURSE_PASSWORD \
-    --set service.type={{ .Values.service.type }} \
-    --set externalDatabase.host={{ .Values.externalDatabase.host }} \
-    --set externalDatabase.port={{ .Values.externalDatabase.port }} \
-    --set externalDatabase.user={{ .Values.externalDatabase.user }} \
-    --set externalDatabase.password=$POSTGRESQL_PASSWORD \
-    --set externalDatabase.database={{ .Values.externalDatabase.database }} \
-    {{- if .Values.global }}{{- if .Values.global.imagePullSecrets }}
-    --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \
-    {{- end }}{{- end }}
-    {{- if and .Values.redis.enabled .Values.redis.auth.enabled (not .Values.redis.auth.existingSecret) (not .Values.redis.auth.password) }}
-    --set redis.auth.password=$REDIS_PASSWORD \
-    {{- end }}
-    --set postgresql.enabled=false
-{{- end }}
+    helm upgrade --namespace {{ $releaseNamespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+      {{- if .Values.global }}
+      {{- if .Values.global.imagePullSecrets }}
+      --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \
+      {{- end }}
+      {{- end }}
+      --set service.type={{ .Values.service.type }} \
+      --set host="$DISCOURSE_HOST:$DISCOURSE_PORT"
 
 {{- else -}}
 
-1. Get the Discourse URL by running:
+Discourse can be accessed via port {{ .Values.service.ports.http }} on the following DNS name from within your cluster:
 
-  Discourse URL : http://{{ include "discourse.host" . }}/
+    {{ printf "%s.%s.svc.%s" $fullname $releaseNamespace $clusterDomain }}
 
-{{- if eq .Values.service.type "ClusterIP" }}
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 80:{{ .Values.service.port }}
-{{- end }}
+To connect to Discourse from outside the cluster, perform the following steps:
 
-2. Get your Discourse login credentials by running:
+{{- if .Values.ingress.enabled }}
 
-  Username: {{ .Values.discourse.username }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "discourse-password" "context" $) }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $postgresqlSecretName "field" "postgresql-password" "context" $) }}
-  {{- if (include "discourse.redis.auth.enabled" .) }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $redisSecretName "field" "redis-password" "context" $) }}
-  {{- end }}
+1. Get the Discourse URL and associate its hostname to your cluster external IP:
 
-{{- end }}
+    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+    echo "Discourse URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}"
+    echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
 
-{{- else -}}
+{{- else if eq .Values.service.type "ClusterIP" }}
 
-########################################################################################
-### ERROR: You did not provide an external database host in your 'helm install' call ###
-########################################################################################
+1.  Create a port-forward to the service:
 
-This deployment will be incomplete until you configure Discourse with a resolvable database host. To configure Discourse to use and external database host:
+    kubectl port-forward --namespace {{ $releaseNamespace }} svc/{{ $fullname }} {{ .Values.service.ports.http }}:{{ .Values.service.ports.http }} &
+    echo "Discourse URL: http://127.0.0.1:{{ .Values.service.ports.http }}"
 
-1. Complete your Discourse deployment by running:
+{{- else if eq .Values.service.type "NodePort" }}
 
-{{- if contains "NodePort" .Values.service.type }}
-  export DISCOURSE_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}"):$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.spec.ports[0].nodePort}")
-{{- else if contains "LoadBalancer" .Values.service.type }}
+1. Obtain the NodePort IP and port:
+
+    export NODE_IP=$(kubectl get nodes --namespace {{ $releaseNamespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullname }} -o jsonpath="{.spec.ports[0].nodePort}")
+    echo "Discourse URL: http://${NODE_IP}:$NODE_PORT"
+
+{{- else if eq .Values.service.type "LoadBalancer" }}
+
+1. Obtain the LoadBalancer IP:
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ $fullname }}'
 
-  export DISCOURSE_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-{{- else }}
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ $fullname }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    echo "Discourse URL: http://${SERVICE_IP}:{{ .Values.service.ports.http }}"
 
-  export DISCOURSE_HOST=127.0.0.1
-{{- end }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "discourse-password" "context" $) }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $postgresqlSecretName "field" "postgresql-password" "context" $) }}
-  {{- if (include "discourse.redis.auth.enabled" .) }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $redisSecretName "field" "redis-password" "context" $) }}
-  {{- end }}
-  ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
-
-  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    --set discourse.host=$DISCOURSE_HOST \
-    --set discourse.password=$DISCOURSE_PASSWORD \
-    --set postgresql.enabled=false \
-    {{- if not (empty .Values.externalDatabase.user) }}
-    --set externalDatabase.user={{ .Values.externalDatabase.user }} \
-    {{- end }}
-    {{- if not (empty .Values.externalDatabase.password) }}
-    --set externalDatabase.password=$POSTGRESQL_PASSWORD \
-    {{- end }}
-    {{- if not (empty .Values.externalDatabase.database) }}
-    --set externalDatabase.database={{ .Values.externalDatabase.database }}
-    {{- end }}
-    --set externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST \
-    {{- if .Values.global }}{{- if .Values.global.imagePullSecrets }}
-    --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \
-    {{- end }}{{- end }}
-    {{- if and .Values.redis.enabled .Values.redis.auth.enabled (not .Values.redis.auth.existingSecret) (not .Values.redis.auth.password) }}
-    --set redis.auth.password=$REDIS_PASSWORD \
-    {{- end }}
-    --set service.type={{ .Values.service.type }}
 {{- end }}
 
-{{ if and .Values.postgresql.enabled (not .Values.postgresql.existingSecret) (eq .Values.postgresql.postgresqlPostgresPassword "bitnami") -}}
-#####################################################################################
-### WARNING: You did not change the default password for the PostgreSQL root user ###
-#####################################################################################
+2. Open a browser and access Discourse using the obtained URL.
+
+3. Get your Discourse login credentials by running:
+
+    {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "discourse-password" "context" $) }}
+    echo User:     {{ .Values.auth.username }}
+    echo Password: $DISCOURSE_PASSWORD
+
+{{- end }}
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
-
-{{- $passwordValidationErrors := list -}}
-{{- if not .Values.discourse.existingSecret -}}
-    {{- $requiredDiscoursePassword := dict "valueKey" "discourse.password" "secret" $secretName "field" "discourse-password" "context" $ -}}
-    {{- $requiredDiscoursePasswordError := include "common.validations.values.single.empty" $requiredDiscoursePassword -}}
-    {{- $passwordValidationErrors = append $passwordValidationErrors $requiredDiscoursePasswordError -}}
-{{- end -}}
-
-{{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $postgresqlPasswordValidationErrors -}}
-
-{{- if (include "discourse.redis.auth.enabled" .) }}
-{{- $redisPasswordValidationErrors := include "common.validations.values.redis.passwords" (dict "secret" $redisSecretName "subchart" true "context" $) -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $redisPasswordValidationErrors -}}
-{{- end }}
-
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

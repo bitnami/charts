@@ -85,7 +85,7 @@ spec:
             - -ec
             - |
               mkdir -p /bitnami/solr
-              find /bitnami/solr -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
+              find /bitnami/solr -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -196,7 +196,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "solr.secretName" . }}
-                  key: solr-password
+                  key: {{ include "solr.secretPasswordKey" . }}
             {{- end }}
             - name: SOLR_ZK_HOSTS
               value: {{ include "solr.zookeeper.host" . | quote }}

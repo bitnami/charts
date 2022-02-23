@@ -217,6 +217,39 @@ kubeapps: ingress.tls
 {{- end -}}
 
 {{/*
+# Calculate the kubeappsapis enabledPlugins.
+*/}}
+{{- define "kubeapps.kubeappsapis.enabledPlugins" -}}
+    {{- $enabledPlugins := list }}
+    {{- if .Values.kubeappsapis.enabledPlugins }}
+      {{- $enabledPlugins = .Values.kubeappsapis.enabledPlugins }}
+    {{- else }}
+      {{- if and .Values.packaging.flux.enabled .Values.packaging.helm.enabled }}
+        {{- fail "packaging: Please enable only one of the flux and helm plugins, since they both operate on Helm releases." }}
+      {{- end -}}
+      {{- range $plugin, $options := .Values.packaging }}
+        {{- if $options.enabled }}
+          {{- if eq $plugin "carvel" }}
+            {{- $enabledPlugins = append $enabledPlugins "kapp-controller" }}
+          {{- else if eq $plugin "flux" }}
+            {{- $enabledPlugins = append $enabledPlugins "fluxv2" }}
+          {{- else if eq $plugin "helm" }}
+            {{- $enabledPlugins = append $enabledPlugins "helm" }}
+          {{- else }}
+            {{ $msg := printf "packaging: Unsupported packaging option: %s" $plugin }}
+            {{- fail $msg }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+      {{- if not $enabledPlugins }}
+        {{- fail "packaging: Please enable at least one of the packaging plugins." }}
+      {{- end }}
+      {{- $enabledPlugins = append $enabledPlugins "resources" }}
+    {{- end }}
+    {{- $enabledPlugins | toJson }}
+{{- end -}}
+
+{{/*
 Check if there are rolling tags in the images
 */}}
 {{- define "kubeapps.checkRollingTags" -}}

@@ -76,6 +76,7 @@ spec:
             {{- end }}
             - --repo-sync-cmd=/asset-syncer
             - --namespace={{ .Release.Namespace }}
+            - --global-repos-namespace={{ .Release.Namespace }}{{ .Values.apprepository.globalReposNamespaceSuffix }}
             {{- if .Values.postgresql.existingSecret }}
             - --database-secret-name={{ .Values.postgresql.existingSecret }}
             {{- else }}

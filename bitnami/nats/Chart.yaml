@@ -24,4 +24,4 @@ name: nats
 sources:
   - https://github.com/bitnami/bitnami-docker-nats
   - https://nats.io/
-version: 7.1.5
+version: 7.1.6

@@ -194,11 +194,12 @@ Get the configmap name
 Load DAGs init-container
 */}}
 {{- define "airflow.loadDAGsInitContainer" -}}
+{{- $compDefinition := (get .context.Values .component) -}}
 - name: load-dags
-  image: {{ include "airflow.dags.image" . }}
-  imagePullPolicy: {{ .Values.dags.image.pullPolicy }}
-  {{- if .Values.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  image: {{ include "airflow.dags.image" .context }}
+  imagePullPolicy: {{ .context.Values.dags.image.pullPolicy }}
+  {{- if $compDefinition.containerSecurityContext.enabled }}
+  securityContext: {{- omit $compDefinition.containerSecurityContext "enabled" | toYaml | nindent 4 }}
   {{- end }}
   command:
     - /bin/bash

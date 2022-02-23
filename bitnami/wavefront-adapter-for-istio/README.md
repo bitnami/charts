@@ -1,9 +1,13 @@
 <!--- app-name: Wavefront Adapter for Istio -->
 
-# Wavefront Adapter for Istio
+# Wavefront Adapter for Istio packaged by Bitnami
 
-[Wavefront Adapter for Istio](https://github.com/vmware/wavefront-adapter-for-istio/) is a lightweight Istio adapter that exposes Istio metrics to Wavefront.
+Wavefront Adapter for Istio is an adapter for Istio to expose Istio metrics to Wavefront. It is a lightweight tool written in Go. It supports Istio v1.4+ and Kubernetes v1.15+.
 
+[Overview of Wavefront Adapter for Istio](https://github.com/vmware/wavefront-adapter-for-istio)
+
+
+                           
 ## TL;DR
 
 ```console

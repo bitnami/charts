@@ -32,7 +32,7 @@ spec:
       {{- if .Values.kubeappsapis.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.hostAliases "context" $) | nindent 8 }}
       {{- end }}
-      # Increase termination timeout to let remaining operations to finish before killing the pods
+      # Increase termination timeout to let remaining operations to finish before ending the pods
       # This is because new releases/upgrades/deletions are synchronous operations
       {{- if .Values.kubeappsapis.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.affinity "context" $) | nindent 8 }}
@@ -68,7 +68,8 @@ spec:
           command:
             - /kubeapps-apis
           args:
-            {{- range .Values.kubeappsapis.enabledPlugins }}
+            {{- $enabledPlugins := include "kubeapps.kubeappsapis.enabledPlugins" . | fromJsonArray }}
+            {{- range $enabledPlugins }}
             - --plugin-dir
             - /plugins/{{ . }}
             {{- end }}
@@ -81,12 +82,19 @@ spec:
             {{- if .Values.pinnipedProxy.enabled }}
             - --pinniped-proxy-url=http://{{ template "kubeapps.pinniped-proxy.fullname" . }}.{{ .Release.Namespace }}:{{ .Values.pinnipedProxy.containerPort }}
             {{- end }}
+            - --global-repos-namespace={{ .Release.Namespace }}{{ .Values.apprepository.globalReposNamespaceSuffix }}
+            {{- if .Values.kubeappsapis.qps }}
+            - --kube-api-qps={{ .Values.kubeappsapis.qps }}
+            {{- end }}
+            {{- if .Values.kubeappsapis.burst }}
+            - --kube-api-burst={{ .Values.kubeappsapis.burst }}
+            {{- end }}
           env:
             - name: GOGC
-              value: "50" # default is 100. 50 means increasing x2 the frequency of GC 
+              value: "50" # default is 100. 50 means increasing x2 the frequency of GC
             - name: PORT
               value: {{ .Values.kubeappsapis.containerPort | quote }}
-            {{- if .Values.redis.enabled }}
+            {{- if .Values.packaging.flux.enabled }}
             # REDIS-* vars are required by the plugins for caching functionality
             # TODO (gfichtenolt) this as required by the kubeapps apis service (which will
             # longer-term pass something to the plugins so that the plugins won't need to

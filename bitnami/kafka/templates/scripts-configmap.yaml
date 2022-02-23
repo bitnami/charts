@@ -121,7 +121,7 @@ data:
     {{- if eq .Values.auth.tls.type "jks" }}
     {{- if not (empty .Values.auth.tls.existingSecrets) }}
     JKS_TRUSTSTORE={{ printf "/%s/%s" (ternary "certs-${ID}" "truststore" (empty $jksTruststoreSecret)) (default "kafka.truststore.jks" $jksTruststore) | quote }}
-    JKS_KEYSTORE="/certs-${ID}/kafka.keystore.jks"
+    JKS_KEYSTORE={{ printf "/certs-${ID}/%s" (default "kafka.keystore.jks" $jksKeystoreSAN) | quote }}
     {{- else }}
     JKS_TRUSTSTORE={{ printf "/%s/%s" (ternary "certs" "truststore" (empty $jksTruststoreSecret)) (default "kafka.truststore.jks" $jksTruststore) | quote }}
     JKS_KEYSTORE={{ printf "/certs/%s" (default "kafka-${ID}.keystore.jks" $jksKeystoreSAN) | quote }}
