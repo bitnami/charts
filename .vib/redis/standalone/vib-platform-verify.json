@@ -37,10 +37,8 @@
               "resources": {
                 "path": "/.vib/redis/standalone"
               },
-              "config": {
-                "remote": {
-                  "workload": "sts-redis-master"
-                }
+              "remote": {
+                "workload": "sts-redis-master"
               }
             }
           }

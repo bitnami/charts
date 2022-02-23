@@ -37,10 +37,8 @@
               "resources": {
                 "path": "/.vib/redis/replicas/goss/goss-master"
               },
-              "config": {
-                "remote": {
-                  "workload": "sts-redis-master"
-                }
+              "remote": {
+                "workload": "sts-redis-master"
               }
             }
           },
@@ -50,10 +48,8 @@
               "resources": {
                 "path": "/.vib/redis/replicas/goss/goss-replica"
               },
-              "config": {
-                "remote": {
-                  "workload": "sts-redis-replicas"
-                }
+              "remote": {
+                "workload": "sts-redis-replicas"
               }
             }
           }

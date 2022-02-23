@@ -37,10 +37,8 @@
               "resources": {
                 "path": "/.vib/redis/sentinel"
               },
-              "config": {
-                "remote": {
-                  "workload": "sts-redis-node"
-                }
+              "remote": {
+                "workload": "sts-redis-node"
               }
             }
           }
