@@ -29,7 +29,7 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
-      - uses: vmware-samples/vmware-image-builder-examples/vib-action@main
+      - uses: vmware-labs/vmware-image-builder-action@main
         with:
           pipeline: vib-platform-verify.json
         env:
