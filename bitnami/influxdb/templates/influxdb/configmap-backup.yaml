@@ -82,7 +82,7 @@ data:
     wget -O azcopy.tar {{ .Values.backup.uploadProviders.azure.azcopyUrl }}
     tar -xf azcopy.tar
     cp */azcopy .
-    ./azcopy sync "{{ .Values.backup.directory }}" "{{ .Values.backup.uploadProviders.azure.secret }}" --recursive --delete-destination true
+    ./azcopy sync "{{ .Values.backup.directory }}" "${AZURE_STORAGE_CONNECTION_STRING}" --recursive --delete-destination true
   upload-aws.sh: |-
     #!/bin/sh
 
