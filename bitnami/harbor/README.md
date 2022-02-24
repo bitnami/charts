@@ -868,32 +868,32 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 ### PostgreSQL Parameters
 
-| Name                                    | Description                                                                                               | Value            |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------- |
-| `postgresql.enabled`                    | If external database is used, set it to `false`                                                           | `true`           |
-| `postgresql.nameOverride`               | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`             |
-| `postgresql.postgresqlUsername`         | Postgresql username                                                                                       | `postgres`       |
-| `postgresql.postgresqlPassword`         | Postgresql password                                                                                       | `randomPassword` |
-| `postgresql.existingSecret`             | Set Postgresql password via an existing secret                                                            | `""`             |
-| `postgresql.postgresqlExtendedConf`     | Extended runtime config parameters (appended to main or default configuration)                            | `{}`             |
-| `postgresql.replication.enabled`        | Enable replicated postgresql                                                                              | `false`          |
-| `postgresql.persistence.enabled`        | Enable persistence for PostgreSQL                                                                         | `true`           |
-| `postgresql.initdbScripts`              | Initdb scripts to create Harbor databases                                                                 | `{}`             |
-| `externalDatabase.host`                 | Host of the external database                                                                             | `localhost`      |
-| `externalDatabase.user`                 | Existing username in the external db                                                                      | `bn_harbor`      |
-| `externalDatabase.password`             | Password for the above username                                                                           | `""`             |
-| `externalDatabase.port`                 | Port of the external database                                                                             | `5432`           |
-| `externalDatabase.sslmode`              | External database ssl mode                                                                                | `disable`        |
-| `externalDatabase.coreDatabase`         | External database name for core                                                                           | `""`             |
-| `externalDatabase.clairDatabase`        | External database name for clair                                                                          | `""`             |
-| `externalDatabase.clairUsername`        | External database username for clair                                                                      | `""`             |
-| `externalDatabase.clairPassword`        | External database password for clair                                                                      | `""`             |
-| `externalDatabase.notaryServerDatabase` | External database name for notary server                                                                  | `""`             |
-| `externalDatabase.notaryServerUsername` | External database username for notary server                                                              | `""`             |
-| `externalDatabase.notaryServerPassword` | External database password for notary server                                                              | `""`             |
-| `externalDatabase.notarySignerDatabase` | External database name for notary signer                                                                  | `""`             |
-| `externalDatabase.notarySignerUsername` | External database username for notary signer                                                              | `""`             |
-| `externalDatabase.notarySignerPassword` | External database password for notary signer                                                              | `""`             |
+| Name                                    | Description                                                                                               | Value                          |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `postgresql.enabled`                    | If external database is used, set it to `false`                                                           | `true`                         |
+| `postgresql.nameOverride`               | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`                           |
+| `postgresql.postgresqlUsername`         | Postgresql username                                                                                       | `postgres`                     |
+| `postgresql.postgresqlPassword`         | Postgresql password                                                                                       | `not-secure-database-password` |
+| `postgresql.existingSecret`             | Set Postgresql password via an existing secret                                                            | `""`                           |
+| `postgresql.postgresqlExtendedConf`     | Extended runtime config parameters (appended to main or default configuration)                            | `{}`                           |
+| `postgresql.replication.enabled`        | Enable replicated postgresql                                                                              | `false`                        |
+| `postgresql.persistence.enabled`        | Enable persistence for PostgreSQL                                                                         | `true`                         |
+| `postgresql.initdbScripts`              | Initdb scripts to create Harbor databases                                                                 | `{}`                           |
+| `externalDatabase.host`                 | Host of the external database                                                                             | `localhost`                    |
+| `externalDatabase.user`                 | Existing username in the external db                                                                      | `bn_harbor`                    |
+| `externalDatabase.password`             | Password for the above username                                                                           | `""`                           |
+| `externalDatabase.port`                 | Port of the external database                                                                             | `5432`                         |
+| `externalDatabase.sslmode`              | External database ssl mode                                                                                | `disable`                      |
+| `externalDatabase.coreDatabase`         | External database name for core                                                                           | `""`                           |
+| `externalDatabase.clairDatabase`        | External database name for clair                                                                          | `""`                           |
+| `externalDatabase.clairUsername`        | External database username for clair                                                                      | `""`                           |
+| `externalDatabase.clairPassword`        | External database password for clair                                                                      | `""`                           |
+| `externalDatabase.notaryServerDatabase` | External database name for notary server                                                                  | `""`                           |
+| `externalDatabase.notaryServerUsername` | External database username for notary server                                                              | `""`                           |
+| `externalDatabase.notaryServerPassword` | External database password for notary server                                                              | `""`                           |
+| `externalDatabase.notarySignerDatabase` | External database name for notary signer                                                                  | `""`                           |
+| `externalDatabase.notarySignerUsername` | External database username for notary signer                                                              | `""`                           |
+| `externalDatabase.notarySignerPassword` | External database password for notary signer                                                              | `""`                           |
 
 
 ### Redis&trade; Parameters
