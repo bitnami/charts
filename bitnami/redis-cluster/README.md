@@ -7,7 +7,7 @@ Redis(TM) is an open source, scalable, distributed in-memory cache for applicati
 [Overview of Redis&trade; Cluster](http://redis.io)
 
 Disclaimer: Redis is a registered trademark of Redis Labs Ltd. Any rights therein are reserved to Redis Labs Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Labs Ltd.
-                           
+
 ## TL;DR
 
 ```bash
@@ -77,7 +77,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 | `global.redis.password`   | Redis&trade; password (overrides `password`)    | `""`  |
-
 
 ### Redis&trade; Cluster Common parameters
 
@@ -161,7 +160,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`        | The requested resources for the container                                                                                                           | `{}`                    |
 | `podSecurityPolicy.create`                    | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later         | `false`                 |
 
-
 ### Redis&trade; statefulset parameters
 
 | Name                                           | Description                                                                                                  | Value           |
@@ -223,7 +221,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.tolerations`                            | Tolerations for Redis&trade; pods assignment                                                                 | `[]`            |
 | `redis.topologySpreadConstraints`              | Pod topology spread constraints for Redis&trade; pod                                                         | `[]`            |
 
-
 ### Cluster update job parameters
 
 | Name                                  | Description                                                                                                    | Value  |
@@ -253,7 +250,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `updateJob.resources.limits`          | The resources limits for the container                                                                         | `{}`   |
 | `updateJob.resources.requests`        | The requested resources for the container                                                                      | `{}`   |
 
-
 ### Cluster management parameters
 
 | Name                                            | Description                                                                                     | Value          |
@@ -269,7 +265,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.update.addNodes`                       | Boolean to specify if you want to add nodes after the upgrade                                   | `false`        |
 | `cluster.update.currentNumberOfNodes`           | Number of currently deployed Redis&trade; nodes                                                 | `6`            |
 | `cluster.update.newExternalIPs`                 | External IPs obtained from the services for the new nodes to add to the cluster                 | `[]`           |
-
 
 ### Metrics sidecar parameters
 
@@ -306,7 +301,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.labels`                   | Additional labels for the metrics service                                                                                          | `{}`                     |
 | `metrics.service.clusterIP`                | Service Cluster IP                                                                                                                 | `""`                     |
 
-
 ### Sysctl Image parameters
 
 | Name                             | Description                                        | Value                   |
@@ -321,7 +315,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctlImage.mountHostSys`       | Mount the host `/sys` folder to `/host-sys`        | `false`                 |
 | `sysctlImage.resources.limits`   | The resources limits for the container             | `{}`                    |
 | `sysctlImage.resources.requests` | The requested resources for the container          | `{}`                    |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -419,7 +412,9 @@ Note we are providing the new IPs at `cluster.update.newExternalIPs`, the flag `
 
 #### Scale down the cluster
 
-To scale down the redis cluster just perform a normal upgrade setting the `cluster.nodes` value to the desired number of nodes. It should not be less than `6`. Also it is needed to provide the password using the `password`. For example, having more than 6 nodes, to scale down the cluster to 6 nodes:
+To scale down the Redis&trade; Cluster, follow these steps:
+
+First perform a normal upgrade setting the `cluster.nodes` value to the desired number of nodes. It should not be less than `6`. Also it is needed to provide the password using the `password`. For example, having more than 6 nodes, to scale down the cluster to 6 nodes:
 
 ```
 helm upgrade --timeout 600s <release> --set "password=${REDIS_PASSWORD},cluster.nodes=6" .
@@ -428,6 +423,30 @@ helm upgrade --timeout 600s <release> --set "password=${REDIS_PASSWORD},cluster.
 The cluster will continue working during the update as long as the quorum is not lost.
 
 > NOTE: To avoid the creation of the Job that initializes the Redis&trade; Cluster again, you will need to provide `cluster.init=false`.
+
+Once all the nodes are ready, get the list of nodes in the cluster using the `CLUSTER NODES` command. You will see references to the ones that were removed. Write down the node IDs of the nodes that show `fail`. In the following example the cluster scaled down from 8 to 6 nodes.
+
+```
+redis-cli -a $REDIS_PASSWORD CLUSTER NODES
+
+...
+b23bcffa1fd64368d445c1d9bd9aeb92641105f7 10.0.0.70:6379@16379 slave,fail - 1645633139060 0 0 connected
+...
+d123b31560d4a32eabb10f1bf5e85e6f8f1d8b2a 10.0.0.23:6379@16379 slave,fail
+```
+
+In each cluster node, execute the following command. Replace the NODE_ID placeholder.
+
+```
+redis-cli -a $REDIS_PASSWORD CLUSTER FORGET NODE_ID
+```
+
+In the previous example the commands would look like this in each cluster node:
+
+```
+redis-cli -a $REDIS_PASSWORD CLUSTER FORGET b23bcffa1fd64368d445c1d9bd9aeb92641105f7
+redis-cli -a $REDIS_PASSWORD CLUSTER FORGET d123b31560d4a32eabb10f1bf5e85e6f8f1d8b2a
+```
 
 ### Using password file
 To use a password file for Redis&trade; you need to create a secret containing the password.
