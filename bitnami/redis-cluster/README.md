@@ -1,12 +1,13 @@
-<!--- app-name: Redis(TM) Cluster -->
+<!--- app-name: Redis&trade; Cluster -->
 
+# Redis(TM) Cluster packaged by Bitnami
 
-# Redis&trade; Cluster Chart packaged by Bitnami
+Redis(TM) is an open source, scalable, distributed in-memory cache for applications. It can be used to store and serve data in the form of strings, hashes, lists, sets and sorted sets.
 
-[Redis&trade;](http://redis.io/) is an advanced key-value cache and store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets, sorted sets, bitmaps and hyperloglogs.
+[Overview of Redis&trade; Cluster](http://redis.io)
 
-Disclaimer: REDIS® is a registered trademark of Redis Labs Ltd.Any rights therein are reserved to Redis Labs Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Labs Ltd.
-
+Disclaimer: Redis is a registered trademark of Redis Labs Ltd. Any rights therein are reserved to Redis Labs Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Labs Ltd.
+                           
 ## TL;DR
 
 ```bash
