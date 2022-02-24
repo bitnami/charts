@@ -192,7 +192,6 @@ Compile all warnings into a single message, and call fail.
 {{- define "kubeapps.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "kubeapps.validateValues.ingress.tls" .) -}}
-{{- $messages := append $messages (include "kubeapps.validateValues.kubeappsapis.enabledPlugins" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -217,27 +216,37 @@ kubeapps: ingress.tls
 {{- end -}}
 {{- end -}}
 
-
 {{/*
-# Validate values of common mistakes in kubeappsapis.enabledPlugins
+# Calculate the kubeappsapis enabledPlugins.
 */}}
-{{- define "kubeapps.validateValues.kubeappsapis.enabledPlugins" -}}
-    {{- if has "flux" .Values.kubeappsapis.enabledPlugins }}
-    kubeapps: kubeappsapis.enabledPlugins
-        You enter "flux", perhaps you meant "fluxv2"?
-    {{- end -}}
-    {{- if has "kapp_controller" .Values.kubeappsapis.enabledPlugins }}
-    kubeapps: kubeappsapis.enabledPlugins
-        You enter "kapp_controller", perhaps you meant "kapp-controller"?
-    {{- end -}}
-    {{- if and (has "fluxv2" .Values.kubeappsapis.enabledPlugins) (not .Values.redis.enabled) }}
-    kubeapps: kubeappsapis.enabledPlugins
-        If you enable the "fluxv2" plugin, you must also set redis.enabled=true
-    {{- end -}}
-    {{- if and (has "fluxv2" .Values.kubeappsapis.enabledPlugins) (has "helm" .Values.kubeappsapis.enabledPlugins) }}
-    kubeapps: kubeappsapis.enabledPlugins
-        Please choose just one of the flux2 and helm plugins, since they both operate on Helm releases.
-    {{- end -}}
+{{- define "kubeapps.kubeappsapis.enabledPlugins" -}}
+    {{- $enabledPlugins := list }}
+    {{- if .Values.kubeappsapis.enabledPlugins }}
+      {{- $enabledPlugins = .Values.kubeappsapis.enabledPlugins }}
+    {{- else }}
+      {{- if and .Values.packaging.flux.enabled .Values.packaging.helm.enabled }}
+        {{- fail "packaging: Please enable only one of the flux and helm plugins, since they both operate on Helm releases." }}
+      {{- end -}}
+      {{- range $plugin, $options := .Values.packaging }}
+        {{- if $options.enabled }}
+          {{- if eq $plugin "carvel" }}
+            {{- $enabledPlugins = append $enabledPlugins "kapp-controller" }}
+          {{- else if eq $plugin "flux" }}
+            {{- $enabledPlugins = append $enabledPlugins "fluxv2" }}
+          {{- else if eq $plugin "helm" }}
+            {{- $enabledPlugins = append $enabledPlugins "helm" }}
+          {{- else }}
+            {{ $msg := printf "packaging: Unsupported packaging option: %s" $plugin }}
+            {{- fail $msg }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+      {{- if not $enabledPlugins }}
+        {{- fail "packaging: Please enable at least one of the packaging plugins." }}
+      {{- end }}
+      {{- $enabledPlugins = append $enabledPlugins "resources" }}
+    {{- end }}
+    {{- $enabledPlugins | toJson }}
 {{- end -}}
 
 {{/*

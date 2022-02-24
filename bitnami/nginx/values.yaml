@@ -98,6 +98,13 @@ extraEnvVarsSecret: ""
 ## @param replicaCount Number of NGINX replicas to deploy
 ##
 replicaCount: 1
+## @param updateStrategy.type NGINX deployment strategy type
+## @param updateStrategy.rollingUpdate NGINX deployment rolling update configuration parameters
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+##
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate: {}
 ## @param podLabels Additional labels for NGINX pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -138,6 +145,9 @@ nodeAffinityPreset:
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
+## @param hostNetwork Specify if host network should be enabled for NGINX pod
+##
+hostNetwork: false
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##

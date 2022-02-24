@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
@@ -56,6 +58,7 @@ diagnosticMode:
     - infinity
 
 ## @section Deployment parameters
+##
 
 ## Bitnami kong image version
 ## ref: https://hub.docker.com/r/bitnami/kong/tags/
@@ -69,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kong
-  tag: 2.7.1-debian-10-r15
+  tag: 2.7.1-debian-10-r25
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -224,6 +227,7 @@ pdb:
   maxUnavailable: "50%"
 
 ## @section Traffic Exposure Parameters
+##
 
 ## Service parameters
 ##
@@ -368,6 +372,7 @@ ingress:
   secrets: []
 
 ## @section Kong Container Parameters
+##
 
 kong:
   ## @param kong.command Override default container command (useful when using custom images)
@@ -456,14 +461,17 @@ kong:
     ## limits:
     ##    cpu: 500m
     ##    memory: 1Gi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
 
 ## @section Kong Migration job Parameters
+##
 
 migration:
   ## In case you want to use a custom image for Kong migration, set this value
@@ -517,14 +525,17 @@ migration:
     ## limits:
     ##    cpu: 500m
     ##    memory: 1Gi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
 
 ## @section Kong Ingress Controller Container Parameters
+##
 
 ingressController:
   ## @param ingressController.enabled Enable/disable the Kong Ingress Controller
@@ -542,7 +553,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 2.2.0-debian-10-r7
+    tag: 2.2.1-debian-10-r7
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -642,14 +653,17 @@ ingressController:
     ## limits:
     ##    cpu: 500m
     ##    memory: 1Gi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
 
 ## @section PostgreSQL Parameters
+##
 
 ## PostgreSQL properties
 ##
@@ -657,11 +671,30 @@ postgresql:
   ## @param postgresql.enabled Deploy the PostgreSQL sub-chart
   ##
   enabled: true
-  ## @param postgresql.usePasswordFile Mount the PostgreSQL secret as a file
-  ##
-  usePasswordFile: false
   ## Properties for using an existing PostgreSQL installation
+  ## @param postgresql.image.registry PostgreSQL image registry
+  ## @param postgresql.image.repository PostgreSQL image repository
+  ## @param postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)
+  ## @param postgresql.image.pullPolicy PostgreSQL image pull policy
+  ## @param postgresql.image.pullSecrets Specify image pull secrets
   ##
+  image:
+    registry: docker.io
+    repository: bitnami/postgresql
+    tag: 11.15.0-debian-10-r11
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
   external:
     ## @param postgresql.external.host Host of an external PostgreSQL installation
     ##
@@ -672,17 +705,29 @@ postgresql:
     ## @param postgresql.external.password Password of the external PostgreSQL installation
     ##
     password: ""
-  ## @param postgresql.existingSecret Use an existing secret file with the PostgreSQL password (can be used with the bundled chart or with an existing installation)
-  ##
-  existingSecret: ""
-  ## @param postgresql.postgresqlDatabase Database name to be used by Kong
-  ##
-  postgresqlDatabase: kong
-  ## @param postgresql.postgresqlUsername Username to be created by the PostgreSQL bundled chart
-  ##
-  postgresqlUsername: kong
+  auth:
+    ## @param postgresql.auth.username Postgresql username
+    ##
+    username: kong
+    ## @param postgresql.auth.password Postgresql password
+    ##
+    password: ""
+    ## @param postgresql.auth.database Postgresql database
+    ##
+    database: kong
+    ## @param postgresql.auth.postgresPassword Postgresql password for the postgres user
+    ##
+    postgresPassword: ""
+    ## This secret is used in case of postgresql.enabled=true and we would like to specify password for newly created postgresql instance
+    ## @param postgresql.auth.existingSecret Name of an existing secret containing the PostgreSQL password ('password' key)
+    ##
+    existingSecret: ""
+    ## @param postgresql.auth.usePasswordFiles Mount credentials as a files instead of using an environment variable
+    ##
+    usePasswordFiles: false
 
 ## @section Cassandra Parameters
+##
 
 ## Cassandra properties
 ##
@@ -721,6 +766,7 @@ cassandra:
   existingSecret: ""
 
 ## @section Metrics Parameters
+##
 
 ## Prometheus metrics
 ##

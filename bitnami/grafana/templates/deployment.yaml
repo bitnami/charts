@@ -84,7 +84,7 @@ spec:
             - -ec
             - |
               mkdir -p /bitnami/grafana
-              find /bitnami/grafana -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.grafana.containerSecurityContext.runAsUser }}:{{ .Values.grafana.podSecurityContext.fsGroup }}
+              find /bitnami/grafana -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.grafana.containerSecurityContext.runAsUser }}:{{ .Values.grafana.podSecurityContext.fsGroup }}
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
