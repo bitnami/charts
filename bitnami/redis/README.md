@@ -689,6 +689,7 @@ The parameter to enable the usage of StaticIDs was removed. The behavior is to [
 
 The Redis&trade; sentinel exporter was removed in this version because the upstream project was deprecated. The regular Redis&trade; exporter is included in the sentinel scenario as usual.
 
+
 ### To 14.0.0
 
 - Several parameters were renamed or disappeared in favor of new ones on this major version:

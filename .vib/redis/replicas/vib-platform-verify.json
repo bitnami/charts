@@ -29,7 +29,14 @@
         },
         "actions": [
           {
-            "action_id":"resilience-tests"
+            "action_id":"resilience-tests",
+            "params": {
+              "test_cases": [
+                "testKubernetesPodDelete",
+                "testPodScaleUp",
+                "testPodScaleDown"
+              ]
+            }
           },
           {
             "action_id": "goss",
