@@ -33,4 +33,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/kubeapps/kubeapps
-version: 7.8.1
+version: 7.8.2

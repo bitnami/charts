@@ -96,13 +96,7 @@ In order to replicate the container startup scripts execute this command:
 {{- $passwordValidationErrors := list }}
 
 If you want to upgrade the installation you will need to re-set the database credentials. Execute the following command
-{{- if eq .Values.database "postgresql" }}
-{{- $dbSecretName := include "kong.postgresql.secretName" . -}}
-{{- $dbPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
-
-  kubectl get secret --namespace {{ .Release.Namespace }} {{ include "kong.postgresql.secretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode
-{{- else }}
+{{- if ne .Values.database "postgresql" }}
   {{- $dbSecretName := include "kong.cassandra.secretName" . -}}
   {{- $dbPasswordValidationErrors := include "common.validations.values.cassandra.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
   {{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
