@@ -58,7 +58,7 @@ data:
                 echo "backuping ${BUCKET} bucket to ${backup_dir}"
                 mkdir -p "${backup_dir}"
 
-                INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" backup --bucket "${BUCKET}" "${backup_dir}/${DATE}"
+                INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx backup --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" --bucket "${BUCKET}" "${backup_dir}/${DATE}"
             done
         done
 
@@ -77,12 +77,12 @@ data:
 
     set -e
 
-    # maybe azcopy could be added to azure-cli image?
+    # using azcopy directly instead of az storage b/c az storage installs azcopy in /bin, which breaks for non-root user
     cd /tmp
     wget -O azcopy.tar {{ .Values.backup.uploadProviders.azure.azcopyUrl }}
     tar -xf azcopy.tar
     cp */azcopy .
-    ./azcopy sync "{{ .Values.backup.directory }}" "{{ .Values.backup.uploadProviders.azure.accessUrl }}" --recursive --delete-destination true
+    ./azcopy sync "{{ .Values.backup.directory }}" "{{ .Values.backup.uploadProviders.azure.secret }}" --recursive --delete-destination true
   upload-aws.sh: |-
     #!/bin/sh
 
