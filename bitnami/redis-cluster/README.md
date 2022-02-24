@@ -7,7 +7,7 @@ Redis(TM) is an open source, scalable, distributed in-memory cache for applicati
 [Overview of Redis&trade; Cluster](http://redis.io)
 
 Disclaimer: Redis is a registered trademark of Redis Labs Ltd. Any rights therein are reserved to Redis Labs Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Labs Ltd.
-
+                           
 ## TL;DR
 
 ```bash
@@ -78,22 +78,29 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 | `global.redis.password`   | Redis&trade; password (overrides `password`)    | `""`  |
 
+
+### Redis&trade; Cluster Common parameters
+
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
+| `clusterDomain`          | Kubernetes Cluster Domain                                                                    | `cluster.local` |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                   | `{}`            |
+| `commonLabels`           | Labels to add to all deployed objects                                                        | `{}`            |
+| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                  | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
+
+
 ### Redis&trade; Cluster Common parameters
 
 | Name                                          | Description                                                                                                                                         | Value                   |
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `nameOverride`                                | String to partially override common.names.fullname template (will maintain the release name)                                                        | `""`                    |
-| `fullnameOverride`                            | String to fully override common.names.fullname template                                                                                             | `""`                    |
-| `clusterDomain`                               | Kubernetes Cluster Domain                                                                                                                           | `cluster.local`         |
-| `commonAnnotations`                           | Annotations to add to all deployed objects                                                                                                          | `{}`                    |
-| `commonLabels`                                | Labels to add to all deployed objects                                                                                                               | `{}`                    |
-| `extraDeploy`                                 | Array of extra objects to deploy with the release (evaluated as a template)                                                                         | `[]`                    |
-| `diagnosticMode.enabled`                      | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`                 |
-| `diagnosticMode.command`                      | Command to override all containers in the deployment                                                                                                | `["sleep"]`             |
-| `diagnosticMode.args`                         | Args to override all containers in the deployment                                                                                                   | `["infinity"]`          |
 | `image.registry`                              | Redis&trade; cluster image registry                                                                                                                 | `docker.io`             |
 | `image.repository`                            | Redis&trade; cluster image repository                                                                                                               | `bitnami/redis-cluster` |
-| `image.tag`                                   | Redis&trade; cluster image tag (immutable tags are recommended)                                                                                     | `6.2.6-debian-10-r95`   |
+| `image.tag`                                   | Redis&trade; cluster image tag (immutable tags are recommended)                                                                                     | `6.2.6-debian-10-r137`  |
 | `image.pullPolicy`                            | Redis&trade; cluster image pull policy                                                                                                              | `IfNotPresent`          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
 | `image.debug`                                 | Enable image debug mode                                                                                                                             | `false`                 |
@@ -141,7 +148,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.loadBalancerIP`                      | Load balancer IP if `service.type` is `LoadBalancer`                                                                                                | `""`                    |
 | `service.loadBalancerSourceRanges`            | Service Load Balancer sources                                                                                                                       | `[]`                    |
 | `service.externalTrafficPolicy`               | Service external traffic policy                                                                                                                     | `Cluster`               |
-| `persistence.enabled`                         | Use a PVC to persist data.                                                                                                                          | `true`                  |
 | `persistence.path`                            | Path to mount the volume at, to use other images Redis&trade; images.                                                                               | `/bitnami/redis/data`   |
 | `persistence.subPath`                         | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services                                             | `""`                    |
 | `persistence.storageClass`                    | Storage class of backing PVC                                                                                                                        | `""`                    |
@@ -153,12 +159,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                         | `10-debian-10-r306`     |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                         | `10-debian-10-r346`     |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                                                                                              | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the container                                                                                                           | `{}`                    |
 | `podSecurityPolicy.create`                    | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later         | `false`                 |
+
 
 ### Redis&trade; statefulset parameters
 
@@ -221,6 +228,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.tolerations`                            | Tolerations for Redis&trade; pods assignment                                                                 | `[]`            |
 | `redis.topologySpreadConstraints`              | Pod topology spread constraints for Redis&trade; pod                                                         | `[]`            |
 
+
 ### Cluster update job parameters
 
 | Name                                  | Description                                                                                                    | Value  |
@@ -250,6 +258,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `updateJob.resources.limits`          | The resources limits for the container                                                                         | `{}`   |
 | `updateJob.resources.requests`        | The requested resources for the container                                                                      | `{}`   |
 
+
 ### Cluster management parameters
 
 | Name                                            | Description                                                                                     | Value          |
@@ -266,6 +275,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.update.currentNumberOfNodes`           | Number of currently deployed Redis&trade; nodes                                                 | `6`            |
 | `cluster.update.newExternalIPs`                 | External IPs obtained from the services for the new nodes to add to the cluster                 | `[]`           |
 
+
 ### Metrics sidecar parameters
 
 | Name                                       | Description                                                                                                                        | Value                    |
@@ -273,7 +283,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                                               | `false`                  |
 | `metrics.image.registry`                   | Redis&trade; exporter image registry                                                                                               | `docker.io`              |
 | `metrics.image.repository`                 | Redis&trade; exporter image name                                                                                                   | `bitnami/redis-exporter` |
-| `metrics.image.tag`                        | Redis&trade; exporter image tag                                                                                                    | `1.33.0-debian-10-r21`   |
+| `metrics.image.tag`                        | Redis&trade; exporter image tag                                                                                                    | `1.35.1-debian-10-r7`    |
 | `metrics.image.pullPolicy`                 | Redis&trade; exporter image pull policy                                                                                            | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                   | `[]`                     |
 | `metrics.resources`                        | Metrics exporter resource requests and limits                                                                                      | `{}`                     |
@@ -301,6 +311,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.labels`                   | Additional labels for the metrics service                                                                                          | `{}`                     |
 | `metrics.service.clusterIP`                | Service Cluster IP                                                                                                                 | `""`                     |
 
+
 ### Sysctl Image parameters
 
 | Name                             | Description                                        | Value                   |
@@ -309,12 +320,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctlImage.command`            | sysctlImage command to execute                     | `[]`                    |
 | `sysctlImage.registry`           | sysctlImage Init container registry                | `docker.io`             |
 | `sysctlImage.repository`         | sysctlImage Init container repository              | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                | sysctlImage Init container tag                     | `10-debian-10-r306`     |
+| `sysctlImage.tag`                | sysctlImage Init container tag                     | `10-debian-10-r346`     |
 | `sysctlImage.pullPolicy`         | sysctlImage Init container pull policy             | `IfNotPresent`          |
 | `sysctlImage.pullSecrets`        | Specify docker-registry secret names as an array   | `[]`                    |
 | `sysctlImage.mountHostSys`       | Mount the host `/sys` folder to `/host-sys`        | `false`                 |
 | `sysctlImage.resources.limits`   | The resources limits for the container             | `{}`                    |
 | `sysctlImage.resources.requests` | The requested resources for the container          | `{}`                    |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -336,7 +348,7 @@ $ helm install my-release -f values.yaml bitnami/redis-cluster
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
-> **Note for minikube users**: Current versions of minikube (v0.24.1 at the time of writing) provision `hostPath` persistent volumes that are only writable by root. Using chart defaults cause pod failure for the Redis&trade; pod as it attempts to write to the `/bitnami` directory. Consider installing Redis&trade; with `--set persistence.enabled=false`. See minikube issue [1990](https://github.com/kubernetes/minikube/issues/1990) for more information.
+> **Note for minikube users**: Current versions of minikube (v0.24.1 at the time of writing) provision `hostPath` persistent volumes that are only writable by root. Using chart defaults cause pod failure for the Redis&trade; pod as it attempts to write to the `/bitnami` directory. See minikube issue [1990](https://github.com/kubernetes/minikube/issues/1990) for more information.
 
 ## Configuration and installation details
 
