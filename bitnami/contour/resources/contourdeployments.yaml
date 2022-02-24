@@ -640,7 +640,7 @@ spec:
                   xdsServer:
                     default:
                       address: 0.0.0.0
-                      port: 8001
+                      port: {{ .Values.contour.service.ports.xds }}
                       tls:
                         caFile: /certs/ca.crt
                         certFile: /certs/tls.crt
