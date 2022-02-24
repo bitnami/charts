@@ -1,48 +1,55 @@
 {
-    "phases": {
-      "package": {
-        "context": {
-          "resources": {
-            "url": "{SHA_ARCHIVE}",
-            "path": "/bitnami/redis"
-          }
-        },
-        "actions": [
-          {
-            "action_id": "helm-package"
-          }
-        ]
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/redis"
+        }
       },
-      "verify": {
-        "context": {
-          "resources": {
-            "url": "{SHA_ARCHIVE}",
-            "path": "/bitnami/redis"
-          },
-          "runtime_parameters": "c2VudGluZWw6CiAgZW5hYmxlZDogdHJ1ZQ==",
-          "target_platform": {
-            "target_platform_id": "{TARGET_PLATFORM}",
-            "size": {
-              "name": "S4"
-            }
+      "actions": [
+        {
+          "action_id": "helm-package"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/redis"
+        },
+        "runtime_parameters": "c2VudGluZWw6CiAgZW5hYmxlZDogdHJ1ZQ==",
+        "target_platform": {
+          "target_platform_id": "{TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id":"resilience-tests",
+          "params": {
+            "test_cases": [
+              "testKubernetesPodDelete",
+              "testPodScaleUp",
+              "testPodScaleDown"
+            ]
           }
         },
-        "actions": [
-          {
-            "action_id":"resilience-tests"
-          },
-          {
-            "action_id": "goss",
-            "params": {
-              "resources": {
-                "path": "/.vib/redis/sentinel"
-              },
-              "remote": {
-                "workload": "sts-redis-node"
-              }
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/redis/sentinel"
+            },
+            "remote": {
+              "workload": "sts-redis-node"
             }
           }
-        ]
-      }
+        }
+      ]
     }
   }
+}
