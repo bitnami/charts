@@ -1947,7 +1947,7 @@ clairImage:
   ##
   registry: docker.io
   repository: bitnami/harbor-clair
-  tag: 2.4.1-debian-10-r60
+  tag: 2.4.1-debian-10-r69
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2913,7 +2913,7 @@ postgresql:
   enabled: true
   nameOverride: ""
   postgresqlUsername: postgres
-  postgresqlPassword: not-secure-database-password
+  postgresqlPassword: randomPassword
   ## Name of existing secret to use for PostgreSQL passwords.
   ## If an existingSecret is used it will overwrite postgresqlUsername and postgresqlPassword.
   ## The secret has to contain at least the key postgresql-postgres-password.
