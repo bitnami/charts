@@ -1,9 +1,13 @@
 <!--- app-name: Data Platform Blueprint 1 -->
 
-# Data Platform Blueprint 1 with Kafka-Spark-Solr
+# Data Platform Blueprint 1 packaged by Bitnami
 
-This Helm chart enables the fully automated Kubernetes deployment of such multi-stack data platform including Zookeeper, Kafka, Solr, Spark and dataplatform exporters
+This Helm chart can be used for the automated deployment of a data platform blueprint containing Kafka, Apache Spark, and Solr. It covers optimized pod sizing and placement diversity rules.
 
+[Overview of Data Platform Blueprint 1](https://github.com/bitnami/dataplatform-exporter)
+
+
+                           
 ## TL;DR
 
 ```console
@@ -19,16 +23,16 @@ common data management services, accelerating the development and deployment of 
 
 This Helm chart enables the fully automated Kubernetes deployment of such multi-stack data platform, covering the following software components:
 
--   Apache Kafka – Data distribution bus with buffering capabilities
--   Apache Spark – In-memory data analytics
--   Solr – Data persistence and search
--   Data Platform Signature State Controller – Kubernetes controller that emits data platform health and state metrics in Prometheus format.
+-   Apache Kafka ��� Data distribution bus with buffering capabilities
+-   Apache Spark ��� In-memory data analytics
+-   Solr ��� Data persistence and search
+-   Data Platform Signature State Controller ��� Kubernetes controller that emits data platform health and state metrics in Prometheus format.
 
 These containerized stateful software stacks are deployed in multi-node cluster configurations, which is defined by the
 Helm chart blueprint for this data platform deployment, covering:
 
--   Pod placement rules – Affinity rules to ensure placement diversity to prevent single point of failures and optimize load distribution
--   Pod resource sizing rules – Optimized Pod and JVM sizing settings for optimal performance and efficient resource usage
+-   Pod placement rules ��� Affinity rules to ensure placement diversity to prevent single point of failures and optimize load distribution
+-   Pod resource sizing rules ��� Optimized Pod and JVM sizing settings for optimal performance and efficient resource usage
 -   Default settings to ensure Pod access security
 -   Optional [Tanzu Observability](https://docs.wavefront.com/kubernetes.html) framework configuration
 
