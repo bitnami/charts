@@ -51,4 +51,4 @@ jobs:
           cat raw-inputs | sed 's/bitnami/charts\/bitnami/' > prepared-inputs
 
       - name: Execute readme-generator-for-helm
-        run: readme-generator-for-helm/bin/index.js --values $(cat prepared-inputs | grep values) --metadata /tmp/chart-schema.json
+        run: readme-generator-for-helm/bin/index.js --values $(cat prepared-inputs | grep values) --schema /tmp/chart-schema.json
