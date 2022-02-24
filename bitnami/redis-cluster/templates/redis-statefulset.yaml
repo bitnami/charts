@@ -348,7 +348,7 @@ spec:
         {{- if .Values.redis.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.redis.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
-      {{- $needsVolumePermissions := and .Values.volumePermissions.enabled (and  .Values.persistence.enabled .Values.containerSecurityContext.enabled) }}
+      {{- $needsVolumePermissions := and .Values.volumePermissions.enabled .Values.containerSecurityContext.enabled }}
       {{- if or $needsVolumePermissions .Values.sysctlImage.enabled .Values.redis.initContainers }}
       initContainers:
         {{- if $needsVolumePermissions }}
@@ -402,10 +402,6 @@ spec:
         - name: default-config
           configMap:
             name: {{ include "common.names.fullname" . }}-default
-        {{- if not .Values.persistence.enabled }}
-        - name: "redis-data"
-          emptyDir: {}
-        {{- end }}
         {{- if .Values.sysctlImage.mountHostSys }}
         - name: host-sys
           hostPath:
@@ -422,7 +418,6 @@ spec:
             secretName: {{ include "redis-cluster.tlsSecretName" . }}
             defaultMode: 256
         {{- end }}
-  {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: redis-data
@@ -450,5 +445,4 @@ spec:
           {{- toYaml .Values.persistence.matchExpressions | nindent 12 }}
         {{- end -}}
         {{- end }}
-  {{- end }}
 {{- end }}
