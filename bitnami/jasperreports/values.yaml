@@ -42,21 +42,21 @@ clusterDomain: cluster.local
 ##
 extraDeploy: []
 
-## @section Jasper&reg;eports parameters
+## @section JasperReports parameters
 ##
 
-## Bitnami Jasper&reg;eports image version
+## Bitnami JasperReports image version
 ## ref: https://hub.docker.com/r/bitnami/dokuwiki/tags/
-## @param image.registry Jasper&reg;eports image registry
-## @param image.repository Jasper&reg;eports image repository
-## @param image.tag Jasper&reg;eports image tag (immutable tags are recommended)
-## @param image.pullPolicy Jasper&reg;eports image pull policy
+## @param image.registry JasperReports image registry
+## @param image.repository JasperReports image repository
+## @param image.tag JasperReports image tag (immutable tags are recommended)
+## @param image.pullPolicy JasperReports image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ##
 image:
   registry: docker.io
   repository: bitnami/jasperreports
-  tag: 7.8.1-debian-10-r70
+  tag: 7.8.1-debian-10-r78
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -70,16 +70,16 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-## @param jasperreportsUsername Jasper&reg;eports user
+## @param jasperreportsUsername JasperReports user
 ## ref: https://github.com/bitnami/bitnami-docker-jasperreports#configuration
 ##
 jasperreportsUsername: jasperadmin
-## @param jasperreportsPassword Jasper&reg;eports password
+## @param jasperreportsPassword JasperReports password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-jasperreports#configuration
 ##
 jasperreportsPassword: ""
-## @param jasperreportsEmail Jasper&reg;eports user email
+## @param jasperreportsEmail JasperReports user email
 ## ref: https://github.com/bitnami/bitnami-docker-jasperreports#configuration
 ##
 jasperreportsEmail: user@example.com
@@ -140,7 +140,7 @@ hostAliases: []
 ##
 containerPorts:
   http: 8080
-## Jasper&reg;eports pods' Security Context
+## JasperReports pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param podSecurityContext.enabled Enable pod's Security Context
 ## @param podSecurityContext.fsGroup Set pod's Security Context fsGroup
@@ -148,7 +148,7 @@ containerPorts:
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-## Jasper&reg;eports containers' SecurityContext
+## JasperReports containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param containerSecurityContext.enabled Enable container's Security Context
 ## @param containerSecurityContext.runAsUser Set container's Security Context runAsUser
@@ -158,7 +158,7 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
-## Jasper&reg;eports resource requests and limits
+## JasperReports resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
@@ -177,7 +177,7 @@ resources:
   requests:
     memory: 512Mi
     cpu: 300m
-## Jasper&reg;eports containers' liveness, readiness and startup probes.
+## JasperReports containers' liveness, readiness and startup probes.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param startupProbe.enabled Enable startupProbe
 ## @param startupProbe.path Request path for startupProbe
@@ -211,7 +211,7 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-## Jasper&reg;eports containers' readiness probe
+## JasperReports containers' readiness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param readinessProbe.enabled Enable readinessProbe
 ## @param readinessProbe.path Request path for readinessProbe
@@ -286,7 +286,7 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-## @param priorityClassName Jasper&reg;eports pods' priorityClassName
+## @param priorityClassName JasperReports pods' priorityClassName
 ##
 priorityClassName: ""
 ## @param schedulerName Name of the k8s scheduler (other than default)
@@ -417,7 +417,7 @@ service:
   sessionAffinityConfig: {}
 
 ## Configure the ingress resource that allows you to access the
-## Jasper&reg;eports installation. Set up the URL
+## JasperReports installation. Set up the URL
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:

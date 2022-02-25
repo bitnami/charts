@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -20,6 +21,7 @@ global:
     password: ""
 
 ## @section Redis&trade; Cluster Common parameters
+##
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -56,6 +58,7 @@ diagnosticMode:
     - infinity
 
 ## @section Redis&trade; Cluster Common parameters
+##
 
 ## Bitnami Redis&trade; image version
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
@@ -72,7 +75,7 @@ image:
   ## Bitnami Redis&trade; image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.2.6-debian-10-r95
+  tag: 6.2.6-debian-10-r138
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -258,6 +261,7 @@ service:
   clusterIP: ""
   ## @param service.loadBalancerIP Load balancer IP if `service.type` is `LoadBalancer`
   ## If service.type is LoadBalancer, request a specific static IP address if supported by the cloud provider, otherwise leave blank
+  ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
@@ -274,9 +278,6 @@ service:
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
-  ## @param persistence.enabled Use a PVC to persist data.
-  ##
-  enabled: true
   ## @param persistence.path Path to mount the volume at, to use other images Redis&trade; images.
   ##
   path: /bitnami/redis/data
@@ -325,7 +326,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r306
+    tag: 10-debian-10-r347
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -345,11 +346,13 @@ volumePermissions:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
 ## PodSecurityPolicy configuration
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
@@ -359,6 +362,7 @@ podSecurityPolicy:
   create: false
 
 ## @section Redis&trade; statefulset parameters
+##
 
 redis:
   ## @param redis.command Redis&trade; entrypoint string. The command `redis-server` is executed if this is not provided
@@ -462,11 +466,13 @@ redis:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}
   ## @param redis.schedulerName Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
@@ -575,6 +581,7 @@ redis:
   topologySpreadConstraints: []
 
 ## @section Cluster update job parameters
+##
 
 ## Cluster update job settings
 ##
@@ -680,14 +687,17 @@ updateJob:
     ## limits:
     ##    cpu: 500m
     ##    memory: 1Gi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
 
 ## @section Cluster management parameters
+##
 
 ## Redis&trade; Cluster settings
 ##
@@ -745,6 +755,7 @@ cluster:
     newExternalIPs: []
 
 ## @section Metrics sidecar parameters
+##
 
 ## Prometheus Exporter / Metrics
 ##
@@ -761,7 +772,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.33.0-debian-10-r21
+    tag: 1.35.1-debian-10-r8
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -786,6 +797,7 @@ metrics:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9121"
   ## @param metrics.podLabels Additional labels for Metrics exporter pod
+  ##
   podLabels: {}
   ## Enable this if you're using https://github.com/coreos/prometheus-operator
   ##
@@ -893,6 +905,7 @@ metrics:
     labels: {}
 
 ## @section Sysctl Image parameters
+##
 
 ## Sysctl InitContainer
 ## Used to perform sysctl operation to modify Kernel settings (needed sometimes to avoid warnings)
@@ -912,7 +925,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r306
+  tag: 10-debian-10-r347
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -935,9 +948,11 @@ sysctlImage:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}

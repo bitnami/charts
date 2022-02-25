@@ -91,7 +91,7 @@ Get PostgreSQL user
 */}}
 {{- define "kong.postgresql.user" -}}
 {{- if .Values.postgresql.enabled -}}
-  {{- .Values.postgresql.postgresqlUsername -}}
+  {{- .Values.postgresql.auth.username -}}
 {{- else -}}
   {{ .Values.postgresql.external.user }}
 {{- end -}}
@@ -101,7 +101,7 @@ Get PostgreSQL user
 Get Cassandra user
 */}}
 {{- define "kong.cassandra.user" -}}
-{{- if .Values.postgresql.enabled -}}
+{{- if .Values.cassandra.enabled -}}
   {{- .Values.cassandra.dbUser.user -}}
 {{- else -}}
   {{ .Values.cassandra.external.user }}
@@ -125,8 +125,8 @@ Get Cassandra secret
 Get PostgreSQL secret
 */}}
 {{- define "kong.postgresql.secretName" -}}
-{{- if .Values.postgresql.existingSecret -}}
-  {{- .Values.postgresql.existingSecret -}}
+{{- if .Values.postgresql.auth.existingSecret -}}
+  {{- .Values.postgresql.auth.existingSecret -}}
 {{- else if .Values.postgresql.enabled }}
   {{- template "kong.postgresql.fullname" . -}}
 {{- else -}}
@@ -145,7 +145,7 @@ Return the proper Docker Image Registry Secret Names
 Return true if a secret for a external database should be created
 */}}
 {{- define "kong.createExternalDBSecret" -}}
-{{- if and (not .Values.postgresql.enabled) (not .Values.cassandra.enabled) (not .Values.cassandra.existingSecret) (not .Values.postgresql.existingSecret) -}}
+{{- if and (not .Values.postgresql.enabled) (not .Values.cassandra.enabled) (not .Values.cassandra.existingSecret) (not .Values.postgresql.auth.existingSecret) -}}
   {{- true -}}
 {{- end -}}
 {{- end -}}
