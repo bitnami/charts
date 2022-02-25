@@ -11,6 +11,7 @@ dependencies:
   - name: postgresql
     repository: https://charts.bitnami.com/bitnami
     version: 10.x.x
+    condition: packaging.helm.enabled
   # Currently redis is only used for an in-progress plugin for flux support.
   # Our upstream bitnami/kubeapps chart should not include redis as a
   # dependency yet, and in development we can set redis.enabled if developing
@@ -33,4 +34,5 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/kubeapps/kubeapps
-version: 7.8.4
+version: 7.8.5
+
