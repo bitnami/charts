@@ -111,7 +111,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | ----------------------------- | ----------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`              | Thanos image registry                                                                     | `docker.io`         |
 | `image.repository`            | Thanos image repository                                                                   | `bitnami/thanos`    |
-| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.24.0-scratch-r0` |
+| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.24.0-scratch-r7` |
 | `image.pullPolicy`            | Thanos image pull policy                                                                  | `IfNotPresent`      |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                |
 | `objstoreConfig`              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                    | `""`                |
@@ -1044,19 +1044,20 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `10-debian-10-r287`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `10-debian-10-r333`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                | `[]`                    |
 
 
 ### MinIO&reg; chart parameters
 
-| Name                      | Description                                                               | Value    |
-| ------------------------- | ------------------------------------------------------------------------- | -------- |
-| `minio.enabled`           | Enable/disable MinIO&reg; chart installation                              | `false`  |
-| `minio.auth.rootUser`     | MinIO&reg; root username                                                  | `admin`  |
-| `minio.auth.rootPassword` | Password for MinIO&reg; root user                                         | `""`     |
-| `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create | `thanos` |
+| Name                      | Description                                                                                                                    | Value    |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------- |
+| `minio`                   | For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/master/bitnami/minio) |          |
+| `minio.enabled`           | Enable/disable MinIO&reg; chart installation                                                                                        | `false`  |
+| `minio.auth.rootUser`     | MinIO&reg; root username                                                                                                            | `admin`  |
+| `minio.auth.rootPassword` | Password for MinIO&reg; root user                                                                                                   | `""`     |
+| `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create                                                           | `thanos` |
 
 
 ### NetWorkPolicy parameters
