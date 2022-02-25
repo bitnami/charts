@@ -26,7 +26,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.master.ingress.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "elasticsearch.master.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "elasticsearch.master.fullname" .) "servicePort" (include "elasticsearch.httpPortName" .) "context" $)  | nindent 14 }}
       {{- if ne .Values.master.ingress.hostname "*" }}
       host: {{ .Values.master.ingress.hostname }}
       {{- end }}
@@ -39,7 +39,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "elasticsearch.master.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "elasticsearch.master.fullname" $) "servicePort" (include "elasticsearch.httpPortName" .) "context" $) | nindent 14 }}
     {{- end }}
   {{- if or .Values.master.ingress.tls .Values.master.ingress.extraTls }}
   tls:

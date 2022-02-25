@@ -49,7 +49,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/tensorflow-serving
-    tag: 2.7.0-debian-10-r84
+    tag: 2.8.0-debian-10-r7
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -63,19 +63,19 @@ server:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-## TensorFlow &reg;esNet image version
+## TensorFlow ResNet image version
 ## ref: https://hub.docker.com/r/bitnami/tensorflow-resnet/tags/
-## @param client.image.registry TensorFlow &reg;esNet image registry
-## @param client.image.repository TensorFlow &reg;esNet image repository
-## @param client.image.tag TensorFlow &reg;esNet Image tag (immutable tags are recommended)
-## @param client.image.pullPolicy TensorFlow &reg;esNet image pull policy
+## @param client.image.registry TensorFlow ResNet image registry
+## @param client.image.repository TensorFlow ResNet image repository
+## @param client.image.tag TensorFlow ResNet Image tag (immutable tags are recommended)
+## @param client.image.pullPolicy TensorFlow ResNet image pull policy
 ## @param client.image.pullSecrets Specify docker-registry secret names as an array
 ##
 client:
   image:
     registry: docker.io
     repository: bitnami/tensorflow-resnet
-    tag: 2.7.0-debian-10-r29
+    tag: 2.8.0-debian-10-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

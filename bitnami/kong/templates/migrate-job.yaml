@@ -53,15 +53,15 @@ spec:
             {{- if (eq .Values.database "postgresql") }}
             - name: KONG_DATABASE
               value: "postgres"
-            {{- if .Values.postgresql.usePasswordFile }}
+            {{- if .Values.postgresql.auth.usePasswordFiles }}
             - name: KONG_POSTGRESQL_PASSWORD_FILE
-              value: "/bitnami/kong/secrets/postgresql-password"
+              value: "/bitnami/kong/secrets/password"
             {{- else }}
             - name: KONG_PG_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "kong.postgresql.secretName" . }}
-                  key: postgresql-password
+                  key: password
             {{- end }}
             - name: KONG_PG_HOST
               value: {{ include "kong.postgresql.host" . }}
