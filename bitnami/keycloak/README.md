@@ -2,12 +2,12 @@
 
 # Keycloak packaged by Bitnami
 
-Keycloak is a high performance Java-based identity and access management solution. It lets developers add an authentication layer to their applications with minimum effort. 
+Keycloak is a high performance Java-based identity and access management solution. It lets developers add an authentication layer to their applications with minimum effort.
 
 [Overview of Keycloak](https://www.keycloak.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -289,20 +289,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                              | Description                                                                   | Value              |
-| --------------------------------- | ----------------------------------------------------------------------------- | ------------------ |
-| `postgresql.enabled`              | Deploy a PostgreSQL server to satisfy the applications database requirements  | `true`             |
-| `postgresql.postgresqlUsername`   | Keycloak PostgreSQL user (has superuser privileges if username is `postgres`) | `bn_keycloak`      |
-| `postgresql.postgresqlPassword`   | Keycloak PostgreSQL password - ignored if existingSecret is provided          | `""`               |
-| `postgresql.postgresqlDatabase`   | Name of the database to create                                                | `bitnami_keycloak` |
-| `postgresql.existingSecret`       | Use an existing secret file with the PostgreSQL password                      | `""`               |
-| `postgresql.persistence.enabled`  | Enable PostgreSQL persistence using PVC                                       | `true`             |
-| `externalDatabase.host`           | Host of the external database                                                 | `""`               |
-| `externalDatabase.port`           | Database port                                                                 | `5432`             |
-| `externalDatabase.user`           | non admin username for Keycloak Database                                      | `bn_keycloak`      |
-| `externalDatabase.password`       | Database password                                                             | `""`               |
-| `externalDatabase.database`       | Database name                                                                 | `bitnami_keycloak` |
-| `externalDatabase.existingSecret` | Use an existing secret file with the external PostgreSQL credentials          | `""`               |
+| Name                                   | Description                                                                                         | Value              |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------ |
+| `postgresql.enabled`                   | Deploy a PostgreSQL server to satisfy the applications database requirements                        | `true`             |
+| `postgresql.postgresqlUsername`        | Keycloak PostgreSQL user (has superuser privileges if username is `postgres`)                       | `bn_keycloak`      |
+| `postgresql.postgresqlPassword`        | Keycloak PostgreSQL password - ignored if existingSecret is provided                                | `""`               |
+| `postgresql.postgresqlDatabase`        | Name of the database to create                                                                      | `bitnami_keycloak` |
+| `postgresql.existingSecret`            | Use an existing secret file with the PostgreSQL password                                            | `""`               |
+| `postgresql.persistence.enabled`       | Enable PostgreSQL persistence using PVC                                                             | `true`             |
+| `externalDatabase.host`                | Host of the external database                                                                       | `""`               |
+| `externalDatabase.port`                | Database port                                                                                       | `5432`             |
+| `externalDatabase.user`                | non admin username for Keycloak Database                                                            | `bn_keycloak`      |
+| `externalDatabase.password`            | Database password                                                                                   | `""`               |
+| `externalDatabase.database`            | Database name                                                                                       | `bitnami_keycloak` |
+| `externalDatabase.existingSecret`      | Use an existing secret file with the external PostgreSQL credentials                                | `""`               |
+| `externalDatabase.extraJdbcParameters` | Additional JDBC parameters in query string format (these parameters are used in the connection url) | `""`               |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

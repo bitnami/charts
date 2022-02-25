@@ -951,3 +951,7 @@ externalDatabase:
   ## @param externalDatabase.existingSecret Use an existing secret file with the external PostgreSQL credentials
   ##
   existingSecret: ""
+  ## @param externalDatabase.extraJdbcParameters Additional JDBC parameters in query string format (these parameters are used in the connection url)
+  ## e.g:
+  ##   extraJdbcParameters: "param1=value1&param2=value2"
+  extraJdbcParameters: ""
