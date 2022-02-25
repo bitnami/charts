@@ -173,7 +173,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-10-r27
+    tag: 1.21.6-debian-10-r28
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -437,7 +437,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.4.3-debian-10-r6
+    tag: 2.4.3-debian-10-r7
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1335,7 +1335,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.2.1-debian-10-r62
+    tag: 7.2.1-debian-10-r63
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1448,7 +1448,7 @@ pinnipedProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.4.3-debian-10-r11
+    tag: 2.4.3-debian-10-r12
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1567,7 +1567,7 @@ rbac:
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.21.6-debian-10-r27
+  tag: 1.21.6-debian-10-r28
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1636,7 +1636,7 @@ kubeappsapis:
   ## set this value if you want to manually override the list of plugins
   ## enabled for the service.
   ##
-  enabledPlugins:
+  enabledPlugins: []
   pluginConfig:
     core:
       packages:
@@ -1656,7 +1656,7 @@ kubeappsapis:
           ## @param kubeappsapis.pluginConfig.kappController.packages.v1alpha1.defaultUpgradePolicy Default upgrade policy generating version constraints
           ## enum: [ "major", "minor", "patch", "none" ]
           defaultUpgradePolicy: none
-          ## @param kubeappsapis.pluginConfig.kappController.packages.v1alpha1.defaultPrereleasesVersionSelection Default policy for allowing prereleases containing one of the identifiers
+          ## @param kubeappsapis.pluginConfig.kappController.packages.v1alpha1.defaultPrereleasesVersionSelection [array,nullable] Default policy for allowing prereleases containing one of the identifiers
           ## ref: https://carvel.dev/kapp-controller/docs/latest/package-consumer-concepts/#prereleases
           ## e.g:
           # defaultPrereleasesVersionSelection:
@@ -1676,7 +1676,7 @@ kubeappsapis:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.4.3-debian-10-r14
+    tag: 2.4.3-debian-10-r15
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
