@@ -193,6 +193,33 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
+{{/* Exporter component container port */}}
+{{- define "harbor.exporter.containerPort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "8443" -}}
+  {{- else -}}
+    {{- printf "8080" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Exporter component service port */}}
+{{- define "harbor.exporter.servicePort" -}}
+  {{- if .Values.internalTLS.enabled -}}
+    {{- printf "443" -}}
+  {{- else -}}
+    {{- printf "80" -}}
+  {{- end -}}
+{{- end -}}}
+
+{{/* Port name for metrics */}}
+{{- define "harbor.metricsPortName" -}}
+  {{- if .Values.internalTLS.enabled }}
+    {{- printf "https-metrics" -}}
+  {{- else -}}
+    {{- printf "http-metrics" -}}
+  {{- end -}}
+{{- end -}}
+
 {{/* Clair Adadpter URL */}}
 {{- define "harbor.clairAdapter.url" -}}
   {{- printf "%s://%s:%s" (include "harbor.component.scheme" .) (include "harbor.clair" .) (include "harbor.clairAdapter.servicePort" .) -}}
@@ -681,6 +708,10 @@ Return whether Redis&trade; uses password authentication or not
   {{- printf "%s-nginx" (include "common.names.fullname" .) -}}
 {{- end -}}
 
+{{- define "harbor.exporter" -}}
+  {{- printf "%s-exporter" (include "common.names.fullname" .) -}}
+{{- end -}}
+
 {{- define "harbor.ingress" -}}
   {{- printf "%s-ingress" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -775,6 +806,13 @@ Return the proper Nginx image name
 */}}
 {{- define "harbor.nginxImage" -}}
 {{- include "common.images.image" ( dict "imageRoot" .Values.nginxImage "global" .Values.global ) -}}
+{{- end -}}
+
+{{/*
+Return the proper Harbor Exporter image name
+*/}}
+{{- define "harbor.exporterImage" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.exporterImage "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*

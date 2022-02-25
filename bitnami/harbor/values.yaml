@@ -2896,6 +2896,212 @@ trivy:
   ##
   podAnnotations: {}
 
+## Bitnami Harbor Exporter image
+## ref: https://hub.docker.com/r/bitnami/harbor-exporter/tags/
+##
+exporterImage:
+  ## @param exporterImage.registry Registry for exporter image
+  ## @param exporterImage.repository Repository for exporter image
+  ## @param exporterImage.tag Tag for exporter image
+  ## @param exporterImage.pullPolicy Harbor exporter image pull policy
+  ## @param exporterImage.pullSecrets Specify docker-registry secret names as an array
+  ## @param exporterImage.debug Specify if debug logs should be enabled
+  ##
+  registry: docker.io
+  repository: bitnami/harbor-exporter
+  # TODO cambiar esto
+  tag: development
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ## It turns BASH and/or NAMI debugging in the image
+  ##
+  debug: false
+## Exporter Parameters
+##
+exporter:
+  ## @param exporter.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param exporter.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param exporter.replicas The replica count
+  ##
+  replicas: 1
+  ## @param exporter.updateStrategy.type The update strategy for deployments with persistent volumes: RollingUpdate or Recreate. Set it as Recreate when RWM for volumes isn't supported
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
+  updateStrategy:
+    type: RollingUpdate
+  ## Use TLS in the container
+  ## TODO check this!!
+  tls:
+    ## @param exporter.tls.existingSecret Name of a secret with the certificates for internal TLS access. Requires internalTLS.enabled to be set to true. If this values is not set it will be automatically generated
+    ##
+    existingSecret: ""
+  ## @param exporter.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
+  ##
+  lifecycleHooks: {}
+  ## @param exporter.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param exporter.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## @param exporter.extraEnvVars Array containing extra env vars
+  ## For example:
+  ##  - name: BEARER_AUTH
+  ##    value: true
+  ##
+  extraEnvVars: []
+  ## @param exporter.extraEnvVarsCM ConfigMap containing extra env vars
+  ##
+  extraEnvVarsCM: ""
+  ## @param exporter.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
+  ##
+  extraEnvVarsSecret: ""
+  ## @param exporter.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`
+  ##
+  extraVolumes: []
+  ## @param exporter.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`.
+  ##
+  extraVolumeMounts: []
+  ## @param exporter.hostAliases Specify hostAliases for the Pod to use
+  ##
+  hostAliases: []
+  ## @param exporter.initContainers Add additional init containers to the pod (evaluated as a template)
+  ##
+  initContainers: []
+  ## @param exporter.sidecars Attach additional containers to the pod (evaluated as a template)
+  ##
+  sidecars: []
+  ## Harbor Exporter containers' resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param exporter.resources.limits The resources limits for the container
+  ## @param exporter.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 500m
+    ##    memory: 1Gi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
+    requests: {}
+  ## @param exporter.podAffinityPreset Harbor Exporter Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param exporter.podAntiAffinityPreset Harbor Exporter Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param exporter.nodeAffinityPreset.type Harbor Exporter Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param exporter.nodeAffinityPreset.key Harbor Exporter Node label key to match Ignored if `affinity` is set.
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## @param exporter.nodeAffinityPreset.values Harbor Exporter Node label values to match. Ignored if `affinity` is set.
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param exporter.affinity Harbor Exporter Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param exporter.priorityClassName Exporter pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
+  ## @param exporter.nodeSelector Harbor Exporter Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param exporter.tolerations Harbor Exporter Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param exporter.podLabels Add additional labels to the pod (evaluated as a template)
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param exporter.podAnnotations Annotations to add to the exporter pod
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param exporter.secret Secret used when the job service communicates with other components. If a secret key is not specified, Helm will generate one. Must be a string of 16 chars.
+  ## If a secret key is not specified, Helm will generate one.
+  ## Must be a string of 16 chars.
+  ##
+  secret: ""
+  ## @param exporter.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
+  ## Harbor Exporter containers' liveness probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param exporter.livenessProbe.enabled Enable livenessProbe
+  ## @param exporter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param exporter.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param exporter.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param exporter.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param exporter.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## Harbor Exporter containers' readiness probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param exporter.readinessProbe.enabled Enable readinessProbe
+  ## @param exporter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param exporter.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param exporter.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param exporter.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param exporter.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+
 ## @section PostgreSQL Parameters
 
 ## PostgreSQL chart configuration
@@ -3085,3 +3291,40 @@ externalRedis:
   chartmuseumDatabaseIndex: '3'
   clairAdapterDatabaseIndex: '4'
   trivyAdapterDatabaseIndex: '5'
+
+# TODO: Clean
+# exporter:
+#     replicas: 1
+#   # resources:
+#   #  requests:
+#   #    memory: 256Mi
+#   #    cpu: 100m
+#     podAnnotations: {}
+#     serviceAccountName: ""
+#     # mount the service account token
+#     automountServiceAccountToken: false
+#     image:
+#       repository: goharbor/harbor-exporter
+#       tag: dev
+#     nodeSelector: {}
+#     tolerations: []
+#     affinity: {}
+#     cacheDuration: 23
+#     cacheCleanInterval: 14400
+#     ## The priority class to run the pod as
+#     priorityClassName:
+
+metrics:
+  enabled: false
+  core:
+    path: /metrics
+    port: 8001
+  registry:
+    path: /metrics
+    port: 8001
+  jobservice:
+    path: /metrics
+    port: 8001
+  exporter:
+    path: /metrics
+    port: 8001

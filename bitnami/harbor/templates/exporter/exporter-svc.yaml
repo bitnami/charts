@@ -1,0 +1,20 @@
+{{- if .Values.metrics.enabled}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ template "harbor.exporter" . }}"
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: exporter
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  ports:
+    - name: {{ template "harbor.metricsPortName" . }}
+      port: {{ .Values.metrics.exporter.port }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    component: exporter
+{{ end }}
