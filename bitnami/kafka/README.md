@@ -393,37 +393,39 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kafka provisioning parameters
 
-| Name                                                 | Description                                                                                                                         | Value            |
-| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `provisioning.enabled`                               | Enable kafka provisioning Job                                                                                                       | `false`          |
-| `provisioning.auth.tls.type`                         | Format to use for TLS certificates. Allowed types: `jks` and `pem`.                                                                 | `jks`            |
-| `provisioning.auth.tls.certificatesSecret`           | Existing secret containing the TLS certificates for the Kafka provisioning Job.                                                     | `""`             |
-| `provisioning.auth.tls.cert`                         | The secret key from the certificatesSecret if 'cert' key different from the default (tls.crt)                                       | `tls.crt`        |
-| `provisioning.auth.tls.key`                          | The secret key from the certificatesSecret if 'key' key different from the default (tls.key)                                        | `tls.key`        |
-| `provisioning.auth.tls.caCert`                       | The secret key from the certificatesSecret if 'caCert' key different from the default (ca.crt)                                      | `ca.crt`         |
-| `provisioning.auth.tls.keystore`                     | The secret key from the certificatesSecret if 'keystore' key different from the default (keystore.jks)                              | `keystore.jks`   |
-| `provisioning.auth.tls.truststore`                   | The secret key from the certificatesSecret if 'truststore' key different from the default (truststore.jks)                          | `truststore.jks` |
-| `provisioning.auth.tls.password`                     | Password to access the JKS files or PEM key when they are password-protected.                                                       | `""`             |
-| `provisioning.auth.tls.existingSecret`               | Name of the secret containing the password to access the JKS files or PEM key when they are password-protected. (`key`: `password`) | `""`             |
-| `provisioning.numPartitions`                         | Default number of partitions for topics when unspecified                                                                            | `1`              |
-| `provisioning.replicationFactor`                     | Default replication factor for topics when unspecified                                                                              | `1`              |
-| `provisioning.topics`                                | Kafka provisioning topics                                                                                                           | `[]`             |
-| `provisioning.command`                               | Override provisioning container command                                                                                             | `[]`             |
-| `provisioning.args`                                  | Override provisioning container arguments                                                                                           | `[]`             |
-| `provisioning.podAnnotations`                        | Extra annotations for Kafka provisioning pods                                                                                       | `{}`             |
-| `provisioning.podLabels`                             | Extra labels for Kafka provisioning pods                                                                                            | `{}`             |
-| `provisioning.resources.limits`                      | The resources limits for the Kafka provisioning container                                                                           | `{}`             |
-| `provisioning.resources.requests`                    | The requested resources for the Kafka provisioning container                                                                        | `{}`             |
-| `provisioning.podSecurityContext.enabled`            | Enable security context for the pods                                                                                                | `true`           |
-| `provisioning.podSecurityContext.fsGroup`            | Set Kafka provisioning pod's Security Context fsGroup                                                                               | `1001`           |
-| `provisioning.containerSecurityContext.enabled`      | Enable Kafka provisioning containers' Security Context                                                                              | `true`           |
-| `provisioning.containerSecurityContext.runAsUser`    | Set Kafka provisioning containers' Security Context runAsUser                                                                       | `1001`           |
-| `provisioning.containerSecurityContext.runAsNonRoot` | Set Kafka provisioning containers' Security Context runAsNonRoot                                                                    | `true`           |
-| `provisioning.schedulerName`                         | Name of the k8s scheduler (other than default) for kafka provisioning                                                               | `""`             |
-| `provisioning.extraVolumes`                          | Optionally specify extra list of additional volumes for the Kafka provisioning pod(s)                                               | `[]`             |
-| `provisioning.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Kafka provisioning container(s)                                    | `[]`             |
-| `provisioning.sidecars`                              | Add additional sidecar containers to the Kafka provisioning pod(s)                                                                  | `[]`             |
-| `provisioning.initContainers`                        | Add additional Add init containers to the Kafka provisioning pod(s)                                                                 | `[]`             |
+| Name                                                 | Description                                                                                                         | Value                 |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `provisioning.enabled`                               | Enable kafka provisioning Job                                                                                       | `false`               |
+| `provisioning.auth.tls.type`                         | Format to use for TLS certificates. Allowed types: `jks` and `pem`.                                                 | `jks`                 |
+| `provisioning.auth.tls.certificatesSecret`           | Existing secret containing the TLS certificates for the Kafka provisioning Job.                                     | `""`                  |
+| `provisioning.auth.tls.cert`                         | The secret key from the certificatesSecret if 'cert' key different from the default (tls.crt)                       | `tls.crt`             |
+| `provisioning.auth.tls.key`                          | The secret key from the certificatesSecret if 'key' key different from the default (tls.key)                        | `tls.key`             |
+| `provisioning.auth.tls.caCert`                       | The secret key from the certificatesSecret if 'caCert' key different from the default (ca.crt)                      | `ca.crt`              |
+| `provisioning.auth.tls.keystore`                     | The secret key from the certificatesSecret if 'keystore' key different from the default (keystore.jks)              | `keystore.jks`        |
+| `provisioning.auth.tls.truststore`                   | The secret key from the certificatesSecret if 'truststore' key different from the default (truststore.jks)          | `truststore.jks`      |
+| `provisioning.auth.tls.existingSecret`               | Name of the secret containing passwords to access the JKS files or PEM key when they are password-protected.        | `""`                  |
+| `provisioning.auth.tls.keyPassword`                  | The secret key from the existingSecret if 'keyPassword' key different from the default (key-password)               | `key-password`        |
+| `provisioning.auth.tls.keystorePassword`             | The secret key from the existingSecret if 'param' key different from the default (keystore-password)                | `keystore-password`   |
+| `provisioning.auth.tls.truststorePassword`           | The secret key from the existingSecret if 'truststorePassword' key different from the default (truststore-password) | `truststore-password` |
+| `provisioning.numPartitions`                         | Default number of partitions for topics when unspecified                                                            | `1`                   |
+| `provisioning.replicationFactor`                     | Default replication factor for topics when unspecified                                                              | `1`                   |
+| `provisioning.topics`                                | Kafka provisioning topics                                                                                           | `[]`                  |
+| `provisioning.command`                               | Override provisioning container command                                                                             | `[]`                  |
+| `provisioning.args`                                  | Override provisioning container arguments                                                                           | `[]`                  |
+| `provisioning.podAnnotations`                        | Extra annotations for Kafka provisioning pods                                                                       | `{}`                  |
+| `provisioning.podLabels`                             | Extra labels for Kafka provisioning pods                                                                            | `{}`                  |
+| `provisioning.resources.limits`                      | The resources limits for the Kafka provisioning container                                                           | `{}`                  |
+| `provisioning.resources.requests`                    | The requested resources for the Kafka provisioning container                                                        | `{}`                  |
+| `provisioning.podSecurityContext.enabled`            | Enable security context for the pods                                                                                | `true`                |
+| `provisioning.podSecurityContext.fsGroup`            | Set Kafka provisioning pod's Security Context fsGroup                                                               | `1001`                |
+| `provisioning.containerSecurityContext.enabled`      | Enable Kafka provisioning containers' Security Context                                                              | `true`                |
+| `provisioning.containerSecurityContext.runAsUser`    | Set Kafka provisioning containers' Security Context runAsUser                                                       | `1001`                |
+| `provisioning.containerSecurityContext.runAsNonRoot` | Set Kafka provisioning containers' Security Context runAsNonRoot                                                    | `true`                |
+| `provisioning.schedulerName`                         | Name of the k8s scheduler (other than default) for kafka provisioning                                               | `""`                  |
+| `provisioning.extraVolumes`                          | Optionally specify extra list of additional volumes for the Kafka provisioning pod(s)                               | `[]`                  |
+| `provisioning.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Kafka provisioning container(s)                    | `[]`                  |
+| `provisioning.sidecars`                              | Add additional sidecar containers to the Kafka provisioning pod(s)                                                  | `[]`                  |
+| `provisioning.initContainers`                        | Add additional Add init containers to the Kafka provisioning pod(s)                                                 | `[]`                  |
 
 
 ### ZooKeeper chart parameters

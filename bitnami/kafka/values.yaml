@@ -1396,13 +1396,18 @@ provisioning:
       ## @param provisioning.auth.tls.truststore The secret key from the certificatesSecret if 'truststore' key different from the default (truststore.jks)
       ##
       truststore: truststore.jks
-      ## @param provisioning.auth.tls.password Password to access the JKS files or PEM key when they are password-protected.
-      ## Note: ignored when using 'existingSecret'.
-      ##
-      password: ""
-      ## @param provisioning.auth.tls.existingSecret Name of the secret containing the password to access the JKS files or PEM key when they are password-protected. (`key`: `password`)
+      ## @param provisioning.auth.tls.existingSecret Name of the secret containing passwords to access the JKS files or PEM key when they are password-protected.
       ##
       existingSecret: ""
+      ## @param provisioning.auth.tls.keyPassword The secret key from the existingSecret if 'keyPassword' key different from the default (key-password)
+      ##
+      keyPassword: key-password
+      ## @param provisioning.auth.tls.keystorePassword The secret key from the existingSecret if 'param' key different from the default (keystore-password)
+      ##
+      keystorePassword: keystore-password
+      ## @param provisioning.auth.tls.truststorePassword The secret key from the existingSecret if 'truststorePassword' key different from the default (truststore-password)
+      ##
+      truststorePassword: truststore-password
   ## @param provisioning.numPartitions Default number of partitions for topics when unspecified
   ##
   numPartitions: 1
