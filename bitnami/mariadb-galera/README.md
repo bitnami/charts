@@ -2,7 +2,7 @@
 
 # MariaDB Galera packaged by Bitnami
 
-MariaDB Galera is a multi-master database cluster solution for synchronous replication and high availability.
+MariaDB Galera is a multi-primary database cluster solution for synchronous replication and high availability.
 
 [Overview of MariaDB Galera](https://mariadb.com/kb/en/library/galera-cluster/)
 
