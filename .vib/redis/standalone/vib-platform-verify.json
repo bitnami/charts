@@ -1,50 +1,55 @@
 {
-    "phases": {
-      "package": {
-        "context": {
-          "resources": {
-            "url": "{SHA_ARCHIVE}",
-            "path": "/bitnami/redis"
-          }
-        },
-        "actions": [
-          {
-            "action_id": "helm-package"
-          }
-        ]
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/redis"
+        }
       },
-      "verify": {
-        "context": {
-          "resources": {
-            "url": "{SHA_ARCHIVE}",
-            "path": "/bitnami/redis"
-          },
-          "runtime_parameters": "YXJjaGl0ZWN0dXJlOiBzdGFuZGFsb25l",
-          "target_platform": {
-            "target_platform_id": "{TARGET_PLATFORM}",
-            "size": {
-              "name": "S4"
-            }
+      "actions": [
+        {
+          "action_id": "helm-package"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/redis"
+        },
+        "runtime_parameters": "YXJjaGl0ZWN0dXJlOiBzdGFuZGFsb25l",
+        "target_platform": {
+          "target_platform_id": "{TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id":"resilience-tests",
+          "params": {
+            "test_cases": [
+              "testKubernetesPodDelete",
+              "testPodScaleUp",
+              "testPodScaleDown"
+            ]
           }
         },
-        "actions": [
-          {
-            "action_id":"resilience-tests"
-          },
-          {
-            "action_id": "goss",
-            "params": {
-              "resources": {
-                "path": "/.vib/redis/standalone"
-              },
-              "config": {
-                "remote": {
-                  "workload": "sts-redis-master"
-                }
-              }
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/redis/standalone"
+            },
+            "remote": {
+              "workload": "sts-redis-master"
             }
           }
-        ]
-      }
+        }
+      ]
     }
   }
+}
