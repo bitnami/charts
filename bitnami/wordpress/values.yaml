@@ -888,7 +888,7 @@ metrics:
     ##
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+      prometheus.io/port: "{{ .Values.metrics.containerPorts.metrics }}"
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
