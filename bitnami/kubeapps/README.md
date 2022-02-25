@@ -501,7 +501,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 | Name                                                                                            | Description                                                                               | Value                   |
 | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------- |
-| `kubeappsapis.enabledPlugins`                                                                   | Manually override which plugins are enabled for the Kubeapps-APIs service                 | `nil`                   |
+| `kubeappsapis.enabledPlugins`                                                                   | Manually override which plugins are enabled for the Kubeapps-APIs service                 | `[]`                    |
 | `kubeappsapis.pluginConfig.core.packages.v1alpha1.versionsInSummary.major`                      | Number of major versions to display in the summary                                        | `3`                     |
 | `kubeappsapis.pluginConfig.core.packages.v1alpha1.versionsInSummary.minor`                      | Number of minor versions to display in the summary                                        | `3`                     |
 | `kubeappsapis.pluginConfig.core.packages.v1alpha1.versionsInSummary.patch`                      | Number of patch versions to display in the summary                                        | `3`                     |

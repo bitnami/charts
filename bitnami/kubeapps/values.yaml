@@ -1636,7 +1636,7 @@ kubeappsapis:
   ## set this value if you want to manually override the list of plugins
   ## enabled for the service.
   ##
-  enabledPlugins:
+  enabledPlugins: []
   pluginConfig:
     core:
       packages:
@@ -1656,7 +1656,7 @@ kubeappsapis:
           ## @param kubeappsapis.pluginConfig.kappController.packages.v1alpha1.defaultUpgradePolicy Default upgrade policy generating version constraints
           ## enum: [ "major", "minor", "patch", "none" ]
           defaultUpgradePolicy: none
-          ## @param kubeappsapis.pluginConfig.kappController.packages.v1alpha1.defaultPrereleasesVersionSelection Default policy for allowing prereleases containing one of the identifiers
+          ## @param kubeappsapis.pluginConfig.kappController.packages.v1alpha1.defaultPrereleasesVersionSelection [nullable] Default policy for allowing prereleases containing one of the identifiers
           ## ref: https://carvel.dev/kapp-controller/docs/latest/package-consumer-concepts/#prereleases
           ## e.g:
           # defaultPrereleasesVersionSelection:
