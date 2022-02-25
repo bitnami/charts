@@ -1275,17 +1275,15 @@ backup:
     ##
     azure:
       ## @param backup.uploadProviders.azure.enabled Enable upload to azure storage container
-      ## @param backup.uploadProviders.azure.secret Secret shared access signature (SAS) URL to access Azure storage
+      ## @param backup.uploadProviders.azure.secret Secret with credentials to access Azure storage
       ## @param backup.uploadProviders.azure.secretKey Service account secret key name
       ## @param backup.uploadProviders.azure.existingSecret Name of existing secret object
-      ## @param backup.uploadProviders.azure.azcopyUrl URL for downloading azcopy
+      ## @param backup.uploadProviders.azure.containerName Destination container
       enabled: false
-      # SAS URI including the SAS token
-      # ref: https://docs.microsoft.com/en-us/azure/storage/common/storage-sas-overview
       secret: ""
       secretKey: "connection-string"
       existingSecret: ""
-      azcopyUrl: "https://aka.ms/downloadazcopy-v10-linux"
+      containerName: "influxdb-container"
       ## Bitnami Azure CLI image
       ## ref: https://hub.docker.com/r/bitnami/azure-cli/tags/
       ## @param backup.uploadProviders.azure.image.registry Azure CLI image registry

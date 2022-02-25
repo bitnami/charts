@@ -77,12 +77,7 @@ data:
 
     set -e
 
-    # using azcopy directly instead of az storage b/c az storage installs azcopy in /bin, which breaks for non-root user
-    cd /tmp
-    wget -O azcopy.tar {{ .Values.backup.uploadProviders.azure.azcopyUrl }}
-    tar -xf azcopy.tar
-    cp */azcopy .
-    ./azcopy sync "{{ .Values.backup.directory }}" "${AZURE_STORAGE_CONNECTION_STRING}" --recursive --delete-destination true
+    az storage blob sync --source {{ .Values.backup.directory }} --container {{ .Values.backup.uploadProviders.azure.containerName }}
   upload-aws.sh: |-
     #!/bin/sh
 

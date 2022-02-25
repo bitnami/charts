@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                                 | InfluxDB&trade; image registry                                                                                                                                                                                                                                       | `docker.io`           |
 | `image.repository`                               | InfluxDB&trade; image repository                                                                                                                                                                                                                                     | `bitnami/influxdb`    |
-| `image.tag`                                      | InfluxDB&trade; image tag (immutable tags are recommended)                                                                                                                                                                                                           | `2.1.1-debian-10-r72` |
+| `image.tag`                                      | InfluxDB&trade; image tag (immutable tags are recommended)                                                                                                                                                                                                           | `2.1.1-debian-10-r48` |
 | `image.pullPolicy`                               | InfluxDB&trade; image pull policy                                                                                                                                                                                                                                    | `IfNotPresent`        |
 | `image.pullSecrets`                              | Specify docker-registry secret names as an array                                                                                                                                                                                                                     | `[]`                  |
 | `image.debug`                                    | Specify if debug logs should be enabled                                                                                                                                                                                                                              | `false`               |
@@ -188,7 +188,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `relay.image.registry`                        | InfluxDB Relay&trade; image registry                                                                                   | `docker.io`                |
 | `relay.image.repository`                      | InfluxDB Relay&trade; image repository                                                                                 | `bitnami/influxdb-relay`   |
-| `relay.image.tag`                             | InfluxDB Relay&trade; image tag (immutable tags are recommended)                                                       | `0.20200717.0-scratch-r18` |
+| `relay.image.tag`                             | InfluxDB Relay&trade; image tag (immutable tags are recommended)                                                       | `0.20200717.0-scratch-r14` |
 | `relay.image.pullPolicy`                      | InfluxDB Relay&trade; image pull policy                                                                                | `IfNotPresent`             |
 | `relay.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                       | `[]`                       |
 | `relay.configuration`                         | InfluxDB Relay&trade; Configuration. Specify content for relay.toml                                                    | `""`                       |
@@ -342,7 +342,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                      | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                       | `10-debian-10-r344`     |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                       | `10-debian-10-r312`     |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                  | `[]`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                 | `0`                     |
@@ -350,56 +350,56 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### InfluxDB&trade; backup parameters
 
-| Name                                              | Description                                                                                             | Value                                     |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| `backup.enabled`                                  | Enable InfluxDB&trade; backup                                                                           | `false`                                   |
-| `backup.directory`                                | Directory where backups are stored                                                                      | `/backups`                                |
-| `backup.retentionDays`                            | Retention time in days for backups (older backups are deleted)                                          | `10`                                      |
-| `backup.cronjob.schedule`                         | Schedule in Cron format to save snapshots                                                               | `0 2 * * *`                               |
-| `backup.cronjob.historyLimit`                     | Number of successful finished jobs to retain                                                            | `1`                                       |
-| `backup.cronjob.podAnnotations`                   | Pod annotations                                                                                         | `{}`                                      |
-| `backup.cronjob.securityContext.enabled`          | Enable security context for InfluxDB&trade;                                                             | `true`                                    |
-| `backup.cronjob.securityContext.fsGroup`          | Group ID for the InfluxDB&trade; filesystem                                                             | `1001`                                    |
-| `backup.cronjob.securityContext.runAsUser`        | Group ID for the InfluxDB&trade; filesystem                                                             | `1001`                                    |
-| `backup.podAffinityPreset`                        | Backup &trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                                      |
-| `backup.podAntiAffinityPreset`                    | Backup&trade; Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                    |
-| `backup.nodeAffinityPreset.type`                  | Backup&trade; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                      |
-| `backup.nodeAffinityPreset.key`                   | Backup&trade; Node label key to match Ignored if `affinity` is set.                                     | `""`                                      |
-| `backup.nodeAffinityPreset.values`                | Backup&trade; Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                      |
-| `backup.affinity`                                 | Backup&trade; Affinity for backup pod assignment                                                        | `{}`                                      |
-| `backup.nodeSelector`                             | Backup&trade; Node labels for backup pod assignment                                                     | `{}`                                      |
-| `backup.tolerations`                              | Backup&trade; Tolerations for backup pod assignment                                                     | `[]`                                      |
-| `backup.uploadProviders.google.enabled`           | enable upload to google storage bucket                                                                  | `false`                                   |
-| `backup.uploadProviders.google.secret`            | json secret with serviceaccount data to access Google storage bucket                                    | `""`                                      |
-| `backup.uploadProviders.google.secretKey`         | service account secret key name                                                                         | `key.json`                                |
-| `backup.uploadProviders.google.existingSecret`    | Name of existing secret object with Google serviceaccount json credentials                              | `""`                                      |
-| `backup.uploadProviders.google.bucketName`        | google storage bucket name name                                                                         | `gs://bucket/influxdb`                    |
-| `backup.uploadProviders.google.image.registry`    | Google Cloud SDK image registry                                                                         | `docker.io`                               |
-| `backup.uploadProviders.google.image.repository`  | Google Cloud SDK image name                                                                             | `bitnami/google-cloud-sdk`                |
-| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                              | `0.373.0-debian-10-r2`                    |
-| `backup.uploadProviders.google.image.pullPolicy`  | Google Cloud SDK image pull policy                                                                      | `IfNotPresent`                            |
-| `backup.uploadProviders.google.image.pullSecrets` | Specify docker-registry secret names as an array                                                        | `[]`                                      |
-| `backup.uploadProviders.azure.enabled`            | Enable upload to azure storage container                                                                | `false`                                   |
-| `backup.uploadProviders.azure.secret`             | Secret shared access signature (SAS) URL to access Azure storage                                        | `""`                                      |
-| `backup.uploadProviders.azure.secretKey`          | Service account secret key name                                                                         | `connection-string`                       |
-| `backup.uploadProviders.azure.existingSecret`     | Name of existing secret object                                                                          | `""`                                      |
-| `backup.uploadProviders.azure.azcopyUrl`          | URL for downloading azcopy                                                                              | `https://aka.ms/downloadazcopy-v10-linux` |
-| `backup.uploadProviders.azure.image.registry`     | Azure CLI image registry                                                                                | `docker.io`                               |
-| `backup.uploadProviders.azure.image.repository`   | Azure CLI image repository                                                                              | `bitnami/azure-cli`                       |
-| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                    | `2.33.1-debian-10-r6`                     |
-| `backup.uploadProviders.azure.image.pullPolicy`   | Azure CLI image pull policy                                                                             | `IfNotPresent`                            |
-| `backup.uploadProviders.azure.image.pullSecrets`  | Specify docker-registry secret names as an array                                                        | `[]`                                      |
-| `backup.uploadProviders.aws.enabled`              | Enable upload to aws s3 bucket                                                                          | `false`                                   |
-| `backup.uploadProviders.aws.accessKeyID`          | Access Key ID to access aws s3                                                                          | `""`                                      |
-| `backup.uploadProviders.aws.secretAccessKey`      | Secret Access Key to access aws s3                                                                      | `""`                                      |
-| `backup.uploadProviders.aws.region`               | Region of aws s3 bucket                                                                                 | `us-east-1`                               |
-| `backup.uploadProviders.aws.existingSecret`       | Name of existing secret object                                                                          | `""`                                      |
-| `backup.uploadProviders.aws.bucketName`           | aws s3 bucket name                                                                                      | `s3://bucket/influxdb`                    |
-| `backup.uploadProviders.aws.image.registry`       | AWS CLI image registry                                                                                  | `docker.io`                               |
-| `backup.uploadProviders.aws.image.repository`     | AWS CLI image repository                                                                                | `bitnami/aws-cli`                         |
-| `backup.uploadProviders.aws.image.tag`            | AWS CLI image tag (immutable tags are recommended)                                                      | `2.4.7-debian-10-r4`                      |
-| `backup.uploadProviders.aws.image.pullPolicy`     | AWS CLI image pull policy                                                                               | `IfNotPresent`                            |
-| `backup.uploadProviders.aws.image.pullSecrets`    | Specify docker-registry secret names as an array                                                        | `[]`                                      |
+| Name                                              | Description                                                                                             | Value                      |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `backup.enabled`                                  | Enable InfluxDB&trade; backup                                                                           | `false`                    |
+| `backup.directory`                                | Directory where backups are stored                                                                      | `/backups`                 |
+| `backup.retentionDays`                            | Retention time in days for backups (older backups are deleted)                                          | `10`                       |
+| `backup.cronjob.schedule`                         | Schedule in Cron format to save snapshots                                                               | `0 2 * * *`                |
+| `backup.cronjob.historyLimit`                     | Number of successful finished jobs to retain                                                            | `1`                        |
+| `backup.cronjob.podAnnotations`                   | Pod annotations                                                                                         | `{}`                       |
+| `backup.cronjob.securityContext.enabled`          | Enable security context for InfluxDB&trade;                                                             | `true`                     |
+| `backup.cronjob.securityContext.fsGroup`          | Group ID for the InfluxDB&trade; filesystem                                                             | `1001`                     |
+| `backup.cronjob.securityContext.runAsUser`        | Group ID for the InfluxDB&trade; filesystem                                                             | `1001`                     |
+| `backup.podAffinityPreset`                        | Backup &trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                       |
+| `backup.podAntiAffinityPreset`                    | Backup&trade; Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                     |
+| `backup.nodeAffinityPreset.type`                  | Backup&trade; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                       |
+| `backup.nodeAffinityPreset.key`                   | Backup&trade; Node label key to match Ignored if `affinity` is set.                                     | `""`                       |
+| `backup.nodeAffinityPreset.values`                | Backup&trade; Node label values to match. Ignored if `affinity` is set.                                 | `[]`                       |
+| `backup.affinity`                                 | Backup&trade; Affinity for backup pod assignment                                                        | `{}`                       |
+| `backup.nodeSelector`                             | Backup&trade; Node labels for backup pod assignment                                                     | `{}`                       |
+| `backup.tolerations`                              | Backup&trade; Tolerations for backup pod assignment                                                     | `[]`                       |
+| `backup.uploadProviders.google.enabled`           | enable upload to google storage bucket                                                                  | `false`                    |
+| `backup.uploadProviders.google.secret`            | json secret with serviceaccount data to access Google storage bucket                                    | `""`                       |
+| `backup.uploadProviders.google.secretKey`         | service account secret key name                                                                         | `key.json`                 |
+| `backup.uploadProviders.google.existingSecret`    | Name of existing secret object with Google serviceaccount json credentials                              | `""`                       |
+| `backup.uploadProviders.google.bucketName`        | google storage bucket name name                                                                         | `gs://bucket/influxdb`     |
+| `backup.uploadProviders.google.image.registry`    | Google Cloud SDK image registry                                                                         | `docker.io`                |
+| `backup.uploadProviders.google.image.repository`  | Google Cloud SDK image name                                                                             | `bitnami/google-cloud-sdk` |
+| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                              | `0.368.0-debian-10-r6`     |
+| `backup.uploadProviders.google.image.pullPolicy`  | Google Cloud SDK image pull policy                                                                      | `IfNotPresent`             |
+| `backup.uploadProviders.google.image.pullSecrets` | Specify docker-registry secret names as an array                                                        | `[]`                       |
+| `backup.uploadProviders.azure.enabled`            | Enable upload to azure storage container                                                                | `false`                    |
+| `backup.uploadProviders.azure.secret`             | Secret with credentials to access Azure storage                                                         | `""`                       |
+| `backup.uploadProviders.azure.secretKey`          | Service account secret key name                                                                         | `connection-string`        |
+| `backup.uploadProviders.azure.existingSecret`     | Name of existing secret object                                                                          | `""`                       |
+| `backup.uploadProviders.azure.containerName`      | Destination container                                                                                   | `influxdb-container`       |
+| `backup.uploadProviders.azure.image.registry`     | Azure CLI image registry                                                                                | `docker.io`                |
+| `backup.uploadProviders.azure.image.repository`   | Azure CLI image repository                                                                              | `bitnami/azure-cli`        |
+| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                    | `2.32.0-debian-10-r13`     |
+| `backup.uploadProviders.azure.image.pullPolicy`   | Azure CLI image pull policy                                                                             | `IfNotPresent`             |
+| `backup.uploadProviders.azure.image.pullSecrets`  | Specify docker-registry secret names as an array                                                        | `[]`                       |
+| `backup.uploadProviders.aws.enabled`              | Enable upload to aws s3 bucket                                                                          | `false`                    |
+| `backup.uploadProviders.aws.accessKeyID`          | Access Key ID to access aws s3                                                                          | `""`                       |
+| `backup.uploadProviders.aws.secretAccessKey`      | Secret Access Key to access aws s3                                                                      | `""`                       |
+| `backup.uploadProviders.aws.region`               | Region of aws s3 bucket                                                                                 | `us-east-1`                |
+| `backup.uploadProviders.aws.existingSecret`       | Name of existing secret object                                                                          | `""`                       |
+| `backup.uploadProviders.aws.bucketName`           | aws s3 bucket name                                                                                      | `s3://bucket/influxdb`     |
+| `backup.uploadProviders.aws.image.registry`       | AWS CLI image registry                                                                                  | `docker.io`                |
+| `backup.uploadProviders.aws.image.repository`     | AWS CLI image repository                                                                                | `bitnami/aws-cli`          |
+| `backup.uploadProviders.aws.image.tag`            | AWS CLI image tag (immutable tags are recommended)                                                      | `2.4.7-debian-10-r4`       |
+| `backup.uploadProviders.aws.image.pullPolicy`     | AWS CLI image pull policy                                                                               | `IfNotPresent`             |
+| `backup.uploadProviders.aws.image.pullSecrets`    | Specify docker-registry secret names as an array                                                        | `[]`                       |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
