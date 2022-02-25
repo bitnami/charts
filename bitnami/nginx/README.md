@@ -108,6 +108,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`    |
 | `affinity`                              | Affinity for pod assignment                                                               | `{}`    |
 | `hostNetwork`                           | Specify if host network should be enabled for NGINX pod                                   | `false` |
+| `hostIPC`                               | Specify if host IPC should be enabled for NGINX pod                                       | `false` |
 | `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                  | `{}`    |
 | `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                  | `{}`    |
 | `priorityClassName`                     | Priority class name                                                                       | `""`    |
