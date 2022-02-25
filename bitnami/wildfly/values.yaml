@@ -269,7 +269,7 @@ containerSecurityContext:
 ## Configure extra options for WildFly containers' startup and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param startupProbe.enabled Enable startupProbe
-## @skip startupProbe.httpGet
+## @skip startupProbe.tcpSocket
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
 ## @param startupProbe.periodSeconds Period seconds for startupProbe
 ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -339,8 +339,8 @@ service:
   ## @param service.type WildFly service type
   ##
   type: LoadBalancer
-  ## @param service.port WildFly service HTTP port
-  ## @param service.mgmtPort WildFly service management console port
+  ## @param service.ports.http WildFly service HTTP port
+  ## @param service.ports.mgmt WildFly service management console port
   ##
   ports:
     http: 80

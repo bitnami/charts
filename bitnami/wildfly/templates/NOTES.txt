@@ -50,19 +50,19 @@ APP VERSION: {{ .Chart.AppVersion }}
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-  {{- $port:=.Values.service.port | toString }}
-  echo "WildFly URL:            http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/
+  {{- $port:=(coalesce .Values.service.ports.http .Values.service.port) | toString }}
+  echo "WildFly URL:            http://$SERVICE_IP{{- if ne $port "80" }}:{{ coalesce .Values.service.ports.http .Values.service.port }}{{ end }}/
   {{- if .Values.exposeManagementConsole }}
   {{- $mgmtPort:=.Values.service.mgmtPort | toString }}
-  echo "WildFly Management URL: http://$SERVICE_IP{{- if ne $mgmtPort "80" }}:{{ .Values.service.mgmtPort }}{{ end }}/
+  echo "WildFly Management URL: http://$SERVICE_IP{{- if ne $mgmtPort "80" }}:{{ coalesce .Values.service.ports.mgmt .Values.service.mgmtPort }}{{ end }}/
   {{- end }}
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ .Values.service.port }} &
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 9990:{{ .Values.service.mgmtPort }} &
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ coalesce .Values.service.ports.http .Values.service.port }} &
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 9990:{{ coalesce .Values.service.ports.mgmt .Values.service.mgmtPort }} &
   echo "WildFly URL:            http://127.0.0.1:8080/"
-  echo "WildFly Management URL: http://127.0.0.1:9990/:
+  echo "WildFly Management URL: http://127.0.0.1:9990/"
 
 {{- end }}
 {{- end }}
