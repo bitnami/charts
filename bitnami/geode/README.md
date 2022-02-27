@@ -404,7 +404,7 @@ This chart an Apache Geode cluster including a _locator_ statefulset with N _Loc
   |     Locator       |                 |                      |
   |       svc         |                 |                      |
    -------------------                  | / server             | / write
-      ���                                 |   discovery          |   read
+      ���������                                 |   discovery          |   read
       \/                                |                      |
  --------------                         |     --------------   |
 |   Locator    |                        |    |   Locator    |  |
