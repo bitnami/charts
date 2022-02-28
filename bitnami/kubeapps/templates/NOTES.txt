@@ -79,11 +79,15 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
 
 {{- $passwordValidationErrors := list -}}
 
+{{ if .Values.packaging.helm.enabled -}}
 {{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
 {{- $passwordValidationErrors = append $passwordValidationErrors $postgresqlPasswordValidationErrors -}}
+{{- end }}
 
+{{ if .Values.packaging.flux.enabled -}}
 {{- $redisPasswordValidationErrors := include "common.validations.values.redis.passwords" (dict "secret" $redisSecretName "subchart" true "context" $) -}}
 {{- $passwordValidationErrors = append $passwordValidationErrors $redisPasswordValidationErrors -}}
+{{- end }}
 
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
 {{- include "kubeapps.checkRollingTags" . }}
