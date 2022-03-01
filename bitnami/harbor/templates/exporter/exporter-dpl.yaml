@@ -31,7 +31,6 @@ spec:
         app.kubernetes.io/component: exporter
       annotations:
         checksum/configmap-env: {{ include (print $.Template.BasePath "/exporter/exporter-cm-envvars.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print $.Template.BasePath "/exporter/exporter-secrets.yaml") . | sha256sum }}
         checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
         {{- if and .Values.internalTLS.enabled (not .Values.core.tls.existingSecret) }}
         checksum/tls: {{ include (print $.Template.BasePath "/internal/internal-crt-secret.yaml") . | sha256sum }}
@@ -79,9 +78,8 @@ spec:
           {{- if .Values.exporter.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /
-              # TODO: Revisar esto
-              port: {{ .Values.metrics.exporter.port }}
+              path: /metrics
+              port: http-metrics
               scheme: {{ include "harbor.component.scheme" . | upper }}
             initialDelaySeconds: {{ .Values.exporter.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.exporter.livenessProbe.periodSeconds }}
@@ -94,8 +92,8 @@ spec:
           {{- if .Values.exporter.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /
-              port:  {{ .Values.metrics.exporter.port }}
+              path: /metrics
+              port:  http-metrics
               scheme: {{ include "harbor.component.scheme" . | upper }}
             initialDelaySeconds: {{ .Values.exporter.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.exporter.readinessProbe.periodSeconds }}
@@ -114,11 +112,16 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.exporterImage.debug | quote }}
-            - name: CORE_SECRET
+            - name: HARBOR_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "harbor.core" . }}
-                  key: secret
+                  name: {{ include "harbor.core" . }}-envvars
+                  key: POSTGRESQL_PASSWORD
+            - name: HARBOR_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "harbor.core" . }}-envvars
+                  key: HARBOR_ADMIN_PASSWORD
             {{- if .Values.internalTLS.enabled }}
             - name: INTERNAL_TLS_ENABLED
               value: "true"
@@ -135,11 +138,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: "{{ include "harbor.exporter" . }}-envvars"
-            - secretRef:
-                name: "{{ include "harbor.exporter" . }}"
           ports:
             - containerPort: {{ include "harbor.exporter.containerPort" . }}
-              name: http
+              name: http-metrics
           volumeMounts:
         {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs

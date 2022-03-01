@@ -16,5 +16,5 @@ spec:
     - name: {{ template "harbor.metricsPortName" . }}
       port: {{ .Values.metrics.exporter.port }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
-    component: exporter
+    app.kubernetes.io/component: exporter
 {{ end }}

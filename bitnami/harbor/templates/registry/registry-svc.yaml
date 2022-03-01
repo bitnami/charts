@@ -15,5 +15,9 @@ spec:
       port: {{ include "harbor.registry.servicePort" . }}
     - name: controller
       port: {{ include "harbor.registryctl.servicePort" . }}
+   {{- if .Values.metrics.enabled}}
+    - name: {{ include "harbor.metricsPortName" . }}
+      port: {{ .Values.metrics.registry.port }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: registry

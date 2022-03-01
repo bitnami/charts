@@ -11,18 +11,13 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-data: # TODO revisar esto
-  {{- if has "jobservice" .Values.proxy.components }}
-  HTTP_PROXY: {{ .Values.proxy.httpProxy | quote }}
-  HTTPS_PROXY: {{ .Values.proxy.httpsProxy | quote }}
-  NO_PROXY: {{ include "harbor.noProxy" . | quote }}
-  {{- end }}
+data:
   LOG_LEVEL: {{ .Values.logLevel | quote }}
   HARBOR_EXPORTER_PORT: {{ .Values.metrics.exporter.port | quote }}
   HARBOR_EXPORTER_METRICS_PATH: {{ .Values.metrics.exporter.path | quote }}
   HARBOR_METRIC_NAMESPACE: harbor
   HARBOR_METRIC_SUBSYSTEM: exporter
-  HARBOR_REDIS_URL: {{ include "harbor.redisForJobservice" . | quote }}
+  HARBOR_REDIS_URL: {{ include "harbor.redisForCore" . | quote }}
   HARBOR_REDIS_NAMESPACE: harbor_job_service_namespace
   HARBOR_SERVICE_SCHEME: {{ include "harbor.component.scheme" . | quote }}
   HARBOR_SERVICE_HOST: {{ include "harbor.core" . | quote }}

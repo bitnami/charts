@@ -49,3 +49,7 @@ data:
     loggers:
       - name: "STD_OUTPUT"
         level: {{ .Values.logLevel | upper }}
+    metric:
+      enabled: {{ .Values.metrics.enabled }}
+      path: {{ .Values.metrics.jobservice.path }}
+      port: {{ .Values.metrics.jobservice.port }}

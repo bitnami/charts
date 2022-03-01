@@ -196,9 +196,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{/* Exporter component container port */}}
 {{- define "harbor.exporter.containerPort" -}}
   {{- if .Values.internalTLS.enabled -}}
+  {{/* TODO */}}
     {{- printf "8443" -}}
   {{- else -}}
-    {{- printf "8080" -}}
+    {{- printf "8001" -}}
   {{- end -}}
 {{- end -}}
 
@@ -583,7 +584,7 @@ Return whether Redis&trade; uses password authentication or not
     {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
       {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
     {{- else -}}
-      {{- template "harbor.redis.host" . -}}:{{ template "harbor.redis.port" . -}}/{{ template "harbor.redis.jobserviceDatabaseIndex" . -}}
+      {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" .) (include "harbor.redis.port" .) (include "harbor.redis.jobserviceDatabaseIndex" .) -}}
     {{- end -}}
   {{- else -}}
     {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
