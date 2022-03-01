@@ -99,7 +99,7 @@ spec:
             - name: raw-certificates
               mountPath: /tmp/certs
             - name: postgresql-certificates
-              mountPath: /opt/bitnami/postgresql/certs
+                mountPath: /opt/bitnami/postgresql/certs
       {{- end }}
       {{- if and .Values.volumePermissions.enabled (or (or (not (empty .Values.postgresql.extendedConf)) (not (empty .Values.postgresql.extendedConfCM))) .Values.persistence.enabled) }}
         - name: init-chmod-data
@@ -425,6 +425,18 @@ spec:
             - name: hooks-scripts
               mountPath: /pre-stop.sh
               subPath: pre-stop.sh
+            - name: tmp
+              mountPath: /tmp
+            - name: confdir
+              mountPath: /opt/bitnami/postgresql/conf
+            - name: confddir
+              mountPath: /opt/bitnami/postgresql/conf/conf.d
+            - name: repmgrconfdir
+              mountPath: /opt/bitnami/repmgr/conf
+            - name: tmppostgres
+              mountPath: /opt/bitnami/postgresql/tmp
+            - name: tmprepmgr
+              mountPath: /opt/bitnami/repmgr/tmp
             {{- if .Values.postgresql.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -528,6 +540,24 @@ spec:
         {{- if .Values.postgresql.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+        - name: repmgrconfdir
+          emptyDir:
+            medium: "Memory"
+        - name: confdir
+          emptyDir:
+            medium: "Memory"
+        - name: confddir
+          emptyDir:
+            medium: "Memory"
+        - name: tmp
+          emptyDir:
+            medium: "Memory"
+        - name: tmppostgres
+          emptyDir:
+            medium: "Memory"
+        - name: tmprepmgr
+          emptyDir:
+            medium: "Memory"
         {{- if and .Values.metrics.enabled .Values.metrics.customMetrics }}
         - name: custom-metrics
           configMap:
