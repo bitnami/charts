@@ -99,7 +99,7 @@ spec:
             - name: raw-certificates
               mountPath: /tmp/certs
             - name: postgresql-certificates
-              mountPath: /opt/bitnami/postgresql/certs
+                mountPath: /opt/bitnami/postgresql/certs
       {{- end }}
       {{- if and .Values.volumePermissions.enabled (or (or (not (empty .Values.postgresql.extendedConf)) (not (empty .Values.postgresql.extendedConfCM))) .Values.persistence.enabled) }}
         - name: init-chmod-data
@@ -122,6 +122,253 @@ spec:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
       {{- end }}
+        - name: container-init
+          image: {{ include "postgresql-ha.postgresqlImage" . }}
+          imagePullPolicy: {{ .Values.volumePermissionsImage.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              # Load libraries
+              . /opt/bitnami/scripts/liblog.sh
+              . /opt/bitnami/scripts/libbitnami.sh
+              . /opt/bitnami/scripts/libpostgresql.sh
+              . /opt/bitnami/scripts/librepmgr.sh
+
+              # Load PostgreSQL & repmgr environment variables
+              . /opt/bitnami/scripts/postgresql-env.sh
+              export MODULE=postgresql-repmgr
+
+              print_welcome_page
+
+              # Enable the nss_wrapper settings
+              postgresql_enable_nss_wrapper
+
+              info "** Starting PostgreSQL with Replication Manager setup **"
+              /opt/bitnami/scripts/postgresql-repmgr/setup.sh
+              touch "$POSTGRESQL_TMP_DIR"/.initialized
+              info "** PostgreSQL with Replication Manager setup finished! **"
+              exit 0
+          # Auxiliary vars to populate environment variables
+          {{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
+          {{- $postgresqlFullname := include "postgresql-ha.postgresql" . }}
+          {{- $postgresqlHeadlessServiceName := printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
+          {{- $clusterDomain:= .Values.clusterDomain }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.postgresqlImage.debug .Values.diagnosticMode.enabled) | quote }}
+            # PostgreSQL configuration
+            - name: POSTGRESQL_VOLUME_DIR
+              value: {{ .Values.persistence.mountPath | quote }}
+            - name: PGDATA
+              value: {{ printf "%s/%s" .Values.persistence.mountPath "data" | quote }}
+            {{- if and (or (not (include "postgresql-ha.postgresqlCreateSecret" .)) (include "postgresql-ha.postgresqlPasswordProvided" .)) (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) }}
+            {{- if .Values.postgresql.usePasswordFile }}
+            - name: POSTGRES_POSTGRES_PASSWORD_FILE
+              value: "/opt/bitnami/postgresql/secrets/postgresql-postgres-password"
+            {{- else }}
+            - name: POSTGRES_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "postgresql-ha.postgresqlSecretName" . }}
+                  key: postgresql-postgres-password
+            {{- end }}
+            {{- end }}
+            - name: POSTGRES_USER
+              value: {{ (include "postgresql-ha.postgresqlUsername" .) | quote }}
+            {{- if .Values.postgresql.usePasswordFile }}
+            - name: POSTGRES_PASSWORD_FILE
+              value: "/opt/bitnami/postgresql/secrets/postgresql-password"
+            {{- else }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "postgresql-ha.postgresqlSecretName" . }}
+                  key: postgresql-password
+            {{- end }}
+            {{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }}
+            - name: POSTGRES_DB
+              value: {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}
+            {{- end }}
+            - name: POSTGRESQL_LOG_HOSTNAME
+              value: {{ .Values.postgresql.audit.logHostname | quote }}
+            - name: POSTGRESQL_LOG_CONNECTIONS
+              value: {{ .Values.postgresql.audit.logConnections | quote }}
+            - name: POSTGRESQL_LOG_DISCONNECTIONS
+              value: {{ .Values.postgresql.audit.logDisconnections | quote }}
+            {{- if .Values.postgresql.audit.logLinePrefix }}
+            - name: POSTGRESQL_LOG_LINE_PREFIX
+              value: {{ .Values.postgresql.audit.logLinePrefix | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.audit.logTimezone }}
+            - name: POSTGRESQL_LOG_TIMEZONE
+              value: {{ .Values.postgresql.audit.logTimezone | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.audit.pgAuditLog }}
+            - name: POSTGRESQL_PGAUDIT_LOG
+              value: {{ .Values.postgresql.audit.pgAuditLog | quote }}
+            {{- end }}
+            - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+              value: {{ .Values.postgresql.audit.pgAuditLogCatalog | quote }}
+            - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+              value: {{ .Values.postgresql.audit.clientMinMessages | quote }}
+            - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+              value: {{ .Values.postgresql.sharedPreloadLibraries | quote }}
+            {{- if .Values.postgresql.maxConnections }}
+            - name: POSTGRESQL_MAX_CONNECTIONS
+              value: {{ .Values.postgresql.maxConnections | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.usePgRewind }}
+            - name: REPMGR_USE_PGREWIND
+              value: {{ .Values.postgresql.usePgRewind | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.postgresConnectionLimit }}
+            - name: POSTGRESQL_POSTGRES_CONNECTION_LIMIT
+              value: {{ .Values.postgresql.postgresConnectionLimit | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.dbUserConnectionLimit }}
+            - name: POSTGRESQL_USERNAME_CONNECTION_LIMIT
+              value: {{ .Values.postgresql.dbUserConnectionLimit | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.tcpKeepalivesInterval }}
+            - name: POSTGRESQL_TCP_KEEPALIVES_INTERVAL
+              value: {{ .Values.postgresql.tcpKeepalivesInterval | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.tcpKeepalivesIdle }}
+            - name: POSTGRESQL_TCP_KEEPALIVES_IDLE
+              value: {{ .Values.postgresql.tcpKeepalivesIdle | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.tcpKeealivesCount }}
+            - name: POSTGRESQL_TCP_KEEPALIVES_COUNT
+              value: {{ .Values.postgresql.tcpKeealivesCount | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.statementTimeout }}
+            - name: POSTGRESQL_STATEMENT_TIMEOUT
+              value: {{ .Values.postgresql.statementTimeout | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.pghbaRemoveFilters }}
+            - name: POSTGRESQL_PGHBA_REMOVE_FILTERS
+              value: {{ .Values.postgresql.pghbaRemoveFilters | quote }}
+            {{- end }}
+            - name: POSTGRESQL_ENABLE_TLS
+              value: {{ ternary "yes" "no" .Values.postgresql.tls.enabled | quote }}
+            {{- if .Values.postgresql.tls.enabled }}
+            - name: POSTGRESQL_TLS_PREFER_SERVER_CIPHERS
+              value: {{ ternary "yes" "no" .Values.postgresql.tls.preferServerCiphers | quote }}
+            - name: POSTGRESQL_TLS_CERT_FILE
+              value: {{ template "postgresql-ha.postgresql.tlsCert" . }}
+            - name: POSTGRESQL_TLS_KEY_FILE
+              value: {{ template "postgresql-ha.postgresql.tlsCertKey" . }}
+            {{- if .Values.postgresql.tls.certCAFilename }}
+            - name: POSTGRESQL_TLS_CA_FILE
+              value: {{ template "postgresql-ha.postgresql.tlsCACert" . }}
+            {{- end }}
+            {{- end }}
+            # Repmgr configuration
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: REPMGR_UPGRADE_EXTENSION
+              value: {{ ternary "yes" "no" .Values.postgresql.upgradeRepmgrExtension | quote }}
+            - name: REPMGR_PGHBA_TRUST_ALL
+              value: {{ ternary "yes" "no" .Values.postgresql.pgHbaTrustAll | quote }}
+            - name: REPMGR_MOUNTED_CONF_DIR
+              value: "/bitnami/repmgr/conf"
+            - name: REPMGR_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: REPMGR_PARTNER_NODES
+              value: {{ range $e, $i := until $postgresqlReplicaCount }}{{ $postgresqlFullname }}-{{ $i }}.{{ $postgresqlHeadlessServiceName }}.$(REPMGR_NAMESPACE).svc.{{ $clusterDomain }},{{ end }}
+            - name: REPMGR_PRIMARY_HOST
+              value: {{ printf "%s-0.%s.$(REPMGR_NAMESPACE).svc.%s" $postgresqlFullname $postgresqlHeadlessServiceName $clusterDomain | quote }}
+            - name: REPMGR_NODE_NAME
+              value: "$(MY_POD_NAME)"
+            - name: REPMGR_NODE_NETWORK_NAME
+              value: "$(MY_POD_NAME).{{ $postgresqlHeadlessServiceName }}.$(REPMGR_NAMESPACE).svc.{{ $clusterDomain }}"
+            - name: REPMGR_LOG_LEVEL
+              value: {{ .Values.postgresql.repmgrLogLevel | quote }}
+            - name: REPMGR_CONNECT_TIMEOUT
+              value: {{ .Values.postgresql.repmgrConnectTimeout | quote }}
+            - name: REPMGR_RECONNECT_ATTEMPTS
+              value: {{ .Values.postgresql.repmgrReconnectAttempts | quote }}
+            - name: REPMGR_RECONNECT_INTERVAL
+              value: {{ .Values.postgresql.repmgrReconnectInterval | quote }}
+            - name: REPMGR_USERNAME
+              value: {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }}
+            {{- if .Values.postgresql.usePasswordFile }}
+            - name: REPMGR_PASSWORD_FILE
+              value: "/opt/bitnami/postgresql/secrets/repmgr-password"
+            {{- else }}
+            - name: REPMGR_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "postgresql-ha.postgresqlSecretName" . }}
+                  key: repmgr-password
+            {{- end }}
+            {{- if .Values.postgresql.repmgrUsePassfile }}
+            - name: REPMGR_USE_PASSFILE
+              value: {{ ternary "true" "false" .Values.postgresql.repmgrUsePassfile | quote }}
+            - name: REPMGR_PASSFILE_PATH
+              value: {{ default "/opt/bitnami/repmgr/conf/.pgpass" .Values.postgresql.repmgrPassfilePath }}
+            {{- end }}
+            {{- if (include "postgresql-ha.repmgrDatabase" .) }}
+            - name: REPMGR_DATABASE
+              value: {{ (include "postgresql-ha.repmgrDatabase" .) | quote }}
+            {{- end }}
+            {{- if .Values.postgresql.syncReplication }}
+            - name: POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS
+              value: {{ sub (int .Values.postgresql.replicaCount) 1 | quote }}
+            {{- end }}
+          {{- if .Values.postgresql.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.postgresql.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- if or .Values.postgresql.repmgrConfiguration .Values.postgresql.configuration .Values.postgresql.pgHbaConfiguration .Values.postgresql.configurationCM }}
+            - name: postgresql-config
+              mountPath: /bitnami/repmgr/conf
+            {{- end }}
+            {{- if or .Values.postgresql.extendedConf .Values.postgresql.extendedConfCM }}
+            - name: postgresql-extended-config
+              mountPath: /bitnami/postgresql/conf/conf.d/
+            {{- end }}
+            {{- if or .Values.postgresql.initdbScriptsCM .Values.postgresql.initdbScripts }}
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d/
+            {{- end }}
+            {{- if .Values.postgresql.initdbScriptsSecret }}
+            - name: custom-init-scripts-secret
+              mountPath: /docker-entrypoint-initdb.d/secret
+            {{- end }}
+            {{- if .Values.postgresql.usePasswordFile }}
+            - name: postgresql-password
+              mountPath: /opt/bitnami/postgresql/secrets/
+            {{- end }}
+            {{- if .Values.postgresql.tls.enabled }}
+            - name: postgresql-certificates
+              mountPath: /opt/bitnami/postgresql/certs
+            {{- end }}
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+            - name: hooks-scripts
+              mountPath: /pre-stop.sh
+              subPath: pre-stop.sh
+            - name: tmp
+              mountPath: /tmp
+            - name: confdir
+              mountPath: /opt/bitnami/postgresql/conf
+            - name: confddir
+              mountPath: /opt/bitnami/postgresql/conf/conf.d
+            - name: repmgrconfdir
+              mountPath: /opt/bitnami/repmgr/conf
+            - name: tmppostgres
+              mountPath: /opt/bitnami/postgresql/tmp
+            - name: tmprepmgr
+              mountPath: /opt/bitnami/repmgr/tmp
       {{- if or .Values.postgresql.initContainers .Values.postgresql.extraInitContainers }}
       {{- include "common.tplvalues.render" ( dict "value" (coalesce .Values.postgresql.initContainers .Values.postgresql.extraInitContainers) "context" $ ) | nindent 8 }}
       {{- end }}
@@ -142,6 +389,9 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else if .Values.postgresql.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /opt/bitnami/scripts/postgresql-repmgr/run.sh
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
@@ -425,6 +675,18 @@ spec:
             - name: hooks-scripts
               mountPath: /pre-stop.sh
               subPath: pre-stop.sh
+            - name: tmp
+              mountPath: /tmp
+            - name: confdir
+              mountPath: /opt/bitnami/postgresql/conf
+            - name: confddir
+              mountPath: /opt/bitnami/postgresql/conf/conf.d
+            - name: repmgrconfdir
+              mountPath: /opt/bitnami/repmgr/conf
+            - name: tmppostgres
+              mountPath: /opt/bitnami/postgresql/tmp
+            - name: tmprepmgr
+              mountPath: /opt/bitnami/repmgr/tmp
             {{- if .Values.postgresql.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -528,6 +790,24 @@ spec:
         {{- if .Values.postgresql.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+        - name: repmgrconfdir
+          emptyDir:
+            medium: "Memory"
+        - name: confdir
+          emptyDir:
+            medium: "Memory"
+        - name: confddir
+          emptyDir:
+            medium: "Memory"
+        - name: tmp
+          emptyDir:
+            medium: "Memory"
+        - name: tmppostgres
+          emptyDir:
+            medium: "Memory"
+        - name: tmprepmgr
+          emptyDir:
+            medium: "Memory"
         {{- if and .Values.metrics.enabled .Values.metrics.customMetrics }}
         - name: custom-metrics
           configMap:
