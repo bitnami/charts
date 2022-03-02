@@ -396,6 +396,14 @@ As an alternative, this chart supports using an initContainer to change the owne
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
+## Upgrading
+
+### To 1.0.0.
+
+The `postgresql` sub-chart was upgraded to `11.x.x`. Several values of the sub-chart were changed, so please check the [upgrade notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/).
+
+It will be necessary to migrate between PostgreSQL versions.
+
 ## License
 
 Copyright &copy; 2022 Bitnami
