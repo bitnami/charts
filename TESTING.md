@@ -33,22 +33,21 @@ The current test system supports a set of tools that are listed below. Test exec
 
 #### Dynamic testing
 
+This part is of the most interest for the contributor. This is where the test design, test execution and test maintenance efforts will be focused. 
+
 If your asset has a user interface, you will **need** to include the following tests:
 
 * [Cypress](https://docs.cypress.io/guides/overview/why-cypress) (functional tests)
-* [Goss](https://github.com/aelsabbahy/goss/blob/master/docs/manual.md) (infrastructure and configuration tests)
-* Health checks
-* Resilience check (needed for all assets that require high availability (eg. databases))
-
+* [Goss](https://github.com/aelsabbahy/goss/blob/master/docs/manual.md) (integration tests)
 
 #### Static analysis
 
-Static analysis is needed for all assets. 
+Static analysis is included for all assets as a part of the pipeline. Since this analysis is generic, it is defined internally and added as an action to the existing the pipeline. There is no need for additional work on the contributor side related to this. The following types of static analysis are supported: 
 
 * [Trivy](https://github.com/aquasecurity/trivy)
 * Helm lint
 
-***NOTE***: Health checks, resilience checks, Trivy and Helm lint are specified using actions based on the Helm chart need. The action will be the same for every chart. Cypress and Goss tests need to be tailored per application under test. 
+***NOTE***: Cypress and Goss tests need to be tailored per application under test. 
 
 ## Test acceptance criteria
 
@@ -75,6 +74,7 @@ In order for your test code PR to be accepted the following criteria must be ful
 - [ ] Include only necessary files
 - [ ] Test code needs to be [maintainable](https://testautomationpatterns.org/wiki/index.php/MAINTAINABLE_TESTWARE)
 - [ ] Test names should be descriptive
+- [ ] Test data should be generated dynamically
 
 ### Cypress
 
