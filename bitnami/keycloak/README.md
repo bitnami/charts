@@ -401,6 +401,12 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 6.0.0
+
+The `postgresql` sub-chart was upgraded to `11.x.x`. Several values of the sub-chart were changed, so please check the [upgrade notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/).
+
+It will be necessary to migrate between PostgreSQL versions.
+
 ### To 5.2.0
 If you use `KUBE_PING` as discovery method you have to enable mounting of ServiceAccountTokens by setting `serviceAccount.automountServiceAccountToken` to `true`.
 
