@@ -45,7 +45,7 @@ If your asset has a user interface, you will **need** to include the following t
 Static analysis is included for all assets as a part of the pipeline. Since this analysis is generic, it is defined internally and added as an action to the existing the pipeline. There is no need for additional work on the contributor side related to this. The following types of static analysis are supported: 
 
 * [Trivy](https://github.com/aquasecurity/trivy)
-* Helm lint
+* [Helm lint](https://helm.sh/docs/helm/helm_lint/)
 
 ***NOTE***: Cypress and Goss tests need to be tailored per application under test. 
 
