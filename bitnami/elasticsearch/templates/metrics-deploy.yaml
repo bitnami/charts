@@ -46,7 +46,7 @@ spec:
             - --es.uri=http://{{- if .Values.security.enabled }}elastic:{{ .Values.security.elasticPassword }}@{{- end }}{{ template "elasticsearch.coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}
             {{- else }}
             # Using master nodes as there are no coordinating only nodes
-            - --es.uri=http://{{- if .Values.security.enabled }}elastic:{{ .Values.security.elasticPassword }}@{{- end }}{{ include "elasticsearch.master.fullname" . }}:{{ .Values.master.service.port }}
+            - --es.uri=http://{{- if .Values.security.enabled }}elastic:{{ .Values.security.elasticPassword }}@{{- end }}{{ include "elasticsearch.master.fullname" . }}:9200
             {{- end }}
             - --es.all
             {{- if .Values.metrics.extraArgs }}
