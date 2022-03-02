@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -38,6 +40,7 @@ commonAnnotations: {}
 extraDeploy: []
 
 ## @section Hub deployment parameters
+##
 
 ## Hub deployment parameters
 ##
@@ -158,7 +161,7 @@ hub:
       activeServerLimit:
       db:
         type: postgres
-        url: postgresql://{{ ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.user .Values.postgresql.enabled }}@{{ ternary (include "jupyterhub.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled }}:{{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled }}/{{ ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.database .Values.postgresql.enabled }}
+        url: postgresql://{{ ternary .Values.postgresql.auth.username .Values.externalDatabase.user .Values.postgresql.enabled }}@{{ ternary (include "jupyterhub.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled }}:{{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled }}/{{ ternary .Values.postgresql.auth.database .Values.externalDatabase.database .Values.postgresql.enabled }}
       services: {}
       allowNamedServers: false
       namedServerLimitPerUser:
@@ -315,11 +318,13 @@ hub:
     ## limits:
     ##   cpu: 200m
     ##   memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##   cpu: 200m
     ##   memory: 10Mi
+    ##
     requests: {}
   ## hub containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -450,6 +455,7 @@ hub:
   sidecars: []
 
   ## @section Hub RBAC parameters
+  ##
 
   ## ServiceAccount parameters
   ##
@@ -469,6 +475,7 @@ hub:
     create: true
 
   ## @section Hub Traffic Exposure Parameters
+  ##
 
   ## Network policy
   ##
@@ -493,6 +500,7 @@ hub:
     ##
     type: ClusterIP
     ## @param hub.service.port Hub service HTTP port
+    ##
     port: 8081
     ## @param hub.service.loadBalancerIP Hub service LoadBalancer IP (optional, cloud specific)
     ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
@@ -515,6 +523,7 @@ hub:
     externalTrafficPolicy: Cluster
 
   ## @section Hub Metrics parameters
+  ##
 
   metrics:
     ## @param hub.metrics.authenticatePrometheus Use authentication for Prometheus
@@ -539,6 +548,7 @@ hub:
       ## @param hub.metrics.serviceMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
       ## e.g:
       ## scrapeTimeout: 30s
+      ##
       scrapeTimeout: ""
       ## @param hub.metrics.serviceMonitor.relabellings Specify Metric Relabellings to add to the scrape endpoint
       ##
@@ -552,6 +562,7 @@ hub:
       additionalLabels: {}
 
 ## @section Proxy deployment parameters
+##
 
 ## Proxy deployment parameters
 ##
@@ -684,11 +695,13 @@ proxy:
     ## limits:
     ##   cpu: 200m
     ##   memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##   cpu: 200m
     ##   memory: 10Mi
+    ##
     requests: {}
   ## proxy containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -817,6 +830,7 @@ proxy:
   sidecars: []
 
   ## @section Proxy Traffic Exposure Parameters
+  ##
 
   ## Network policy
   ##
@@ -1002,6 +1016,7 @@ proxy:
     secrets: []
 
   ## @section Proxy Metrics parameters
+  ##
 
   metrics:
     ## Prometheus Operator ServiceMonitor configuration
@@ -1022,6 +1037,7 @@ proxy:
       ## @param proxy.metrics.serviceMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
       ## e.g:
       ## scrapeTimeout: 30s
+      ##
       scrapeTimeout: ""
       ## @param proxy.metrics.serviceMonitor.relabellings Specify Metric Relabellings to add to the scrape endpoint
       ##
@@ -1035,6 +1051,7 @@ proxy:
       additionalLabels: {}
 
 ## @section Image puller deployment parameters
+##
 
 ## Image Puller deployment parameters
 ##
@@ -1066,11 +1083,13 @@ imagePuller:
     ## limits:
     ##   cpu: 200m
     ##   memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##   cpu: 200m
     ##   memory: 10Mi
+    ##
     requests: {}
   ## imagePuller containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -1202,6 +1221,7 @@ imagePuller:
   sidecars: []
 
 ## @section Singleuser deployment parameters
+##
 
 ## Singleuser deployment parameters
 ## NOTE: The values in this section are used for generating the hub.configuration value. In case you provide
@@ -1259,11 +1279,13 @@ singleuser:
     ## limits:
     ##   cpu: 200m
     ##   memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##   cpu: 200m
     ##   memory: 10Mi
+    ##
     requests: {}
   ## singleuser containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -1337,6 +1359,7 @@ singleuser:
   sidecars: []
 
   ## @section Single User RBAC parameters
+  ##
 
   ## Service account parameters
   ##
@@ -1350,6 +1373,7 @@ singleuser:
     name: ""
 
   ## @section Single User Persistence parameters
+  ##
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -1376,6 +1400,7 @@ singleuser:
     size: 10Gi
 
   ## @section Traffic exposure parameters
+  ##
 
   ## Network policy
   ##
@@ -1397,6 +1422,7 @@ singleuser:
     extraEgress: ""
 
 ## @section Auxiliary image parameters
+##
 
 ## @param auxiliaryImage.registry Auxiliary image registry
 ## @param auxiliaryImage.repository Auxiliary image repository
@@ -1419,6 +1445,7 @@ auxiliaryImage:
   pullSecrets: []
 
 ## @section External Database settings
+##
 
 ## External Database Configuration
 ## All of these values are only used when postgresql.enabled is set to false
@@ -1434,7 +1461,7 @@ externalDatabase:
   ##
   password: ""
   ## @param externalDatabase.existingSecret Secret containing the password of an external PostgreSQL instance to connect (only if postgresql.enabled=false)
-  ## Name of an existing secret resource containing the DB password in a 'postgresql-password' key
+  ## Name of an existing secret resource containing the DB password in a 'password' key
   ##
   existingSecret: ""
   ## @param externalDatabase.database Database inside an external PostgreSQL to connect (only if postgresql.enabled=false)
@@ -1445,6 +1472,7 @@ externalDatabase:
   port: 5432
 
 ## @section PostgreSQL subchart settings
+##
 
 ## PostgreSQL chart configuration
 ## https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
@@ -1459,22 +1487,24 @@ postgresql:
   ## @param postgresql.existingSecret Existing secret containing the password of the PostgreSQL chart
   ##
   existingSecret: ""
-  ## @param postgresql.postgresqlPassword Password for the postgres user of the PostgreSQL chart (auto-generated if not set)
-  ## ref: https://hub.docker.com/_/postgres/
-  ##
-  postgresqlPassword: ""
-  ## @param postgresql.postgresqlUsername Username to create when deploying the PostgreSQL chart
-  ##
-  postgresqlUsername: bn_jupyterhub
-  ## @param postgresql.postgresqlDatabase Database to create when deploying the PostgreSQL chart
-  ##
-  postgresqlDatabase: bitnami_jupyterhub
+  auth:
+    ## @param postgresql.auth.password Password for the postgres user of the PostgreSQL chart (auto-generated if not set)
+    ## ref: https://hub.docker.com/_/postgres/
+    ##
+    password: ""
+    ## @param postgresql.auth.username Username to create when deploying the PostgreSQL chart
+    ##
+    username: bn_jupyterhub
+    ## @param postgresql.auth.database Database to create when deploying the PostgreSQL chart
+    ##
+    database: bitnami_jupyterhub
   ## PostgreSQL service
   ##
   service:
-    ## @param postgresql.service.port PostgreSQL service port
+    ## @param postgresql.service.ports.postgresql PostgreSQL service port
     ##
-    port: 5432
+    ports:
+      postgresql: 5432
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
