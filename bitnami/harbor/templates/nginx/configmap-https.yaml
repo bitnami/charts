@@ -1,10 +1,9 @@
-{{- if and (eq .Values.exposureType "proxy") .Values.nginx.tls.enabled }}
-{{- $scheme := ternary "https" "http" .Values.internalTLS.enabled -}}
+{{- if and (not .Values.ingress.enabled) .Values.service.tls.enabled }}
+{{- $scheme := (include "harbor.component.scheme" .) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "harbor.nginx" . }}
-  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -37,16 +36,16 @@ data:
       proxy_http_version 1.1;
 
       upstream core {
-        server {{ printf "%s:%d" (include "harbor.core" .) (ternary .Values.core.containerPorts.https .Values.core.containerPorts.http .Values.internalTLS.enabled | int) }};
+        server "{{ template "harbor.core" . }}:{{ template "harbor.core.servicePort" . }}";
       }
 
       upstream portal {
-        server {{ printf "%s" (include "harbor.portal" .) }};
+        server "{{ template "harbor.portal" . }}:{{ template "harbor.portal.servicePort" . }}";
       }
 
       {{- if .Values.notary.enabled }}
       upstream notary-server {
-        server {{ template "harbor.notary-server" . }}:{{ .Values.notary.server.containerPorts.server }};
+        server {{ template "harbor.notary-server" . }}:4443;
       }
       {{- end }}
 
@@ -60,10 +59,10 @@ data:
       {{- if .Values.notary.enabled }}
       server {
         {{- if .Values.ipFamily.ipv4.enabled }}
-        listen {{ .Values.nginx.containerPorts.notary }} ssl;
+        listen 4443 ssl;
         {{- end }}
         {{- if .Values.ipFamily.ipv6.enabled }}
-        listen [::]:{{ .Values.nginx.containerPorts.notary }} ssl;
+        listen [::]:4443 ssl;
         {{- end }}
         server_tokens off;
         # ssl
@@ -100,10 +99,10 @@ data:
 
       server {
         {{- if .Values.ipFamily.ipv4.enabled }}
-        listen {{ .Values.nginx.containerPorts.https }} ssl;
+        listen 8443 ssl;
         {{- end }}
         {{- if .Values.ipFamily.ipv6.enabled }}
-        listen [::]:{{ .Values.nginx.containerPorts.https }} ssl;
+        listen [::]:8443 ssl;
         {{- end }}
         server_tokens off;
         # SSL

@@ -1,8 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ printf "%s-envvars" (include "harbor.trivy" .) }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ template "harbor.trivy" . }}-envvars
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -21,7 +20,7 @@ data:
   SCANNER_TRIVY_IGNORE_UNFIXED: {{ .Values.trivy.ignoreUnfixed | quote }}
   SCANNER_TRIVY_SKIP_UPDATE: {{ .Values.trivy.skipUpdate | quote }}
   SCANNER_TRIVY_INSECURE: {{ .Values.trivy.insecure | quote }}
-  SCANNER_API_SERVER_ADDR: {{ printf ":%d" (ternary .Values.trivy.containerPorts.https .Values.trivy.containerPorts.http .Values.internalTLS.enabled | int) | quote }}
+  SCANNER_API_SERVER_ADDR: {{ printf ":%s" (include "harbor.trivy.containerPort" .) | quote }}
   {{- if .Values.internalTLS.enabled }}
   INTERNAL_TLS_ENABLED: "true"
   SCANNER_API_SERVER_TLS_KEY: /etc/harbor/ssl/trivy/tls.key
