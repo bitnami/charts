@@ -64,7 +64,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                         | Value |
@@ -75,7 +74,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonLabels`      | Labels to add to all deployed objects                                               | `{}`  |
 | `commonAnnotations` | Annotations to add to all deployed objects                                          | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                   | `[]`  |
-
 
 ### Hub deployment parameters
 
@@ -148,7 +146,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.initContainers`                        | Add additional init containers to the Hub pods                                            | `[]`                   |
 | `hub.sidecars`                              | Add additional sidecar containers to the Hub pod                                          | `[]`                   |
 
-
 ### Hub RBAC parameters
 
 | Name                        | Description                                          | Value  |
@@ -156,7 +153,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.serviceAccount.create` | Specifies whether a ServiceAccount should be created | `true` |
 | `hub.serviceAccount.name`   | Override Hub service account name                    | `""`   |
 | `hub.rbac.create`           | Specifies whether RBAC resources should be created   | `true` |
-
 
 ### Hub Traffic Exposure Parameters
 
@@ -173,7 +169,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.service.nodePorts.http`              | NodePort for the HTTP endpoint                           | `""`        |
 | `hub.service.externalTrafficPolicy`       | External traffic policy for the service                  | `Cluster`   |
 
-
 ### Hub Metrics parameters
 
 | Name                                          | Description                                                                                 | Value          |
@@ -187,7 +182,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                                   | `[]`           |
 | `hub.metrics.serviceMonitor.honorLabels`      | Specify honorLabels parameter to add the scrape endpoint                                    | `false`        |
 | `hub.metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the installed Prometheus Operator                  | `{}`           |
-
 
 ### Proxy deployment parameters
 
@@ -258,7 +252,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.initContainers`                        | Add additional init containers to the Proxy pods                                          | `[]`                              |
 | `proxy.sidecars`                              | Add additional sidecar containers to the Proxy pod                                        | `[]`                              |
 
-
 ### Proxy Traffic Exposure Parameters
 
 | Name                                             | Description                                                                                                                      | Value                    |
@@ -299,7 +292,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.ingress.extraPaths`                       | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
 | `proxy.ingress.secrets`                          | Add extra secrets for the tls configuration                                                                                      | `[]`                     |
 
-
 ### Proxy Metrics parameters
 
 | Name                                            | Description                                                                                 | Value      |
@@ -312,7 +304,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                                   | `[]`       |
 | `proxy.metrics.serviceMonitor.honorLabels`      | Specify honorLabels parameter to add the scrape endpoint                                    | `false`    |
 | `proxy.metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the installed Prometheus Operator                  | `{}`       |
-
 
 ### Image puller deployment parameters
 
@@ -353,7 +344,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `imagePuller.initContainers`                        | Add additional init containers to the ImagePuller pods                                    | `[]`            |
 | `imagePuller.sidecars`                              | Add additional sidecar containers to the ImagePuller pod                                  | `[]`            |
 
-
 ### Singleuser deployment parameters
 
 | Name                                            | Description                                                                                         | Value                                |
@@ -384,14 +374,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.initContainers`                     | Add additional init containers to the Single User pods                                              | `[]`                                 |
 | `singleuser.sidecars`                           | Add additional sidecar containers to the Single User pod                                            | `[]`                                 |
 
-
 ### Single User RBAC parameters
 
 | Name                               | Description                                          | Value  |
 | ---------------------------------- | ---------------------------------------------------- | ------ |
 | `singleuser.serviceAccount.create` | Specifies whether a ServiceAccount should be created | `true` |
 | `singleuser.serviceAccount.name`   | Override Single User service account name            | `""`   |
-
 
 ### Single User Persistence parameters
 
@@ -401,7 +389,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.persistence.storageClass` | Persistent Volumes storage class                           | `""`                |
 | `singleuser.persistence.accessModes`  | Persistent Volumes access modes                            | `["ReadWriteOnce"]` |
 | `singleuser.persistence.size`         | Persistent Volumes size                                    | `10Gi`              |
-
 
 ### Traffic exposure parameters
 
@@ -413,7 +400,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.networkPolicy.extraIngress`             | Add extra ingress rules to the NetworkPolicy             | `""`    |
 | `singleuser.networkPolicy.extraEgress`              | Add extra egress rules to the NetworkPolicy              | `""`    |
 
-
 ### Auxiliary image parameters
 
 | Name                         | Description                                         | Value                   |
@@ -423,7 +409,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended) | `10-debian-10-r351`     |
 | `auxiliaryImage.pullPolicy`  | Auxiliary image pull policy                         | `IfNotPresent`          |
 | `auxiliaryImage.pullSecrets` | Auxiliary image pull secrets                        | `[]`                    |
-
 
 ### External Database settings
 
@@ -435,7 +420,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret` | Secret containing the password of an external PostgreSQL instance to connect (only if postgresql.enabled=false) | `""`         |
 | `externalDatabase.database`       | Database inside an external PostgreSQL to connect (only if postgresql.enabled=false)                            | `jupyterhub` |
 | `externalDatabase.port`           | Port of an external PostgreSQL to connect (only if postgresql.enabled=false)                                    | `5432`       |
-
 
 ### PostgreSQL subchart settings
 
@@ -453,7 +437,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `postgresql.persistence.storageClass`  | storageClass of the created PVCs                                                   | `""`                 |
 | `postgresql.persistence.accessMode`    | Access mode of the created PVCs                                                    | `ReadWriteOnce`      |
 | `postgresql.persistence.size`          | Size of the created PVCs                                                           | `8Gi`                |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -540,6 +523,12 @@ Find more information about how to deal with common errors related to Bitnami's 
 ```bash
 $ helm upgrade my-release bitnami/jupyterhub
 ```
+
+### To 1.0.0
+
+The `postgresql` sub-chart was upgraded to `11.x.x`. Several values of the sub-chart were changed, so please check the [upgrade notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/).
+
+It will be necessary to migrate between PostgreSQL versions.
 
 ## License
 
