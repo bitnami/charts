@@ -62,7 +62,7 @@ Return the Database type
 {{- if .Values.mariadb.enabled }}
     {{- printf "mariadb" -}}
 {{- else -}}
-    {{- printf "%d" .Values.externalDatabase.type -}}
+    {{- printf "%s" .Values.externalDatabase.type -}}
 {{- end -}}
 {{- end -}}
 
