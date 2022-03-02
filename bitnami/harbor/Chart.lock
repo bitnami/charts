@@ -1,10 +1,19 @@
 dependencies:
+<<<<<<< HEAD
 - name: redis
   repository: https://charts.bitnami.com/bitnami
   version: 15.7.6
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
   version: 10.16.2
+=======
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 11.0.8
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 16.4.0
+>>>>>>> 32a481e62 ([bitnami/harbor] Chart standardized)
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 1.11.3
