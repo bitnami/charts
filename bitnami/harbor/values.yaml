@@ -2896,6 +2896,7 @@ trivy:
   ##
   podAnnotations: {}
 
+## @section Harbor Exporter Parameters
 ## Bitnami Harbor Exporter image
 ## ref: https://hub.docker.com/r/bitnami/harbor-exporter/tags/
 ##
@@ -2947,12 +2948,6 @@ exporter:
   ##
   updateStrategy:
     type: RollingUpdate
-  ## Use TLS in the container
-  ## TODO check this!!
-  tls:
-    ## @param exporter.tls.existingSecret Name of a secret with the certificates for internal TLS access. Requires internalTLS.enabled to be set to true. If this values is not set it will be automatically generated
-    ##
-    existingSecret: ""
   ## @param exporter.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
   ##
   lifecycleHooks: {}
@@ -3292,43 +3287,32 @@ externalRedis:
   clairAdapterDatabaseIndex: '4'
   trivyAdapterDatabaseIndex: '5'
 
-# TODO: Clean
-# exporter:
-#     replicas: 1
-#   # resources:
-#   #  requests:
-#   #    memory: 256Mi
-#   #    cpu: 100m
-#     podAnnotations: {}
-#     serviceAccountName: ""
-#     # mount the service account token
-#     automountServiceAccountToken: false
-#     image:
-#       repository: goharbor/harbor-exporter
-#       tag: dev
-#     nodeSelector: {}
-#     tolerations: []
-#     affinity: {}
-#     cacheDuration: 23
-#     cacheCleanInterval: 14400
-#     ## The priority class to run the pod as
-#     priorityClassName:
-
+## @section Harbor metrics parameters
 metrics:
+  ## @param metrics.enabled Whether or not to enable metrics for different
   enabled: false
+  ## @param metrics.core.path Path where metrics are exposed in Harbor Core
+  ## @param metrics.core.port Port where metrics are exposed in Harbor Core
   core:
     path: /metrics
     port: 8001
+  ## @param metrics.registry.path Path where metrics are exposed in Harbor Registry
+  ## @param metrics.registry.port Port where metrics are exposed in Harbor Registry
   registry:
     path: /metrics
     port: 8001
+  ## @param metrics.jobservice.path Path where metrics are exposed in Harbor Jobservice
+  ## @param metrics.jobservice.port Port where metrics are exposed in Harbor Jobservice
   jobservice:
     path: /metrics
     port: 8001
+  ## @param metrics.exporter.path Path where metrics are exposed in Harbor Exporter
+  ## @param metrics.exporter.port Port where metrics are exposed in Harbor Exporter
   exporter:
     path: /metrics
     port: 8001
-
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
   serviceMonitor:
     ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.enabled` to be `true`)
     ##

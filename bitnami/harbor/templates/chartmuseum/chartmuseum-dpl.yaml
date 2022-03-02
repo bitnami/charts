@@ -91,7 +91,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
-              port: http
+              port: {{ include "harbor.portName" . }}
               scheme: {{ include "harbor.component.scheme" . | upper }}
             initialDelaySeconds: {{ .Values.chartmuseum.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.chartmuseum.livenessProbe.periodSeconds }}
@@ -105,7 +105,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /health
-              port: http
+              port: {{ include "harbor.portName" . }}
               scheme: {{ include "harbor.component.scheme" . | upper }}
             initialDelaySeconds: {{ .Values.chartmuseum.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.chartmuseum.readinessProbe.periodSeconds }}
@@ -160,7 +160,7 @@ spec:
                   key: secret
           ports:
             - containerPort: {{ include "harbor.chartmuseum.containerPort" .  }}
-              name: http
+              name: {{ include "harbor.portName" . }}
           volumeMounts:
             - name: chartmuseum-data
               mountPath: /bitnami/data

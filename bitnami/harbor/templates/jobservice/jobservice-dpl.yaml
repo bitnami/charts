@@ -105,7 +105,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /api/v1/stats
-              port: http
+              port: {{ include "harbor.portName" . }}
               scheme: {{ include "harbor.component.scheme" . | upper }}
             initialDelaySeconds: {{ .Values.jobservice.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jobservice.livenessProbe.periodSeconds }}
@@ -119,7 +119,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /api/v1/stats
-              port: http
+              port: {{ include "harbor.portName" . }}
               scheme: {{ include "harbor.component.scheme" . | upper }}
             initialDelaySeconds: {{ .Values.jobservice.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jobservice.readinessProbe.periodSeconds }}
@@ -176,7 +176,7 @@ spec:
             {{- end }}
           ports:
             - containerPort: {{ include "harbor.jobservice.containerPort" . }}
-              name: http
+              name: {{ include "harbor.portName" . }}
           volumeMounts:
             - name: jobservice-config
               mountPath: /etc/jobservice/config.yml

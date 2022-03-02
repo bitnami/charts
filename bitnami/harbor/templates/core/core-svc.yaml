@@ -17,7 +17,7 @@ spec:
   ports:
     - name: {{ ternary "https-web" "http-web" .Values.internalTLS.enabled }}
       port: {{ include "harbor.core.servicePort" . }}
-      targetPort: http
+      targetPort: {{ include "harbor.portName" . }}
     {{- if .Values.metrics.enabled}}
     - name: {{ template "harbor.metricsPortName" . }}
       port: {{ .Values.metrics.core.port }}

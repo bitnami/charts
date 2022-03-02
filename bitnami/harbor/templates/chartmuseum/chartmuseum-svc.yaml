@@ -14,8 +14,8 @@ metadata:
 spec:
   ports:
     - port: {{ include "harbor.chartmuseum.servicePort" . }}
-      name: http
-      targetPort: http
+      name: {{ include "harbor.portName" . }}
+      targetPort: {{ include "harbor.portName" . }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: chartmuseum
 {{- end }}

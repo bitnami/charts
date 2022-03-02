@@ -101,7 +101,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: {{ include "harbor.portName" . }}
               scheme: {{ include "harbor.component.scheme" . | upper }}
             initialDelaySeconds: {{ .Values.portal.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.portal.readinessProbe.periodSeconds }}
@@ -128,7 +128,7 @@ spec:
             {{- end }}
           ports:
             - containerPort: {{ include "harbor.portal.containerPort" . }}
-              name: http
+              name: {{ include "harbor.portName" . }}
           volumeMounts:
             - name: portal-config
               mountPath: /opt/bitnami/nginx/conf/nginx.conf

@@ -14,8 +14,8 @@ spec:
   type: NodePort
   {{- end }}
   ports:
-    - name: http
+    - name: {{ include "harbor.portName" . }}
       port: {{ include "harbor.portal.servicePort" . }}
-      targetPort: http
+      targetPort: {{ include "harbor.portName" . }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: portal

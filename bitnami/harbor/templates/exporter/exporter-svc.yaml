@@ -13,7 +13,7 @@ metadata:
   {{- end }}
 spec:
   ports:
-    - name: {{ template "harbor.metricsPortName" . }}
+    - name: {{ include "harbor.metricsPortName" . }}
       port: {{ .Values.metrics.exporter.port }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: exporter

@@ -22,7 +22,7 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   endpoints:
-    - port: http-metrics
+    - port: {{ template "harbor.metricsPortName" . }}
       path: /metrics
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}

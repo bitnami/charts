@@ -12,9 +12,9 @@ metadata:
   {{- end }}
 spec:
   ports:
-    - name: http
+    - name: {{ include "harbor.portName" . }}
       port: {{ include "harbor.jobservice.servicePort" . }}
-      targetPort: http
+      targetPort: {{ include "harbor.portName" . }}
     {{- if .Values.metrics.enabled }}
     - name: {{ template "harbor.metricsPortName" . }}
       port: {{ .Values.metrics.jobservice.port }}

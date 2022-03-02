@@ -193,16 +193,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
-{{/* Exporter component container port */}}
-{{- define "harbor.exporter.containerPort" -}}
-  {{- if .Values.internalTLS.enabled -}}
-  {{/* TODO */}}
-    {{- printf "8443" -}}
-  {{- else -}}
-    {{- printf "8001" -}}
-  {{- end -}}
-{{- end -}}
-
 {{/* Exporter component service port */}}
 {{- define "harbor.exporter.servicePort" -}}
   {{- if .Values.internalTLS.enabled -}}
@@ -214,11 +204,12 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{/* Port name for metrics */}}
 {{- define "harbor.metricsPortName" -}}
-  {{- if .Values.internalTLS.enabled }}
-    {{- printf "https-metrics" -}}
-  {{- else -}}
-    {{- printf "http-metrics" -}}
-  {{- end -}}
+  {{- printf "http-metrics" -}}
+{{- end -}}
+
+{/* Common port name */}}
+{{- define "harbor.portName" -}}
+  {{- include "harbor.component.scheme" . -}}
 {{- end -}}
 
 {{/* Clair Adadpter URL */}}
@@ -268,29 +259,34 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s" (coalesce .Values.chartmuseum.tls.existingSecret (printf "%s-crt" (include "harbor.chartmuseum" .))) -}}
 {{- end -}}
 
-{{/* Chartmuseum TLS secret name */}}
+{{/* Clair TLS secret name */}}
 {{- define "harbor.clair.tls.secretName" -}}
 {{- printf "%s" (coalesce .Values.clair.tls.existingSecret (printf "%s-crt" (include "harbor.clair" .))) -}}
 {{- end -}}
 
-{{/* Chartmuseum TLS secret name */}}
+{{/* Jobservice TLS secret name */}}
 {{- define "harbor.jobservice.tls.secretName" -}}
 {{- printf "%s" (coalesce .Values.jobservice.tls.existingSecret (printf "%s-crt" (include "harbor.jobservice" .))) -}}
 {{- end -}}
 
-{{/* Chartmuseum TLS secret name */}}
+{{/* Portal TLS secret name */}}
 {{- define "harbor.portal.tls.secretName" -}}
 {{- printf "%s" (coalesce .Values.portal.tls.existingSecret (printf "%s-crt" (include "harbor.portal" .))) -}}
 {{- end -}}
 
-{{/* Chartmuseum TLS secret name */}}
+{{/* Registry TLS secret name */}}
 {{- define "harbor.registry.tls.secretName" -}}
 {{- printf "%s" (coalesce .Values.registry.tls.existingSecret (printf "%s-crt" (include "harbor.registry" .))) -}}
 {{- end -}}
 
-{{/* Chartmuseum TLS secret name */}}
+{{/* Trivy TLS secret name */}}
 {{- define "harbor.trivy.tls.secretName" -}}
 {{- printf "%s" (coalesce .Values.trivy.tls.existingSecret (printf "%s-crt" (include "harbor.trivy" .))) -}}
+{{- end -}}
+
+{{/* Exporter TLS secret name */}}
+{{- define "harbor.exporter.tls.secretName" -}}
+{{- printf "%s" (coalesce .Values.exporter.tls.existingSecret (printf "%s-crt" (include "harbor.exporter" .))) -}}
 {{- end -}}
 
 {{/*

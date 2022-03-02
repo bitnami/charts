@@ -78,9 +78,10 @@ spec:
           {{- if .Values.exporter.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /metrics
-              port: http-metrics
-              scheme: {{ include "harbor.component.scheme" . | upper }}
+              path: {{ .Values.metrics.exporter.path | quote }}
+              port: {{ include "harbor.metricsPortName" . }}
+              # Metrics are exposed only though HTTP https://github.com/goharbor/harbor/issues/16252
+              scheme: HTTP
             initialDelaySeconds: {{ .Values.exporter.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.exporter.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.exporter.livenessProbe.timeoutSeconds }}
@@ -92,9 +93,10 @@ spec:
           {{- if .Values.exporter.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /metrics
-              port:  http-metrics
-              scheme: {{ include "harbor.component.scheme" . | upper }}
+              path: {{ .Values.metrics.exporter.path | quote }}
+              port: {{ include "harbor.metricsPortName" . }}
+              # Metrics are exposed only though HTTP https://github.com/goharbor/harbor/issues/16252
+              scheme: HTTP
             initialDelaySeconds: {{ .Values.exporter.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.exporter.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.exporter.readinessProbe.timeoutSeconds }}
@@ -122,16 +124,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "harbor.core" . }}-envvars
                   key: HARBOR_ADMIN_PASSWORD
-            {{- if .Values.internalTLS.enabled }}
-            - name: INTERNAL_TLS_ENABLED
-              value: "true"
-            - name: INTERNAL_TLS_KEY_PATH
-              value: /etc/harbor/ssl/exporter/tls.key
-            - name: INTERNAL_TLS_CERT_PATH
-              value: /etc/harbor/ssl/exporter/tls.crt
-            - name: INTERNAL_TLS_TRUST_CA_PATH
-              value: /etc/harbor/ssl/exporter/ca.crt
-            {{- end }}
             {{- if .Values.exporter.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.exporter.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -139,15 +131,15 @@ spec:
             - configMapRef:
                 name: "{{ include "harbor.exporter" . }}-envvars"
           ports:
-            - containerPort: {{ include "harbor.exporter.containerPort" . }}
-              name: http-metrics
+            - containerPort: {{ .Values.metrics.exporter.port }}
+              name: {{ include "harbor.metricsPortName" . }}
           volumeMounts:
         {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/exporter
             {{- end }}
             {{- if .Values.caBundleSecretName }}
-{{ include "harbor.caBundleVolumeMount" . | indent 12 }}
+            {{- include "harbor.caBundleVolumeMount" . | indent 12 }}
             {{- end }}
             {{- if .Values.exporter.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.exporter.extraVolumeMounts "context" $) | nindent 12 }}
@@ -162,7 +154,10 @@ spec:
         {{- if .Values.internalTLS.enabled }}
         - name: internal-tls-certs
           secret:
-            secretName: {{ include "harbor.exporter.tls.secretName" . }}
+            secretName: {{ include "harbor.core.tls.secretName" . }}
+            items:
+              - key: ca.crt
+                path: ca.crt
         {{- end }}
       {{- if .Values.exporter.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.exporter.extraVolumes "context" $) | nindent 8 }}
