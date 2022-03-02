@@ -105,16 +105,16 @@ spec:
             - name: POSTGRESQL_CLIENT_DATABASE_HOST
               value: {{ ternary (include "jupyterhub.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled }}
             - name: POSTGRESQL_CLIENT_DATABASE_NAME
-              value: {{ ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.port .Values.postgresql.enabled }}
+              value: {{ ternary .Values.postgresql.auth.database .Values.externalDatabase.port .Values.postgresql.enabled }}
             - name: POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER
               value: {{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "jupyterhub.databaseSecretName" . }}
-                  key: "postgresql-password"
+                  key: "password"
             - name: POSTGRESQL_CLIENT_POSTGRES_USER
-              value: {{ ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
+              value: {{ ternary .Values.postgresql.auth.username .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
         {{- end }}
         {{- if .Values.hub.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.hub.initContainers "context" $) | nindent 8 }}
@@ -171,7 +171,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "jupyterhub.databaseSecretName" . }}
-                  key: {{ ternary "postgresql-password" "db-password" .Values.postgresql.enabled | quote }}
+                  key: {{ ternary "password" "db-password" .Values.postgresql.enabled | quote }}
             {{- if .Values.hub.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.hub.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
