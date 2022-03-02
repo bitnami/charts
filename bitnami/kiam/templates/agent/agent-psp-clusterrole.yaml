@@ -1,6 +1,5 @@
 {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
-{{- if and $pspAvailable .Values.agent.enabled .Values.agent.podSecurityPolicy.create }}
-{{- if .Values.rbac.create }}
+{{- if and $pspAvailable .Values.agent.enabled .Values.agent.podSecurityPolicy.create .Values.rbac.create }}
 kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
@@ -22,5 +21,4 @@ rules:
       - {{ template "common.names.fullname" . }}-agent
     verbs:
       - use
-{{- end }}
 {{- end }}

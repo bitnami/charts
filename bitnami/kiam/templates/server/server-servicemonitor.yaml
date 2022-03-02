@@ -4,17 +4,23 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "common.names.fullname" . }}-server
   {{- if .Values.server.metrics.serviceMonitor.namespace }}
-  namespace: {{ .Values.server.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.server.metrics.serviceMonitor.namespace | quote }}
+  {{- else }}
+  namespace: {{ .Release.Namespace | quote }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: server
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+    {{- if .Values.server.metrics.serviceMonitor.labels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.metrics.serviceMonitor.labels "context" $) | nindent 4 }}
+    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  jobLabel: {{ .Values.server.metrics.serviceMonitor.jobLabel | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       {{- if .Values.server.metrics.serviceMonitor.selector }}
@@ -29,6 +35,9 @@ spec:
       {{- if .Values.server.metrics.serviceMonitor.scrapeTimeout }}
       scrapeTimeout: {{ .Values.server.metrics.serviceMonitor.scrapeTimeout }}
       {{- end }}
+      {{- if .Values.server.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.server.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
       {{- if .Values.server.metrics.serviceMonitor.relabelings }}
       relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.server.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
       {{- end }}
@@ -37,5 +46,5 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ .Release.Namespace | quote }}
 {{- end }}
