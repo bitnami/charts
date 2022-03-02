@@ -14,7 +14,7 @@ dependencies:
     tags:
       - ejbca-database
     version: 10.x.x
-description: Enterprise class PKI Certificate Authority built on JEE technology.
+description: EJBCA is an enterprise class PKI Certificate Authority software, built using Java (JEE) technology.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/ejbca
 icon: https://bitnami.com/assets/stacks/ejbca/img/ejbca-stack-220x234.png
@@ -30,4 +30,4 @@ name: ejbca
 sources:
   - https://github.com/bitnami/bitnami-docker-ejbca
   - https://www.ejbca.org/
-version: 5.1.2
+version: 5.1.3
