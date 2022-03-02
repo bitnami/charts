@@ -641,10 +641,10 @@ externalDatabase:
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##
   existingSecret: ""
-  ## @param externalDatabase.ssl External Database database ssl
+  ## @param externalDatabase.ssl External Database ssl
   ##
   ssl: false
-  ## @param externalDatabase.sslCaFile External Database database ssl CA filepath
+  ## @param externalDatabase.sslCaFile External Database ssl CA filepath
   ##
   sslCaFile: ""
 
