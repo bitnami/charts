@@ -157,7 +157,7 @@ Return the proper database password secret key
 */}}
 {{- define "argo-workflows.controller.database.password.secret.key" -}}
 {{- if .Values.postgresql.enabled -}}
-{{- printf "%s" "password" -}}
+{{- printf "%s" "postgres-password" -}}
 {{- end -}}
 {{- if .Values.mysql.enabled -}}
 {{- printf "%s" "mysql-password" -}}
