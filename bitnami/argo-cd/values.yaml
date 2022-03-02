@@ -2336,7 +2336,7 @@ redis:
   ## @disabled-param redis.architecture Redis dependency architecture. Either 'standalone' or 'replicaset'
   ## TODO(miguelaeh): We need to test the chart with redis sentinel, it seems to be supported at: https://github.com/argoproj/argo-cd/blob/2a410187565e15633b6f2a8c8d8da22cf02b257d/util/cache/cache.go#L40
   ##
-  ## architecture: standalone
+  architecture: standalone
 
 ##
 ## External Redis&trade;
