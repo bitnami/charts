@@ -103,7 +103,7 @@ spec:
                       {{- if eq .Values.databaseType "mariadb" }}
                       key: mariadb-password
                       {{- else }}
-                      key: postgresql-password
+                      key: password
                       {{- end }}
                 - name: REDMINE_MAIL_RECEIVER_DB_PORT
                 {{- if (include "redmine.useExternalDB" .) }}
