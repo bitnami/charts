@@ -31,6 +31,6 @@ jobs:
           repository: ${{github.event.pull_request.head.repo.full_name}}
       - uses: vmware-labs/vmware-image-builder-action@main
         with:
-          pipeline: vib-platform-verify.json
+          pipeline: grafana/vib-platform-verify.json
         env:
           TARGET_PLATFORM: ${{ matrix.target-platform-id }}
