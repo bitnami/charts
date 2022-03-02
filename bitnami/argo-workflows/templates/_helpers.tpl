@@ -116,7 +116,7 @@ Return the proper database username
 */}}
 {{- define "argo-workflows.controller.database.username" -}}
 {{- if .Values.postgresql.enabled -}}
-{{- .Values.postgresql.postgresqlUsername -}}
+{{- .Values.postgresql.auth.username -}}
 {{- end -}}
 {{- if .Values.mysql.enabled -}}
 {{- .Values.mysql.auth.username -}}
@@ -157,7 +157,7 @@ Return the proper database password secret key
 */}}
 {{- define "argo-workflows.controller.database.password.secret.key" -}}
 {{- if .Values.postgresql.enabled -}}
-{{- printf "%s" "postgresql-password" -}}
+{{- printf "%s" "password" -}}
 {{- end -}}
 {{- if .Values.mysql.enabled -}}
 {{- printf "%s" "mysql-password" -}}
@@ -188,7 +188,7 @@ Return the proper database
 */}}
 {{- define "argo-workflows.controller.database" -}}
 {{- if .Values.postgresql.enabled -}}
-{{- .Values.postgresql.postgresqlDatabase -}}
+{{- .Values.postgresql.auth.database -}}
 {{- end -}}
 {{- if .Values.mysql.enabled -}}
 {{- .Values.mysql.auth.database -}}
@@ -203,7 +203,7 @@ Return the proper database port
 */}}
 {{- define "argo-workflows.controller.database.port" -}}
 {{- if .Values.postgresql.enabled -}}
-{{- .Values.postgresql.service.port -}}
+{{- .Values.postgresql.service.ports.postgresql -}}
 {{- end -}}
 {{- if .Values.mysql.enabled -}}
 {{- .Values.mysql.service.port -}}

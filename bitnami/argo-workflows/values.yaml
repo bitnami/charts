@@ -16,6 +16,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -47,6 +48,7 @@ rbac:
 createAggregateRoles: true
 
 ## @section Argo Workflows Server configuration parameters
+##
 
 ## Argo Workflows server (based on the CLI) image
 ##
@@ -201,6 +203,7 @@ server:
       ## The root URL of the OIDC identity provider.
       ## E.g.
       ## issuer: "https://accounts.google.com"
+      ##
       issuer: ""
       ## Name of a secret and a key in it to retrieve the app OIDC client ID from.
       ##
@@ -216,6 +219,7 @@ server:
       ##
       redirectUrl: ""
       ## Create RBAC resources for SSO
+      ##
       rbac:
         enabled: true
         ## When present, restricts secrets the server can read to a given list.
@@ -262,6 +266,7 @@ server:
 
   ## Server container port
   ## @param server.containerPorts.web argo Server container port
+  ##
   containerPorts:
     web: 2746
 
@@ -276,6 +281,7 @@ server:
     ##
     name: ""
     ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
     automountServiceAccountToken: true
 
   ## @param server.command Override default container command (useful when using custom images)
@@ -447,6 +453,7 @@ server:
     extraPorts: []
 
 ## @section Argo Workflows Controller configuration parameters
+##
 
 ## Argo Workflows Controller
 ##
@@ -565,6 +572,7 @@ controller:
   ## Server container port
   ## @param controller.containerPorts.metrics Port to expose controller metrics
   ## @param controller.containerPorts.telemetry Port to expose controller telemetry
+  ##
   containerPorts:
     metrics: 9090
     telemetry: 8081
@@ -577,6 +585,7 @@ controller:
 
   ## Use an existing configmap instead of creating a configmap with the specified parameters
   ## @param controller.existingConfigMap
+  ##
   existingConfigMap: ""
 
   ## @param controller.extraArgs Extra arguments for the controller command line
@@ -585,6 +594,7 @@ controller:
 
   ## Controller configmap configuration content. Requires controller.existingConfigmap to be empty.
   ## @param controller.config [object] Controller configmap configuration content
+  ##
   config: |
     {{- if .Values.controller.instanceID.enabled }}
     {{- if .Values.controller.instanceID.useReleaseName }}
@@ -594,13 +604,16 @@ controller:
     {{- end }}
     {{- end }}
     ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
+    ##
     containerRuntimeExecutor: {{ .Values.controller.containerRuntimeExecutor }}
     ## Uncomment to create containerRuntimeExecutors
     ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
     ## containerRuntimeExecutors: {}
     ## How many workflows can be running at the same time
+    ##
     parallelism:
     ## Maximun number of workflows running in a namespace
+    ##
     namespaceParallelism:
     {{- if or .Values.executor.resources .Values.executor.extraEnvVars .Values.executor.podSecurityContext }}
     executor:
@@ -614,6 +627,7 @@ controller:
       securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.executor.containerSecurityContext "context" $) | nindent 4 }}
         {{- if not (eq .Values.controller.containerRuntimeExecutor "docker") }}
         ## Docker executor requires to run executor as root
+        ##
         runAsNonRoot: true
         {{- end }}
       {{- end }}
@@ -622,6 +636,7 @@ controller:
     ## artifactRepository:
     ##  archiveLogs: false
     ##  configuration: {}
+    ##
     {{- if .Values.controller.metrics.enabled }}
     metricsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.metrics "context" $) | nindent 4 }}
     {{- end }}
@@ -645,6 +660,7 @@ controller:
         database: {{ include "argo-workflows.controller.database" . }}
         tableName: argo_workflows
         ## the database secrets must be in the same namespace of the controller
+        ##
         userNameSecret:
           name: {{ include "argo-workflows.controller.database.username.secret" . }}
           key: username
@@ -655,6 +671,7 @@ controller:
     ## Uncomment to set workflowDefaults
     ## Ref: https://argoproj.github.io/argo-workflows/default-workflow-specs/#setting-default-workflow-values
     ## workflowDefaults: {}
+    ##
     {{- if and .Values.server.auth.enabled .Values.server.auth.sso.enabled }}
     sso: {{- include "common.tplvalues.render" (dict "value" .Values.server.auth.sso "context" $) | nindent 4 }}
     {{- end }}
@@ -664,6 +681,7 @@ controller:
     ## Uncomment to set links
     ## Ref: https://argoproj.github.io/argo-workflows/links/
     ## links: {}
+    ##
 
   ## Configure the controller to accept only submissions with a matching instanceID attribute
   ## @param controller.instanceID.enabled Enable submission filtering based on instanceID attribute. Requires to set instanceID.useReleaseName or instanceID.explicitID
@@ -673,6 +691,7 @@ controller:
   instanceID:
     enabled: false
     ## NOTE: If `instanceID.enabled` is set to `true` then either `instanceID.userReleaseName` or `instanceID.explicitID` must be defined.
+    ##
     useReleaseName: false
     explicitID: ""
 
@@ -717,6 +736,7 @@ controller:
 
   ## Namespaces allowed to run workflows
   ## @param controller.workflowNamespaces Namespaces allowed to run workflows
+  ##
   workflowNamespaces:
     - default
   ## Logging level for the controller
@@ -746,6 +766,7 @@ controller:
     ##
     name: ""
     ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the controller service account
+    ##
     automountServiceAccountToken: true
 
   ## @param controller.command Override default container command (useful when using custom images)
@@ -921,6 +942,7 @@ controller:
     extraPorts: []
 
 ## @section Executor configuration section
+##
 
 executor:
   ## Bitnami Argo Workflow Executor image
@@ -973,6 +995,7 @@ executor:
     fsGroup: 1001
 
 ## @section Traffic Exposure Parameters
+##
 
 ## Server ingress parameters
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -1073,6 +1096,7 @@ ingress:
   secrets: []
 
 ## @section Workflows configuration
+##
 
 workflows:
   ## Service account configuration for workflows
@@ -1092,23 +1116,27 @@ workflows:
     create: true
 
 ## @section PostgreSQL subchart
+##
 
 ## Postgresql subchart configuration
 ## @param postgresql.enabled Enable PostgreSQL subchart and controller persistence using PostgreSQL
-## @param postgresql.service.port PostgreSQL port
-## @param postgresql.postgresqlUsername PostgreSQL username
-## @param postgresql.postgresqlDatabase PortgreSQL database name
-## @param postgresql.postgresqlPassword PortgreSQL database password
+## @param postgresql.service.ports.postgresql PostgreSQL port
+## @param postgresql.auth.username PostgreSQL username
+## @param postgresql.auth.database PortgreSQL database name
+## @param postgresql.auth.password PortgreSQL database password
 ##
 postgresql:
   enabled: true
   service:
-    port: 5432
-  postgresqlUsername: postgres
-  postgresqlDatabase: bn_argo_workflows
-  postgresqlPassword: ""
+    ports:
+      postgresql: 5432
+  auth:
+    username: postgres
+    database: bn_argo_workflows
+    password: ""
 
 ## @section MySQL subchart
+##
 
 ## Mysql subchart configuration
 ## @param mysql.enabled Enable MySQL subchart and controller persistence using MySQL
@@ -1127,6 +1155,7 @@ mysql:
     password: ""
 
 ## @section External Database configuration
+##
 
 ## External Database Configuration
 ## @param externalDatabase.enabled Enable using externaldatabase and the controller to use persistence with it
