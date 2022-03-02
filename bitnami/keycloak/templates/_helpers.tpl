@@ -133,7 +133,7 @@ Return the Database database name
 */}}
 {{- define "keycloak.databaseName" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- printf "%s" .Values.postgresql.postgresqlDatabase -}}
+    {{- printf "%s" .Values.postgresql.auth.database -}}
 {{- else -}}
     {{- printf "%s" .Values.externalDatabase.database -}}
 {{- end -}}
@@ -144,7 +144,7 @@ Return the Database user
 */}}
 {{- define "keycloak.databaseUser" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- printf "%s" .Values.postgresql.postgresqlUsername -}}
+    {{- printf "%s" .Values.postgresql.auth.username -}}
 {{- else -}}
     {{- printf "%s" .Values.externalDatabase.user -}}
 {{- end -}}
@@ -155,8 +155,8 @@ Return the Database encrypted password
 */}}
 {{- define "keycloak.databaseSecretName" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- if .Values.postgresql.existingSecret -}}
-        {{- printf "%s" .Values.postgresql.existingSecret -}}
+    {{- if .Values.postgresql.auth.existingSecret -}}
+        {{- printf "%s" .Values.postgresql.auth.existingSecret -}}
     {{- else }}
         {{- printf "%s" (include "keycloak.postgresql.fullname" .) -}}
     {{- end -}}
