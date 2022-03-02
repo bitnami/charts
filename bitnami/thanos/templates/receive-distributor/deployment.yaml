@@ -180,7 +180,7 @@ spec:
       volumes:
         - name: hashring-config
           configMap:
-            name: {{ include "common.names.fullname" . }}-receive
+            name: {{ include "thanos.receive.configmapName" . }}
         {{- if .Values.receiveDistributor.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.receiveDistributor.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
