@@ -255,7 +255,7 @@ spec:
             - bootstrap
             - /config/envoy.json
             - --xds-address={{ template "common.names.fullname" . }}
-            - --xds-port=8001
+            - --xds-port={{ .Values.contour.service.ports.xds }}
             - --resources-dir=/config/resources
             - --envoy-cafile=/certs/ca.crt
             - --envoy-cert-file=/certs/tls.crt
