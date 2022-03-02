@@ -119,7 +119,7 @@ spec:
                   {{- if eq .Values.databaseType "mariadb" }}
                   key: mariadb-password
                   {{- else }}
-                  key: postgresql-password
+                  key: password
                   {{- end }}
             - name: REDMINE_DATABASE_PORT_NUMBER
               value: {{ include "redmine.database.port" . | quote }}
