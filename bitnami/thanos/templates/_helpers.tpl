@@ -325,6 +325,17 @@ Return true if a hashring configmap object should be created
 {{- end -}}
 
 
+{{/*
+Return the Thanos receive hashring configuration configmap.
+*/}}
+{{- define "thanos.receive.configmapName" -}}
+{{- if .Values.receive.existingConfigmap -}}
+    {{- printf "%s" (tpl .Values.receive.existingConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-receive" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
 {{/* Return the proper pod fqdn of the replica.
 Usage:
 {{ include "thanos.receive.podFqdn" (dict "root" . "extra" $suffix ) }}

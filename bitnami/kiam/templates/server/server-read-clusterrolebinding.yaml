@@ -1,5 +1,4 @@
-{{- if .Values.server.enabled }}
-{{- if .Values.rbac.create }}
+{{- if and .Values.server.enabled .Values.rbac.create }}
 kind: ClusterRoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
@@ -20,5 +19,4 @@ subjects:
   - kind: ServiceAccount
     name: {{ template "kiam.server.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
-{{- end }}
 {{- end }}

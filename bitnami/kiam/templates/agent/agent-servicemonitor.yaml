@@ -4,21 +4,27 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "common.names.fullname" . }}-agent
   {{- if .Values.agent.metrics.serviceMonitor.namespace }}
-  namespace: {{ .Values.agent.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.agent.metrics.serviceMonitor.namespace | quote }}
+  {{- else }}
+  namespace: {{ .Release.Namespace | quote }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: agent
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+    {{- if .Values.agent.metrics.serviceMonitor.labels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.agent.metrics.serviceMonitor.labels "context" $) | nindent 4 }}
+    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  jobLabel: {{ .Values.agent.metrics.serviceMonitor.jobLabel | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-      {{- if .Values.metrics.serviceMonitor.selector }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- if .Values.agent.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.agent.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
       app.kubernetes.io/component: agent
   endpoints:
@@ -28,6 +34,9 @@ spec:
       {{- end }}
       {{- if .Values.agent.metrics.serviceMonitor.scrapeTimeout }}
       scrapeTimeout: {{ .Values.agent.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.agent.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.agent.metrics.serviceMonitor.honorLabels }}
       {{- end }}
       {{- if .Values.agent.metrics.serviceMonitor.relabelings }}
       relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.agent.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}

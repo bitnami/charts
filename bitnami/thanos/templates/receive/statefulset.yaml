@@ -223,7 +223,7 @@ spec:
       volumes:
         - name: hashring-config
           configMap:
-            name: {{ include "common.names.fullname" . }}-receive
+            name: {{ include "thanos.receive.configmapName" . }}
         {{- if .Values.receive.grpc.server.tls.enabled }}
         - name: grpc-server-tls
           secret:

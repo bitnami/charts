@@ -212,7 +212,7 @@ spec:
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "databasePassword") }}
                 {{- else }}
                   name: {{ include "keycloak.databaseSecretName" . }}
-                  key: "postgresql-password"
+                  key: "password"
                 {{- end }}
             {{- if .Values.auth.tls.enabled }}
             {{- if or .Values.auth.tls.keystorePassword .Values.auth.existingSecretPerPassword }}
