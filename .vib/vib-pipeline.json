@@ -12,10 +12,7 @@
           "action_id": "helm-package"
         },
         {
-          "action_id": "linter-packaging",
-          "params": {
-            "kind": "HELM"
-          }
+          "action_id": "helm-lint"
         }
       ]
     },
@@ -27,10 +24,8 @@
         {
           "action_id": "trivy",
           "params": {
-            "config": {
-              "threshold": "CRITICAL",
-              "vuln_type": ["OS"]
-            }
+            "threshold": "CRITICAL",
+            "vuln_type": ["OS"]
           }
         }
       ]

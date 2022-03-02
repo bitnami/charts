@@ -387,7 +387,7 @@ The chart also facilitates the creation of TLS secrets for use with the Ingress 
 
 ### Use with ingress offloading SSL
 
-If your ingress controller has the SSL Termination, you can add the following env vars in `extraEnvVars`
+If your ingress controller has the SSL Termination, you should set `proxyAddressForwarding` to `true` or you should add the following env vars in `extraEnvVars`
 ```yaml
 - name: KEYCLOAK_PROXY_ADDRESS_FORWARDING
   value: "true"

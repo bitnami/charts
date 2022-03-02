@@ -43,7 +43,13 @@ jobs:
           elif [[ "$num_charts_changed" -eq "1" ]]; then
             # Changes done in only one chart -> OK
             echo "::set-output name=chart::${charts_dirs_changed}"
-            echo "::set-output name=result::ok"
+            if [[ "$charts_dirs_changed" =~ "common" ]]; then
+                # Changes done in bitnami/common -> SKIP
+                echo "::set-output name=result::skip"
+            else
+                # Changes done in a chart different from common -> OK
+                echo "::set-output name=result::ok"
+            fi
           elif [[ "$num_charts_changed" -le "0" ]]; then
             # Changes done in the bitnami/ folder but not inside a chart subfolder -> SKIP
             echo "::set-output name=error::No changes detected in charts. The rest of the tests will be skipped."
@@ -73,7 +79,7 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
-      - uses: vmware-samples/vmware-image-builder-examples/vib-action@main
+      - uses: vmware-labs/vmware-image-builder-action@main
         name: 'Package, Lint and Trivy scan'
         with:
           pipeline: vib-early-feedback.json

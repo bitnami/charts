@@ -19,7 +19,7 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
-      - uses: vmware-samples/vmware-image-builder-examples/vib-action@main
+      - uses: vmware-labs/vmware-image-builder-action@main
         with:
           pipeline: redis/standalone/vib-platform-verify.json
         env:
@@ -34,7 +34,7 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
-      - uses: vmware-samples/vmware-image-builder-examples/vib-action@main
+      - uses: vmware-labs/vmware-image-builder-action@main
         with:
           pipeline: redis/sentinel/vib-platform-verify.json
         env:
@@ -49,7 +49,7 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
-      - uses: vmware-samples/vmware-image-builder-examples/vib-action@main
+      - uses: vmware-labs/vmware-image-builder-action@main
         with:
           pipeline: redis/replicas/vib-platform-verify.json
         env:
