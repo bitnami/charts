@@ -26,7 +26,7 @@ data:
     host="{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc"
 
     get_orgs() {
-      INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" org list 2> /dev/null | grep -v 'ID' | awk -F '\t' 'BEGIN{ORS=" "} {print $2}'
+      INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx org list --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" 2> /dev/null | grep -v 'ID' | awk -F '\t' 'BEGIN{ORS=" "} {print $2}'
     }
 
     get_databases() {
@@ -34,28 +34,31 @@ data:
         if [[ "${BRANCH}" = "1" ]]; then
             influx -username "{{ .Values.auth.admin.username }}" -password "${INFLUXDB_ADMIN_USER_PASSWORD}" -host "${host}" -port {{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }} -execute 'SHOW DATABASES' | sed -e '1,3d'
         else
-            INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" bucket list --org "${org_name}" 2> /dev/null | grep -v 'ID' | awk -F '\t' 'BEGIN{ORS=" "} {print $2}'
+            INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx bucket list --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" --org "${org_name}" 2> /dev/null | grep -v 'ID' | awk -F '\t' 'BEGIN{ORS=" "} {print $2}'
         fi
     }
 
     if [[ "${BRANCH}" = "1" ]]; then
+        echo "detected InfluxDB 1.*"
         for DATABASE in $(get_databases); do
             echo "backuping ${DATABASE} db to {{ .Values.backup.directory }}/${DATABASE}"
             mkdir -p {{ .Values.backup.directory }}/${DATABASE}
 
-            influxd backup -host "${host}:{{ coalesce .Values.influxdb.service.ports.rpc .Values.influxdb.service.rpcPort }}" -portable -db ${DATABASE} {{ .Values.backup.directory }}/"${DATABASE}/${DATE}"
+            influxd backup --host "${host}:{{ coalesce .Values.influxdb.service.ports.rpc .Values.influxdb.service.rpcPort }}" -portable -db ${DATABASE} {{ .Values.backup.directory }}/"${DATABASE}/${DATE}"
         done
 
         echo "deleting old backups"
         find {{ .Values.backup.directory }} -mindepth 2 -maxdepth 2 -not -name ".snapshot" -not -name "lost+found" -type d -mtime +{{ .Values.backup.retentionDays }} -exec rm -r {} \;
     else
+        echo "detected InfluxDB 2.*"
         for ORG in $(get_orgs); do
+            echo "finding buckets in org ${ORG}"
             for BUCKET in $(get_databases "${ORG}"); do
                 backup_dir="{{ .Values.backup.directory }}/${ORG}/${BUCKET}"
                 echo "backuping ${BUCKET} bucket to ${backup_dir}"
                 mkdir -p "${backup_dir}"
 
-                INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" backup --bucket "${BUCKET}" "${backup_dir}/${DATE}"
+                INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx backup --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" --bucket "${BUCKET}" "${backup_dir}/${DATE}"
             done
         done
 

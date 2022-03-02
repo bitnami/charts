@@ -6,7 +6,7 @@ dependencies:
   - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
+    version: 11.x.x
   - condition: cassandra.enabled
     name: cassandra
     repository: https://charts.bitnami.com/bitnami
@@ -34,4 +34,4 @@ name: kong
 sources:
   - https://github.com/bitnami/bitnami-docker-kong
   - https://konghq.com/
-version: 5.0.7
+version: 6.0.1
