@@ -7,7 +7,7 @@ Grafana is an open source metric analytics and visualization suite for visualizi
 [Overview of Grafana](https://grafana.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -55,7 +55,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 In the Bitnami catalog we offer both the bitnami/grafana and bitnami/grafana-operator charts. Each solution covers different needs and use cases.
 
-The *bitnami/grafana* chart deploys a single Grafana installation (with grafana-image-renderer) using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). The figure below shows the deployed objects in the cluster after executing *helm install*:
+The _bitnami/grafana_ chart deploys a single Grafana installation (with grafana-image-renderer) using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). The figure below shows the deployed objects in the cluster after executing _helm install_:
 
 ```
                     +--------------+             +-----+
@@ -76,7 +76,7 @@ The *bitnami/grafana* chart deploys a single Grafana installation (with grafana-
 
 Its lifecycle is managed using Helm and, at the Grafana container level, the following operations are automated: persistence management, configuration based on environment variables and plugin initialization. The chart also allows deploying dashboards and data sources using ConfigMaps. The Deployments do not require any ServiceAccounts with special RBAC privileges so this solution would fit better in more restricted Kubernetes installations.
 
-The *bitnami/grafana-operator* chart deploys a Grafana Operator installation using a Kubernetes Deployment.  The figure below shows the Grafana operator deployment after executing *helm install*:
+The _bitnami/grafana-operator_ chart deploys a Grafana Operator installation using a Kubernetes Deployment. The figure below shows the Grafana operator deployment after executing _helm install_:
 
 ```
 +--------------------+
@@ -92,8 +92,8 @@ The *bitnami/grafana-operator* chart deploys a Grafana Operator installation usi
             +-----------------+
 ```
 
-The operator will extend the Kubernetes API with the following objects: *Grafana*, *GrafanaDashboards* and *GrafanaDataSources*. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using *kubectl* on the Grafana, GrafanaDashboards and GrafanaDataSource objects. The following figure shows the deployed objects after
- deploying a *Grafana* object using *kubectl*:
+The operator will extend the Kubernetes API with the following objects: _Grafana_, _GrafanaDashboards_ and _GrafanaDataSources_. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using _kubectl_ on the Grafana, GrafanaDashboards and GrafanaDataSource objects. The following figure shows the deployed objects after
+deploying a _Grafana_ object using _kubectl_:
 
 ```
 +--------------------+
@@ -132,7 +132,7 @@ The operator will extend the Kubernetes API with the following objects: *Grafana
 
 ```
 
-This solution allows to easily deploy multiple Grafana instances compared to the *bitnami/grafana* chart. As the operator automatically deploys Grafana installations, the Grafana Operator pods will require a ServiceAccount with privileges to create and destroy mulitple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
+This solution allows to easily deploy multiple Grafana instances compared to the _bitnami/grafana_ chart. As the operator automatically deploys Grafana installations, the Grafana Operator pods will require a ServiceAccount with privileges to create and destroy mulitple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
 
 ## Parameters
 
@@ -143,7 +143,6 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -156,7 +155,6 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `clusterDomain`     | Default Kubernetes cluster domain                                                       | `cluster.local` |
 | `commonLabels`      | Labels to add to all deployed objects                                                   | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects                                              | `{}`            |
-
 
 ### Grafana parameters
 
@@ -196,7 +194,6 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `dashboardsConfigMaps`             | Array with the names of a series of ConfigMaps containing dashboards files        | `[]`                 |
 | `datasources.secretName`           | Secret name containing custom datasource files                                    | `""`                 |
 | `notifiers.configMapName`          | Name of a ConfigMap containing Grafana notifiers configuration                    | `""`                 |
-
 
 ### Grafana Deployment parameters
 
@@ -265,7 +262,6 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.command`                            | Override default container command (useful when using custom images)                                    | `[]`            |
 | `grafana.args`                               | Override default container args (useful when using custom images)                                       | `[]`            |
 
-
 ### Persistence parameters
 
 | Name                        | Description                                                                                               | Value           |
@@ -278,7 +274,6 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `persistence.existingClaim` | If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable | `""`            |
 | `persistence.size`          | Size for the PV                                                                                           | `10Gi`          |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                                                                           | Value   |
@@ -287,7 +282,6 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `serviceAccount.name`                         | The name of the ServiceAccount to use. If not set and create is true, a name is generated using the fullname template | `""`    |
 | `serviceAccount.annotations`                  | Annotations to add to the ServiceAccount Metadata                                                                     | `{}`    |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the application controller service account                                        | `false` |
-
 
 ### Traffic exposure parameters
 
@@ -317,7 +311,6 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 
-
 ### Metrics parameters
 
 | Name                                       | Description                                                                                                                               | Value   |
@@ -337,7 +330,6 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`    |
 | `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`    |
 | `metrics.prometheusRule.rules`             | PrometheusRule rules to configure                                                                                                         | `[]`    |
-
 
 ### Grafana Image Renderer parameters
 
@@ -394,7 +386,6 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.command`                                 | Override default container command (useful when using custom images)                                                                      | `[]`                             |
 | `imageRenderer.args`                                    | Override default container args (useful when using custom images)                                                                         | `[]`                             |
 
-
 ### Volume permissions init Container Parameters
 
 | Name                                                   | Description                                                                                     | Value                   |
@@ -409,7 +400,6 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
 
-
 ### Diagnostic Mode Parameters
 
 | Name                     | Description                                                                             | Value          |
@@ -417,7 +407,6 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -464,9 +453,10 @@ And now you need to pass the ConfigMap name, to the corresponding parameters: `c
 
 To provide dashboards on deployment time, Grafana needs a dashboards provider and the dashboards themselves.
 A default provider is created if enabled, or you can mount your own provider using a ConfigMap, but have in mind that the path to the dashboard folder must be `/opt/bitnami/grafana/dashboards`.
-  1. To create a dashboard, it is needed to have a datasource for it. The datasources must be created mounting a secret with all the datasource files in it. In this case, it is not a ConfigMap because the datasource could contain sensitive information.
-  2. To load the dashboards themselves you need to create a ConfigMap for each one containing the `json` file that defines the dashboard and set the array with the ConfigMap names into the `dashboardsConfigMaps` parameter.
-Note the difference between the datasources and the dashboards creation. For the datasources we can use just one secret with all of the files, while for the dashboards we need one ConfigMap per file.
+
+1. To create a dashboard, it is needed to have a datasource for it. The datasources must be created mounting a secret with all the datasource files in it. In this case, it is not a ConfigMap because the datasource could contain sensitive information.
+2. To load the dashboards themselves you need to create a ConfigMap for each one containing the `json` file that defines the dashboard and set the array with the ConfigMap names into the `dashboardsConfigMaps` parameter.
+   Note the difference between the datasources and the dashboards creation. For the datasources we can use just one secret with all of the files, while for the dashboards we need one ConfigMap per file.
 
 For example, create the dashboard ConfigMap(s) and datasource Secret as described below:
 
@@ -476,9 +466,9 @@ $ kubectl create configmap my-dashboard-1 --from-file=my-dashboard-1.json
 $ kubectl create configmap my-dashboard-2 --from-file=my-dashboard-2.json
 ```
 
-> Note: the commands above assume you had previously exported your dashboards in the JSON files: *my-dashboard-1.json* and *my-dashboard-2.json*
+> Note: the commands above assume you had previously exported your dashboards in the JSON files: _my-dashboard-1.json_ and _my-dashboard-2.json_
 
-> Note: the commands above assume you had previously created a datasource config file *datasource-secret.yaml*. Find an example at https://grafana.com/docs/grafana/latest/administration/provisioning/#example-datasource-config-file
+> Note: the commands above assume you had previously created a datasource config file _datasource-secret.yaml_. Find an example at https://grafana.com/docs/grafana/latest/administration/provisioning/#example-datasource-config-file
 
 Once you have them, use the following parameters to deploy Grafana with 2 custom dashboards:
 
@@ -506,47 +496,47 @@ metadata:
   name: ldap-config
 data:
   ldap.toml: |-
-      [[servers]]
-      # Ldap server host (specify multiple hosts space separated)
-      host = "ldap"
-      # Default port is 389 or 636 if use_ssl = true
-      port = 389
-      # Set to true if ldap server supports TLS
-      use_ssl = false
-      # Set to true if connect ldap server with STARTTLS pattern (create connection in insecure, then upgrade to secure connection with TLS)
-      start_tls = false
-      # set to true if you want to skip ssl cert validation
-      ssl_skip_verify = false
-      # set to the path to your root CA certificate or leave unset to use system defaults
-      # root_ca_cert = "/path/to/certificate.crt"
-      # Authentication against LDAP servers requiring client certificates
-      # client_cert = "/path/to/client.crt"
-      # client_key = "/path/to/client.key"
+    [[servers]]
+    # Ldap server host (specify multiple hosts space separated)
+    host = "ldap"
+    # Default port is 389 or 636 if use_ssl = true
+    port = 389
+    # Set to true if ldap server supports TLS
+    use_ssl = false
+    # Set to true if connect ldap server with STARTTLS pattern (create connection in insecure, then upgrade to secure connection with TLS)
+    start_tls = false
+    # set to true if you want to skip ssl cert validation
+    ssl_skip_verify = false
+    # set to the path to your root CA certificate or leave unset to use system defaults
+    # root_ca_cert = "/path/to/certificate.crt"
+    # Authentication against LDAP servers requiring client certificates
+    # client_cert = "/path/to/client.crt"
+    # client_key = "/path/to/client.key"
 
-      # Search user bind dn
-      bind_dn = "cn=admin,dc=example,dc=org"
-      # Search user bind password
-      # If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
-      bind_password = 'admin'
+    # Search user bind dn
+    bind_dn = "cn=admin,dc=example,dc=org"
+    # Search user bind password
+    # If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
+    bind_password = 'admin'
 
-      # User search filter, for example "(cn=%s)" or "(sAMAccountName=%s)" or "(uid=%s)"
-      # Allow login from email or username, example "(|(sAMAccountName=%s)(userPrincipalName=%s))"
-      search_filter = "(uid=%s)"
+    # User search filter, for example "(cn=%s)" or "(sAMAccountName=%s)" or "(uid=%s)"
+    # Allow login from email or username, example "(|(sAMAccountName=%s)(userPrincipalName=%s))"
+    search_filter = "(uid=%s)"
 
-      # An array of base dns to search through
-      search_base_dns = ["ou=People,dc=support,dc=example,dc=org"]
+    # An array of base dns to search through
+    search_base_dns = ["ou=People,dc=support,dc=example,dc=org"]
 
-      # group_search_filter = "(&(objectClass=posixGroup)(memberUid=%s))"
-      # group_search_filter_user_attribute = "distinguishedName"
-      # group_search_base_dns = ["ou=groups,dc=grafana,dc=org"]
+    # group_search_filter = "(&(objectClass=posixGroup)(memberUid=%s))"
+    # group_search_filter_user_attribute = "distinguishedName"
+    # group_search_base_dns = ["ou=groups,dc=grafana,dc=org"]
 
-      # Specify names of the ldap attributes your ldap uses
-      [servers.attributes]
-      name = "givenName"
-      surname = "sn"
-      username = "cn"
-      member_of = "memberOf"
-      email =  "email"
+    # Specify names of the ldap attributes your ldap uses
+    [servers.attributes]
+    name = "givenName"
+    surname = "sn"
+    username = "cn"
+    member_of = "memberOf"
+    email =  "email"
 ```
 
 Create the ConfigMap into the cluster and deploy the Grafana Helm Chart using the existing ConfigMap and the following parameters:
@@ -605,7 +595,7 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 **What changes were introduced in this major version?**
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
 **Considerations when upgrading to this version**
 
