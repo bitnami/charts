@@ -29,7 +29,7 @@ The current test system supports a set of tools that are listed below. Test exec
 #### Test types
 
 * Functional tests
-* Infrastructure tests
+* Integration tests
 
 #### Dynamic testing
 
