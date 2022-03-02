@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -49,7 +51,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/redmine
-  tag: 4.2.3-debian-10-r135
+  tag: 4.2.3-debian-10-r136
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -70,6 +72,7 @@ image:
 ## @section Redmine Configuration parameters
 ## Redmine settings based on environment variables
 ## ref: https://github.com/bitnami/bitnami-docker-redmine#environment-variables
+##
 
 ## @param redmineUsername Redmine username
 ## ref: https://github.com/bitnami/bitnami-docker-redmine#configuration
@@ -147,6 +150,7 @@ extraEnvVarsCM: ""
 extraEnvVarsSecret: ""
 
 ## @section Redmine deployment parameters
+##
 
 ## @param replicaCount Number of Redmine replicas to deploy
 ## NOTE: ReadWriteMany PVC(s) are required if replicaCount > 1
@@ -342,6 +346,7 @@ customReadinessProbe: {}
 customStartupProbe: {}
 
 ## @section Traffic Exposure Parameters
+##
 
 ## Redmine service parameters
 ##
@@ -394,6 +399,7 @@ ingress:
   ## @param ingress.className Set the ingressClassName which will be used for this ingress
   ## The newer ingressClassName field on Ingresses is a replacement for that "kubernetes.io/ingress.class" annotation (Kubernetes 1.18+).
   ## When using this filed you need to create the IngressClass resource with the corresponding name.
+  ##
   className: ""
   ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
   ## certManager: false
@@ -482,6 +488,7 @@ ingress:
   secrets: []
 
 ## @section Persistence Parameters
+##
 
 ## Persistence Parameters
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -534,6 +541,7 @@ volumePermissions:
     runAsUser: 0
 
 ## @section Other Parameters
+##
 
 ## Redmine Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -562,6 +570,7 @@ autoscaling:
   targetMemory: 50
 
 ## @section Database Parameters
+##
 
 ## @param databaseType Redmine database type. Allowed values: `mariadb` and `postgresql`
 ## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables
@@ -630,25 +639,26 @@ postgresql:
   ## @param postgresql.enabled Whether to deploy a PostgreSQL server to satisfy the database requirements
   ##
   enabled: true
-  ## @param postgresql.postgresqlUsername PostgreSQL username
-  ## ref: https://hub.docker.com/_/postgres/
-  ##
-  postgresqlUsername: "bn_redmine"
-  ## @param postgresql.postgresqlPassword PostgreSQL password
-  ## ref: https://hub.docker.com/_/postgres/
-  ##
-  postgresqlPassword: ""
-  ## @param postgresql.postgresqlDatabase PostgreSQL database
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
-  ##
-  postgresqlDatabase: bitnami_redmine
-  ## @param postgresql.existingSecret Name of existing secret object
-  ## The secret should contain the following keys:
-  ## postgresql-postgres-password (for root user)
-  ## postgresql-password (for the unprivileged user)
-  ##
-  # existingSecret: my-secret
-  existingSecret: ""
+  auth:
+    ## @param postgresql.auth.username PostgreSQL username
+    ## ref: https://hub.docker.com/_/postgres/
+    ##
+    username: "bn_redmine"
+    ## @param postgresql.auth.password PostgreSQL password
+    ## ref: https://hub.docker.com/_/postgres/
+    ##
+    password: ""
+    ## @param postgresql.auth.database PostgreSQL database
+    ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
+    ##
+    database: bitnami_redmine
+    ## @param postgresql.auth.existingSecret Name of existing secret object
+    ## The secret should contain the following keys:
+    ## postgres-password (for root user)
+    ## password (for the unprivileged user)
+    ##
+    # existingSecret: my-secret
+    existingSecret: ""
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -677,6 +687,7 @@ postgresql:
     size: 8Gi
 ## External Database Configuration
 ## All of these values are only used when postgresql.enabled is set to false
+##
 externalDatabase:
   ## @param externalDatabase.host External Database server host
   ##
@@ -699,6 +710,7 @@ externalDatabase:
   existingSecret: ""
 
 ## @section Mail Receiver/Cron Job Parameters
+##
 
 ## Configure CronJob scheduler for receiving emails and converting them to tasks
 ## ref: https://www.redmine.org/projects/redmine/wiki/RedmineReceivingEmails
@@ -912,6 +924,7 @@ mailReceiver:
   tolerations: []
 
 ## @section Custom Certificates parameters
+##
 
 ## Add custom certificates and certificate authorities to redmine container
 ##
@@ -925,6 +938,7 @@ certificates:
     certificateSecret: ""
     ## @param certificates.customCertificate.chainSecret.name Name of the secret containing the certificate chain
     ## @param certificates.customCertificate.chainSecret.key Key of the certificate chain file inside the secret
+    ##
     chainSecret:
       # e.g.:
       # name: secret-key
@@ -964,6 +978,7 @@ certificates:
   #   value: myval
 
 ## @section NetworkPolicy parameters
+##
 
 ## Add networkpolicies
 ##
