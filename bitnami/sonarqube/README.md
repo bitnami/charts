@@ -7,7 +7,7 @@ SonarQube is an open source quality management platform that analyzes and measur
 [Overview of SonarQube](http://www.sonarqube.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -60,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -76,7 +75,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
-
 ### SonarQube Image parameters
 
 | Name                | Description                                          | Value                 |
@@ -87,7 +85,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`  | SonarQube image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | SonarQube image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable SonarQube image debug mode                    | `false`               |
-
 
 ### SonarQube Configuration parameters
 
@@ -113,7 +110,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`         | Array with extra environment variables to add to SonarQube nodes                   | `[]`               |
 | `extraEnvVarsCM`       | Name of existing ConfigMap containing extra env vars for SonarQube nodes           | `""`               |
 | `extraEnvVarsSecret`   | Name of existing Secret containing extra env vars for SonarQube nodes              | `""`               |
-
 
 ### SonarQube deployment parameters
 
@@ -170,7 +166,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                              | Add additional sidecar containers to the SonarQube pod(s)                                 | `{}`            |
 | `initContainers`                        | Add additional init containers to the SonarQube pod(s)                                    | `{}`            |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -200,7 +195,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                                                   | Description                                                                                     | Value                   |
@@ -221,7 +215,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
 
-
 ### Sysctl Image parameters
 
 | Name                        | Description                                              | Value                   |
@@ -234,7 +227,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.image.pullSecrets`  | Bitnami Shell image pull secrets                         | `[]`                    |
 | `sysctl.resources.limits`   | The resources limits for the init container              | `{}`                    |
 | `sysctl.resources.requests` | The requested resources for the init container           | `{}`                    |
-
 
 ### Other Parameters
 
@@ -249,7 +241,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.maxReplicas`                     | Maximum number of SonarQube replicas                                   | `11`    |
 | `autoscaling.targetCPU`                       | Target CPU utilization percentage                                      | `50`    |
 | `autoscaling.targetMemory`                    | Target Memory utilization percentage                                   | `50`    |
-
 
 ### Metrics parameters
 
@@ -281,24 +272,22 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.relabelings`                | Specify general relabeling                                                                            | `[]`                    |
 | `metrics.serviceMonitor.selector`                   | Prometheus instance selector labels                                                                   | `{}`                    |
 
-
 ### PostgreSQL subchart settings
 
 | Name                                   | Description                                                                        | Value               |
 | -------------------------------------- | ---------------------------------------------------------------------------------- | ------------------- |
 | `postgresql.enabled`                   | Deploy PostgreSQL subchart                                                         | `true`              |
 | `postgresql.nameOverride`              | Override name of the PostgreSQL chart                                              | `""`                |
-| `postgresql.existingSecret`            | Existing secret containing the password of the PostgreSQL chart                    | `""`                |
-| `postgresql.postgresqlPassword`        | Password for the postgres user of the PostgreSQL chart (auto-generated if not set) | `""`                |
-| `postgresql.postgresqlUsername`        | Username to create when deploying the PostgreSQL chart                             | `bn_sonarqube`      |
-| `postgresql.postgresqlDatabase`        | Database to create when deploying the PostgreSQL chart                             | `bitnami_sonarqube` |
-| `postgresql.service.port`              | PostgreSQL service port                                                            | `5432`              |
+| `postgresql.auth.existingSecret`            | Existing secret containing the password of the PostgreSQL chart                    | `""`                |
+| `postgresql.auth.password`        | Password for the postgres user of the PostgreSQL chart (auto-generated if not set) | `""`                |
+| `postgresql.auth.username`        | Username to create when deploying the PostgreSQL chart                             | `bn_sonarqube`      |
+| `postgresql.auth.database`        | Database to create when deploying the PostgreSQL chart                             | `bitnami_sonarqube` |
+| `postgresql.service.ports.postgresql`              | PostgreSQL service port                                                            | `5432`              |
 | `postgresql.persistence.enabled`       | Use PVCs when deploying the PostgreSQL chart                                       | `true`              |
 | `postgresql.persistence.existingClaim` | Use an existing PVC when deploying the PostgreSQL chart                            | `""`                |
 | `postgresql.persistence.storageClass`  | storageClass of the created PVCs                                                   | `""`                |
 | `postgresql.persistence.accessMode`    | Access mode of the created PVCs                                                    | `ReadWriteOnce`     |
 | `postgresql.persistence.size`          | Size of the created PVCs                                                           | `8Gi`               |
-
 
 ### External Database settings
 
@@ -311,7 +300,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`       | Database inside an external PostgreSQL to connect (only if postgresql.enabled=false)                            | `sonarqube` |
 | `externalDatabase.port`           | Port of an external PostgreSQL to connect (only if postgresql.enabled=false)                                    | `5432`      |
 
-
 The above parameters map to the env variables defined in [bitnami/sonarqube](https://github.com/bitnami/bitnami-docker-sonarqube). For more information please refer to the [bitnami/sonarqube](https://github.com/bitnami/bitnami-docker-sonarqube) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -320,7 +308,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 $ helm install my-release \
   --set sonarqubeUsername=admin \
   --set sonarqubePassword=password \
-  --set postgresql.postgresqlPassword=secretpassword \
+  --set postgresql.auth.password=secretpassword \
     bitnami/sonarqube
 ```
 
