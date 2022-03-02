@@ -61,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                          | Value           |
@@ -74,7 +73,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`            |
 | `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]`            |
-
 
 ### Keycloak parameters
 
@@ -121,7 +119,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsCM`                  | Name of existing ConfigMap containing extra env vars                                          | `""`                   |
 | `extraEnvVarsSecret`              | Name of existing Secret containing extra env vars                                             | `""`                   |
 
-
 ### keycloak-config-cli parameters
 
 | Name                                                      | Description                                                                                     | Value                         |
@@ -153,7 +150,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.extraVolumeMounts`                     | Extra volume mounts to add to the container                                                     | `[]`                          |
 | `keycloakConfigCli.configuration`                         | keycloak-config-cli realms configuration                                                        | `{}`                          |
 | `keycloakConfigCli.existingConfigmap`                     | ConfigMap with keycloak-config-cli configuration. This will override `keycloakConfigCli.config` | `""`                          |
-
 
 ### Keycloak deployment/statefulset parameters
 
@@ -214,7 +210,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                        | Add additional init containers to the Keycloak pods                                       | `[]`                  |
 | `sidecars`                              | Add additional sidecar containers to the Keycloak pods                                    | `[]`                  |
 
-
 ### Exposure parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -245,7 +240,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                                                                       | `true`                   |
 | `networkPolicy.additionalRules`    | Additional NetworkPolicy rules                                                                                                   | `{}`                     |
 
-
 ### RBAC parameter
 
 | Name                                          | Description                                               | Value   |
@@ -255,7 +249,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod           | `false` |
 | `rbac.create`                                 | Whether to create and use RBAC resources or not           | `false` |
 | `rbac.rules`                                  | Custom RBAC rules                                         | `[]`    |
-
 
 ### Other parameters
 
@@ -269,7 +262,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.maxReplicas`  | Maximum number of Keycloak replicas                            | `11`    |
 | `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `""`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage                           | `""`    |
-
 
 ### Metrics parameters
 
@@ -286,16 +278,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.honorLabels`      | honorLabels chooses the metric's labels on collisions with target labels     | `false` |
 | `metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the installed Prometheus Operator   | `{}`    |
 
-
 ### Database parameters
 
 | Name                              | Description                                                                   | Value              |
 | --------------------------------- | ----------------------------------------------------------------------------- | ------------------ |
 | `postgresql.enabled`              | Deploy a PostgreSQL server to satisfy the applications database requirements  | `true`             |
-| `postgresql.postgresqlUsername`   | Keycloak PostgreSQL user (has superuser privileges if username is `postgres`) | `bn_keycloak`      |
-| `postgresql.postgresqlPassword`   | Keycloak PostgreSQL password - ignored if existingSecret is provided          | `""`               |
-| `postgresql.postgresqlDatabase`   | Name of the database to create                                                | `bitnami_keycloak` |
-| `postgresql.existingSecret`       | Use an existing secret file with the PostgreSQL password                      | `""`               |
+| `postgresql.auth.username`   | Keycloak PostgreSQL user (has superuser privileges if username is `postgres`) | `bn_keycloak`      |
+| `postgresql.auth.password`   | Keycloak PostgreSQL password - ignored if existingSecret is provided          | `""`               |
+| `postgresql.auth.database`   | Name of the database to create                                                | `bitnami_keycloak` |
+| `postgresql.auth.existingSecret`       | Use an existing secret file with the PostgreSQL password                      | `""`               |
 | `postgresql.persistence.enabled`  | Enable PostgreSQL persistence using PVC                                       | `true`             |
 | `externalDatabase.host`           | Host of the external database                                                 | `""`               |
 | `externalDatabase.port`           | Database port                                                                 | `5432`             |
@@ -303,7 +294,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.password`       | Database password                                                             | `""`               |
 | `externalDatabase.database`       | Database name                                                                 | `bitnami_keycloak` |
 | `externalDatabase.existingSecret` | Use an existing secret file with the external PostgreSQL credentials          | `""`               |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -410,6 +400,12 @@ Refer to the [chart documentation on managing passwords](https://docs.bitnami.co
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 6.0.0
+
+The `postgresql` sub-chart was upgraded to `11.x.x`. Several values of the sub-chart were changed, so please check the [upgrade notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/).
+
+It will be necessary to migrate between PostgreSQL versions.
 
 ### To 5.2.0
 If you use `KUBE_PING` as discovery method you have to enable mounting of ServiceAccountTokens by setting `serviceAccount.automountServiceAccountToken` to `true`.
