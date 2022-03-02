@@ -13,7 +13,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not .Values.receive.autoscaling.enabled }}
   replicas: {{ .Values.receive.replicaCount }}
+  {{- end }}
   podManagementPolicy: {{ .Values.receive.podManagementPolicy }}
   serviceName: {{ include "common.names.fullname" . }}-receive-headless
   {{- if .Values.receive.updateStrategy }}
