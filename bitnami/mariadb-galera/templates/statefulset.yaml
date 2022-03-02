@@ -462,6 +462,13 @@ spec:
         name: data
         labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/managed-by: {{ .Release.Service }}
+          {{- if .Values.persistence.labels }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.persistence.labels "context" $) | nindent 10 }}
+          {{- end }}
+        {{- if .Values.persistence.annotations }}
+        annotations:
+        {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
         {{- range .Values.persistence.accessModes }}
