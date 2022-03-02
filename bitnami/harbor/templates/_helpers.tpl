@@ -193,15 +193,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- end -}}
 {{- end -}}
 
-{{/* Exporter component service port */}}
-{{- define "harbor.exporter.servicePort" -}}
-  {{- if .Values.internalTLS.enabled -}}
-    {{- printf "443" -}}
-  {{- else -}}
-    {{- printf "80" -}}
-  {{- end -}}
-{{- end -}}}
-
 {{/* Port name for metrics */}}
 {{- define "harbor.metricsPortName" -}}
   {{- printf "http-metrics" -}}
@@ -282,11 +273,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{/* Trivy TLS secret name */}}
 {{- define "harbor.trivy.tls.secretName" -}}
 {{- printf "%s" (coalesce .Values.trivy.tls.existingSecret (printf "%s-crt" (include "harbor.trivy" .))) -}}
-{{- end -}}
-
-{{/* Exporter TLS secret name */}}
-{{- define "harbor.exporter.tls.secretName" -}}
-{{- printf "%s" (coalesce .Values.exporter.tls.existingSecret (printf "%s-crt" (include "harbor.exporter" .))) -}}
 {{- end -}}
 
 {{/*
