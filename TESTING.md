@@ -12,12 +12,12 @@ Before writing any test scenario, understand the primary purpose of the chart. T
 
 ## Common test cases
 
+* Login/Logout 
 * Important files and folders are present in the docker image
 * CRUD
 * File upload
 * SMTP (if applicable)
 * Establish a connection 
-* Login/Logout 
 * Plugins (if applicable)
 
 ## HOW-TO:
