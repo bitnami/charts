@@ -1,7 +1,26 @@
 {  
+<<<<<<< HEAD
   "baseUrl": "http://localhost/",
   "env": {
     "username": "test_admin",
     "password": "ComplicatedPassword123!4"
   } 
 }
+=======
+    "baseUrl": "http://localhost/",
+    "env": {
+      "username": "test_admin",
+      "password": "ComplicatedPassword123!4",
+      "smtp_name": "test_smtp",
+      "smtp_host": "smtp",
+      "smtp_address": "test@smtp.com",
+      "smtp_user": "smtp_user",
+      "panel_title": "Test panel",
+      "panel_description": "Test panel description",
+      "dashboard_title": "Test dashboard",
+      "rule_name": "Test rule",
+      "test_email_address": "test@email.com",
+      "invite_user_name": "Invited test user"
+    }
+  }
+>>>>>>> d51ee38ac (Removed the port for default port)
