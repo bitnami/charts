@@ -3,7 +3,7 @@ apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.chartmuseum" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -69,7 +69,7 @@ spec:
       {{- if .Values.chartmuseum.schedulerName }}
       schedulerName: {{ .Values.chartmuseum.schedulerName }}
       {{- end }}
-      {{- if .Values.chartmuseum.podSecurityContext }}
+      {{- if .Values.chartmuseum.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.chartmuseum.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.chartmuseum.initContainers }}
@@ -79,7 +79,7 @@ spec:
         - name: chartmuseum
           image: {{ include "harbor.chartmuseum.image" . }}
           imagePullPolicy: {{ .Values.chartmuseum.image.pullPolicy | quote }}
-          {{- if .Values.chartmuseum.containerSecurityContext }}
+          {{- if .Values.chartmuseum.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.chartmuseum.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}

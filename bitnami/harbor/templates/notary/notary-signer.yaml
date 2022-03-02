@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "harbor.notary-signer" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -64,7 +64,7 @@ spec:
       {{- if .Values.notary.signer.schedulerName }}
       schedulerName: {{ .Values.notary.signer.schedulerName }}
       {{- end }}
-      {{- if .Values.notary.signer.podSecurityContext }}
+      {{- if .Values.notary.signer.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.notary.signer.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.notary.signer.initContainers }}
@@ -74,7 +74,7 @@ spec:
         - name: notary-signer
           image: {{ include "harbor.notary.signer.image" . }}
           imagePullPolicy: {{ .Values.notary.signer.image.pullPolicy | quote }}
-          {{- if .Values.notary.signer.containerSecurityContext }}
+          {{- if .Values.notary.signer.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.notary.signer.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}

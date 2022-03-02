@@ -4,7 +4,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "harbor.registry" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -28,6 +28,9 @@ spec:
   resources:
     requests:
       storage: {{ .Values.persistence.persistentVolumeClaim.registry.size }}
+  {{- if .Values.persistence.persistentVolumeClaim.registry.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.persistentVolumeClaim.registry.selector "context" $) | nindent 2 }}
+  {{- end }}
   {{- include "common.storage.class" ( dict "persistence" .Values.persistence.persistentVolumeClaim.registry "global" .Values.global ) | nindent 2 }}
 {{- end }}
 {{- end }}

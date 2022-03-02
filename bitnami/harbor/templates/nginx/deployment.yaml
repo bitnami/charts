@@ -3,7 +3,7 @@ apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.nginx" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -70,7 +70,7 @@ spec:
       {{- if .Values.nginx.schedulerName }}
       schedulerName: {{ .Values.nginx.schedulerName }}
       {{- end }}
-      {{- if .Values.nginx.podSecurityContext }}
+      {{- if .Values.nginx.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.nginx.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.nginx.initContainers }}
@@ -80,7 +80,7 @@ spec:
         - name: nginx
           image: {{ include "harbor.nginx.image" . }}
           imagePullPolicy: {{ .Values.nginx.image.pullPolicy | quote }}
-          {{- if .Values.nginx.containerSecurityContext }}
+          {{- if .Values.nginx.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.nginx.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}

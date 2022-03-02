@@ -398,6 +398,7 @@ persistence:
     ## @param persistence.persistentVolumeClaim.registry.accessModes The access mode of the volume
     ## @param persistence.persistentVolumeClaim.registry.size The size of the volume
     ## @param persistence.persistentVolumeClaim.registry.annotations Annotations for the PVC
+    ## @param persistence.persistentVolumeClaim.registry.selector Selector to match an existing Persistent Volume
     ##
     registry:
       existingClaim: ""
@@ -407,6 +408,7 @@ persistence:
         - ReadWriteOnce
       size: 5Gi
       annotations: {}
+      selector: {}
     ## @param persistence.persistentVolumeClaim.jobservice.existingClaim Name of an existing PVC to use
     ## @param persistence.persistentVolumeClaim.jobservice.storageClass PVC Storage Class for Harbor Jobservice data volume
     ## Note: The default StorageClass will be used if not defined. Set it to `-` to disable dynamic provisioning
@@ -645,9 +647,11 @@ volumePermissions:
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
+  ## @param volumePermissions.containerSecurityContext.enabled Enable init container Security Context
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
   ##
   containerSecurityContext:
+    enabled: true
     runAsUser: 0
 
 ## @section NGINX Parameters
@@ -3716,7 +3720,6 @@ redis:
 ## All of these values are only used when redis.enabled is set to false
 ## @param externalRedis.host Redis&trade; host
 ## @param externalRedis.port Redis&trade; port number
-## @param externalRedis.username Redis&trade; username
 ## @param externalRedis.password Redis&trade; password
 ## @param externalRedis.coreDatabaseIndex Index for core database
 ## @param externalRedis.jobserviceDatabaseIndex Index for jobservice database
@@ -3728,9 +3731,6 @@ redis:
 externalRedis:
   host: localhost
   port: 6379
-  ## Most Redis&trade; implementations do not require a username
-  ## to authenticate and it should be enough with the password
-  username: ""
   password: ""
   coreDatabaseIndex: '0'
   jobserviceDatabaseIndex: '1'

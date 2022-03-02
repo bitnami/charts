@@ -2,7 +2,7 @@ apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.core" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -70,7 +70,7 @@ spec:
       {{- if .Values.core.schedulerName }}
       schedulerName: {{ .Values.core.schedulerName }}
       {{- end }}
-      {{- if .Values.core.podSecurityContext }}
+      {{- if .Values.core.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.core.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.core.initContainers }}
@@ -80,7 +80,7 @@ spec:
         - name: core
           image: {{ include "harbor.core.image" . }}
           imagePullPolicy: {{ .Values.core.image.pullPolicy | quote }}
-          {{- if .Values.core.containerSecurityContext }}
+          {{- if .Values.core.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.core.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}

@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "harbor.notary-server" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -65,7 +65,7 @@ spec:
       {{- if .Values.notary.server.schedulerName }}
       schedulerName: {{ .Values.notary.server.schedulerName }}
       {{- end }}
-      {{- if .Values.notary.server.podSecurityContext }}
+      {{- if .Values.notary.server.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.notary.server.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.notary.server.initContainers }}
@@ -75,7 +75,7 @@ spec:
         - name: notary-server
           image: {{ include "harbor.notary.server.image" . | quote }}
           imagePullPolicy: {{ .Values.notary.server.image.pullPolicy | quote }}
-          {{- if .Values.notary.server.containerSecurityContext }}
+          {{- if .Values.notary.server.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.notary.server.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "harbor.registry" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -73,8 +73,8 @@ data:
         {{- if .Values.persistence.imageChartStorage.s3.rootdirectory }}
         rootdirectory: {{ .Values.persistence.imageChartStorage.s3.rootdirectory }}
         {{- end }}
-        {{- if .Values.persistence.imageChartStorage.s3.storageclass }}
-        storageclass: {{ .Values.persistence.imageChartStorage.s3.storageclass }}
+        {{- if .Values.persistence.imageChartStorage.s3.storageClass }}
+        storageclass: {{ .Values.persistence.imageChartStorage.s3.storageClass }}
         {{- end }}
       {{- else if eq .Values.persistence.imageChartStorage.type "swift" }}
       swift:

@@ -2,7 +2,7 @@ apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.portal" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -65,7 +65,7 @@ spec:
       {{- if .Values.portal.schedulerName }}
       schedulerName: {{ .Values.portal.schedulerName }}
       {{- end }}
-      {{- if .Values.portal.podSecurityContext }}
+      {{- if .Values.portal.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.portal.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.portal.initContainers }}
@@ -75,7 +75,7 @@ spec:
         - name: portal
           image: {{ include "harbor.portal.image" . }}
           imagePullPolicy: {{ .Values.portal.image.pullPolicy | quote }}
-          {{- if .Values.portal.containerSecurityContext }}
+          {{- if .Values.portal.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.portal.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}

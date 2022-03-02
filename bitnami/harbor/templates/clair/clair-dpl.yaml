@@ -3,7 +3,7 @@ apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.clair" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -70,7 +70,7 @@ spec:
       {{- if .Values.clair.schedulerName }}
       schedulerName: {{ .Values.clair.schedulerName }}
       {{- end }}
-      {{- if .Values.clair.podSecurityContext }}
+      {{- if .Values.clair.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.clair.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.clair.initContainers }}
@@ -80,7 +80,7 @@ spec:
         - name: clair
           image: {{ include "harbor.clair.server.image" . }}
           imagePullPolicy: {{ .Values.clair.server.image.pullPolicy | quote }}
-          {{- if .Values.clair.server.containerSecurityContext }}
+          {{- if .Values.clair.server.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.clair.server.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
@@ -173,7 +173,7 @@ spec:
         - name: adapter
           image: {{ include "harbor.clair.adapter.image" . }}
           imagePullPolicy: {{ .Values.clair.adapter.image.pullPolicy }}
-          {{- if .Values.clair.adapter.containerSecurityContext }}
+          {{- if .Values.clair.adapter.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.clair.adapter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
