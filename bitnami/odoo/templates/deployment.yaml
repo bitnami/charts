@@ -113,7 +113,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "odoo.databaseSecretName" . | quote }}
-                  key: "postgresql-password"
+                  key: "password"
             {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.create }}
             - name: POSTGRESQL_CLIENT_DATABASE_HOST
               value: {{ template "odoo.databaseHost" . }}
@@ -125,7 +125,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "odoo.databaseSecretName" . }}
-                  key: "postgresql-postgres-password"
+                  key: "postgres-password"
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_NAME
               value: {{ template "odoo.databaseName" . }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME
@@ -134,7 +134,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "odoo.databaseSecretName" . }}
-                  key: "postgresql-password"
+                  key: "password"
             {{- end }}
             - name: ODOO_EMAIL
               value: {{ .Values.odooEmail | quote }}

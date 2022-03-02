@@ -7,7 +7,7 @@ Odoo is an open source ERP and CRM platform, formerly known as OpenERP, that can
 [Overview of Odoo](https://www.odoo.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                        | Value                        |
@@ -79,7 +78,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`  | Odoo image pull policy                             | `IfNotPresent`               |
 | `image.pullSecrets` | Odoo image pull secrets                            | `[]`                         |
 | `image.debug`       | Enable image debug mode                            | `false`                      |
-
 
 ### Odoo Configuration parameters
 
@@ -102,7 +100,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`          | Array with extra environment variables to add to the Odoo container  | `[]`               |
 | `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                 | `""`               |
 | `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                    | `""`               |
-
 
 ### Odoo deployment parameters
 
@@ -161,7 +158,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                      | `{}`            |
 | `customStartupProbe`                 | Custom startupProbe that overrides the default one                                        | `{}`            |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -188,7 +184,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                                          | Description                                                                                     | Value           |
@@ -205,7 +200,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`            |
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`             |
 
-
 ### Other Parameters
 
 | Name                       | Description                                                    | Value   |
@@ -219,16 +213,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `50`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage                           | `50`    |
 
-
 ### Database Parameters
 
 | Name                                          | Description                                                                       | Value           |
 | --------------------------------------------- | --------------------------------------------------------------------------------- | --------------- |
 | `postgresql.enabled`                          | Deploy PostgreSQL container(s)                                                    | `true`          |
-| `postgresql.postgresqlUsername`               | PostgreSQL username                                                               | `bn_odoo`       |
-| `postgresql.postgresqlPassword`               | PostgreSQL password                                                               | `""`            |
-| `postgresql.postgresqlDatabase`               | PostgreSQL database                                                               | `bitnami_odoo`  |
-| `postgresql.existingSecret`                   | Name of existing secret object                                                    | `""`            |
+| `postgresql.auth.username`               | PostgreSQL username                                                               | `bn_odoo`       |
+| `postgresql.auth.password`               | PostgreSQL password                                                               | `""`            |
+| `postgresql.auth.database`               | PostgreSQL database                                                               | `bitnami_odoo`  |
+| `postgresql.auth.existingSecret`                   | Name of existing secret object                                                    | `""`            |
 | `postgresql.persistence.enabled`              | Enable PostgreSQL persistence using PVC                                           | `true`          |
 | `postgresql.persistence.existingClaim`        | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template | `""`            |
 | `postgresql.persistence.storageClass`         | PVC Storage Class for PostgreSQL volume                                           | `""`            |
@@ -243,7 +236,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.postgresqlPostgresUser`     | External Database admin username                                                  | `postgres`      |
 | `externalDatabase.postgresqlPostgresPassword` | External Database admin password                                                  | `""`            |
 | `externalDatabase.existingSecret`             | Name of existing secret object                                                    | `""`            |
-
 
 ### NetworkPolicy parameters
 
@@ -261,7 +253,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                       | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                           | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                               | `{}`    |
-
 
 The above parameters map to the env variables defined in [bitnami/odoo](https://github.com/bitnami/bitnami-docker-odoo). For more information please refer to the [bitnami/odoo](https://github.com/bitnami/bitnami-docker-odoo) image documentation.
 
@@ -346,6 +337,12 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### 21.0.0
+
+The `postgresql` sub-chart was upgraded to `11.x.x`. Several values of the sub-chart were changed, so please check the [upgrade notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/).
+
+It will be necessary to migrate between PostgreSQL versions.
+
 ### 19.0.0
 
 The [Bitnami Odoo](https://github.com/bitnami/bitnami-docker-odoo) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-odoo/tree/master/14/debian-10/rootfs) folder of the container image repository.
@@ -355,7 +352,7 @@ Upgrades from previous versions require to specify `--set volumePermissions.enab
 ```console
 $ helm upgrade odoo bitnami/odoo \
     --set odooPassword=$DISCOURSE_PASSWORD \
-    --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+    --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
     --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
     --set volumePermissions.enabled=true
 ```
@@ -386,7 +383,7 @@ Full compatibility is not guaranteed due to the amount of involved changes, howe
 
 ```console
 $ export ODOO_PASSWORD=$(kubectl get secret --namespace default odoo -o jsonpath="{.data.odoo-password}" | base64 --decode)
-$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default odoo-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default odoo-postgresql -o jsonpath="{.data.password}" | base64 --decode)
 $ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=odoo,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
 ```
 
@@ -403,7 +400,7 @@ $ kubectl delete statefulsets.apps --cascade=false odoo-postgresql
 ```console
 $ helm upgrade odoo bitnami/odoo \
     --set odooPassword=$ODOO_PASSWORD \
-    --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+    --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
     --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
 ```
 
@@ -463,7 +460,7 @@ As a consequence, backwards compatibility from previous versions is not guarante
 - Export both database and Odoo credentials in order to provide them in the update
 
   ```console
-  $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default odoo-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+  $ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default odoo-postgresql -o jsonpath="{.data.password}" | base64 --decode)
 
   $ export ODOO_PASSWORD=$(kubectl get secret --namespace default odoo-odoo -o jsonpath="{.data.odoo-password}" | base64 --decode)
   ```
@@ -471,7 +468,7 @@ As a consequence, backwards compatibility from previous versions is not guarante
 - The upgrade to the latest (`15.X.X`) version is going to fail
 
   ```console
-  $ helm upgrade odoo bitnami/odoo --set odooPassword=$ODOO_PASSWORD --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
+  $ helm upgrade odoo bitnami/odoo --set odooPassword=$ODOO_PASSWORD --set postgresql.auth.password=$POSTGRESQL_PASSWORD
   Error: UPGRADE FAILED: cannot patch "odoo-odoo" with kind Deployment: Deployment.apps "odoo-odoo" is invalid: spec.selector: Invalid value: v1.LabelSelector{MatchLabels:map[string]string{"app.kubernetes.io/instance":"odoo", "app.kubernetes.io/name":"odoo"}, MatchExpressions:[]v1.LabelSelectorRequirement(nil)}: field is immutable
   ```
 
@@ -488,7 +485,7 @@ As a consequence, backwards compatibility from previous versions is not guarante
 - Now the upgrade works
 
   ```console
-  $ helm upgrade odoo bitnami/odoo --set odooPassword=$ODOO_PASSWORD --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD
+  $ helm upgrade odoo bitnami/odoo --set odooPassword=$ODOO_PASSWORD --set postgresql.auth.password=$POSTGRESQL_PASSWORD
   $ helm ls
   NAME  NAMESPACE REVISION  UPDATED                                STATUS   CHART       APP VERSION
   odoo  default   3         v2020-10-21 13:35:27.255118 +0200 CEST deployed odoo-15.0.0 13.0.20201010

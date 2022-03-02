@@ -77,7 +77,7 @@ Return the Postgresql database name
 */}}
 {{- define "odoo.databaseName" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- printf "%s" .Values.postgresql.postgresqlDatabase -}}
+    {{- printf "%s" .Values.postgresql.auth.database -}}
 {{- else -}}
     {{- printf "%s" .Values.externalDatabase.database -}}
 {{- end -}}
@@ -88,7 +88,7 @@ Return the Postgresql user
 */}}
 {{- define "odoo.databaseUser" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- printf "%s" .Values.postgresql.postgresqlUsername -}}
+    {{- printf "%s" .Values.postgresql.auth.username -}}
 {{- else -}}
     {{- printf "%s" .Values.externalDatabase.user -}}
 {{- end -}}
@@ -99,8 +99,8 @@ Return the PostgreSQL Secret Name
 */}}
 {{- define "odoo.databaseSecretName" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- if .Values.postgresql.existingSecret }}
-        {{- printf "%s" .Values.postgresql.existingSecret -}}
+    {{- if .Values.postgresql.auth.existingSecret }}
+        {{- printf "%s" .Values.postgresql.auth.existingSecret -}}
     {{- else -}}
         {{- printf "%s" (include "odoo.postgresql.fullname" .) -}}
     {{- end -}}
