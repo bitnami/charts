@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 0.24.0
+appVersion: 0.25.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -28,4 +28,4 @@ name: thanos
 sources:
   - https://github.com/bitnami/bitnami-docker-thanos
   - https://thanos.io
-version: 9.0.11
+version: 9.0.12
