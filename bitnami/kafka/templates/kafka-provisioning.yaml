@@ -109,22 +109,22 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-            {{- if and (include "kafka.client.tlsEncryption" .) .Values.provisioning.auth.tls.existingSecret }}
+            {{- if (include "kafka.client.tlsEncryption" .) }}
             - name: KAFKA_CLIENT_KEY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.provisioning.auth.tls.existingSecret }}
-                  key: {{ .Values.provisioning.auth.tls.keyPassword }}
+                  name: {{ template "kafka.client.passwordsSecretName" . }}
+                  key: {{ .Values.provisioning.auth.tls.keyPasswordSecretKey }}
             - name: KAFKA_CLIENT_KEYSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.provisioning.auth.tls.existingSecret }}
-                  key: {{ .Values.provisioning.auth.tls.keystorePassword }}
+                  name: {{ template "kafka.client.passwordsSecretName" . }}
+                  key: {{ .Values.provisioning.auth.tls.keystorePasswordSecretKey }}
             - name: KAFKA_CLIENT_TRUSTSTORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.provisioning.auth.tls.existingSecret }}
-                  key: {{ .Values.provisioning.auth.tls.truststorePassword }}
+                  name: {{ template "kafka.client.passwordsSecretName" . }}
+                  key: {{ .Values.provisioning.auth.tls.truststorePasswordSecretKey }}
             {{- end }}
           {{- if .Values.provisioning.resources }}
           resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}

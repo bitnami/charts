@@ -1400,6 +1400,18 @@ provisioning:
       ## It should contain two keys called "keystore-password" and "truststore-password", or "key-password" if using a password-protected PEM key.
       ##
       passwordsSecret: ""
+      ## @param provisioning.auth.tls.keyPasswordSecretKey The secret key from the passwordsSecret if 'keyPasswordSecretKey' key different from the default (key-password)
+      ## Note: must not be used if `passwordsSecret` is not defined.
+      ##
+      keyPasswordSecretKey: key-password
+      ## @param provisioning.auth.tls.keystorePasswordSecretKey The secret key from the passwordsSecret if 'keystorePasswordSecretKey' key different from the default (keystore-password)
+      ## Note: must not be used if `passwordsSecret` is not defined.
+      ##
+      keystorePasswordSecretKey: keystore-password
+      ## @param provisioning.auth.tls.truststorePasswordSecretKey The secret key from the passwordsSecret if 'truststorePasswordSecretKey' key different from the default (truststore-password)
+      ## Note: must not be used if `passwordsSecret` is not defined.
+      ##
+      truststorePasswordSecretKey: truststore-password
       ## @param provisioning.auth.tls.keyPassword Password to access the password-protected PEM key if necessary. Ignored if 'passwordsSecret' is provided.
       ##
       keyPassword: ""
