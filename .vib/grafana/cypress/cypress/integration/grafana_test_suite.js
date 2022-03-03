@@ -87,10 +87,9 @@ it('checks if plugin page is showing plugins', () => {
     .should('exist');
 })
 
-it('checks if it is possible to create and delete a data source', () => {
+it('checks if it is possible to create a data source', () => {
   const DATASOURCE = 'Prometheus';
   const DATASOURCE_ID = 'button[aria-label= "Add data source ' + DATASOURCE + '"]'
-  const DELETE_BUTTON = 'button[aria-label="Confirm Modal Danger Button"]';
 
   cy.login();
   cy.visit("/datasources/new");
@@ -99,13 +98,6 @@ it('checks if it is possible to create and delete a data source', () => {
   cy.get(DATASOURCE_ID).click();
   cy.get('div').contains('Datasource added')
     .should('be.visible');
-  cy.visit("/datasources");
-  cy.get('div').contains(DATASOURCE).click();
-  cy.get('button').contains('Delete').click();
-  cy.get('div').contains('Are you sure you want to delete')
-    .should('be.visible');
-  cy.get(DELETE_BUTTON).should('be.visible').click();
-  verifySuccesOfAction();
 })
 
 it('checks if an API key can be added and deleted', () => {
