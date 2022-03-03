@@ -148,6 +148,7 @@ $ helm uninstall my-release
 | `contour.startupProbe.successThreshold`         | Minimum consecutive successes for the probe to be considered successful after having failed.                                       | `1`                    |
 | `contour.certgen.serviceAccount.create`         | Create a serviceAccount for the Contour pod                                                                                        | `true`                 |
 | `contour.certgen.serviceAccount.name`           | Use the serviceAccount with the specified name, a name is generated using the fullname template                                    | `""`                   |
+| `contour.certgen.certificateLifetime`           | Generated certificate lifetime (in days).                                                                                          | `365`                  |
 | `contour.tlsExistingSecret`                     | Name of the existingSecret to be use in Contour deployment. If it is not nil `contour.certgen` will be disabled.                   | `""`                   |
 | `contour.service.type`                          | Service type                                                                                                                       | `ClusterIP`            |
 | `contour.service.ports.xds`                     | Contour service xds port                                                                                                           | `8001`                 |
