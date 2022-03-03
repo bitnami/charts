@@ -21,7 +21,6 @@ data:
     . /opt/bitnami/scripts/libinfluxdb.sh
 
     DATE="$(date +%Y%m%d_%H%M%S)"
-    BRANCH="$(influxdb_branch)"
 
     host="{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc"
 
@@ -31,40 +30,22 @@ data:
 
     get_databases() {
         local org_name="${1:-}"
-        if [[ "${BRANCH}" = "1" ]]; then
-            influx -username "{{ .Values.auth.admin.username }}" -password "${INFLUXDB_ADMIN_USER_PASSWORD}" -host "${host}" -port {{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }} -execute 'SHOW DATABASES' | sed -e '1,3d'
-        else
-            INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx bucket list --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" --org "${org_name}" 2> /dev/null | grep -v 'ID' | awk -F '\t' 'BEGIN{ORS=" "} {print $2}'
-        fi
+        INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx bucket list --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" --org "${org_name}" 2> /dev/null | grep -v 'ID' | awk -F '\t' 'BEGIN{ORS=" "} {print $2}'
     }
 
-    if [[ "${BRANCH}" = "1" ]]; then
-        echo "detected InfluxDB 1.*"
-        for DATABASE in $(get_databases); do
-            echo "backuping ${DATABASE} db to {{ .Values.backup.directory }}/${DATABASE}"
-            mkdir -p {{ .Values.backup.directory }}/${DATABASE}
+    for ORG in $(get_orgs); do
+        echo "finding buckets in org ${ORG}"
+        for BUCKET in $(get_databases "${ORG}"); do
+            backup_dir="{{ .Values.backup.directory }}/${ORG}/${BUCKET}"
+            echo "backuping ${BUCKET} bucket to ${backup_dir}"
+            mkdir -p "${backup_dir}"
 
-            influxd backup --host "${host}:{{ coalesce .Values.influxdb.service.ports.rpc .Values.influxdb.service.rpcPort }}" -portable -db ${DATABASE} {{ .Values.backup.directory }}/"${DATABASE}/${DATE}"
+            INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx backup --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" --bucket "${BUCKET}" "${backup_dir}/${DATE}"
         done
+    done
 
-        echo "deleting old backups"
-        find {{ .Values.backup.directory }} -mindepth 2 -maxdepth 2 -not -name ".snapshot" -not -name "lost+found" -type d -mtime +{{ .Values.backup.retentionDays }} -exec rm -r {} \;
-    else
-        echo "detected InfluxDB 2.*"
-        for ORG in $(get_orgs); do
-            echo "finding buckets in org ${ORG}"
-            for BUCKET in $(get_databases "${ORG}"); do
-                backup_dir="{{ .Values.backup.directory }}/${ORG}/${BUCKET}"
-                echo "backuping ${BUCKET} bucket to ${backup_dir}"
-                mkdir -p "${backup_dir}"
-
-                INFLUX_TOKEN="${INFLUXDB_ADMIN_USER_TOKEN}" influx backup --host "http://${host}:{{ coalesce .Values.influxdb.service.ports.http .Values.influxdb.service.port }}" --bucket "${BUCKET}" "${backup_dir}/${DATE}"
-            done
-        done
-
-        echo "deleting old backups"
-        find {{ .Values.backup.directory }} -mindepth 3 -maxdepth 3 -not -name ".snapshot" -not -name "lost+found" -type d -mtime +{{ .Values.backup.retentionDays }} -exec rm -r {} \;
-    fi
+    echo "deleting old backups"
+    find {{ .Values.backup.directory }} -mindepth 3 -maxdepth 3 -not -name ".snapshot" -not -name "lost+found" -type d -mtime +{{ .Values.backup.retentionDays }} -exec rm -r {} \;
   upload-google.sh: |-
     #!/bin/sh
 
