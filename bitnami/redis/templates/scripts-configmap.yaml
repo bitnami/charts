@@ -109,12 +109,14 @@ data:
     master_in_persisted_conf="$(get_full_hostname "$HOSTNAME")"
     master_port_in_persisted_conf="$REDIS_MASTER_PORT_NUMBER"
 
+    {{- if .Values.sentintel.persistence.enabled }}
     if [[ -f /opt/bitnami/redis-sentinel/etc/sentinel.conf ]]; then
         master_in_persisted_conf="$(awk '/monitor/ {print $4}' /opt/bitnami/redis-sentinel/etc/sentinel.conf)"
         master_port_in_persisted_conf="$(awk '/monitor/ {print $5}' /opt/bitnami/redis-sentinel/etc/sentinel.conf)"
         info "Found previous master ${master_in_persisted_conf}:${master_port_in_persisted_conf} in /opt/bitnami/redis-sentinel/etc/sentinel.conf"
         debug "$(cat /opt/bitnami/redis-sentinel/etc/sentinel.conf | grep monitor)"
     fi
+    {{- end }}
 
     if [[ $redisRetVal -ne 0 ]]; then
         if [[ "$master_in_persisted_conf" == "$(get_full_hostname "$HOSTNAME")" ]]; then
@@ -302,11 +304,14 @@ data:
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
 
     master_in_persisted_conf="$(get_full_hostname "$HOSTNAME")"
+
+    {{- if .Values.sentintel.persistence.enabled }}
     if [[ -f /opt/bitnami/redis-sentinel/etc/sentinel.conf ]]; then
         master_in_persisted_conf="$(awk '/monitor/ {print $4}' /opt/bitnami/redis-sentinel/etc/sentinel.conf)"
         info "Found previous master $master_in_persisted_conf in /opt/bitnami/redis-sentinel/etc/sentinel.conf"
         debug "$(cat /opt/bitnami/redis-sentinel/etc/sentinel.conf | grep monitor)"
     fi
+    {{- end }}
     if ! get_sentinel_master_info && [[ "$master_in_persisted_conf" == "$(get_full_hostname "$HOSTNAME")" ]]; then
         # No master found, lets create a master node
         export REDIS_REPLICATION_MODE="master"
