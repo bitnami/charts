@@ -125,6 +125,7 @@ auth:
   ## @param auth.usePasswordFiles Mount credentials as files instead of using an environment variable
   ##
   usePasswordFiles: false
+
 ## @param commonConfiguration [string] Common configuration to be added into the ConfigMap
 ## ref: https://redis.io/topics/config
 ##
@@ -418,6 +419,7 @@ master:
     ##
     selector: {}
     ## @param master.persistence.dataSource Custom PVC data source
+    ##
     dataSource: {}
     ## @param master.persistence.existingClaim Use a existing PVC which must be created manually before bound
     ## NOTE: requires master.persistence.enabled: true
@@ -767,6 +769,7 @@ replica:
     ##
     selector: {}
     ## @param replica.persistence.dataSource Custom PVC data source
+    ##
     dataSource: {}
   ## Redis&trade; replicas service parameters
   ##
@@ -917,6 +920,7 @@ sentinel:
   ## @param sentinel.externalMaster.enabled Use external master for bootstrapping
   ## @param sentinel.externalMaster.host External master host to bootstrap from
   ## @param sentinel.externalMaster.port Port for Redis service external master host
+  ##
   externalMaster:
     enabled: false
     host: ""
@@ -978,6 +982,39 @@ sentinel:
   ## @param sentinel.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
+  ## Persistence parameters
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## @param sentinel.persistence.enabled Enable persistence on Redis&trade; sentinel nodes using Persistent Volume Claims (Experimental)
+    ##
+    enabled: false
+    ## @param sentinel.persistence.storageClass Persistent Volume storage class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
+    ##
+    storageClass: ""
+    ## @param sentinel.persistence.accessModes Persistent Volume access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param sentinel.persistence.size Persistent Volume size
+    ##
+    size: 100Mi
+    ## @param sentinel.persistence.annotations Additional custom annotations for the PVC
+    ##
+    annotations: {}
+    ## @param sentinel.persistence.selector Additional labels to match for the PVC
+    ## e.g:
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param sentinel.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
   ## Redis&trade; Sentinel resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param sentinel.resources.limits The resources limits for the Redis&trade; Sentinel containers
@@ -1011,6 +1048,7 @@ sentinel:
     type: ClusterIP
     ## @param sentinel.service.ports.redis Redis&trade; service port for Redis&trade;
     ## @param sentinel.service.ports.sentinel Redis&trade; service port for Redis&trade; Sentinel
+    ##
     ports:
       redis: 6379
       sentinel: 26379

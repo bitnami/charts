@@ -232,6 +232,10 @@ spec:
               mountPath: /opt/bitnami/scripts/start-scripts
             - name: health
               mountPath: /health
+            {{- if .Values.sentinel.persistence.enabled }}
+            - name: sentinel-data
+              mountPath: /opt/bitnami/redis-sentinel/etc
+            {{- end }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
@@ -406,6 +410,10 @@ spec:
               mountPath: /opt/bitnami/scripts/start-scripts
             - name: health
               mountPath: /health
+            {{- if .Values.sentinel.persistence.enabled }}
+            - name: sentinel-data
+              mountPath: /opt/bitnami/redis-sentinel/etc
+            {{- end }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
@@ -415,8 +423,6 @@ spec:
               subPath: {{ .Values.replica.persistence.subPath }}
             - name: config
               mountPath: /opt/bitnami/redis-sentinel/mounted-etc
-            - name: sentinel-tmp-conf
-              mountPath: /opt/bitnami/redis-sentinel/etc
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
@@ -570,7 +576,8 @@ spec:
           hostPath:
             path: /sys
         {{- end }}
-        - name: sentinel-tmp-conf
+        {{- if not .Values.sentinel.persistence.enabled }}
+        - name: sentinel-data
           {{- if .Values.replica.persistence.medium }}
           emptyDir: {
             medium: {{ .Values.replica.persistence.medium | quote }}
@@ -578,6 +585,7 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- end }}
         - name: redis-tmp-conf
           {{- if .Values.replica.persistence.medium }}
           emptyDir: {
@@ -636,6 +644,27 @@ spec:
         selector: {{- include "common.tplvalues.render" ( dict "value" .Values.replica.persistence.selector "context" $) | nindent 10 }}
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.replica.persistence "global" .Values.global) | nindent 8 }}
+    {{- if .Values.sentinel.persistence.enabled }}
+    - metadata:
+        name: sentinel-data
+        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+          app.kubernetes.io/component: node
+        {{- if .Values.sentinel.persistence.annotations }}
+        annotations: {{- toYaml .Values.sentinel.persistence.annotations | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.sentinel.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.sentinel.persistence.size | quote }}
+        {{- if .Values.sentinel.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.sentinel.persistence "global" .Values.global) | nindent 8 }}
+    {{- end }}
   {{- end }}
 {{- end }}
 {{- end }}
