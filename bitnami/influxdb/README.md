@@ -7,7 +7,7 @@ InfluxDB(TM) is an open source time-series database. It is a core component of t
 [Overview of InfluxDB&trade;](https://www.influxdata.com/products/influxdb-overview)
 
 InfluxDB(TM) is a trademark owned by InfluxData, which is not affiliated with, and does not endorse, this site.
-                           
+
 ## TL;DR
 
 ```console
@@ -580,6 +580,12 @@ $ helm upgrade my-release bitnami/influxdb \
 > Note: you need to substitute the placeholders _[ADMIN_USER_PASSWORD]_, _[USER_PASSWORD]_, _[READ_USER_PASSWORD]_, and _[WRITE_USER_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
 ## Upgrading
+
+### To 4.0.0
+
+This major release completely removes support for InfluxDB&trade; branch 1.x.x. You can use images for versions ~1.x.x taking into account the chart may need some modification to run with them.
+
+If you were using InfluxDB&trade; +2.0 no issues are expected during upgrade.
 
 ### To 3.0.0
 
