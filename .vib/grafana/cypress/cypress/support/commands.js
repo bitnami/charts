@@ -21,5 +21,4 @@ Cypress.Commands.add("login", (
     cy.get('[name="user"]').type(username).should('have.value',username);
     cy.get('input#current-password').type(password).should('have.value',password);
     cy.get('[aria-label="Login button"]').click();
-    cy.get('div').contains('Invalid username').should('not.exist');
 });

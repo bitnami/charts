@@ -4,10 +4,11 @@ import {
   verifySuccesOfAction
 } from './utils'
 
-it('allows user to log out', () => {
+it('allows user to log in and log out', () => {
   cy.login();
+  cy.get('div').contains('Invalid username').should('not.exist');
   cy.visit('/logout');
-  cy.get('.login-content-box').should('exist');
+  cy.get('.login-content-box').should('be.visible');
 })
 
 it('allows creating a dashboard with a panel', () => {
