@@ -1396,18 +1396,19 @@ provisioning:
       ## @param provisioning.auth.tls.truststore The secret key from the certificatesSecret if 'truststore' key different from the default (truststore.jks)
       ##
       truststore: truststore.jks
-      ## @param provisioning.auth.tls.existingSecret Name of the secret containing passwords to access the JKS files or PEM key when they are password-protected.
+      ## @param provisioning.auth.tls.passwordsSecret Name of the secret containing passwords to access the JKS files or PEM key when they are password-protected.
+      ## It should contain two keys called "keystore-password" and "truststore-password", or "key-password" if using a password-protected PEM key.
       ##
-      existingSecret: ""
-      ## @param provisioning.auth.tls.keyPassword The secret key from the existingSecret if 'keyPassword' key different from the default (key-password)
+      passwordsSecret: ""
+      ## @param provisioning.auth.tls.keyPassword Password to access the password-protected PEM key if necessary. Ignored if 'passwordsSecret' is provided.
       ##
-      keyPassword: key-password
-      ## @param provisioning.auth.tls.keystorePassword The secret key from the existingSecret if 'param' key different from the default (keystore-password)
+      keyPassword: ""
+      ## @param provisioning.auth.tls.keystorePassword Password to access the JKS keystore. Ignored if 'passwordsSecret' is provided.
       ##
-      keystorePassword: keystore-password
-      ## @param provisioning.auth.tls.truststorePassword The secret key from the existingSecret if 'truststorePassword' key different from the default (truststore-password)
+      keystorePassword: ""
+      ## @param provisioning.auth.tls.truststorePassword Password to access the JKS truststore. Ignored if 'passwordsSecret' is provided.
       ##
-      truststorePassword: truststore-password
+      truststorePassword: ""
   ## @param provisioning.numPartitions Default number of partitions for topics when unspecified
   ##
   numPartitions: 1

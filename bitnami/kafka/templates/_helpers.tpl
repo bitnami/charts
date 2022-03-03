@@ -260,6 +260,17 @@ Return the Kafka client configuration configmap
 {{- end -}}
 
 {{/*
+Returns the secret name for the Kafka Provisioning client
+*/}}
+{{- define "kafka.client.passwordsSecretName" -}}
+{{- if .Values.provisioning.auth.tls.passwordsSecret -}}
+    {{- printf "%s" (tpl .Values.provisioning.auth.tls.passwordsSecret $) -}}
+{{- else -}}
+    {{- printf "%s-client-secret" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if a configmap object should be created
 */}}
 {{- define "kafka.createConfigmap" -}}
