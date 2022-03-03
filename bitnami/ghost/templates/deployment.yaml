@@ -133,6 +133,8 @@ spec:
               value: {{ .Values.externalDatabase.ssl | quote }}
             - name: MYSQL_CLIENT_ENABLE_SSL
               value: {{ ternary "yes" "no" .Values.externalDatabase.ssl | quote }}
+            - name: GHOST_DATABASE_SSL_CA_FILE
+              value: {{ .Values.externalDatabase.sslCaFile | quote }}
             {{- end }}
             - name: GHOST_HOST
               value: {{ include "ghost.host" . | quote }}
