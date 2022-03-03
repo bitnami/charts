@@ -6,7 +6,7 @@ import {
 
 it('allows user to log in and log out', () => {
   cy.login();
-  cy.get('div').contains('Invalid username').should('not.exist');
+  cy.contains('div','Invalid username').should('not.exist');
   cy.visit('/logout');
   cy.get('.login-content-box').should('be.visible');
 })
@@ -19,14 +19,16 @@ it('allows creating a dashboard with a panel', () => {
 
   cy.login();
   cy.visit('dashboard/new');
-  cy.get('button').contains('Add a new panel')
+  cy.contains('button','Add a new panel')
     .should('be.visible').click();
   cy.get('[value="Panel Title"]').clear().type(`${PANEL_TITLE}.${random}`);
   cy.get('textarea#description-text-area')
     .should('exist').type(`${PANEL_DESCRIPTION}.${random}`);
-  cy.get('button').contains('Apply')
+
+  cy.contains('button','Apply')
     .should('be.visible').click();
-  cy.get('.panel-title').contains(PANEL_TITLE).should('be.visible');
+
+  cy.contains('.panel-title',PANEL_TITLE).should('be.visible');
   cy.get('[aria-label="Save dashboard"]').click();
   cy.get(CLOSE_DIALOGUE_BUTTON)
     .should('be.visible');
@@ -42,13 +44,13 @@ it('checks if it is possible to upload a dashboard as JSON file', () => {
   
   cy.login();
   cy.visit("dashboard/import");
-  cy.get('label').contains('Upload JSON').click();
+  cy.contains('label','Upload JSON').click();
   cy.get('input[type=file]').selectFile('cypress/fixtures/test-dashboard.json',
   {force:true});
   cy.get('[data-testid="data-testid-import-dashboard-title"]').clear().type(`${DASHBOARD_TITLE}.${random}`);
   cy.get(IMPORT_DASHBOARD_BUTTON).click();
   cy.visit("dashboards");
-  cy.get('div').contains(DASHBOARD_TITLE)
+  cy.contains('div',DASHBOARD_TITLE)
     .should('exist').click();
 })
 
@@ -72,11 +74,11 @@ it('checks if smtp is configured', () => {
 
   cy.login();
   cy.visit("admin/settings");
-  cy.get('td').contains(SMTP_ADDRESS)
+  cy.contains('td',SMTP_ADDRESS)
     .should('exist');
-  cy.get('td').contains(SMTP_NAME)
+  cy.contains('td',SMTP_NAME)
     .should('exist');
-  cy.get('td').contains(SMTP_USER)
+  cy.contains('td',SMTP_USER)
     .should('exist');
 })
 
@@ -87,17 +89,25 @@ it('checks if plugin page is showing plugins', () => {
     .should('exist');
 })
 
-it('checks if it is possible to create a data source', () => {
+it('checks if it is possible to create and delete a data source', () => {
   const DATASOURCE = 'Prometheus';
   const DATASOURCE_ID = 'button[aria-label= "Add data source ' + DATASOURCE + '"]'
+  const DELETE_BUTTON = 'button[aria-label="Confirm Modal Danger Button"]';
 
   cy.login();
   cy.visit("/datasources/new");
   cy.get('input[placeholder="Filter by name or type"]')
     .type(DATASOURCE);
   cy.get(DATASOURCE_ID).click();
-  cy.get('div').contains('Datasource added')
+  cy.contains('div','Datasource added')
     .should('be.visible');
+    cy.visit("/datasources");
+    cy.contains('a',DATASOURCE).click({force:true});
+    cy.contains('button','Delete').click();
+    cy.contains('div','Are you sure you want to delete')
+      .should('be.visible');
+    cy.get(DELETE_BUTTON).should('be.visible').click();
+    verifySuccesOfAction();
 })
 
 it('checks if an API key can be added and deleted', () => {
@@ -111,12 +121,12 @@ it('checks if an API key can be added and deleted', () => {
   cy.get(ADD_NEW_API_KEY).click();
   cy.get('input[placeholder="Name"]')
     .should('be.visible').type(`${API_KEY_NAME}.${random}`)
-  cy.get('button').contains('Add').click({force:true});
-  cy.get('h2').contains('API Key Created')
+  cy.contains('button','Add').click({force:true});
+  cy.contains('h2','API Key Created')
     .should('be.visible');
   cy.get(CLOSE_DIALOGUE_BUTTON).click();
   cy.get(DELETE_API_KEY_BUTTON).click();
-  cy.get('span').contains('Delete').click();
+  cy.contains('span','Delete').click();
 })
 
 it('checks admin settings endpoint',() => {
@@ -150,4 +160,3 @@ it('checks the usage preview endpoint',() => {
     expect(response.body).to.include.all.keys('metrics','version');
    })
  })
-  
