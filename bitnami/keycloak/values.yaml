@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
@@ -45,6 +47,7 @@ clusterDomain: cluster.local
 extraDeploy: []
 
 ## @section Keycloak parameters
+##
 
 ## Bitnami Keycloak image version
 ## ref: https://hub.docker.com/r/bitnami/keycloak/tags/
@@ -58,7 +61,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 16.1.1-debian-10-r32
+  tag: 16.1.1-debian-10-r36
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -182,11 +185,13 @@ auth:
       ## limits:
       ##    cpu: 100m
       ##    memory: 128Mi
+      ##
       limits: {}
       ## Examples:
       ## requests:
       ##    cpu: 100m
       ##    memory: 128Mi
+      ##
       requests: {}
 ## @param proxyAddressForwarding Enable Proxy Address Forwarding
 ## ref: https://www.keycloak.org/docs/latest/server_installation/#_setting-up-a-load-balancer-or-proxy
@@ -276,6 +281,7 @@ extraEnvVarsCM: ""
 extraEnvVarsSecret: ""
 
 ## @section keycloak-config-cli parameters
+##
 
 ## Configuration for keycloak-config-cli
 ## ref: https://github.com/adorsys/keycloak-config-cli
@@ -295,7 +301,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 4.7.0-debian-10-r11
+    tag: 4.7.0-debian-10-r14
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -340,11 +346,13 @@ keycloakConfigCli:
     ## limits:
     ##    cpu: 200m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 200m
     ##    memory: 10Mi
+    ##
     requests: {}
   ## keycloak-config-cli containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -416,6 +424,7 @@ keycloakConfigCli:
   existingConfigmap: ""
 
 ## @section Keycloak deployment/statefulset parameters
+##
 
 ## @param replicaCount Number of Keycloak replicas to deploy
 ##
@@ -460,11 +469,13 @@ resources:
   ## limits:
   ##    cpu: 200m
   ##    memory: 256Mi
+  ##
   limits: {}
   ## Examples:
   ## requests:
   ##    cpu: 200m
   ##    memory: 10Mi
+  ##
   requests: {}
 ## Configure extra options for startup probe
 ## When enabling this, make sure to set initialDelaySeconds to 0 for livenessProbe and readinessProbe
@@ -630,6 +641,7 @@ initContainers: []
 sidecars: []
 
 ## @section Exposure parameters
+##
 
 ## Service configuration
 ##
@@ -822,6 +834,7 @@ rbac:
   rules: []
 
 ## @section Other parameters
+##
 
 ## Keycloak Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -851,6 +864,7 @@ autoscaling:
   targetMemory: ""
 
 ## @section Metrics parameters
+##
 
 ## Metrics configuration
 ##
@@ -899,6 +913,7 @@ metrics:
     additionalLabels: {}
 
 ## @section Database parameters
+##
 
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
@@ -907,22 +922,23 @@ postgresql:
   ## @param postgresql.enabled Deploy a PostgreSQL server to satisfy the applications database requirements
   ##
   enabled: true
-  ## @param postgresql.postgresqlUsername Keycloak PostgreSQL user (has superuser privileges if username is `postgres`)
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  postgresqlUsername: bn_keycloak
-  ## @param postgresql.postgresqlPassword Keycloak PostgreSQL password - ignored if existingSecret is provided
-  ## Defaults to a random 10-character alphanumeric string if not set
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  postgresqlPassword: ""
-  ## @param postgresql.postgresqlDatabase Name of the database to create
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
-  ##
-  postgresqlDatabase: bitnami_keycloak
-  ## @param postgresql.existingSecret Use an existing secret file with the PostgreSQL password
-  ##
-  existingSecret: ""
+  auth:
+    ## @param postgresql.auth.username Keycloak PostgreSQL user (has superuser privileges if username is `postgres`)
+    ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
+    ##
+    username: bn_keycloak
+    ## @param postgresql.auth.password Keycloak PostgreSQL password - ignored if existingSecret is provided
+    ## Defaults to a random 10-character alphanumeric string if not set
+    ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
+    ##
+    password: ""
+    ## @param postgresql.auth.database Name of the database to create
+    ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
+    ##
+    database: bitnami_keycloak
+    ## @param postgresql.auth.existingSecret Use an existing secret file with the PostgreSQL password
+    ##
+    existingSecret: ""
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes
   ##

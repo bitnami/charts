@@ -13,7 +13,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not .Values.bucketweb.autoscaling.enabled }}
   replicas: {{ .Values.bucketweb.replicaCount }}
+  {{- end }}
   {{- if .Values.bucketweb.updateStrategy }}
   strategy: {{- toYaml .Values.bucketweb.updateStrategy | nindent 4 }}
   {{- end }}

@@ -125,7 +125,7 @@ Return the database name for Redmine
 {{- if and (eq .Values.databaseType "mariadb") (.Values.mariadb.enabled) -}}
     {{- .Values.mariadb.auth.database | quote }}
 {{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
-    {{- .Values.postgresql.postgresqlDatabase | quote }}
+    {{- .Values.postgresql.auth.database | quote }}
 {{- else }}
     {{- .Values.externalDatabase.database | quote }}
 {{- end -}}
@@ -138,7 +138,7 @@ Return the database username for Redmine
 {{- if and (eq .Values.databaseType "mariadb") (.Values.mariadb.enabled) -}}
     {{- .Values.mariadb.auth.username | quote }}
 {{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
-    {{- .Values.postgresql.postgresqlUsername | quote }}
+    {{- .Values.postgresql.auth.username | quote }}
 {{- else }}
     {{- .Values.externalDatabase.user | quote }}
 {{- end -}}
@@ -155,8 +155,8 @@ Return the name of the database secret with its credentials
         {{- printf "%s" (include "redmine.mariadb.fullname" .) -}}
     {{- end -}}
 {{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
-    {{- if .Values.postgresql.existingSecret -}}
-        {{- printf "%s" .Values.postgresql.existingSecret -}}
+    {{- if .Values.postgresql.auth.existingSecret -}}
+        {{- printf "%s" .Values.postgresql.auth.existingSecret -}}
     {{- else -}}
         {{- printf "%s" (include "redmine.postgresql.fullname" .) -}}
     {{- end -}}
