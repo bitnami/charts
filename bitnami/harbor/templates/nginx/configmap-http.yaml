@@ -36,7 +36,7 @@ data:
       proxy_http_version 1.1;
 
       upstream core {
-        server {{ printf "%s:%d" (include "harbor.core" .) (ternary .Values.core.service.ports.https .Values.core.service.ports.http .Values.internalTLS.enabled | int ) }};
+        server {{ printf "%s:%d" (include "harbor.core" .) (ternary .Values.core.service.ports.https .Values.core.service.ports.http .Values.internalTLS.enabled | int) }};
       }
 
       upstream portal {
