@@ -1,7 +1,7 @@
 annotations:
   category: Forum
 apiVersion: v2
-appVersion: 2.7.13
+appVersion: 2.8.1
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -35,4 +35,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-discourse
   - https://github.com/spinnaker
   - https://www.discourse.org/
-version: 6.0.4
+version: 7.0.1
