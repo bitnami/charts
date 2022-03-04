@@ -203,7 +203,7 @@ spec:
             - name: INTERNAL_TLS_ENABLED
               value: "true"
             - name: SCANNER_API_SERVER_ADDR
-              value: {{ printf ":%s" (ternary .Values.clair.adapter.containerPorts.https .Values.clair.adapter.containerPorts.http .Values.internalTLS.enabled | int) | quote }}
+              value: {{ printf ":%d" (ternary .Values.clair.adapter.containerPorts.https .Values.clair.adapter.containerPorts.http .Values.internalTLS.enabled | int) | quote }}
             - name: SCANNER_API_SERVER_TLS_KEY
               value: /etc/harbor/ssl/clair/tls.key
             - name: SCANNER_API_SERVER_TLS_CERTIFICATE
