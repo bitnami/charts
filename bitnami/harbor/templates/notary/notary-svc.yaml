@@ -17,7 +17,7 @@ spec:
   {{- end }}
   ports:
     - name: notary-server
-      port: {{ .Values.notary.server.containerPorts.server }}
+      port: {{ .Values.notary.service.ports.server }}
       targetPort: notary-server
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: notary-server
@@ -36,7 +36,7 @@ metadata:
 spec:
   ports:
     - name: notary-signer
-      port: {{ .Values.notary.signer.containerPorts.signer }}
+      port: {{ .Values.notary.service.ports.signer }}
       targetPort: notary-signer
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: notary-signer

@@ -39,32 +39,32 @@ Set the http prefix if the externalURl doesn't have it
 
 {{/* Harbor Adapter for Clair URL */}}
 {{- define "harbor.clairAdapter.url" -}}
-  {{- printf "%s://%s:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.clair" .) (ternary .Values.clair.adapter.containerPorts.https .Values.clair.adapter.containerPorts.http .Values.internalTLS.enabled | int ) -}}
+  {{- printf "%s://%s:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.clair" .) (ternary .Values.clair.adapter.service.ports.https .Values.clair.adapter.service.ports.http .Values.internalTLS.enabled | int ) -}}
 {{- end -}}
 
 {{/* port is included in this url as a workaround for issue https://github.com/aquasecurity/harbor-scanner-trivy/issues/108 */}}
 {{- define "harbor.core.url" -}}
-  {{- printf "%s://%s" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.core" .) -}}
+  {{- printf "%s://%s:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.core" .) (ternary .Values.core.service.ports.https .Values.core.service.ports.http .Values.internalTLS.enabled | int) -}}
 {{- end -}}
 
 {{- define "harbor.jobservice.url" -}}
-  {{- printf "%s://%s-jobservice" (ternary "https" "http" .Values.internalTLS.enabled) (include "common.names.fullname" .) -}}
+  {{- printf "%s://%s-jobservice:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "common.names.fullname" .) (ternary .Values.jobservice.service.ports.https .Values.jobservice.service.ports.http .Values.internalTLS.enabled | int) -}}
 {{- end -}}
 
 {{- define "harbor.portal.url" -}}
-  {{- printf "%s://%s" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.portal" .) -}}
+  {{- printf "%s://%s:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.portal" .) (ternary .Values.portal.service.ports.https .Values.portal.service.ports.http .Values.internalTLS.enabled | int) -}}
 {{- end -}}
 
 {{- define "harbor.chartmuseum.url" -}}
-  {{- printf "%s://%s" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.chartmuseum" .) -}}
+  {{- printf "%s://%s:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.chartmuseum" .) (ternary .Values.chartmuseum.service.ports.https .Values.chartmuseum.service.ports.http .Values.internalTLS.enabled | int) -}}
 {{- end -}}
 
 {{- define "harbor.registry.url" -}}
-  {{- printf "%s://%s:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.registry" .) (ternary .Values.registry.server.containerPorts.https .Values.registry.server.containerPorts.http .Values.internalTLS.enabled | int ) -}}
+  {{- printf "%s://%s:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.registry" .) (ternary .Values.registry.server.service.ports.https .Values.registry.server.service.ports.http .Values.internalTLS.enabled | int ) -}}
 {{- end -}}
 
 {{- define "harbor.registryCtl.url" -}}
-  {{- printf "%s://%s:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.registry" .) (ternary .Values.registry.controller.containerPorts.https .Values.registry.controller.containerPorts.http .Values.internalTLS.enabled | int ) -}}
+  {{- printf "%s://%s:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.registry" .) (ternary .Values.registry.controller.service.ports.https .Values.registry.controller.service.ports.http .Values.internalTLS.enabled | int ) -}}
 {{- end -}}
 
 {{- define "harbor.tokenService.url" -}}
@@ -72,7 +72,7 @@ Set the http prefix if the externalURl doesn't have it
 {{- end -}}
 
 {{- define "harbor.trivy.url" -}}
-  {{- printf "%s://%s:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.trivy" .) (ternary .Values.trivy.containerPorts.https .Values.trivy.containerPorts.http .Values.internalTLS.enabled | int) -}}
+  {{- printf "%s://%s:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.trivy" .) (ternary .Values.trivy.service.ports.https .Values.trivy.service.ports.http .Values.internalTLS.enabled | int) -}}
 {{- end -}}
 
 {{- define "harbor.core.tls.secretName" -}}

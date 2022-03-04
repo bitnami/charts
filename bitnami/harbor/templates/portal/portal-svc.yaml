@@ -16,7 +16,7 @@ spec:
   {{- end }}
   ports:
     - name: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-      port: {{ ternary 443 80 .Values.internalTLS.enabled }}
+      port: {{ ternary .Values.portal.service.ports.https .Values.portal.service.ports.http .Values.internalTLS.enabled }}
       targetPort: {{ ternary "https" "http" .Values.internalTLS.enabled }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: portal

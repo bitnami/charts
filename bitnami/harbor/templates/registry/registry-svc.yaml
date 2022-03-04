@@ -13,8 +13,8 @@ metadata:
 spec:
   ports:
     - name: registry
-      port: {{ ternary .Values.registry.server.containerPorts.https .Values.registry.server.containerPorts.http .Values.internalTLS.enabled }}
+      port: {{ ternary .Values.registry.server.service.ports.https .Values.registry.server.service.ports.http .Values.internalTLS.enabled }}
     - name: controller
-      port: {{ ternary .Values.registry.controller.containerPorts.https .Values.registry.controller.containerPorts.http .Values.internalTLS.enabled }}
+      port: {{ ternary .Values.registry.controller.service.ports.https .Values.registry.controller.service.ports.http .Values.internalTLS.enabled }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: registry

@@ -37,16 +37,16 @@ data:
       proxy_http_version 1.1;
 
       upstream core {
-        server {{ printf "%s:%d" (include "harbor.core" .) (ternary 443 80 .Values.internalTLS.enabled) }};
+        server {{ printf "%s:%d" (include "harbor.core" .) (ternary .Values.core.service.ports.https .Values.core.service.ports.http .Values.internalTLS.enabled) }};
       }
 
       upstream portal {
-        server {{ printf "%s:%d" (include "harbor.portal" .) (ternary 443 80 .Values.internalTLS.enabled)}};
+        server {{ printf "%s:%d" (include "harbor.portal" .) (ternary .Values.portal.service.ports.https .Values.portal.service.ports.http .Values.internalTLS.enabled) }};
       }
 
       {{- if .Values.notary.enabled }}
       upstream notary-server {
-        server {{ template "harbor.notary-server" . }}:{{ .Values.notary.server.containerPorts.server }};
+        server {{ template "harbor.notary-server" . }}:{{ .Values.notary.service.ports.server }};
       }
       {{- end }}
 

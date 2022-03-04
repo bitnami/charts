@@ -14,7 +14,7 @@ metadata:
 spec:
   ports:
     - name: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-      port: {{ ternary 443 80 .Values.internalTLS.enabled }}
+      port: {{ ternary .Values.jobservice.service.ports.https .Values.jobservice.service.ports.http .Values.internalTLS.enabled }}
       targetPort: {{ ternary "https" "http" .Values.internalTLS.enabled }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: jobservice

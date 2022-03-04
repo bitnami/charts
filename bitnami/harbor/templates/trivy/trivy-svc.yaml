@@ -16,7 +16,7 @@ spec:
   ports:
     - name: api-server
       protocol: TCP
-      port: {{ ternary .Values.trivy.containerPorts.https .Values.trivy.containerPorts.http .Values.internalTLS.enabled }}
+      port: {{ ternary .Values.trivy.service.ports.https .Values.trivy.service.ports.http .Values.internalTLS.enabled }}
       targetPort: api-server
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: trivy

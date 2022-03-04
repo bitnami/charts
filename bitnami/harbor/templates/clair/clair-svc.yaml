@@ -15,11 +15,11 @@ metadata:
 spec:
   ports:
     - name: api
-      port: {{ .Values.clair.server.containerPorts.api }}
+      port: {{ .Values.clair.server.service.ports.api }}
     - name: health
-      port: {{ .Values.clair.server.containerPorts.health }}
+      port: {{ .Values.clair.server.service.ports.health }}
     - name: adapter
-      port: {{ ternary .Values.clair.adapter.containerPorts.https .Values.clair.adapter.containerPorts.http .Values.internalTLS.enabled }}
+      port: {{ ternary .Values.clair.adapter.service.ports.https .Values.clair.adapter.service.ports.http .Values.internalTLS.enabled }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: clair
 {{- end }}

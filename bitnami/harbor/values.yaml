@@ -1167,6 +1167,15 @@ portal:
   ## @param portal.automountServiceAccountToken Automount service account token
   ##
   automountServiceAccountToken: false
+  ## Harbor Portal service configuration
+  ##
+  service:
+    ## @param portal.service.ports.http Harbor Portal HTTP service port
+    ## @param portal.service.ports.https Harbor Portal HTTPS service port
+    ##
+    ports:
+      http: 80
+      https: 443
 
 ## @section Harbor Core Parameters
 
@@ -1434,6 +1443,15 @@ core:
   ## @param core.automountServiceAccountToken Automount service account token
   ##
   automountServiceAccountToken: false
+  ## Harbor Core service configuration
+  ##
+  service:
+    ## @param core.service.ports.http Harbor Core HTTP service port
+    ## @param core.service.ports.https Harbor Core HTTPS service port
+    ##
+    ports:
+      http: 80
+      https: 443
 
 ## @section Harbor Jobservice Parameters
 
@@ -1695,6 +1713,15 @@ jobservice:
   ## @param jobservice.automountServiceAccountToken Automount service account token
   ##
   automountServiceAccountToken: false
+  ## Harbor Jobservice service configuration
+  ##
+  service:
+    ## @param jobservice.service.ports.http Harbor Jobservice HTTP service port
+    ## @param jobservice.service.ports.https Harbor Jobservice HTTPS service port
+    ##
+    ports:
+      http: 80
+      https: 443
 
 ## @section Harbor Registry Parameters
 
@@ -1995,6 +2022,15 @@ registry:
     ## @param registry.server.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Harbor Registry main pods
     ##
     extraVolumeMounts: []
+    ## Harbor Registry service configuration
+    ##
+    service:
+      ## @param registry.server.service.ports.http Harbor Registry HTTP service port
+      ## @param registry.server.service.ports.https Harbor Registry HTTPS service port
+      ##
+      ports:
+        http: 5000
+        https: 5443
   ## Harbor Registryctl parameters
   ##
   controller:
@@ -2125,6 +2161,15 @@ registry:
     ## @param registry.controller.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Harbor Registryctl pods
     ##
     extraVolumeMounts: []
+    ## Harbor Registryctl service configuration
+    ##
+    service:
+      ## @param registry.controller.service.ports.http Harbor Registryctl HTTP service port
+      ## @param registry.controller.service.ports.https Harbor Registryctl HTTPS service port
+      ##
+      ports:
+        http: 8080
+        https: 8443
 
 ## @section ChartMuseum Parameters
 
@@ -2425,6 +2470,15 @@ chartmuseum:
   ## @param chartmuseum.automountServiceAccountToken Automount service account token
   ##
   automountServiceAccountToken: false
+  ## Chartmuseum service configuration
+  ##
+  service:
+    ## @param chartmuseum.service.ports.http Chartmuseum HTTP service port
+    ## @param chartmuseum.service.ports.https Chartmuseum HTTPS service port
+    ##
+    ports:
+      http: 80
+      https: 443
 
 ## @section Clair Parameters
 
@@ -2691,6 +2745,15 @@ clair:
     ## @param clair.adapter.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Harbor Adapter for Clair pods
     ##
     extraVolumeMounts: []
+    ## Harbor Adapter for Clair service configuration
+    ##
+    service:
+      ## @param clair.server.service.ports.http Harbor Adapter for Clair HTTP service port
+      ## @param clair.server.service.ports.https Harbor Adapter for Clair HTTPS service port
+      ##
+      ports:
+        http: 8080
+        https: 8080
   ## Clair main container properties
   ##
   server:
@@ -2821,6 +2884,15 @@ clair:
     ## @param clair.server.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Harbor Clair pods
     ##
     extraVolumeMounts: []
+    ## Harbor Clair service configuration
+    ##
+    service:
+      ## @param clair.server.service.ports.api Harbor Clair API service port
+      ## @param clair.server.service.ports.health Harbor Clair health service port
+      ##
+      ports:
+        api: 6060
+        health: 6061
 
 ## @section Notary Parameters
 
@@ -3312,6 +3384,15 @@ notary:
     ## @param notary.signer.automountServiceAccountToken Automount service account token
     ##
     automountServiceAccountToken: false
+  ## Harbor Notary service configuration
+  ##
+  service:
+    ## @param notary.service.ports.server Harbor Notary server service port
+    ## @param notary.service.ports.signer Harbor Notary signer service port
+    ##
+    ports:
+      server: 4443
+      signer: 7899
 
 ## @section Harbor Adapter Trivy Parameters
 
@@ -3610,6 +3691,15 @@ trivy:
   ## @param trivy.automountServiceAccountToken Automount service account token
   ##
   automountServiceAccountToken: false
+  ## Trivy service configuration
+  ##
+  service:
+    ## @param trivy.service.ports.http Trivy HTTP service port
+    ## @param trivy.service.ports.https Trivy HTTPS service port
+    ##
+    ports:
+      http: 8080
+      https: 8443
 
 ## @section PostgreSQL Parameters
 

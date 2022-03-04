@@ -36,11 +36,11 @@ data:
       proxy_http_version 1.1;
 
       upstream core {
-        server {{ printf "%s:%d" (include "harbor.core" .) (ternary 443 80 .Values.internalTLS.enabled) }};
+        server {{ printf "%s:%d" (include "harbor.core" .) (ternary .Values.core.service.ports.https .Values.core.service.ports.http .Values.internalTLS.enabled | int ) }};
       }
 
       upstream portal {
-        server {{ printf "%s:%d" (include "harbor.portal" .) (ternary 443 80 .Values.internalTLS.enabled)}};
+        server {{ printf "%s:%d" (include "harbor.portal" .) (ternary .Values.portal.service.ports.https .Values.portal.service.ports.http .Values.internalTLS.enabled | int) }};
       }
 
       log_format timed_combined '[$time_local]:$remote_addr - '
