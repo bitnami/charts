@@ -341,6 +341,7 @@ service:
   type: LoadBalancer
   ## @param service.ports.http WildFly service HTTP port
   ## @param service.ports.mgmt WildFly service management console port
+  ## TODO: service.port and service.mgmtPort still supported for backward-compatibility. Deprecate with the next major release 14.0.0
   ##
   ports:
     http: 80
