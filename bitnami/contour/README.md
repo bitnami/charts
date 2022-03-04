@@ -258,6 +258,7 @@ $ helm uninstall my-release
 | `envoy.service.nodePorts.http`                      | HTTP Port. If `envoy.service.type` is NodePort and this is non-empty                                                  | `""`                    |
 | `envoy.service.nodePorts.https`                     | HTTPS Port. If `envoy.service.type` is NodePort and this is non-empty                                                 | `""`                    |
 | `envoy.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                                        | `[]`                    |
+| `envoy.service.ipFamilyPolicy`                      | IP family policy, support `SingleStack`, `PreferDualStack` and `RequireDualStack`                                     | `""`                    |
 | `envoy.useHostPort`                                 | Enable/disable `hostPort` for TCP/80 and TCP/443                                                                      | `true`                  |
 | `envoy.useHostIP`                                   | Enable/disable `hostIP`                                                                                               | `false`                 |
 | `envoy.hostPorts.http`                              | Sets `hostPort` http port                                                                                             | `80`                    |
