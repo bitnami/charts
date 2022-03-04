@@ -191,7 +191,7 @@ spec:
               value: {{ ternary "true" "false" .Values.clair.adapter.image.debug | quote }}
             - name: SCANNER_CLAIR_URL
               # To avoid a pod cannot reach itself via service IP when the clusters disable hairpin
-              value: {{ printf "http://127.0.0.1:%d" .Values.clair.server.containerPorts.api | quote }}
+              value: {{ printf "http://127.0.0.1:%d" (int .Values.clair.server.containerPorts.api) | quote }}
             - name: SCANNER_STORE_REDIS_URL
               value: {{ include "harbor.redisForClairAdapter" . }}
             - name: SCANNER_CLAIR_DATABASE_URL
@@ -203,7 +203,7 @@ spec:
             - name: INTERNAL_TLS_ENABLED
               value: "true"
             - name: SCANNER_API_SERVER_ADDR
-              value: {{ printf ":%s" (ternary .Values.clair.adapter.containerPorts.https .Values.clair.adapter.containerPorts.http .Values.internalTLS.enabled) | quote }}
+              value: {{ printf ":%s" (ternary .Values.clair.adapter.containerPorts.https .Values.clair.adapter.containerPorts.http .Values.internalTLS.enabled | int) | quote }}
             - name: SCANNER_API_SERVER_TLS_KEY
               value: /etc/harbor/ssl/clair/tls.key
             - name: SCANNER_API_SERVER_TLS_CERTIFICATE
