@@ -6,7 +6,7 @@ import {
 
 it('allows user to log in and log out', () => {
   cy.login();
-  cy.contains('div','Invalid username').should('not.exist');
+  cy.contains('div', 'Invalid username').should('not.exist');
   cy.visit('/logout');
   cy.get('.login-content-box').should('be.visible');
 })
@@ -18,7 +18,7 @@ it('allows creating a dashboard with a panel', () => {
 
   cy.login();
   cy.visit('dashboard/new');
-  cy.contains('button','Add a new panel')
+  cy.contains('button', 'Add a new panel')
     .should('be.visible').click();
   cy.get('[value*="Panel Title"]').clear().type(`${PANEL_TITLE}.${random}`);
   cy.get('textarea#description-text-area')
@@ -27,7 +27,7 @@ it('allows creating a dashboard with a panel', () => {
   cy.contains('button','Apply')
     .should('be.visible').click();
 
-  cy.contains('.panel-title',PANEL_TITLE).should('be.visible');
+  cy.contains('.panel-title', PANEL_TITLE).should('be.visible');
   cy.get('[aria-label*="Save dashboard"]').click();
   cy.get('button[aria-label*="Close dialogue"]')
     .should('be.visible');
@@ -38,17 +38,17 @@ it('allows creating a dashboard with a panel', () => {
 })
 
 it('checks if it is possible to upload a dashboard as JSON file', () => {
-  const DASHBOARD_TITLE = "New Test dashboard";
+  const DASHBOARD_TITLE = 'New Test dashboard';
   
   cy.login();
-  cy.visit("dashboard/import");
+  cy.visit('dashboard/import');
   cy.contains('label','Upload JSON').click();
   cy.get('input[type=file]').selectFile('cypress/fixtures/test-dashboard.json',
   {force:true});
   cy.get('[data-testid*="data-testid-import-dashboard-title"]').clear().type(`${DASHBOARD_TITLE}.${random}`);
   cy.get('[data-testid*="data-testid-import-dashboard-submit"]').click();
   cy.visit("dashboards");
-  cy.contains('div',DASHBOARD_TITLE)
+  cy.contains('div', DASHBOARD_TITLE)
     .should('exist').click();
 })
 
@@ -71,12 +71,12 @@ it('checks if smtp is configured', () => {
   const SMTP_USER = 'smtp_user';
 
   cy.login();
-  cy.visit("admin/settings");
-  cy.contains('td',SMTP_ADDRESS)
+  cy.visit('admin/settings');
+  cy.contains('td', SMTP_ADDRESS)
     .should('exist');
-  cy.contains('td',SMTP_NAME)
+  cy.contains('td', SMTP_NAME)
     .should('exist');
-  cy.contains('td',SMTP_USER)
+  cy.contains('td', SMTP_USER)
     .should('exist');
 })
 
@@ -91,42 +91,42 @@ it('checks if it is possible to create and delete a data source', () => {
   const DATASOURCE = 'Prometheus';
 
   cy.login();
-  cy.visit("/datasources/new");
+  cy.visit('/datasources/new');
   cy.get('input[placeholder*="Filter by name or type"]')
     .type(DATASOURCE);
-  cy.get('button[aria-label*="Add data source ' + DATASOURCE + '"]').click();
-  cy.contains('div','Datasource added')
+  cy.get(`button[aria-label*="Add data source ${DATASOURCE}"]`).click();
+  cy.contains('div', 'Datasource added')
     .should('be.visible');
     cy.visit("/datasources");
-    cy.contains('a',DATASOURCE).click({force:true});
-    cy.contains('button','Delete').click();
-    cy.contains('div','Are you sure you want to delete')
+    cy.contains('a', DATASOURCE).click({force:true});
+    cy.contains('button', 'Delete').click();
+    cy.contains('div', 'Are you sure you want to delete')
       .should('be.visible');
     cy.get('button[aria-label*="Confirm Modal Danger Button"]').should('be.visible').click();
     verifySuccesOfAction();
 })
 
 it('checks if an API key can be added and deleted', () => {
-  const API_KEY_NAME = "test_api_key";
+  const API_KEY_NAME = 'test_api_key';
 
   cy.login();
   cy.visit('org/apikeys');
   cy.get('[data-testid*="data-testid Call to action button New API key"]').click();
   cy.get('input[placeholder*="Name"]')
     .should('be.visible').type(`${API_KEY_NAME}.${random}`)
-  cy.contains('button','Add').click({force:true});
-  cy.contains('h2','API Key Created')
+  cy.contains('button', 'Add').click({force:true});
+  cy.contains('h2', 'API Key Created')
     .should('be.visible');
   cy.get('button[aria-label*="Close dialogue"]').click();
   cy.get('button[aria-label*="Delete API key"]').click();
-  cy.contains('span','Delete').click();
+  cy.contains('span', 'Delete').click();
 })
 
 it('checks admin settings endpoint',() => {
   cy.request({
     method: 'GET',
     url: '/api/admin/settings',
-    form: true, 
+    form: true,
     auth: {
       username: Cypress.env("username"),
       password: Cypress.env("password")
@@ -142,7 +142,7 @@ it('checks the usage preview endpoint',() => {
     cy.request({
     method: 'GET',
     url: 'api/admin/usage-report-preview',
-    form: true, 
+    form: true,
     auth: {
       username: Cypress.env("username"),
       password: Cypress.env("password")
