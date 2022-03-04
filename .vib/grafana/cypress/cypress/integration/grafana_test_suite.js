@@ -20,7 +20,7 @@ it('allows creating a dashboard with a panel', () => {
   cy.visit('dashboard/new');
   cy.contains('button','Add a new panel')
     .should('be.visible').click();
-  cy.get('[value="Panel Title"]').clear().type(`${PANEL_TITLE}.${random}`);
+  cy.get('[value*="Panel Title"]').clear().type(`${PANEL_TITLE}.${random}`);
   cy.get('textarea#description-text-area')
     .should('exist').type(`${PANEL_DESCRIPTION}.${random}`);
 
@@ -28,11 +28,11 @@ it('allows creating a dashboard with a panel', () => {
     .should('be.visible').click();
 
   cy.contains('.panel-title',PANEL_TITLE).should('be.visible');
-  cy.get('[aria-label="Save dashboard"]').click();
-  cy.get('button[aria-label="Close dialogue"]')
+  cy.get('[aria-label*="Save dashboard"]').click();
+  cy.get('button[aria-label*="Close dialogue"]')
     .should('be.visible');
-  cy.get('[name="title"]').clear().type(`${DASHBOARD_TITLE}.${random}`);
-  cy.get('[type="submit"]')
+  cy.get('[name*="title"]').clear().type(`${DASHBOARD_TITLE}.${random}`);
+  cy.get('[type*="submit"]')
     .should('be.visible').click();
   verifySuccesOfAction();
 })
@@ -45,8 +45,8 @@ it('checks if it is possible to upload a dashboard as JSON file', () => {
   cy.contains('label','Upload JSON').click();
   cy.get('input[type=file]').selectFile('cypress/fixtures/test-dashboard.json',
   {force:true});
-  cy.get('[data-testid="data-testid-import-dashboard-title"]').clear().type(`${DASHBOARD_TITLE}.${random}`);
-  cy.get('[data-testid="data-testid-import-dashboard-submit"]').click();
+  cy.get('[data-testid*="data-testid-import-dashboard-title"]').clear().type(`${DASHBOARD_TITLE}.${random}`);
+  cy.get('[data-testid*="data-testid-import-dashboard-submit"]').click();
   cy.visit("dashboards");
   cy.contains('div',DASHBOARD_TITLE)
     .should('exist').click();
@@ -58,10 +58,10 @@ it('allows inviting a user', () => {
 
   cy.login();
   cy.visit('/org/users/invite');
-  cy.get('[name="loginOrEmail"]').clear().type(`${TEST_EMAIL_ADDRESS}.${random}`);
-  cy.get('[name="name"]').clear().type(`${INVITE_USER_NAME}.${random}`);
-  cy.get('[name="sendEmail"]').click({force: true});
-  cy.get('[type="submit"]').click();
+  cy.get('[name*="loginOrEmail"]').clear().type(`${TEST_EMAIL_ADDRESS}.${random}`);
+  cy.get('[name*="name"]').clear().type(`${INVITE_USER_NAME}.${random}`);
+  cy.get('[name*="sendEmail"]').click({force: true});
+  cy.get('[type*="submit"]').click();
   verifySuccesOfAction();
 })
 
@@ -83,7 +83,7 @@ it('checks if smtp is configured', () => {
 it('checks if plugin page is showing plugins', () => {
   cy.login();
   cy.visit('/plugins?filterByType=datasource');
-  cy.get('[data-testid="plugin-list"]')
+  cy.get('[data-testid*="plugin-list"]')
     .should('exist');
 })
 
@@ -92,9 +92,9 @@ it('checks if it is possible to create and delete a data source', () => {
 
   cy.login();
   cy.visit("/datasources/new");
-  cy.get('input[placeholder="Filter by name or type"]')
+  cy.get('input[placeholder*="Filter by name or type"]')
     .type(DATASOURCE);
-  cy.get('button[aria-label= "Add data source ' + DATASOURCE + '"]').click();
+  cy.get('button[aria-label*="Add data source ' + DATASOURCE + '"]').click();
   cy.contains('div','Datasource added')
     .should('be.visible');
     cy.visit("/datasources");
@@ -102,7 +102,7 @@ it('checks if it is possible to create and delete a data source', () => {
     cy.contains('button','Delete').click();
     cy.contains('div','Are you sure you want to delete')
       .should('be.visible');
-    cy.get('button[aria-label="Confirm Modal Danger Button"]').should('be.visible').click();
+    cy.get('button[aria-label*="Confirm Modal Danger Button"]').should('be.visible').click();
     verifySuccesOfAction();
 })
 
@@ -111,14 +111,14 @@ it('checks if an API key can be added and deleted', () => {
 
   cy.login();
   cy.visit('org/apikeys');
-  cy.get('[data-testid="data-testid Call to action button New API key"]').click();
-  cy.get('input[placeholder="Name"]')
+  cy.get('[data-testid*="data-testid Call to action button New API key"]').click();
+  cy.get('input[placeholder*="Name"]')
     .should('be.visible').type(`${API_KEY_NAME}.${random}`)
   cy.contains('button','Add').click({force:true});
   cy.contains('h2','API Key Created')
     .should('be.visible');
-  cy.get('button[aria-label="Close dialogue"]').click();
-  cy.get('button[aria-label="Delete API key"]').click();
+  cy.get('button[aria-label*="Close dialogue"]').click();
+  cy.get('button[aria-label*="Delete API key"]').click();
   cy.contains('span','Delete').click();
 })
 
