@@ -18,7 +18,7 @@ Cypress.Commands.add("login", (
 ) => {
     cy.clearCookies();
     cy.visit('/login')
-    cy.get('[name="user"]').type(username).should('have.value',username);
+    cy.get('[name*="user"]').type(username).should('have.value',username);
     cy.get('input#current-password').type(password).should('have.value',password);
     cy.get('[aria-label="Login button"]').click();
 });
