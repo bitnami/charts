@@ -3,17 +3,17 @@ annotations:
 apiVersion: v2
 appVersion: 7.4.3-2
 dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
     tags:
       - ejbca-database
     version: 10.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: EJBCA is an enterprise class PKI Certificate Authority software, built using Java (JEE) technology.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/ejbca
@@ -30,4 +30,4 @@ name: ejbca
 sources:
   - https://github.com/bitnami/bitnami-docker-ejbca
   - https://www.ejbca.org/
-version: 5.1.3
+version: 5.1.4
