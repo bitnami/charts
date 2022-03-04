@@ -578,9 +578,9 @@ spec:
         {{- end }}
         {{- if not .Values.sentinel.persistence.enabled }}
         - name: sentinel-data
-          {{- if .Values.replica.persistence.medium }}
+          {{- if .Values.sentinel.persistence.medium }}
           emptyDir: {
-            medium: {{ .Values.replica.persistence.medium | quote }}
+            medium: {{ .Values.sentinel.persistence.medium | quote }}
           }
           {{- else }}
           emptyDir: {}
