@@ -933,7 +933,7 @@ portal:
   image:
     registry: docker.io
     repository: bitnami/harbor-portal
-    tag: 2.4.1-debian-10-r57
+    tag: 2.4.1-debian-10-r58
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3724,7 +3724,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 13.6.0-debian-10-r18
+    tag: 11.15.0-debian-10-r20
   auth:
     enablePostgresUser: true
     postgresPassword: not-secure-database-password
