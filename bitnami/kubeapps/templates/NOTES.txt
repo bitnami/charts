@@ -65,30 +65,5 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
 
 2. Open a browser and access Kubeapps using the obtained URL.
 
-{{ if and (.Values.packaging.helm.enabled) (not .Values.postgresql.existingSecret) (empty .Values.postgresql.postgresqlPassword) -}}
-##########################################################################################################
-### WARNING: You did not provide a value for the postgresqlPassword so one has been generated randomly ###
-##########################################################################################################
-{{- end }}
-
-{{ if and (.Values.packaging.flux.enabled) (not .Values.redis.existingSecret) (empty .Values.redis.redisPassword) -}}
-##########################################################################################################
-### WARNING: You did not provide a value for the redisPassword so one has been generated randomly      ###
-##########################################################################################################
-{{- end }}
-
-{{- $passwordValidationErrors := list -}}
-
-{{ if .Values.packaging.helm.enabled -}}
-{{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $postgresqlPasswordValidationErrors -}}
-{{- end }}
-
-{{ if .Values.packaging.flux.enabled -}}
-{{- $redisPasswordValidationErrors := include "common.validations.values.redis.passwords" (dict "secret" $redisSecretName "subchart" true "context" $) -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $redisPasswordValidationErrors -}}
-{{- end }}
-
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
 {{- include "kubeapps.checkRollingTags" . }}
 {{- include "kubeapps.validateValues" . }}
