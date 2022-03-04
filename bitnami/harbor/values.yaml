@@ -2753,7 +2753,7 @@ clair:
       ##
       ports:
         http: 8080
-        https: 8080
+        https: 8443
   ## Clair main container properties
   ##
   server:
