@@ -690,6 +690,9 @@ envoy:
     ## @param envoy.service.loadBalancerSourceRanges [array] List of IP CIDRs allowed access to load balancer (if supported)
     ##
     loadBalancerSourceRanges: []
+    ## @param envoy.service.ipFamilyPolicy [string], support SingleStack, PreferDualStack and RequireDualStack
+    ##
+    ipFamilyPolicy: ""
     ## @param envoy.service.annotations [object] Annotations for Envoy service
     ##
     annotations: {}
