@@ -120,11 +120,11 @@ data:
 
     if [[ $redisRetVal -ne 0 ]]; then
         if [[ "$master_in_persisted_conf" == "$(get_full_hostname "$HOSTNAME")" ]]; then
-            # Case 1: No active sentinel in previous sentinel.conf we were the master --> MASTER
+            # Case 1: No active sentinel and in previous sentinel.conf we were the master --> MASTER
             info "Configuring the node as master"
             export REDIS_REPLICATION_MODE="master"
         else
-            # Case 2: No active sentinel in previous sentinel.conf we were not master --> REPLICA
+            # Case 2: No active sentinel and in previous sentinel.conf we were not master --> REPLICA
             info "Configuring the node as replica"
             export REDIS_REPLICATION_MODE="slave"
             REDIS_MASTER_HOST=${master_in_persisted_conf}
