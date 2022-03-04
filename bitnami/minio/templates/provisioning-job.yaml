@@ -104,6 +104,7 @@ spec:
               mc admin group {{ $groupStatus }} {{ $minioAlias }} {{ $group.name }};
               {{- end }}
 
+              {{- $isDistributedMode := and (eq .Values.mode "distributed") (not .Values.gateway.enabled) }}
               {{- range $bucket := .Values.provisioning.buckets }}
               {{- $target := printf "%s/%s" $minioAlias $bucket.name }}
               {{- $region := ternary (printf "--region=%s" $bucket.region) ("") (not (empty $bucket.region)) }}
@@ -118,11 +119,13 @@ spec:
               mc admin bucket quota {{ $minioAlias }}/{{ $bucket.name }} --{{ .type }} {{ .size }};
               {{- end }}
 
+              {{- if $isDistributedMode }}
               {{- if (or ((empty $bucket.withLock)) (not $bucket.withLock)) }}
               {{- $versioning := ternary ("enable") ("suspend") (and (not (empty $bucket.versioning)) $bucket.versioning) }}
               mc version {{ $versioning }} {{ $minioAlias }}/{{ $bucket.name }};
               {{- end }}
-                            
+              {{- end }}
+
               {{- if $bucket.tags }}
               {{- $target := printf "%s/%s" $minioAlias $bucket.name }}
               {{- $tags := list }}
