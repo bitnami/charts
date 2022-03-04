@@ -80,6 +80,17 @@ spec:
               {{- $minioRootPassword := ternary ("$(<$MINIO_ROOT_PASSWORD_FILE)") ("$MINIO_ROOT_PASSWORD") (.Values.auth.useCredentialsFiles) }}
               mc alias set {{ $minioAlias }} {{ $minioUrl }} {{ $minioRootUser }} {{ $minioRootPassword }};
 
+              {{- range $config := .Values.provisioning.config }}
+              {{- $options := list }}
+              {{- range $name, $value := $config.options }}
+              {{- $options = (printf "%s=%s" $name $value) | append $options }}
+              {{- end }}
+              {{- $options := join " " $options }}
+              mc admin config set {{ $minioAlias }} {{ $config.name }} {{ $options }};
+              {{- end }}
+
+              mc admin service restart {{ $minioAlias }};
+
               {{- range $user := .Values.provisioning.users }}
               mc admin user add {{ $minioAlias }} {{ $user.username }} {{ $user.password }};
               getPolicyArray user {{ $user.username }}
@@ -135,15 +146,6 @@ spec:
               {{- $tags := join "&" $tags | quote }}
               mc tag set {{ $target }} {{ $tags }};
               {{- end }}
-              {{- end }}
-
-              {{- range $config := .Values.provisioning.config }}
-              {{- $options := list }}
-              {{- range $name, $value := $config.options }}
-              {{- $options = (printf "%s=%s" $name $value) | append $options }}
-              {{- end }}
-              {{- $options := join " " $options }}
-              mc admin config set {{ $minioAlias }} {{ $config.name }} {{ $options }};
               {{- end }}
 
               echo "End Minio provisioning";
