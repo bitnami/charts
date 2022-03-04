@@ -3,14 +3,14 @@ annotations:
 apiVersion: v2
 appVersion: 2.4.1
 dependencies:
-  - condition: postgresql.enabled
-    name: postgresql
-    repository: https://charts.bitnami.com/bitnami
-    version: 11.x.x
   - condition: redis.enabled
     name: redis
     repository: https://charts.bitnami.com/bitnami
     version: 16.x.x
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     version: 1.x.x
