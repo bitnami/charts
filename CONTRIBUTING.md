@@ -52,10 +52,10 @@ Notice the `Author` and `Signed-off-by` lines match. If they don't your PR will 
 ### PR Approval and Release Process
 
 1. Changes are automatically linted and tested using the [`ct` tool](https://github.com/helm/chart-testing) as a [GitHub action](https://github.com/helm/chart-testing-action). Those tests are based on `helm install`, `helm lint` and `helm test` commands and provide quick feedback about the changes in the PR. For those tests, the chart is installed on top of [kind](https://github.com/kubernetes-sigs/kind) and this step is not blocking (as opposed to 3rd step).
-2. Changes are manually reviewed by Bitnami team members.
-3. Once the changes are accepted, the PR is verified with a [Static analysis](https://github.com/bitnami/charts/blob/master/TESTING.md#Static-analysis) that includes the lint and the vulnerability checks. If that passes, the Bitnami team will review the changes and trigger the verification and functional tests. 
-4. When the PR passes all tests, the PR is merged by the reviewer(s) in the GitHub `master` branch.
-5. Then our CI/CD system is going to push the chart to the Helm registry including the recently merged changes and also the latest images and dependencies used by the chart. The changes in the images will be also committed by the CI/CD to the GitHub repository, bumping the chart version again.
+1. Changes are manually reviewed by Bitnami team members.
+1. Once the changes are accepted, the PR is verified with a [Static analysis](https://github.com/bitnami/charts/blob/master/TESTING.md#Static-analysis) that includes the lint and the vulnerability checks. If that passes, the Bitnami team will review the changes and trigger the verification and functional tests. 
+1. When the PR passes all tests, the PR is merged by the reviewer(s) in the GitHub `master` branch.
+1. Then our CI/CD system is going to push the chart to the Helm registry including the recently merged changes and also the latest images and dependencies used by the chart. The changes in the images will be also committed by the CI/CD to the GitHub repository, bumping the chart version again.
 
 ***NOTE***: Please note that, in terms of time, may be a slight difference between the appearance of the code in GitHub and the chart in the registry.
 
