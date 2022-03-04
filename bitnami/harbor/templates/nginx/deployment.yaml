@@ -37,7 +37,7 @@ spec:
         checksum/configmap: {{ include (print $.Template.BasePath "/nginx/configmap-https.yaml") . | sha256sum }}
         {{- end }}
         {{- if (include "harbor.autoGenCertForNginx" .) }}
-        checksum/tl-ssecret: {{ include (print $.Template.BasePath "/nginx/tls-secret.yaml") . | sha256sum }}
+        checksum/tls-secret: {{ include (print $.Template.BasePath "/nginx/tls-secret.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.nginx.podAnnotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.podAnnotations "context" $) | nindent 8 }}
@@ -131,7 +131,7 @@ spec:
             httpGet:
               path: /
               port: {{ ternary "https" "http" .Values.nginx.tls.enabled }}
-              scheme: {{ ternary "HTTPS" "HTTP" .Values.nginx.tls.enabled }}
+              scheme: {{ ternary "https" "http" .Values.nginx.tls.enabled  | upper }}
           {{- else if .Values.nginx.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -140,7 +140,7 @@ spec:
             httpGet:
               path: /
               port: {{ ternary "https" "http" .Values.nginx.tls.enabled }}
-              scheme: {{ ternary "HTTPS" "HTTP" .Values.nginx.tls.enabled }}
+              scheme: {{ ternary "https" "http" .Values.nginx.tls.enabled  | upper }}
           {{- else if .Values.nginx.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
