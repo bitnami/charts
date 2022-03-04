@@ -69,6 +69,12 @@ spec:
               set -e;
               echo "Start Minio provisioning";
 
+              function getPolicyArray() {
+                local tmp=$(mc admin $1 info {{ $minioAlias }} $2 | grep 'Policy');
+                local tmp=${tmp#*: };
+                IFS=',' read -r -a policies <<< "$tmp";
+              };
+
               {{- $minioUrl := printf "$MINIO_SCHEME://%s:%d" (include "common.names.fullname" .) (.Values.service.ports.api | int) }}
               {{- $minioRootUser := ternary ("$(<$MINIO_ROOT_USER_FILE)") ("$MINIO_ROOT_USER") (.Values.auth.useCredentialsFiles) }}
               {{- $minioRootPassword := ternary ("$(<$MINIO_ROOT_PASSWORD_FILE)") ("$MINIO_ROOT_PASSWORD") (.Values.auth.useCredentialsFiles) }}
@@ -76,8 +82,11 @@ spec:
 
               {{- range $user := .Values.provisioning.users }}
               mc admin user add {{ $minioAlias }} {{ $user.username }} {{ $user.password }};
+              getPolicyArray user {{ $user.username }}
               {{- range $policy := $user.policies }}
-              mc admin policy update {{ $minioAlias }} {{ $policy }} user={{ $user.username }};
+              if [[ ! "${policies[*]}" =~ "{{ $policy }}" ]]; then
+                mc admin policy update {{ $minioAlias }} {{ $policy }} user={{ $user.username }};
+              fi;
               {{- end }}
               {{- $userStatus := ternary ("disable") ("enable") (and (not (empty $user.disabled)) $user.disabled) }}
               mc admin user {{ $userStatus }} {{ $minioAlias }} {{ $user.username }};
@@ -85,8 +94,11 @@ spec:
 
               {{- range $group := .Values.provisioning.groups }}
               mc admin group add {{ $minioAlias }} {{ $group.name }} {{ join " " $group.members }};
+              getPolicyArray group {{ $group.name }}
               {{- range $policy := $group.policies }}
-              mc admin policy update {{ $minioAlias }} {{ $policy }} group={{ $group.name }};
+              if [[ ! "${policies[*]}" =~ "{{ $policy }}" ]]; then
+                mc admin policy update {{ $minioAlias }} {{ $policy }} group={{ $group.name }};
+              fi;
               {{- end }}
               {{- $groupStatus := ternary ("disable") ("enable") (and (not (empty $group.disabled)) $group.disabled) }}
               mc admin group {{ $groupStatus }} {{ $minioAlias }} {{ $group.name }};
