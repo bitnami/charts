@@ -2748,8 +2748,8 @@ clair:
     ## Harbor Adapter for Clair service configuration
     ##
     service:
-      ## @param clair.server.service.ports.http Harbor Adapter for Clair HTTP service port
-      ## @param clair.server.service.ports.https Harbor Adapter for Clair HTTPS service port
+      ## @param clair.adapter.service.ports.http Harbor Adapter for Clair HTTP service port
+      ## @param clair.adapter.service.ports.https Harbor Adapter for Clair HTTPS service port
       ##
       ports:
         http: 8080
