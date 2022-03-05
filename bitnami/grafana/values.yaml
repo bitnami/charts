@@ -937,3 +937,27 @@ diagnosticMode:
   ##
   args:
     - infinity
+
+## @section Security Parameters
+
+## Allow embedding
+##
+security:
+  ## @param security.allow_embedding Allow embedding grafana dashboards in other frames on other websites (e.g. iFrame)
+  ##
+  allow_embedding: false
+
+## @section Auth Anonymous Parameters
+
+## Enable anonymous authentication
+##
+auth_anonymous:
+  ## @param Enable anonymous authentication for presenting the dashboards.
+  ##
+  enabled: false
+  ## @param Organization name that should be used for unauthenticated users. You find the organization in preferences.
+  ##
+  org_name: ""
+  ## @param Role for unauthenticated users. Valid values are `Editor`, `Admin` and `Viewer`.
+  ##
+  org_role: ""

@@ -117,6 +117,18 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.extraEnvVarsSecret "context" $) }}
             {{- end }}
           env:
+            {{- if .Values.auth_anonymous.enabled }}
+            - name: GF_AUTH_ANONYMOUS_ENABLED
+              value: "true"
+            - name: GF_AUTH_ANONYMOUS_ORG_NAME
+              value: {{ .Values.auth_anonymous.org_name }}
+            - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+              value: {{ .Values.auth_anonymous.org_role }}
+            {{- end }}
+            {{- if .Values.security.allow_embedding }}
+            - name: GF_SECURITY_ALLOW_EMBEDDING
+              value: "true"
+            {{- end }}
             - name: GF_SECURITY_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
