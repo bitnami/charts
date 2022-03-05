@@ -396,6 +396,21 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
 
 
+### Security Parameters
+
+| Name                       | Description                                                                        | Value          |
+|----------------------------|------------------------------------------------------------------------------------| -------------- |
+| `security.allow_embedding` | Allow embedding grafana dashboards in other frames on other websites (e.g. iFrame) | `false`        |
+
+
+### Auth Anonymous Parameters
+
+| Name                      | Description                                                                                                 | Value   |
+|---------------------------|-------------------------------------------------------------------------------------------------------------|---------|
+| `auth_anonymous.enabled`  | Enable anonymous authentication for presenting the dashboards.                                              | `false` |
+| `auth_anonymous.org_name` | Organization name that should be used for unauthenticated users. You find the organization in preferences.  | ""      |
+| `auth_anonymous.org_role` | Role for unauthenticated users. Valid values are `Editor`, `Admin` and `Viewer`.                            | ""      |
+
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
