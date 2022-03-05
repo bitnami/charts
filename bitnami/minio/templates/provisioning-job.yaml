@@ -69,10 +69,12 @@ spec:
               set -e;
               echo "Start Minio provisioning";
 
-              function getPolicyArray() {
-                local tmp=$(mc admin $1 info {{ $minioAlias }} $2 | grep 'Policy');
-                local tmp=${tmp#*: };
-                IFS=',' read -r -a policies <<< "$tmp";
+              function addPolicy() {
+                local tmp=$(mc admin $1 info {{ $minioAlias }} $2 | sed -n -e 's/^Policy.*: \(.*\)$/\1/p');
+                IFS=',' read -r -a CURRENT_POLICIES <<< "$tmp";
+                if [[ ! "${CURRENT_POLICIES[*]}" =~ "$3" ]]; then
+                  mc admin policy update {{ $minioAlias }} $3 $1=$2;
+                fi;
               };
 
               {{- $minioUrl := printf "$MINIO_SCHEME://%s:%d" (include "common.names.fullname" .) (.Values.service.ports.api | int) }}
@@ -96,11 +98,8 @@ spec:
               {{- if $user.setPolicies }}
               mc admin policy set {{ $minioAlias }} "{{ join "," $user.policies }}" user={{ $user.username }};
               {{- else }}
-              getPolicyArray user {{ $user.username }}
               {{- range $policy := $user.policies }}
-              if [[ ! "${policies[*]}" =~ "{{ $policy }}" ]]; then
-                mc admin policy update {{ $minioAlias }} {{ $policy }} user={{ $user.username }};
-              fi;
+              addPolicy user {{ $user.username }} {{ $policy }};
               {{- end }}
               {{- end }}
               {{- $userStatus := ternary ("disable") ("enable") (and (not (empty $user.disabled)) $user.disabled) }}
@@ -112,11 +111,8 @@ spec:
               {{- if $group.setPolicies }}
               mc admin policy set {{ $minioAlias }} "{{ join "," $group.policies }}" group={{ $group.name }};
               {{- else }}
-              getPolicyArray group {{ $group.name }}
               {{- range $policy := $group.policies }}
-              if [[ ! "${policies[*]}" =~ "{{ $policy }}" ]]; then
-                mc admin policy update {{ $minioAlias }} {{ $policy }} group={{ $group.name }};
-              fi;
+              addPolicy group {{ $group.name }} {{ $policy }};
               {{- end }}
               {{- end }}
               {{- $groupStatus := ternary ("disable") ("enable") (and (not (empty $group.disabled)) $group.disabled) }}
