@@ -93,11 +93,15 @@ spec:
 
               {{- range $user := .Values.provisioning.users }}
               mc admin user add {{ $minioAlias }} {{ $user.username }} {{ $user.password }};
+              {{- if $user.setPolicies }}
+              mc admin policy set {{ $minioAlias }} "{{ join "," $user.policies }}" user={{ $user.username }};
+              {{- else }}
               getPolicyArray user {{ $user.username }}
               {{- range $policy := $user.policies }}
               if [[ ! "${policies[*]}" =~ "{{ $policy }}" ]]; then
                 mc admin policy update {{ $minioAlias }} {{ $policy }} user={{ $user.username }};
               fi;
+              {{- end }}
               {{- end }}
               {{- $userStatus := ternary ("disable") ("enable") (and (not (empty $user.disabled)) $user.disabled) }}
               mc admin user {{ $userStatus }} {{ $minioAlias }} {{ $user.username }};
@@ -105,11 +109,15 @@ spec:
 
               {{- range $group := .Values.provisioning.groups }}
               mc admin group add {{ $minioAlias }} {{ $group.name }} {{ join " " $group.members }};
+              {{- if $group.setPolicies }}
+              mc admin policy set {{ $minioAlias }} "{{ join "," $group.policies }}" group={{ $group.name }};
+              {{- else }}
               getPolicyArray group {{ $group.name }}
               {{- range $policy := $group.policies }}
               if [[ ! "${policies[*]}" =~ "{{ $policy }}" ]]; then
                 mc admin policy update {{ $minioAlias }} {{ $policy }} group={{ $group.name }};
               fi;
+              {{- end }}
               {{- end }}
               {{- $groupStatus := ternary ("disable") ("enable") (and (not (empty $group.disabled)) $group.disabled) }}
               mc admin group {{ $groupStatus }} {{ $minioAlias }} {{ $group.name }};

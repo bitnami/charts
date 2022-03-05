@@ -251,6 +251,9 @@ provisioning:
   ##       - readwrite
   ##       - consoleAdmin
   ##       - diagnostics
+  ##     # When set to true, it will replace all policies with the specified.
+  ##     # When false, the policies will be added to the existing.
+  ##     setPolicies: false
   users: []
   ## @param provisioning.groups MinIO&reg; groups provisioning
   ## https://docs.min.io/docs/minio-admin-complete-guide.html#group
@@ -262,6 +265,9 @@ provisioning:
   ##       - test-username
   ##     policies:
   ##       - readwrite
+  ##     # When set to true, it will replace all policies with the specified.
+  ##     # When false, the policies will be added to the existing.
+  ##     setPolicies: false
   groups: []
   ## @param provisioning.buckets MinIO&reg; buckets, versioning, lifecycle, quota and tags provisioning
   ## Buckets https://docs.min.io/docs/minio-client-complete-guide.html#mb
