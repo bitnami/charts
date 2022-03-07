@@ -538,16 +538,8 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "harbor.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.core.image .Values.portal.image .Values.jobservice.image .Values.clair.server.image .Values.clair.adapter.image .Values.chartmuseum.image .Values.trivy.image .Values.notary.server.image .Values.notary.signer.image .Values.registry.server.image .Values.registry.controller.image .Values.nginx.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.core.image .Values.exporter.image .Values.portal.image .Values.jobservice.image .Values.clair.server.image .Values.clair.adapter.image .Values.chartmuseum.image .Values.trivy.image .Values.notary.server.image .Values.notary.signer.image .Values.registry.server.image .Values.registry.controller.image .Values.nginx.image .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
-
-{{/*
-Return the metrics port name
-*/}}
-{{- define "harbor.metricsPortName" -}}
-{{- printf "metrics" -}}
-{{- end -}}
-
 
 {{/* Check if there are rolling tags in the images */}}
 {{- define "harbor.checkRollingTags" -}}

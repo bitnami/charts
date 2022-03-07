@@ -137,7 +137,7 @@ spec:
               name: {{ ternary "https" "http" .Values.internalTLS.enabled }}
             {{- if .Values.metrics.enabled }}
             - containerPort: {{ .Values.core.containerPorts.metrics }}
-              name: {{ include "harbor.metricsPortName" . }}
+              name: metrics
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.core.startupProbe.enabled }}

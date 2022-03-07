@@ -14,8 +14,9 @@ metadata:
   {{- end }}
 spec:
   ports:
-    - name: {{ include "harbor.metricsPortName" . }}
+    - name: http-metrics
       port: {{ .Values.exporter.service.ports.metrics }}
+      targetPort: metrics
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: exporter
 {{ end }}
