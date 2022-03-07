@@ -162,6 +162,12 @@ extraVolumes: []
 ##     readOnly: true
 ##
 extraVolumeMounts: []
+
+## @param serviceAccount Containing the creation of ServiceAccount Object on Kubernetes
+serviceAccount:
+  create: false
+  annotations: []
+
 ## @param containerPorts [array] Array containing the ports to open in the Logstash container
 ##
 containerPorts:
