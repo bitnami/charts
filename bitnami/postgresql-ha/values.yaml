@@ -398,6 +398,10 @@ postgresql:
   ## @param postgresql.repmgrConnectTimeout Repmgr backend connection timeout (in seconds)
   ## @param postgresql.repmgrReconnectAttempts Repmgr backend reconnection attempts
   ## @param postgresql.repmgrReconnectInterval Repmgr backend reconnection interval (in seconds)
+  ## @param postgresql.repmgrFenceOldPrimary Set if fencing of old primary in multiple primary situation is desired
+  ## @param postgresql.repmgrChildNodesCheckInterval Repmgr child nodes check interval (in seconds)
+  ## @param postgresql.repmgrChildNodesConnectedMinCount Repmgr minimum number of connected child nodes before being considered as failed primary for fencing
+  ## @param postgresql.repmgrChildNodesDisconnectTimeout Repmgr time before node will be fenced when insufficient child nodes are detected (in seconds)
   ##
   repmgrUsername: repmgr
   repmgrPassword: ""
@@ -406,6 +410,10 @@ postgresql:
   repmgrConnectTimeout: 5
   repmgrReconnectAttempts: 2
   repmgrReconnectInterval: 3
+  repmgrFenceOldPrimary: false
+  repmgrChildNodesCheckInterval: 5
+  repmgrChildNodesConnectedMinCount: 1
+  repmgrChildNodesDisconnectTimeout: 30
   ## EXPERMENTAL: Use pg_rewind for standby failover
   ## @param postgresql.usePgRewind Use pg_rewind for standby failover (experimental)
   ##
