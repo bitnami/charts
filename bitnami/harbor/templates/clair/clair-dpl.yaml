@@ -3,6 +3,7 @@ apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.clair" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -12,13 +13,13 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.clair.replicas }}
-  {{- if .Values.clair.updateStrategy }}
-  strategy: {{- toYaml .Values.clair.updateStrategy | nindent 4 }}
-  {{- end }}
+  replicas: {{ .Values.clair.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: clair
+  {{- if .Values.clair.updateStrategy }}
+  strategy: {{- toYaml .Values.clair.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -39,10 +40,10 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: {{ .Values.clair.automountServiceAccountToken }}
-      {{- if .Values.clair.priorityClassName }}
-      priorityClassName: {{ .Values.clair.priorityClassName | quote }}
+      {{- if .Values.clair.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.clair.hostAliases "context" $) | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.clair.automountServiceAccountToken }}
       {{- if .Values.clair.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.clair.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -60,57 +61,41 @@ spec:
       {{- if .Values.clair.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.clair.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.clair.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.clair.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.clair.priorityClassName }}
+      priorityClassName: {{ .Values.clair.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.clair.schedulerName }}
+      schedulerName: {{ .Values.clair.schedulerName }}
+      {{- end }}
+      {{- if .Values.clair.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.clair.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
       {{- if .Values.clair.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.clair.initContainers "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.clair.hostAliases }}
-      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.clair.hostAliases "context" $) | nindent 8 }}
-      {{- end }}
       containers:
         - name: clair
-          image: {{ include "harbor.clairImage" . }}
-          imagePullPolicy: {{ .Values.clairImage.pullPolicy | quote }}
-          {{- if .Values.containerSecurityContext }}
-          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          image: {{ include "harbor.clair.server.image" . }}
+          imagePullPolicy: {{ .Values.clair.server.image.pullPolicy | quote }}
+          {{- if .Values.clair.server.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.clair.server.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.clair.server.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.clair.server.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.clair.server.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.clair.server.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.args "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.clair.server.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.clair.server.livenessProbe.enabled }}
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 6061
-            initialDelaySeconds: {{ .Values.clair.server.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.clair.server.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.clair.server.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.clair.server.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.clair.server.livenessProbe.failureThreshold }}
-          {{- else if .Values.clair.server.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.customLivenessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.clair.server.readinessProbe.enabled }}
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 6061
-            initialDelaySeconds: {{ .Values.clair.server.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.clair.server.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.clair.server.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.clair.server.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.clair.server.readinessProbe.failureThreshold }}
-          {{- else if .Values.clair.server.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.clairImage.debug | quote }}
+              value: {{ ternary "true" "false" .Values.clair.server.image.debug | quote }}
             {{- if has "clair" .Values.proxy.components }}
             {{- if .Values.clair.httpProxy }}
             - name: HTTP_PROXY
@@ -135,17 +120,48 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.clair.server.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          ports:
+            - containerPort: {{ .Values.clair.server.containerPorts.api }}
+              name: api
+            - containerPort: {{ .Values.clair.server.containerPorts.health }}
+              name: health
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.clair.server.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.clair.server.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: health
+          {{- else if .Values.clair.server.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.clair.server.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.clair.server.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /health
+              port: health
+          {{- else if .Values.clair.server.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.clair.server.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.clair.server.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /health
+              port: health
+          {{- else if .Values.clair.server.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.clair.server.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.clair.server.resources }}
           resources: {{- toYaml .Values.clair.server.resources | nindent 12 }}
           {{- end }}
-          ports:
-            - containerPort: 6060
           volumeMounts:
             - name: config
               mountPath: /etc/clair/config.yaml
               subPath: config.yaml
-            {{- if .Values.caBundleSecretName }}
-{{ include "harbor.caBundleVolumeMount" . | indent 12 }}
+            {{- if .Values.internalTLS.caBundleSecret }}
+            {{- include "harbor.caBundleVolumeMount" . | nindent 12 }}
             {{- end }}
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
@@ -155,54 +171,27 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.clair.server.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         - name: adapter
-          image: {{ include "harbor.clairAdapterImage" . }}
-          imagePullPolicy: {{ .Values.clairAdapterImage.pullPolicy }}
-          {{- if .Values.clair.adapter.command }}
+          image: {{ include "harbor.clair.adapter.image" . }}
+          imagePullPolicy: {{ .Values.clair.adapter.image.pullPolicy }}
+          {{- if .Values.clair.adapter.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.clair.adapter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.clair.adapter.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.clair.adapter.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.clair.adapter.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.args "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.clair.adapter.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.containerSecurityContext }}
-          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.clair.adapter.livenessProbe.enabled }}
-          livenessProbe:
-            httpGet:
-              path: /probe/healthy
-              port: {{ include "harbor.clairAdapter.containerPort" . }}
-              scheme: {{ include "harbor.component.scheme" . | upper }}
-            initialDelaySeconds: {{ .Values.clair.adapter.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.clair.adapter.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.clair.adapter.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.clair.adapter.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.clair.adapter.livenessProbe.failureThreshold }}
-          {{- else if .Values.clair.adapter.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.customLivenessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.clair.adapter.readinessProbe.enabled }}
-          readinessProbe:
-            httpGet:
-              path: /probe/ready
-              port: {{ include "harbor.clairAdapter.containerPort" . }}
-              scheme: {{ include "harbor.component.scheme" . | upper }}
-            initialDelaySeconds: {{ .Values.clair.adapter.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.clair.adapter.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.clair.adapter.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.clair.adapter.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.clair.adapter.readinessProbe.failureThreshold }}
-          {{- else if .Values.clair.adapter.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.clairAdapterImage.debug | quote }}
+              value: {{ ternary "true" "false" .Values.clair.adapter.image.debug | quote }}
             - name: SCANNER_CLAIR_URL
               # To avoid a pod cannot reach itself via service IP when the clusters disable hairpin
-              value: "http://127.0.0.1:6060"
+              value: {{ printf "http://127.0.0.1:%d" (int .Values.clair.server.containerPorts.api) | quote }}
             - name: SCANNER_STORE_REDIS_URL
               value: {{ include "harbor.redisForClairAdapter" . }}
             - name: SCANNER_CLAIR_DATABASE_URL
@@ -214,7 +203,7 @@ spec:
             - name: INTERNAL_TLS_ENABLED
               value: "true"
             - name: SCANNER_API_SERVER_ADDR
-              value: {{ printf ":%s" ( include "harbor.clairAdapter.containerPort" . ) | quote }}
+              value: {{ printf ":%d" (ternary .Values.clair.adapter.containerPorts.https .Values.clair.adapter.containerPorts.http .Values.internalTLS.enabled | int) | quote }}
             - name: SCANNER_API_SERVER_TLS_KEY
               value: /etc/harbor/ssl/clair/tls.key
             - name: SCANNER_API_SERVER_TLS_CERTIFICATE
@@ -232,23 +221,53 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.clair.adapter.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          ports:
+            - containerPort: {{ ternary .Values.clair.adapter.containerPorts.https .Values.clair.adapter.containerPorts.http .Values.internalTLS.enabled }}
+              name: {{ ternary "https" "http" .Values.internalTLS.enabled }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.clair.adapter.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.clair.adapter.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
+          {{- else if .Values.clair.adapter.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.clair.adapter.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.clair.adapter.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /probe/healthy
+              port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
+              scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
+          {{- else if .Values.clair.adapter.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.clair.adapter.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.clair.adapter.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /probe/ready
+              port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
+              scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
+          {{- else if .Values.clair.adapter.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.clair.adapter.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.clair.adapter.resources }}
           resources: {{- toYaml .Values.clair.adapter.resources | nindent 12 }}
           {{- end }}
-          ports:
-            - containerPort: 8080
           volumeMounts:
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/clair
             {{- end }}
-            {{- if .Values.caBundleSecretName }}
-{{ include "harbor.caBundleVolumeMount" . | indent 12 }}
+            {{- if .Values.internalTLS.caBundleSecret }}
+            {{- include "harbor.caBundleVolumeMount" . | nindent 12 }}
             {{- end }}
             {{- if .Values.clair.adapter.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.clair.adapter.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-
         {{- if .Values.clair.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.clair.sidecars "context" $) | nindent 8 }}
         {{- end }}
@@ -261,8 +280,8 @@ spec:
           secret:
             secretName: {{ template "harbor.clair.tls.secretName" . }}
         {{- end }}
-        {{- if .Values.caBundleSecretName }}
-{{ include "harbor.caBundleVolume" . | indent 8 }}
+        {{- if .Values.internalTLS.caBundleSecret }}
+        {{- include "harbor.caBundleVolume" . | nindent 8 }}
         {{- end }}
       {{- if .Values.clair.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.clair.extraVolumes "context" $) | nindent 8 }}

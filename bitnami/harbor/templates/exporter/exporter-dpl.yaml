@@ -1,8 +1,9 @@
 {{- if .Values.metrics.enabled}}
-apiVersion: apps/v1
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.exporter" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -12,16 +13,16 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.exporter.replicas }}
-  {{- if .Values.exporter.updateStrategy }}
-  strategy: {{- toYaml .Values.exporter.updateStrategy | nindent 4 }}
-  {{- end }}
+  replicas: {{ .Values.exporter.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: exporter
+  {{- if .Values.exporter.updateStrategy }}
+  strategy: {{- toYaml .Values.exporter.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.matchLabels" . | nindent 8 }}
         {{- if .Values.commonLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
@@ -41,13 +42,12 @@ spec:
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       automountServiceAccountToken: {{ .Values.exporter.automountServiceAccountToken }}
-      {{- if .Values.exporter.serviceAccountName }}
-      serviceAccountName: {{ .Values.exporter.serviceAccountName }}
+      {{- if .Values.exporter.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.exporter.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.affinity "context" $) | nindent 8 }}
       {{- else }}
-      priorityClassName: {{ .Values.exporter.priorityClassName | quote }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.exporter.podAffinityPreset "component" "exporter" "context" $) | nindent 10 }}
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.exporter.podAntiAffinityPreset "component" "exporter" "context" $) | nindent 10 }}
@@ -59,61 +59,44 @@ spec:
       {{- if .Values.exporter.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.podSecurityContext }}
-      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- if .Values.exporter.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.exporter.priorityClassName }}
+      priorityClassName: {{ .Values.exporter.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.exporter.schedulerName }}
+      schedulerName: {{ .Values.exporter.schedulerName }}
+      {{- end }}
+      {{- if .Values.exporter.serviceAccountName }}
+      serviceAccountName: {{ .Values.exporter.serviceAccountName }}
+      {{- end }}
+      {{- if .Values.exporter.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.exporter.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.exporter.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: exporter
-          image: {{ include "harbor.exporterImage" . }}
-          imagePullPolicy: {{ .Values.exporterImage.pullPolicy | quote }}
-          {{- if .Values.exporter.command }}
+          image: {{ include "harbor.exporter.image" . }}
+          imagePullPolicy: {{ .Values.exporter.image.pullPolicy | quote }}
+          {{- if .Values.exporter.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.exporter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.exporter.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.exporter.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.exporter.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.args "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.containerSecurityContext }}
-          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.exporter.livenessProbe.enabled }}
-          livenessProbe:
-            httpGet:
-              path: {{ .Values.metrics.exporter.path | quote }}
-              port: {{ include "harbor.metricsPortName" . }}
-              # Metrics are exposed only though HTTP https://github.com/goharbor/harbor/issues/16252
-              scheme: HTTP
-            initialDelaySeconds: {{ .Values.exporter.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.exporter.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.exporter.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.exporter.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.exporter.livenessProbe.failureThreshold }}
-          {{- else if .Values.exporter.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customLivenessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.exporter.readinessProbe.enabled }}
-          readinessProbe:
-            httpGet:
-              path: {{ .Values.metrics.exporter.path | quote }}
-              port: {{ include "harbor.metricsPortName" . }}
-              # Metrics are exposed only though HTTP https://github.com/goharbor/harbor/issues/16252
-              scheme: HTTP
-            initialDelaySeconds: {{ .Values.exporter.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.exporter.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.exporter.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.exporter.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.exporter.readinessProbe.failureThreshold }}
-          {{- else if .Values.exporter.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customReadinessProbe "context" $) | nindent 12 }}
-          {{- end }}
-           {{- if .Values.exporter.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.exporter.resources }}
-          resources: {{- toYaml .Values.exporter.resources | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.exporterImage.debug | quote }}
+              value: {{ ternary "true" "false" .Values.exporter.image.debug | quote }}
             - name: HARBOR_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -131,15 +114,51 @@ spec:
             - configMapRef:
                 name: "{{ include "harbor.exporter" . }}-envvars"
           ports:
-            - containerPort: {{ .Values.metrics.exporter.port }}
+            - containerPort: {{ .Values.exporter.containerPorts.metrics }}
               name: {{ include "harbor.metricsPortName" . }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.exporter.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.exporter.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: {{ .Values.metrics.path | quote }}
+              port: {{ include "harbor.metricsPortName" . }}
+              # Metrics are exposed only though HTTP https://github.com/goharbor/harbor/issues/16252
+              scheme: HTTP
+          {{- else if .Values.exporter.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.exporter.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.exporter.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: {{ .Values.metrics.path | quote }}
+              port: {{ include "harbor.metricsPortName" . }}
+              scheme: HTTP
+          {{- else if .Values.exporter.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.exporter.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.exporter.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: {{ .Values.metrics.path | quote }}
+              port: {{ include "harbor.metricsPortName" . }}
+              scheme: HTTP
+          {{- else if .Values.exporter.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.exporter.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.exporter.resources }}
+          resources: {{- toYaml .Values.exporter.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
-        {{- if .Values.internalTLS.enabled }}
+            {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/exporter
             {{- end }}
-            {{- if .Values.caBundleSecretName }}
-            {{- include "harbor.caBundleVolumeMount" . | indent 12 }}
+            {{- if .Values.internalTLS.caBundleSecret }}
+            {{- include "harbor.caBundleVolumeMount" . | nindent 12 }}
             {{- end }}
             {{- if .Values.exporter.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.exporter.extraVolumeMounts "context" $) | nindent 12 }}
@@ -148,9 +167,6 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.exporter.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.caBundleSecretName }}
-        {{- include "harbor.caBundleVolume" . | indent 8 }}
-        {{- end }}
         {{- if .Values.internalTLS.enabled }}
         - name: internal-tls-certs
           secret:
@@ -158,6 +174,9 @@ spec:
             items:
               - key: ca.crt
                 path: ca.crt
+        {{- end }}
+        {{- if .Values.internalTLS.caBundleSecret }}
+        {{- include "harbor.caBundleVolume" . | nindent 8 }}
         {{- end }}
       {{- if .Values.exporter.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.exporter.extraVolumes "context" $) | nindent 8 }}

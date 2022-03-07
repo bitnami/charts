@@ -271,6 +271,13 @@ spec:
                 - bash
                 - -ec
                 - |
+                  {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.initdbScriptsConfigMap .Values.initdbScripts }}
+                  # If the init scripts don't get executed there can be race conditions with the Galera bootstrap
+                  if [[ ! -f "{{ .Values.persistence.mountPath }}/.user_scripts_initialized" ]]; then
+                      echo "Init scripts still not executed. Skipping check"
+                      exit 1
+                  fi
+                  {{- end }}
                   password_aux="${MARIADB_ROOT_PASSWORD:-}"
                   if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
@@ -291,6 +298,13 @@ spec:
                 - bash
                 - -ec
                 - |
+                  {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.initdbScriptsConfigMap .Values.initdbScripts }}
+                  # If the init scripts don't get executed there can be race conditions with the Galera bootstrap
+                  if [[ ! -f "{{ .Values.persistence.mountPath }}/.user_scripts_initialized" ]]; then
+                      echo "Init scripts still not executed. Skipping check"
+                      exit 1
+                  fi
+                  {{- end }}
                   password_aux="${MARIADB_ROOT_PASSWORD:-}"
                   if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
@@ -448,6 +462,13 @@ spec:
         name: data
         labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/managed-by: {{ .Release.Service }}
+          {{- if .Values.persistence.labels }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.persistence.labels "context" $) | nindent 10 }}
+          {{- end }}
+        {{- if .Values.persistence.annotations }}
+        annotations:
+        {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
         {{- range .Values.persistence.accessModes }}

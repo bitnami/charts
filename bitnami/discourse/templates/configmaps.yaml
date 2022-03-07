@@ -1,7 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.commonLabels }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -10,41 +11,40 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  {{- $port := .Values.service.port | toString }}
-  DISCOURSE_HOST: "{{ include "discourse.host" . }}"
+  DISCOURSE_HOST: {{ include "discourse.host" . | quote }}
   DISCOURSE_SKIP_INSTALL: {{ ternary "yes" "no" .Values.discourse.skipInstall | quote }}
-  DISCOURSE_SITE_NAME: {{ .Values.discourse.siteName | quote }}
-  DISCOURSE_USERNAME: {{ .Values.discourse.username | quote }}
-  DISCOURSE_EMAIL: {{ .Values.discourse.email | quote }}
-  DISCOURSE_REDIS_HOST: {{ template "discourse.redisHost" . }}
-  DISCOURSE_REDIS_PORT_NUMBER: {{ template "discourse.redisPort" . }}
-  DISCOURSE_DATABASE_HOST: {{ template "discourse.databaseHost" . }}
-  DISCOURSE_DATABASE_PORT_NUMBER: {{ template "discourse.databasePort" . }}
-  DISCOURSE_DATABASE_NAME: {{ template "discourse.databaseName" . }}
-  DISCOURSE_DATABASE_USER: {{ template "discourse.databaseUser" . }}
-  {{- if .Values.discourse.smtp.enabled }}
-  DISCOURSE_SMTP_HOST: {{ .Values.discourse.smtp.host | quote }}
-  DISCOURSE_SMTP_PORT: {{ .Values.discourse.smtp.port | quote }}
-  {{- if .Values.discourse.smtp.user }}
-  DISCOURSE_SMTP_USER: {{ .Values.discourse.smtp.user | quote }}
+  DISCOURSE_SITE_NAME: {{ .Values.siteName | quote }}
+  DISCOURSE_USERNAME: {{ .Values.auth.username | quote }}
+  DISCOURSE_EMAIL: {{ .Values.auth.email | quote }}
+  DISCOURSE_REDIS_HOST: {{ include "discourse.redis.host" . }}
+  DISCOURSE_REDIS_PORT_NUMBER: {{ include "discourse.redis.port" . }}
+  DISCOURSE_DATABASE_HOST: {{ include "discourse.database.host" . }}
+  DISCOURSE_DATABASE_PORT_NUMBER: {{ include "discourse.database.port" . }}
+  DISCOURSE_DATABASE_NAME: {{ include "discourse.database.name" . }}
+  DISCOURSE_DATABASE_USER: {{ include "discourse.database.user" . }}
+  {{- if .Values.smtp.enabled }}
+  DISCOURSE_SMTP_HOST: {{ .Values.smtp.host | quote }}
+  DISCOURSE_SMTP_PORT: {{ .Values.smtp.port | quote }}
+  {{- if .Values.smtp.user }}
+  DISCOURSE_SMTP_USER: {{ .Values.smtp.user | quote }}
   {{- end }}
-  {{- if .Values.discourse.smtp.protocol }}
-  DISCOURSE_SMTP_PROTOCOL: {{ .Values.discourse.smtp.protocol | quote }}
+  {{- if .Values.smtp.protocol }}
+  DISCOURSE_SMTP_PROTOCOL: {{ .Values.smtp.protocol | quote }}
   {{- end }}
-  {{- if .Values.discourse.smtp.auth }}
-  DISCOURSE_SMTP_AUTH: {{ .Values.discourse.smtp.auth | quote }}
+  {{- if .Values.smtp.auth }}
+  DISCOURSE_SMTP_AUTH: {{ .Values.smtp.auth | quote }}
   {{- end }}
   {{- end }}
   {{- if or .Values.postgresql.enabled .Values.externalDatabase.create }}
-  POSTGRESQL_CLIENT_DATABASE_HOST: {{ template "discourse.databaseHost" . }}
-  POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER: {{ template "discourse.databasePort" . }}
-  {{- if or .Values.postgresql.enabled (not .Values.externalDatabase.postgresqlPostgresUser) }}
+  POSTGRESQL_CLIENT_DATABASE_HOST: {{ include "discourse.database.host" . }}
+  POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER: {{ include "discourse.database.port" . }}
+  {{- if or .Values.postgresql.enabled (not .Values.externalDatabase.postgresUser) }}
   POSTGRESQL_CLIENT_POSTGRES_USER: "postgres"
   {{- else }}
-  POSTGRESQL_CLIENT_POSTGRES_USER: {{ .Values.externalDatabase.postgresqlPostgresUser | quote }}
+  POSTGRESQL_CLIENT_POSTGRES_USER: {{ .Values.externalDatabase.postgresUser | quote }}
   POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME: {{ .Values.externalDatabase.user | quote }}
   POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD: {{ .Values.externalDatabase.password | quote }}
   {{- end }}
-  POSTGRESQL_CLIENT_CREATE_DATABASE_NAME: {{ template "discourse.databaseName" . }}
+  POSTGRESQL_CLIENT_CREATE_DATABASE_NAME: {{ include "discourse.database.name" . }}
   POSTGRESQL_CLIENT_CREATE_DATABASE_EXTENSIONS: "hstore,pg_trgm"
   {{- end }}

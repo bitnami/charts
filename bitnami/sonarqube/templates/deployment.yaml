@@ -160,7 +160,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "sonarqube.database.secretName" . }}
-                  key: postgresql-password
+                  key: password
             {{- if .Values.smtpHost }}
             - name: SONARQUBE_SMTP_HOST
               value: {{ .Values.smtpHost | quote }}

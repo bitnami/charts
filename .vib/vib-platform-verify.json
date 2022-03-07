@@ -41,13 +41,11 @@
             "resources": {
               "path": "/.vib/wordpress/goss"
             },
-            "config": {
-              "remote": {
-                "workload": "deploy-wordpress"
-              },
-              "wait": {
-                "file": "goss-wait.yaml"
-              }
+            "remote": {
+              "workload": "deploy-wordpress"
+             },
+            "wait": {
+              "file": "goss-wait.yaml"
             }
           }
         },
@@ -57,13 +55,11 @@
             "resources": {
               "path": "/.vib/wordpress/cypress"
             },
-            "config": {
-              "endpoint": "lb-wordpress-https",
-              "app_protocol": "HTTPS",
-              "env": {
-                "username": "test_user",
-                "password": "ComplicatedPassword123!4"
-              }
+            "endpoint": "lb-wordpress-https",
+            "app_protocol": "HTTPS",
+            "env": {
+              "username": "test_user",
+              "password": "ComplicatedPassword123!4"
             }
           }
         },
@@ -73,14 +69,12 @@
             "resources": {
               "path": "/.vib/wordpress/jmeter"
             },
-            "config": {
-              "test_plan_file": "wordpress.jmx",
-              "endpoint": "lb-wordpress-https",
-              "app_protocol": "HTTPS",
-              "env": {
-                "wordpress.username": "test_user",
-                "wordpress.password": "ComplicatedPassword123!4"
-              }
+            "test_plan_file": "wordpress.jmx",
+            "endpoint": "lb-wordpress-https",
+            "app_protocol": "HTTPS",
+             "env": {
+              "wordpress.username": "test_user",
+              "wordpress.password": "ComplicatedPassword123!4"
             }
           }
         }

@@ -22,8 +22,8 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   endpoints:
-    - port: {{ template "harbor.metricsPortName" . }}
-      path: /metrics
+    - port: {{ include "harbor.metricsPortName" . }}
+      path: {{ .Values.metrics.path }}
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}

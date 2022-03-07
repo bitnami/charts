@@ -13,15 +13,15 @@ metadata:
   {{- end }}
 data:
   LOG_LEVEL: {{ .Values.logLevel | quote }}
-  HARBOR_EXPORTER_PORT: {{ .Values.metrics.exporter.port | quote }}
-  HARBOR_EXPORTER_METRICS_PATH: {{ .Values.metrics.exporter.path | quote }}
+  HARBOR_EXPORTER_PORT: {{ .Values.exporter.containerPorts.metrics | quote }}
+  HARBOR_EXPORTER_METRICS_PATH: {{ .Values.metrics.path | quote }}
   HARBOR_METRIC_NAMESPACE: harbor
   HARBOR_METRIC_SUBSYSTEM: exporter
   HARBOR_REDIS_URL: {{ include "harbor.redisForCore" . | quote }}
   HARBOR_REDIS_NAMESPACE: harbor_job_service_namespace
-  HARBOR_SERVICE_SCHEME: {{ include "harbor.component.scheme" . | quote }}
+  HARBOR_SERVICE_SCHEME: {{ ternary "https" "http" .Values.internalTLS.enabled | quote }}
   HARBOR_SERVICE_HOST: {{ include "harbor.core" . | quote }}
-  HARBOR_SERVICE_PORT: {{ include "harbor.core.servicePort" . | quote }}
+  HARBOR_SERVICE_PORT: {{ ternary .Values.core.service.ports.https .Values.core.service.ports.http .Values.internalTLS.enabled | quote }}
   HARBOR_DATABASE_HOST: {{ include "harbor.database.host" . | quote }}
   HARBOR_DATABASE_PORT: {{ include "harbor.database.port" . | quote  }}
   HARBOR_DATABASE_USERNAME: {{ include "harbor.database.username" . | quote }}

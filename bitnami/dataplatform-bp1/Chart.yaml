@@ -3,10 +3,6 @@ annotations:
 apiVersion: v2
 appVersion: 1.0.1
 dependencies:
-  - condition: kafka.enabled
-    name: kafka
-    repository: https://charts.bitnami.com/bitnami
-    version: 14.x.x
   - condition: spark.enabled
     name: spark
     repository: https://charts.bitnami.com/bitnami
@@ -23,12 +19,16 @@ dependencies:
     name: wavefront
     repository: https://charts.bitnami.com/bitnami
     version: 3.x.x
+  - condition: kafka.enabled
+    name: kafka
+    repository: https://charts.bitnami.com/bitnami
+    version: 14.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
     version: 1.x.x
-description: OCTO Data platform Kafka-Spark-Solr Helm Chart
+description: This Helm chart can be used for the automated deployment of a data platform blueprint containing Kafka, Apache Spark, and Solr. It covers optimized pod sizing and placement diversity rules.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/dataplatform-bp1
 icon: https://bitnami.com/assets/stacks/dataplatform-bp1/img/dataplatform-bp1-stack-220x234.png
@@ -59,4 +59,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-wavefront-proxy
   - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
   - https://github.com/wavefrontHQ/wavefront-proxy
-version: 9.0.8
+version: 9.0.10

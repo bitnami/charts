@@ -46,6 +46,9 @@ spec:
   {{- if .Values.envoy.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges: {{- toYaml .Values.envoy.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
+  {{- if .Values.envoy.service.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ .Values.envoy.service.ipFamilyPolicy }}
+  {{- end }}
   ports:
     - name: http
       port: {{ .Values.envoy.service.ports.http }}
