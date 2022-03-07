@@ -53,28 +53,28 @@ helm uninstall my-release
 This charts allows you install several Thanos components, so you deploy an architecture as the one below:
 
 ```
-                       ������������������������������������������������                  ������������������������������������������������      ������������������������������������������������
-                       ��� Thanos       ������������������������������������������������������ ��� Thanos Store ���      ��� Thanos       ���
-                       ��� Query        ���           ���      ��� Gateway      ���      ��� Compactor    ���
-                       ������������������������������������������������           ���      ������������������������������������������������      ������������������������������������������������
-                   push                           ���             ���                     ���
-������������������������������������������������   alerts   ������������������������������������������������      ���             ��� storages            ��� Downsample &
-��� Alertmanager ��� ������������������������������������ Thanos       ��� ������������������             ��� query metrics       ��� compact blocks
-��� (*)          ���            ��� Ruler        ���      ���             ���                     ���
-������������������������������������������������            ������������������������������������������������      ���             ���                     ���
-      ���                            ���              ���      ������������������������������������������������������           ���
-      ��� push alerts                ��������������������������������������������������������������� ��� MinIO&reg; (*) ��� ���������������������������������
-      ���                                           ���      ���                ���
-��� ������ ������ ������ ������ ������ ������ ������ ������ ������ ���������                  ���      ������������������������������������������������������
-���������������������������������������������  ���������������������������������������������                  ���             ���
-������ Prometheus ������������ Thanos     ������ ������������������������������������������������������             ���
-������ (*)        ������������ Sidecar (*)������    query                       ��� inspect
-���������������������������������������������  ���������������������������������������������    metrics                     ��� blocks
-��� ������ ������ ������ ������ ������ ������ ������ ������ ������ ���������                                ���
-                                                         ������������������������������������������������
-                                                         ��� Thanos       ���
-                                                         ��� Bucket Web   ���
-                                                         ������������������������������������������������
+                       ������������������������������������������������������������������������������������������������������������������������������������������������                  ������������������������������������������������������������������������������������������������������������������������������������������������      ������������������������������������������������������������������������������������������������������������������������������������������������
+                       ��������� Thanos       ������������������������������������������������������������������������������������������������������������������������������������������������������������������ ��������� Thanos Store ���������      ��������� Thanos       ���������
+                       ��������� Query        ���������           ���������      ��������� Gateway      ���������      ��������� Compactor    ���������
+                       ������������������������������������������������������������������������������������������������������������������������������������������������           ���������      ������������������������������������������������������������������������������������������������������������������������������������������������      ������������������������������������������������������������������������������������������������������������������������������������������������
+                   push                           ���������             ���������                     ���������
+������������������������������������������������������������������������������������������������������������������������������������������������   alerts   ������������������������������������������������������������������������������������������������������������������������������������������������      ���������             ��������� storages            ��������� Downsample &
+��������� Alertmanager ��������� ������������������������������������������������������������������������������������������������������������ Thanos       ��������� ������������������������������������������������������             ��������� query metrics       ��������� compact blocks
+��������� (*)          ���������            ��������� Ruler        ���������      ���������             ���������                     ���������
+������������������������������������������������������������������������������������������������������������������������������������������������            ������������������������������������������������������������������������������������������������������������������������������������������������      ���������             ���������                     ���������
+      ���������                            ���������              ���������      ������������������������������������������������������������������������������������������������������������������������������������������������������������������           ���������
+      ��������� push alerts                ��������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������� ��������� MinIO&reg; (*) ��������� ���������������������������������������������������������������������������������������������������
+      ���������                                           ���������      ���������                ���������
+��������� ������������������ ������������������ ������������������ ������������������ ������������������ ������������������ ������������������ ������������������ ������������������ ���������������������������                  ���������      ������������������������������������������������������������������������������������������������������������������������������������������������������������������
+���������������������������������������������������������������������������������������������������������������������������������������  ���������������������������������������������������������������������������������������������������������������������������������������                  ���������             ���������
+������������������ Prometheus ������������������������������������ Thanos     ������������������ ������������������������������������������������������������������������������������������������������������������������������������������������������������������             ���������
+������������������ (*)        ������������������������������������ Sidecar (*)������������������    query                       ��������� inspect
+���������������������������������������������������������������������������������������������������������������������������������������  ���������������������������������������������������������������������������������������������������������������������������������������    metrics                     ��������� blocks
+��������� ������������������ ������������������ ������������������ ������������������ ������������������ ������������������ ������������������ ������������������ ������������������ ���������������������������                                ���������
+                                                         ������������������������������������������������������������������������������������������������������������������������������������������������
+                                                         ��������� Thanos       ���������
+                                                         ��������� Bucket Web   ���������
+                                                         ������������������������������������������������������������������������������������������������������������������������������������������������
 ```
 
 > Note: Components marked with (*) are provided by subchart(s) (such as the [Bitnami MinIO&reg; chart](https://github.com/bitnami/charts/tree/master/bitnami/minio)) or external charts (such as the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus)).
@@ -111,7 +111,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | ----------------------------- | ----------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`              | Thanos image registry                                                                     | `docker.io`         |
 | `image.repository`            | Thanos image repository                                                                   | `bitnami/thanos`    |
-| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.24.0-scratch-r0` |
+| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.24.0-scratch-r7` |
 | `image.pullPolicy`            | Thanos image pull policy                                                                  | `IfNotPresent`      |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                |
 | `objstoreConfig`              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                    | `""`                |
@@ -142,7 +142,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.extraFlags`                                        | Extra Flags to passed to Thanos Query                                                                                                   | `[]`                     |
 | `query.command`                                           | Override default container command (useful when using custom images)                                                                    | `[]`                     |
 | `query.args`                                              | Override default container args (useful when using custom images)                                                                       | `[]`                     |
-| `query.replicaCount`                                      | Number of Thanos Query replicas to deploy                                                                                               | `1`                      |
+| `query.replicaCount`                                      | Number of Thanos Query replicas to deploy. This field is removed if the HorizontalPodAutoscaler is enabled                              | `1`                      |
 | `query.updateStrategy.type`                               | Update strategy type for Thanos Query replicas                                                                                          | `RollingUpdate`          |
 | `query.podSecurityContext.enabled`                        | Enable security context for the Thanos Query pods                                                                                       | `true`                   |
 | `query.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Query pods                                                                                   | `1001`                   |
@@ -274,7 +274,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `queryFrontend.extraFlags`                                        | Extra Flags to passed to Thanos Query Frontend                                                                                   | `[]`                     |
 | `queryFrontend.command`                                           | Override default container command (useful when using custom images)                                                             | `[]`                     |
 | `queryFrontend.args`                                              | Override default container args (useful when using custom images)                                                                | `[]`                     |
-| `queryFrontend.replicaCount`                                      | Number of Thanos Query Frontend replicas to deploy                                                                               | `1`                      |
+| `queryFrontend.replicaCount`                                      | Number of Thanos Query Frontend replicas to deploy. This field is removed if the HorizontalPodAutoscaler is enabled              | `1`                      |
 | `queryFrontend.updateStrategy.type`                               | Update strategy type for Thanos Query Frontend replicas                                                                          | `RollingUpdate`          |
 | `queryFrontend.podSecurityContext.enabled`                        | Enable security context for the Thanos Query Frontend pods                                                                       | `true`                   |
 | `queryFrontend.podSecurityContext.fsGroup`                        | Group ID for the filesystem used by Thanos Query Frontend pods                                                                   | `1001`                   |
@@ -1044,19 +1044,20 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `10-debian-10-r287`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `10-debian-10-r333`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                | `[]`                    |
 
 
 ### MinIO&reg; chart parameters
 
-| Name                      | Description                                                               | Value    |
-| ------------------------- | ------------------------------------------------------------------------- | -------- |
-| `minio.enabled`           | Enable/disable MinIO&reg; chart installation                              | `false`  |
-| `minio.auth.rootUser`     | MinIO&reg; root username                                                  | `admin`  |
-| `minio.auth.rootPassword` | Password for MinIO&reg; root user                                         | `""`     |
-| `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create | `thanos` |
+| Name                      | Description                                                                                                                    | Value    |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------- |
+| `minio`                   | For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/master/bitnami/minio) |          |
+| `minio.enabled`           | Enable/disable MinIO&reg; chart installation                                                                                        | `false`  |
+| `minio.auth.rootUser`     | MinIO&reg; root username                                                                                                            | `admin`  |
+| `minio.auth.rootPassword` | Password for MinIO&reg; root user                                                                                                   | `""`     |
+| `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create                                                           | `thanos` |
 
 
 ### NetWorkPolicy parameters

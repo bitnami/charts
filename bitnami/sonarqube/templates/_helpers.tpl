@@ -79,7 +79,7 @@ Return the Database Name
 */}}
 {{- define "sonarqube.database.name" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- printf "%s" .Values.postgresql.postgresqlDatabase -}}
+    {{- printf "%s" .Values.postgresql.auth.database -}}
 {{- else -}}
     {{- .Values.externalDatabase.database -}}
 {{- end -}}
@@ -90,7 +90,7 @@ Return the Database User
 */}}
 {{- define "sonarqube.database.username" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- printf "%s" .Values.postgresql.postgresqlUsername -}}
+    {{- printf "%s" .Values.postgresql.auth.username -}}
 {{- else -}}
     {{- .Values.externalDatabase.user -}}
 {{- end -}}
@@ -101,8 +101,8 @@ Return the Database Secret Name
 */}}
 {{- define "sonarqube.database.secretName" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- if .Values.postgresql.existingSecret -}}
-        {{- printf "%s" .Values.postgresql.existingSecret -}}
+    {{- if .Values.postgresql.auth.existingSecret -}}
+        {{- printf "%s" .Values.postgresql.auth.existingSecret -}}
     {{- else -}}
         {{- printf "%s" (include "sonarqube.postgresql.fullname" .) -}}
     {{- end -}}

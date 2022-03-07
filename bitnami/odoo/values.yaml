@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -49,7 +51,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/odoo
-  tag: 15.0.20220210-debian-10-r8
+  tag: 15.0.20220210-debian-10-r19
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -70,6 +72,7 @@ image:
 ## @section Odoo Configuration parameters
 ## Odoo settings based on environment variables
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#environment-variables
+##
 
 ## @param odooEmail Odoo user email
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
@@ -143,6 +146,7 @@ extraEnvVarsCM: ""
 extraEnvVarsSecret: ""
 
 ## @section Odoo deployment parameters
+##
 
 ## @param replicaCount Number of Odoo replicas to deploy
 ## NOTE: ReadWriteMany PVC(s) are required if replicaCount > 1
@@ -340,6 +344,7 @@ customReadinessProbe: {}
 customStartupProbe: {}
 
 ## @section Traffic Exposure Parameters
+##
 
 ## Odoo service parameters
 ##
@@ -476,6 +481,7 @@ ingress:
   secrets: []
 
 ## @section Persistence Parameters
+##
 
 ## Persistence Parameters
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -531,6 +537,7 @@ volumePermissions:
     runAsUser: 0
 
 ## @section Other Parameters
+##
 
 ## Odoo Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -559,6 +566,7 @@ autoscaling:
   targetMemory: 50
 
 ## @section Database Parameters
+##
 
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
@@ -567,25 +575,26 @@ postgresql:
   ## @param postgresql.enabled Deploy PostgreSQL container(s)
   ##
   enabled: true
-  ## @param postgresql.postgresqlUsername PostgreSQL username
-  ## ref: https://hub.docker.com/_/postgres/
-  ##
-  postgresqlUsername: "bn_odoo"
-  ## @param postgresql.postgresqlPassword PostgreSQL password
-  ## ref: https://hub.docker.com/_/postgres/
-  ##
-  postgresqlPassword: ""
-  ## @param postgresql.postgresqlDatabase PostgreSQL database
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
-  ##
-  postgresqlDatabase: bitnami_odoo
-  ## @param postgresql.existingSecret Name of existing secret object
-  ## The secret should contain the following keys:
-  ## postgresql-postgres-password (for root user)
-  ## postgresql-password (for the unprivileged user)
-  ##
-  # existingSecret: my-secret
-  existingSecret: ""
+  auth:
+    ## @param postgresql.auth.username PostgreSQL username
+    ## ref: https://hub.docker.com/_/postgres/
+    ##
+    username: "bn_odoo"
+    ## @param postgresql.auth.password PostgreSQL password
+    ## ref: https://hub.docker.com/_/postgres/
+    ##
+    password: ""
+    ## @param postgresql.auth.database PostgreSQL database
+    ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
+    ##
+    database: bitnami_odoo
+    ## @param postgresql.auth.existingSecret Name of existing secret object
+    ## The secret should contain the following keys:
+    ## postgres-password (for root user)
+    ## password (for the unprivileged user)
+    ##
+    # existingSecret: my-secret
+    existingSecret: ""
 
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -617,6 +626,7 @@ postgresql:
 
 ## External Database Configuration
 ## All of these values are only used when postgresql.enabled is set to false
+##
 externalDatabase:
   ## @param externalDatabase.host External Database server host
   ##
@@ -645,13 +655,14 @@ externalDatabase:
   postgresqlPostgresPassword: ""
   ## @param externalDatabase.existingSecret Name of existing secret object
   ## The secret should contain the following keys:
-  ## postgresql-postgres-password (for root user)
-  ## postgresql-password (for the unprivileged user)
+  ## postgres-password (for root user)
+  ## password (for the unprivileged user)
   ##
   # existingSecret: my-secret
   existingSecret: ""
 
 ## @section NetworkPolicy parameters
+##
 
 ## Add networkpolicies
 ##
@@ -725,4 +736,5 @@ networkPolicy:
     ##       - namespaceSelector:
     ##           matchLabels:
     ##             label: example
+    ##
     customRules: {}

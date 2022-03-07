@@ -5,7 +5,7 @@ metadata:
   name: {{ include "common.names.fullname" . }}-receive-distributor
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: receive
+    app.kubernetes.io/component: receive-distributor
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -14,9 +14,9 @@ metadata:
   {{- end }}
 spec:
   scaleTargetRef:
-    apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: {{ include "common.capabilities.deployment.apiVersion" . }}
+    name: {{ include "common.names.fullname" . }}-receive-distributor
   minReplicas: {{ .Values.receiveDistributor.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.receiveDistributor.autoscaling.maxReplicas }}
   metrics:

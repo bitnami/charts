@@ -1,12 +1,12 @@
 dependencies:
-- name: common
-  repository: https://charts.bitnami.com/bitnami
-  version: 1.11.1
 - name: mariadb
   repository: https://charts.bitnami.com/bitnami
   version: 9.8.1
 - name: elasticsearch
   repository: https://charts.bitnami.com/bitnami
-  version: 17.9.2
-digest: sha256:a370f04f5f6be5a94844056bf1d8bc044bd98946cccc828781aa9e87312f6bbd
-generated: "2022-02-13T05:21:28.740853657Z"
+  version: 17.9.7
+- name: common
+  repository: https://charts.bitnami.com/bitnami
+  version: 1.11.3
+digest: sha256:85390f583ea373d66a0245b9a42be17852fa25dda3f6cd31675498dce478228f
+generated: "2022-03-04T15:40:48.076934202Z"

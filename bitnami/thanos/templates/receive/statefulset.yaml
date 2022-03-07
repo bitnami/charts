@@ -13,7 +13,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not .Values.receive.autoscaling.enabled }}
   replicas: {{ .Values.receive.replicaCount }}
+  {{- end }}
   podManagementPolicy: {{ .Values.receive.podManagementPolicy }}
   serviceName: {{ include "common.names.fullname" . }}-receive-headless
   {{- if .Values.receive.updateStrategy }}
@@ -72,8 +74,27 @@ spec:
       {{- if .Values.receive.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.receive.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.receive.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.receive.initContainers "context" $) | nindent 8 }}
+      {{- if or .Values.receive.initContainers (and .Values.volumePermissions.enabled .Values.receive.persistence.enabled) }}
+      initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.receive.persistence.enabled }}
+        - name: init-chmod-data
+          image: {{ include "thanos.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /var/thanos/receive
+              chown -R "{{ .Values.receive.containerSecurityContext.runAsUser }}:{{ .Values.receive.podSecurityContext.fsGroup }}" /var/thanos/receive
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: data
+              mountPath: /var/thanos/receive
+        {{- end }}
+        {{- if .Values.receive.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.receive.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       {{- end }}
       containers:
         {{- if .Values.receive.sidecars }}
@@ -204,7 +225,7 @@ spec:
       volumes:
         - name: hashring-config
           configMap:
-            name: {{ include "common.names.fullname" . }}-receive
+            name: {{ include "thanos.receive.configmapName" . }}
         {{- if .Values.receive.grpc.server.tls.enabled }}
         - name: grpc-server-tls
           secret:

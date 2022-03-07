@@ -3,14 +3,6 @@ annotations:
 apiVersion: v2
 appVersion: 2.4.3
 dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
-  - name: postgresql
-    repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
   # Currently redis is only used for an in-progress plugin for flux support.
   # Our upstream bitnami/kubeapps chart should not include redis as a
   # dependency yet, and in development we can set redis.enabled if developing
@@ -18,7 +10,15 @@ dependencies:
   - name: redis
     repository: https://charts.bitnami.com/bitnami
     version: 15.x.x
-    condition: redis.enabled
+    condition: packaging.flux.enabled
+  - name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
 description: Kubeapps is a web-based UI for launching and managing applications on Kubernetes. It allows users to deploy trusted applications and operators to control users access to the cluster.
 home: https://kubeapps.com
 icon: https://raw.githubusercontent.com/kubeapps/kubeapps/main/docs/img/logo.png
@@ -33,4 +33,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/kubeapps/kubeapps
-version: 7.8.0
+version: 7.8.7

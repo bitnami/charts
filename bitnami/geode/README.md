@@ -7,7 +7,7 @@ Apache Geode is a data management platform that provides advanced capabilities f
 [Overview of Apache Geode](https://geode.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -404,7 +404,7 @@ This chart an Apache Geode cluster including a _locator_ statefulset with N _Loc
   |     Locator       |                 |                      |
   |       svc         |                 |                      |
    -------------------                  | / server             | / write
-      │                                 |   discovery          |   read
+      ���������������������������                                 |   discovery          |   read
       \/                                |                      |
  --------------                         |     --------------   |
 |   Locator    |                        |    |   Locator    |  |
