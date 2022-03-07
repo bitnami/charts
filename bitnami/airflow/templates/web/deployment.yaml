@@ -64,7 +64,7 @@ spec:
       securityContext: {{- omit .Values.web.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
-        {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
+        {{- include "airflow.git.containers.clone" (dict "securityContext" .Values.web.containerSecurityContext "context" $) | trim | nindent 8 }}
         {{- if .Values.dags.existingConfigmap }}
         {{- include "airflow.loadDAGsInitContainer" (dict "component" "web" "context" . ) | trim | nindent 8 }}
         {{- end }}
@@ -72,7 +72,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainers "context" $) | trim | nindent 8 }}
         {{- end }}
       containers:
-        {{- include "airflow.git.containers.sync" . | trim | nindent 8 }}
+        {{- include "airflow.git.containers.sync" (dict "securityContext" .Values.web.containerSecurityContext "context" $) | trim | nindent 8 }}
         - name: airflow-web
           image: {{ include "airflow.image" . }}
           imagePullPolicy: {{ .Values.web.image.pullPolicy | quote }}
