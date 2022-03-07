@@ -54,8 +54,8 @@ data:
   {{- end }}
   {{- if .Values.metrics.enabled}}
   METRIC_ENABLE: "true"
-  METRIC_PATH: "{{ .Values.metrics.path }}"
-  METRIC_PORT: "{{ .Values.core.containerPorts.metrics }}"
+  METRIC_PATH: {{ .Values.metrics.path | quote }}
+  METRIC_PORT: {{ .Values.core.containerPorts.metrics | quote }}
   METRIC_NAMESPACE: harbor
   METRIC_SUBSYSTEM: core
   {{- end }}
