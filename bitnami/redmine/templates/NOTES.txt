@@ -76,10 +76,7 @@ You have 4 alternatives:
   {{- $passwordValidationErrors =  append $passwordValidationErrors $requiredRedminePasswordError -}}
 {{- end -}}
 
-{{- if eq .Values.databaseType "postgresql" }}
-{{- $dbPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
-{{- else }}
+{{- if eq .Values.databaseType "mariadb" }}
   {{- $dbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
   {{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
 {{- end }}

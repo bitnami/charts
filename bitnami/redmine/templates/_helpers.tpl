@@ -4,7 +4,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "redmine.mariadb.fullname" -}}
-{{- printf "%s-%s" .Release.Name "mariadb" | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "mariadb" "chartValues" .Values.mariadb "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -12,7 +12,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "redmine.postgresql.fullname" -}}
-{{- printf "%s-%s" .Release.Name "postgresql" | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "postgresql" "chartValues" .Values.postgresql "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -125,7 +125,15 @@ Return the database name for Redmine
 {{- if and (eq .Values.databaseType "mariadb") (.Values.mariadb.enabled) -}}
     {{- .Values.mariadb.auth.database | quote }}
 {{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
-    {{- .Values.postgresql.auth.database | quote }}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- coalesce .Values.global.postgresql.auth.database .Values.postgresql.auth.database | quote -}}
+        {{- else -}}
+            {{- .Values.postgresql.auth.database | quote -}}
+        {{- end -}}
+    {{- else -}}
+        {{- .Values.postgresql.auth.database | quote -}}
+    {{- end -}}
 {{- else }}
     {{- .Values.externalDatabase.database | quote }}
 {{- end -}}
@@ -138,7 +146,15 @@ Return the database username for Redmine
 {{- if and (eq .Values.databaseType "mariadb") (.Values.mariadb.enabled) -}}
     {{- .Values.mariadb.auth.username | quote }}
 {{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
-    {{- .Values.postgresql.auth.username | quote }}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- coalesce .Values.global.postgresql.auth.username .Values.postgresql.auth.username | quote -}}
+        {{- else -}}
+            {{- .Values.postgresql.auth.username | quote -}}
+        {{- end -}}
+    {{- else -}}
+        {{- .Values.postgresql.auth.username | quote -}}
+    {{- end -}}
 {{- else }}
     {{- .Values.externalDatabase.user | quote }}
 {{- end -}}
@@ -155,10 +171,18 @@ Return the name of the database secret with its credentials
         {{- printf "%s" (include "redmine.mariadb.fullname" .) -}}
     {{- end -}}
 {{- else if and (eq .Values.databaseType "postgresql") (.Values.postgresql.enabled) -}}
-    {{- if .Values.postgresql.auth.existingSecret -}}
-        {{- printf "%s" .Values.postgresql.auth.existingSecret -}}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- if .Values.global.postgresql.auth.existingSecret }}
+                {{- tpl .Values.global.postgresql.auth.existingSecret $ -}}
+            {{- else -}}
+                {{- default (include "redmine.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+            {{- end -}}
+        {{- else -}}
+            {{- default (include "redmine.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+        {{- end -}}
     {{- else -}}
-        {{- printf "%s" (include "redmine.postgresql.fullname" .) -}}
+        {{- default (include "redmine.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
     {{- end -}}
 {{- else -}}
     {{- if .Values.externalDatabase.existingSecret -}}
