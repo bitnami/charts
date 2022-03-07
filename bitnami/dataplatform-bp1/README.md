@@ -6,8 +6,6 @@ This Helm chart can be used for the automated deployment of a data platform blue
 
 [Overview of Data Platform Blueprint 1](https://github.com/bitnami/dataplatform-exporter)
 
-
-                           
 ## TL;DR
 
 ```console
@@ -487,6 +485,18 @@ Find more information about how to deal with common errors related to Bitnami's 
 In order to render complete information about the deployment including all the sub-charts, please use --render-subchart-notes flag while installing the chart.
 
 ## Upgrading
+
+### To 10.0.0
+
+This major release updates the Kafka, Solr and Zookeeper subcharts to their newest major `15.x.x`, `3.x.x` and `8.x.x`, respectively, which contain several changes in the supported values. Also, the new major in Kafka bumps Kafka major version to `3.x` series (check the [upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/kafka/README.md#to-1500) to obtain more information).
+
+To upgrade to *10.0.0* from *9.x* it's recommended to maintain the Kafka `2.x` series (to avoid incompatibility issues). To do so, follow the instructions below (the following example assumes that the release name is *dataplatform* and the release namespace *default*):
+
+```bash
+export CURRENT_KAFKA_VERSION=$(kubectl exec dataplatform-kafka-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade dataplatform bitnami/dataplatform-bp1 \
+  --set kafka.image.tag=$CURRENT_KAFKA_VERSION
+```
 
 ### To 9.0.0
 
