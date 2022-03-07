@@ -18,7 +18,7 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: speaker
-        {{- if .Values.podLabels }}
+        {{- if .Values.speaker.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.speaker.podLabels "context" $) | nindent 8 }}
         {{- end }}
       {{- if .Values.speaker.podAnnotations }}
