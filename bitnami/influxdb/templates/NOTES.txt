@@ -49,16 +49,16 @@ To get the password for the {{ .Values.auth.user.username }} user, run:
     export USER_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "influxdb.secretName" . }} -o jsonpath="{.data.user-password}" | base64 --decode)
 
 {{- end }}
-{{- if .Values.readUser.name }}
+{{- if .Values.auth.readUser.username }}
 
-To get the password for the {{ .Values.readUser.name }} user, run:
+To get the password for the {{ .Values.auth.readUser.username }} user, run:
 
     export READ_USER_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "influxdb.secretName" . }} -o jsonpath="{.data.read-user-password}" | base64 --decode)
 
 {{- end }}
-{{- if .Values.writeUser.name }}
+{{- if .Values.auth.writeUser.username }}
 
-To get the password for the {{ .Values.writeUser.name }} user, run:
+To get the password for the {{ .Values.auth.writeUser.username }} user, run:
 
     export WRITE_USER_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "influxdb.secretName" . }} -o jsonpath="{.data.write-user-password}" | base64 --decode)
 
