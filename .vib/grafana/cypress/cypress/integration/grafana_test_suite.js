@@ -39,7 +39,7 @@ it('allows creating a dashboard with a panel', () => {
 
 it('checks if it is possible to upload a dashboard as JSON file', () => {
   const DASHBOARD_TITLE = 'New Test dashboard';
-  
+
   cy.login();
   cy.visit('dashboard/import');
   cy.contains('label','Upload JSON').click();
