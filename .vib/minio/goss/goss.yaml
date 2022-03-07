@@ -1,0 +1,8 @@
+command:
+  mc-version-development:
+    exec: mc --version
+    exit-status: 0
+    stdout:
+      - "DEVELOPMENT"
+    stderr: [ ]
+    timeout: 20000    
