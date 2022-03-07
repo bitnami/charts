@@ -7,7 +7,7 @@ This Helm chart can be used for the automated deployment of a data platform blue
 [Overview of Data Platform Blueprint 2](https://github.com/bitnami/dataplatform-emitter)
 
 
-
+                           
 ## TL;DR
 
 ```console
@@ -541,18 +541,6 @@ Elasticsearch dependency version was bumped to a new major version changing the 
 Regular upgrade is compatible from previous versions.
 
 ## Upgrading
-
-### To 10.0.0
-
-This major release updates the Kafka subchart to its newest major `15.x.x`, which contain several changes in the supported values and bumps Kafka major version to `3.x` series (check the [upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/kafka/README.md#to-1500) to obtain more information).
-
-To upgrade to *10.0.0* from *9.x* it's recommended to maintain the Kafka `2.x` series (to avoid incompatibility issues). To do so, follow the instructions below (the following example assumes that the release name is *dataplatform* and the release namespace *default*):
-
-```bash
-export CURRENT_KAFKA_VERSION=$(kubectl exec dataplatform-kafka-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
-helm upgrade dataplatform bitnami/dataplatform-bp2 \
-  --set kafka.image.tag=$CURRENT_KAFKA_VERSION
-```
 
 ### To 9.0.0
 
