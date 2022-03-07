@@ -48,9 +48,6 @@ Obtain the Argo Workflows access token:
 
 {{- if .Release.IsUpgrade -}}
 {{- $passwordValidationErrors := list -}}
-{{- if and .Values.postgresql.enabled (not .Values.postgresql.postgresqlPassword) -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors "Missing 'postgresql.password', please use the same than the current one" -}}
-{{- end -}}
 {{- if and .Values.mysql.enabled (not .Values.mysql.auth.password) -}}
 {{- $passwordValidationErrors = append $passwordValidationErrors "Missing 'mysql.auth.password', please use the same than the current one" -}}
 {{- end -}}

@@ -6,7 +6,7 @@ dependencies:
   - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -28,4 +28,4 @@ name: sonarqube
 sources:
   - https://github.com/bitnami/bitnami-docker-sonarqube
   - https://github.com/SonarSource/sonarqube
-version: 0.2.8
+version: 1.0.0

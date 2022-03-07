@@ -1,8 +1,9 @@
-{{- if not .Values.ingress.enabled }}
+{{- if eq .Values.exposureType "proxy" }}
 apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.nginx" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -12,13 +13,13 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.nginx.replicas }}
-  {{- if .Values.nginx.updateStrategy }}
-  strategy: {{- toYaml .Values.nginx.updateStrategy | nindent 4 }}
-  {{- end }}
+  replicas: {{ .Values.nginx.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: nginx
+  {{- if .Values.nginx.updateStrategy }}
+  strategy: {{- toYaml .Values.nginx.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -30,21 +31,21 @@ spec:
         {{- end }}
         app.kubernetes.io/component: nginx
       annotations:
-        {{- if not .Values.service.tls.enabled }}
+        {{- if not .Values.nginx.tls.enabled }}
         checksum/configmap: {{ include (print $.Template.BasePath "/nginx/configmap-http.yaml") . | sha256sum }}
         {{- else }}
         checksum/configmap: {{ include (print $.Template.BasePath "/nginx/configmap-https.yaml") . | sha256sum }}
         {{- end }}
-        {{- if eq (include "harbor.autoGenCertForNginx" .) "true" }}
-        checksum/secret: {{ include (print $.Template.BasePath "/nginx/secret.yaml") . | sha256sum }}
+        {{- if (include "harbor.autoGenCertForNginx" .) }}
+        checksum/tls-secret: {{ include (print $.Template.BasePath "/nginx/tls-secret.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.nginx.podAnnotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
-      {{- if .Values.nginx.priorityClassName }}
-      priorityClassName: {{ .Values.nginx.priorityClassName | quote }}
+      {{- if .Values.nginx.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.nginx.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.affinity "context" $) | nindent 8 }}
@@ -60,63 +61,41 @@ spec:
       {{- if .Values.nginx.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.podSecurityContext }}
-      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- if .Values.nginx.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nginx.priorityClassName }}
+      priorityClassName: {{ .Values.nginx.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.nginx.schedulerName }}
+      schedulerName: {{ .Values.nginx.schedulerName }}
+      {{- end }}
+      {{- if .Values.nginx.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.nginx.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.nginx.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.initContainers "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.nginx.hostAliases }}
-      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.hostAliases "context" $) | nindent 8 }}
-      {{- end }}
       containers:
         - name: nginx
-          image: {{ include "harbor.nginxImage" . }}
-          imagePullPolicy: {{ .Values.nginxImage.pullPolicy | quote }}
-          {{- if .Values.nginx.command }}
+          image: {{ include "harbor.nginx.image" . }}
+          imagePullPolicy: {{ .Values.nginx.image.pullPolicy | quote }}
+          {{- if .Values.nginx.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.nginx.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.nginx.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.nginx.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.nginx.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.args "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.containerSecurityContext }}
-          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.nginx.livenessProbe.enabled }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: {{ ternary "https" "http" .Values.service.tls.enabled }}
-              {{- if .Values.service.tls.enabled }}
-              scheme: HTTPS
-              {{- end }}
-            initialDelaySeconds: {{ .Values.nginx.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.nginx.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.nginx.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.nginx.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.nginx.livenessProbe.failureThreshold }}
-          {{- else if .Values.nginx.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customLivenessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.nginx.readinessProbe.enabled }}
-          readinessProbe:
-            httpGet:
-              path: /
-              port: {{ ternary "https" "http" .Values.service.tls.enabled }}
-              {{- if .Values.service.tls.enabled }}
-              scheme: HTTPS
-              {{- end }}
-            initialDelaySeconds: {{ .Values.nginx.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.nginx.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.nginx.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.nginx.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.nginx.readinessProbe.failureThreshold }}
-          {{- else if .Values.nginx.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.nginxImage.debug | quote }}
+              value: {{ ternary "true" "false" .Values.nginx.image.debug | quote }}
             {{- if .Values.nginx.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.nginx.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -132,21 +111,48 @@ spec:
           {{- if .Values.nginx.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
+          ports:
+            - containerPort: {{ .Values.nginx.containerPorts.http }}
+              name: http
+            - containerPort: {{ .Values.nginx.containerPorts.https }}
+              name: https
+            - containerPort: {{ .Values.nginx.containerPorts.notary }}
+              name: notary
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.nginx.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.nginx.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ ternary "https" "http" .Values.nginx.tls.enabled }}
+          {{- else if .Values.nginx.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.nginx.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.nginx.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: {{ ternary "https" "http" .Values.nginx.tls.enabled }}
+              scheme: {{ ternary "https" "http" .Values.nginx.tls.enabled  | upper }}
+          {{- else if .Values.nginx.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.nginx.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.nginx.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: {{ ternary "https" "http" .Values.nginx.tls.enabled }}
+              scheme: {{ ternary "https" "http" .Values.nginx.tls.enabled  | upper }}
+          {{- else if .Values.nginx.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
           {{- if .Values.nginx.resources }}
           resources: {{- toYaml .Values.nginx.resources | nindent 12 }}
           {{- end }}
-          ports:
-            - containerPort: 8080
-              name: http
-            - containerPort: 8443
-              name: https
-            - containerPort: 4443
-              name: notary
           volumeMounts:
             - name: config
               mountPath: /opt/bitnami/nginx/conf/nginx.conf
               subPath: nginx.conf
-            {{- if .Values.service.tls.enabled }}
+            {{- if .Values.nginx.tls.enabled }}
             - name: certificate
               mountPath: /etc/nginx/cert
             {{- end }}
@@ -160,11 +166,11 @@ spec:
         - name: config
           configMap:
             name: {{ include "harbor.nginx" . }}
-        {{- if .Values.service.tls.enabled }}
+        {{- if .Values.nginx.tls.enabled }}
         - name: certificate
           secret:
-            {{- if .Values.service.tls.existingSecret }}
-            secretName: {{ .Values.service.tls.existingSecret }}
+            {{- if .Values.nginx.tls.existingSecret }}
+            secretName: {{ .Values.nginx.tls.existingSecret }}
             {{- else }}
             secretName: {{ include "harbor.nginx" . }}
             {{- end }}

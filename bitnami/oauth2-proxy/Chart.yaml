@@ -3,15 +3,15 @@ annotations:
 apiVersion: v2
 appVersion: 7.2.1
 dependencies:
+  - name: redis
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled
+    version: 16.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
     version: 1.x.x
-  - name: redis
-    repository: https://charts.bitnami.com/bitnami
-    condition: redis.enabled
-    version: 16.x.x
 description: A reverse proxy and static file server that provides authentication using Providers (Google, GitHub, and others) to validate accounts by email, domain or group.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/oauth2-proxy
@@ -30,4 +30,4 @@ name: oauth2-proxy
 sources:
   - https://github.com/bitnami/bitnami-docker-oauth2-proxy
   - https://github.com/oauth2-proxy/oauth2-proxy
-version: 2.0.6
+version: 2.0.8
