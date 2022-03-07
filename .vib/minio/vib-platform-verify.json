@@ -1,0 +1,66 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/minio"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/minio"
+        },
+        "runtime_parameters": "",
+        "target_platform": {
+          "target_platform_id": "{TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/minio/goss"
+            },
+            "remote": {
+              "workload": ""
+             }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/minio/cypress"
+            },
+            "endpoint": "",
+            "app_protocol": "HTTPS",
+            "env": {
+              "username": "test_admin",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
