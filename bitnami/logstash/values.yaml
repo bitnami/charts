@@ -163,12 +163,9 @@ extraVolumes: []
 ##
 extraVolumeMounts: []
 
-## @param serviceAccount Containing the creation of ServiceAccount Object on Kubernetes
-## @param serviceAccount.create If true, create a service account.
-## @param serviceAccount.annotations Annotations for the service account
+## @param serviceAccount.create If true, create a service account object on Kubernetes.
 # serviceAccount:
 #   create: false
-#   annotations: {}
 serviceAccount: 
   create: false
 
