@@ -7,25 +7,23 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.service.annotations .Values.commonAnnotations }}
   annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+    {{- end }}
     {{- if .Values.service.annotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
     {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   {{- if and .Values.service.clusterIP (eq .Values.service.type "ClusterIP") }}
   clusterIP: {{ .Values.service.clusterIP }}
   {{- end }}
-  {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
+  {{- if or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{- if (and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerSourceRanges) }}
-  loadBalancerSourceRanges: {{- toYaml . | nindent 4 }}
+  {{- if and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   {{- if (and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
@@ -37,24 +35,22 @@ spec:
   sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
-    - name: http
-      port: {{ coalesce .Values.service.ports.http .Values.service.port }}
-      targetPort: http
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http)) }}
-      nodePort: {{ .Values.service.nodePorts.http }}
+    - name: tf-serving
+      port: {{ coalesce .Values.service.ports.server .Values.service.port }}
+      targetPort: tf-serving
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.server)) }}
+      nodePort: {{ .Values.service.nodePorts.server }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- if or (eq .Values.service.type "ClusterIP") .Values.exposeManagementConsole }}
-    - name: mgmt
-      port: {{ coalesce .Values.service.ports.mgmt .Values.service.mgmtPort }}
-      targetPort: mgmt
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.mgmt)) }}
-      nodePort: {{ .Values.service.nodePorts.mgmt }}
+    - name: tf-serving-api
+      port: {{ coalesce .Values.service.ports.restApi .Values.service.restApiPort }}
+      targetPort: tf-serving-api
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.restApi)) }}
+      nodePort: {{ .Values.service.nodePorts.restApi }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- end }}
     {{- if .Values.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

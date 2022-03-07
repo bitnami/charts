@@ -29,6 +29,9 @@ spec:
   {{- end }}
   {{- if eq .Values.service.type "LoadBalancer" }}
   loadBalancerSourceRanges: {{ .Values.service.loadBalancerSourceRanges }}
+  {{- if .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end }}
   {{- end }}
   {{- if .Values.service.sessionAffinity }}
   sessionAffinity: {{ .Values.service.sessionAffinity }}
