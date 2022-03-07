@@ -4,10 +4,10 @@ dependencies:
   version: 5.9.3
 - name: solr
   repository: https://charts.bitnami.com/bitnami
-  version: 2.4.2
+  version: 3.0.7
 - name: zookeeper
   repository: https://charts.bitnami.com/bitnami
-  version: 7.6.2
+  version: 8.1.1
 - name: wavefront
   repository: https://charts.bitnami.com/bitnami
   version: 3.1.30
@@ -17,5 +17,5 @@ dependencies:
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 1.11.3
-digest: sha256:c54ea21e7871572a9d3e0d5ee780314675c5f77c87c313eae5aba548038cabab
-generated: "2022-03-07T14:00:09.28609+01:00"
+digest: sha256:59e1acfbd56d4c0e22613a9bbaa7f90ec7eea7b13bc308f6eaeaf02fd0890054
+generated: "2022-03-07T16:36:42.531915+01:00"
