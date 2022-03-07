@@ -157,7 +157,7 @@ spec:
               name: debug
             {{- if .Values.metrics.enabled }}
             - containerPort: {{ .Values.registry.server.containerPorts.metrics }}
-              name: {{ include "harbor.metricsPortName" . }}
+              name: metrics
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.registry.server.startupProbe.enabled }}
