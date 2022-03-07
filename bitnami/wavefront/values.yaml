@@ -780,6 +780,6 @@ proxy:
 
 ## kube-state-metrics are used to get metrics about the state of the Kubernetes scheduler
 ## @param kube-state-metrics.enabled If enabled the kube-state-metrics chart will be installed as a subchart and the collector will be configured to capture metrics.
-  ##
+##
 kube-state-metrics:
   enabled: false
