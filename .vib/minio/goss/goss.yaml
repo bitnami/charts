@@ -17,6 +17,7 @@ command:
     exec: mc ls
     exit-status: 0
     stdout:
+<<<<<<< HEAD
       - "bin"
       - "licenses"
     stderr: [ ]
@@ -33,11 +34,19 @@ command:
       - "/opt/bitnami/minio/bin/minio"
     stderr: [ ]
     timeout: 20000                
+=======
+      - "mc"
+    stderr: [ ]
+    timeout: 20000          
+>>>>>>> 3aed99798 (Fork copy of minio added manually)
 file:
   /data:
     filetype: directory
     exists: true
+<<<<<<< HEAD
   /opt/bitnami/minio-client/bin/mc:
     filetype: file
     exists: true
     group: root    
+=======
+>>>>>>> 3aed99798 (Fork copy of minio added manually)
