@@ -132,6 +132,10 @@ spec:
               done
 
               {{- else }}
+              # number of currently deployed redis master nodes
+              currentMasterNodesNum="$(( {{ .Values.cluster.update.currentNumberOfNodes }} / (( {{ .Values.cluster.update.currentNumberOfReplicas }} + 1 )) ))"
+              # end postion of new replicas that should be assigned to original redis master nodes
+              slaveNodesEndPos="$(( {{ .Values.cluster.update.currentNumberOfNodes }} + (($REDIS_CLUSTER_REPLICAS - {{ .Values.cluster.update.currentNumberOfReplicas }})) * $currentMasterNodesNum ))"
               for node in $(seq $((1+{{ .Values.cluster.update.currentNumberOfNodes }})) {{ .Values.cluster.nodes }}); do
                 newNodeIndex="$(($node - 1))"
                 newNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${newNodeIndex}.{{ template "common.names.fullname" . }}-headless" 120 5)
@@ -145,7 +149,9 @@ spec:
                   sleep 5
                 done
                 slave=()
-                if (( $REDIS_CLUSTER_REPLICAS >= 1 )) && (( newNodeIndex % (( $REDIS_CLUSTER_REPLICAS + 1 )) )); then
+                # when the index of the new node is less than `slaveNodesEndPos`，the added node is a replica that assigned to original redis master node
+                # when the index of the new node is greater than or equal to `slaveNodesEndPos`，and it is not a multiple of `$REDIS_CLUSTER_REPLICAS + 1`, the added node is a replica that assigned to newly added master node
+                if (( $REDIS_CLUSTER_REPLICAS >= 1 )) && (( (( $newNodeIndex < $slaveNodesEndPos )) || (( (( $newNodeIndex >= $slaveNodesEndPos )) && (( $newNodeIndex % (( $REDIS_CLUSTER_REPLICAS + 1 )) )) )) )); then
                   slave+=("--cluster-slave")
                 fi
                 {{- if .Values.tls.enabled }}

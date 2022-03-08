@@ -244,13 +244,7 @@ spec:
                   export INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"
                   {{- end }}
 
-                  branch=$(influxdb_branch)
-
-                  if [[ "$branch" = "2" ]]; then
-                      timeout {{ $startupTimeout }}s influx --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }} ping
-                  else
-                      timeout {{ $startupTimeout }}s influx -host $POD_IP -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
-                  fi
+                  timeout {{ $startupTimeout }}s influx --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }} ping
           {{- else if .Values.influxdb.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -271,13 +265,7 @@ spec:
                   export INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"
                   {{- end }}
 
-                  branch=$(influxdb_branch)
-
-                  if [[ "$branch" = "2" ]]; then
-                      timeout {{ $livenessTimeout }}s influx ping --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }}
-                  else
-                      timeout {{ $livenessTimeout }}s influx -host $POD_IP -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
-                  fi
+                  timeout {{ $livenessTimeout }}s influx ping --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }}
           {{- else if .Values.influxdb.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -298,13 +286,7 @@ spec:
                   export INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"
                   {{- end }}
 
-                  branch=$(influxdb_branch)
-
-                  if [[ "$branch" = "2" ]]; then
-                      timeout {{ $readinessTimeout }}s influx ping --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }}
-                  else
-                      timeout {{ $readinessTimeout }}s influx -host $POD_IP -port {{ .Values.influxdb.containerPorts.http }} -execute "SHOW DATABASES"
-                  fi
+                  timeout {{ $readinessTimeout }}s influx ping --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }}
           {{- else if .Values.influxdb.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}

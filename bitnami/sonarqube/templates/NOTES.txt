@@ -94,8 +94,4 @@ You can access the JMX Prometheus metrics following the steps below:
     {{- $requiredSonarQubePasswordError := include "common.validations.values.single.empty" $requiredSonarQubePassword -}}
     {{- $passwordValidationErrors = append $passwordValidationErrors $requiredSonarQubePasswordError -}}
 {{- end }}
-{{- if .Values.postgresql.enabled }}
-    {{- $dbSecretName := include "sonarqube.database.secretName" . -}}
-    {{- $dbPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
-{{- end }}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
