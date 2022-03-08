@@ -62,7 +62,7 @@ You have 4 alternatives:
   {{- if eq .Values.databaseType "mariadb" }}
   {{ include "common.utils.secret.getvalue" (dict "secret" $dbSecretName "field" "mariadb-password" "context" $) }}
   {{- else if eq .Values.databaseType "postgresql" }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $dbSecretName "field" "postgresql-password" "context" $) }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $dbSecretName "field" "password" "context" $) }}
   {{ end }}
 {{- end }}
 
@@ -76,10 +76,7 @@ You have 4 alternatives:
   {{- $passwordValidationErrors =  append $passwordValidationErrors $requiredRedminePasswordError -}}
 {{- end -}}
 
-{{- if eq .Values.databaseType "postgresql" }}
-{{- $dbPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
-{{- else }}
+{{- if eq .Values.databaseType "mariadb" }}
   {{- $dbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
   {{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
 {{- end }}

@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param commonLabels Add labels to all the deployed resources
 ##
@@ -29,6 +31,7 @@ commonAnnotations: {}
 extraDeploy: []
 
 ## @section Wavefront Common parameters
+##
 
 ## @param clusterName This is a unique name for the cluster (required)
 ## All metrics will receive a `cluster` tag with this value
@@ -69,6 +72,7 @@ tkgi:
   enabled: false
 
 ## @section Collector parameters
+##
 
 ## Wavefront Collector is responsible to get all Kubernetes metrics from your cluster.
 ## It will capture Kubernetes resources metrics available from the kubelets,
@@ -87,7 +91,7 @@ collector:
   image:
     registry: docker.io
     repository: bitnami/wavefront-kubernetes-collector
-    tag: 1.8.0-scratch-r6
+    tag: 1.9.0-scratch-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -274,6 +278,10 @@ collector:
     ##       password = "PASSWORD"
     ##
     config: []
+  ## @param collector.controlplane.enabled Enable metrics for control plane dashboard (default false)
+  ##
+  controlplane:
+    enabled: false
   ## @param collector.existingConfigmap Name of existing ConfigMap with collector configuration
   ##
   existingConfigmap: ""
@@ -297,11 +305,13 @@ collector:
     ## limits:
     ##    cpu: 200m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 200m
     ##    memory: 10Mi
+    ##
     requests: {}
   ## Container Security Context configuration
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -430,6 +440,7 @@ collector:
   sidecars: []
 
 ## @section Proxy parameters
+##
 
 ## Wavefront Proxy is a metrics forwarder that is used to relay metrics to the Wavefront SaaS service.
 ## It can receive metrics from the Wavefront Collector as well as other metrics collection services
@@ -451,7 +462,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/wavefront-proxy
-    tag: 10.14.0-debian-10-r31
+    tag: 10.14.0-debian-10-r43
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -483,11 +494,13 @@ proxy:
     ## limits:
     ##    cpu: 100m
     ##    memory: 4Gi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 1Gi
+    ##
     requests: {}
   ## Container Security Context configuration
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -763,6 +776,7 @@ proxy:
   preprocessor: {}
 
 ## @section Kube State Metrics parameters
+##
 
 ## kube-state-metrics are used to get metrics about the state of the Kubernetes scheduler
 ## @param kube-state-metrics.enabled If enabled the kube-state-metrics chart will be installed as a subchart and the collector will be configured to capture metrics.

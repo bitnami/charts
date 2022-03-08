@@ -1,6 +1,7 @@
 
 /// <reference types="cypress" />
 
+<<<<<<< HEAD
 const ALERT_SUCCESS = 'div[data-testid="data-testid Alert success"]'; 
 const DELETE_BUTTON = 'button[aria-label="Confirm Modal Danger Button"]';
 const DASHBOARD_SETTINGS = '[aria-label="Dashboard settings"]';
@@ -30,3 +31,11 @@ export const verifySuccesOfAction = () => {
 export const clickDeleteButton = () => {
     cy.get(DELETE_BUTTON).should('be.visible').click();
 }
+=======
+export const verifySuccesOfAction = () => {
+    cy.get('div[data-testid*="data-testid Alert success"]').should('be.visible');
+}
+
+export let random = (Math.random() + 1).toString(36).substring(7);
+console.log("random", random);
+>>>>>>> bitnami-master
