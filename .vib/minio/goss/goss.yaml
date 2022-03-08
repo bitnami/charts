@@ -1,0 +1,26 @@
+command:
+  mc-version-development:
+    exec: mc --version
+    exit-status: 0
+    stdout:
+      - "DEVELOPMENT"
+    stderr: [ ]
+    timeout: 20000 
+  mc-make-bucket:
+    exec: mc mb test
+    exit-status: 0
+    stdout:
+      - "Bucket created successfully `test`."
+    stderr: [ ]
+    timeout: 20000    
+  mc-list-buckets:
+    exec: mc ls
+    exit-status: 0
+    stdout:
+      - "mc"
+    stderr: [ ]
+    timeout: 20000          
+file:
+  /data:
+    filetype: directory
+    exists: true
