@@ -3892,7 +3892,7 @@ exporter:
     ## @param exporter.nodeAffinityPreset.type Harbor Exporter Node affinity preset type. Ignored if `exporter.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## @param exporter.nodeAffinityPreset.key Harbor Exporter Node label key to match Ignored if `affinity` is set.
+    ## @param exporter.nodeAffinityPreset.key Harbor Exporter Node label key to match Ignored if `exporter.affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
