@@ -291,8 +291,7 @@ spec:
                 - sh
                 - -c
                 - |
-                  cd /bitnami/geode/data
-                  gfsh status server
+                  (cd /bitnami/geode/data && gfsh status server)
           {{- else if .Values.server.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -303,8 +302,7 @@ spec:
                 - sh
                 - -c
                 - |
-                  cd /bitnami/geode/data
-                  gfsh status server
+                  (cd /bitnami/geode/data && gfsh status server)
           {{- else if .Values.server.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
