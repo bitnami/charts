@@ -3,6 +3,14 @@ annotations:
 apiVersion: v2
 appVersion: 1.0.1
 dependencies:
+  - condition: zookeeper.enabled
+    name: zookeeper
+    repository: https://charts.bitnami.com/bitnami
+    version: 8.x.x
+  - condition: wavefront.enabled
+    name: wavefront
+    repository: https://charts.bitnami.com/bitnami
+    version: 3.x.x
   - condition: spark.enabled
     name: spark
     repository: https://charts.bitnami.com/bitnami
@@ -10,19 +18,11 @@ dependencies:
   - condition: solr.enabled
     name: solr
     repository: https://charts.bitnami.com/bitnami
-    version: 2.x.x
-  - condition: zookeeper.enabled
-    name: zookeeper
-    repository: https://charts.bitnami.com/bitnami
-    version: 7.x.x
-  - condition: wavefront.enabled
-    name: wavefront
-    repository: https://charts.bitnami.com/bitnami
     version: 3.x.x
   - condition: kafka.enabled
     name: kafka
     repository: https://charts.bitnami.com/bitnami
-    version: 14.x.x
+    version: 15.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -59,4 +59,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-wavefront-proxy
   - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
   - https://github.com/wavefrontHQ/wavefront-proxy
-version: 9.0.10
+version: 10.0.2
