@@ -35,4 +35,24 @@ it('allows creating a bucket and file upload', () => {
     cy.contains(TEST_ACCESS_KEY).should('be.visible');
   })
 
+  it('allows creating a group', () => {
+    const TEST_GROUP_NAME = 'Test group';
+
+    cy.login();
+    cy.visit('identity/groups');
+    cy.get('[aria-label="Create Group"]').should('be.visible').click();
+    cy.get('#group-name').should('be.visible').type(`${TEST_GROUP_NAME}.${random}`);
+    cy.contains('button[type="submit"]','Save').click();
+    cy.contains(TEST_GROUP_NAME);
+  })
+
+  it('allows creating a service account and downloading credentials', () => {
+    cy.login();
+    cy.visit('identity/account');
+    cy.get('[aria-label="Create service account"]').should('be.visible').click();
+    cy.contains('button[type="submit"]','Create').click();
+    cy.get('#download-button').should('be.visible').click(); 
+    cy.readFile('cypress/downloads/credentials.json').should('exist');
+  })
+
 
