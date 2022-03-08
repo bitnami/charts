@@ -3745,8 +3745,7 @@ exporter:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    ## Set to true if you would like to see extra information on logs
-    ## It turns BASH and/or NAMI debugging in the image
+    ## Enable debug mode
     ##
     debug: false
   ## @param exporter.command Override default container command (useful when using custom images)
