@@ -3919,7 +3919,7 @@ exporter:
     values: []
   ## @param exporter.affinity Harbor Exporter Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ## Note: `exporter.podAffinityPreset`, `exporter.podAntiAffinityPreset`, and `exporter.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
   ## @param exporter.priorityClassName Exporter pods Priority Class Name
