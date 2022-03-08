@@ -173,6 +173,25 @@ Return the Database encrypted password
 {{- end -}}
 
 {{/*
+Add environment variables to configure database values
+*/}}
+{{- define "keycloak.databaseSecretKey" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- print "password" -}}
+{{- else -}}
+    {{- if .Values.externalDatabase.existingSecret -}}
+        {{- if .Values.externalDatabase.existingSecretPasswordKey -}}
+            {{- printf "%s" .Values.externalDatabase.existingSecretPasswordKey -}}
+        {{- else -}}
+            {{- print "password" -}}
+        {{- end -}}
+    {{- else -}}
+        {{- print "password" -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Keycloak initdb scripts configmap
 */}}
 {{- define "keycloak.initdbScriptsCM" -}}
