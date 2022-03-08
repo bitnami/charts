@@ -3829,25 +3829,13 @@ exporter:
   ## @param exporter.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## Harbor Exporter containers' resource requests and limits
+  ## Harbor Exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  ## We usually recommend not to specify default resources and to leave this as a conscious
-  ## choice for the user. This also increases chances charts run on environments with little
-  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param exporter.resources.limits The resources limits for the container
-  ## @param exporter.resources.requests The requested resources for the container
+  ## @param exporter.resources.limits The resources limits for the Harbor Exporter containers
+  ## @param exporter.resources.requests The requested resources for the Harbor Exporter containers
   ##
   resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 500m
-    ##    memory: 1Gi
     limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 250m
-    ##    memory: 256Mi
     requests: {}
   ## Configure Exporter pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
