@@ -166,21 +166,21 @@ extraVolumeMounts: []
  ## ServiceAccount for Logstash
  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
  ##
- serviceAccount:
-   ## @param serviceAccount.create Enable creation of ServiceAccount for Logstash pods
-   ##
-   create: true
-   ## @param serviceAccount.name The name of the service account to use. If not set and `create` is `true`, a name is generated
-   ## If not set and create is true, a name is generated using the logstash.serviceAccountName template
-   ##
-   name: ""
-   ## @param serviceAccount.automountServiceAccountToken Allows automount of ServiceAccountToken on the serviceAccount created
-   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
-   ##
-   automountServiceAccountToken: true
-   ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
-   ##
-   annotations: {}
+serviceAccount:
+  ## @param serviceAccount.create Enable creation of ServiceAccount for Logstash pods
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the service account to use. If not set and `create` is `true`, a name is generated
+  ## If not set and create is true, a name is generated using the logstash.serviceAccountName template
+  ##
+  name: ""
+  ## @param serviceAccount.automountServiceAccountToken Allows automount of ServiceAccountToken on the serviceAccount created
+  ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+  ##
+  automountServiceAccountToken: true
+  ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+  ##
+  annotations: {}
 
 ## @param containerPorts [array] Array containing the ports to open in the Logstash container
 ##
