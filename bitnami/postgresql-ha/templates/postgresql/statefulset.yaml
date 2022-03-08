@@ -270,11 +270,11 @@ spec:
             {{- end }}
             - name: POSTGRESQL_PORT_NUMBER
               value: {{ .Values.postgresql.containerPort | quote }}
+            # Repmgr configuration
             - name: REPMGR_PORT_NUMBER
               value: {{ .Values.postgresql.containerPort | quote }}
             - name: REPMGR_PRIMARY_PORT
               value: {{ .Values.postgresql.containerPort | quote }}
-            # Repmgr configuration
             - name: MY_POD_NAME
               valueFrom:
                 fieldRef:
