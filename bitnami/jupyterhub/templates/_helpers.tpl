@@ -169,6 +169,25 @@ Get the Postgresql credentials secret.
 {{- end -}}
 
 {{/*
+Add environment variables to configure database values
+*/}}
+{{- define "jupyterhub.databaseSecretKey" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- print "password" -}}
+{{- else -}}
+    {{- if .Values.externalDatabase.existingSecret -}}
+        {{- if .Values.externalDatabase.existingSecretPasswordKey -}}
+            {{- printf "%s" .Values.externalDatabase.existingSecretPasswordKey -}}
+        {{- else -}}
+            {{- print "db-password" -}}
+        {{- end -}}
+    {{- else -}}
+        {{- print "db-password" -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Get the Postgresql credentials secret.
 */}}
 {{- define "jupyterhub.hubSecretName" -}}
