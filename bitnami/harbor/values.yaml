@@ -3774,7 +3774,7 @@ exporter:
   ## @param exporter.replicaCount The replica count
   ##
   replicaCount: 1
-    ## Harbor Exporter containers' liveness probe
+  ## Harbor Exporter containers' liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param exporter.livenessProbe.enabled Enable livenessProbe
   ## @param exporter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe

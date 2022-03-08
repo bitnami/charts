@@ -25,7 +25,7 @@ data:
       workers: {{ .Values.jobservice.maxJobWorkers }}
       backend: "redis"
       redis_pool:
-        redis_url: "{{ include "harbor.redisForJobservice" . }}"
+        redis_url: {{ include "harbor.redisForJobservice" . | quote }}
         namespace: {{ .Values.jobservice.redisNamespace | quote}}
     job_loggers:
       {{- if eq .Values.jobservice.jobLogger "file" }}
