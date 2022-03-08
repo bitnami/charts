@@ -268,7 +268,13 @@ spec:
               value: {{ template "postgresql-ha.postgresql.tlsCACert" . }}
             {{- end }}
             {{- end }}
+            - name: POSTGRESQL_PORT_NUMBER
+              value: {{ .Values.postgresql.containerPort | quote }}
             # Repmgr configuration
+            - name: REPMGR_PORT_NUMBER
+              value: {{ .Values.postgresql.containerPort | quote }}
+            - name: REPMGR_PRIMARY_PORT
+              value: {{ .Values.postgresql.containerPort | quote }}
             - name: MY_POD_NAME
               valueFrom:
                 fieldRef:
@@ -348,7 +354,7 @@ spec:
               command:
                 - bash
                 - -ec
-                - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}  -h 127.0.0.1 -c "SELECT 1"'
+                - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} -h 127.0.0.1 -p {{ .Values.postgresql.containerPort }} -c "SELECT 1"'
             initialDelaySeconds: {{ .Values.postgresql.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.postgresql.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.postgresql.livenessProbe.timeoutSeconds }}
@@ -365,7 +371,7 @@ spec:
               command:
                 - bash
                 - -ec
-                - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}  -h 127.0.0.1 -c "SELECT 1"'
+                - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} -h 127.0.0.1 -p {{ .Values.postgresql.containerPort }} -c "SELECT 1"'
             initialDelaySeconds: {{ .Values.postgresql.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.postgresql.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.postgresql.readinessProbe.timeoutSeconds }}
@@ -382,7 +388,7 @@ spec:
               command:
                 - bash
                 - -ec
-                - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }}  -h 127.0.0.1 -c "SELECT 1"'
+                - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} -h 127.0.0.1 -p {{ .Values.postgresql.containerPort }} -c "SELECT 1"'
             initialDelaySeconds: {{ .Values.postgresql.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.postgresql.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.postgresql.startupProbe.timeoutSeconds }}
