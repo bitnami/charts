@@ -3910,7 +3910,7 @@ exporter:
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## @param exporter.nodeAffinityPreset.values Harbor Exporter Node label values to match. Ignored if `affinity` is set.
+    ## @param exporter.nodeAffinityPreset.values Harbor Exporter Node label values to match. Ignored if `exporter.affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
