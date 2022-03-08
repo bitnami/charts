@@ -40,7 +40,7 @@ spec:
   egress:
     # Proxy --> Hub
     - ports:
-        - port: {{ .Values.hub.containerPort }}
+        - port: {{ coalesce .Values.hub.containerPorts.http .Values.hub.containerPort }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
