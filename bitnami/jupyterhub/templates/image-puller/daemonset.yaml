@@ -2,13 +2,13 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
+  name: {{ printf "%s-image-puller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: image-puller
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  name: {{ printf "%s-image-puller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ .Release.Namespace | quote }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -48,11 +48,20 @@ spec:
       {{- if .Values.imagePuller.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.tolerations "context" .) | nindent 8 }}
       {{- end }}
-      {{- if .Values.imagePuller.priorityClassName }}
+      {{- if .Values.imagePuller.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hub.priorityClassName }}
       priorityClassName: {{ .Values.imagePuller.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.imagePuller.schedulerName }}
+      schedulerName: {{ .Values.imagePuller.schedulerName }}
       {{- end }}
       {{- if .Values.imagePuller.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.imagePuller.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.imagePuller.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.imagePuller.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
       {{- range $index, $image := (list .Values.singleuser.image .Values.auxiliaryImage) }}
@@ -80,7 +89,9 @@ spec:
           {{- if .Values.imagePuller.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.imagePuller.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.imagePuller.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.imagePuller.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.command "context" $) | nindent 12 }}
           {{- else }}
           command:
@@ -88,7 +99,9 @@ spec:
             - -c
             - sleep infinity
           {{- end }}
-          {{- if .Values.imagePuller.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.imagePuller.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.args "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.imagePuller.extraEnvVars }}
