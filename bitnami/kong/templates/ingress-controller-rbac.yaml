@@ -43,6 +43,9 @@ rules:
       - endpoints
     verbs:
       - get
+  {{- if .Values.ingressController.rbac.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.ingressController.rbac.rules "context" $ ) | nindent 2 }}
+  {{- end }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
@@ -63,12 +66,13 @@ roleRef:
   name: {{ template "common.names.fullname" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "kong.serviceAccount" . }}
+    name: {{ include "kong.ingressController.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
+  name: {{ template "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: server
     {{- if .Values.commonLabels }}
@@ -77,7 +81,6 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-  name: {{ template "common.names.fullname" . }}
 rules:
   - apiGroups:
       - ""
@@ -147,6 +150,9 @@ rules:
       - get
       - list
       - watch
+  {{- if .Values.ingressController.rbac.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.ingressController.rbac.rules "context" $ ) | nindent 2 }}
+  {{- end }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
@@ -166,22 +172,7 @@ roleRef:
   name: {{ template "common.names.fullname" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "kong.serviceAccount" . }}
+    name: {{ include "kong.ingressController.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 ---
-{{- if not .Values.ingressController.rbac.existingServiceAccount }}
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: {{ template "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: server
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
-{{- end }}
 {{- end }}
