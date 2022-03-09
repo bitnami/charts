@@ -1043,12 +1043,12 @@ security:
 ## Enable anonymous authentication
 ##
 auth_anonymous:
-  ## @param Enable anonymous authentication for presenting the dashboards.
+  ## @param auth_anonymous.enabled Enable anonymous authentication for presenting the dashboards.
   ##
   enabled: false
-  ## @param Organization name that should be used for unauthenticated users. You find the organization in preferences.
+  ## @param auth_anonymous.org_name Organization name that should be used for unauthenticated users. You find the organization in preferences.
   ##
   org_name: ""
-  ## @param Role for unauthenticated users. Valid values are `Editor`, `Admin` and `Viewer`.
+  ## @param auth_anonymous.org_role Role for unauthenticated users. Valid values are `Editor`, `Admin` and `Viewer`.
   ##
   org_role: ""
