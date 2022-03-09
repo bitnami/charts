@@ -453,7 +453,7 @@ oci:
   ## @param oci.privateKeyFingerprint When using the OCI provider, put in the fingerprint of your privateKey
   ##
   privateKeyFingerprint: ""
-  ## @param oci.passphrase When using the OCI provider and your privateKey has a passphrase, put it in here. (optional)
+  ## @param oci.privateKeyPassphrase When using the OCI provider and your privateKey has a passphrase, put it in here. (optional)
   ##
   privateKeyPassphrase: ""
 
