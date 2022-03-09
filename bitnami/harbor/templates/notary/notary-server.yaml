@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "harbor.notary-server" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -12,13 +13,13 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.notary.server.replicas }}
-  {{- if .Values.notary.server.updateStrategy }}
-  strategy: {{- toYaml .Values.notary.server.updateStrategy | nindent 4 }}
-  {{- end }}
+  replicas: {{ .Values.notary.server.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: notary-server
+  {{- if .Values.notary.server.updateStrategy }}
+  strategy: {{- toYaml .Values.notary.server.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -38,8 +39,8 @@ spec:
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       automountServiceAccountToken: {{ .Values.notary.server.automountServiceAccountToken }}
-      {{- if .Values.notary.server.priorityClassName }}
-      priorityClassName: {{ .Values.notary.server.priorityClassName | quote }}
+      {{- if .Values.notary.server.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.notary.server.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.affinity "context" $) | nindent 8 }}
@@ -55,43 +56,47 @@ spec:
       {{- if .Values.notary.server.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.podSecurityContext }}
-      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- if .Values.notary.server.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.notary.server.priorityClassName }}
+      priorityClassName: {{ .Values.notary.server.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.notary.server.schedulerName }}
+      schedulerName: {{ .Values.notary.server.schedulerName }}
+      {{- end }}
+      {{- if .Values.notary.server.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.notary.server.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.notary.server.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.initContainers "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.notary.server.hostAliases }}
-      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.hostAliases "context" $) | nindent 8 }}
-      {{- end }}
       containers:
         - name: notary-server
-          image: {{ include "harbor.notaryServerImage" . | quote }}
-          imagePullPolicy: {{ .Values.notaryServerImage.pullPolicy | quote }}
-          {{- if .Values.containerSecurityContext }}
-          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          image: {{ include "harbor.notary.server.image" . | quote }}
+          imagePullPolicy: {{ .Values.notary.server.image.pullPolicy | quote }}
+          {{- if .Values.notary.server.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.notary.server.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.notary.server.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.notary.server.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.notary.server.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.notary.server.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.args "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.notary.server.resources }}
-          resources: {{- toYaml .Values.notary.server.resources | nindent 12 }}
-          {{- end }}
-          {{- if .Values.notary.server.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.notaryServerImage.debug | quote }}
+              value: {{ ternary "true" "false" .Values.notary.server.image.debug | quote }}
             - name: MIGRATIONS_PATH
               value: migrations/server/postgresql
             - name: DB_URL
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "harbor.notary-server" . }}-envvars
+                  name: {{ printf "%s-envvars" (include "harbor.notary-server" .) }}
                   key: server_db_url
             {{- if .Values.notary.server.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.extraEnvVars "context" $) | nindent 12 }}
@@ -105,6 +110,38 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.notary.server.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          ports:
+            - containerPort: {{ .Values.notary.server.containerPorts.server }}
+              name: notary-server
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.notary.server.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.notary.server.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: notary-server
+          {{- else if .Values.notary.server.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.notary.server.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.notary.server.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: notary-server
+          {{- else if .Values.notary.server.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.notary.server.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.notary.server.readinessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: notary-server
+          {{- else if .Values.notary.server.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.notary.server.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.notary.server.resources }}
+          resources: {{- toYaml .Values.notary.server.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: notary-config
               mountPath: /etc/notary
@@ -119,33 +156,6 @@ spec:
             {{- if .Values.notary.server.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-          ports:
-            - containerPort: 4443
-              name: notary-server
-          {{- if .Values.notary.server.livenessProbe.enabled }}
-          livenessProbe:
-            tcpSocket:
-              port: notary-server
-            initialDelaySeconds: {{ .Values.notary.server.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.notary.server.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.notary.server.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.notary.server.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.notary.server.livenessProbe.failureThreshold }}
-          {{- else if .Values.notary.server.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.customLivenessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.notary.server.readinessProbe.enabled }}
-          readinessProbe:
-            tcpSocket:
-              port: notary-server
-            initialDelaySeconds: {{ .Values.notary.server.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.notary.server.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.notary.server.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.notary.server.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.notary.server.readinessProbe.failureThreshold }}
-          {{- else if .Values.notary.server.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.customReadinessProbe "context" $) | nindent 12 }}
-          {{- end }}
         {{- if .Values.notary.server.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.notary.server.sidecars "context" $) | nindent 8 }}
         {{- end }}

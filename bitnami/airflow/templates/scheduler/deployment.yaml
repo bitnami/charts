@@ -65,7 +65,7 @@ spec:
       securityContext: {{- omit .Values.scheduler.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
-        {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
+        {{- include "airflow.git.containers.clone" (dict "securityContext" .Values.scheduler.containerSecurityContext "context" $) | trim | nindent 8 }}
         {{- if .Values.dags.existingConfigmap }}
         {{- include "airflow.loadDAGsInitContainer" (dict "component" "scheduler" "context" . ) | trim | nindent 8 }}
         {{- end }}
@@ -73,7 +73,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.initContainers "context" $) | trim | nindent 8 }}
         {{- end }}
       containers:
-        {{- include "airflow.git.containers.sync" . | trim | nindent 8 }}
+        {{- include "airflow.git.containers.sync" (dict "securityContext" .Values.scheduler.containerSecurityContext "context" $) | trim | nindent 8 }}
         - name: airflow-scheduler
           image: {{ include "airflow.schedulerImage" . | quote }}
           imagePullPolicy: {{ .Values.scheduler.image.pullPolicy | quote }}

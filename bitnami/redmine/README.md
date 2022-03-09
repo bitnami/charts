@@ -7,7 +7,7 @@ Redmine is an open source management application. It includes a tracking issue s
 [Overview of Redmine](http://www.redmine.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -70,24 +70,22 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
-| Name                | Description                                        | Value                 |
-| ------------------- | -------------------------------------------------- | --------------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `""`                  |
-| `nameOverride`      | String to partially override common.names.fullname | `""`                  |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                  |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`                  |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                  |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                  |
-| `image.registry`    | Redmine image registry                             | `docker.io`           |
-| `image.repository`  | Redmine image repository                           | `bitnami/redmine`     |
-| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.3-debian-10-r88` |
-| `image.pullPolicy`  | Redmine image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | Redmine image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable image debug mode                            | `false`               |
-
+| Name                | Description                                        | Value                  |
+| ------------------- | -------------------------------------------------- | ---------------------- |
+| `kubeVersion`       | Override Kubernetes version                        | `""`                   |
+| `nameOverride`      | String to partially override common.names.fullname | `""`                   |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                   |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`                   |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                   |
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                   |
+| `image.registry`    | Redmine image registry                             | `docker.io`            |
+| `image.repository`  | Redmine image repository                           | `bitnami/redmine`      |
+| `image.tag`         | Redmine image tag (immutable tags are recommended) | `4.2.3-debian-10-r132` |
+| `image.pullPolicy`  | Redmine image pull policy                          | `IfNotPresent`         |
+| `image.pullSecrets` | Redmine image pull secrets                         | `[]`                   |
+| `image.debug`       | Enable image debug mode                            | `false`                |
 
 ### Redmine Configuration parameters
 
@@ -111,7 +109,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `extraEnvVars`          | Array with extra environment variables to add to the Redmine container | `[]`               |
 | `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `""`               |
 | `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `""`               |
-
 
 ### Redmine deployment parameters
 
@@ -169,11 +166,10 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                      | `{}`            |
 | `customStartupProbe`                 | Custom startupProbe that overrides the default one                                        | `{}`            |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
-|------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|--------------------------|
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Redmine service type                                                                                                             | `LoadBalancer`           |
 | `service.port`                     | Redmine service HTTP port                                                                                                        | `80`                     |
 | `service.nodePort`                 | Node port for HTTP                                                                                                               | `""`                     |
@@ -184,8 +180,8 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `service.annotations`              | Additional custom annotations for Redmine service                                                                                | `{}`                     |
 | `service.extraPorts`               | Extra port to expose on Redmine service                                                                                          | `[]`                     |
 | `ingress.enabled`                  | Enable ingress record generation for Redmine                                                                                     | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
 | `ingress.className`                | Set the ingressClassName which will be used for this ingress                                                                     | `""`                     |
+| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                                              | `redmine.local`          |
@@ -196,7 +192,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-
 
 ### Persistence Parameters
 
@@ -213,7 +208,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`    |
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`     |
 
-
 ### Other Parameters
 
 | Name                                 | Description                                                    | Value   |
@@ -226,7 +220,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `autoscaling.maxReplicas`            | Maximum number of Redmine replicas                             | `11`    |
 | `autoscaling.targetCPU`              | Target CPU utilization percentage                              | `50`    |
 | `autoscaling.targetMemory`           | Target Memory utilization percentage                           | `50`    |
-
 
 ### Database Parameters
 
@@ -246,10 +239,10 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `mariadb.primary.persistence.size`          | PVC Storage Request for MariaDB volume                                                                                                   | `8Gi`             |
 | `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)                                                 | `""`              |
 | `postgresql.enabled`                        | Whether to deploy a PostgreSQL server to satisfy the database requirements                                                               | `true`            |
-| `postgresql.postgresqlUsername`             | PostgreSQL username                                                                                                                      | `bn_redmine`      |
-| `postgresql.postgresqlPassword`             | PostgreSQL password                                                                                                                      | `""`              |
-| `postgresql.postgresqlDatabase`             | PostgreSQL database                                                                                                                      | `bitnami_redmine` |
-| `postgresql.existingSecret`                 | Name of existing secret object                                                                                                           | `""`              |
+| `postgresql.auth.username`                  | PostgreSQL username                                                                                                                      | `bn_redmine`      |
+| `postgresql.auth.password`                  | PostgreSQL password                                                                                                                      | `""`              |
+| `postgresql.auth.database`                  | PostgreSQL database                                                                                                                      | `bitnami_redmine` |
+| `postgresql.auth.existingSecret`            | Name of existing secret object                                                                                                           | `""`              |
 | `postgresql.persistence.enabled`            | Enable PostgreSQL persistence using PVC                                                                                                  | `true`            |
 | `postgresql.persistence.existingClaim`      | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template                                                        | `""`              |
 | `postgresql.persistence.storageClass`       | PVC Storage Class for PostgreSQL volume                                                                                                  | `""`              |
@@ -261,7 +254,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `externalDatabase.password`                 | External Database user password                                                                                                          | `""`              |
 | `externalDatabase.database`                 | External Database database name                                                                                                          | `bitnami_redmine` |
 | `externalDatabase.existingSecret`           | Use an existing secret for external db password. Must contain the keys `redmine-password` or `mariadb-password` depending on the DB type | `""`              |
-
 
 ### Mail Receiver/Cron Job Parameters
 
@@ -318,7 +310,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `mailReceiver.nodeSelector`                          | Node labels for pod assignment                                                                                                                | `{}`                      |
 | `mailReceiver.tolerations`                           | Tolerations for pod assignment                                                                                                                | `[]`                      |
 
-
 ### Custom Certificates parameters
 
 | Name                                                 | Description                                                        | Value                                    |
@@ -332,11 +323,10 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store | `[]`                                     |
 | `certificates.image.registry`                        | Redmine image registry                                             | `docker.io`                              |
 | `certificates.image.repository`                      | Redmine image repository                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r309`                      |
+| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `10-debian-10-r350`                      |
 | `certificates.image.pullPolicy`                      | Redmine image pull policy                                          | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                         | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables (e.g. proxy)         | `[]`                                     |
-
 
 ### NetworkPolicy parameters
 
@@ -354,7 +344,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                          | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                              | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                  | `{}`    |
-
 
 The above parameters map to the env variables defined in [bitnami/redmine](https://github.com/bitnami/bitnami-docker-redmine). For more information please refer to the [bitnami/redmine](https://github.com/bitnami/bitnami-docker-redmine) image documentation.
 
@@ -551,165 +540,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-### To 17.0.0
-
-In this version, the `image` block is defined once and is used in the different templates, while in the previous version, the `image` block was duplicated for the main container and the mail receiver one
-
-```yaml
-image:
-  registry: docker.io
-  repository: bitnami/redmine
-  tag: 4.2.2
-```
-
-VS
-
-```yaml
-image:
-  registry: docker.io
-  repository: bitnami/redmine
-  tag: 4.2.2
----
-mailReceiver:
-  image:
-    registry: docker.io
-    repository: bitnami/redmine
-    tag: 4.2.2
-```
-
-See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about the implemented changes
-
-### To 16.0.0
-
-The [Bitnami Redmine](https://github.com/bitnami/bitnami-docker-redmine) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-redmine/tree/master/4/debian-10/rootfs) folder of the container image repository.
-
-Upgrades from previous versions require to specify `--set volumePermissions.enabled=true` in order for all features to work properly:
-
-```console
-$ helm upgrade example bitnami/redmine --set redminePassword=$REDMINE_PASSWORD --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set volumePermissions.enabled=true
-```
-
-In addition, the `replicas` parameter was renamed to `replicaCount`.
-
-Full compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected aside from the ones mentioned above.
-
-### To 15.0.0
-
-[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version includes all the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-#### What changes were introduced in this major version?
-
-- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
-- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
-- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
-- PostgreSQL dependency version was bumped to a new major version `10.X.X`, which includes changes that do no longer guarantee backwards compatibility. Check [PostgreSQL Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#upgrading) for more information.
-- MariaDB dependency version was bumped to a new major version `9.X.X`, which includes changes that do no longer guarantee backwards compatibility. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#upgrading) for more information.
-- Inclusion of the`bitnami/common` library chart, standardizations and adaptation of labels to follow helm's standards.
-- `securityContext.*` is deprecated in favor of `podSecurityContext`, `containerSecurityContext`, `mailReceiver.podSecurityContext`, and `mailReceiver.containerSecurityContext`.
-
-#### Considerations when upgrading to this version
-
-- If you want to upgrade to this version from a previous one installed with Helm v3, please follow the instructions below.
-- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
-- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3.
-- This chart depends on the **PostgreSQL 10** instead of **PostgreSQL 8**. Apart from the changes that are described in this section, there are also other major changes due to the `master/slave` nomenclature was replaced by `primary/readReplica` or the standardization of Helm labels. For further details regarding the changes introduced, refer to [version 10 changes](https://github.com/bitnami/charts/pull/4385) or [version 9 changes](https://github.com/bitnami/charts/pull/3021) respectively.
-
-As a consequence, backwards compatibility from previous versions is not guaranteed during the upgrade. To upgrade to this new version `15.0.0` there are two alternatives:
-
-- Install a new Redmine chart and follow the [official guide on how to backup/restore](https://www.redmine.org/projects/redmine/wiki/RedmineBackupRestore).
-
-- Reuse the PVC used to hold the PostgreSQL/MariaDB data on your previous release. To do so, follow the instructions below.
-
-**Upgrade instructions**
-
-> NOTE: The instructions suppose your DatabaseType is MariaDB. The process is analogous for PostgreSQL instances.
-> WARNING: Please, make sure to create or have a backup of your database before running any of those actions.
-
-1. Old version is up and running
-
-```console
-$ kubectl get pods
-NAME                              READY   STATUS    RESTARTS   AGE
-example-mariadb-0                 1/1     Running   0          40s
-example-redmine-9f8c7b54d-trns2   1/1     Running   0          72s
-```
-
-2. Export both MariaDB and Redmine credentials in order to provide them in the update
-
-```console
-$ export REDMINE_PASSWORD=$(kubectl get secret --namespace default example-redmine -o jsonpath="{.data.redmine-password}" | base64 --decode)
-
-$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-
-$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default example-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
-```
-
-3. Delete the Redmine deployment and delete the MariaDB statefulset. Notice the option `--cascade=false` in the latter.
-
-```console
-$ kubectl delete deployment.apps/example-redmine
-deployment.apps "example-redmine" deleted
-
-$ kubectl delete statefulset.apps/example-mariadb --cascade=false
-statefulset.apps "example-mariadb" deleted
-```
-
-4. Now the upgrade works
-
-```console
-$ helm upgrade example bitnami/redmine --set redminePassword=$REDMINE_PASSWORD --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD
-
-$ helm ls
-NAME   	NAMESPACE	REVISION	UPDATED                             	STATUS  	CHART         	APP VERSION
-example	default  	1       	2020-10-29 20:33:17.776769 +0100 CET	deployed	redmine-15.0.0	4.1.1
-```
-
-5. You should kill the existing MariaDB pod now and the new statefulset is going to create a new one
-
-```console
-$ kubectl delete pod example-mariadb-0
-pod "example-mariadb-0" deleted
-
-$ kubectl get pods
-NAME                               READY   STATUS    RESTARTS   AGE
-example-mariadb-0                  1/1     Running   0          19s
-example-redmine-766c69d549-4zlgh   1/1     Running   2          2m26s
-```
-
-#### Useful links
-
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
-
-### To 14.0.0
-
-- Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
-- The `databaseType` parameters is no longer an object but a string. Allowed values are "mariadb" and "postgresql".
-- Ingress configuration was standardized to simplify the way to configure the main host.
-- Ports names were prefixed with the protocol to comply with Istio (see https://istio.io/docs/ops/deployment/requirements/).
-
-### To 13.0.0
-
-Helm performs a lookup for the object based on its group (apps), version (v1), and kind (Deployment). Also known as its GroupVersionKind, or GVK. Changing the GVK is considered a compatibility breaker from Kubernetes' point of view, so you cannot "upgrade" those objects to the new GVK in-place. Earlier versions of Helm 3 did not perform the lookup correctly which has since been fixed to match the spec.
-
-In https://github.com/helm/charts/pull/17309 the `apiVersion` of the deployment resources was updated to `apps/v1` in tune with the api's deprecated, resulting in compatibility breakage.
-
-This major version signifies this change.
-
-### To 5.0.0
-
-Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
-Use the workaround below to upgrade from versions previous to 5.0.0. The following example assumes that the release name is redmine:
-
-```console
-$ kubectl patch deployment redmine-redmine --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-# If using postgresql as database
-$ kubectl patch deployment redmine-postgresql --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-# If using mariadb as database
-$ kubectl delete statefulset redmine-mariadb --cascade=false
-```
+Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/apps/redmine/administration/upgrade/).
 
 ## Community supported solution
 

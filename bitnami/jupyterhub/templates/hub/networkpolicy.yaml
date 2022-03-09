@@ -33,7 +33,7 @@ spec:
     {{- end }}
     # Pods with label "hub.jupyter.org/network-access-hub" --> Hub
     - ports:
-        - port: {{ .Values.hub.containerPort }}
+        - port: {{ coalesce .Values.hub.containerPorts.http .Values.hub.containerPort }}
       from:
         - podSelector:
             matchLabels:
@@ -69,9 +69,9 @@ spec:
     ## PostgreSQL access
     - ports:
         - protocol: UDP
-          port: {{ .Values.postgresql.service.port }}
+          port: {{ .Values.postgresql.service.ports.postgresql }}
         - protocol: TCP
-          port: {{ .Values.postgresql.service.port }}
+          port: {{ .Values.postgresql.service.ports.postgresql }}
     {{- if .Values.hub.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.hub.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}

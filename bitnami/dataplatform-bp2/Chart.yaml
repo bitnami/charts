@@ -3,26 +3,26 @@ annotations:
 apiVersion: v2
 appVersion: 1.0.1
 dependencies:
-  - condition: kafka.enabled
-    name: kafka
-    repository: https://charts.bitnami.com/bitnami
-    version: 14.x.x
-  - condition: spark.enabled
-    name: spark
-    repository: https://charts.bitnami.com/bitnami
-    version: 5.x.x
-  - condition: elasticsearch.enabled
-    name: elasticsearch
-    repository: https://charts.bitnami.com/bitnami
-    version: 17.x.x
-  - condition: logstash.enabled
-    name: logstash
-    repository: https://charts.bitnami.com/bitnami
-    version: 3.x.x
   - condition: wavefront.enabled
     name: wavefront
     repository: https://charts.bitnami.com/bitnami
     version: 3.x.x
+  - condition: spark.enabled
+    name: spark
+    repository: https://charts.bitnami.com/bitnami
+    version: 5.x.x
+  - condition: logstash.enabled
+    name: logstash
+    repository: https://charts.bitnami.com/bitnami
+    version: 3.x.x
+  - condition: kafka.enabled
+    name: kafka
+    repository: https://charts.bitnami.com/bitnami
+    version: 15.x.x
+  - condition: elasticsearch.enabled
+    name: elasticsearch
+    repository: https://charts.bitnami.com/bitnami
+    version: 17.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -58,4 +58,4 @@ sources:
   - https://www.elastic.co/products/logstash
   - https://zookeeper.apache.org/
   - https://github.com/bitnami/bitnami-docker-zookeeper
-version: 10.0.9
+version: 11.0.0

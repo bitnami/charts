@@ -1,15 +1,32 @@
 # Test values file for generating all of the yaml and check that
 # the rendering is correct
 
-ingress:
-  enabled: true
-
-volumePermissions:
-  enabled: true
+exposureType: ingress
 
 internalTLS:
   enabled: true
 
-redis:
+ingress:
+  core:
+    hostname: core.harbor.domain
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      ingress.kubernetes.io/ssl-redirect: 'true'
+      ingress.kubernetes.io/proxy-body-size: '0'
+      nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+      nginx.ingress.kubernetes.io/proxy-body-size: '0'
+    tls: true
+    selfSigned: true
+  notary:
+    hostname: notary.harbor.domain
+    annotations:
+      ingress.kubernetes.io/ssl-redirect: 'true'
+      ingress.kubernetes.io/proxy-body-size: '0'
+      nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+      nginx.ingress.kubernetes.io/proxy-body-size: '0'
+      kubernetes.io/ingress.class: nginx
+    tls: true
+    selfSigned: true
+
+volumePermissions:
   enabled: true
-  architecture: standalone

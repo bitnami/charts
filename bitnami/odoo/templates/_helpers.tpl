@@ -19,7 +19,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "odoo.postgresql.fullname" -}}
-{{- printf "%s-%s" .Release.Name "postgresql" | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "postgresql" "chartValues" .Values.postgresql "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -54,22 +54,14 @@ Return  the proper Storage Class
 Return the Postgresql hostname
 */}}
 {{- define "odoo.databaseHost" -}}
-{{- if .Values.postgresql.enabled }}
-    {{- printf "%s" (include "odoo.postgresql.fullname" .) -}}
-{{- else -}}
-    {{- printf "%s" .Values.externalDatabase.host -}}
-{{- end -}}
+{{- ternary (include "odoo.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
 Return the Postgresql port
 */}}
 {{- define "odoo.databasePort" -}}
-{{- if .Values.postgresql.enabled }}
-    {{- printf "5432" | quote -}}
-{{- else -}}
-    {{- .Values.externalDatabase.port | quote -}}
-{{- end -}}
+{{- ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
@@ -77,9 +69,17 @@ Return the Postgresql database name
 */}}
 {{- define "odoo.databaseName" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- printf "%s" .Values.postgresql.postgresqlDatabase -}}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- coalesce .Values.global.postgresql.auth.database .Values.postgresql.auth.database -}}
+        {{- else -}}
+            {{- .Values.postgresql.auth.database -}}
+        {{- end -}}
+    {{- else -}}
+        {{- .Values.postgresql.auth.database -}}
+    {{- end -}}
 {{- else -}}
-    {{- printf "%s" .Values.externalDatabase.database -}}
+    {{- .Values.externalDatabase.database -}}
 {{- end -}}
 {{- end -}}
 
@@ -88,9 +88,17 @@ Return the Postgresql user
 */}}
 {{- define "odoo.databaseUser" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- printf "%s" .Values.postgresql.postgresqlUsername -}}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- coalesce .Values.global.postgresql.auth.username .Values.postgresql.auth.username -}}
+        {{- else -}}
+            {{- .Values.postgresql.auth.username -}}
+        {{- end -}}
+    {{- else -}}
+        {{- .Values.postgresql.auth.username -}}
+    {{- end -}}
 {{- else -}}
-    {{- printf "%s" .Values.externalDatabase.user -}}
+    {{- .Values.externalDatabase.user -}}
 {{- end -}}
 {{- end -}}
 
@@ -99,15 +107,21 @@ Return the PostgreSQL Secret Name
 */}}
 {{- define "odoo.databaseSecretName" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- if .Values.postgresql.existingSecret }}
-        {{- printf "%s" .Values.postgresql.existingSecret -}}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- if .Values.global.postgresql.auth.existingSecret }}
+                {{- tpl .Values.global.postgresql.auth.existingSecret $ -}}
+            {{- else -}}
+                {{- default (include "odoo.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+            {{- end -}}
+        {{- else -}}
+            {{- default (include "odoo.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+        {{- end -}}
     {{- else -}}
-        {{- printf "%s" (include "odoo.postgresql.fullname" .) -}}
+        {{- default (include "odoo.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
     {{- end -}}
-{{- else if .Values.externalDatabase.existingSecret }}
-    {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
-    {{- printf "%s-externaldb" (include "common.names.fullname" .) -}}
+    {{- default (printf "%s-externaldb" .Release.Name) (tpl .Values.externalDatabase.existingSecret $) -}}
 {{- end -}}
 {{- end -}}
 

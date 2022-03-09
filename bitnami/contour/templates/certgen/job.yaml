@@ -49,6 +49,7 @@ spec:
             - --overwrite
             - --secrets-format=compact
             - --namespace=$(CONTOUR_NAMESPACE)
+            - --certificate-lifetime={{ .Values.contour.certgen.certificateLifetime }}
           env:
             - name: CONTOUR_NAMESPACE
               valueFrom:
