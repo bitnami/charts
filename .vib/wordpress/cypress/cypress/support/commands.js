@@ -1,17 +1,17 @@
-// Added to slow down Cypress test execution without using hardcoded waits. If removed, there will be false positives.
+// Added to slow down Cypress test execution without using hardcoded waits. If removed, there will be false positives. 
 
-const COMMAND_DELAY = 500;
+const COMMAND_DELAY = 200;
 
 for (const command of ['click']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
     const origVal = originalFn(...args);
 
-      return new Promise((resolve) => {
-          setTimeout(() => {
-              resolve(origVal);
-           }, COMMAND_DELAY);
-        });
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(origVal);
+      }, COMMAND_DELAY);
     });
+  });
 }
 
 Cypress.Commands.add("login", (
