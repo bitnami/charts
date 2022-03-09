@@ -20,7 +20,7 @@ Cypress.Commands.add("login", (
 ) => {
   cy.clearCookies();
   cy.visit('/wp-login.php')
-  cy.get('#user_login').should('not.be.disabled').type(username);
+  cy.get('#user_login').should('not.be.disabled').type(username); //assertion is here to combat flakiness, do not remove
   cy.get('#user_pass').should('not.be.disabled').type(password);
   cy.get('#wp-submit').should('be.visible').click();
 });
