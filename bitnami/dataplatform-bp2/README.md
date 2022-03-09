@@ -7,7 +7,7 @@ This Helm chart can be used for the automated deployment of a data platform blue
 [Overview of Data Platform Blueprint 2](https://github.com/bitnami/dataplatform-emitter)
 
 
-
+                           
 ## TL;DR
 
 ```console
