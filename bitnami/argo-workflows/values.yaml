@@ -161,6 +161,7 @@ server:
   ## @param server.containerSecurityContext.enabled Enabled server containers' Security Context
   ## @param server.containerSecurityContext.runAsUser Set server containers' Security Context runAsUser
   ## @param server.containerSecurityContext.runAsNonRoot Set server containers' Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ##
   containerSecurityContext:
     enabled: true
@@ -564,6 +565,7 @@ controller:
   ## @param controller.containerSecurityContext.enabled Enabled controller containers' Security Context
   ## @param controller.containerSecurityContext.runAsUser Set controller containers' Security Context runAsUser
   ## @param controller.containerSecurityContext.runAsNonRoot Set controller containers' Security Context runAsNonRoot
+  ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ##
   containerSecurityContext:
     enabled: true
@@ -991,6 +993,7 @@ executor:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param executor.containerSecurityContext.enabled Enabled executor pods' Security Context
   ## @param executor.containerSecurityContext.fsGroup Set executor pod's Security Context fsGroup
+  ## @param executor.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Context
   ##
   containerSecurityContext:
     enabled: true
