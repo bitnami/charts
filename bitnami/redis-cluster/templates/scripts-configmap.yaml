@@ -38,7 +38,7 @@ data:
 {{- end }}
         ping
     )
-    if [ $? == 124 ]; then
+    if [[ "$?" -eq "124" ]]; then
       echo "Timed out"
       exit 1
     fi
@@ -63,7 +63,7 @@ data:
   {{- end }}
           CLUSTER INFO | grep cluster_state | tr -d '[:space:]'
       )
-      if [ $? == 124 ]; then
+      if [[ "$?" -eq "124" ]]; then
         echo "Timed out"
         exit 1
       fi
@@ -100,7 +100,7 @@ data:
 {{- end }}
         ping
     )
-    if [ $? == 124 ]; then
+    if [[ "$?" -eq "124" ]]; then
       echo "Timed out"
       exit 1
     fi
