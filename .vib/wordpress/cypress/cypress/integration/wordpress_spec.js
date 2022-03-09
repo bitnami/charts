@@ -7,7 +7,7 @@ import {
 it('contains the sample blogpost and a comment', () => {
   cy.visit('/');
   cy.get('.wp-block-query').should('exist');
-  cy.contains('.wp-block-post-title a','Hello World').click();
+  cy.get('.wp-block-post-title a').click();
   cy.fixture('helloworld').then((hw) => {
     cy.contains('.wp-block-post-title', hw.title);
     cy.contains('.wp-block-post-content',hw.content);
