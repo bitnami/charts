@@ -166,6 +166,7 @@ server:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    readOnlyRootFilesystem: true
 
   ## Create RBAC resources for the Argo workflows server
   ## @param server.rbac.create Create RBAC resources for the Argo workflows server
@@ -568,6 +569,7 @@ controller:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    readOnlyRootFilesystem: true
 
   ## Server container port
   ## @param controller.containerPorts.metrics Port to expose controller metrics
@@ -993,6 +995,7 @@ executor:
   containerSecurityContext:
     enabled: true
     fsGroup: 1001
+    readOnlyRootFilesystem: true
 
 ## @section Traffic Exposure Parameters
 ##
