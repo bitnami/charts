@@ -1,12 +1,16 @@
 /// <reference types="cypress" />
 
+import {
+  random,
+} from './utils'
+
 it('contains the sample blogpost and a comment', () => {
   cy.visit('/');
   cy.get('.wp-block-query').should('exist');
   cy.get('.wp-block-post-title a').click();
   cy.fixture('helloworld').then((hw) => {
-    cy.get('.wp-block-post-title').should('have.text', hw.title);
-    cy.get('.wp-block-post-content').should('contain.text', hw.content);
+    cy.contains('.wp-block-post-title', hw.title);
+    cy.contains('.wp-block-post-content',hw.content);
   })
 
   cy.get('.wp-block-post-title').click();
@@ -32,8 +36,8 @@ it('disallows login to an invalid user', () => {
   cy.clearCookies();
   cy.visit('/wp-login.php')
   cy.fixture('user').then((user) => {
-    cy.get('#user_login').type(user.username).should('have.value', user.username);
-    cy.get('#user_pass').type(user.password).should('have.value', user.password);
+    cy.get('#user_login').should('not.be.disabled').type(user.username).should('have.value', user.username);
+    cy.get('#user_pass').should('not.be.disabled').type(user.password).should('have.value', user.password);
   })
   cy.get('#wp-submit').click();
   cy.fixture('user').then((user) => {
@@ -68,13 +72,16 @@ it('checks if admin can edit a site', () => {
   cy.url().should('include', '/wp-admin/site-editor.php');
 })
 
-it('checks if admin can edit a post', () => {
+it('checks if admin can create a post', () => {
   cy.login();
-  cy.visit('/wp-admin/edit.php');
-  cy.get('#bulk-action-selector-top').should('exist');
-  cy.get('#post-1 .row-title').should('exist').click();
-  cy.url().should('include', '/post.php?post=1&action=edit');
-  cy.get('#editor').should('exist');
+  cy.visit('/wp-admin/post-new.php');
+  cy.get('.components-modal__header > .components-button').click();
+  cy.get('#editor').should('be.visible');
+  cy.contains('button[type="button"]',"Publish").click();
+  cy.get('h1[aria-label="Add title"]').should('be.visible').clear().type(`Test Hello World!${random}`);
+  cy.get('.editor-post-save-draft').should('be.visible').click();
+  cy.get('.editor-post-saved-state').should('be.visible').and('have.text','Saved');
+
 })
 
 it('checks the SMTP configuration', () => {
@@ -96,8 +103,8 @@ it('checks the value of auto update status', () => {
 it('allows the upload of a file',() => {
   cy.login();
   cy.visit("wp-admin/upload.php");
-  cy.get("[role='button']").contains('Add New').click();
-  cy.get("[aria-labelledby]").contains('Select Files').should('be.visible');
+  cy.contains("[role='button']",'Add New').should('be.visible').click();
+  cy.contains("[aria-labelledby]",'Select Files').should('be.visible');
   cy.get('input[type=file]').selectFile('cypress/fixtures/images/test_image.jpeg',
     {force:true});
   cy.get('.attachment').should('be.visible');
@@ -105,8 +112,7 @@ it('allows the upload of a file',() => {
 
 it('allows to log out', () => {
   cy.login();
-  cy.get("#wp-admin-bar-logout .ab-item").click({
-    force: true
-  });
-  cy.get('.message').contains('logged out');
+  cy.visit('wp-login.php?loggedout=true&wp_lang=en_US');
+  cy.contains('.message','logged out');
 })
+
