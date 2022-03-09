@@ -6,7 +6,7 @@ import {
 it('allows user to log in and log out', () => {
   cy.login();
   cy.get('[data-testid="ErrorOutlineIcon"]').should('not.exist');
-  cy.get("#logout").should('exist').click();
+  cy.get('#logout').should('exist').click();
 })
 
 it('allows creating a bucket and file upload', () => {
