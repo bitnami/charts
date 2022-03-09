@@ -30,4 +30,3 @@ sources:
   - https://github.com/bitnami/bitnami-docker-kafka
   - https://kafka.apache.org/
 version: 15.3.7
-
