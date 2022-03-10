@@ -649,7 +649,7 @@ metrics:
     ## scrapeTimeout: 10s
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.laels Labels that can be used so PodMonitor will be discovered by Prometheus
+    ## @param metrics.serviceMonitor.labels Labels that can be used so PodMonitor will be discovered by Prometheus
     ##
     labels: {}
     ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
