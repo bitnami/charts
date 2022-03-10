@@ -174,7 +174,7 @@ query:
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
   ## Thanos Query containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param query.resources.limits The resources limits for the Thanos Query container
@@ -727,7 +727,7 @@ queryFrontend:
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
   ## Thanos Query Frontend containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param queryFrontend.resources.limits The resources limits for the Thanos Query Frontend container
@@ -1130,7 +1130,7 @@ bucketweb:
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
   ## Thanos Bucket Web containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param bucketweb.resources.limits The resources limits for the Thanos Bucket Web container
@@ -1511,7 +1511,7 @@ compactor:
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
   ## Thanos Compactor containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param compactor.resources.limits The resources limits for the Thanos Compactor container
@@ -1930,7 +1930,7 @@ storegateway:
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
   ## Thanos Store Gateway containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param storegateway.resources.limits The resources limits for the Thanos Store Gateway container
@@ -2503,7 +2503,7 @@ ruler:
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
   ## Thanos Ruler containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param ruler.resources.limits The resources limits for the Thanos Ruler container
@@ -2961,7 +2961,7 @@ receive:
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
   ## Thanos Receive containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param receive.resources.limits The resources limits for the Thanos Receive container
@@ -3377,7 +3377,7 @@ receiveDistributor:
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
   ## Thanos Receive Distributor containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param receiveDistributor.resources.limits The resources limits for the Thanos Receive container
