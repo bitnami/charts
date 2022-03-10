@@ -58,4 +58,4 @@ sources:
   - https://www.elastic.co/products/logstash
   - https://zookeeper.apache.org/
   - https://github.com/bitnami/bitnami-docker-zookeeper
-version: 11.0.0
+version: 11.0.1
