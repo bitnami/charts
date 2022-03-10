@@ -51,7 +51,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/apache
-  tag: 2.4.52-debian-10-r62
+  tag: 2.4.52-debian-10-r74
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -79,7 +79,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.35.1-debian-10-r29
+  tag: 2.35.1-debian-10-r40
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -579,7 +579,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-10-r68
+    tag: 0.11.0-debian-10-r79
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -649,9 +649,9 @@ metrics:
     ## scrapeTimeout: 10s
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.additionalLabels Additional labels that can be used so PodMonitor will be discovered by Prometheus
+    ## @param metrics.serviceMonitor.laels Labels that can be used so PodMonitor will be discovered by Prometheus
     ##
-    additionalLabels: {}
+    labels: {}
     ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
     ##
     relabelings: []
@@ -667,9 +667,9 @@ metrics:
     ## @param metrics.prometheusRule.namespace Namespace for the PrometheusRule Resource (defaults to the Release Namespace)
     ##
     namespace: ""
-    ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so PrometheusRule will be discovered by Prometheus
+    ## @param metrics.prometheusRule.labels Labels that can be used so PrometheusRule will be discovered by Prometheus
     ##
-    additionalLabels: {}
+    labels: {}
     ## @param metrics.prometheusRule.rules Prometheus Rule definitions
     ##   - alert: LowInstance
     ##     expr: up{service="{{ template "common.names.fullname" . }}"} < 1
