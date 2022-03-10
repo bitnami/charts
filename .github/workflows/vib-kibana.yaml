@@ -4,7 +4,11 @@ on: # rebuild any PRs and main branch changes
     branches:
       - master
     paths:
+<<<<<<< HEAD
       - 'bitnami/kibana/*'
+=======
+      - 'bitnami/grafana/*'
+>>>>>>> 46e97b3b5 (Add Kibana workflow)
 env:
   CSP_API_URL: https://console.cloud.vmware.com
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
