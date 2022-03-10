@@ -15,7 +15,7 @@ metadata:
     {{- if .Values.metrics.serviceMonitor.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.labels "context" $) | nindent 4 }}
     {{- end }}
-  app.kubernetes.io/component: metrics
+    app.kubernetes.io/component: metrics
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
