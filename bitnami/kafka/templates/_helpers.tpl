@@ -252,12 +252,6 @@ Return the Kafka configuration configmap
 {{- end -}}
 {{- end -}}
 
-{{/*
-Return the Kafka client configuration configmap
-*/}}
-{{- define "kafka.client.configmapName" -}}
-    {{- printf "%s-client-configuration" (include "common.names.fullname" .) -}}
-{{- end -}}
 
 {{/*
 Returns the secret name for the Kafka Provisioning client
