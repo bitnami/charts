@@ -51,7 +51,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/redmine
-  tag: 4.2.4-debian-10-r6
+  tag: 4.2.4-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -963,7 +963,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r360
+    tag: 10-debian-10-r361
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
