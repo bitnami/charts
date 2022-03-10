@@ -105,6 +105,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `smtpUser`           | SMTP username                                                        | `""`               |
 | `smtpPassword`       | SMTP user password                                                   | `""`               |
 | `smtpService`        | SMTP service                                                         | `""`               |
+| `smtpProtocol`       | SMTP protocol (ssl or tls)                                           | `""`               |
 | `smtpExistingSecret` | The name of an existing secret with SMTP credentials                 | `""`               |
 | `allowEmptyPassword` | Allow the container to be started with blank passwords               | `true`             |
 | `ghostSkipInstall`   | Skip performing the initial bootstrapping for Ghost                  | `false`            |
