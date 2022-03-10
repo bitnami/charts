@@ -26,4 +26,4 @@ name: apache
 sources:
   - https://github.com/bitnami/bitnami-docker-apache
   - https://httpd.apache.org
-version: 9.0.8
+version: 9.0.9
