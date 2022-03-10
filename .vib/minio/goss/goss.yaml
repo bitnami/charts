@@ -26,7 +26,7 @@ command:
     exit-status: 0
     stderr: [ ]
     timeout: 20000  
-  mc-which-minio:
+  which-minio:
     exec: which minio
     exit-status: 0
     stdout:
