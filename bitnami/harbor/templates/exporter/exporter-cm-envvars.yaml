@@ -19,7 +19,7 @@ data:
   HARBOR_METRIC_NAMESPACE: harbor
   HARBOR_METRIC_SUBSYSTEM: exporter
   HARBOR_REDIS_URL: {{ include "harbor.redisForJobservice" . | quote }}
-  HARBOR_REDIS_NAMESPACE: {{ .Values.jobservice.redisNamespace | quote}}
+  HARBOR_REDIS_NAMESPACE: {{ .Values.jobservice.redisNamespace | quote }}
   HARBOR_SERVICE_SCHEME: {{ ternary "https" "http" .Values.internalTLS.enabled | quote }}
   HARBOR_SERVICE_HOST: {{ include "harbor.core" . | quote }}
   HARBOR_SERVICE_PORT: {{ ternary .Values.core.service.ports.https .Values.core.service.ports.http .Values.internalTLS.enabled | quote }}
