@@ -7,7 +7,7 @@ Apache HTTP Server is an open-source HTTP server. The goal of this project is to
 [Overview of Apache](https://httpd.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -234,12 +234,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.namespace`         | Namespace for the PodMonitor Resource (defaults to the Release Namespace)                                                                 | `""`                      |
 | `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                                              | `""`                      |
 | `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                                   | `""`                      |
-| `metrics.serviceMonitor.additionalLabels`  | Additional labels that can be used so PodMonitor will be discovered by Prometheus                                                         | `{}`                      |
+| `metrics.serviceMonitor.labels`            | Labels that can be used so PodMonitor will be discovered by Prometheus                                                                    | `{}`                      |
 | `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                                        | `[]`                      |
 | `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                                 | `[]`                      |
 | `metrics.prometheusRule.enabled`           | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                   |
 | `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                      |
-| `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`                      |
+| `metrics.prometheusRule.labels`            | Labels that can be used so PrometheusRule will be discovered by Prometheus                                                                | `{}`                      |
 | `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                               | `[]`                      |
 
 

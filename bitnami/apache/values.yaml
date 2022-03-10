@@ -649,9 +649,9 @@ metrics:
     ## scrapeTimeout: 10s
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.additionalLabels Additional labels that can be used so PodMonitor will be discovered by Prometheus
+    ## @param metrics.serviceMonitor.laels Labels that can be used so PodMonitor will be discovered by Prometheus
     ##
-    additionalLabels: {}
+    labels: {}
     ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
     ##
     relabelings: []
@@ -667,9 +667,9 @@ metrics:
     ## @param metrics.prometheusRule.namespace Namespace for the PrometheusRule Resource (defaults to the Release Namespace)
     ##
     namespace: ""
-    ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so PrometheusRule will be discovered by Prometheus
+    ## @param metrics.prometheusRule.labels Labels that can be used so PrometheusRule will be discovered by Prometheus
     ##
-    additionalLabels: {}
+    labels: {}
     ## @param metrics.prometheusRule.rules Prometheus Rule definitions
     ##   - alert: LowInstance
     ##     expr: up{service="{{ template "common.names.fullname" . }}"} < 1
