@@ -26,7 +26,7 @@ data:
       backend: "redis"
       redis_pool:
         redis_url: {{ include "harbor.redisForJobservice" . | quote }}
-        namespace: {{ .Values.jobservice.redisNamespace | quote}}
+        namespace: {{ .Values.jobservice.redisNamespace | quote }}
     job_loggers:
       {{- if eq .Values.jobservice.jobLogger "file" }}
       - name: "FILE"
