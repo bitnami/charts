@@ -252,6 +252,18 @@ Return the Kafka configuration configmap
 {{- end -}}
 {{- end -}}
 
+
+{{/*
+Returns the secret name for the Kafka Provisioning client
+*/}}
+{{- define "kafka.client.passwordsSecretName" -}}
+{{- if .Values.provisioning.auth.tls.passwordsSecret -}}
+    {{- printf "%s" (tpl .Values.provisioning.auth.tls.passwordsSecret $) -}}
+{{- else -}}
+    {{- printf "%s-client-secret" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
 {{/*
 Return true if a configmap object should be created
 */}}
@@ -343,6 +355,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "kafka.validateValues.saslMechanisms" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.tlsSecrets" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.tlsSecrets.length" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.tlsPasswords" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -445,6 +458,17 @@ kafka: auth.tls.existingSecrets
 {{- if ne $replicaCount $existingSecretsLength }}
 kafka: .Values.auth.tls.existingSecrets
     Number of replicas and existingSecrets array length must be the same. Currently: replicaCount = {{ $replicaCount }} and existingSecrets = {{ $existingSecretsLength }}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Kafka provisioning - keyPasswordSecretKey, keystorePasswordSecretKey or truststorePasswordSecretKey must not be used without passwordsSecret */}}
+{{- define "kafka.validateValues.tlsPasswords" -}}
+{{- if and (include "kafka.client.tlsEncryption" .) (not .Values.auth.tls.passwordsSecret) }}
+{{- if or .Values.auth.tls.keyPasswordSecretKey .Values.auth.tls.keystorePasswordSecretKey .Values.auth.tls.truststorePasswordSecretKey }}
+kafka: auth.tls.keyPasswordSecretKey,auth.tls.keystorePasswordSecretKey,auth.tls.truststorePasswordSecretKey
+    auth.tls.keyPasswordSecretKey,auth.tls.keystorePasswordSecretKey,auth.tls.truststorePasswordSecretKey
+    must not be used without passwordsSecret setted.
 {{- end -}}
 {{- end -}}
 {{- end -}}
