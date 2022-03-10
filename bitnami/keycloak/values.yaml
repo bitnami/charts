@@ -113,7 +113,6 @@ auth:
   ##   keyMapping:
   ##     admin-password: myPasswordKey
   ##     management-password: myManagementPasswordKey
-  ##     database-password: myDatabasePasswordKey
   ##     tls-keystore-password: myTlsKeystorePasswordKey
   ##     tls-truestore-password: myTlsTruestorePasswordKey
   ##
