@@ -168,9 +168,6 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: kafka-client-config
-          configMap:
-            name: {{ include "kafka.client.configmapName" . }}
         {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
         - name: log4j-config
           configMap:
