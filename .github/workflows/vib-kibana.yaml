@@ -4,7 +4,7 @@ on: # rebuild any PRs and main branch changes
     branches:
       - master
     paths:
-      - 'bitnami/grafana/*'
+      - 'bitnami/kibana/*'
 env:
   CSP_API_URL: https://console.cloud.vmware.com
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
@@ -31,7 +31,7 @@ jobs:
           repository: ${{github.event.pull_request.head.repo.full_name}}
       - uses: vmware-labs/vmware-image-builder-action@main
         with:
-          pipeline: grafana/vib-platform-verify.json
+          pipeline: kibana/vib-platform-verify.json
         env:
 <<<<<<< HEAD
           TARGET_PLATFORM: ${{ matrix.target-platform-id }
