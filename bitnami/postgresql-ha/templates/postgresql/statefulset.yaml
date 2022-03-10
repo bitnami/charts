@@ -328,7 +328,7 @@ spec:
               value: {{ (include "postgresql-ha.repmgrDatabase" .) | quote }}
             {{- end }}
             - name: REPMGR_FENCE_OLD_PRIMARY
-              value: {{ ternary "true" "false" .Values.postgresql.repmgrFenceOldPrimary | quote }}
+              value: {{ ternary "yes" "no" .Values.postgresql.repmgrFenceOldPrimary | quote }}
             {{- if .Values.postgresql.repmgrChildNodesCheckInterval }}
             - name: REPMGR_CHILD_NODES_CHECK_INTERVAL
               value: {{ .Values.postgresql.repmgrChildNodesCheckInterval | quote }}
