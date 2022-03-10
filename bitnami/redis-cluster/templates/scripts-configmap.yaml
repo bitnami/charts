@@ -12,17 +12,13 @@ metadata:
   {{- end }}
 data:
   ping_readiness_local.sh: |-
-    #!/bin/sh
-    set -e
+    #!/bin/bash
+
+    [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
+    [[ -n "$REDIS_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_PASSWORD"
 
     REDIS_STATUS_FILE=/tmp/.redis_cluster_check
 
-    {{- if .Values.usePasswordFile }}
-    password_aux=`cat ${REDIS_PASSWORD_FILE}`
-    export REDISCLI_AUTH=$password_aux
-    {{- else }}
-    if [ ! -z "$REDIS_PASSWORD" ]; then export REDISCLI_AUTH=$REDIS_PASSWORD; fi;
-    {{- end }}
     response=$(
       timeout -s 3 $1 \
       redis-cli \
@@ -30,15 +26,17 @@ data:
 {{- if .Values.tls.enabled }}
         -p $REDIS_TLS_PORT \
         --tls \
-        --cert {{ template "redis-cluster.tlsCert" . }} \
-        --key {{ template "redis-cluster.tlsCertKey" . }} \
         --cacert {{ template "redis-cluster.tlsCACert" . }} \
+        {{- if .Values.tls.authClients }}
+          --cert {{ template "redis-cluster.tlsCert" . }} \
+          --key {{ template "redis-cluster.tlsCertKey" . }} \
+        {{- end }}
 {{- else }}
         -p $REDIS_PORT \
 {{- end }}
         ping
     )
-    if [ "$?" -eq "124" ]; then
+    if [[ "$?" -eq "124" ]]; then
       echo "Timed out"
       exit 1
     fi
@@ -53,17 +51,19 @@ data:
         redis-cli \
           -h localhost \
   {{- if .Values.tls.enabled }}
-          -p $REDIS_TLS_PORT \
-          --tls \
+        -p $REDIS_TLS_PORT \
+        --tls \
+        --cacert {{ template "redis-cluster.tlsCACert" . }} \
+        {{- if .Values.tls.authClients }}
           --cert {{ template "redis-cluster.tlsCert" . }} \
           --key {{ template "redis-cluster.tlsCertKey" . }} \
-          --cacert {{ template "redis-cluster.tlsCACert" . }} \
+        {{- end }}
   {{- else }}
-          -p $REDIS_PORT \
+        -p $REDIS_PORT \
   {{- end }}
           CLUSTER INFO | grep cluster_state | tr -d '[:space:]'
       )
-      if [ "$?" -eq "124" ]; then
+      if [[ "$?" -eq "124" ]]; then
         echo "Timed out"
         exit 1
       fi
@@ -76,15 +76,10 @@ data:
     fi
 {{- end }}
   ping_liveness_local.sh: |-
-    #!/bin/sh
-    set -e
+    #!/bin/bash
 
-    {{- if .Values.usePasswordFile }}
-    password_aux=`cat ${REDIS_PASSWORD_FILE}`
-    export REDISCLI_AUTH=$password_aux
-    {{- else }}
-    if [ ! -z "$REDIS_PASSWORD" ]; then export REDISCLI_AUTH=$REDIS_PASSWORD; fi;
-    {{- end }}
+    [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
+    [[ -n "$REDIS_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_PASSWORD"
     response=$(
       timeout -s 3 $1 \
       redis-cli \
@@ -92,9 +87,11 @@ data:
 {{- if .Values.tls.enabled }}
         -p $REDIS_TLS_PORT \
         --tls \
-        --cert {{ template "redis-cluster.tlsCert" . }} \
-        --key {{ template "redis-cluster.tlsCertKey" . }} \
         --cacert {{ template "redis-cluster.tlsCACert" . }} \
+        {{- if .Values.tls.authClients }}
+          --cert {{ template "redis-cluster.tlsCert" . }} \
+          --key {{ template "redis-cluster.tlsCertKey" . }} \
+        {{- end }}
 {{- else }}
         -p $REDIS_PORT \
 {{- end }}
