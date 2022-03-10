@@ -1,21 +1,21 @@
 dependencies:
+- name: zookeeper
+  repository: https://charts.bitnami.com/bitnami
+  version: 8.1.1
+- name: wavefront
+  repository: https://charts.bitnami.com/bitnami
+  version: 3.2.0
 - name: spark
   repository: https://charts.bitnami.com/bitnami
   version: 5.9.3
 - name: solr
   repository: https://charts.bitnami.com/bitnami
-  version: 2.4.2
-- name: zookeeper
-  repository: https://charts.bitnami.com/bitnami
-  version: 7.6.2
-- name: wavefront
-  repository: https://charts.bitnami.com/bitnami
-  version: 3.1.29
+  version: 3.0.7
 - name: kafka
   repository: https://charts.bitnami.com/bitnami
-  version: 14.9.3
+  version: 15.3.6
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 1.11.3
-digest: sha256:11e9de81d072c02ef7f9a4af2c239b4c66af6d3f4993b2c5c52b35af17fde4e4
-generated: "2022-03-04T15:33:07.142092084Z"
+digest: sha256:f08399722896aaf84ac3f5f5b183fbd5827a36d8e570e1d2ea5ba5a0db799594
+generated: "2022-03-07T21:27:13.966058883Z"

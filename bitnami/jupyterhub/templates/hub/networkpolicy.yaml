@@ -33,7 +33,7 @@ spec:
     {{- end }}
     # Pods with label "hub.jupyter.org/network-access-hub" --> Hub
     - ports:
-        - port: {{ .Values.hub.containerPort }}
+        - port: {{ coalesce .Values.hub.containerPorts.http .Values.hub.containerPort }}
       from:
         - podSelector:
             matchLabels:

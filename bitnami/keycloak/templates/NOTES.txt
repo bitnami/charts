@@ -6,7 +6,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 Keycloak can be accessed through the following DNS name from within your cluster:
 
-    {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.service.port }})
+    {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ coalesce .Values.service.ports.http .Values.service.port }})
 
 To access Keycloak from outside the cluster execute the following commands:
 
@@ -63,8 +63,9 @@ You can access the Prometheus metrics following the steps below:
 
 1. Get the Keycloak Prometheus metrics URL by running:
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-metrics" (include "keycloak.fullname" .) }} {{ .Values.metrics.service.port }}:{{ .Values.metrics.service.port }} &
-    echo "Keycloak Prometheus metrics URL: http://127.0.0.1:{{ .Values.metrics.service.port }}/metrics"
+    {{- $metricsPort := coalesce .Values.metrics.service.ports.http .Values.metrics.service.port | toString }}
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-metrics" (include "keycloak.fullname" .) }} {{ $metricsPort }}:{{ $metricsPort }} &
+    echo "Keycloak Prometheus metrics URL: http://127.0.0.1:{{ $metricsPort }}/metrics"
 
 2. Open a browser and access Keycloak Prometheus metrics using the obtained URL.
 
