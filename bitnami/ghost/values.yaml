@@ -110,12 +110,14 @@ ghostEnableHttps: false
 ## @param smtpUser SMTP username
 ## @param smtpPassword SMTP user password
 ## @param smtpService SMTP service
+## @param smtpProtocol SMTP protocol (ssl or tls)
 ##
 smtpHost: ""
 smtpPort: ""
 smtpUser: ""
 smtpPassword: ""
 smtpService: ""
+smtpProtocol: ""
 ## @param smtpExistingSecret The name of an existing secret with SMTP credentials
 ## NOTE: Must contain key `smtp-password`
 ## NOTE: When it's set, the `smtpPassword` parameter is ignored

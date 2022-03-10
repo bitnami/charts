@@ -182,6 +182,10 @@ spec:
             - name: GHOST_SMTP_SERVICE
               value: {{ .Values.smtpService | quote }}
             {{- end }}
+            {{- if .Values.smtpProtocol }}
+            - name: GHOST_SMTP_PROTOCOL
+              value: {{ .Values.smtpProtocol | quote }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
