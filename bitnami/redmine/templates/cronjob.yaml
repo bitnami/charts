@@ -62,11 +62,22 @@ spec:
               {{- if .Values.mailReceiver.containerSecurityContext.enabled }}
               securityContext: {{- omit .Values.mailReceiver.containerSecurityContext "enabled" | toYaml | nindent 16 }}
               {{- end }}
-              {{- if .Values.mailReceiver.command }}
+              {{- if .Values.diagnosticMode.enabled }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
+              {{- else if .Values.mailReceiver.command }}
               command: {{- include "common.tplvalues.render" (dict "value" .Values.mailReceiver.command "context" $) | nindent 16 }}
+              {{- else }}
+              command:
+                - bash
               {{- end }}
-              {{- if .Values.mailReceiver.args }}
+              {{- if .Values.diagnosticMode.enabled }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
+              {{- else if .Values.mailReceiver.args }}
               args: {{- include "common.tplvalues.render" (dict "value" .Values.mailReceiver.args "context" $) | nindent 16 }}
+              {{- else }}
+              args:
+                - -c
+                - /cj/receive.sh
               {{- end }}
               env:
                 - name: REDMINE_DATABASE_TYPE

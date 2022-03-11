@@ -422,11 +422,11 @@ ingress:
   ## @param ingress.enabled Enable ingress record generation for Redmine
   ##
   enabled: false
-  ## @param ingress.className IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
   ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
-  className: ""
+  ingressClassName: ""
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
@@ -759,10 +759,10 @@ mailReceiver:
   allowOverride: ""
   ## @param mailReceiver.command Override default container command (useful when using custom images)
   ##
-  command: ["bash"]
+  command: []
   ## @param mailReceiver.args Override default container args (useful when using custom images)
   ##
-  args: ["-c", "/cj/receive.sh"]
+  args: []
   ## @param mailReceiver.extraEnvVars Extra environment variables to be set on mailReceiver container
   ## e.g:
   ## extraEnvVars:
