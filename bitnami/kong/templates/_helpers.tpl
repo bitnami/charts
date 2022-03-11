@@ -239,12 +239,13 @@ Validate values for kong.
 Function to validate the RBAC
 */}}
 {{- define "kong.validateValues.rbac" -}}
-{{- if and .Values.ingressController.enabled (not .Values.ingressController.rbac.existingServiceAccount) (not .Values.ingressController.rbac.create) -}}
+{{- if and .Values.ingressController.enabled (not .Values.ingressController.serviceAccount.create) (not .Values.ingressController.serviceAccount.name) (not .Values.ingressController.rbac.create) -}}
 INVALID RBAC: You enabled the Kong Ingress Controller sidecar without creating RBAC objects and not
-specifying an existing Service Account. Specify an existing Service Account in ingressController.rbac.existingServiceAccount
+specifying an existing Service Account. Specify an existing Service Account in ingressController.serviceAccount.name
 or allow the chart to create the proper RBAC objects with ingressController.rbac.create
 {{- end -}}
 {{- end -}}
+
 {{/*
 Function to validate the external database
 */}}

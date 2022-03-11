@@ -17,9 +17,11 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: migration
-      annotations:
+        {{- if .Values.migration.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.migration.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if .Values.migration.podAnnotations }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.migration.podAnnotations "context" $) | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.migration.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
       {{- include "kong.imagePullSecrets" . | nindent 6 }}

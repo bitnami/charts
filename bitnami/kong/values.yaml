@@ -242,12 +242,12 @@ autoscaling:
         targetAverageUtilization: 80
 ## Kong Pod Disruption Budget
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
-## @param pdb.enabled Deploy a PodDisruptionBudget object for Kong deployment
+## @param pdb.create Deploy a PodDisruptionBudget object for Kong deployment
 ## @param pdb.minAvailable Minimum available Kong replicas (expressed in percentage)
 ## @param pdb.maxUnavailable Maximum unavailable Kong replicas (expressed in percentage)
 ##
 pdb:
-  enabled: false
+  create: false
   minAvailable: ""
   maxUnavailable: "50%"
 
@@ -526,9 +526,6 @@ ingressController:
   ## @param ingressController.enabled Enable/disable the Kong Ingress Controller
   ##
   enabled: true
-  ## @param ingressController.customResourceDeletePolicy Add custom CRD resource delete policy (for Helm 2 support)
-  ##
-  customResourceDeletePolicy: {}
   ## @param ingressController.image.registry Kong Ingress Controller image registry
   ## @param ingressController.image.repository Kong Ingress Controller image name
   ## @param ingressController.image.tag Kong Ingress Controller image tag
@@ -722,8 +719,16 @@ migration:
   ## @param migration.annotations [object] Add annotations to the job
   ##
   annotations:
-    helm.sh/hook: post-install, post-upgrade
+    helm.sh/hook: post-install, pre-upgrade
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+  ## @param migration.podLabels Additional pod labels
+  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param migration.podAnnotations Additional pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
 
 ## @section PostgreSQL Parameters
 ##
@@ -788,6 +793,7 @@ postgresql:
 ## @param cassandra.dbUser.password Password for `cassandra.dbUser.user`. Randomly generated if empty
 ## @param cassandra.dbUser.existingSecret Name of existing secret to use for Cassandra credentials
 ## @param cassandra.usePasswordFile Mount credentials as a files instead of using an environment variable
+## @param cassandra.replicaCount Number of Cassandra replicas
 ##
 cassandra:
   enabled: false
@@ -796,6 +802,7 @@ cassandra:
     password: ""
     existingSecret: ""
   usePasswordFile: false
+  replicaCount: 1
   ## External Cassandra configuration
   ## All of these values are only used when cassandra.enabled is set to false
   ## @param cassandra.external.hosts List of Cassandra hosts
@@ -827,16 +834,26 @@ metrics:
   containerPorts:
     http: 9119
   ## Kong metrics service configuration
-  ## @param metrics.service.annotations [object] Annotations for Prometheus metrics service
-  ## @param metrics.service.type Type of the Prometheus metrics service
-  ## @param metrics.service.ports.http Prometheus metrics service HTTP port
   ##
   service:
-    type: ClusterIP
+    ## @param metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param metrics.service.clusterIP Cluster internal IP of the service
+    ## This is the internal IP address of the service and is usually assigned randomly.
+    ## ref: https://kubernetes.io/docs/reference/kubernetes-api/service-resources/service-v1/#ServiceSpec
+    ##
+    clusterIP: ""
+    ## @param metrics.service.annotations [object] Annotations for Prometheus metrics service
+    ##
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ coalesce .Values.metrics.service.ports.http .Values.metrics.service.port }}"
       prometheus.io/path: "/metrics"
+    ## @param metrics.service.ports.http Prometheus metrics service HTTP port
+    ##
     ports:
       http: 9119
   ## Kong ServiceMonitor configuration

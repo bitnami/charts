@@ -126,7 +126,7 @@ To uninstall/delete the `my-release` deployment:
 | `autoscaling.minReplicas`               | Minimum number of replicas to scale back                                                                                           | `2`                   |
 | `autoscaling.maxReplicas`               | Maximum number of replicas to scale out                                                                                            | `5`                   |
 | `autoscaling.metrics`                   | Metrics to use when deciding to scale the deployment (evaluated as a template)                                                     | `[]`                  |
-| `pdb.enabled`                           | Deploy a PodDisruptionBudget object for Kong deployment                                                                            | `false`               |
+| `pdb.create`                            | Deploy a PodDisruptionBudget object for Kong deployment                                                                            | `false`               |
 | `pdb.minAvailable`                      | Minimum available Kong replicas (expressed in percentage)                                                                          | `""`                  |
 | `pdb.maxUnavailable`                    | Maximum unavailable Kong replicas (expressed in percentage)                                                                        | `50%`                 |
 
@@ -215,7 +215,6 @@ To uninstall/delete the `my-release` deployment:
 | Name                                                            | Description                                                                                                                                   | Value                             |
 | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
 | `ingressController.enabled`                                     | Enable/disable the Kong Ingress Controller                                                                                                    | `true`                            |
-| `ingressController.customResourceDeletePolicy`                  | Add custom CRD resource delete policy (for Helm 2 support)                                                                                    | `{}`                              |
 | `ingressController.image.registry`                              | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
 | `ingressController.image.repository`                            | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
 | `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.2.1-debian-10-r9`              |
@@ -276,6 +275,8 @@ To uninstall/delete the `my-release` deployment:
 | `migration.resources.requests` | The requested resources for the container                                                                                  | `{}`  |
 | `migration.hostAliases`        | Add deployment host aliases                                                                                                | `[]`  |
 | `migration.annotations`        | Add annotations to the job                                                                                                 | `{}`  |
+| `migration.podLabels`          | Additional pod labels                                                                                                      | `{}`  |
+| `migration.podAnnotations`     | Additional pod annotations                                                                                                 | `{}`  |
 
 
 ### PostgreSQL Parameters
@@ -311,6 +312,7 @@ To uninstall/delete the `my-release` deployment:
 | `cassandra.dbUser.password`                    | Password for `cassandra.dbUser.user`. Randomly generated if empty        | `""`    |
 | `cassandra.dbUser.existingSecret`              | Name of existing secret to use for Cassandra credentials                 | `""`    |
 | `cassandra.usePasswordFile`                    | Mount credentials as a files instead of using an environment variable    | `false` |
+| `cassandra.replicaCount`                       | Number of Cassandra replicas                                             | `1`     |
 | `cassandra.external.hosts`                     | List of Cassandra hosts                                                  | `[]`    |
 | `cassandra.external.port`                      | Cassandra port number                                                    | `9042`  |
 | `cassandra.external.user`                      | Username of the external cassandra installation                          | `""`    |
@@ -321,25 +323,26 @@ To uninstall/delete the `my-release` deployment:
 
 ### Metrics Parameters
 
-| Name                                       | Description                                                                           | Value       |
-| ------------------------------------------ | ------------------------------------------------------------------------------------- | ----------- |
-| `metrics.enabled`                          | Enable the export of Prometheus metrics                                               | `false`     |
-| `metrics.containerPorts.http`              | Prometheus metrics HTTP container port                                                | `9119`      |
-| `metrics.service.annotations`              | Annotations for Prometheus metrics service                                            | `{}`        |
-| `metrics.service.type`                     | Type of the Prometheus metrics service                                                | `ClusterIP` |
-| `metrics.service.ports.http`               | Prometheus metrics service HTTP port                                                  | `9119`      |
-| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator          | `false`     |
-| `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                              | `""`        |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                           | `30s`       |
-| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                   | `""`        |
-| `metrics.serviceMonitor.labels`            | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus | `{}`        |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                   | `{}`        |
-| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                    | `[]`        |
-| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                             | `[]`        |
-| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels              | `false`     |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.     | `""`        |
-| `metrics.serviceMonitor.serviceAccount`    | Service account used by Prometheus Operator                                           | `""`        |
-| `metrics.serviceMonitor.rbac.create`       | Create the necessary RBAC resources so Prometheus Operator can reach Kong's namespace | `true`      |
+| Name                                       | Description                                                                           | Value   |
+| ------------------------------------------ | ------------------------------------------------------------------------------------- | ------- |
+| `metrics.enabled`                          | Enable the export of Prometheus metrics                                               | `false` |
+| `metrics.containerPorts.http`              | Prometheus metrics HTTP container port                                                | `9119`  |
+| `metrics.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                      | `None`  |
+| `metrics.service.clusterIP`                | Cluster internal IP of the service                                                    | `""`    |
+| `metrics.service.annotations`              | Annotations for Prometheus metrics service                                            | `{}`    |
+| `metrics.service.ports.http`               | Prometheus metrics service HTTP port                                                  | `9119`  |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator          | `false` |
+| `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                              | `""`    |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                           | `30s`   |
+| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                   | `""`    |
+| `metrics.serviceMonitor.labels`            | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus | `{}`    |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                   | `{}`    |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                    | `[]`    |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                             | `[]`    |
+| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels              | `false` |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.     | `""`    |
+| `metrics.serviceMonitor.serviceAccount`    | Service account used by Prometheus Operator                                           | `""`    |
+| `metrics.serviceMonitor.rbac.create`       | Create the necessary RBAC resources so Prometheus Operator can reach Kong's namespace | `true`  |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

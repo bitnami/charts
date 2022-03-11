@@ -19,6 +19,10 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
+  sessionAffinity: {{ .Values.metrics.service.sessionAffinity }}
+  {{- if .Values.metrics.service.clusterIP }}
+  clusterIP: {{ .Values.metrics.service.clusterIP }}
+  {{- end }}
   ports:
     - port: {{ coalesce .Values.metrics.service.ports.http .Values.metrics.service.port }}
       targetPort: http-metrics
