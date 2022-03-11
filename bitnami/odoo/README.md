@@ -51,6 +51,9 @@ $ helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
+> If persistence.resourcePolicy is set to keep, you should manually delete the PVCs.
+
+
 
 ## Parameters
 
@@ -62,22 +65,24 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
-| Name                | Description                                        | Value                        |
-| ------------------- | -------------------------------------------------- | ---------------------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `""`                         |
-| `nameOverride`      | String to partially override common.names.fullname | `""`                         |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                         |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`                         |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                         |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                         |
-| `image.registry`    | Odoo image registry                                | `docker.io`                  |
-| `image.repository`  | Odoo image repository                              | `bitnami/odoo`               |
-| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `15.0.20220110-debian-10-r1` |
-| `image.pullPolicy`  | Odoo image pull policy                             | `IfNotPresent`               |
-| `image.pullSecrets` | Odoo image pull secrets                            | `[]`                         |
-| `image.debug`       | Enable image debug mode                            | `false`                      |
+| Name                | Description                                        | Value                         |
+| ------------------- | -------------------------------------------------- | ----------------------------- |
+| `kubeVersion`       | Override Kubernetes version                        | `""`                          |
+| `nameOverride`      | String to partially override common.names.fullname | `""`                          |
+| `fullnameOverride`  | String to fully override common.names.fullname     | `""`                          |
+| `commonLabels`      | Labels to add to all deployed objects              | `{}`                          |
+| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`                          |
+| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`                          |
+| `image.registry`    | Odoo image registry                                | `docker.io`                   |
+| `image.repository`  | Odoo image repository                              | `bitnami/odoo`                |
+| `image.tag`         | Odoo image tag (immutable tags are recommended)    | `15.0.20220210-debian-10-r19` |
+| `image.pullPolicy`  | Odoo image pull policy                             | `IfNotPresent`                |
+| `image.pullSecrets` | Odoo image pull secrets                            | `[]`                          |
+| `image.debug`       | Enable image debug mode                            | `false`                       |
+
 
 ### Odoo Configuration parameters
 
@@ -100,6 +105,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`          | Array with extra environment variables to add to the Odoo container  | `[]`               |
 | `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                 | `""`               |
 | `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                    | `""`               |
+
 
 ### Odoo deployment parameters
 
@@ -158,6 +164,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                      | `{}`            |
 | `customStartupProbe`                 | Custom startupProbe that overrides the default one                                        | `{}`            |
 
+
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -184,21 +191,24 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 
+
 ### Persistence Parameters
 
-| Name                                          | Description                                                                                     | Value           |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------- |
-| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`          |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`            |
-| `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`            |
-| `persistence.accessMode`                      | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)               | `ReadWriteOnce` |
-| `persistence.size`                            | Persistent Volume size                                                                          | `10Gi`          |
-| `persistence.dataSource`                      | Custom PVC data source                                                                          | `{}`            |
-| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `""`            |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`         |
-| `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`            |
-| `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`            |
-| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`             |
+| Name                                          | Description                                                                                                                                                                       | Value           |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                                                                                                                 | `true`          |
+| `persistence.resourcePolicy`                  | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted                                             | `""`           |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                                                                                                   | `""`            |
+| `persistence.accessModes`                     | Persistent Volume access modes                                                                                                                                                    | `[]`            |
+| `persistence.accessMode`                      | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                                                                                                 | `ReadWriteOnce` |
+| `persistence.size`                            | Persistent Volume size                                                                                                                                                            | `10Gi`          |
+| `persistence.dataSource`                      | Custom PVC data source                                                                                                                                                            | `{}`            |
+| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                                                                                                                | `""`            |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                                                                   | `false`         |
+| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                                                                                       | `{}`            |
+| `volumePermissions.resources.requests`        | The requested resources for the init container                                                                                                                                    | `{}`            |
+| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                                                                                                   | `0`             |
+
 
 ### Other Parameters
 
@@ -213,15 +223,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `50`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage                           | `50`    |
 
+
 ### Database Parameters
 
 | Name                                          | Description                                                                       | Value           |
 | --------------------------------------------- | --------------------------------------------------------------------------------- | --------------- |
 | `postgresql.enabled`                          | Deploy PostgreSQL container(s)                                                    | `true`          |
-| `postgresql.auth.username`               | PostgreSQL username                                                               | `bn_odoo`       |
-| `postgresql.auth.password`               | PostgreSQL password                                                               | `""`            |
-| `postgresql.auth.database`               | PostgreSQL database                                                               | `bitnami_odoo`  |
-| `postgresql.auth.existingSecret`                   | Name of existing secret object                                                    | `""`            |
+| `postgresql.auth.username`                    | PostgreSQL username                                                               | `bn_odoo`       |
+| `postgresql.auth.password`                    | PostgreSQL password                                                               | `""`            |
+| `postgresql.auth.database`                    | PostgreSQL database                                                               | `bitnami_odoo`  |
+| `postgresql.auth.existingSecret`              | Name of existing secret object                                                    | `""`            |
 | `postgresql.persistence.enabled`              | Enable PostgreSQL persistence using PVC                                           | `true`          |
 | `postgresql.persistence.existingClaim`        | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template | `""`            |
 | `postgresql.persistence.storageClass`         | PVC Storage Class for PostgreSQL volume                                           | `""`            |
@@ -236,6 +247,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.postgresqlPostgresUser`     | External Database admin username                                                  | `postgres`      |
 | `externalDatabase.postgresqlPostgresPassword` | External Database admin password                                                  | `""`            |
 | `externalDatabase.existingSecret`             | Name of existing secret object                                                    | `""`            |
+
 
 ### NetworkPolicy parameters
 
@@ -253,6 +265,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                       | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                           | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                               | `{}`    |
+
 
 The above parameters map to the env variables defined in [bitnami/odoo](https://github.com/bitnami/bitnami-docker-odoo). For more information please refer to the [bitnami/odoo](https://github.com/bitnami/bitnami-docker-odoo) image documentation.
 
