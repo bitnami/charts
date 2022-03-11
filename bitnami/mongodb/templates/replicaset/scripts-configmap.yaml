@@ -114,16 +114,17 @@ data:
       {{- range $e, $i := until $replicaCount }}
       {{- $mongoList = append $mongoList (printf "%s-%d.%s-headless.%s.svc.%s:%d" $fullname $i $fullname $releaseNamespace $clusterDomain $portNumber) }}
       {{- end }}
-      current_primary=$(mongo admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }} --eval 'db.runCommand("ismaster")' | awk -F\" '/primary/ {print $4}')
+      current_primary=$(mongo admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}{{-if .Values.tls.enabled}} --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert{{- end }} --eval 'db.runCommand("ismaster")' | awk -F\" '/primary/ {print $4}')
+
       if ! is_empty_value "$current_primary"; then
         info "Detected existing primary: ${current_primary}"
       fi
     fi
 
-    if { ! is_empty_value "$current_primary"; } && [[ "$MONGODB_ADVERTISED_HOSTNAME:$MONGODB_ADVERTISED_PORT_NUMBER" == "$current_primary" ]]; then
+    if ! is_empty_value "$current_primary" && [[ "$MONGODB_ADVERTISED_HOSTNAME:$MONGODB_ADVERTISED_PORT_NUMBER" == "$current_primary" ]]; then
         info "Advertised name matches current primary, configuring node as a primary"
         export MONGODB_REPLICA_SET_MODE="primary"
-    elif { ! is_empty_value "$current_primary"; } && [[ "$MONGODB_ADVERTISED_HOSTNAME:$MONGODB_ADVERTISED_PORT_NUMBER" != "$current_primary" ]]; then
+    elif ! is_empty_value "$current_primary" && [[ "$MONGODB_ADVERTISED_HOSTNAME:$MONGODB_ADVERTISED_PORT_NUMBER" != "$current_primary" ]]; then
         info "Current primary is different from this node. Configuring the node as replica of ${current_primary}"
         export MONGODB_REPLICA_SET_MODE="secondary"
         export MONOGDB_INITIAL_PRIMARY_HOST="${current_primary%:*}"
