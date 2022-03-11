@@ -102,7 +102,7 @@ data:
     # This is for cases where the PVC is lost or for MongoDB caches without
     # persistence
     current_primary=""
-    if is_dir_empty "$MONGODB_DATA_DIR/db"; then
+    if is_dir_empty "${MONGODB_DATA_DIR}/db"; then
       info "Data dir empty, checking if the replica set already exists"
       {{- $replicaCount := int .Values.replicaCount }}
       {{- $portNumber := int .Values.service.port }}
