@@ -57,9 +57,6 @@ diagnosticMode:
   args:
     - infinity
 
-## @section Redis&trade; Cluster Common parameters
-##
-
 ## Bitnami Redis&trade; image version
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
 ## @param image.registry Redis&trade; cluster image registry
