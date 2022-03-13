@@ -1,3 +1,4 @@
+{{- if .Values.metrics.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -18,19 +19,15 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
-  type: {{ .Values.metrics.service.type }}
-  {{- if and (eq .Values.metrics.service.type "LoadBalancer") (not (empty .Values.metrics.service.loadBalancerIP)) }}
-  loadBalancerIP: {{ .Values.metrics.service.loadBalancerIP }}
+  sessionAffinity: {{ .Values.metrics.service.sessionAffinity }}
+  {{- if .Values.metrics.service.clusterIP }}
+  clusterIP: {{ .Values.metrics.service.clusterIP }}
   {{- end }}
   ports:
-    - port: {{ .Values.metrics.service.port }}
+    - port: {{ coalesce .Values.metrics.service.ports.http .Values.metrics.service.port }}
       targetPort: http-metrics
       protocol: TCP
       name: http-metrics
-      {{- if and (or (eq .Values.metrics.service.type "NodePort") (eq .Values.metrics.service.type "LoadBalancer")) (not (empty .Values.metrics.service.nodePort)) }}
-      nodePort: {{ .Values.metrics.service.nodePort }}
-      {{- else if eq .Values.metrics.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: server
+{{- end }}

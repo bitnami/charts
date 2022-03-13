@@ -92,7 +92,7 @@ Note: Since NetworkPolicy is enabled, only pods with label "{{ include "common.n
 To connect to your database from outside the cluster execute the following commands:
 
 {{- if .Values.ingress.enabled }}
-{{- $ingressHost := .Values.ingress.hostname }}
+{{- $ingressHost := (tpl .Values.ingress.hostname .) }}
   {{- if .Values.ingress.extraHosts }}
   You should be able to access your new InfluxDB&trade; server(s) through:
   {{- end }}

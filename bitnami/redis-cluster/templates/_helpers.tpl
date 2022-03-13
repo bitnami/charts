@@ -213,6 +213,10 @@ redis-cluster: newExternalIPs
 redis-cluster: currentNumberOfNodes
     You must provide the currentNumberOfNodes to perform an upgrade when not using external access.
     {{- end -}}
+    {{- if not .Values.cluster.update.currentNumberOfReplicas -}}
+redis-cluster: currentNumberOfReplicas
+    You must provide the currentNumberOfReplicas to perform an upgrade when not using external access.
+    {{- end -}}
   {{- end -}}
 {{- end -}}
 {{- end -}}

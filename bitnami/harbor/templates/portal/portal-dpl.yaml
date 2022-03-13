@@ -2,6 +2,7 @@ apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.portal" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -11,13 +12,13 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.portal.replicas }}
-  {{- if .Values.portal.updateStrategy }}
-  strategy: {{- toYaml .Values.portal.updateStrategy | nindent 4 }}
-  {{- end }}
+  replicas: {{ .Values.portal.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: portal
+  {{- if .Values.portal.updateStrategy }}
+  strategy: {{- toYaml .Values.portal.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -38,8 +39,8 @@ spec:
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
       automountServiceAccountToken: {{ .Values.portal.automountServiceAccountToken }}
-      {{- if .Values.portal.priorityClassName }}
-      priorityClassName: {{ .Values.portal.priorityClassName | quote }}
+      {{- if .Values.portal.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.portal.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.portal.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.portal.affinity "context" $) | nindent 8 }}
@@ -55,65 +56,41 @@ spec:
       {{- if .Values.portal.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.portal.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.podSecurityContext }}
-      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- if .Values.portal.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.portal.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.portal.priorityClassName }}
+      priorityClassName: {{ .Values.portal.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.portal.schedulerName }}
+      schedulerName: {{ .Values.portal.schedulerName }}
+      {{- end }}
+      {{- if .Values.portal.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.portal.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.portal.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.portal.initContainers "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.portal.hostAliases }}
-      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.portal.hostAliases "context" $) | nindent 8 }}
-      {{- end }}
       containers:
         - name: portal
-          image: {{ include "harbor.portalImage" . }}
-          imagePullPolicy: {{ .Values.portalImage.pullPolicy | quote }}
-          {{- if .Values.portal.command }}
+          image: {{ include "harbor.portal.image" . }}
+          imagePullPolicy: {{ .Values.portal.image.pullPolicy | quote }}
+          {{- if .Values.portal.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.portal.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.portal.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.portal.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.portal.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.portal.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.portal.args "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.portal.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.portal.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.portal.resources }}
-          resources: {{- toYaml .Values.portal.resources | nindent 12 }}
-          {{- end }}
-          {{- if .Values.containerSecurityContext }}
-          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.portal.livenessProbe.enabled }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-              scheme: {{ include "harbor.component.scheme" . | upper }}
-            initialDelaySeconds: {{ .Values.portal.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.portal.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.portal.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.portal.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.portal.livenessProbe.failureThreshold }}
-          {{- else if .Values.portal.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.portal.customLivenessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.portal.readinessProbe.enabled }}
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-              scheme: {{ include "harbor.component.scheme" . | upper }}
-            initialDelaySeconds: {{ .Values.portal.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.portal.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.portal.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.portal.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.portal.readinessProbe.failureThreshold }}
-          {{- else if .Values.portal.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.portal.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.portalImage.debug | quote }}
+              value: {{ ternary "true" "false" .Values.portal.image.debug | quote }}
             {{- if .Values.portal.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.portal.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -127,8 +104,41 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.portal.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - containerPort: {{ include "harbor.portal.containerPort" . }}
-              name: http
+            - containerPort: {{ ternary .Values.portal.containerPorts.https .Values.portal.containerPorts.http .Values.internalTLS.enabled }}
+              name: {{ ternary "https" "http" .Values.internalTLS.enabled }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.portal.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.portal.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
+          {{- else if .Values.portal.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.portal.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.portal.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.portal.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
+              scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
+          {{- else if .Values.portal.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.portal.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.portal.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.portal.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
+              scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
+          {{- else if .Values.portal.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.portal.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.portal.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.portal.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.portal.resources }}
+          resources: {{- toYaml .Values.portal.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: portal-config
               mountPath: /opt/bitnami/nginx/conf/nginx.conf

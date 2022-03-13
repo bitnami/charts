@@ -114,6 +114,18 @@
           "form": true,
           "title": "Database Port",
           "hidden": "mariadb/enabled"
+        },
+        "ssl": {
+          "type": "boolean",
+          "form": true,
+          "title": "Database SSL",
+          "hidden": "mariadb/enabled"
+        },
+        "sslCaFile": {
+          "type": "string",
+          "form": true,
+          "title": "Database SSL CA filepath",
+          "hidden": "mariadb/enabled"
         }
       }
     },
@@ -155,6 +167,17 @@
           "type": "boolean",
           "title": "Enable Pod Security Context",
           "description": "When disabled, an initContainer will be used to set required folder permissions",
+          "form": true
+        }
+      }
+    },
+    "serviceAccount": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Service Account Name",
+          "description": "Service Account Name to use",
           "form": true
         }
       }
