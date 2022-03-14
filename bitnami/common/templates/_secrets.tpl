@@ -72,6 +72,15 @@ Params:
   - strong - Boolean - Optional - Whether to add symbols to the generated random password.
   - chartName - String - Optional - Name of the chart used when said chart is deployed as a subchart.
   - context - Context - Required - Parent context.
+
+The order in which this function returns a secret password:
+  1. Already existing 'Secret' resource
+     (If a 'Secret' resource is found under the name provided to the 'secret' parameter to this function and that 'Secret' resource contains a key with the name passed as the 'key' parameter to this function then the value of this existing secret password will be returned)
+  2. Password provided via the values.yaml
+     (If one of the keys passed to the 'providedValues' parameter to this function is a valid path to a key in the values.yaml and has a value, the value of the first key with a value will be returned)
+  3. Randomly generated secret password
+     (A new random secret password with the length specified in the 'length' parameter will be generated and returned)
+
 */}}
 {{- define "common.secrets.passwords.manage" -}}
 

@@ -22,7 +22,7 @@ spec:
   type: ClusterIP
   ports:
     - name: http-management
-      port: {{ .Values.metrics.service.port }}
+      port: {{ coalesce .Values.metrics.service.ports.http .Values.metrics.service.port }}
       protocol: TCP
       targetPort: http-management
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

@@ -3,6 +3,7 @@ apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.chartmuseum" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -12,13 +13,13 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.chartmuseum.replicas }}
-  {{- if .Values.chartmuseum.updateStrategy }}
-  strategy: {{- toYaml .Values.chartmuseum.updateStrategy | nindent 4 }}
-  {{- end }}
+  replicas: {{ .Values.chartmuseum.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: chartmuseum
+  {{- if .Values.chartmuseum.updateStrategy }}
+  strategy: {{- toYaml .Values.chartmuseum.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.matchLabels" . | nindent 8 }}
@@ -41,10 +42,10 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: {{ .Values.chartmuseum.automountServiceAccountToken }}
-      {{- if .Values.chartmuseum.priorityClassName }}
-      priorityClassName: {{ .Values.chartmuseum.priorityClassName | quote }}
+      {{- if .Values.chartmuseum.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.hostAliases "context" $) | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.chartmuseum.automountServiceAccountToken }}
       {{- if .Values.chartmuseum.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -59,78 +60,41 @@ spec:
       {{- if .Values.chartmuseum.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.podSecurityContext }}
-      securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- if .Values.chartmuseum.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.chartmuseum.priorityClassName }}
+      priorityClassName: {{ .Values.chartmuseum.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.chartmuseum.schedulerName }}
+      schedulerName: {{ .Values.chartmuseum.schedulerName }}
+      {{- end }}
+      {{- if .Values.chartmuseum.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.chartmuseum.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.chartmuseum.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.initContainers "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.chartmuseum.hostAliases }}
-      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.hostAliases "context" $) | nindent 8 }}
-      {{- end }}
       containers:
         - name: chartmuseum
-          image: {{ include "harbor.chartMuseumImage" . }}
-          imagePullPolicy: {{ .Values.chartMuseumImage.pullPolicy | quote }}
-          {{- if .Values.containerSecurityContext }}
-          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          image: {{ include "harbor.chartmuseum.image" . }}
+          imagePullPolicy: {{ .Values.chartmuseum.image.pullPolicy | quote }}
+          {{- if .Values.chartmuseum.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.chartmuseum.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.chartmuseum.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.chartmuseum.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.chartmuseum.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.chartmuseum.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.args "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.chartmuseum.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.chartmuseum.resources }}
-          resources: {{- toYaml .Values.chartmuseum.resources | nindent 12 }}
-          {{- end }}
-          {{- if .Values.chartmuseum.livenessProbe.enabled }}
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: http
-              scheme: {{ include "harbor.component.scheme" . | upper }}
-            initialDelaySeconds: {{ .Values.chartmuseum.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.chartmuseum.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.chartmuseum.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.chartmuseum.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.chartmuseum.livenessProbe.failureThreshold }}
-          {{- else if .Values.chartmuseum.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.customLivenessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.chartmuseum.readinessProbe.enabled }}
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: http
-              scheme: {{ include "harbor.component.scheme" . | upper }}
-            initialDelaySeconds: {{ .Values.chartmuseum.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.chartmuseum.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.chartmuseum.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.chartmuseum.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.chartmuseum.readinessProbe.failureThreshold }}
-          {{- else if .Values.chartmuseum.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.customReadinessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          envFrom:
-            - configMapRef:
-                name: {{ include "harbor.chartmuseum" . }}-envvars
-            - secretRef:
-                name: {{ include "harbor.chartmuseum" . }}-secret
-            {{- if .Values.chartmuseum.extraEnvVarsCM }}
-            - configMapRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraEnvVarsCM "context" $) }}
-            {{- end }}
-            {{- if .Values.chartmuseum.extraEnvVarsSecret }}
-            - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraEnvVarsSecret "context" $) }}
-            {{- end }}
           env:
             - name: DEBUG
-              value: {{ ternary "1" "0" .Values.chartMuseumImage.debug | quote }}
+              value: {{ ternary "1" "0" .Values.chartmuseum.image.debug | quote }}
             {{- if has "chartmuseum" .Values.proxy.components }}
             - name: HTTP_PROXY
               value: {{ .Values.proxy.httpProxy | quote  }}
@@ -149,18 +113,64 @@ spec:
             - name: INTERNAL_TLS_TRUST_CA_PATH
               value: /etc/harbor/ssl/chartmuseum/ca.crt
             {{- end }}
-            {{- if .Values.chartmuseum.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraEnvVars "context" $) | nindent 12 }}
-            {{- end }}
             - name: BASIC_AUTH_PASS
               valueFrom:
                 secretKeyRef:
                   # Take the password from the core component secret
                   name: {{ include "harbor.core" . }}
                   key: secret
+            {{- if .Values.chartmuseum.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ printf "%s-envvars" (include "harbor.chartmuseum" .) }}
+            - secretRef:
+                name: {{ printf "%s-secret" (include "harbor.chartmuseum" .) }}
+            {{- if .Values.chartmuseum.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.chartmuseum.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           ports:
-            - containerPort: {{ include "harbor.chartmuseum.containerPort" .  }}
-              name: http
+            - containerPort: {{ ternary .Values.chartmuseum.containerPorts.https .Values.chartmuseum.containerPorts.http .Values.internalTLS.enabled }}
+              name: {{ ternary "https" "http" .Values.internalTLS.enabled }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.chartmuseum.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.chartmuseum.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
+          {{- else if .Values.chartmuseum.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.chartmuseum.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.chartmuseum.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /health
+              port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
+              scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
+          {{- else if .Values.chartmuseum.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.chartmuseum.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.chartmuseum.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /health
+              port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
+              scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
+          {{- else if .Values.chartmuseum.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.chartmuseum.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.chartmuseum.resources }}
+          resources: {{- toYaml .Values.chartmuseum.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: chartmuseum-data
               mountPath: /bitnami/data
@@ -174,12 +184,12 @@ spec:
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/chartmuseum
             {{- end }}
-            {{- if .Values.persistence.imageChartStorage.caBundleSecretName }}
+            {{- if .Values.persistence.imageChartStorage.caBundleSecret }}
             - name: storage-service-ca
               mountPath: /harbor_cust_cert/ca-bundle.crt
               subPath: ca.crt
-            {{- if .Values.caBundleSecretName }}
-{{ include "harbor.caBundleVolumeMount" . | indent 12 }}
+            {{- if .Values.internalTLS.caBundleSecret }}
+            {{- include "harbor.caBundleVolumeMount" . | nindent 12 }}
             {{- end }}
             {{- end }}
             {{- if .Values.chartmuseum.extraVolumeMounts }}
@@ -204,13 +214,13 @@ spec:
               - key: GCS_KEY_DATA
                 path: gcs-key.json
         {{- end }}
-        {{- if .Values.persistence.imageChartStorage.caBundleSecretName }}
+        {{- if .Values.persistence.imageChartStorage.caBundleSecret }}
         - name: storage-service-ca
           secret:
-            secretName: {{ .Values.persistence.imageChartStorage.caBundleSecretName }}
+            secretName: {{ .Values.persistence.imageChartStorage.caBundleSecret }}
         {{- end }}
-        {{- if .Values.caBundleSecretName }}
-{{ include "harbor.caBundleVolume" . | indent 8 }}
+        {{- if .Values.internalTLS.caBundleSecret }}
+        {{- include "harbor.caBundleVolume" . | nindent 8 }}
         {{- end }}
         {{- if .Values.internalTLS.enabled }}
         - name: internal-tls-certs

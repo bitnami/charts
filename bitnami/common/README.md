@@ -88,10 +88,10 @@ The following table lists the helpers available in the library which are scoped 
 
 ### Labels
 
-| Helper identifier           | Description                                          | Expected Input    |
-|-----------------------------|------------------------------------------------------|-------------------|
-| `common.labels.standard`    | Return Kubernetes standard labels                    | `.` Chart context |
-| `common.labels.matchLabels` | Return the proper Docker Image Registry Secret Names | `.` Chart context |
+| Helper identifier           | Description                                                                 | Expected Input    |
+|-----------------------------|-----------------------------------------------------------------------------|-------------------|
+| `common.labels.standard`    | Return Kubernetes standard labels                                           | `.` Chart context |
+| `common.labels.matchLabels` | Labels to use on `deploy.spec.selector.matchLabels` and `svc.spec.selector` | `.` Chart context |
 
 ### Names
 

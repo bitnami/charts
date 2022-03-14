@@ -75,7 +75,7 @@ image:
   ## Bitnami Redis&trade; image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.2.6-debian-10-r138
+  tag: 6.2.6-debian-10-r140
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -326,7 +326,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r347
+    tag: 10-debian-10-r349
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -744,12 +744,15 @@ cluster:
   ##
   update:
     ## @param cluster.update.addNodes Boolean to specify if you want to add nodes after the upgrade
-    ## Setting this to true a hook will add nodes to the Redis&trade; cluster after the upgrade. currentNumberOfNodes is required
+    ## Setting this to true a hook will add nodes to the Redis&trade; cluster after the upgrade. currentNumberOfNodes and currentNumberOfReplicas is required
     ##
     addNodes: false
     ## @param cluster.update.currentNumberOfNodes Number of currently deployed Redis&trade; nodes
     ##
     currentNumberOfNodes: 6
+    ## @param cluster.update.currentNumberOfReplicas Number of currently deployed Redis&trade; replicas
+    ##
+    currentNumberOfReplicas: 1
     ## @param cluster.update.newExternalIPs External IPs obtained from the services for the new nodes to add to the cluster
     ##
     newExternalIPs: []
@@ -772,7 +775,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.35.1-debian-10-r8
+    tag: 1.35.1-debian-10-r10
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -925,7 +928,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r347
+  tag: 10-debian-10-r349
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.

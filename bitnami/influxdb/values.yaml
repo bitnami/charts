@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.1.1-debian-10-r72
+  tag: 2.1.1-debian-10-r81
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -865,7 +865,7 @@ ingress:
   ##
   enabled: false
   ## @param ingress.tls Create TLS Secret
-  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" (tpl .Values.ingress.hostname .) }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
@@ -879,7 +879,7 @@ ingress:
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
-  ## @param ingress.hostname Default host for the ingress resource
+  ## @param ingress.hostname Default host for the ingress resource (evaluated as template)
   ##
   hostname: influxdb.local
   ## @param ingress.path Ingress path*' in order to use this
@@ -1129,7 +1129,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r344
+    tag: 10-debian-10-r354
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -1258,7 +1258,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.373.0-debian-10-r2
+        tag: 0.375.0-debian-10-r1
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
         ##
@@ -1295,7 +1295,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.33.1-debian-10-r6
+        tag: 2.34.1-debian-10-r0
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
         ##

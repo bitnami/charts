@@ -120,9 +120,8 @@ Return the secret with MariaDB credentials
 Return true if a secret object should be created for MariaDB
 */}}
 {{- define "mariadb.createSecret" -}}
-{{- if and (not .Values.auth.existingSecret) (not .Values.auth.customPasswordFiles) }}
+{{- if not (or .Values.auth.existingSecret .Values.auth.customPasswordFiles) }}
     {{- true -}}
-{{- else -}}
 {{- end -}}
 {{- end -}}
 

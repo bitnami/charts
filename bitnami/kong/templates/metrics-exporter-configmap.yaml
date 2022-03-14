@@ -17,7 +17,7 @@ data:
     # Prometheus metrics
     server {
         server_name kong_prometheus_exporter;
-        listen 0.0.0.0:{{ .Values.metrics.service.port }};
+        listen 0.0.0.0:{{ coalesce .Values.metrics.service.ports.http .Values.metrics.service.port }};
         access_log off;
         location /metrics {
             default_type text/plain;

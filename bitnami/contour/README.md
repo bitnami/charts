@@ -148,6 +148,7 @@ $ helm uninstall my-release
 | `contour.startupProbe.successThreshold`         | Minimum consecutive successes for the probe to be considered successful after having failed.                                       | `1`                    |
 | `contour.certgen.serviceAccount.create`         | Create a serviceAccount for the Contour pod                                                                                        | `true`                 |
 | `contour.certgen.serviceAccount.name`           | Use the serviceAccount with the specified name, a name is generated using the fullname template                                    | `""`                   |
+| `contour.certgen.certificateLifetime`           | Generated certificate lifetime (in days).                                                                                          | `365`                  |
 | `contour.tlsExistingSecret`                     | Name of the existingSecret to be use in Contour deployment. If it is not nil `contour.certgen` will be disabled.                   | `""`                   |
 | `contour.service.type`                          | Service type                                                                                                                       | `ClusterIP`            |
 | `contour.service.ports.xds`                     | Contour service xds port                                                                                                           | `8001`                 |
@@ -257,6 +258,7 @@ $ helm uninstall my-release
 | `envoy.service.nodePorts.http`                      | HTTP Port. If `envoy.service.type` is NodePort and this is non-empty                                                  | `""`                    |
 | `envoy.service.nodePorts.https`                     | HTTPS Port. If `envoy.service.type` is NodePort and this is non-empty                                                 | `""`                    |
 | `envoy.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                                        | `[]`                    |
+| `envoy.service.ipFamilyPolicy`                      | IP family policy, support `SingleStack`, `PreferDualStack` and `RequireDualStack`                                     | `""`                    |
 | `envoy.useHostPort`                                 | Enable/disable `hostPort` for TCP/80 and TCP/443                                                                      | `true`                  |
 | `envoy.useHostIP`                                   | Enable/disable `hostIP`                                                                                               | `false`                 |
 | `envoy.hostPorts.http`                              | Sets `hostPort` http port                                                                                             | `80`                    |
