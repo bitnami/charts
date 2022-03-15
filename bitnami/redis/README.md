@@ -98,7 +98,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------- | ---------------------- |
 | `image.registry`    | Redis&trade; image registry                             | `docker.io`            |
 | `image.repository`  | Redis&trade; image repository                           | `bitnami/redis`        |
-| `image.tag`         | Redis&trade; image tag (immutable tags are recommended) | `6.2.6-debian-10-r142` |
+| `image.tag`         | Redis&trade; image tag (immutable tags are recommended) | `6.2.6-debian-10-r146` |
 | `image.pullPolicy`  | Redis&trade; image pull policy                          | `IfNotPresent`         |
 | `image.pullSecrets` | Redis&trade; image pull secrets                         | `[]`                   |
 | `image.debug`       | Enable image debug mode                                 | `false`                |
@@ -223,11 +223,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.externalMaster.host`                | External master host to bootstrap from                                                              | `""`                     |
 | `replica.externalMaster.port`                | Port for Redis service external master host                                                         | `6379`                   |
 | `replica.containerPorts.redis`               | Container port to open on Redis&trade; replicas nodes                                               | `6379`                   |
-| `replica.startupProbe.enabled`               | Enable startupProbe on Redis&trade; replicas nodes                                                  | `false`                  |
-| `replica.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                              | `20`                     |
-| `replica.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                     | `5`                      |
+| `replica.startupProbe.enabled`               | Enable startupProbe on Redis&trade; replicas nodes                                                  | `true`                   |
+| `replica.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                              | `10`                     |
+| `replica.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                     | `10`                     |
 | `replica.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                    | `5`                      |
-| `replica.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                  | `5`                      |
+| `replica.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                  | `22`                     |
 | `replica.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                  | `1`                      |
 | `replica.livenessProbe.enabled`              | Enable livenessProbe on Redis&trade; replicas nodes                                                 | `true`                   |
 | `replica.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                             | `20`                     |
@@ -306,12 +306,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.enabled`                            | Use Redis&trade; Sentinel on Redis&trade; pods.                                                                                             | `false`                  |
 | `sentinel.image.registry`                     | Redis&trade; Sentinel image registry                                                                                                        | `docker.io`              |
 | `sentinel.image.repository`                   | Redis&trade; Sentinel image repository                                                                                                      | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                          | Redis&trade; Sentinel image tag (immutable tags are recommended)                                                                            | `6.2.6-debian-10-r140`   |
+| `sentinel.image.tag`                          | Redis&trade; Sentinel image tag (immutable tags are recommended)                                                                            | `6.2.6-debian-10-r144`   |
 | `sentinel.image.pullPolicy`                   | Redis&trade; Sentinel image pull policy                                                                                                     | `IfNotPresent`           |
 | `sentinel.image.pullSecrets`                  | Redis&trade; Sentinel image pull secrets                                                                                                    | `[]`                     |
 | `sentinel.image.debug`                        | Enable image debug mode                                                                                                                     | `false`                  |
 | `sentinel.masterSet`                          | Master set name                                                                                                                             | `mymaster`               |
 | `sentinel.quorum`                             | Sentinel Quorum                                                                                                                             | `2`                      |
+| `sentinel.getMasterTimeout`                   | Amount of time to allow before get_sentinel_master_info() times out.                                                                        | `220`                    |
 | `sentinel.automateClusterRecovery`            | Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it. | `false`                  |
 | `sentinel.downAfterMilliseconds`              | Timeout for detecting a Redis&trade; node is down                                                                                           | `60000`                  |
 | `sentinel.failoverTimeout`                    | Timeout for performing a election failover                                                                                                  | `18000`                  |
@@ -327,11 +328,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.externalMaster.host`                | External master host to bootstrap from                                                                                                      | `""`                     |
 | `sentinel.externalMaster.port`                | Port for Redis service external master host                                                                                                 | `6379`                   |
 | `sentinel.containerPorts.sentinel`            | Container port to open on Redis&trade; Sentinel nodes                                                                                       | `26379`                  |
-| `sentinel.startupProbe.enabled`               | Enable startupProbe on Redis&trade; Sentinel nodes                                                                                          | `false`                  |
-| `sentinel.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                                      | `20`                     |
-| `sentinel.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                                             | `5`                      |
+| `sentinel.startupProbe.enabled`               | Enable startupProbe on Redis&trade; Sentinel nodes                                                                                          | `true`                   |
+| `sentinel.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                                      | `10`                     |
+| `sentinel.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                                             | `10`                     |
 | `sentinel.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                                            | `5`                      |
-| `sentinel.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                                          | `5`                      |
+| `sentinel.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                                          | `22`                     |
 | `sentinel.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                                          | `1`                      |
 | `sentinel.livenessProbe.enabled`              | Enable livenessProbe on Redis&trade; Sentinel nodes                                                                                         | `true`                   |
 | `sentinel.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                     | `20`                     |
@@ -348,7 +349,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                                                          | `{}`                     |
 | `sentinel.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                                                         | `{}`                     |
 | `sentinel.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                                                        | `{}`                     |
-| `sentinel.persistence.enabled`                | Enable persistence on Redis&trade; sentinel nodes using Persistent Volume Claims                                                            | `false`                  |
+| `sentinel.persistence.enabled`                | Enable persistence on Redis&trade; sentinel nodes using Persistent Volume Claims (Experimental)                                             | `false`                  |
 | `sentinel.persistence.storageClass`           | Persistent Volume storage class                                                                                                             | `""`                     |
 | `sentinel.persistence.accessModes`            | Persistent Volume access modes                                                                                                              | `["ReadWriteOnce"]`      |
 | `sentinel.persistence.size`                   | Persistent Volume size                                                                                                                      | `100Mi`                  |
@@ -415,7 +416,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Redis&trade; metrics                               | `false`                  |
 | `metrics.image.registry`                     | Redis&trade; Exporter image registry                                                             | `docker.io`              |
 | `metrics.image.repository`                   | Redis&trade; Exporter image repository                                                           | `bitnami/redis-exporter` |
-| `metrics.image.tag`                          | Redis&trade; Redis&trade; Exporter image tag (immutable tags are recommended)                    | `1.35.1-debian-10-r12`   |
+| `metrics.image.tag`                          | Redis&trade; Redis&trade; Exporter image tag (immutable tags are recommended)                    | `1.35.1-debian-10-r16`   |
 | `metrics.image.pullPolicy`                   | Redis&trade; Exporter image pull policy                                                          | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                  | Redis&trade; Exporter image pull secrets                                                         | `[]`                     |
 | `metrics.command`                            | Override default metrics container init command (useful when using custom images)                | `[]`                     |
@@ -457,7 +458,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r351`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r355`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -466,7 +467,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                 | `false`                 |
 | `sysctl.image.registry`                                | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `sysctl.image.repository`                              | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r351`     |
+| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r355`     |
 | `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `sysctl.command`                                       | Override default init-sysctl container command (useful when using custom images)                | `[]`                    |
