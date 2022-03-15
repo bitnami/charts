@@ -58,6 +58,12 @@ spec:
                       description: RequestHashPolicy contains configuration for an
                         individual hash policy on a request attribute.
                       properties:
+                        hashSourceIP:
+                          description: HashSourceIP should be set to true when request
+                            source IP hash based load balancing is desired. It must
+                            be the only hash option field set, otherwise this request
+                            hash policy object will be ignored.
+                          type: boolean
                         headerHashOptions:
                           description: HeaderHashOptions should be set when request
                             header hash based load balancing is desired. It must be

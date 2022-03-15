@@ -83,6 +83,9 @@ spec:
                   defaultHTTPVersions:
                   - HTTP/1.1
                   - HTTP/2
+                  health:
+                    address: 0.0.0.0
+                    port: 8002
                   http:
                     accessLog: /dev/stdout
                     address: 0.0.0.0
@@ -94,6 +97,7 @@ spec:
                   listener:
                     connectionBalancer: ""
                     disableAllowChunkedLength: false
+                    disableMergeSlashes: false
                     tls:
                       cipherSuites:
                       - '[ECDHE-ECDSA-AES128-GCM-SHA256|ECDHE-ECDSA-CHACHA20-POLY1305]'
@@ -166,6 +170,24 @@ spec:
                       - HTTP/2
                       type: string
                     type: array
+                  health:
+                    default:
+                      address: 0.0.0.0
+                      port: 8002
+                    description: Health defines the endpoint Envoy uses to serve health
+                      checks.
+                    properties:
+                      address:
+                        description: Defines the health address interface.
+                        minLength: 1
+                        type: string
+                      port:
+                        description: Defines the health port.
+                        type: integer
+                    required:
+                    - address
+                    - port
+                    type: object
                   http:
                     default:
                       accessLog: /dev/stdout
@@ -231,6 +253,11 @@ spec:
                           revert back to Envoy''s default behavior in case of failures.
                           Please file an issue if failures are encountered. See: https://github.com/projectcontour/contour/issues/3221'
                         type: boolean
+                      disableMergeSlashes:
+                        description: DisableMergeSlashes disables Envoy's non-standard
+                          merge_slashes path transformation option which strips duplicate
+                          slashes from request URL paths.
+                        type: boolean
                       tls:
                         description: TLS holds various configurable Envoy TLS listener
                           values.
@@ -280,6 +307,7 @@ spec:
                     required:
                     - connectionBalancer
                     - disableAllowChunkedLength
+                    - disableMergeSlashes
                     - tls
                     - useProxyProtocol
                     type: object
@@ -298,6 +326,16 @@ spec:
                           when format is set to `envoy`. When empty, Envoy's default
                           format is used.
                         type: string
+                      accessLogLevel:
+                        default: info
+                        description: AccessLogLevel sets the verbosity level of the
+                          access log. Valid options are `info`, `error` and `disabled`.
+                          Default value is `info`, meaning all requests are logged.
+                        enum:
+                        - info
+                        - error
+                        - disabled
+                        type: string
                       jsonFields:
                         description: AccessLogFields sets the fields that JSON logging
                           will output when AccessLogFormat is json.
@@ -311,8 +349,8 @@ spec:
                     default:
                       address: 0.0.0.0
                       port: 8002
-                    description: Metrics defines the endpoints Envoy use to serve
-                      to metrics.
+                    description: Metrics defines the endpoint Envoy uses to serve
+                      metrics.
                     properties:
                       address:
                         description: Defines the metrics address interface.
@@ -322,6 +360,21 @@ spec:
                       port:
                         description: Defines the metrics port.
                         type: integer
+                      tls:
+                        description: TLS holds TLS file config details. Metrics and
+                          health endpoints cannot have same port number when metrics
+                          is served over HTTPS.
+                        properties:
+                          caFile:
+                            description: CA filename.
+                            type: string
+                          certFile:
+                            description: Client certificate filename.
+                            type: string
+                          keyFile:
+                            description: Client key filename.
+                            type: string
+                        type: object
                     required:
                     - address
                     - port
@@ -339,7 +392,7 @@ spec:
                       numTrustedHops:
                         description: "XffNumTrustedHops defines the number of additional
                           ingress proxy hops from the right side of the x-forwarded-for
-                          HTTP header to trust when determining the origin client's
+                          HTTP header to trust when determining the origin client’s
                           IP address. \n See https://www.envoyproxy.io/docs/envoy/v1.17.0/api-v3/extensions/filters/network/http_connection_manager/v3/http_connection_manager.proto?highlight=xff_num_trusted_hops
                           for more information."
                         format: int32
@@ -366,6 +419,13 @@ spec:
                     description: Timeouts holds various configurable timeouts that
                       can be set in the config file.
                     properties:
+                      connectTimeout:
+                        description: "ConnectTimeout defines how long the proxy should
+                          wait when establishing connection to upstream service. If
+                          not set, a default value of 2 seconds will be used. \n See
+                          https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/cluster.proto#envoy-v3-api-field-config-cluster-v3-cluster-connect-timeout
+                          for more information."
+                        type: string
                       connectionIdleTimeout:
                         description: "ConnectionIdleTimeout defines how long the proxy
                           should wait while there are no active requests (for HTTP/1.1)
@@ -447,15 +507,15 @@ spec:
                 default:
                   address: 0.0.0.0
                   port: 8000
-                description: Health contains parameters to configure endpoints which
-                  Contour exposes to respond to Kubernetes health checks.
+                description: Health defines the endpoints Contour uses to serve health
+                  checks.
                 properties:
                   address:
-                    description: Defines the Contour health address interface.
+                    description: Defines the health address interface.
                     minLength: 1
                     type: string
                   port:
-                    description: Defines the Contour health port.
+                    description: Defines the health port.
                     type: integer
                 required:
                 - address
@@ -495,55 +555,20 @@ spec:
               ingress:
                 description: Ingress contains parameters for ingress options.
                 properties:
-                  className:
-                    description: Ingress Class Name Contour should use.
-                    type: string
+                  classNames:
+                    description: Ingress Class Names Contour should use.
+                    items:
+                      type: string
+                    type: array
                   statusAddress:
                     description: Address to set in Ingress object status.
                     type: string
-                type: object
-              leaderElection:
-                default:
-                  configmap:
-                    name: leader-elect
-                    namespace: projectcontour
-                  disableLeaderElection: false
-                  leaseDuration: 15s
-                  renewDeadline: 10s
-                  retryPeriod: 2s
-                description: LeaderElection contains leader election parameters.
-                properties:
-                  configmap:
-                    description: NamespacedName defines the namespace/name of the
-                      Kubernetes resource referred from the config file. Used for
-                      Contour config YAML file parsing, otherwise we could use K8s
-                      types.NamespacedName.
-                    properties:
-                      name:
-                        type: string
-                      namespace:
-                        type: string
-                    required:
-                    - name
-                    - namespace
-                    type: object
-                  disableLeaderElection:
-                    type: boolean
-                  leaseDuration:
-                    type: string
-                  renewDeadline:
-                    type: string
-                  retryPeriod:
-                    type: string
-                required:
-                - disableLeaderElection
                 type: object
               metrics:
                 default:
                   address: 0.0.0.0
                   port: 8000
-                description: Metrics defines the endpoints Contour uses to serve to
-                  metrics.
+                description: Metrics defines the endpoint Contour uses to serve metrics.
                 properties:
                   address:
                     description: Defines the metrics address interface.
@@ -553,6 +578,21 @@ spec:
                   port:
                     description: Defines the metrics port.
                     type: integer
+                  tls:
+                    description: TLS holds TLS file config details. Metrics and health
+                      endpoints cannot have same port number when metrics is served
+                      over HTTPS.
+                    properties:
+                      caFile:
+                        description: CA filename.
+                        type: string
+                      certFile:
+                        description: Client certificate filename.
+                        type: string
+                      keyFile:
+                        description: Client key filename.
+                        type: string
+                    type: object
                 required:
                 - address
                 - port
