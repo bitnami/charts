@@ -1,9 +1,9 @@
-# CRDs source: https://github.com/projectcontour/contour-operator/tree/v1.19.1/config/crd
+# CRDs source: https://github.com/projectcontour/contour-operator/tree/v1.20.1/config/crd
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.6.0
+    controller-gen.kubebuilder.io/version: v0.6.2
   creationTimestamp: null
   name: contourconfigurations.projectcontour.io
 spec:
@@ -97,7 +97,6 @@ spec:
                   listener:
                     connectionBalancer: ""
                     disableAllowChunkedLength: false
-                    disableMergeSlashes: false
                     tls:
                       cipherSuites:
                       - '[ECDHE-ECDSA-AES128-GCM-SHA256|ECDHE-ECDSA-CHACHA20-POLY1305]'
@@ -253,11 +252,6 @@ spec:
                           revert back to Envoy''s default behavior in case of failures.
                           Please file an issue if failures are encountered. See: https://github.com/projectcontour/contour/issues/3221'
                         type: boolean
-                      disableMergeSlashes:
-                        description: DisableMergeSlashes disables Envoy's non-standard
-                          merge_slashes path transformation option which strips duplicate
-                          slashes from request URL paths.
-                        type: boolean
                       tls:
                         description: TLS holds various configurable Envoy TLS listener
                           values.
@@ -307,7 +301,6 @@ spec:
                     required:
                     - connectionBalancer
                     - disableAllowChunkedLength
-                    - disableMergeSlashes
                     - tls
                     - useProxyProtocol
                     type: object
@@ -325,16 +318,6 @@ spec:
                         description: AccessLogFormatString sets the access log format
                           when format is set to `envoy`. When empty, Envoy's default
                           format is used.
-                        type: string
-                      accessLogLevel:
-                        default: info
-                        description: AccessLogLevel sets the verbosity level of the
-                          access log. Valid options are `info`, `error` and `disabled`.
-                          Default value is `info`, meaning all requests are logged.
-                        enum:
-                        - info
-                        - error
-                        - disabled
                         type: string
                       jsonFields:
                         description: AccessLogFields sets the fields that JSON logging
@@ -419,13 +402,6 @@ spec:
                     description: Timeouts holds various configurable timeouts that
                       can be set in the config file.
                     properties:
-                      connectTimeout:
-                        description: "ConnectTimeout defines how long the proxy should
-                          wait when establishing connection to upstream service. If
-                          not set, a default value of 2 seconds will be used. \n See
-                          https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/cluster.proto#envoy-v3-api-field-config-cluster-v3-cluster-connect-timeout
-                          for more information."
-                        type: string
                       connectionIdleTimeout:
                         description: "ConnectionIdleTimeout defines how long the proxy
                           should wait while there are no active requests (for HTTP/1.1)
@@ -555,11 +531,9 @@ spec:
               ingress:
                 description: Ingress contains parameters for ingress options.
                 properties:
-                  classNames:
-                    description: Ingress Class Names Contour should use.
-                    items:
-                      type: string
-                    type: array
+                  className:
+                    description: Ingress Class Name Contour should use.
+                    type: string
                   statusAddress:
                     description: Address to set in Ingress object status.
                     type: string
