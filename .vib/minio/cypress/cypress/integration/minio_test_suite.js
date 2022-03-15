@@ -12,14 +12,21 @@ it('allows user to log in and log out', () => {
 it('allows creating a bucket and file upload', () => {  
   cy.login();
   cy.visit('add-bucket');
+  cy.contains('div','Return to Buckets')
   cy.fixture('testdata').then((td) => {
     cy.get('#bucket-name').should('be.visible').type(`${td.bucketTitle}.${random}`);
   })
-  cy.contains('button[type="submit"]','Create Bucket').click();
-  cy.contains('#upload-main','Upload').should('be.visible').click();
+  cy.contains('button[type="submit"]','Create Bucket').should('be.visible').click();
+  cy.fixture('testdata').then((td) => {
+    cy.url().should('include',`buckets/${td.bucketTitle}`);
+  })
+
+  cy.get('#upload-main').should('be.visible').click();
   cy.contains('span','Upload File').should('be.visible').click();
-  cy.get('div#object-list-wrapper > input[type="file"]').selectFile('cypress/fixtures/example.json',
+  cy.get('div#object-list-wrapper > input[type="file"]').should('not.be.disabled').selectFile('cypress/fixtures/example.json',
   {force:true});
+  cy.get('button[aria-label="Clear Completed List"]').should('be.visible').click();
+  cy.contains('div','Object uploaded successfully.').should('be.visible');
 })
 
 it('allows creating a user', () => {
@@ -34,8 +41,8 @@ it('allows creating a user', () => {
   cy.contains('button[type="submit"]','Save').should('be.visible').click();
   cy.fixture('testdata').then((td) => {
     cy.contains(td.testAccessKey).should('be.visible');
-    cy.get('#accesskey-input').should('not.exist');
   })
+  cy.get('#accesskey-input').should('not.exist');
 })
 
 it('allows creating a group', () => {
@@ -47,6 +54,7 @@ it('allows creating a group', () => {
     cy.contains('button[type="submit"]','Save').click();
     cy.contains(td.testGroupName);
   })
+  cy.contains('div[role="dialog"]','Create Group').should('not.exist');
 })
 
 it('allows creating a service account and downloading credentials', () => {
