@@ -357,6 +357,14 @@ extraDeploy:
         name: {{ .Release.Namespace | quote }}
 ```
 
+## Upgrading
+
+### To 1.0.0
+
+This version updates the chart to use Contour's latest release, `1.20.1`. Among other features, exisiting CRDs have been syncronised with the official [Contour repository](https://github.com/projectcontour/contour/blob/main/examples/render/contour.yaml)
+
+This version bumps the Envoy and Contour container to the ones matching the Contour Operator requirements.
+
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
