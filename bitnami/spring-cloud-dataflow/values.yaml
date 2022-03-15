@@ -989,10 +989,15 @@ deployer:
   ## @param deployer.imagePullSecrets Streaming applications imagePullSecrets
   ##
   imagePullSecrets: []
-
   ## @param deployer.secretRefs Streaming applications secretRefs
   ##
   secretRefs: []
+  ## @param deployer.entryPointStyle An entry point style affects how application properties are passed to the container to be deployed. Allowed values: exec (default), shell, boot
+  ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#_entry_point_style
+  entryPointStyle: exec
+  ## @param deployer.imagePullPolicy An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never
+  ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#_image_pull_policy
+  imagePullPolicy: IfNotPresent
 
 ## @section RBAC parameters
 
