@@ -1,13 +1,13 @@
-# CRDs source: https://github.com/projectcontour/contour-operator/tree/v1.19.1/config/crd
+# CRDs source: https://github.com/projectcontour/contour-operator/tree/v1.20.1/config/crd
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.5.0
+    api-approved.kubernetes.io: https://github.com/kubernetes-sigs/gateway-api/pull/891
   creationTimestamp: null
-  name: tcproutes.networking.x-k8s.io
+  name: tcproutes.gateway.networking.k8s.io
 spec:
-  group: networking.x-k8s.io
+  group: gateway.networking.k8s.io
   names:
     categories:
     - gateway-api
@@ -21,10 +21,12 @@ spec:
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
-    name: v1alpha1
+    name: v1alpha2
     schema:
       openAPIV3Schema:
-        description: TCPRoute is the Schema for the TCPRoute resource.
+        description: TCPRoute provides a way to route TCP requests. When combined
+          with a Gateway listener, it can be used to forward connections on the port
+          specified by the listener to a set of backends specified by the TCPRoute.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -41,130 +43,160 @@ spec:
           spec:
             description: Spec defines the desired state of TCPRoute.
             properties:
-              gateways:
-                default:
-                  allow: SameNamespace
-                description: Gateways defines which Gateways can use this Route.
-                properties:
-                  allow:
-                    default: SameNamespace
-                    description: 'Allow indicates which Gateways will be allowed to
-                      use this route. Possible values are: * All: Gateways in any
-                      namespace can use this route. * FromList: Only Gateways specified
-                      in GatewayRefs may use this route. * SameNamespace: Only Gateways
-                      in the same namespace may use this route.'
-                    enum:
-                    - All
-                    - FromList
-                    - SameNamespace
-                    type: string
-                  gatewayRefs:
-                    description: GatewayRefs must be specified when Allow is set to
-                      "FromList". In that case, only Gateways referenced in this list
-                      will be allowed to use this route. This field is ignored for
-                      other values of "Allow".
-                    items:
-                      description: GatewayReference identifies a Gateway in a specified
-                        namespace.
-                      properties:
-                        name:
-                          description: Name is the name of the referent.
-                          maxLength: 253
-                          minLength: 1
-                          type: string
-                        namespace:
-                          description: Namespace is the namespace of the referent.
-                          maxLength: 253
-                          minLength: 1
-                          type: string
-                      required:
-                      - name
-                      - namespace
-                      type: object
-                    type: array
-                type: object
+              parentRefs:
+                description: "ParentRefs references the resources (usually Gateways)
+                  that a Route wants to be attached to. Note that the referenced parent
+                  resource needs to allow this for the attachment to be complete.
+                  For Gateways, that means the Gateway needs to allow attachment from
+                  Routes of this kind and namespace. \n The only kind of parent resource
+                  with \"Core\" support is Gateway. This API may be extended in the
+                  future to support additional kinds of parent resources such as one
+                  of the route kinds. \n It is invalid to reference an identical parent
+                  more than once. It is valid to reference multiple distinct sections
+                  within the same parent resource, such as 2 Listeners within a Gateway.
+                  \n It is possible to separately reference multiple distinct objects
+                  that may be collapsed by an implementation. For example, some implementations
+                  may choose to merge compatible Gateway Listeners together. If that
+                  is the case, the list of routes attached to those resources should
+                  also be merged."
+                items:
+                  description: "ParentRef identifies an API object (usually a Gateway)
+                    that can be considered a parent of this resource (usually a route).
+                    The only kind of parent resource with \"Core\" support is Gateway.
+                    This API may be extended in the future to support additional kinds
+                    of parent resources, such as HTTPRoute. \n The API object must
+                    be valid in the cluster; the Group and Kind must be registered
+                    in the cluster for this reference to be valid. \n References to
+                    objects with invalid Group and Kind are not valid, and must be
+                    rejected by the implementation, with appropriate Conditions set
+                    on the containing object."
+                  properties:
+                    group:
+                      default: gateway.networking.k8s.io
+                      description: "Group is the group of the referent. \n Support:
+                        Core"
+                      maxLength: 253
+                      pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                      type: string
+                    kind:
+                      default: Gateway
+                      description: "Kind is kind of the referent. \n Support: Core
+                        (Gateway) Support: Custom (Other Resources)"
+                      maxLength: 63
+                      minLength: 1
+                      pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
+                      type: string
+                    name:
+                      description: "Name is the name of the referent. \n Support:
+                        Core"
+                      maxLength: 253
+                      minLength: 1
+                      type: string
+                    namespace:
+                      description: "Namespace is the namespace of the referent. When
+                        unspecified (or empty string), this refers to the local namespace
+                        of the Route. \n Support: Core"
+                      maxLength: 63
+                      minLength: 1
+                      pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+                      type: string
+                    sectionName:
+                      description: "SectionName is the name of a section within the
+                        target resource. In the following resources, SectionName is
+                        interpreted as the following: \n * Gateway: Listener Name
+                        \n Implementations MAY choose to support attaching Routes
+                        to other resources. If that is the case, they MUST clearly
+                        document how SectionName is interpreted. \n When unspecified
+                        (empty string), this will reference the entire resource. For
+                        the purpose of status, an attachment is considered successful
+                        if at least one section in the parent resource accepts it.
+                        For example, Gateway listeners can restrict which Routes can
+                        attach to them by Route kind, namespace, or hostname. If 1
+                        of 2 Gateway listeners accept attachment from the referencing
+                        Route, the Route MUST be considered successfully attached.
+                        If no Gateway listeners accept attachment from this Route,
+                        the Route MUST be considered detached from the Gateway. \n
+                        Support: Core"
+                      maxLength: 253
+                      minLength: 1
+                      pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                      type: string
+                  required:
+                  - name
+                  type: object
+                maxItems: 32
+                type: array
               rules:
                 description: Rules are a list of TCP matchers and actions.
                 items:
                   description: TCPRouteRule is the configuration for a given rule.
                   properties:
-                    forwardTo:
-                      description: ForwardTo defines the backend(s) where matching
-                        requests should be sent.
+                    backendRefs:
+                      description: "BackendRefs defines the backend(s) where matching
+                        requests should be sent. If unspecified or invalid (refers
+                        to a non-existent resource or a Service with no endpoints),
+                        the underlying implementation MUST actively reject connection
+                        attempts to this backend. Connection rejections must respect
+                        weight; if an invalid backend is requested to have 80% of
+                        connections, then 80% of connections must be rejected instead.
+                        \n Support: Core for Kubernetes Service Support: Custom for
+                        any other resource \n Support for weight: Extended"
                       items:
-                        description: RouteForwardTo defines how a Route should forward
-                          a request.
+                        description: "BackendRef defines how a Route should forward
+                          a request to a Kubernetes resource. \n Note that when a
+                          namespace is specified, a ReferencePolicy object is required
+                          in the referent namespace to allow that namespace's owner
+                          to accept the reference. See the ReferencePolicy documentation
+                          for details."
                         properties:
-                          backendRef:
-                            description: "BackendRef is a reference to a backend to
-                              forward matched requests to. If both BackendRef and
-                              ServiceName are specified, ServiceName will be given
-                              precedence. \n If the referent cannot be found, the
-                              rule is not included in the route. The controller should
-                              raise the \"ResolvedRefs\" condition on the Gateway
-                              with the \"DegradedRoutes\" reason. The gateway status
-                              for this route should be updated with a condition that
-                              describes the error more specifically. \n Support: Custom"
-                            properties:
-                              group:
-                                description: Group is the group of the referent.
-                                maxLength: 253
-                                minLength: 1
-                                type: string
-                              kind:
-                                description: Kind is kind of the referent.
-                                maxLength: 253
-                                minLength: 1
-                                type: string
-                              name:
-                                description: Name is the name of the referent.
-                                maxLength: 253
-                                minLength: 1
-                                type: string
-                            required:
-                            - group
-                            - kind
-                            - name
-                            type: object
+                          group:
+                            default: ""
+                            description: Group is the group of the referent. For example,
+                              "networking.k8s.io". When unspecified (empty string),
+                              core API group is inferred.
+                            maxLength: 253
+                            pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                            type: string
+                          kind:
+                            default: Service
+                            description: Kind is kind of the referent. For example
+                              "HTTPRoute" or "Service".
+                            maxLength: 63
+                            minLength: 1
+                            pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
+                            type: string
+                          name:
+                            description: Name is the name of the referent.
+                            maxLength: 253
+                            minLength: 1
+                            type: string
+                          namespace:
+                            description: "Namespace is the namespace of the backend.
+                              When unspecified, the local namespace is inferred. \n
+                              Note that when a namespace is specified, a ReferencePolicy
+                              object is required in the referent namespace to allow
+                              that namespace's owner to accept the reference. See
+                              the ReferencePolicy documentation for details. \n Support:
+                              Core"
+                            maxLength: 63
+                            minLength: 1
+                            pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+                            type: string
                           port:
-                            description: "Port specifies the destination port number
-                              to use for the backend referenced by the ServiceName
-                              or BackendRef field. If unspecified, the destination
-                              port in the request is used when forwarding to a backendRef
-                              or serviceName. \n Support: Core"
+                            description: Port specifies the destination port number
+                              to use for this resource. Port is required when the
+                              referent is a Kubernetes Service. For other resources,
+                              destination port might be derived from the referent
+                              resource or this field.
                             format: int32
                             maximum: 65535
                             minimum: 1
                             type: integer
-                          serviceName:
-                            description: "ServiceName refers to the name of the Service
-                              to forward matched requests to. When specified, this
-                              takes the place of BackendRef. If both BackendRef and
-                              ServiceName are specified, ServiceName will be given
-                              precedence. \n If the referent cannot be found, the
-                              rule is not included in the route. The controller should
-                              raise the \"ResolvedRefs\" condition on the Gateway
-                              with the \"DegradedRoutes\" reason. The gateway status
-                              for this route should be updated with a condition that
-                              describes the error more specifically. \n The protocol
-                              to use is defined using AppProtocol field (introduced
-                              in Kubernetes 1.18) in the Service resource. In the
-                              absence of the AppProtocol field a `networking.x-k8s.io/app-protocol`
-                              annotation on the BackendPolicy resource may be used
-                              to define the protocol. If the AppProtocol field is
-                              available, this annotation should not be used. The AppProtocol
-                              field, when populated, takes precedence over the annotation
-                              in the BackendPolicy resource. For custom backends,
-                              it is encouraged to add a semantically-equivalent field
-                              in the Custom Resource Definition. \n Support: Core"
-                            maxLength: 253
-                            type: string
                           weight:
                             default: 1
-                            description: "Weight specifies the proportion of HTTP
-                              requests forwarded to the backend referenced by the
-                              ServiceName or BackendRef field. This is computed as
-                              weight/(sum of all weights in this ForwardTo list).
+                            description: "Weight specifies the proportion of requests
+                              forwarded to the referenced backend. This is computed
+                              as weight/(sum of all weights in this BackendRefs list).
                               For non-zero values, there may be some epsilon from
                               the exact proportion defined here depending on the precision
                               an implementation supports. Weight is not a percentage
@@ -173,78 +205,18 @@ spec:
                               greater than 0, 100% of the traffic is forwarded to
                               that backend. If weight is set to 0, no traffic should
                               be forwarded for this entry. If unspecified, weight
-                              defaults to 1. \n Support: Extended"
+                              defaults to 1. \n Support for this field varies based
+                              on the context where used."
                             format: int32
                             maximum: 1000000
                             minimum: 0
                             type: integer
+                        required:
+                        - name
                         type: object
                       maxItems: 16
                       minItems: 1
                       type: array
-                    matches:
-                      description: "Matches define conditions used for matching the
-                        rule against incoming TCP connections. Each match is independent,
-                        i.e. this rule will be matched if **any** one of the matches
-                        is satisfied. If unspecified (i.e. empty), this Rule will
-                        match all requests for the associated Listener. \n Each client
-                        request MUST map to a maximum of one route rule. If a request
-                        matches multiple rules, matching precedence MUST be determined
-                        in order of the following criteria, continuing on ties: \n
-                        * The most specific match specified by ExtensionRef. Each
-                        implementation   that supports ExtensionRef may have different
-                        ways of determining the   specificity of the referenced extension.
-                        \n If ties still exist across multiple Routes, matching precedence
-                        MUST be determined in order of the following criteria, continuing
-                        on ties: \n * The oldest Route based on creation timestamp.
-                        For example, a Route with   a creation timestamp of \"2020-09-08
-                        01:02:03\" is given precedence over   a Route with a creation
-                        timestamp of \"2020-09-08 01:02:04\". * The Route appearing
-                        first in alphabetical order by   \"<namespace>/<name>\". For
-                        example, foo/bar is given precedence over   foo/baz. \n If
-                        ties still exist within the Route that has been given precedence,
-                        matching precedence MUST be granted to the first matching
-                        rule meeting the above criteria."
-                      items:
-                        description: TCPRouteMatch defines the predicate used to match
-                          connections to a given action.
-                        properties:
-                          extensionRef:
-                            description: "ExtensionRef is an optional, implementation-specific
-                              extension to the \"match\" behavior.  For example, resource
-                              \"mytcproutematcher\" in group \"networking.acme.io\".
-                              If the referent cannot be found, the rule is not included
-                              in the route. The controller should raise the \"ResolvedRefs\"
-                              condition on the Gateway with the \"DegradedRoutes\"
-                              reason. The gateway status for this route should be
-                              updated with a condition that describes the error more
-                              specifically. \n Support: Custom"
-                            properties:
-                              group:
-                                description: Group is the group of the referent.
-                                maxLength: 253
-                                minLength: 1
-                                type: string
-                              kind:
-                                description: Kind is kind of the referent.
-                                maxLength: 253
-                                minLength: 1
-                                type: string
-                              name:
-                                description: Name is the name of the referent.
-                                maxLength: 253
-                                minLength: 1
-                                type: string
-                            required:
-                            - group
-                            - kind
-                            - name
-                            type: object
-                        type: object
-                      maxItems: 8
-                      type: array
-                  required:
-                  - forwardTo
                   type: object
                 maxItems: 16
                 minItems: 1
@@ -255,27 +227,40 @@ spec:
           status:
             description: Status defines the current state of TCPRoute.
             properties:
-              gateways:
-                description: "Gateways is a list of Gateways that are associated with
-                  the route, and the status of the route with respect to each Gateway.
-                  When a Gateway selects this route, the controller that manages the
-                  Gateway must add an entry to this list when the controller first
-                  sees the route and should update the entry as appropriate when the
-                  route is modified. \n A maximum of 100 Gateways will be represented
-                  in this list. If this list is full, there may be additional Gateways
-                  using this Route that are not included in the list. An empty list
-                  means the route has not been admitted by any Gateway."
+              parents:
+                description: "Parents is a list of parent resources (usually Gateways)
+                  that are associated with the route, and the status of the route
+                  with respect to each parent. When this route attaches to a parent,
+                  the controller that manages the parent must add an entry to this
+                  list when the controller first sees the route and should update
+                  the entry as appropriate when the route or gateway is modified.
+                  \n Note that parent references that cannot be resolved by an implementation
+                  of this API will not be added to this list. Implementations of this
+                  API can only populate Route status for the Gateways/parent resources
+                  they are responsible for. \n A maximum of 32 Gateways will be represented
+                  in this list. An empty list means the route has not been attached
+                  to any Gateway."
                 items:
-                  description: RouteGatewayStatus describes the status of a route
-                    with respect to an associated Gateway.
+                  description: RouteParentStatus describes the status of a route with
+                    respect to an associated Parent.
                   properties:
                     conditions:
-                      description: Conditions describes the status of the route with
-                        respect to the Gateway. The "Admitted" condition must always
-                        be specified by controllers to indicate whether the route
-                        has been admitted or rejected by the Gateway, and why. Note
-                        that the route's availability is also subject to the Gateway's
-                        own status conditions and listener status.
+                      description: "Conditions describes the status of the route with
+                        respect to the Gateway. Note that the route's availability
+                        is also subject to the Gateway's own status conditions and
+                        listener status. \n If the Route's ParentRef specifies an
+                        existing Gateway that supports Routes of this kind AND that
+                        Gateway's controller has sufficient access, then that Gateway's
+                        controller MUST set the \"Accepted\" condition on the Route,
+                        to indicate whether the route has been accepted or rejected
+                        by the Gateway, and why. \n A Route MUST be considered \"Accepted\"
+                        if at least one of the Route's rules is implemented by the
+                        Gateway. \n There are a number of cases where the \"Accepted\"
+                        condition may not be set due to lack of controller visibility,
+                        that includes when: \n * The Route refers to a non-existent
+                        parent. * The Route is of a type that the controller does
+                        not support. * The Route is in a namespace the the controller
+                        does not have access to."
                       items:
                         description: "Condition contains details for one aspect of
                           the current state of this API Resource. --- This struct
@@ -348,45 +333,90 @@ spec:
                         - type
                         type: object
                       maxItems: 8
+                      minItems: 1
                       type: array
                       x-kubernetes-list-map-keys:
                       - type
                       x-kubernetes-list-type: map
-                    gatewayRef:
-                      description: GatewayRef is a reference to a Gateway object that
-                        is associated with the route.
+                    controllerName:
+                      description: "ControllerName is a domain/path string that indicates
+                        the name of the controller that wrote this status. This corresponds
+                        with the controllerName field on GatewayClass. \n Example:
+                        \"example.net/gateway-controller\". \n The format of this
+                        field is DOMAIN \"/\" PATH, where DOMAIN and PATH are valid
+                        Kubernetes names (https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names)."
+                      maxLength: 253
+                      minLength: 1
+                      pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*\/[A-Za-z0-9\/\-._~%!$&'()*+,;=:]+$
+                      type: string
+                    parentRef:
+                      description: ParentRef corresponds with a ParentRef in the spec
+                        that this RouteParentStatus struct describes the status of.
                       properties:
-                        controller:
-                          description: "Controller is a domain/path string that indicates
-                            the controller implementing the Gateway. This corresponds
-                            with the controller field on GatewayClass. \n Example:
-                            \"acme.io/gateway-controller\". \n The format of this
-                            field is DOMAIN \"/\" PATH, where DOMAIN and PATH are
-                            valid Kubernetes names (https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names)."
+                        group:
+                          default: gateway.networking.k8s.io
+                          description: "Group is the group of the referent. \n Support:
+                            Core"
                           maxLength: 253
+                          pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                          type: string
+                        kind:
+                          default: Gateway
+                          description: "Kind is kind of the referent. \n Support:
+                            Core (Gateway) Support: Custom (Other Resources)"
+                          maxLength: 63
+                          minLength: 1
+                          pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
                           type: string
                         name:
-                          description: Name is the name of the referent.
+                          description: "Name is the name of the referent. \n Support:
+                            Core"
                           maxLength: 253
                           minLength: 1
                           type: string
                         namespace:
-                          description: Namespace is the namespace of the referent.
+                          description: "Namespace is the namespace of the referent.
+                            When unspecified (or empty string), this refers to the
+                            local namespace of the Route. \n Support: Core"
+                          maxLength: 63
+                          minLength: 1
+                          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+                          type: string
+                        sectionName:
+                          description: "SectionName is the name of a section within
+                            the target resource. In the following resources, SectionName
+                            is interpreted as the following: \n * Gateway: Listener
+                            Name \n Implementations MAY choose to support attaching
+                            Routes to other resources. If that is the case, they MUST
+                            clearly document how SectionName is interpreted. \n When
+                            unspecified (empty string), this will reference the entire
+                            resource. For the purpose of status, an attachment is
+                            considered successful if at least one section in the parent
+                            resource accepts it. For example, Gateway listeners can
+                            restrict which Routes can attach to them by Route kind,
+                            namespace, or hostname. If 1 of 2 Gateway listeners accept
+                            attachment from the referencing Route, the Route MUST
+                            be considered successfully attached. If no Gateway listeners
+                            accept attachment from this Route, the Route MUST be considered
+                            detached from the Gateway. \n Support: Core"
                           maxLength: 253
                           minLength: 1
+                          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
                           type: string
                       required:
                       - name
-                      - namespace
                       type: object
                   required:
-                  - gatewayRef
+                  - controllerName
+                  - parentRef
                   type: object
-                maxItems: 100
+                maxItems: 32
                 type: array
             required:
-            - gateways
+            - parents
             type: object
+        required:
+        - spec
         type: object
     served: true
     storage: true
