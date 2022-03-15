@@ -134,6 +134,8 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "linode") .Values.linode.apiToken (not .Values.linode.secretName) -}}
     {{- true -}}
+{{- else if and (eq .Values.provider "oci") .Values.oci.privateKeyFingerprint (not .Values.oci.secretName) -}}
+    {{- true -}}
 {{- else if and (eq .Values.provider "rfc2136") (or .Values.rfc2136.tsigSecret (and .Values.rfc2136.kerberosUsername .Values.rfc2136.kerberosPassword)) (not .Values.rfc2136.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "pdns") .Values.pdns.apiKey (not .Values.pdns.secretName) -}}
@@ -183,6 +185,8 @@ Return the name of the Secret used to store the passwords
 {{- .Values.hetzner.secretName -}}
 {{- else if and (eq .Values.provider "linode") .Values.linode.secretName }}
 {{- .Values.linode.secretName }}
+{{- else if and (eq .Values.provider "oci") .Values.oci.secretName }}
+{{- .Values.oci.secretName }}
 {{- else if and (eq .Values.provider "ovh") .Values.ovh.secretName }}
 {{- .Values.ovh.secretName }}
 {{- else if and (eq .Values.provider "pdns") .Values.pdns.secretName }}
@@ -243,6 +247,19 @@ region = {{ .Values.aws.region }}
   "useManagedIdentityExtension": true
   {{- end }}
 }
+{{ end }}
+{{- define "external-dns.oci-credentials" -}}
+auth:
+  region: {{ .Values.oci.region }}
+  tenancy: {{ .Values.oci.tenancyOCID }}
+  user: {{ .Values.oci.userOCID }}
+  key: {{ toYaml .Values.oci.privateKey | indent 4 }}
+  fingerprint: {{ .Values.oci.privateKeyFingerprint }}
+  # Omit if there is not a password for the key
+  {{- if .Values.oci.privateKeyPassphrase }}
+  passphrase: {{ .Values.oci.privateKeyPassphrase }}
+  {{- end }}
+compartment: {{ .Values.oci.compartmentOCID }}
 {{ end }}
 
 {{/*
