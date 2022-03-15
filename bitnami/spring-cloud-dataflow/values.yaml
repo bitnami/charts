@@ -982,9 +982,10 @@ deployer:
   environmentVariables: []
   ## Streams containers' Security Context. This security context will be use in every deployed stream.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param deployer.podSecurityContext.enabled Enabled pods' Security Context of the deployed pods batch or stream pods
   ## @param deployer.podSecurityContext.runAsUser Set Dataflow Streams container's Security Context runAsUser
-  ##
   podSecurityContext:
+    enabled: true
     runAsUser: 1001
   ## @param deployer.imagePullSecrets Streaming applications imagePullSecrets
   ##

@@ -291,6 +291,7 @@ helm uninstall my-release
 | `deployer.volumeMounts`                       | Streaming applications extra volume mounts                                                  | `{}`   |
 | `deployer.volumes`                            | Streaming applications extra volumes                                                        | `{}`   |
 | `deployer.environmentVariables`               | Streaming applications environment variables                                                | `[]`   |
+| `deployer.podSecurityContext.enabled`         | Enabled pods' Security Context of the deployed pods batch or stream pods                    | `true` |
 | `deployer.podSecurityContext.runAsUser`       | Set Dataflow Streams container's Security Context runAsUser                                 | `1001` |
 | `deployer.imagePullSecrets`                   | Streaming applications imagePullSecrets                                                     | `[]`   |
 | `deployer.secretRefs`                         | Streaming applications secretRefs                                                           | `[]`   |
