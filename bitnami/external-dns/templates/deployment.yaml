@@ -628,6 +628,10 @@ spec:
             - name: google-service-account
               mountPath: /etc/secrets/service-account/
             {{- end }}
+            {{- if eq .Values.provider "oci" }}
+            - name: oci-config-file
+              mountPath: /etc/kubernetes/
+            {{- end }}
             {{- if eq .Values.provider "designate" }}
             # Designate mountPath(s)
             {{- if and (.Values.designate.customCAHostPath) (.Values.designate.customCA.enabled) }}
@@ -687,6 +691,11 @@ spec:
             path: /etc/kubernetes/azure.json
             type: File
           {{- end }}
+        {{- end }}
+        {{- if (eq .Values.provider "oci")}}
+        - name: oci-config-file
+          secret:
+            secretName: {{ template "external-dns.secretName" . }}
         {{- end }}
         {{- if and (eq .Values.provider "coredns") (.Values.coredns.etcdTLS.enabled) }}
         # CoreDNS volume(s)

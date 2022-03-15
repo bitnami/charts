@@ -61,6 +61,9 @@ data:
     #!/bin/bash
 
     . /opt/bitnami/scripts/mongodb-env.sh
+    . /opt/bitnami/scripts/libfs.sh
+    . /opt/bitnami/scripts/liblog.sh
+    . /opt/bitnami/scripts/libvalidations.sh
 
     {{- if .Values.externalAccess.enabled }}
     {{- if eq .Values.externalAccess.service.type "LoadBalancer" }}
@@ -88,18 +91,57 @@ data:
     /scripts/replicaSetConfigurationSettings.sh &
     {{- end }}
 
-    echo "Advertised Hostname: $MONGODB_ADVERTISED_HOSTNAME"
-    echo "Advertised Port: $MONGODB_ADVERTISED_PORT_NUMBER"
+    if is_empty_value "$MONGODB_ADVERTISED_PORT_NUMBER"; then
+      export MONGODB_ADVERTISED_PORT_NUMBER="$MONGODB_PORT_NUMBER"
+    fi
 
-    if [[ "$MY_POD_NAME" = "{{ $fullname }}-0" ]]; then
-        echo "Pod name matches initial primary pod name, configuring node as a primary"
+    info "Advertised Hostname: $MONGODB_ADVERTISED_HOSTNAME"
+    info "Advertised Port: $MONGODB_ADVERTISED_PORT_NUMBER"
+
+    # Check for existing replica set in case there is no data in the PVC
+    # This is for cases where the PVC is lost or for MongoDB caches without
+    # persistence
+    current_primary=""
+    if is_dir_empty "${MONGODB_DATA_DIR}/db"; then
+      info "Data dir empty, checking if the replica set already exists"
+      {{- $replicaCount := int .Values.replicaCount }}
+      {{- $portNumber := int .Values.service.port }}
+      {{- $fullname := include "mongodb.fullname" . }}
+      {{- $releaseNamespace := include "mongodb.namespace" . }}
+      {{- $clusterDomain := .Values.clusterDomain }}
+      {{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs }}
+      {{- $mongoList := list }}
+      {{- range $e, $i := until $replicaCount }}
+      {{- $mongoList = append $mongoList (printf "%s-%d.%s-headless.%s.svc.%s:%d" $fullname $i $fullname $releaseNamespace $clusterDomain $portNumber) }}
+      {{- end }}
+      current_primary=$(mongo admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}{{- if .Values.tls.enabled}} --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert{{- end }} --eval 'db.runCommand("ismaster")' | awk -F\" '/primary/ {print $4}')
+
+      if ! is_empty_value "$current_primary"; then
+        info "Detected existing primary: ${current_primary}"
+      fi
+    fi
+
+    if ! is_empty_value "$current_primary" && [[ "$MONGODB_ADVERTISED_HOSTNAME:$MONGODB_ADVERTISED_PORT_NUMBER" == "$current_primary" ]]; then
+        info "Advertised name matches current primary, configuring node as a primary"
+        export MONGODB_REPLICA_SET_MODE="primary"
+    elif ! is_empty_value "$current_primary" && [[ "$MONGODB_ADVERTISED_HOSTNAME:$MONGODB_ADVERTISED_PORT_NUMBER" != "$current_primary" ]]; then
+        info "Current primary is different from this node. Configuring the node as replica of ${current_primary}"
+        export MONGODB_REPLICA_SET_MODE="secondary"
+        export MONOGDB_INITIAL_PRIMARY_HOST="${current_primary%:*}"
+        export MONGODB_INITIAL_PRIMARY_PORT_NUMBER="${current_primary#*:}"
+        export MONGODB_SET_SECONDARY_OK="yes"
+    elif [[ "$MY_POD_NAME" = "{{ $fullname }}-0" ]]; then
+        info "Pod name matches initial primary pod name, configuring node as a primary"
         export MONGODB_REPLICA_SET_MODE="primary"
     else
-        echo "Pod name doesn't match initial primary pod name, configuring node as a secondary"
+        info "Pod name doesn't match initial primary pod name, configuring node as a secondary"
         export MONGODB_REPLICA_SET_MODE="secondary"
+        export MONGODB_INITIAL_PRIMARY_PORT_NUMBER="$MONGODB_PORT_NUMBER"
+    fi
+
+    if [[ "$MONGODB_REPLICA_SET_MODE" == "secondary" ]]; then
         export MONGODB_INITIAL_PRIMARY_ROOT_USER="$MONGODB_ROOT_USER"
         export MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD="$MONGODB_ROOT_PASSWORD"
-        export MONGODB_INITIAL_PRIMARY_PORT_NUMBER="$MONGODB_PORT_NUMBER"
         export MONGODB_ROOT_PASSWORD=""
         export MONGODB_EXTRA_USERNAMES=""
         export MONGODB_EXTRA_DATABASES=""

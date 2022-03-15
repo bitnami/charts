@@ -1,32 +1,11 @@
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "odoo.name" -}}
-{{- include "common.names.name" . -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "odoo.fullname" -}}
-{{- include "common.names.fullname" . -}}
-{{- end -}}
-
+=
 {{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "odoo.postgresql.fullname" -}}
 {{- include "common.names.dependency.fullname" (dict "chartName" "postgresql" "chartValues" .Values.postgresql "context" $) -}}
-{{- end -}}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "odoo.chart" -}}
-{{- include "common.names.chart" . -}}
 {{- end -}}
 
 {{/*
@@ -41,13 +20,6 @@ Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "odoo.imagePullSecrets" -}}
 {{ include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return  the proper Storage Class
-*/}}
-{{- define "odoo.storageClass" -}}
-{{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -126,10 +98,48 @@ Return the PostgreSQL Secret Name
 {{- end -}}
 
 {{/*
+Add environment variables to configure database values
+*/}}
+{{- define "odoo.databaseSecretPasswordKey" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- print "password" -}}
+{{- else -}}
+    {{- if .Values.externalDatabase.existingSecret -}}
+        {{- if .Values.externalDatabase.existingSecretPasswordKey -}}
+            {{- printf "%s" .Values.externalDatabase.existingSecretPasswordKey -}}
+        {{- else -}}
+            {{- print "password" -}}
+        {{- end -}}
+    {{- else -}}
+        {{- print "password" -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Add environment variables to configure database values
+*/}}
+{{- define "odoo.databaseSecretPostgresPasswordKey" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- print "postgres-password" -}}
+{{- else -}}
+    {{- if .Values.externalDatabase.existingSecret -}}
+        {{- if .Values.externalDatabase.existingSecretPostgresPasswordKey -}}
+            {{- printf "%s" .Values.externalDatabase.existingSecretPostgresPasswordKey -}}
+        {{- else -}}
+            {{- print "postgres-password" -}}
+        {{- end -}}
+    {{- else -}}
+        {{- print "postgres-password" -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Odoo credential secret name
 */}}
 {{- define "odoo.secretName" -}}
-{{- coalesce .Values.existingSecret (include "odoo.fullname" .) -}}
+{{- coalesce .Values.existingSecret (include "common.names.fullname" .) -}}
 {{- end -}}
 
 {{/*
@@ -144,7 +154,7 @@ Return the SMTP Secret Name
  */}}
 {{- define "odoo.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "odoo.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}

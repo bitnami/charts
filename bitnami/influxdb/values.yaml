@@ -865,7 +865,7 @@ ingress:
   ##
   enabled: false
   ## @param ingress.tls Create TLS Secret
-  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
+  ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" (tpl .Values.ingress.hostname .) }}
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
@@ -879,7 +879,7 @@ ingress:
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
-  ## @param ingress.hostname Default host for the ingress resource
+  ## @param ingress.hostname Default host for the ingress resource (evaluated as template)
   ##
   hostname: influxdb.local
   ## @param ingress.path Ingress path*' in order to use this

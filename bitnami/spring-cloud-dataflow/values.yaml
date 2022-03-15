@@ -982,17 +982,23 @@ deployer:
   environmentVariables: []
   ## Streams containers' Security Context. This security context will be use in every deployed stream.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param deployer.podSecurityContext.enabled Enabled pods' Security Context of the deployed pods batch or stream pods
   ## @param deployer.podSecurityContext.runAsUser Set Dataflow Streams container's Security Context runAsUser
-  ##
   podSecurityContext:
+    enabled: true
     runAsUser: 1001
   ## @param deployer.imagePullSecrets Streaming applications imagePullSecrets
   ##
   imagePullSecrets: []
-
   ## @param deployer.secretRefs Streaming applications secretRefs
   ##
   secretRefs: []
+  ## @param deployer.entryPointStyle An entry point style affects how application properties are passed to the container to be deployed. Allowed values: exec (default), shell, boot
+  ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#_entry_point_style
+  entryPointStyle: exec
+  ## @param deployer.imagePullPolicy An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never
+  ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#_image_pull_policy
+  imagePullPolicy: IfNotPresent
 
 ## @section RBAC parameters
 

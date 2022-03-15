@@ -49,6 +49,9 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- end }}
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ template "logstash.serviceAccountName" . }}
+      {{- end }}
       {{- if or (and .Values.securityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled) (.Values.initContainers) }}
       initContainers:
         {{- if and .Values.securityContext.enabled .Values.volumePermissions.enabled }}
