@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.4.52
+appVersion: 2.4.53
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -26,4 +26,4 @@ name: apache
 sources:
   - https://github.com/bitnami/bitnami-docker-apache
   - https://httpd.apache.org
-version: 9.0.9
+version: 9.0.10
