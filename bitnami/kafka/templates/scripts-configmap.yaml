@@ -146,9 +146,29 @@ data:
     PEM_CERT="/certs/kafka-${ID}.keystore.pem"
     PEM_KEY="/certs/kafka-${ID}.keystore.key"
     {{- end }}
-    if [[ -f "$PEM_CA" ]] && [[ -f "$PEM_CERT" ]] && [[ -f "$PEM_KEY" ]]; then
-        cp "$PEM_CA" "/opt/bitnami/kafka/config/certs/kafka.truststore.pem"
-        cp "$PEM_CERT" "/opt/bitnami/kafka/config/certs/kafka.keystore.pem"
+    if [[ -f "$PEM_CERT" ]] && [[ -f "$PEM_KEY" ]]; then
+        CERT_DIR="/opt/bitnami/kafka/config/certs"
+        PEM_CA_LOCATION="${CERT_DIR}/kafka.truststore.pem"
+        PEM_CERT_LOCATION="${CERT_DIR}/kafka.keystore.pem"
+        {{- if .Values.auth.tls.pemChainIncluded }}
+            cat $PEM_CERT | csplit - -s -z '/\-*END CERTIFICATE\-*/+1' '{*}' -f ${CERT_DIR}/xx
+            FIND_CA_RESULT=$(find ${CERT_DIR} -not -name 'xx00' -name 'xx*')
+            if [[ $(echo $FIND_CA_RESULT | wc -l)  < 1 ]]; then
+                echo "auth.tls.pemChainIncluded was set, but PEM chain only contained 1 cert"
+                exit 1
+            fi
+            echo $FIND_CA_RESULT | sort | xargs cat >> "$PEM_CA_LOCATION"
+            cat ${CERT_DIR}/xx00 > "$PEM_CERT_LOCATION"
+        {{- else }}
+            if [[ -f "$PEM_CA" ]]; then
+                cp "$PEM_CA" "$PEM_CA_LOCATION"
+                cp "$PEM_CERT" "$PEM_CERT_LOCATION"
+            else
+                echo "PEM_CA not provided, and auth.tls.pemChainIncluded was not true. One of these values must be set when using PEM type for TLS."
+                exit 1
+            fi
+        {{- end }}
+
         # Ensure the key used PEM format with PKCS#8
         openssl pkcs8 -topk8 -nocrypt -in "$PEM_KEY" > "/opt/bitnami/kafka/config/certs/kafka.keystore.key"
     else
