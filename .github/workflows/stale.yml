@@ -1,0 +1,21 @@
+name: 'Close stale issues and PRs'
+on:
+  schedule:
+    - cron: '0 1 * * *'
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-message: 'This Issue has been automatically marked as "stale" because it has not had recent activity (for 15 days). It will be closed if no further activity occurs. Thanks for the feedback.'
+          stale-pr-message: 'This Pull Request has been automatically marked as "stale" because it has not had recent activity (for 15 days). It will be closed if no further activity occurs. Thank you for your contribution.'
+          close-issue-message: 'Due to the lack of activity in the last 5 days since it was marked as "stale", we proceed to close this Issue. Do not hesitate to reopen it later if necessary.'
+          close-pr-message: 'Due to the lack of activity in the last 5 days since it was marked as "stale", we proceed to close this Pull Request. Do not hesitate to reopen it later if necessary.'
+          days-before-stale: 15
+          days-before-close: 5
+          exempt-issue-labels: 'on-hold'
+          exempt-pr-labels: 'on-hold'
+          operations-per-run: 500
