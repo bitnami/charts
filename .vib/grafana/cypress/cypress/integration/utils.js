@@ -5,4 +5,3 @@ export const verifySuccesOfAction = () => {
 };
 
 export let random = (Math.random() + 1).toString(36).substring(7);
-console.log('random', random);
