@@ -184,6 +184,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.initContainers`                     | Add additional init containers to the Redis&trade; master pod(s)                                  | `[]`                     |
 | `master.persistence.enabled`                | Enable persistence on Redis&trade; master nodes using Persistent Volume Claims                    | `true`                   |
 | `master.persistence.medium`                 | Provide a medium for `emptyDir` volumes.                                                          | `""`                     |
+| `master.persistence.sizeLimit`              | Set this to enable a size limit for `emptyDir` volumes.                                                          | `""`                     |
 | `master.persistence.path`                   | The path the volume will be mounted at on Redis&trade; master containers                          | `/data`                  |
 | `master.persistence.subPath`                | The subdirectory of the volume to mount on Redis&trade; master containers                         | `""`                     |
 | `master.persistence.storageClass`           | Persistent Volume storage class                                                                   | `""`                     |
