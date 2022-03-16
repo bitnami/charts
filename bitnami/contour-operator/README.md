@@ -99,18 +99,17 @@ The operator will extend the Kubernetes API with the *Contour* object, among oth
   |                    |      |     RBAC      |
   |     Deployment     |      | Privileges    |
   +-------+------------+      +-------+-------+
-    ���     ^                           |
-    ���     |   +-----------------+     |
-    ���     +---+ Service Account +<----+
-    ���         +-----------------+
-    ���
-    ���
-    ���
-    ���
-    ���    ���������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������
-    ���    ���                                                                       ���
+    |     ^                           |
+    |     |   +-----------------+     |
+    |     +---+ Service Account +<----+
+    |         +-----------------+
+    |
+    |
+    |
+    |
+    |    +-----------------------------------------------------------------------+
     |    |                       +--------------+                +-------------+ |
-    |���������������                       |              |                |             | |
+    |->  |                       |              |                |             | |
          |    Service            |   Contour    |                |    Envoy    | |
          |   <-------------------+              +<---------------+             | |
          |                       |  Deployment  |                |  DaemonSet  | |
@@ -118,12 +117,10 @@ The operator will extend the Kubernetes API with the *Contour* object, among oth
          |                       +-----------+--+                +-------------+ |
          |                                   ^                                   |
          |                                   |                +------------+     |
-         ���                                   +----------------+ Configmaps |     |
-         ���                                                    |  Secrets   |     |
-         ���                                                    +------------+     |
-         ���                                                                       ���
-         ���                                                                       ���
-         ���������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������
+         |                                   +----------------+ Configmaps |     |
+         |                                                    |  Secrets   |     |
+         |                                                    +------------+     |
+         +-----------------------------------------------------------------------+
 
 ```
 
@@ -134,7 +131,7 @@ This solution allows to easily deploy multiple Contour instances compared to the
 ### Global parameters
 
 | Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
+|:--------------------------|:------------------------------------------------|:------|
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
@@ -143,7 +140,7 @@ This solution allows to easily deploy multiple Contour instances compared to the
 ### Common parameters
 
 | Name                | Description                                        | Value |
-| ------------------- | -------------------------------------------------- | ----- |
+|:--------------------|:---------------------------------------------------|:------|
 | `kubeVersion`       | Override Kubernetes version                        | `""`  |
 | `nameOverride`      | String to partially override common.names.fullname | `""`  |
 | `fullnameOverride`  | String to fully override common.names.fullname     | `""`  |
@@ -155,7 +152,7 @@ This solution allows to easily deploy multiple Contour instances compared to the
 ### Contour Operator Parameters
 
 | Name                                    | Description                                                                                                              | Value                      |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+|:----------------------------------------|:-------------------------------------------------------------------------------------------------------------------------|:---------------------------|
 | `image.registry`                        | Contour Operator image registry                                                                                          | `docker.io`                |
 | `image.repository`                      | Contour Operator image repository                                                                                        | `bitnami/contour-operator` |
 | `image.tag`                             | Contour Operator image tag (immutable tags are recommended)                                                              | `1.19.1-scratch-r3`        |
@@ -230,7 +227,7 @@ This solution allows to easily deploy multiple Contour instances compared to the
 ### Other Parameters
 
 | Name                                          | Description                                          | Value  |
-| --------------------------------------------- | ---------------------------------------------------- | ------ |
+|:----------------------------------------------|:-----------------------------------------------------|:-------|
 | `rbac.create`                                 | Specifies whether RBAC resources should be created   | `true` |
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created | `true` |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.               | `""`   |
@@ -240,7 +237,7 @@ This solution allows to easily deploy multiple Contour instances compared to the
 ### Metrics parameters
 
 | Name                                       | Description                                                                      | Value       |
-| ------------------------------------------ | -------------------------------------------------------------------------------- | ----------- |
+|:-------------------------------------------|:---------------------------------------------------------------------------------|:------------|
 | `metrics.enabled`                          | Create a service for accessing the metrics endpoint                              | `false`     |
 | `metrics.service.type`                     | Contour Operator metrics service type                                            | `ClusterIP` |
 | `metrics.service.ports.http`               | Contour Operator metrics service HTTP port                                       | `80`        |
@@ -359,6 +356,14 @@ extraDeploy:
       namespace:
         name: {{ .Release.Namespace | quote }}
 ```
+
+## Upgrading
+
+### To 1.0.0
+
+This version updates the chart to use Contour's latest release, `1.20.1`. Among other features, exisiting CRDs have been syncronised with the official [Contour repository](https://github.com/projectcontour/contour/blob/main/examples/render/contour.yaml)
+
+This version bumps the Envoy and Contour container to the ones matching the Contour Operator requirements.
 
 ## Troubleshooting
 

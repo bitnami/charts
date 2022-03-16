@@ -7,7 +7,7 @@ This Helm chart can be used for the automated deployment of a data platform blue
 [Overview of Data Platform Blueprint 2](https://github.com/bitnami/dataplatform-emitter)
 
 
-
+                           
 ## TL;DR
 
 ```console
@@ -22,16 +22,16 @@ Open source and commercial supported software stacks are available to implement 
 
 This Helm chart enables the fully automated Kubernetes deployment of such multi-stack data platform, covering the following software components:
 
--   Apache Kafka              ��� Data distribution bus with buffering capabilities
--   Apache Spark              ��� In-memory data analytics
--   Elasticsearch with Kibana ��� Data persistence and search
+-   Apache Kafka              - Data distribution bus with buffering capabilities
+-   Apache Spark              - In-memory data analytics
+-   Elasticsearch with Kibana - Data persistence and search
 -   Logstash                  - Data Processing Pipeline
 -   Data Platform Signature State Controller - Kubernetes controller that emits data platform health and state metrics in Prometheus format.
 
 These containerized stateful software stacks are deployed in multi-node cluster configurations, which is defined by the Helm Chart blueprint for this data platform deployment, covering:
 
--   Pod placement rules ��� Affinity rules to ensure placement diversity to prevent single point of failures and optimize load distribution
--   Pod resource sizing rules ��� Optimized Pod and JVM sizing settings for optimal performance and efficient resource usage
+-   Pod placement rules - Affinity rules to ensure placement diversity to prevent single point of failures and optimize load distribution
+-   Pod resource sizing rules - Optimized Pod and JVM sizing settings for optimal performance and efficient resource usage
 -   Default settings to ensure Pod access security
 -   Optional [Tanzu Observability](https://docs.wavefront.com/kubernetes.html) framework configuration.
 

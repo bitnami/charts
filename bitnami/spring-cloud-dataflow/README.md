@@ -280,20 +280,23 @@ helm uninstall my-release
 
 ### Deployer parameters
 
-| Name                                          | Description                                                                                 | Value  |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------- | ------ |
-| `deployer.resources.limits`                   | Streaming applications resource limits                                                      | `{}`   |
-| `deployer.resources.requests`                 | Streaming applications resource requests                                                    | `{}`   |
-| `deployer.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                    | `120`  |
-| `deployer.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                     | `90`   |
-| `deployer.nodeSelector`                       | The node selectors to apply to the streaming applications deployments in "key:value" format | `""`   |
-| `deployer.tolerations`                        | Streaming applications tolerations                                                          | `{}`   |
-| `deployer.volumeMounts`                       | Streaming applications extra volume mounts                                                  | `{}`   |
-| `deployer.volumes`                            | Streaming applications extra volumes                                                        | `{}`   |
-| `deployer.environmentVariables`               | Streaming applications environment variables                                                | `[]`   |
-| `deployer.podSecurityContext.runAsUser`       | Set Dataflow Streams container's Security Context runAsUser                                 | `1001` |
-| `deployer.imagePullSecrets`                   | Streaming applications imagePullSecrets                                                     | `[]`   |
-| `deployer.secretRefs`                         | Streaming applications secretRefs                                                           | `[]`   |
+| Name                                          | Description                                                                                                                                     | Value          |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| `deployer.resources.limits`                   | Streaming applications resource limits                                                                                                          | `{}`           |
+| `deployer.resources.requests`                 | Streaming applications resource requests                                                                                                        | `{}`           |
+| `deployer.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                                        | `120`          |
+| `deployer.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                         | `90`           |
+| `deployer.nodeSelector`                       | The node selectors to apply to the streaming applications deployments in "key:value" format                                                     | `""`           |
+| `deployer.tolerations`                        | Streaming applications tolerations                                                                                                              | `{}`           |
+| `deployer.volumeMounts`                       | Streaming applications extra volume mounts                                                                                                      | `{}`           |
+| `deployer.volumes`                            | Streaming applications extra volumes                                                                                                            | `{}`           |
+| `deployer.environmentVariables`               | Streaming applications environment variables                                                                                                    | `[]`           |
+| `deployer.podSecurityContext.enabled`         | Enabled pods' Security Context of the deployed pods batch or stream pods                                                                        | `true`         |
+| `deployer.podSecurityContext.runAsUser`       | Set Dataflow Streams container's Security Context runAsUser                                                                                     | `1001`         |
+| `deployer.imagePullSecrets`                   | Streaming applications imagePullSecrets                                                                                                         | `[]`           |
+| `deployer.secretRefs`                         | Streaming applications secretRefs                                                                                                               | `[]`           |
+| `deployer.entryPointStyle`                    | An entry point style affects how application properties are passed to the container to be deployed. Allowed values: exec (default), shell, boot | `exec`         |
+| `deployer.imagePullPolicy`                    | An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never  | `IfNotPresent` |
 
 
 ### RBAC parameters

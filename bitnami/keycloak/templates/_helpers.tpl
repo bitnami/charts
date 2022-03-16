@@ -168,7 +168,7 @@ Return the Database encrypted password
         {{- default (include "keycloak.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
     {{- end -}}
 {{- else -}}
-    {{- default (tpl .Values.auth.existingSecret $) (tpl .Values.externalDatabase.existingSecret $) -}}
+    {{- default (include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $)) (tpl .Values.externalDatabase.existingSecret $) -}}
 {{- end -}}
 {{- end -}}
 

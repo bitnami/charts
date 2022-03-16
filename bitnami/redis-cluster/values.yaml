@@ -57,9 +57,6 @@ diagnosticMode:
   args:
     - infinity
 
-## @section Redis&trade; Cluster Common parameters
-##
-
 ## Bitnami Redis&trade; image version
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
 ## @param image.registry Redis&trade; cluster image registry
@@ -393,6 +390,10 @@ redis:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param redis.hostNetwork Host networking requested for this pod. Use the host's network namespace.
+  ## https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#podspec-v1-core
+  ##
+  hostNetwork: false
   ## @param redis.useAOFPersistence Whether to use AOF Persistence mode or not
   ## It is strongly recommended to use this type when dealing with clusters
   ## ref: https://redis.io/topics/persistence#append-only-file

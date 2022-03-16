@@ -68,7 +68,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.1.0-debian-10-r31
+  tag: 3.1.0-debian-10-r40
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -698,7 +698,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.23.4-debian-10-r9
+      tag: 1.23.4-debian-10-r17
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -789,7 +789,7 @@ networkPolicy:
   ##
   enabled: false
   ## @param networkPolicy.allowExternal Don't require client label for connections
-  ## When set to false, only pods with the correct client label will have network access to the port Redis&trade; is
+  ## When set to false, only pods with the correct client label will have network access to the port Kafka is
   ## listening on. When true, zookeeper accept connections from any source (with the correct destination port).
   ##
   allowExternal: true
@@ -925,7 +925,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r351
+    tag: 10-debian-10-r360
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1003,7 +1003,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.4.2-debian-10-r160
+      tag: 1.4.2-debian-10-r169
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1229,7 +1229,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.16.1-debian-10-r222
+      tag: 0.16.1-debian-10-r232
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1366,6 +1366,61 @@ provisioning:
   ## @param provisioning.enabled Enable kafka provisioning Job
   ##
   enabled: false
+  ## Auth Configuration for kafka provisioning Job
+  ##
+  auth:
+    ## TLS configuration for kafka provisioning Job
+    ##
+    tls:
+      ## @param provisioning.auth.tls.type Format to use for TLS certificates. Allowed types: `jks` and `pem`.
+      ## Note: ignored if auth.tls.clientProtocol different from one of these values: "tls" "mtls" "sasl_tls".
+      ##
+      type: jks
+      ## @param provisioning.auth.tls.certificatesSecret Existing secret containing the TLS certificates for the Kafka provisioning Job.
+      ## When using 'jks' format for certificates, the secret should contain a truststore and a keystore.
+      ## When using 'pem' format for certificates, the secret should contain a public CA certificate, a public certificate and one private key.
+      ##
+      certificatesSecret: ""
+      ## @param provisioning.auth.tls.cert The secret key from the certificatesSecret if 'cert' key different from the default (tls.crt)
+      ##
+      cert: tls.crt
+      ## @param provisioning.auth.tls.key The secret key from the certificatesSecret if 'key' key different from the default (tls.key)
+      ##
+      key: tls.key
+      ## @param provisioning.auth.tls.caCert The secret key from the certificatesSecret if 'caCert' key different from the default (ca.crt)
+      ##
+      caCert: ca.crt
+      ## @param provisioning.auth.tls.keystore The secret key from the certificatesSecret if 'keystore' key different from the default (keystore.jks)
+      ##
+      keystore: keystore.jks
+      ## @param provisioning.auth.tls.truststore The secret key from the certificatesSecret if 'truststore' key different from the default (truststore.jks)
+      ##
+      truststore: truststore.jks
+      ## @param provisioning.auth.tls.passwordsSecret Name of the secret containing passwords to access the JKS files or PEM key when they are password-protected.
+      ## It should contain two keys called "keystore-password" and "truststore-password", or "key-password" if using a password-protected PEM key.
+      ##
+      passwordsSecret: ""
+      ## @param provisioning.auth.tls.keyPasswordSecretKey The secret key from the passwordsSecret if 'keyPasswordSecretKey' key different from the default (key-password)
+      ## Note: must not be used if `passwordsSecret` is not defined.
+      ##
+      keyPasswordSecretKey: key-password
+      ## @param provisioning.auth.tls.keystorePasswordSecretKey The secret key from the passwordsSecret if 'keystorePasswordSecretKey' key different from the default (keystore-password)
+      ## Note: must not be used if `passwordsSecret` is not defined.
+      ##
+      keystorePasswordSecretKey: keystore-password
+      ## @param provisioning.auth.tls.truststorePasswordSecretKey The secret key from the passwordsSecret if 'truststorePasswordSecretKey' key different from the default (truststore-password)
+      ## Note: must not be used if `passwordsSecret` is not defined.
+      ##
+      truststorePasswordSecretKey: truststore-password
+      ## @param provisioning.auth.tls.keyPassword Password to access the password-protected PEM key if necessary. Ignored if 'passwordsSecret' is provided.
+      ##
+      keyPassword: ""
+      ## @param provisioning.auth.tls.keystorePassword Password to access the JKS keystore. Ignored if 'passwordsSecret' is provided.
+      ##
+      keystorePassword: ""
+      ## @param provisioning.auth.tls.truststorePassword Password to access the JKS truststore. Ignored if 'passwordsSecret' is provided.
+      ##
+      truststorePassword: ""
   ## @param provisioning.numPartitions Default number of partitions for topics when unspecified
   ##
   numPartitions: 1
