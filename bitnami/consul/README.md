@@ -222,29 +222,32 @@ $ helm delete --purge my-release
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                                                 | Value                     |
-| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`                          | Start a side-car prometheus exporter                                                                                        | `false`                   |
-| `metrics.image.registry`                   | HashiCorp Consul Prometheus Exporter image registry                                                                         | `docker.io`               |
-| `metrics.image.repository`                 | HashiCorp Consul Prometheus Exporter image repository                                                                       | `bitnami/consul-exporter` |
-| `metrics.image.tag`                        | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.7.1-debian-10-r508`    |
-| `metrics.image.pullPolicy`                 | HashiCorp Consul Prometheus Exporter image pull policy                                                                      | `IfNotPresent`            |
-| `metrics.image.pullSecrets`                | HashiCorp Consul Prometheus Exporter image pull secrets                                                                     | `[]`                      |
-| `metrics.service.type`                     | Kubernetes Service type                                                                                                     | `ClusterIP`               |
-| `metrics.service.loadBalancerIP`           | Service Load Balancer IP                                                                                                    | `""`                      |
-| `metrics.service.annotations`              | Provide any additional annotations which may be required.                                                                   | `{}`                      |
-| `metrics.podAnnotations`                   | Metrics exporter pod Annotation and Labels                                                                                  | `{}`                      |
-| `metrics.resources.limits`                 | The resources limits for the container                                                                                      | `{}`                      |
-| `metrics.resources.requests`               | The requested resources for the container                                                                                   | `{}`                      |
-| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator, set to true to create a Service Monitor Entry | `false`                   |
-| `metrics.serviceMonitor.namespace`         | The namespace in which the ServiceMonitor will be created                                                                   | `""`                      |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                                                                 | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`     | The timeout after which the scrape is ended                                                                                 | `""`                      |
-| `metrics.serviceMonitor.metricRelabelings` | Metrics relabelings to add to the scrape endpoint                                                                           | `[]`                      |
-| `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                                                    | `false`                   |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                           | `""`                      |
-| `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                                                              | `{}`                      |
-| `metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with       | `{}`                      |
+| Name                                            | Description                                                                                                                 | Value                     |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`                               | Start a side-car prometheus exporter                                                                                        | `false`                   |
+| `metrics.image.registry`                        | HashiCorp Consul Prometheus Exporter image registry                                                                         | `docker.io`               |
+| `metrics.image.repository`                      | HashiCorp Consul Prometheus Exporter image repository                                                                       | `bitnami/consul-exporter` |
+| `metrics.image.tag`                             | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.7.1-debian-10-r508`    |
+| `metrics.image.pullPolicy`                      | HashiCorp Consul Prometheus Exporter image pull policy                                                                      | `IfNotPresent`            |
+| `metrics.image.pullSecrets`                     | HashiCorp Consul Prometheus Exporter image pull secrets                                                                     | `[]`                      |
+| `metrics.containerSecurityContext.enabled`      | HashiCorp Consul Prometheus Exporter securityContext                                                                        | `true`                    |
+| `metrics.containerSecurityContext.runAsUser`    | User ID for the HashiCorp Consul Prometheus Exporter                                                                        | `1001`                    |
+| `metrics.containerSecurityContext.runAsNonRoot` | Force the container to be run as non root                                                                                   | `true`                    |
+| `metrics.service.type`                          | Kubernetes Service type                                                                                                     | `ClusterIP`               |
+| `metrics.service.loadBalancerIP`                | Service Load Balancer IP                                                                                                    | `""`                      |
+| `metrics.service.annotations`                   | Provide any additional annotations which may be required.                                                                   | `{}`                      |
+| `metrics.podAnnotations`                        | Metrics exporter pod Annotation and Labels                                                                                  | `{}`                      |
+| `metrics.resources.limits`                      | The resources limits for the container                                                                                      | `{}`                      |
+| `metrics.resources.requests`                    | The requested resources for the container                                                                                   | `{}`                      |
+| `metrics.serviceMonitor.enabled`                | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator, set to true to create a Service Monitor Entry | `false`                   |
+| `metrics.serviceMonitor.namespace`              | The namespace in which the ServiceMonitor will be created                                                                   | `""`                      |
+| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped                                                                                 | `30s`                     |
+| `metrics.serviceMonitor.scrapeTimeout`          | The timeout after which the scrape is ended                                                                                 | `""`                      |
+| `metrics.serviceMonitor.metricRelabelings`      | Metrics relabelings to add to the scrape endpoint                                                                           | `[]`                      |
+| `metrics.serviceMonitor.honorLabels`            | Specify honorLabels parameter to add the scrape endpoint                                                                    | `false`                   |
+| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                           | `""`                      |
+| `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                              | `{}`                      |
+| `metrics.serviceMonitor.additionalLabels`       | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with       | `{}`                      |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
