@@ -729,10 +729,6 @@ controller:
   ## @param controller.workflowWorkers Number of workflow workers to deploy
   ##
   workflowWorkers: 32
-  ## Number of pod workers to deploy
-  ## @param controller.podWorkers Number of pod workers to deploy
-  ##
-  podWorkers: 32
 
   ## Namespaces allowed to run workflows
   ## @param controller.workflowNamespaces Namespaces allowed to run workflows

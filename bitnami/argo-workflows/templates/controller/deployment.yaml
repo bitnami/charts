@@ -105,10 +105,6 @@ spec:
             - --workflow-workers
             - {{ .Values.controller.workflowWorkers | quote }}
             {{- end }}
-            {{- if .Values.controller.podWorkers }}
-            - --pod-workers
-            - {{ .Values.controller.podWorkers | quote }}
-            {{- end }}
             {{- if .Values.controller.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraArgs "context" $) | nindent 12 }}
             {{- end }}
