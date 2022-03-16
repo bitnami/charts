@@ -2,7 +2,7 @@
 
 # Fluentd packaged by Bitnami
 
-Fluentd collects events from various data sources and writes them to files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on. 
+Fluentd collects events from various data sources and writes them to files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on.
 
 [Overview of Fluentd](https://www.fluentd.org)
 
