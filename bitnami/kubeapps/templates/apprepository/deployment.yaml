@@ -102,7 +102,7 @@ spec:
             - --global-repos-namespace={{ include "kubeapps.globalReposNamespace" . }}
             - --database-secret-name={{ include "kubeapps.postgresql.secretName" . }}
             - --database-secret-key=postgresql-password
-            - --database-url={{ template "kubeapps.postgresql.fullname" . }}:{{ default "5432" .Values.postgresql.service.ports.http }}
+            - --database-url={{ template "kubeapps.postgresql.fullname" . }}:{{ default "5432" .Values.postgresql.service.ports.postgresql }}
             - --database-user=postgres
             - --database-name={{ .Values.postgresql.postgresqlDatabase }}
             {{- if .Values.apprepository.crontab }}

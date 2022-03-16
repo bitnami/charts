@@ -90,7 +90,7 @@ spec:
           args:
             - --database-user=postgres
             - --database-name={{ .Values.postgresql.postgresqlDatabase }}
-            - --database-url={{ printf "%s-headless:%d" (include "kubeapps.postgresql.fullname" .) (default "5432" .Values.postgresql.service.ports.http) }}
+            - --database-url={{ printf "%s-headless:%d" (include "kubeapps.postgresql.fullname" .) (default "5432" .Values.postgresql.service.ports.postgresql) }}
             {{- range .Values.assetsvc.extraFlags }}
             - {{ . }}
             {{- end }}

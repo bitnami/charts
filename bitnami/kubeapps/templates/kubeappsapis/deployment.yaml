@@ -143,7 +143,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: ASSET_SYNCER_DB_URL
-              value: {{ printf "%s-headless:%d" (include "kubeapps.postgresql.fullname" .) (default "5432" .Values.postgresql.service.ports.http) | quote }}
+              value: {{ printf "%s-headless:%d" (include "kubeapps.postgresql.fullname" .) (default "5432" .Values.postgresql.service.ports.postgresql) | quote }}
             - name: ASSET_SYNCER_DB_NAME
               value: {{ .Values.postgresql.postgresqlDatabase | quote }}
             - name: ASSET_SYNCER_DB_USERNAME

@@ -2030,6 +2030,11 @@ postgresql:
     requests:
       memory: 256Mi
       cpu: 250m
+  ## @param postgresql.service.ports.postgresql PostgreSQL port
+  ##
+  service:
+    ports:
+      postgresql: 5432
 
 ## @section kubeappsapis parameters
 kubeappsapis:
