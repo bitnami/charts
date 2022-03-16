@@ -1540,6 +1540,9 @@ alertmanager:
   ## @param alertmanager.configSelector Namespaces to be selected for AlertmanagerConfig discovery. If nil, only check own namespace. This defaults to {}
   ##
   configSelector: {}
+  ## @param alertmanager.configuration EXPERIMENTAL: alertmanagerConfiguration specifies the global Alertmanager configuration. If defined, it takes precedence over the `configSecret` field. This field may change in future releases. The specified global alertmanager config will not force add a namespace label in routes and inhibitRules
+  ##
+  configuration: {}
 
 ## @section Exporters
 
