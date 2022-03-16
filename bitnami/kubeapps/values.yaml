@@ -1546,7 +1546,7 @@ assetsvc:
     failureThreshold: 6
     successThreshold: 1
   ## @param assetsvc.startupProbe.enabled Enable startupProbe
-  ## @skip  assetsvc.startupProbe.httpGet
+  ## @skip  assetsvc.startupProbe.tcpSocket
   ## @param assetsvc.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param assetsvc.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param assetsvc.startupProbe.timeoutSeconds Timeout seconds for startupProbe
