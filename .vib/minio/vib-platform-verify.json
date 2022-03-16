@@ -53,7 +53,7 @@
               "path": "/.vib/minio/cypress"
             },
             "endpoint": "lb-minio-minio-console",
-            "app_protocol": "HTTPS",
+            "app_protocol": "HTTP",
             "env": {
               "username": "test_admin",
               "password": "ComplicatedPassword123!4"
