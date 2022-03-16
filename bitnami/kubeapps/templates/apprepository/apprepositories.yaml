@@ -3,11 +3,7 @@ apiVersion: kubeapps.com/v1alpha1
 kind: AppRepository
 metadata:
   name: {{ .name }}
-  {{- if .namespace }}
-  namespace: {{ .namespace | quote }}
-  {{- else }}
-  namespace: {{ printf "%s%s" $.Release.Namespace $.Values.apprepository.globalReposNamespaceSuffix | quote }}
-  {{- end }}
+  namespace: {{ default (include "kubeapps.globalReposNamespace" $) .namespace | quote }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     {{- if $.Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}

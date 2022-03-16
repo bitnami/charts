@@ -13,7 +13,7 @@ dependencies:
     condition: packaging.flux.enabled
   - name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -33,4 +33,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/kubeapps/kubeapps
-version: 7.8.9
+version: 8.0.0

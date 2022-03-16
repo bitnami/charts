@@ -40,6 +40,21 @@ extraDeploy: []
 ##
 enableIPv6: false
 
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
 ## @section Traffic Exposure Parameters
 
 ## Configure the ingress resource that allows you to access the Kubeapps installation
@@ -135,6 +150,11 @@ ingress:
   ##       -----END CERTIFICATE-----
   ##
   secrets: []
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
 
 ## @section Kubeapps packaging options
 ## Note: the helm and flux plugins are mutually exclusive, you can only
@@ -208,6 +228,17 @@ frontend:
   ## @param frontend.replicaCount Number of frontend replicas to deploy
   ##
   replicaCount: 2
+  ## @param frontend.updateStrategy.type Frontend deployment strategy type.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
+  ##
+  updateStrategy:
+    type: RollingUpdate
   ## Frontend containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param frontend.resources.limits.cpu The CPU limits for the NGINX container
@@ -235,9 +266,10 @@ frontend:
   ## @param frontend.extraEnvVarsSecret Name of existing Secret containing extra env vars for the NGINX container
   ##
   extraEnvVarsSecret: ""
-  ## @param frontend.containerPort NGINX HTTP container port
+  ## @param frontend.containerPorts.http NGINX HTTP container port
   ##
-  containerPort: 8080
+  containerPorts:
+    http: 8080
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param frontend.podSecurityContext.enabled Enabled frontend pods' Security Context
@@ -270,7 +302,7 @@ frontend:
     enabled: true
     httpGet:
       path: /healthz
-      port: 8080
+      port: http
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5
@@ -288,7 +320,24 @@ frontend:
     enabled: true
     httpGet:
       path: /
-      port: 8080
+      port: http
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param frontend.startupProbe.enabled Enable startupProbe
+  ## @skip frontend.startupProbe.tcpSocket
+  ## @param frontend.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param frontend.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param frontend.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param frontend.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param frontend.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    tcpSocket:
+      port: http
     initialDelaySeconds: 0
     periodSeconds: 10
     timeoutSeconds: 5
@@ -300,9 +349,18 @@ frontend:
   ## @param frontend.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
+  ## @param frontend.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## @param frontend.lifecycleHooks Custom lifecycle hooks for frontend containers
   ##
   lifecycleHooks: {}
+  ## @param frontend.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param frontend.args Override default container args (useful when using custom images)
+  ##
+  args: []
   ## @param frontend.podLabels Extra labels for frontend pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
@@ -389,13 +447,15 @@ frontend:
     ## @param frontend.service.type Frontend service type
     ##
     type: ClusterIP
-    ## @param frontend.service.port Frontend service HTTP port
+    ## @param frontend.service.ports.http Frontend service HTTP port
     ##
-    port: 80
-    ## @param frontend.service.nodePort Node port for HTTP
+    ports:
+      http: 80
+    ## @param frontend.service.nodePorts.http Node port for HTTP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#nodeport
     ##
-    nodePort: ""
+    nodePorts:
+      http: ""
     ## @param frontend.service.clusterIP Frontend service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -416,9 +476,23 @@ frontend:
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
+    ## @param frontend.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
     ## @param frontend.service.annotations Additional custom annotations for frontend service
     ##
     annotations: {}
+    ## @param frontend.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param frontend.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
 
 ## @section Dashboard parameters
 
@@ -497,6 +571,17 @@ dashboard:
   ## @param dashboard.replicaCount Number of Dashboard replicas to deploy
   ##
   replicaCount: 2
+  ## @param dashboard.updateStrategy.type Dashboard deployment strategy type.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
+  ##
+  updateStrategy:
+    type: RollingUpdate
   ## @param dashboard.extraEnvVars Array with extra environment variables to add to the Dashboard container
   ## e.g:
   ## extraEnvVars:
@@ -510,9 +595,10 @@ dashboard:
   ## @param dashboard.extraEnvVarsSecret Name of existing Secret containing extra env vars for the Dashboard container
   ##
   extraEnvVarsSecret: ""
-  ## @param dashboard.containerPort Dashboard HTTP container port
+  ## @param dashboard.containerPorts.http Dashboard HTTP container port
   ##
-  containerPort: 8080
+  containerPorts:
+    http: 8080
   ## Dashboard containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param dashboard.resources.limits.cpu The CPU limits for the Dashboard container
@@ -561,7 +647,7 @@ dashboard:
     enabled: true
     httpGet:
       path: /
-      port: 8080
+      port: http
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5
@@ -579,7 +665,24 @@ dashboard:
     enabled: true
     httpGet:
       path: /
-      port: 8080
+      port: http
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param dashboard.startupProbe.enabled Enable startupProbe
+  ## @skip dashboard.startupProbe.tcpSocket
+  ## @param dashboard.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param dashboard.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param dashboard.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param dashboard.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param dashboard.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    tcpSocket:
+      port: http
     initialDelaySeconds: 0
     periodSeconds: 10
     timeoutSeconds: 5
@@ -591,9 +694,18 @@ dashboard:
   ## @param dashboard.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
+  ## @param dashboard.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## @param dashboard.lifecycleHooks Custom lifecycle hooks for Dashboard containers
   ##
   lifecycleHooks: {}
+  ## @param dashboard.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param dashboard.args Override default container args (useful when using custom images)
+  ##
+  args: []
   ## @param dashboard.podLabels Extra labels for Dasbhoard pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
@@ -643,6 +755,15 @@ dashboard:
   ## @param dashboard.priorityClassName Priority class name for Dashboard pods
   ##
   priorityClassName: ""
+  ## @param dashboard.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param dashboard.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## @param dashboard.hostAliases Custom host aliases for Dashboard pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -677,9 +798,10 @@ dashboard:
   ## Dasbhoard service parameters
   ##
   service:
-    ## @param dashboard.service.port Dasbhoard service HTTP port
+    ## @param dashboard.service.ports.http Dasbhoard service HTTP port
     ##
-    port: 8080
+    ports:
+      http: 8080
     ## @param dashboard.service.annotations Additional custom annotations for Dasbhoard service
     ##
     annotations: {}
@@ -807,10 +929,24 @@ apprepository:
   ## without each instance watching AppRepositories of each other
   ##
   watchAllNamespaces: true
+  ## @param apprepository.extraFlags Additional command line flags for AppRepository Controller
+  ##
+  extraFlags: []
   ## @param apprepository.replicaCount Number of AppRepository Controller replicas to deploy
   ## Running a single controller replica to avoid sync job duplication
   ##
   replicaCount: 1
+  ## @param apprepository.updateStrategy.type AppRepository Controller deployment strategy type.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
+  ##
+  updateStrategy:
+    type: RollingUpdate
   ## AppRepository Controller containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param apprepository.resources.limits.cpu The CPU limits for the AppRepository Controller container
@@ -846,6 +982,31 @@ apprepository:
   ## @param apprepository.lifecycleHooks Custom lifecycle hooks for AppRepository Controller containers
   ##
   lifecycleHooks: {}
+  ## @param apprepository.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param apprepository.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param apprepository.extraEnvVars Array with extra environment variables to add to AppRepository Controller pod(s)
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param apprepository.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for AppRepository Controller pod(s)
+  ##
+  extraEnvVarsCM: ""
+  ## @param apprepository.extraEnvVarsSecret Name of existing Secret containing extra env vars for AppRepository Controller pod(s)
+  ##
+  extraEnvVarsSecret: ""
+  ## @param apprepository.extraVolumes Optionally specify extra list of additional volumes for the AppRepository Controller pod(s)
+  ##
+  extraVolumes: []
+  ## @param apprepository.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the AppRepository Controller container(s)
+  ##
+  extraVolumeMounts: []
   ## @param apprepository.podLabels Extra labels for AppRepository Controller pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
@@ -895,10 +1056,52 @@ apprepository:
   ## @param apprepository.priorityClassName Priority class name for AppRepository Controller pods
   ##
   priorityClassName: ""
+  ## @param apprepository.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param apprepository.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## @param apprepository.hostAliases Custom host aliases for AppRepository Controller pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param apprepository.sidecars Add additional sidecar containers to the AppRepository Controller pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param apprepository.initContainers Add additional init containers to the AppRepository Controller pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## AppRepository Controller Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param apprepository.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param apprepository.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param apprepository.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param apprepository.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
+  serviceAccount:
+    create: true
+    name: ""
+    automountServiceAccountToken: true
+    annotations: {}
 
 ## @section Kubeops parameters
 
@@ -950,9 +1153,23 @@ kubeops:
   ## @param kubeops.burst Kubeops burst rate
   ##
   burst: ""
+  ## @param kubeops.extraFlags Additional command line flags for Kubeops
+  ##
+  extraFlags: []
   ## @param kubeops.replicaCount Number of Kubeops replicas to deploy
   ##
   replicaCount: 2
+  ## @param kubeops.updateStrategy.type Kubeops deployment strategy type.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
+  ##
+  updateStrategy:
+    type: RollingUpdate
   ## @param kubeops.terminationGracePeriodSeconds The grace time period for sig term
   ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
   ##
@@ -970,9 +1187,10 @@ kubeops:
   ## @param kubeops.extraEnvVarsSecret Name of existing Secret containing extra env vars for the Kubeops container
   ##
   extraEnvVarsSecret: ""
-  ## @param kubeops.containerPort Kubeops HTTP container port
+  ## @param kubeops.containerPorts.http Kubeops HTTP container port
   ##
-  containerPort: 8080
+  containerPorts:
+    http: 8080
   ## Kubeops containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param kubeops.resources.limits.cpu The CPU limits for the Kubeops container
@@ -1021,7 +1239,7 @@ kubeops:
     enabled: true
     httpGet:
       path: /live
-      port: 8080
+      port: http
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5
@@ -1039,7 +1257,24 @@ kubeops:
     enabled: true
     httpGet:
       path: /ready
-      port: 8080
+      port: http
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param kubeops.startupProbe.enabled Enable startupProbe
+  ## @skip kubeops.startupProbe.tcpSocket
+  ## @param kubeops.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param kubeops.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param kubeops.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param kubeops.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param kubeops.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    tcpSocket:
+      port: http
     initialDelaySeconds: 0
     periodSeconds: 10
     timeoutSeconds: 5
@@ -1051,9 +1286,24 @@ kubeops:
   ## @param kubeops.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
+  ## @param kubeops.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## @param kubeops.lifecycleHooks Custom lifecycle hooks for Kubeops containers
   ##
   lifecycleHooks: {}
+  ## @param kubeops.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param kubeops.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param kubeops.extraVolumes Optionally specify extra list of additional volumes for the Kubeops pod(s)
+  ##
+  extraVolumes: []
+  ## @param kubeops.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Kubeops container(s)
+  ##
+  extraVolumeMounts: []
   ## @param kubeops.podLabels Extra labels for Kubeops pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
@@ -1103,6 +1353,15 @@ kubeops:
   ## @param kubeops.priorityClassName Priority class name for Kubeops pods
   ##
   priorityClassName: ""
+  ## @param kubeops.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param kubeops.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## @param kubeops.hostAliases Custom host aliases for Kubeops pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1110,11 +1369,24 @@ kubeops:
   ## Kubeops service parameters
   ##
   service:
-    ## @param kubeops.service.port Kubeops service HTTP port
+    ## @param kubeops.service.ports.http Kubeops service HTTP port
     ##
-    port: 8080
+    ports:
+      http: 8080
     ## @param kubeops.service.annotations Additional custom annotations for Kubeops service
     ##
+    annotations: {}
+  ## Kubeops Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param kubeops.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param kubeops.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param kubeops.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param kubeops.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
+  serviceAccount:
+    create: true
+    name: ""
+    automountServiceAccountToken: true
     annotations: {}
 
 ## @section Assetsvc parameters
@@ -1152,9 +1424,32 @@ assetsvc:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param assetsvc.extraFlags Additional command line flags for Assetsvc
+  ##
+  extraFlags: []
   ## @param assetsvc.replicaCount Number of Assetsvc replicas to deploy
   ##
   replicaCount: 1
+  ## @param assetsvc.updateStrategy.type Assetsvc deployment strategy type.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
+  ##
+  updateStrategy:
+    type: RollingUpdate
+  ## @param assetsvc.lifecycleHooks Custom lifecycle hooks for Assetsvc containers
+  ##
+  lifecycleHooks: {}
+  ## @param assetsvc.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param assetsvc.args Override default container args (useful when using custom images)
+  ##
+  args: []
   ## @param assetsvc.extraEnvVars Array with extra environment variables to add to the Assetsvc container
   ## e.g:
   ## extraEnvVars:
@@ -1168,9 +1463,16 @@ assetsvc:
   ## @param assetsvc.extraEnvVarsSecret Name of existing Secret containing extra env vars for the Assetsvc container
   ##
   extraEnvVarsSecret: ""
-  ## @param assetsvc.containerPort Assetsvc HTTP container port
+  ## @param assetsvc.extraVolumes Optionally specify extra list of additional volumes for the Assetsvc pod(s)
   ##
-  containerPort: 8080
+  extraVolumes: []
+  ## @param assetsvc.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Assetsvc container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param assetsvc.containerPorts.http Assetsvc HTTP container port
+  ##
+  containerPorts:
+    http: 8080
   ## Assetsvc containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param assetsvc.resources.limits.cpu The CPU limits for the Assetsvc container
@@ -1219,7 +1521,7 @@ assetsvc:
     enabled: true
     httpGet:
       path: /live
-      port: 8080
+      port: http
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5
@@ -1237,7 +1539,24 @@ assetsvc:
     enabled: true
     httpGet:
       path: /ready
-      port: 8080
+      port: http
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param assetsvc.startupProbe.enabled Enable startupProbe
+  ## @skip  assetsvc.startupProbe.httpGet
+  ## @param assetsvc.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param assetsvc.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param assetsvc.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param assetsvc.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param assetsvc.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    tcpSocket:
+      port: http
     initialDelaySeconds: 0
     periodSeconds: 10
     timeoutSeconds: 5
@@ -1249,9 +1568,9 @@ assetsvc:
   ## @param assetsvc.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
-  ## @param assetsvc.lifecycleHooks Custom lifecycle hooks for Assetsvc containers
+  ## @param assetsvc.customStartupProbe Custom startupProbe that overrides the default one
   ##
-  lifecycleHooks: {}
+  customStartupProbe: {}
   ## @param assetsvc.podLabels Extra labels for Assetsvc pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
@@ -1301,16 +1620,47 @@ assetsvc:
   ## @param assetsvc.priorityClassName Priority class name for Assetsvc pods
   ##
   priorityClassName: ""
+  ## @param assetsvc.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param assetsvc.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## @param assetsvc.hostAliases Custom host aliases for Assetsvc pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param assetsvc.sidecars Add additional sidecar containers to the Assetsvc pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param assetsvc.initContainers Add additional init containers to the Assetsvc pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
   ## Assetsvc service parameters
   ##
   service:
-    ## @param assetsvc.service.port Assetsvc service HTTP port
+    ## @param assetsvc.service.ports.http Assetsvc service HTTP port
     ##
-    port: 8080
+    ports:
+      http: 8080
     ## @param assetsvc.service.annotations Additional custom annotations for Assetsvc service
     ##
     annotations: {}
@@ -1385,15 +1735,24 @@ authProxy:
   ## Use "example.com" to restrict logins to emails from example.com
   ##
   emailDomain: "*"
-  ## @param authProxy.additionalFlags Additional flags for oauth2-proxy
+  ## @param authProxy.extraFlags Additional command line flags for oauth2-proxy
   ## ref: https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview
   ## e.g:
-  ## additionalFlags:
+  ## extraFlags:
   ##   - --ssl-insecure-skip-verify
   ##   - --cookie-secure=false
   ##   - --oidc-issuer-url=https://accounts.google.com # Only needed if provider is oidc
   ##
-  additionalFlags: []
+  extraFlags: []
+  ## @param authProxy.lifecycleHooks for the Auth Proxy container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param authProxy.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param authProxy.args Override default container args (useful when using custom images)
+  ##
+  args: []
   ## @param authProxy.extraEnvVars Array with extra environment variables to add to the Auth Proxy container
   ## e.g:
   ## extraEnvVars:
@@ -1401,9 +1760,19 @@ authProxy:
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param authProxy.containerPort Auth Proxy HTTP container port
+  ## @param authProxy.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Auth Proxy containers(s)
   ##
-  containerPort: 3000
+  extraEnvVarsCM: ""
+  ## @param authProxy.extraEnvVarsSecret Name of existing Secret containing extra env vars for Auth Proxy containers(s)
+  ##
+  extraEnvVarsSecret: ""
+  ## @param authProxy.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Auth Proxy container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param authProxy.containerPorts.proxy Auth Proxy HTTP container port
+  ##
+  containerPorts:
+    proxy: 3000
   ## Configure Container Security Context for Auth Proxy
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param authProxy.containerSecurityContext.enabled Enabled Auth Proxy containers' Security Context
@@ -1474,9 +1843,35 @@ pinnipedProxy:
   ## @param pinnipedProxy.defaultPinnipedAPISuffix Specify the (default) API suffix
   ##
   defaultPinnipedAPISuffix: pinniped.dev
-  ## @param pinnipedProxy.containerPort Kubeops HTTP container port
+  ## @param pinnipedProxy.lifecycleHooks for the Pinniped Proxy container(s) to automate configuration before or after startup
   ##
-  containerPort: 3333
+  lifecycleHooks: {}
+  ## @param pinnipedProxy.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param pinnipedProxy.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param pinnipedProxy.extraEnvVars Array with extra environment variables to add to Pinniped Proxy container(s)
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param pinnipedProxy.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Pinniped Proxy container(s)
+  ##
+  extraEnvVarsCM: ""
+  ## @param pinnipedProxy.extraEnvVarsSecret Name of existing Secret containing extra env vars for Pinniped Proxy container(s)
+  ##
+  extraEnvVarsSecret: ""
+  ## @param pinnipedProxy.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Pinniped Proxy container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param pinnipedProxy.containerPorts.pinnipedProxy Pinniped Proxy container port
+  ##
+  containerPorts:
+    pinnipedProxy: 3333
   ## Configure Container Security Context for Pinniped Proxy
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param pinnipedProxy.containerSecurityContext.enabled Enabled Pinniped Proxy containers' Security Context
@@ -1501,7 +1896,16 @@ pinnipedProxy:
     requests:
       cpu: 25m
       memory: 32Mi
-
+  ## Pinniped Proxy service parameters
+  ##
+  service:
+    ## @param pinnipedProxy.service.ports.pinnipedProxy Pinniped Proxy service port
+    ##
+    ports:
+      pinnipedProxy: 3333
+    ## @param pinnipedProxy.service.annotations Additional custom annotations for Pinniped Proxy service
+    ##
+    annotations: {}
 ## @section Other Parameters
 
 ## @param allowNamespaceDiscovery Allow users to discover available namespaces (only the ones they have access)
@@ -1693,6 +2097,20 @@ kubeappsapis:
   ## @param kubeappsapis.replicaCount Number of frontend replicas to deploy
   ##
   replicaCount: 2
+  ## @param kubeappsapis.updateStrategy.type KubeappsAPIs deployment strategy type.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
+  ##
+  updateStrategy:
+    type: RollingUpdate
+  ## @param kubeappsapis.extraFlags Additional command line flags for KubeappsAPIs
+  ##
+  extraFlags: []
   ## @param kubeappsapis.qps KubeappsAPIs Kubernetes API client QPS limit
   ##
   qps: "50.0"
@@ -1716,9 +2134,10 @@ kubeappsapis:
   ## @param kubeappsapis.extraEnvVarsSecret Name of existing Secret containing extra env vars for the KubeappsAPIs container
   ##
   extraEnvVarsSecret: ""
-  ## @param kubeappsapis.containerPort KubeappsAPIs HTTP container port
+  ## @param kubeappsapis.containerPorts.http KubeappsAPIs HTTP container port
   ##
-  containerPort: 50051
+  containerPorts:
+    http: 50051
   ## KubeappsAPIs containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param kubeappsapis.resources.limits.cpu The CPU limits for the KubeappsAPIs container
@@ -1767,7 +2186,7 @@ kubeappsapis:
     enabled: true
     httpGet:
       path: /core/plugins/v1alpha1/configured-plugins
-      port: 50051
+      port: http
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5
@@ -1785,7 +2204,24 @@ kubeappsapis:
     enabled: true
     httpGet:
       path: /core/plugins/v1alpha1/configured-plugins
-      port: 50051
+      port: http
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param kubeappsapis.startupProbe.enabled Enable startupProbe
+  ## @skip kubeappsapis.startupProbe.tcpSocket
+  ## @param kubeappsapis.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param kubeappsapis.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param kubeappsapis.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param kubeappsapis.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param kubeappsapis.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    tcpSocket:
+      port: http
     initialDelaySeconds: 0
     periodSeconds: 10
     timeoutSeconds: 5
@@ -1797,9 +2233,24 @@ kubeappsapis:
   ## @param kubeappsapis.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
+  ## @param kubeappsapis.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## @param kubeappsapis.lifecycleHooks Custom lifecycle hooks for KubeappsAPIs containers
   ##
   lifecycleHooks: {}
+  ## @param kubeappsapis.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param kubeappsapis.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param kubeappsapis.extraVolumes Optionally specify extra list of additional volumes for the KubeappsAPIs pod(s)
+  ##
+  extraVolumes: []
+  ## @param kubeappsapis.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the KubeappsAPIs container(s)
+  ##
+  extraVolumeMounts: []
   ## @param kubeappsapis.podLabels Extra labels for KubeappsAPIs pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
@@ -1849,18 +2300,61 @@ kubeappsapis:
   ## @param kubeappsapis.priorityClassName Priority class name for KubeappsAPIs pods
   ##
   priorityClassName: ""
+  ## @param kubeappsapis.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param kubeappsapis.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## @param kubeappsapis.hostAliases Custom host aliases for KubeappsAPIs pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param kubeappsapis.sidecars Add additional sidecar containers to the KubeappsAPIs pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param kubeappsapis.initContainers Add additional init containers to the KubeappsAPIs pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
   ## kubeappsapis service parameters
   ##
   service:
-    ## @param kubeappsapis.service.port KubeappsAPIs service HTTP port
+    ## @param kubeappsapis.service.ports.http KubeappsAPIs service HTTP port
     ##
-    port: 8080
+    ports:
+      http: 8080
     ## @param kubeappsapis.service.annotations Additional custom annotations for KubeappsAPIs service
     ##
+    annotations: {}
+  ## kubeappsapis Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param kubeappsapis.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param kubeappsapis.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param kubeappsapis.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param kubeappsapis.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
+  serviceAccount:
+    create: true
+    name: ""
+    automountServiceAccountToken: true
     annotations: {}
 
 ## @section Redis&trade; chart configuration

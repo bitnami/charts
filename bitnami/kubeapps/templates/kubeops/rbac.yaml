@@ -48,7 +48,7 @@ roleRef:
   name: {{ template "kubeapps.kubeops.fullname" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "kubeapps.kubeops.fullname" . }}
+    name: {{ template "kubeapps.kubeops.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 {{- if .Values.allowNamespaceDiscovery }}
 ---
@@ -90,7 +90,7 @@ roleRef:
   name: "kubeapps:controller:kubeops-ns-discovery-{{ .Release.Namespace }}"
 subjects:
   - kind: ServiceAccount
-    name: {{ template "kubeapps.kubeops.fullname" . }}
+    name: {{ template "kubeapps.kubeops.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 {{- end }}
 ---
@@ -132,6 +132,6 @@ roleRef:
   name: "kubeapps:controller:kubeops-operators-{{ .Release.Namespace }}"
 subjects:
   - kind: ServiceAccount
-    name: {{ template "kubeapps.kubeops.fullname" . }}
+    name: {{ template "kubeapps.kubeops.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 {{- end }}
