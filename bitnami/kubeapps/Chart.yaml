@@ -9,7 +9,7 @@ dependencies:
   # other plugins only.
   - name: redis
     repository: https://charts.bitnami.com/bitnami
-    version: 15.x.x
+    version: 16.x.x
     condition: packaging.flux.enabled
   - name: postgresql
     repository: https://charts.bitnami.com/bitnami
