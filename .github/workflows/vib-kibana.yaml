@@ -33,4 +33,8 @@ jobs:
         with:
           pipeline: kibana/vib-platform-verify.json
         env:
+<<<<<<< HEAD
           TARGET_PLATFORM: ${{ matrix.target-platform-id }
+=======
+          TARGET_PLATFORM: ${{ matrix.target-platform-id }}
+>>>>>>> be2dccb8e (Add workflows)
