@@ -319,6 +319,7 @@ spec:
         resources:
           requests:
             storage: {{ .Values.master.persistence.size | quote }}
+        persistentVolumeReclaimPolicy: {{ .Values.master.persistence.reclaimPolicy }}
         {{- if .Values.master.persistence.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.master.persistence.selector "context" $) | nindent 10 }}
         {{- else if .Values.master.persistence.existingVolume }}
