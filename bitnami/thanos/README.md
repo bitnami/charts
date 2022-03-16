@@ -1186,7 +1186,7 @@ objstoreConfig: |-
   config:
     bucket: thanos
     endpoint: {{ include "thanos.minio.fullname" . }}.monitoring.svc.cluster.local:9000
-    access_key: minio
+    access_key: admin
     secret_key: minio123
     insecure: true
 query:
