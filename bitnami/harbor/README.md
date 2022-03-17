@@ -105,7 +105,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `exposureType`                     | The way to expose Harbor. Allowed values are [ ingress | proxy ]                                                                 | `proxy`                  |
+| `exposureType`                     | The way to expose Harbor. Allowed values are [ ingress \| proxy ]                                                                | `proxy`                  |
 | `service.type`                     | NGINX proxy service type                                                                                                         | `LoadBalancer`           |
 | `service.ports.http`               | NGINX proxy service HTTP port                                                                                                    | `80`                     |
 | `service.ports.https`              | NGINX proxy service HTTPS port                                                                                                   | `443`                    |
