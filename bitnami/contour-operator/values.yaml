@@ -192,11 +192,13 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled Contour Operator containers' Security Context
 ## @param containerSecurityContext.runAsUser Set Contour Operator containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set Contour Operator containers' Security Context runAsNonRoot
+## @param containerSecurityContext.readOnlyRootFilesystem Mount / (root) as a readonly filesystem on Contour Operator containers
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  readOnlyRootFilesystem: true
 
 ## @param command Override default container command (useful when using custom images)
 ##
