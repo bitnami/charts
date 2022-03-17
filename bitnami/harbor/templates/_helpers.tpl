@@ -84,27 +84,27 @@ Set the http prefix if the externalURl doesn't have it
 {{- printf "%s" (coalesce .Values.chartmuseum.tls.existingSecret (printf "%s-crt" (include "harbor.chartmuseum" .))) -}}
 {{- end -}}
 
-{{/* Chartmuseum TLS secret name */}}
+{{/* Clair TLS secret name */}}
 {{- define "harbor.clair.tls.secretName" -}}
 {{- printf "%s" (coalesce .Values.clair.tls.existingSecret (printf "%s-crt" (include "harbor.clair" .))) -}}
 {{- end -}}
 
-{{/* Chartmuseum TLS secret name */}}
+{{/* Jobservice TLS secret name */}}
 {{- define "harbor.jobservice.tls.secretName" -}}
 {{- printf "%s" (coalesce .Values.jobservice.tls.existingSecret (printf "%s-crt" (include "harbor.jobservice" .))) -}}
 {{- end -}}
 
-{{/* Chartmuseum TLS secret name */}}
+{{/* Portal TLS secret name */}}
 {{- define "harbor.portal.tls.secretName" -}}
 {{- printf "%s" (coalesce .Values.portal.tls.existingSecret (printf "%s-crt" (include "harbor.portal" .))) -}}
 {{- end -}}
 
-{{/* Chartmuseum TLS secret name */}}
+{{/* Registry TLS secret name */}}
 {{- define "harbor.registry.tls.secretName" -}}
 {{- printf "%s" (coalesce .Values.registry.tls.existingSecret (printf "%s-crt" (include "harbor.registry" .))) -}}
 {{- end -}}
 
-{{/* Chartmuseum TLS secret name */}}
+{{/* Trivy TLS secret name */}}
 {{- define "harbor.trivy.tls.secretName" -}}
 {{- printf "%s" (coalesce .Values.trivy.tls.existingSecret (printf "%s-crt" (include "harbor.trivy" .))) -}}
 {{- end -}}
@@ -295,7 +295,7 @@ Return whether Redis&trade; uses password authentication or not
     {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
       {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
     {{- else -}}
-      {{- template "harbor.redis.host" . -}}:{{ template "harbor.redis.port" . -}}/{{ template "harbor.redis.jobserviceDatabaseIndex" . -}}
+      {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" .) (include "harbor.redis.port" .) (include "harbor.redis.jobserviceDatabaseIndex" .) -}}
     {{- end -}}
   {{- else -}}
     {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
@@ -420,6 +420,10 @@ Return whether Redis&trade; uses password authentication or not
   {{- printf "%s-nginx" (include "common.names.fullname" .) -}}
 {{- end -}}
 
+{{- define "harbor.exporter" -}}
+  {{- printf "%s-exporter" (include "common.names.fullname" .) -}}
+{{- end -}}
+
 {{- define "harbor.ingress" -}}
   {{- printf "%s-ingress" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -437,6 +441,13 @@ Return the proper Harbor Core image name
 */}}
 {{- define "harbor.core.image" -}}
 {{- include "common.images.image" ( dict "imageRoot" .Values.core.image "global" .Values.global ) -}}
+{{- end -}}
+
+{{/*
+Return the proper Harbor Exporter image name
+*/}}
+{{- define "harbor.exporter.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.exporter.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
@@ -527,7 +538,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "harbor.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.core.image .Values.portal.image .Values.jobservice.image .Values.clair.server.image .Values.clair.adapter.image .Values.chartmuseum.image .Values.trivy.image .Values.notary.server.image .Values.notary.signer.image .Values.registry.server.image .Values.registry.controller.image .Values.nginx.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.core.image .Values.exporter.image .Values.portal.image .Values.jobservice.image .Values.clair.server.image .Values.clair.adapter.image .Values.chartmuseum.image .Values.trivy.image .Values.notary.server.image .Values.notary.signer.image .Values.registry.server.image .Values.registry.controller.image .Values.nginx.image .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/* Check if there are rolling tags in the images */}}
