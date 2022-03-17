@@ -111,6 +111,7 @@ spec:
             {{- end }}
             # TODO(agamez): pass this configuration using a separated config file
             # These env vars are currently (and temporarily) required by the 'helm' plugin
+            {{- if .Values.packaging.helm.enabled }}
             - name: POD_NAMESPACE
               valueFrom:
                 fieldRef:
@@ -126,6 +127,7 @@ spec:
                 secretKeyRef:
                   key: postgresql-password
                   name: {{ include "kubeapps.postgresql.secretName" . }}
+            {{- end }}
             {{- if .Values.kubeappsapis.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
