@@ -91,7 +91,7 @@ collector:
   image:
     registry: docker.io
     repository: bitnami/wavefront-kubernetes-collector
-    tag: 1.9.0-scratch-r1
+    tag: 1.9.0-scratch-r2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -462,7 +462,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/wavefront-proxy
-    tag: 10.14.0-debian-10-r43
+    tag: 10.14.0-debian-10-r53
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
