@@ -164,11 +164,13 @@ resources:
 ## @param containerSecurityContext.enabled Enabled Adapter containers' Security Context
 ## @param containerSecurityContext.runAsUser Set Adapter container's Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set Adapter container's Security Context runAsNonRoot
+## @param containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Adapter container
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  readOnlyRootFilesystem: true
 
 ## wavefront-hpa-adapter pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod

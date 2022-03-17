@@ -160,10 +160,8 @@ spec:
               name: config
               readOnly: true
           {{- end }}
-          {{- if .Values.adapterSSLCertsSecret }}
             - name: ssl-cert-dirs
               mountPath: {{ .Values.adapterSSLCertDir }}
-          {{- end }}
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -171,10 +169,12 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-      {{- if .Values.adapterSSLCertsSecret }}
         - name: ssl-cert-dirs
+      {{- if .Values.adapterSSLCertsSecret }}
           secret:
             secretName: {{ .Values.adapterSSLCertsSecret }}
+      {{- else }}
+          emptyDir: {}
       {{- end }}
         - name: temp-vol
           emptyDir: {}
