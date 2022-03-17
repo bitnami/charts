@@ -2,7 +2,7 @@
 
 # Keycloak packaged by Bitnami
 
-Keycloak is a high performance Java-based identity and access management solution. It lets developers add an authentication layer to their applications with minimum effort. 
+Keycloak is a high performance Java-based identity and access management solution. It lets developers add an authentication layer to their applications with minimum effort.
 
 [Overview of Keycloak](https://www.keycloak.org/)
 
@@ -133,11 +133,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.http`                   | Keycloak HTTP container port                                                                                             | `8080`          |
 | `containerPorts.https`                  | Keycloak HTTPS container port                                                                                            | `8443`          |
 | `containerPorts.management`             | Keycloak management HTTP container port                                                                                  | `9990`          |
-| `podSecurityContext.enabled`            | Enabled Keykloak pods' Security Context                                                                                  | `true`          |
-| `podSecurityContext.fsGroup`            | Set Keykloak pod's Security Context fsGroup                                                                              | `1001`          |
-| `containerSecurityContext.enabled`      | Enabled Keykloak containers' Security Context                                                                            | `true`          |
-| `containerSecurityContext.runAsUser`    | Set Keykloak container's Security Context runAsUser                                                                      | `1001`          |
-| `containerSecurityContext.runAsNonRoot` | Set Keykloak container's Security Context runAsNonRoot                                                                   | `true`          |
+| `podSecurityContext.enabled`            | Enabled Keycloak pods' Security Context                                                                                  | `true`          |
+| `podSecurityContext.fsGroup`            | Set Keycloak pod's Security Context fsGroup                                                                              | `1001`          |
+| `containerSecurityContext.enabled`      | Enabled Keycloak containers' Security Context                                                                            | `true`          |
+| `containerSecurityContext.runAsUser`    | Set Keycloak container's Security Context runAsUser                                                                      | `1001`          |
+| `containerSecurityContext.runAsNonRoot` | Set Keycloak container's Security Context runAsNonRoot                                                                   | `true`          |
 | `resources.limits`                      | The resources limits for the Keycloak containers                                                                         | `{}`            |
 | `resources.requests`                    | The requested resources for the Keycloak containers                                                                      | `{}`            |
 | `livenessProbe.enabled`                 | Enable livenessProbe on Keycloak containers                                                                              | `true`          |

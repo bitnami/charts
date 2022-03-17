@@ -2,7 +2,7 @@
 
 # Jenkins packaged by Bitnami
 
-Jenkins is an open source Continuous Integration and Continuous Delivery (CI/CD) server designed to automate the building, testing, and deploying of any software project. 
+Jenkins is an open source Continuous Integration and Continuous Delivery (CI/CD) server designed to automate the building, testing, and deploying of any software project.
 
 [Overview of Jenkins](http://jenkins-ci.org/)
 

@@ -42,7 +42,7 @@ Replacing "YOUR_ES_HOST" and "YOUR_ES_PORT" placeholders by the proper values of
 {{- if or .Values.ingress.enabled (contains "NodePort" .Values.service.type) (contains "LoadBalancer" .Values.service.type) }}
 
 WARNING: Kibana is externally accessible from the cluster but the dashboard does not contain authentication mechanisms. Make sure you follow the authentication guidelines in your Elastic stack.
-+info https://www.elastic.co/guide/en/elastic-stack-overview/current/setting-up-authentication.html
++info https://www.elastic.co/guide/en/elasticsearch/reference/current/setting-up-authentication.html
 {{- end }}
 
 {{- if .Values.metrics.enabled }}

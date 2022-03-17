@@ -78,14 +78,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Ghost Image parameters
 
-| Name                | Description                                      | Value                 |
-| ------------------- | ------------------------------------------------ | --------------------- |
-| `image.registry`    | Ghost image registry                             | `docker.io`           |
-| `image.repository`  | Ghost image repository                           | `bitnami/ghost`       |
-| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.37.0-debian-10-r3` |
-| `image.pullPolicy`  | Ghost image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | Ghost image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable image debug mode                          | `false`               |
+| Name                | Description                                      | Value                  |
+| ------------------- | ------------------------------------------------ | ---------------------- |
+| `image.registry`    | Ghost image registry                             | `docker.io`            |
+| `image.repository`  | Ghost image repository                           | `bitnami/ghost`        |
+| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.37.0-debian-10-r12` |
+| `image.pullPolicy`  | Ghost image pull policy                          | `IfNotPresent`         |
+| `image.pullSecrets` | Ghost image pull secrets                         | `[]`                   |
+| `image.debug`       | Enable image debug mode                          | `false`                |
 
 
 ### Ghost Configuration parameters
@@ -105,6 +105,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `smtpUser`           | SMTP username                                                        | `""`               |
 | `smtpPassword`       | SMTP user password                                                   | `""`               |
 | `smtpService`        | SMTP service                                                         | `""`               |
+| `smtpProtocol`       | SMTP protocol (ssl or tls)                                           | `""`               |
 | `smtpExistingSecret` | The name of an existing secret with SMTP credentials                 | `""`               |
 | `allowEmptyPassword` | Allow the container to be started with blank passwords               | `true`             |
 | `ghostSkipInstall`   | Skip performing the initial bootstrapping for Ghost                  | `false`            |

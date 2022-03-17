@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 6.2.6-debian-10-r146
+  tag: 6.2.6-debian-10-r158
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -387,6 +387,9 @@ master:
     ## @param master.persistence.medium Provide a medium for `emptyDir` volumes.
     ##
     medium: ""
+    sizeLimit: ""
+    ## @param master.persistence.sizeLimit Set this to enable a size limit for `emptyDir` volumes.
+    ##
     ## @param master.persistence.path The path the volume will be mounted at on Redis&trade; master containers
     ## NOTE: Useful when using different Redis&trade; images
     ##
@@ -538,12 +541,12 @@ replica:
   ## @param replica.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
-    enabled: false
-    initialDelaySeconds: 20
-    periodSeconds: 5
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
-    failureThreshold: 5
+    failureThreshold: 22
   ## @param replica.livenessProbe.enabled Enable livenessProbe on Redis&trade; replicas nodes
   ## @param replica.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param replica.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -854,7 +857,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 6.2.6-debian-10-r144
+    tag: 6.2.6-debian-10-r156
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -877,6 +880,9 @@ sentinel:
   ## @param sentinel.quorum Sentinel Quorum
   ##
   quorum: 2
+  ## @param sentinel.getMasterTimeout Amount of time to allow before get_sentinel_master_info() times out.
+  ## NOTE: This is directly related to the startupProbes which are configured to run every 10 seconds for a total of 22 failures. If adjusting this value, also adjust the startupProbes.
+  getMasterTimeout: 220
   ## @param sentinel.automateClusterRecovery Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it.
   ## This also prevents any new replica from starting until the last remaining replica is elected as master to guarantee that it is the one to be elected by Sentinel, and not a newly started replica with no data.
   ## NOTE: This feature requires a "downAfterMilliseconds" value less or equal to 2000.
@@ -939,12 +945,12 @@ sentinel:
   ## @param sentinel.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
-    enabled: false
-    initialDelaySeconds: 20
-    periodSeconds: 5
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
-    failureThreshold: 5
+    failureThreshold: 22
   ## @param sentinel.livenessProbe.enabled Enable livenessProbe on Redis&trade; Sentinel nodes
   ## @param sentinel.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param sentinel.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -1252,7 +1258,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.35.1-debian-10-r16
+    tag: 1.36.0-debian-10-r5
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1438,7 +1444,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r355
+    tag: 10-debian-10-r367
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1484,7 +1490,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r355
+    tag: 10-debian-10-r367
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

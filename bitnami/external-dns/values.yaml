@@ -56,7 +56,7 @@ kubeVersion: ""
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.10.2-debian-10-r71
+  tag: 0.10.2-debian-10-r89
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -97,7 +97,7 @@ sources:
   # - contour-httpproxy
 ## @param provider DNS provider where the DNS records will be created.
 ## Available providers are:
-## - alibabacloud, aws, azure, azure-private-dns, cloudflare, coredns, designate, digitalocean, google, hetzner, infoblox, linode, rfc2136, transip
+## - alibabacloud, aws, azure, azure-private-dns, cloudflare, coredns, designate, digitalocean, google, hetzner, infoblox, linode, rfc2136, transip, oci
 ##
 provider: aws
 ## @param initContainers Attach additional init containers to the pod (evaluated as a template)
@@ -423,11 +423,40 @@ linode:
   ## This ignores linode.apiToken
   ##
   secretName: ""
+
 ## NS1 configuration to be set via arguments/env. variables
 ## @param ns1.minTTL When using the ns1 provider, specify minimal TTL, as an integer, for records
 ##
 ns1:
   minTTL: 10
+
+## oci configuration to be set via arguments/env. variables
+##
+oci:
+  ## @param oci.region When using the OCI provider, specify the region, where your zone is located in.
+  ##
+  region: ""
+  ## @param oci.tenancyOCID When using the OCI provider, specify your Tenancy OCID
+  ##
+  tenancyOCID: ""
+  ## @param oci.userOCID When using the OCI provider, specify your User OCID
+  ##
+  userOCID: ""
+  ## @param oci.compartmentOCID When using the OCI provider, specify your Compartment OCID where your DNS Zone is located in.
+  ##
+  compartmentOCID: ""
+  ## @param oci.privateKey When using the OCI provider, paste in your RSA private key file for the Oracle API
+  ##
+  privateKey: |
+    -----BEGIN RSA PRIVATE KEY-----
+    -----END RSA PRIVATE KEY-----
+  ## @param oci.privateKeyFingerprint When using the OCI provider, put in the fingerprint of your privateKey
+  ##
+  privateKeyFingerprint: ""
+  ## @param oci.privateKeyPassphrase When using the OCI provider and your privateKey has a passphrase, put it in here. (optional)
+  ##
+  privateKeyPassphrase: ""
+
 ## OVH configuration to be set via arguments/env. variables
 ##
 ovh:

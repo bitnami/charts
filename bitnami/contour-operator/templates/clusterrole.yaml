@@ -35,6 +35,14 @@ rules:
   - apiGroups:
       - ""
     resources:
+      - events
+    verbs:
+      - create
+      - get
+      - update
+  - apiGroups:
+      - ""
+    resources:
       - namespaces
       - secrets
       - serviceaccounts
@@ -97,6 +105,30 @@ rules:
       - update
       - watch
   - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - gatewayclasses
+      - gateways
+      - httproutes
+      - referencepolicies
+      - tlsroutes
+    verbs:
+      - get
+      - list
+      - update
+      - watch
+  - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - gatewayclasses/status
+      - gateways/status
+      - httproutes/status
+      - tlsroutes/status
+    verbs:
+      - create
+      - get
+      - update
+  - apiGroups:
       - networking.k8s.io
     resources:
       - ingressclasses
@@ -112,47 +144,6 @@ rules:
     verbs:
       - create
       - get
-      - update
-  - apiGroups:
-      - networking.x-k8s.io
-    resources:
-      - backendpolicies
-      - gatewayclasses
-      - gateways
-      - httproutes
-      - tlsroutes
-    verbs:
-      - get
-      - list
-      - update
-      - watch
-  - apiGroups:
-      - networking.x-k8s.io
-    resources:
-      - backendpolicies/status
-      - gatewayclasses/status
-      - gateways/status
-      - httproutes/status
-      - tlsroutes/status
-    verbs:
-      - create
-      - get
-      - update
-  - apiGroups:
-      - networking.x-k8s.io
-    resources:
-      - tcproutes
-      - udproutes
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - networking.x-k8s.io
-    resources:
-      - tcproutes/status
-      - udproutes/status
-    verbs:
       - update
   - apiGroups:
       - operator.projectcontour.io

@@ -57,9 +57,6 @@ diagnosticMode:
   args:
     - infinity
 
-## @section Redis&trade; Cluster Common parameters
-##
-
 ## Bitnami Redis&trade; image version
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
 ## @param image.registry Redis&trade; cluster image registry
@@ -75,7 +72,7 @@ image:
   ## Bitnami Redis&trade; image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.2.6-debian-10-r140
+  tag: 6.2.6-debian-10-r158
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -326,7 +323,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r349
+    tag: 10-debian-10-r367
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -393,6 +390,10 @@ redis:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param redis.hostNetwork Host networking requested for this pod. Use the host's network namespace.
+  ## https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#podspec-v1-core
+  ##
+  hostNetwork: false
   ## @param redis.useAOFPersistence Whether to use AOF Persistence mode or not
   ## It is strongly recommended to use this type when dealing with clusters
   ## ref: https://redis.io/topics/persistence#append-only-file
@@ -775,7 +776,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.35.1-debian-10-r10
+    tag: 1.36.0-debian-10-r5
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -928,7 +929,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r349
+  tag: 10-debian-10-r367
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.

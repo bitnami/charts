@@ -1,4 +1,4 @@
-{{- if .Values.pdb.enabled }}
+{{- if and (coalesce .Values.pdb.create .Values.pdb.enabled) (not .Values.useDaemonset) }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
@@ -20,6 +20,6 @@ spec:
   maxUnavailable: {{ .Values.pdb.maxUnavailable }}
   {{- end  }}
   selector:
-    matchLabels:
-      {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: server
 {{- end }}

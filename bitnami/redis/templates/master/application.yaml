@@ -391,6 +391,9 @@ spec:
           {{- if .Values.master.persistence.medium }}
           emptyDir: {
             medium: {{ .Values.master.persistence.medium | quote }}
+            {{- if .Values.master.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.master.persistence.sizeLimit | quote }}
+            {{- end }}
           }
           {{- else }}
           emptyDir: {}
@@ -399,6 +402,9 @@ spec:
           {{- if .Values.master.persistence.medium }}
           emptyDir: {
             medium: {{ .Values.master.persistence.medium | quote }}
+            {{- if .Values.master.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.master.persistence.sizeLimit | quote }}
+            {{- end }}
           }
           {{- else }}
           emptyDir: {}

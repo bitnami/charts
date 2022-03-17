@@ -7,7 +7,7 @@ InfluxDB(TM) is an open source time-series database. It is a core component of t
 [Overview of InfluxDB&trade;](https://www.influxdata.com/products/influxdb-overview)
 
 InfluxDB(TM) is a trademark owned by InfluxData, which is not affiliated with, and does not endorse, this site.
-
+                           
 ## TL;DR
 
 ```console
@@ -287,7 +287,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.tls`              | Create TLS Secret                                                                                                                | `false`                  |
 | `ingress.pathType`         | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`       | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`         | Default host for the ingress resource                                                                                            | `influxdb.local`         |
+| `ingress.hostname`         | Default host for the ingress resource (evaluated as template)                                                                    | `influxdb.local`         |
 | `ingress.path`             | Ingress path*' in order to use this                                                                                              | `/`                      |
 | `ingress.annotations`      | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `ingress.extraHosts`       | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |

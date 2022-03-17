@@ -7,7 +7,7 @@ The Contour Operator extends the Kubernetes API to create, configure and manage 
 [Overview of Contour Operator](https://github.com/projectcontour/contour-operator)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -356,6 +356,14 @@ extraDeploy:
       namespace:
         name: {{ .Release.Namespace | quote }}
 ```
+
+## Upgrading
+
+### To 1.0.0
+
+This version updates the chart to use Contour's latest release, `1.20.1`. Among other features, exisiting CRDs have been syncronised with the official [Contour repository](https://github.com/projectcontour/contour/blob/main/examples/render/contour.yaml)
+
+This version bumps the Envoy and Contour container to the ones matching the Contour Operator requirements.
 
 ## Troubleshooting
 
