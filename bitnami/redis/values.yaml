@@ -387,9 +387,9 @@ master:
     ## @param master.persistence.medium Provide a medium for `emptyDir` volumes.
     ##
     medium: ""
-    sizeLimit: ""
     ## @param master.persistence.sizeLimit Set this to enable a size limit for `emptyDir` volumes.
     ##
+    sizeLimit: ""
     ## @param master.persistence.path The path the volume will be mounted at on Redis&trade; master containers
     ## NOTE: Useful when using different Redis&trade; images
     ##
