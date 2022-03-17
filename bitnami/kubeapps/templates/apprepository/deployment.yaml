@@ -1,3 +1,4 @@
+{{- if .Values.packaging.helm.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -150,3 +151,4 @@ spec:
       {{- if .Values.apprepository.extraVolumes }}
       volumes: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
+{{- end }}

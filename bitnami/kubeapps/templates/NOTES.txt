@@ -81,19 +81,5 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
 
 2. Open a browser and access Kubeapps using the obtained URL.
 
-{{ if and (not .Values.postgresql.existingSecret) (empty .Values.postgresql.postgresqlPassword) -}}
-##########################################################################################################
-### WARNING: You did not provide a value for the postgresqlPassword so one has been generated randomly ###
-##########################################################################################################
-{{- end }}
-
-{{ if and (.Values.packaging.flux.enabled) (not .Values.redis.existingSecret) (empty .Values.redis.redisPassword) -}}
-##########################################################################################################
-### WARNING: You did not provide a value for the redisPassword so one has been generated randomly      ###
-##########################################################################################################
-{{- end }}
-
-{{- end }}
-
 {{- include "kubeapps.checkRollingTags" . }}
 {{- include "kubeapps.validateValues" . }}

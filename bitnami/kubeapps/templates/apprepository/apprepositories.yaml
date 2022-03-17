@@ -1,3 +1,4 @@
+{{- if .Values.packaging.helm.enabled }}
 {{- range .Values.apprepository.initialRepos }}
 apiVersion: kubeapps.com/v1alpha1
 kind: AppRepository
@@ -62,3 +63,4 @@ spec:
   {{- end }}
 ---
 {{ end -}}
+{{- end -}}
