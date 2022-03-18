@@ -74,17 +74,13 @@ spec:
           {{- if .Values.assetsvc.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.assetsvc.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          {{- else if .Values.assetsvc.command }}
+          {{- if .Values.assetsvc.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.assetsvc.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /assetsvc
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else if .Values.assetsvc.args }}
+          {{- if .Values.assetsvc.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.assetsvc.args "context" $) | nindent 12 }}
           {{- else }}
           args:

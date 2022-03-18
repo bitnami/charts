@@ -78,17 +78,13 @@ spec:
           {{- if .Values.kubeops.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          {{- else if .Values.kubeops.command }}
+          {{- if .Values.kubeops.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /kubeops
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else if .Values.kubeops.args }}
+          {{- if .Values.kubeops.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.args "context" $) | nindent 12 }}
           {{- else }}
           args:

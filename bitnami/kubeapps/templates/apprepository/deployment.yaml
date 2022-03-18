@@ -75,17 +75,13 @@ spec:
           {{- if .Values.apprepository.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          {{- else if .Values.apprepository.command }}
+          {{- if .Values.apprepository.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /apprepository-controller
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else if .Values.apprepository.args }}
+          {{- if .Values.apprepository.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.args "context" $) | nindent 12 }}
           {{- else }}
           args:
