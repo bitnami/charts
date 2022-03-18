@@ -168,6 +168,9 @@ spec:
             {{- if .Values.kubeops.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+        {{- if .Values.kubeops.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.sidecars "context" $) | trim | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if .Values.clusters }}
         - name: clusters-config
