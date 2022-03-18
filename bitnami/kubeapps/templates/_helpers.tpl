@@ -188,7 +188,7 @@ Create proxy_pass for the frontend config
 Create proxy_pass for the kubeappsapis
 */}}
 {{- define "kubeapps.kubeappsapis.proxy_pass" -}}
-{{- printf "http://%s:%d" (include "kubeapps.kubeappsapis.fullname" .) .Values.kubeappsapis.service.ports.http -}}
+{{- printf "http://%s:%d" (include "kubeapps.kubeappsapis.fullname" .) (int .Values.kubeappsapis.service.ports.http) -}}
 {{- end -}}
 
 {{/*
