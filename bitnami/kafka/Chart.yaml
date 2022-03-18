@@ -29,12 +29,4 @@ name: kafka
 sources:
   - https://github.com/bitnami/bitnami-docker-kafka
   - https://kafka.apache.org/
-<<<<<<< HEAD
-<<<<<<< HEAD
-version: 15.4.3
-=======
-version: 15.4.1
->>>>>>> bump chart version
-=======
 version: 15.5.0
->>>>>>> Changed version bump
