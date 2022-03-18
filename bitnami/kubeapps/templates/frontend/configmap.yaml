@@ -190,6 +190,6 @@ data:
         # Add the Authorization header if exists
         add_header Authorization $http_authorization;
 
-        proxy_pass {{ printf "http://%s:%d" (include "kubeapps.dashboard.fullname" .) .Values.dashboard.service.ports.http }};
+        proxy_pass {{ printf "http://%s:%d" (include "kubeapps.dashboard.fullname" .) (int .Values.dashboard.service.ports.http) }};
       }
     }
