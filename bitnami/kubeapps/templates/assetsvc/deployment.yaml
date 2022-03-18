@@ -125,16 +125,24 @@ spec:
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.assetsvc.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.assetsvc.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /live
+              port: http
           {{- else if .Values.assetsvc.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.assetsvc.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.assetsvc.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.assetsvc.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /ready
+              port: http
           {{- else if .Values.assetsvc.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.assetsvc.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.assetsvc.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.assetsvc.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
           {{- else if .Values.assetsvc.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.assetsvc.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
