@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.4.1
+appVersion: 2.4.2
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -34,4 +34,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-harbor-registry
   - https://github.com/bitnami/bitnami-docker-harbor-registryctl
   - https://goharbor.io/
-version: 12.0.1
+version: 12.1.1

@@ -409,6 +409,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 9.0.0
+
+This new version of the chart includes the new ZooKeeper major version 3.8.0. Upgrade compatibility is not guaranteed.
+
 ### To 8.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.

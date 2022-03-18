@@ -626,7 +626,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r366
+    tag: 10-debian-10-r369
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -669,7 +669,7 @@ nginx:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-10-r47
+    tag: 1.21.6-debian-10-r49
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -933,7 +933,7 @@ portal:
   image:
     registry: docker.io
     repository: bitnami/harbor-portal
-    tag: 2.4.1-debian-10-r70
+    tag: 2.4.2-debian-10-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1192,7 +1192,7 @@ core:
   image:
     registry: docker.io
     repository: bitnami/harbor-core
-    tag: 2.4.1-debian-10-r81
+    tag: 2.4.2-debian-10-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1251,10 +1251,12 @@ core:
   extraEnvVarsSecret: ""
   ## @param core.containerPorts.http Harbor Core HTTP container port
   ## @param core.containerPorts.https Harbor Core HTTPS container port
+  ## @param core.containerPorts.metrics Harbor Core metrics container port
   ##
   containerPorts:
     http: 8080
     https: 8443
+    metrics: 8001
   ## @param core.replicaCount Number of Harbor Core replicas
   ##
   replicaCount: 1
@@ -1448,10 +1450,12 @@ core:
   service:
     ## @param core.service.ports.http Harbor Core HTTP service port
     ## @param core.service.ports.https Harbor Core HTTPS service port
+    ## @param core.service.ports.metrics Harbor Core metrics service port
     ##
     ports:
       http: 80
       https: 443
+      metrics: 8001
 
 ## @section Harbor Jobservice Parameters
 
@@ -1468,7 +1472,7 @@ jobservice:
   image:
     registry: docker.io
     repository: bitnami/harbor-jobservice
-    tag: 2.4.1-debian-10-r83
+    tag: 2.4.2-debian-10-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1488,6 +1492,9 @@ jobservice:
   ## @param jobservice.maxJobWorkers The max job workers
   ##
   maxJobWorkers: 10
+  ## @param jobservice.redisNamespace Redis namespace for jobservice
+  ##
+  redisNamespace: harbor_job_service_namespace
   ## @param jobservice.jobLogger The logger for jobs: `file`, `database` or `stdout`
   ##
   jobLogger: file
@@ -1521,10 +1528,12 @@ jobservice:
   extraEnvVarsSecret: ""
   ## @param jobservice.containerPorts.http Harbor Jobservice HTTP container port
   ## @param jobservice.containerPorts.https Harbor Jobservice HTTPS container port
+  ## @param jobservice.containerPorts.metrics Harbor Jobservice metrics container port
   ##
   containerPorts:
     http: 8080
     https: 8443
+    metrics: 8001
   ## @param jobservice.replicaCount Number of Harbor Jobservice replicas
   ##
   replicaCount: 1
@@ -1718,10 +1727,12 @@ jobservice:
   service:
     ## @param jobservice.service.ports.http Harbor Jobservice HTTP service port
     ## @param jobservice.service.ports.https Harbor Jobservice HTTPS service port
+    ## @param jobservice.service.ports.metrics Harbor Jobservice HTTPS service port
     ##
     ports:
       http: 80
       https: 443
+      metrics: 8001
 
 ## @section Harbor Registry Parameters
 
@@ -1905,7 +1916,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registry
-      tag: 2.4.1-debian-10-r87
+      tag: 2.4.2-debian-10-r1
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1940,11 +1951,13 @@ registry:
     ## @param registry.server.containerPorts.http Harbor Registry HTTP container port
     ## @param registry.server.containerPorts.https Harbor Registry HTTPS container port
     ## @param registry.server.containerPorts.debug Harbor Registry debug container port
+    ## @param registry.server.containerPorts.metrics Harbor Registry metrics container port
     ##
     containerPorts:
       http: 5000
       https: 5443
       debug: 5001
+      metrics: 8001
     ## Configure extra options for Harbor Registry main containers' liveness, readiness and startup probes
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
     ## @param registry.server.livenessProbe.enabled Enable livenessProbe on Harbor Registry main containers
@@ -2027,10 +2040,12 @@ registry:
     service:
       ## @param registry.server.service.ports.http Harbor Registry HTTP service port
       ## @param registry.server.service.ports.https Harbor Registry HTTPS service port
+      ## @param registry.server.service.ports.metrics Harbor Registry metrics service port
       ##
       ports:
         http: 5000
         https: 5443
+        metrics: 8001
   ## Harbor Registryctl parameters
   ##
   controller:
@@ -2046,7 +2061,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registryctl
-      tag: 2.4.1-debian-10-r86
+      tag: 2.4.2-debian-10-r1
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2186,7 +2201,7 @@ chartmuseum:
   image:
     registry: docker.io
     repository: bitnami/chartmuseum
-    tag: 0.14.0-debian-10-r42
+    tag: 0.14.0-debian-10-r44
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2630,7 +2645,7 @@ clair:
     image:
       registry: docker.io
       repository: bitnami/harbor-adapter-clair
-      tag: 2.4.1-debian-10-r87
+      tag: 2.4.2-debian-10-r2
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2769,7 +2784,7 @@ clair:
     image:
       registry: docker.io
       repository: bitnami/harbor-clair
-      tag: 2.4.1-debian-10-r89
+      tag: 2.4.2-debian-10-r1
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2923,7 +2938,7 @@ notary:
     image:
       registry: docker.io
       repository: bitnami/harbor-notary-server
-      tag: 2.4.1-debian-10-r91
+      tag: 2.4.2-debian-10-r1
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3160,7 +3175,7 @@ notary:
     image:
       registry: docker.io
       repository: bitnami/harbor-notary-signer
-      tag: 2.4.1-debian-10-r88
+      tag: 2.4.2-debian-10-r1
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3409,7 +3424,7 @@ trivy:
   image:
     registry: docker.io
     repository: bitnami/harbor-adapter-trivy
-    tag: 2.4.1-debian-10-r86
+    tag: 2.4.2-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3701,6 +3716,238 @@ trivy:
       http: 8080
       https: 8443
 
+## @section Harbor Exporter Parameters
+
+exporter:
+  ## Bitnami Harbor Exporter image
+  ## ref: https://hub.docker.com/r/bitnami/harbor-exporter/tags/
+  ## @param exporter.image.registry Registry for exporter image
+  ## @param exporter.image.repository Repository for exporter image
+  ## @param exporter.image.tag Tag for exporter image
+  ## @param exporter.image.pullPolicy Harbor exporter image pull policy
+  ## @param exporter.image.pullSecrets Specify docker-registry secret names as an array
+  ## @param exporter.image.debug Specify if debug logs should be enabled
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/harbor-exporter
+    tag: 2.4.2-debian-10-r1
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param exporter.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param exporter.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param exporter.extraEnvVars Array containing extra env vars
+  ## For example:
+  ##  - name: HARBOR_DATABASE_SSLMODE
+  ##    value: verify-ca
+  ##
+  extraEnvVars: []
+  ## @param exporter.extraEnvVarsCM ConfigMap containing extra env vars
+  ##
+  extraEnvVarsCM: ""
+  ## @param exporter.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
+  ##
+  extraEnvVarsSecret: ""
+  ## @param exporter.containerPorts.metrics Harbor Exporter HTTP container port
+  ##
+  containerPorts:
+    metrics: 8001
+  ## @param exporter.replicaCount The replica count
+  ##
+  replicaCount: 1
+  ## Harbor Exporter containers' liveness probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param exporter.livenessProbe.enabled Enable livenessProbe
+  ## @param exporter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param exporter.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param exporter.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param exporter.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param exporter.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## Harbor Exporter containers' readiness probe
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param exporter.readinessProbe.enabled Enable readinessProbe
+  ## @param exporter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param exporter.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param exporter.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param exporter.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param exporter.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param exporter.startupProbe.enabled Enable startupProbe on Harbor Exporter containers
+  ## @param exporter.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param exporter.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param exporter.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param exporter.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param exporter.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param exporter.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param exporter.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param exporter.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Harbor Exporter resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param exporter.resources.limits The resources limits for the Harbor Exporter containers
+  ## @param exporter.resources.requests The requested resources for the Harbor Exporter containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Exporter pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param exporter.podSecurityContext.enabled Enabled Exporter pods' Security Context
+  ## @param exporter.podSecurityContext.fsGroup Set Exporter pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Exporter containers (only main one) Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param exporter.containerSecurityContext.enabled Enabled Exporter containers' Security Context
+  ## @param exporter.containerSecurityContext.runAsUser Set Exporter containers' Security Context runAsUser
+  ## @param exporter.containerSecurityContext.runAsNonRoot Set Exporter containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param exporter.updateStrategy.type The update strategy for deployments with persistent volumes: RollingUpdate or Recreate. Set it as Recreate when RWM for volumes isn't supported
+  ## @param exporter.updateStrategy.rollingUpdate Exporter deployment rolling update configuration parameters
+  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
+  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
+  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param exporter.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
+  ##
+  lifecycleHooks: {}
+  ## @param exporter.hostAliases Exporter pods host aliases
+  ##
+  hostAliases: []
+  ## @param exporter.podLabels Add additional labels to the pod (evaluated as a template)
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param exporter.podAnnotations Annotations to add to the exporter pod
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param exporter.podAffinityPreset Harbor Exporter Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param exporter.podAntiAffinityPreset Harbor Exporter Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param exporter.nodeAffinityPreset.type Harbor Exporter Node affinity preset type. Ignored if `exporter.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param exporter.nodeAffinityPreset.key Harbor Exporter Node label key to match Ignored if `exporter.affinity` is set.
+    ## E.g.
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    ## @param exporter.nodeAffinityPreset.values Harbor Exporter Node label values to match. Ignored if `exporter.affinity` is set.
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param exporter.affinity Harbor Exporter Affinity for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: `exporter.podAffinityPreset`, `exporter.podAntiAffinityPreset`, and `exporter.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param exporter.priorityClassName Exporter pods Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
+  ## @param exporter.nodeSelector Harbor Exporter Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param exporter.tolerations Harbor Exporter Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param exporter.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: {}
+  ## @param exporter.initContainers Add additional init containers to the pod (evaluated as a template)
+  ##
+  initContainers: []
+  ## @param exporter.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Chartmuseum pods
+  ##
+  extraVolumeMounts: []
+  ## @param exporter.extraVolumes Optionally specify extra list of additional volumes for the Chartmuseum pods
+  ##
+  extraVolumes: []
+  ## @param exporter.sidecars Attach additional containers to the pod (evaluated as a template)
+  ##
+  sidecars: []
+  ## @param exporter.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
+  ## Exporter service configuration
+  ##
+  service:
+    ## @param exporter.service.ports.metrics Exporter HTTP service port
+    ##
+    ports:
+      metrics: 8001
+
 ## @section PostgreSQL Parameters
 
 ## PostgreSQL chart configuration
@@ -3724,7 +3971,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 11.15.0-debian-10-r33
+    tag: 11.15.0-debian-10-r35
   auth:
     enablePostgresUser: true
     postgresPassword: not-secure-database-password
@@ -3838,3 +4085,46 @@ externalRedis:
     masterSet: 'mymaster'
     hosts: ""
 
+## @section Harbor metrics parameters
+metrics:
+  ## @param metrics.enabled Whether or not to enable metrics for different
+  enabled: false
+  ## @param metrics.path Path where metrics are exposed
+  ##
+  path: /metrics
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.enabled` to be `true`)
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    selector: {}
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
