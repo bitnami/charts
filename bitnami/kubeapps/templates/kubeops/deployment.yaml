@@ -98,7 +98,7 @@ spec:
             - --clusters-config-path=/config/clusters.conf
             {{- end }}
             {{- if .Values.pinnipedProxy.enabled }}
-            - --pinniped-proxy-url={{ printf "http://%s.%s:%d" (include "kubeapps.pinniped-proxy.fullname" .) .Release.Namespace .Values.pinnipedProxy.service.ports.pinnipedProxy }}
+            - --pinniped-proxy-url={{ printf "http://%s.%s:%d" (include "kubeapps.pinniped-proxy.fullname" .) .Release.Namespace (int .Values.pinnipedProxy.service.ports.pinnipedProxy) }}
             {{- end }}
             {{- if .Values.kubeops.burst }}
             - --burst={{ .Values.kubeops.burst }}
