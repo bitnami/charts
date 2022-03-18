@@ -423,6 +423,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.command`                            | Override default metrics container init command (useful when using custom images)                | `[]`                     |
 | `metrics.redisTargetHost`                    | A way to specify an alternative Redis&trade; hostname                                            | `localhost`              |
 | `metrics.extraArgs`                          | Extra arguments for Redis&trade; exporter, for example:                                          | `{}`                     |
+| `metrics.extraEnvVars`                       | Array with extra environment variables to add to Redis&trade; exporter                           | `[]`                     |
 | `metrics.containerSecurityContext.enabled`   | Enabled Redis&trade; exporter containers' Security Context                                       | `true`                   |
 | `metrics.containerSecurityContext.runAsUser` | Set Redis&trade; exporter containers' Security Context runAsUser                                 | `1001`                   |
 | `metrics.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis&trade; metrics sidecar         | `[]`                     |
