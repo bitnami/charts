@@ -3327,6 +3327,9 @@ receiveDistributor:
   ## @param receiveDistributor.replicaLabel Label to treat as a replica indicator along which data is de-duplicated
   ##
   replicaLabel: replica
+  ## @param receiveDistributor.replicationFactor Thanos Receive Distributor replication-factor
+  ##
+  replicationFactor: 1
   ## @param receiveDistributor.extraEnvVars Extra environment variables for Thanos Receive Distributor container
   ## e.g:
   ## extraEnvVars:
