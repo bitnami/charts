@@ -181,7 +181,7 @@ Create the name of the kubeops service account to use
 Create proxy_pass for the frontend config
 */}}
 {{- define "kubeapps.frontend-config.proxy_pass" -}}
-{{- printf "http://%s:%d" (include "kubeapps.kubeops.fullname" .) .Values.kubeops.service.ports.http -}}
+{{- printf "http://%s:%d" (include "kubeapps.kubeops.fullname" .) (int .Values.kubeops.service.ports.http) -}}
 {{- end -}}
 
 {{/*
