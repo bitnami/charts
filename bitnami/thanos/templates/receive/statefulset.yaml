@@ -119,7 +119,6 @@ spec:
             - --grpc-address=0.0.0.0:10901
             - --http-address=0.0.0.0:10902
             - --remote-write.address=0.0.0.0:19291
-            - --receive.replication-factor={{ .Values.receive.replicationFactor }}
             - --objstore.config=$(OBJSTORE_CONFIG)
             - --tsdb.path=/var/thanos/receive
             - --label={{ .Values.receive.replicaLabel }}="$(NAME)"
@@ -132,6 +131,7 @@ spec:
             {{- end }}
             {{- if eq .Values.receive.mode "standalone" }}
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
+            - --receive.replication-factor={{ .Values.receive.replicationFactor }}
             {{- end }}
             {{- if .Values.receive.grpc.server.tls.enabled }}
             - --grpc-server-tls-cert=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "key" "tls-cert") }}

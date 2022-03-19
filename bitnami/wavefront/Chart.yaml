@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 1.9.0
+appVersion: 1.10.0
 dependencies:
   - condition: kube-state-metrics.enabled
     name: kube-state-metrics

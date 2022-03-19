@@ -168,7 +168,7 @@ diagnosticMode:
     enabled: true
     fsGroup: 1001
   ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param %%MAIN_OBJECT_BLOCK%%.containerSecurityContext.enabled Enabled %%MAIN_CONTAINER_NAME%% containers' Security Context
   ## @param %%MAIN_OBJECT_BLOCK%%.containerSecurityContext.runAsUser Set %%MAIN_CONTAINER_NAME%% containers' Security Context runAsUser
   ## @param %%MAIN_OBJECT_BLOCK%%.containerSecurityContext.runAsNonRoot Set %%MAIN_CONTAINER_NAME%% containers' Security Context runAsNonRoot
