@@ -46,15 +46,15 @@ it("allows to create a user", () => {
   cy.login();
   cy.visit("users/add");
   cy.fixture("users").then((users) => {
-    cy.get("input#first_name").type(users.newUser1.firstName);
-    cy.get("input#last_name").type(users.newUser1.lastName);
-    cy.get("input#username").type(`${users.newUser1.username}.${random}`);
+    cy.get("input#first_name").type(users.newUser.firstName);
+    cy.get("input#last_name").type(users.newUser.lastName);
+    cy.get("input#username").type(`${users.newUser.username}.${random}`);
     cy.get("input#email").type(
-      `${users.newUser1.username}.${random}@email.com`
+      `${users.newUser.username}.${random}@email.com`
     );
-    cy.get("#s2id_autogen1").type(`${users.newUser1.role}{enter}`);
-    cy.get("input#password").type(users.newUser1.password);
-    cy.get("input#conf_password").type(users.newUser1.password);
+    cy.get("#s2id_autogen1").type(`${users.newUser.role}{enter}`);
+    cy.get("input#password").type(users.newUser.password);
+    cy.get("input#conf_password").type(users.newUser.password);
     cy.contains("Save").click();
     // Verify the user was created successfully
     cy.get(".alert-success").should("contain.text", "Added Row");
