@@ -103,7 +103,7 @@ spec:
             - --plugin-config-path=/config/kubeapps-apis/plugins.conf
             {{- end }}
             {{- if .Values.pinnipedProxy.enabled }}
-            - --pinniped-proxy-url={{ printf "http://%s.%s:%d" (include "kubeapps.pinniped-proxy.fullname" .) .Release.Namespace .Values.pinnipedProxy.service.ports.pinnipedProxy }}
+            - --pinniped-proxy-url={{ printf "http://%s.%s:%d" (include "kubeapps.pinniped-proxy.fullname" .) .Release.Namespace (int .Values.pinnipedProxy.service.ports.pinnipedProxy) }}
             {{- end }}
             - --global-repos-namespace={{ include "kubeapps.globalReposNamespace" . }}
             {{- if .Values.kubeappsapis.qps }}
@@ -144,7 +144,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: ASSET_SYNCER_DB_URL
-              value: {{ printf "%s-headless:%d" (include "kubeapps.postgresql.fullname" .) (default "5432" .Values.postgresql.service.ports.postgresql) | quote }}
+              value: {{ printf "%s-headless:%d" (include "kubeapps.postgresql.fullname" .) (int (default "5432" .Values.postgresql.service.ports.postgresql)) | quote }}
             - name: ASSET_SYNCER_DB_NAME
               value: {{ .Values.postgresql.postgresqlDatabase | quote }}
             - name: ASSET_SYNCER_DB_USERNAME

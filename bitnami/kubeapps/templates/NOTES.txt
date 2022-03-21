@@ -68,7 +68,7 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
        Watch the status by running 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-   echo "Kubeapps URL: {{ printf "%s://$SERVICE_IP:%d" (ternary "http" "https" (eq ( .Values.frontend.service.ports.http | toString ) "443")) .Values.frontend.service.ports.http }}"
+   echo "Kubeapps URL: {{ printf "%s://$SERVICE_IP:%d" (ternary "http" "https" (eq ( .Values.frontend.service.ports.http | toString ) "443")) (int .Values.frontend.service.ports.http) }}"
 
 {{- else if contains "ClusterIP" .Values.frontend.service.type }}
 

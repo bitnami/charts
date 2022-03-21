@@ -128,7 +128,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ printf "kubeapps:%s:apprepositories-read" .Release.Name | quote }}
+  name: {{ printf "kubeapps:%s:apprepositories-read" .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: apprepository
     rbac.authorization.k8s.io/aggregate-to-view: "true"
@@ -164,7 +164,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ printf "kubeapps:%s:apprepositories-read" .Release.Name | quote }}
+  name: {{ printf "kubeapps:%s:apprepositories-read" .Release.Namespace | quote }}
 subjects:
   - kind: ServiceAccount
     name: {{ template "kubeapps.apprepository.serviceAccountName" . }}
@@ -226,7 +226,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ printf "kubeapps:%s:apprepositories-read" .Release.Name | quote }}
+  name: {{ printf "kubeapps:%s:apprepositories-read" .Release.Namespace | quote }}
 subjects:
   - kind: Group
     name: system:authenticated
