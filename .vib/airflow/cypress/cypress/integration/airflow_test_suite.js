@@ -1,28 +1,15 @@
 /// <reference types="cypress" />
 import { random } from "./utils";
 
-it("allows user to log in and log out", () => {
-  cy.login();
-  cy.contains("DAGs").should('be.visible');
-  cy.contains("div", "Invalid login").should("not.exist");
-
-  cy.visit("/logout").then(() => {
-    cy.clearCookies();
-    cy.reload();
-    cy.contains("DAGs").should('not.exist');
-  });
-
-});
-
 it("allows triggering execution of a sample DAG", () => {
   cy.login();
   cy.fixture("DAGs").then((dags) => {
     const TRIGGERED_OK_MESSAGE = `Triggered ${dags.triggered.id}, it should start`;
 
-    cy.get("#dag_query")
-      .clear()
-      .type(`${dags.triggered.id}{enter}`);
-    cy.get(`a[href="/tree?dag_id=${dags.triggered.id}"]`).should("be.visible").click();
+    cy.get("#dag_query").clear().type(`${dags.triggered.id}{enter}`);
+    cy.get(`a[href="/tree?dag_id=${dags.triggered.id}"]`)
+      .should("be.visible")
+      .click();
     cy.get('a[aria-label="Trigger DAG"]').click();
     cy.contains("button", "Trigger DAG").click(); // A dropdown appears and clicking again is needed
     cy.get(".alert-message").should("contain.text", TRIGGERED_OK_MESSAGE);
@@ -49,9 +36,7 @@ it("allows to create a user", () => {
     cy.get("input#first_name").type(users.newUser.firstName);
     cy.get("input#last_name").type(users.newUser.lastName);
     cy.get("input#username").type(`${users.newUser.username}.${random}`);
-    cy.get("input#email").type(
-      `${users.newUser.username}.${random}@email.com`
-    );
+    cy.get("input#email").type(`${users.newUser.username}.${random}@email.com`);
     cy.get("#s2id_autogen1").type(`${users.newUser.role}{enter}`);
     cy.get("input#password").type(users.newUser.password);
     cy.get("input#conf_password").type(users.newUser.password);
@@ -65,4 +50,18 @@ it("checks job list contains Scheduler and it is running", () => {
   cy.login();
   cy.visit("job/list/");
   cy.get("tr").contains("SchedulerJob").parent().contains("running");
+});
+
+it("allows importing variables", () => {
+  cy.login();
+  cy.visit("variable/list/");
+  cy.get('form[action*="varimport"]')
+    .should("be.visible")
+    .within(($form) => {
+      cy.get('input[type="file"]').selectFile(
+        "cypress/fixtures/variables.json"
+      );
+      cy.get('button[type="submit"]').click();
+    });
+  cy.contains("div", "variable", "successfully updated").should("be.visible");
 });
