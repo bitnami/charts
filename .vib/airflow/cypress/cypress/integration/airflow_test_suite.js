@@ -24,7 +24,7 @@ it("allows triggering execution of a sample DAG", () => {
       .type(`${dags.triggered.id}{enter}`);
     cy.get(`a[href="/tree?dag_id=${dags.triggered.id}"]`).should("be.visible").click();
     cy.get('a[aria-label="Trigger DAG"]').click();
-    cy.contains("Trigger DAG").click(); // A dropdown appears and clicking again is needed
+    cy.contains("button", "Trigger DAG").click(); // A dropdown appears and clicking again is needed
     cy.get(".alert-message").should("contain.text", TRIGGERED_OK_MESSAGE);
   });
 
