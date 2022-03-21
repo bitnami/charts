@@ -1,29 +1,30 @@
 command:
-  kibana-help:
-    exec: kibana --help
-    exit-status: 0
-    stdout:
-      - "DEVELOPMENT"
-    stderr: [ ]
-    timeout: 20000  
-  run-kibana:
-    exec: kibana --elasticsearch http://localhost:9200
+  kibana-version-ok:
+    exec: kibana --version
     exit-status: 0
     stdout:
     stderr: [ ]
-    timeout: 20000 
+    timeout: 20000
+  which-kibana:
+    exec: which kibana
+    exit-status: 0
+    stdout:
+    - "/opt/bitnami/kibana/bin/kibana"
+    stderr: []
+    timeout: 0  
 file:
   /opt/bitnami/kibana/config/kibana.yml:
-    mode: "0644"
+    mode: "0664"
     filetype: file
     exists: true
     group: root
-  /opt/bitnami/grafana/data:
+  /opt/bitnami/kibana/x-pack:
+    mode: "0755"
     filetype: directory
     exists: true
-  /opt/bitnami/grafana/data/plugins/grafana-kubernetes-app:
-    filetype: directory
+    group: root
+  /opt/bitnami/kibana/config/node.options:
+    mode: "0664"
+    filetype: file
     exists: true
-  /opt/bitnami/grafana/conf/provisioning:
-    filetype: directory
-    exists: true
+    group: root  
