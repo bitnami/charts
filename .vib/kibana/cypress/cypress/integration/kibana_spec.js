@@ -22,13 +22,13 @@ it('allows uploading a file', () => {
   cy.get('[data-test-subj="dataVisualizerFileImportButton"]')
     .should('be.visible')
     .click();
-  cy.get('[title="Step 2: Index created is complete"]')
+  cy.get('[title*="Index created is complete"]')
     .scrollIntoView()
     .should('be.visible');
-  cy.get('[title="Step 3: Data uploaded is complete"')
+  cy.get('[title*="Data uploaded is complete"')
     .scrollIntoView()
     .should('be.visible');
-  cy.get('[title="Step 4: Index pattern created is complete"]').should(
+  cy.get('[title*="Index pattern created is complete"]').should(
     'be.visible',
   );
   cy.get('[data-test-subj="dataVisualizerFileImportSuccessCallout"]').should(
@@ -114,7 +114,8 @@ it('allows adding a remote cluster', () => {
     cy.get('[data-test-subj="remoteClusterDetailFlyout"]').contains(
       td.remoteClusterName,
     );
-    cy.get('[data-test-subj="remoteClusterDetailPanelStatusValues"]').should(
+    cy.get('#remoteClusterDetailsFlyoutTitle')
+    .should(
       'contain.text',
       `${td.remoteClusterName}${random}`,
     );
@@ -134,3 +135,4 @@ it('allows adding of a canvas', () => {
   cy.visit('app/canvas#/');
   cy.contains('My Canvas Workpad').should('be.visible');
 })
+ 
