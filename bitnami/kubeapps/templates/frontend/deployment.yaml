@@ -247,13 +247,13 @@ spec:
           {{- end }}
           env:
             - name: DEFAULT_PINNIPED_NAMESPACE
-              value: {{ .Values.pinnipedProxy.defaultPinnipedNamespace }}
+              value: {{ .Values.pinnipedProxy.defaultPinnipedNamespace | quote }}
             - name: DEFAULT_PINNIPED_AUTHENTICATOR_TYPE
-              value: {{ .Values.pinnipedProxy.defaultAuthenticatorType }}
+              value: {{ .Values.pinnipedProxy.defaultAuthenticatorType | quote }}
             - name: DEFAULT_PINNIPED_AUTHENTICATOR_NAME
-              value: {{ .Values.pinnipedProxy.defaultAuthenticatorName }}
+              value: {{ .Values.pinnipedProxy.defaultAuthenticatorName | quote }}
             - name: DEFAULT_PINNIPED_API_SUFFIX
-              value: {{ .Values.pinnipedProxy.defaultPinnipedAPISuffix }}
+              value: {{ .Values.pinnipedProxy.defaultPinnipedAPISuffix | quote }}
             - name: RUST_LOG
               value: info
               {{- if .Values.pinnipedProxy.extraEnvVars }}
