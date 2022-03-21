@@ -85,8 +85,8 @@ spec:
           {{- else }}
           args:
             - --database-user=postgres
-            - --database-name={{ .Values.postgresql.postgresqlDatabase }}
-            - --database-url={{ printf "%s-headless:%d" (include "kubeapps.postgresql.fullname" .) (int (default "5432" .Values.postgresql.service.ports.postgresql)) }}
+            - --database-name={{ .Values.postgresql.auth.database }}
+            - --database-url={{ printf "%s-hl:%d" (include "kubeapps.postgresql.host" .) (int (include "kubeapps.postgresql.port" .)) | quote }}
             {{- range .Values.assetsvc.extraFlags }}
             - {{ . }}
             {{- end }}
@@ -95,7 +95,7 @@ spec:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: postgresql-password
+                  key: postgres-password
                   name: {{ include "kubeapps.postgresql.secretName" . }}
             - name: POD_NAMESPACE
               valueFrom:

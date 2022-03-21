@@ -1973,22 +1973,21 @@ testImage:
 
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+## @param postgresql.enabled Deploy a PostgreSQL server to satisfy the applications database requirements
+## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
+## @param postgresql.auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
+## @param postgresql.auth.username Name for a custom user to create
+## @param postgresql.auth.password Password for the custom user to create
+## @param postgresql.auth.database Name for a custom database to create
+## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
 ##
 postgresql:
-  ## @param postgresql.enabled Deploy a PostgreSQL server to satisfy the applications database requirements
-  ##
   enabled: true
-  ## @param postgresql.replication.enabled Enable replication for high availability
-  ##
-  replication:
-    enabled: true
-  ## @param postgresql.postgresqlDatabase Database name for Kubeapps to be created on the first run
-  ##
-  postgresqlDatabase: assets
-  ## @param postgresql.postgresqlPassword Password for 'postgres' user
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  postgresqlPassword: ""
+  architecture: "replication"
+  auth:
+    password: ""
+    database: assets
+    existingSecret: ""
   ## PostgreSQL Persistence parameters
   ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ## @param postgresql.persistence.enabled Enable persistence on PostgreSQL using PVC(s)
@@ -2013,11 +2012,6 @@ postgresql:
     requests:
       memory: 256Mi
       cpu: 250m
-  ## @param postgresql.service.ports.postgresql PostgreSQL port
-  ##
-  service:
-    ports:
-      postgresql: 5432
 
 ## @section kubeappsapis parameters
 kubeappsapis:
@@ -2339,10 +2333,10 @@ kubeappsapis:
 ##
 ## Redis will be enabled and installed if `packages.flux.enabled` is true.
 redis:
-  ## @param redis.redisPassword Password used in Redis&trade;
-  ## ref: https://github.com/bitnami/bitnami-docker-redis/blob/master/README.md#setting-the-server-password-on-first-run
-  ##
-  redisPassword: ""
+  auth:
+    enabled: true
+    password: ""
+    existingSecret: ""
   master:
     ## @param redis.master.extraFlags Array with additional command line flags for Redis&trade; master
     extraFlags:

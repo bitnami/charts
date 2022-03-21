@@ -75,8 +75,33 @@ Create a default fully qualified app name for PostgreSQL dependency.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "kubeapps.postgresql.fullname" -}}
-{{- $name := default "postgresql" .Values.postgresql.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "postgresql" "chartValues" .Values.postgresql "context" $) -}}
+{{- end -}}
+
+{{/*
+Return the Postgresql Hostname
+*/}}
+{{- define "kubeapps.postgresql.host" -}}
+{{- if .Values.postgresql.enabled }}
+  {{- if eq .Values.postgresql.architecture "replication" }}
+      {{- printf "%s-primary" (include "kubeapps.postgresql.fullname" .) | trunc 63 | trimSuffix "-" -}}
+  {{- else -}}
+      {{- printf "%s" (include "kubeapps.postgresql.fullname" .) -}}
+  {{- end -}}
+{{- else -}}
+  {{- printf "%s" .Values.externalDatabase.host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Postgresql Port
+*/}}
+{{- define "kubeapps.postgresql.port" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- print "5432" -}}
+{{- else -}}
+    {{- printf "%d" (int .Values.externalDatabase.port) -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -84,8 +109,7 @@ Create a default fully qualified app name for Redis dependency.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "kubeapps.redis.fullname" -}}
-{{- $name := default "redis" .Values.redis.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "redis" "chartValues" .Values.redis "context" $) -}}
 {{- end -}}
 
 {{/*
