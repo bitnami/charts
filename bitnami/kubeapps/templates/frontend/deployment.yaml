@@ -203,11 +203,11 @@ spec:
           envFrom:
             {{- if .Values.authProxy.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ .Values.authProxy.extraEnvVarsCM }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.authProxy.extraEnvVarsCM "context" $) }}
             {{- end }}
             {{- if .Values.authProxy.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ .Values.authProxy.extraEnvVarsSecret }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.authProxy.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
             - name: proxy
@@ -262,11 +262,11 @@ spec:
           envFrom:
             {{- if .Values.pinnipedProxy.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ .Values.pinnipedProxy.extraEnvVarsCM }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.pinnipedProxy.extraEnvVarsCM "context" $) }}
             {{- end }}
             {{- if .Values.pinnipedProxy.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ .Values.pinnipedProxy.extraEnvVarsSecret }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.pinnipedProxy.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
             - name: pinniped-proxy

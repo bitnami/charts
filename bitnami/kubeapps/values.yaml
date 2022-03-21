@@ -1975,8 +1975,6 @@ testImage:
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Deploy a PostgreSQL server to satisfy the applications database requirements
 ## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
-## @param postgresql.auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
-## @param postgresql.auth.username Name for a custom user to create
 ## @param postgresql.auth.password Password for the custom user to create
 ## @param postgresql.auth.database Name for a custom database to create
 ## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
@@ -2333,6 +2331,9 @@ kubeappsapis:
 ##
 ## Redis will be enabled and installed if `packages.flux.enabled` is true.
 redis:
+  ## @param redis.auth.enabled Enable password authentication
+  ## @param redis.auth.password Redis&trade; password
+  ## @param redis.auth.existingSecret The name of an existing secret with Redis&trade; credentials
   auth:
     enabled: true
     password: ""

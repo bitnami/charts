@@ -129,11 +129,11 @@ spec:
           envFrom:
             {{- if .Values.apprepository.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ .Values.apprepository.extraEnvVarsCM }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.apprepository.extraEnvVarsCM "context" $) }}
             {{- end }}
             {{- if .Values.apprepository.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ .Values.apprepository.extraEnvVarsSecret }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.apprepository.extraEnvVarsSecret "context" $) }}
             {{- end }}
           {{- if .Values.apprepository.extraVolumeMounts }}
           volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.extraVolumeMounts "context" $) | nindent 12 }}

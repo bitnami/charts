@@ -584,19 +584,19 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 ### Database Parameters
 
-| Name                                   | Description                                                                  | Value    |
-| -------------------------------------- | ---------------------------------------------------------------------------- | -------- |
-| `postgresql.enabled`                   | Deploy a PostgreSQL server to satisfy the applications database requirements | `true`   |
-| `postgresql.replication.enabled`       | Enable replication for high availability                                     | `true`   |
-| `postgresql.postgresqlDatabase`        | Database name for Kubeapps to be created on the first run                    | `assets` |
-| `postgresql.postgresqlPassword`        | Password for 'postgres' user                                                 | `""`     |
-| `postgresql.persistence.enabled`       | Enable persistence on PostgreSQL using PVC(s)                                | `false`  |
-| `postgresql.persistence.size`          | Persistent Volume size                                                       | `8Gi`    |
-| `postgresql.securityContext.enabled`   | Enabled PostgreSQL replicas pods' Security Context                           | `false`  |
-| `postgresql.resources.limits`          | The resources limits for the PostreSQL container                             | `{}`     |
-| `postgresql.resources.requests.cpu`    | The requested CPU for the PostreSQL container                                | `250m`   |
-| `postgresql.resources.requests.memory` | The requested memory for the PostreSQL container                             | `256Mi`  |
-| `postgresql.service.ports.postgresql`  | PostgreSQL port                                                              | `5432`   |
+| Name                                   | Description                                                                  | Value         |
+| -------------------------------------- | ---------------------------------------------------------------------------- | ------------- |
+| `postgresql.enabled`                   | Deploy a PostgreSQL server to satisfy the applications database requirements | `true`        |
+| `postgresql.architecture`              | PostgreSQL architecture (`standalone` or `replication`)                      | `replication` |
+| `postgresql.auth.password`             | Password for the custom user to create                                       | `""`          |
+| `postgresql.auth.database`             | Name for a custom database to create                                         | `assets`      |
+| `postgresql.auth.existingSecret`       | Name of existing secret to use for PostgreSQL credentials                    | `""`          |
+| `postgresql.persistence.enabled`       | Enable persistence on PostgreSQL using PVC(s)                                | `false`       |
+| `postgresql.persistence.size`          | Persistent Volume size                                                       | `8Gi`         |
+| `postgresql.securityContext.enabled`   | Enabled PostgreSQL replicas pods' Security Context                           | `false`       |
+| `postgresql.resources.limits`          | The resources limits for the PostreSQL container                             | `{}`          |
+| `postgresql.resources.requests.cpu`    | The requested CPU for the PostreSQL container                                | `250m`        |
+| `postgresql.resources.requests.memory` | The requested memory for the PostreSQL container                             | `256Mi`       |
 
 
 ### kubeappsapis parameters
@@ -689,7 +689,9 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 | Name                            | Description                                                        | Value                                                    |
 | ------------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------- |
-| `redis.redisPassword`           | Password used in Redis&trade;                                      | `""`                                                     |
+| `redis.auth.enabled`            | Enable password authentication                                     | `true`                                                   |
+| `redis.auth.password`           | Redis&trade; password                                              | `""`                                                     |
+| `redis.auth.existingSecret`     | The name of an existing secret with Redis&trade; credentials       | `""`                                                     |
 | `redis.master.extraFlags`       | Array with additional command line flags for Redis&trade; master   | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
 | `redis.master.disableCommands`  | Array with commands to deactivate on Redis&trade                   | `[]`                                                     |
 | `redis.replica.replicaCount`    | Number of Redis&trade; replicas to deploy                          | `1`                                                      |
