@@ -127,7 +127,7 @@ spec:
             # longer-term pass something to the plugins so that the plugins won't need to
             # know these details). Currently they're used directly by the flux plugin
             - name: REDIS_ADDR
-              value: {{ printf "%s-master.%s.svc.cluster.local:6379" (include "kubeapps.redis.fullname" .) .Release.Namespace | quote }}
+              value: {{ printf "%s-master.%s.svc.cluster.local:6379" (include "kubeapps.redis.fullname" .) .Release.Namespace }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -144,7 +144,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: ASSET_SYNCER_DB_URL
-              value: {{ printf "%s-hl:%d" (include "kubeapps.postgresql.host" .) (int (include "kubeapps.postgresql.port" .)) | quote }}
+              value: {{ printf "%s-hl:%d" (include "kubeapps.postgresql.host" .) (int (include "kubeapps.postgresql.port" .)) }}
             - name: ASSET_SYNCER_DB_NAME
               value: {{ .Values.postgresql.auth.database | quote }}
             - name: ASSET_SYNCER_DB_USERNAME
