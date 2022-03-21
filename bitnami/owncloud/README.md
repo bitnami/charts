@@ -2,7 +2,7 @@
 
 # ownCloud packaged by Bitnami
 
-ownCloud is an open source content collaboration platform used to store and share files from any device. It grants data privacy, synchronization between devices, and file access control. 
+ownCloud is an open source content collaboration platform used to store and share files from any device. It grants data privacy, synchronization between devices, and file access control.
 
 [Overview of ownCloud](http://owncloud.org)
 

@@ -276,7 +276,7 @@ spec:
             {{- end }}
             {{- if .Values.primary.initdb.password }}
             - name: POSTGRESQL_INITSCRIPTS_PASSWORD
-              value: {{ .Values.primary.initdb.password }}
+              value: {{ .Values.primary.initdb.password | quote }}
             {{- end }}
             # Standby
             {{- if .Values.primary.standby.enabled }}

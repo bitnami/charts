@@ -25,8 +25,8 @@ data:
       workers: {{ .Values.jobservice.maxJobWorkers }}
       backend: "redis"
       redis_pool:
-        redis_url: "{{ template "harbor.redisForJobservice" . }}"
-        namespace: "harbor_job_service_namespace"
+        redis_url: {{ include "harbor.redisForJobservice" . | quote }}
+        namespace: {{ .Values.jobservice.redisNamespace | quote }}
     job_loggers:
       {{- if eq .Values.jobservice.jobLogger "file" }}
       - name: "FILE"
@@ -50,3 +50,7 @@ data:
     loggers:
       - name: "STD_OUTPUT"
         level: {{ .Values.logLevel | upper }}
+    metric:
+      enabled: {{ .Values.metrics.enabled }}
+      path: {{ .Values.metrics.path }}
+      port: {{ .Values.jobservice.containerPorts.metrics }}
