@@ -1,3 +1,4 @@
+{{- if .Values.packaging.helm.enabled }}
 {{- if .Values.rbac.create -}}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
@@ -229,4 +230,5 @@ roleRef:
 subjects:
   - kind: Group
     name: system:authenticated
+{{- end -}}
 {{- end -}}

@@ -64,7 +64,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-cli
-    tag: 3.2.9-scratch-r0
+    tag: 3.3.0-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -161,11 +161,13 @@ server:
   ## @param server.containerSecurityContext.enabled Enabled server containers' Security Context
   ## @param server.containerSecurityContext.runAsUser Set server containers' Security Context runAsUser
   ## @param server.containerSecurityContext.runAsNonRoot Set server containers' Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    readOnlyRootFilesystem: true
 
   ## Create RBAC resources for the Argo workflows server
   ## @param server.rbac.create Create RBAC resources for the Argo workflows server
@@ -469,7 +471,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-controller
-    tag: 3.2.9-scratch-r0
+    tag: 3.3.0-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -563,11 +565,13 @@ controller:
   ## @param controller.containerSecurityContext.enabled Enabled controller containers' Security Context
   ## @param controller.containerSecurityContext.runAsUser Set controller containers' Security Context runAsUser
   ## @param controller.containerSecurityContext.runAsNonRoot Set controller containers' Security Context runAsNonRoot
+  ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    readOnlyRootFilesystem: true
 
   ## Server container port
   ## @param controller.containerPorts.metrics Port to expose controller metrics
@@ -729,10 +733,6 @@ controller:
   ## @param controller.workflowWorkers Number of workflow workers to deploy
   ##
   workflowWorkers: 32
-  ## Number of pod workers to deploy
-  ## @param controller.podWorkers Number of pod workers to deploy
-  ##
-  podWorkers: 32
 
   ## Namespaces allowed to run workflows
   ## @param controller.workflowNamespaces Namespaces allowed to run workflows
@@ -956,7 +956,7 @@ executor:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-exec
-    tag: 3.2.8-debian-10-r24
+    tag: 3.3.0-debian-10-r6
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -989,10 +989,12 @@ executor:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param executor.containerSecurityContext.enabled Enabled executor pods' Security Context
   ## @param executor.containerSecurityContext.fsGroup Set executor pod's Security Context fsGroup
+  ## @param executor.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Context
   ##
   containerSecurityContext:
     enabled: true
     fsGroup: 1001
+    readOnlyRootFilesystem: true
 
 ## @section Traffic Exposure Parameters
 ##

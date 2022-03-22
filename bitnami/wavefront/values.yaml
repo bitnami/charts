@@ -91,7 +91,7 @@ collector:
   image:
     registry: docker.io
     repository: bitnami/wavefront-kubernetes-collector
-    tag: 1.9.0-scratch-r1
+    tag: 1.10.0-scratch-r2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -318,11 +318,14 @@ collector:
   ## @param collector.containerSecurityContext.enabled Enable Container Security Context configuration
   ## @param collector.containerSecurityContext.runAsUser Set Container's Security Context runAsUser
   ## @param collector.containerSecurityContext.runAsNonRoot Set Container's Security Context runAsNonRoot
+  ## @param collector.containerSecurityContext.readOnlyRootFilesystem Mount / (root) as a readonly filesystem on container
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    readOnlyRootFilesystem: true
+
   ## Pod Security Context configuration
   ## @param collector.podSecurityContext.enabled Enable Pod Security Context configuration
   ## @param collector.podSecurityContext.fsGroup Group ID for the volumes of the pod
@@ -462,7 +465,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/wavefront-proxy
-    tag: 10.14.0-debian-10-r43
+    tag: 10.14.0-debian-10-r57
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -507,11 +510,14 @@ proxy:
   ## @param proxy.containerSecurityContext.enabled Enable Container Security Context configuration
   ## @param proxy.containerSecurityContext.runAsUser Set Container's Security Context runAsUser
   ## @param proxy.containerSecurityContext.runAsNonRoot Set Container's Security Context runAsNonRoot
+  ## @param proxy.containerSecurityContext.readOnlyRootFilesystem Mount / (root) as a readonly filesystem on Proxy container
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    readOnlyRootFilesystem: true
+
   ## Pod Security Context configuration
   ## @param proxy.podSecurityContext.enabled Enable Pod Security Context configuration
   ## @param proxy.podSecurityContext.fsGroup Group ID for the volumes of the pod

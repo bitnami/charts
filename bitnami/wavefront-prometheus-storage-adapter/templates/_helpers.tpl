@@ -10,7 +10,11 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "wfpsa.proxy.fullname" -}}
-{{- printf "%s-%s" .Release.Name "wavefront-proxy" | trunc 63 | trimSuffix "-" -}}
+{{- if contains "wavefront" .Release.Name -}}
+{{- printf "%s-proxy" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-wavefront-proxy" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 {{- end -}}
 
 {{/*

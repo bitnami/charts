@@ -145,8 +145,8 @@ spec:
             - --grpc-client-tls-key=/certs/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.client.tls.existingSecret "key" "tls-key") }}
             - --grpc-client-tls-ca=/certs/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.client.tls.existingSecret "key" "ca-cert") }}
             {{- end }}
-            {{- if .Values.query.grpc.client.servername }}
-            - --grpc-client-server-name={{ .Values.query.grpc.client.servername }}
+            {{- if .Values.query.grpc.client.serverName }}
+            - --grpc-client-server-name={{ .Values.query.grpc.client.serverName }}
             {{- end }}
             {{- if .Values.query.extraFlags }}
             {{- .Values.query.extraFlags | toYaml | nindent 12 }}

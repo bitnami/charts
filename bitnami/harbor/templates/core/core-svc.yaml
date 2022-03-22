@@ -19,5 +19,10 @@ spec:
     - name: {{ ternary "https" "http" .Values.internalTLS.enabled }}
       port: {{ ternary .Values.core.service.ports.https .Values.core.service.ports.http .Values.internalTLS.enabled }}
       targetPort: {{ ternary "https" "http" .Values.internalTLS.enabled }}
+    {{- if .Values.metrics.enabled }}
+    - name: http-metrics
+      port: {{ .Values.core.service.ports.metrics }}
+      targetPort: metrics
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: core

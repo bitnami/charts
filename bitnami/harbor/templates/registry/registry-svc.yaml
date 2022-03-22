@@ -16,5 +16,10 @@ spec:
       port: {{ ternary .Values.registry.server.service.ports.https .Values.registry.server.service.ports.http .Values.internalTLS.enabled }}
     - name: controller
       port: {{ ternary .Values.registry.controller.service.ports.https .Values.registry.controller.service.ports.http .Values.internalTLS.enabled }}
+    {{- if .Values.metrics.enabled }}
+    - name: http-metrics
+      port: {{ .Values.registry.server.service.ports.metrics }}
+      targetPort: metrics
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: registry

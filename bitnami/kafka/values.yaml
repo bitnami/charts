@@ -68,7 +68,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.1.0-debian-10-r40
+  tag: 3.1.0-debian-10-r52
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -283,6 +283,10 @@ auth:
     ## @param auth.tls.type Format to use for TLS certificates. Allowed types: `jks` and `pem`
     ##
     type: jks
+    ## @param auth.tls.pemChainIncluded Flag to denote that the Certificate Authority (CA) certificates are bundled with the endpoint cert.
+    ## Certificates must be in proper order, where the top certificate is the leaf and the bottom certificate is the top-most intermediate CA.
+    ##
+    pemChainIncluded: false
     ## @param auth.tls.existingSecrets Array existing secrets containing the TLS certificates for the Kafka brokers
     ## When using 'jks' format for certificates, each secret should contain a truststore and a keystore.
     ## Create these secrets following the steps below:
@@ -698,7 +702,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.23.4-debian-10-r17
+      tag: 1.23.5-debian-10-r1
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -925,7 +929,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r360
+    tag: 10-debian-10-r372
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1003,7 +1007,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.4.2-debian-10-r169
+      tag: 1.4.2-debian-10-r182
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1229,7 +1233,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.16.1-debian-10-r232
+      tag: 0.16.1-debian-10-r245
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
