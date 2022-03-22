@@ -20,7 +20,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: {{ .Values.dashboard.service.port }}
+    - port: {{ .Values.dashboard.service.ports.http }}
       targetPort: http
       protocol: TCP
       name: http
