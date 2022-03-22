@@ -939,9 +939,9 @@ Feel free to [open an issue](https://github.com/kubeapps/kubeapps/issues/new) if
 
 ### Upgrading to chart version 8.0.0
 
-This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+This major release renames several values in this chart and adds missing features, in order to get aligned with the rest of the assets in the Bitnami charts repository.
 
-Additionally updates the PostgreSQL subchart and Redis subchart to their newest major, 11.0.0 and 16.0.0 respectively, which contains similar changes.
+Additionally, it updates both the [PostgreSQL](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) and the [Redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) subcharts to their latest major versions, 11.0.0 and 16.0.0 respectively, where similar changes have been also performed.
 Check [PostgreSQL Upgrading Notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/#to-1100) and [Redis Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1600) for more information.
 
 The following values have been renamed:
