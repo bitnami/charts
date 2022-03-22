@@ -47,8 +47,18 @@ spec:
       {{- if .Values.grafana.labels }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.labels "context" $ ) | nindent 6 }}
       {{- end }}
-    {{- if .Values.commonAnnotations }}
-    annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
+    {{- if or .Values.commonAnnotations .Values.service.annotations }}
+    annotations:
+      {{- if .Values.service.annotations }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 6 }}
+      {{- end }}
+      {{- if .Values.commonAnnotations }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
+      {{- end }}
+    {{- end }}
+    type: {{ .Values.service.type }}
+    {{- if .Values.service.extraPorts }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.service.extraPorts "context" $) | nindent 6 }}
     {{- end }}
   {{- $imagePullSecrets := include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.grafana.image) "global" .Values.global) }}
   {{- if (not (empty ($imagePullSecrets))) | or .Values.grafana.serviceAccount }}

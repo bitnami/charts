@@ -532,6 +532,23 @@ grafana:
   ## @param grafana.labels Add additional labels to the grafana deployment, service and ingress resources
   ##
   labels: {}
+  ## Configure the Service resource
+  ## Ref: https://github.com/grafana-operator/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-service
+  ##
+  service:
+    ## @param grafana.service.type Kubernetes Service type
+    ##
+    type: ClusterIP
+    ## @param grafana.service.annotations Additional custom annotations for Grafana service
+    ##
+    annotations: {}
+    ## @param grafana.service.extraPorts Extra ports to expose in the Grafana service
+    ## extraPorts:
+    ##   - name: grafana-proxy
+    ##     port: 9091
+    ##     protocol: TCP
+    ##     targetPort: grafana-http
+    extraPorts: []
   ## Configure the ingress resource that allows you to access the
   ## Grafana web. Set up the URL
   ## Ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -623,7 +640,6 @@ grafana:
       reporting_enabled: false
       check_for_updates: false
     security:
-      disable_gravatar: false
       # ## Grafana Admin credentials, if omitted they will be admin:<random_pass>
       # admin_user:
       # admin_password:
@@ -646,6 +662,7 @@ grafana:
       #   # role_attribute_path: contains(groups[*], 'platform-readonly') && 'Viewer' || contains(groups[*], 'platform-admin') && 'Admin' || contains(groups[*], 'platform-emergency') && 'Admin' || contains(groups[*], 'customer-poweruser') && 'Admin' || contains(groups[*], 'customer-collaborator') && 'Editor' || contains(groups[*], 'customer-readonly') && 'Viewer'
       #   # allowed_domains: example.com
       #   allow_sign_up: True
+      disable_gravatar: false
   ## @param grafana.configMaps Extra configMaps to mount into the grafana pod
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/extra_files.md
   ## e.g:
