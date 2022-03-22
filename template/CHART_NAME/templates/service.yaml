@@ -13,6 +13,12 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
+  {{- if .Values.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
   {{- if or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
   {{- end }}
