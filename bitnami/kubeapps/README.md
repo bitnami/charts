@@ -7,7 +7,7 @@ Kubeapps is a web-based UI for launching and managing applications on Kubernetes
 [Overview of Kubeapps](https://kubeapps.com)
 
 
-
+                           
 ## TL;DR
 
 ```bash
