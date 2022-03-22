@@ -7,7 +7,7 @@ Argo Workflows is meant to orchestrate Kubernetes jobs in parallel. It uses DAG 
 [Overview of Argo Workflows](https://argoproj.github.io/workflows)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -235,7 +235,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.telemetry.enabled`                               | Enable telemetry for the controller                                                                                           | `false`                            |
 | `controller.telemetry.path`                                  | Path to expose telemetry information                                                                                          | `/telemetry`                       |
 | `controller.workflowWorkers`                                 | Number of workflow workers to deploy                                                                                          | `32`                               |
-| `controller.podWorkers`                                      | Number of pod workers to deploy                                                                                               | `32`                               |
 | `controller.workflowNamespaces`                              | Namespaces allowed to run workflows                                                                                           | `["default"]`                      |
 | `controller.logging.level`                                   | Level for the controller logging                                                                                              | `info`                             |
 | `controller.logging.globalLevel`                             | Global logging level for the controller                                                                                       | `0`                                |
@@ -281,7 +280,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.service.externalTrafficPolicy`                   | controller service external traffic policy                                                                                    | `Cluster`                          |
 | `controller.service.annotations`                             | Additional custom annotations for controller service                                                                          | `{}`                               |
 | `controller.service.extraPorts`                              | Extra port to expose on the controller service                                                                                | `[]`                               |
-
 
 ### Executor configuration section
 

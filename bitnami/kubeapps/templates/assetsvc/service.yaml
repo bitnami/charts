@@ -21,7 +21,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: {{ .Values.assetsvc.service.port }}
+    - port: {{ .Values.assetsvc.service.ports.http }}
       targetPort: http
       protocol: TCP
       name: http

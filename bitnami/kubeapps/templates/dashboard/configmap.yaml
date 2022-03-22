@@ -14,12 +14,12 @@ metadata:
 data:
   vhost.conf: |-
     server {
-      listen {{ .Values.dashboard.containerPort }};
+      listen {{ .Values.dashboard.containerPorts.http }};
   {{- if .Values.frontend.largeClientHeaderBuffers }}
       large_client_header_buffers {{ .Values.frontend.largeClientHeaderBuffers }};
   {{- end }}
   {{- if .Values.enableIPv6 }}
-      listen [::]:{{ .Values.dashboard.containerPort }};
+      listen [::]:{{ .Values.dashboard.containerPorts.http }};
   {{- end }}
       server_name _;
 
@@ -67,17 +67,18 @@ data:
 {{- .Values.dashboard.customLocale | toJson | nindent 4 }}
   config.json: |-
     {
-      "kubeappsCluster": "{{ template "kubeapps.kubeappsCluster" . -}}",
-      "kubeappsNamespace": "{{ .Release.Namespace }}",
-      "globalReposNamespace": "{{ .Release.Namespace }}{{ .Values.apprepository.globalReposNamespaceSuffix }}",
-      "appVersion": "v{{ .Chart.AppVersion }}",
+      "kubeappsCluster": {{ include "kubeapps.kubeappsCluster" . | quote }},
+      "kubeappsNamespace": {{ .Release.Namespace | quote }},
+      "globalReposNamespace": {{ include "kubeapps.globalReposNamespace" . | quote }},
+      "appVersion": {{ printf "v%s" .Chart.AppVersion | quote }},
       "authProxyEnabled": {{ .Values.authProxy.enabled }},
       "oauthLoginURI": {{ .Values.authProxy.oauthLoginURI | quote }},
       "oauthLogoutURI": {{ .Values.authProxy.oauthLogoutURI | quote }},
       "authProxySkipLoginPage": {{ .Values.authProxy.skipKubeappsLoginPage }},
       "featureFlags": {{ .Values.featureFlags | toJson }},
-      "clusters": {{ template "kubeapps.clusterNames" . }},
-      "theme": "{{ .Values.dashboard.defaultTheme }}",
-      "remoteComponentsUrl": "{{ .Values.dashboard.remoteComponentsUrl }}",
-      "customAppViews": {{ .Values.dashboard.customAppViews | toJson }}
+      "clusters": {{ include "kubeapps.clusterNames" . }},
+      "theme": {{ .Values.dashboard.defaultTheme | quote }},
+      "remoteComponentsUrl": {{ .Values.dashboard.remoteComponentsUrl | quote }},
+      "customAppViews": {{ .Values.dashboard.customAppViews | toJson }},
+      "skipAvailablePackageDetails": {{ .Values.dashboard.skipAvailablePackageDetails }}
     }
