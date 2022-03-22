@@ -92,7 +92,7 @@ proxy:
     - jobservice
     - clair
     - trivy
-## @param logLevel The log level used for Harbor services. Allowed values are [ fatal | error | warn | info | debug | trace ]
+## @param logLevel The log level used for Harbor services. Allowed values are [ fatal \| error \| warn \| info \| debug \| trace ]
 ##
 logLevel: debug
 ## TLS settings
@@ -121,7 +121,7 @@ ipFamily:
 
 ## @section Traffic Exposure Parameters
 
-## @param exposureType The way to expose Harbor. Allowed values are [ ingress | proxy ]
+## @param exposureType The way to expose Harbor. Allowed values are [ ingress \| proxy ]
 ## Use "proxy" to use a deploy NGINX proxy in front of Harbor services
 ## Use "ingress" to use an Ingress Controller as proxy
 ##
