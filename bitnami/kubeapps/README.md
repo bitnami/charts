@@ -7,7 +7,7 @@ Kubeapps is a web-based UI for launching and managing applications on Kubernetes
 [Overview of Kubeapps](https://kubeapps.com)
 
 
-                           
+
 ## TL;DR
 
 ```bash
@@ -936,6 +936,34 @@ To reduce this response time, you can increase the number of checks that Kubeapp
 Feel free to [open an issue](https://github.com/kubeapps/kubeapps/issues/new) if you have any questions!
 
 ## Troubleshooting
+
+### Upgrading to chart version 8.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Additionally updates the PostgreSQL subchart and Redis subchart to their newest major, 11.0.0 and 16.0.0 respectively, which contains similar changes.
+Check [PostgreSQL Upgrading Notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/#to-1100) and [Redis Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1600) for more information.
+
+The following values have been renamed:
+
+- `frontend.service.port` renamed as `frontend.service.ports.http`.
+- `frontend.service.nodePort` renamed as `frontend.service.nodePorts.http`.
+- `frontend.containerPort` renamed as `frontend.containerPorts.http`.
+- `dashboard.service.port` renamed as `dashboard.service.ports.http`.
+- `dashboard.containerPort` renamed as `dashboard.containerPorts.http`.
+- `apprepository.service.port` renamed as `apprepository.service.ports.http`.
+- `apprepository.containerPort` renamed as `apprepository.containerPorts.http`.
+- `kubeops.service.port` renamed as `kubeops.service.ports.http`.
+- `kubeops.containerPort` renamed as `kubeops.containerPorts.http`.
+- `assetsvc.service.port` renamed as `assetsvc.service.ports.http`.
+- `assetsvc.containerPort` renamed as `assetsvc.containerPorts.http`.
+- `authProxy.containerPort` renamed as `authProxy.containerPorts.proxy`.
+- Pinniped Proxy service no longer uses `pinnipedProxy.containerPort`. Use `pinnipedProxy.service.ports.pinnipedProxy` to change the service port.
+- `pinnipedProxy.containerPort` renamed as `pinnipedProxy.containerPorts.pinnipedProxy`.
+- `postgresql.replication.enabled` has been removed. Use `postgresql.architecture` instead.
+- `postgresql.postgresqlDatabase` renamed as `postgresql.auth.database`.
+- `postgresql.postgresqlPassword` renamed as `postgresql.auth.password`.
+- `redis.redisPassword` renamed as `redis.auth.password`.
 
 ### Nginx Ipv6 error
 

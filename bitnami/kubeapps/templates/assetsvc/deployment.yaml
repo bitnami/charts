@@ -109,11 +109,11 @@ spec:
           envFrom:
             {{- if .Values.assetsvc.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ .Values.assetsvc.extraEnvVarsCM }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.assetsvc.extraEnvVarsCM "context" $) }}
             {{- end }}
             {{- if .Values.assetsvc.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ .Values.assetsvc.extraEnvVarsSecret }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.assetsvc.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
             - name: http
