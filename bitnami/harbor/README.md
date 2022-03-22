@@ -94,7 +94,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `proxy.httpsProxy`           | The URL of the HTTPS proxy server                                                                                                                           | `""`                                    |
 | `proxy.noProxy`              | The URLs that the proxy settings not apply to                                                                                                               | `127.0.0.1,localhost,.local,.internal`  |
 | `proxy.components`           | The component list that the proxy settings apply to                                                                                                         | `["core","jobservice","clair","trivy"]` |
-| `logLevel`                   | The log level used for Harbor services. Allowed values are [ fatal | error | warn | info | debug | trace ]                                                  | `debug`                                 |
+| `logLevel`                   | The log level used for Harbor services. Allowed values are [ fatal \| error \| warn \| info \| debug \| trace ]                                             | `debug`                                 |
 | `internalTLS.enabled`        | Use TLS in all the supported containers: chartmuseum, clair, core, jobservice, portal, registry and trivy                                                   | `false`                                 |
 | `internalTLS.caBundleSecret` | Name of an existing secret with a custom CA that will be injected into the trust store for chartmuseum, clair, core, jobservice, registry, trivy components | `""`                                    |
 | `ipFamily.ipv6.enabled`      | Enable listening on IPv6 ([::]) for NGINX-based components (NGINX,portal)                                                                                   | `true`                                  |
@@ -105,7 +105,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `exposureType`                     | The way to expose Harbor. Allowed values are [ ingress | proxy ]                                                                 | `proxy`                  |
+| `exposureType`                     | The way to expose Harbor. Allowed values are [ ingress \| proxy ]                                                                | `proxy`                  |
 | `service.type`                     | NGINX proxy service type                                                                                                         | `LoadBalancer`           |
 | `service.ports.http`               | NGINX proxy service HTTP port                                                                                                    | `80`                     |
 | `service.ports.https`              | NGINX proxy service HTTPS port                                                                                                   | `443`                    |
