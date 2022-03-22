@@ -1,6 +1,10 @@
 /// <reference types="cypress" />
 
-import { random, closeThePopups, skipTheWelcomeScreen } from './utils'
+import {
+  random,
+  closeThePopups,
+  skipTheWelcomeScreen
+} from './utils'
 
 before(() => {
   skipTheWelcomeScreen()
@@ -10,7 +14,9 @@ it('allows uploading a file', () => {
   cy.get('a[data-test-subj="uploadFile"]').should('be.visible').click()
   cy.get(
     'input#filePicker',
-  ).selectFile('cypress/fixtures/test-data-to-import.ndjson', { force: true });
+  ).selectFile('cypress/fixtures/test-data-to-import.ndjson', {
+    force: true
+  });
   cy.get('[data-test-subj="dataVisualizerFileOpenImportPageButton"]')
     .should('be.visible')
     .click();
@@ -104,7 +110,9 @@ it('allows adding a remote cluster', () => {
   cy.fixture('testdata').then((td) => {
     cy.get('[data-test-subj="remoteClusterFormNameInput"]')
       .should('be.visible')
-      .type(`${td.remoteClusterName}${random}`, { force: true });
+      .type(`${td.remoteClusterName}${random}`, {
+        force: true
+      });
     cy.get('[data-test-subj="comboBoxInput"]')
       .should('be.visible')
       .type(td.remoteCluster);
@@ -115,10 +123,10 @@ it('allows adding a remote cluster', () => {
       td.remoteClusterName,
     );
     cy.get('#remoteClusterDetailsFlyoutTitle')
-    .should(
-      'contain.text',
-      `${td.remoteClusterName}${random}`,
-    );
+      .should(
+        'contain.text',
+        `${td.remoteClusterName}${random}`,
+      );
   })
 })
 
@@ -128,11 +136,16 @@ it('allows adding of a canvas', () => {
   cy.get('[data-test-subj="create-workpad-button"]')
     .should('be.visible')
     .forceClick();
+  cy.fixture('testdata').then((td) => {
+    cy.get('input[value="My Canvas Workpad"]').clear().type(`${td.workpadName}${random}`);
+  });
+
   cy.get('[data-test-subj="add-element-button"]')
     .should('have.text', 'Add element')
     .forceClick();
   cy.contains('span', 'Text').forceClick();
   cy.visit('app/canvas#/');
-  cy.contains('My Canvas Workpad').should('be.visible');
+  cy.fixture('testdata').then((td) => {
+    cy.contains(`${td.workpadName}${random}`).should('be.visible');
+  });
 })
- 
