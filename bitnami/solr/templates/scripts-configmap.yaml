@@ -15,6 +15,8 @@ data:
   init-certs.sh: |-
     #!/bin/bash
 
+    . /opt/bitnami/scripts/liblog.sh
+
     if [[ -f "/certs/keystore.p12" ]] && [[ -f "/certs/truststore.p12" ]]; then
         # the user provided keystore.p12 and truststore.p12 files (prefered)
         cp "/certs/keystore.p12" "/opt/bitnami/solr/certs/keystore.p12"
@@ -32,7 +34,7 @@ data:
         rm "/tmp/keystore.p12"
         keytool -import -file "/certs/ca.crt" -keystore "/opt/bitnami/solr/certs/truststore.p12" -storepass "${SOLR_SSL_TRUST_STORE_PASSWORD}" -noprompt
     else
-        echo "no certificate files provided ... nothing to do ..."
+        info "No certificate files provided ... nothing to do ..."
     fi
   setup.sh: |-
     #!/bin/bash
