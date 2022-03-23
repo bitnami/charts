@@ -18,7 +18,13 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: exporter
   {{- if .Values.exporter.updateStrategy }}
-  strategy: {{- toYaml .Values.exporter.updateStrategy | nindent 4 }}
+  strategy:
+    type: {{ .Values.exporter.updateStrategy.type }}
+    {{- if (eq "Recreate" .Values.exporter.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- else }}
+    rollingUpdate: {{ toYaml .Values.exporter.updateStrategy.rollingUpdate | nindent 6 }}
+    {{- end }}
   {{- end }}
   template:
     metadata:

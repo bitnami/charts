@@ -17,7 +17,13 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: registry
   {{- if .Values.registry.updateStrategy }}
-  strategy: {{- toYaml .Values.registry.updateStrategy | nindent 4 }}
+  strategy:
+    type: {{ .Values.registry.updateStrategy.type }}
+    {{- if (eq "Recreate" .Values.registry.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- else }}
+    rollingUpdate: {{ toYaml .Values.registry.updateStrategy.rollingUpdate | nindent 6 }}
+    {{- end }}
   {{- end }}
   template:
     metadata:

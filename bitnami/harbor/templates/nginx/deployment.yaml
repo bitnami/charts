@@ -18,7 +18,13 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: nginx
   {{- if .Values.nginx.updateStrategy }}
-  strategy: {{- toYaml .Values.nginx.updateStrategy | nindent 4 }}
+  strategy:
+    type: {{ .Values.nginx.updateStrategy.type }}
+  {{- if (eq "Recreate" .Values.nginx.updateStrategy.type) }}
+    rollingUpdate: null
+  {{- else }}
+    rollingUpdate: {{ toYaml .Values.nginx.updateStrategy.rollingUpdate | nindent 6 }}
+  {{- end }}
   {{- end }}
   template:
     metadata:

@@ -17,7 +17,13 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: portal
   {{- if .Values.portal.updateStrategy }}
-  strategy: {{- toYaml .Values.portal.updateStrategy | nindent 4 }}
+  strategy:
+    type: {{ .Values.portal.updateStrategy.type }}
+    {{- if (eq "Recreate" .Values.portal.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- else }}
+    rollingUpdate: {{ toYaml .Values.portal.updateStrategy.rollingUpdate | nindent 6 }}
+    {{- end }}
   {{- end }}
   template:
     metadata:
