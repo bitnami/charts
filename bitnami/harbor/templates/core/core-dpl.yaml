@@ -106,6 +106,13 @@ spec:
                 secretKeyRef:
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
+            {{- if or .Values.core.configOverwriteJson .Values.core.configOverwriteJsonSecret }}
+            - name: CONFIG_OVERWRITE_JSON
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "harbor.coreOverridesJsonSecret" . }}
+                  key: overrides.json
+            {{- end }}
             {{- if .Values.internalTLS.enabled }}
             - name: INTERNAL_TLS_ENABLED
               value: "true"
