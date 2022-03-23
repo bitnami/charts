@@ -821,7 +821,6 @@ nginx:
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param nginx.lifecycleHooks LifecycleHook for the NGINX container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1069,7 +1068,6 @@ portal:
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param portal.lifecycleHooks LifecycleHook for the Harbor Portal container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1347,7 +1345,6 @@ core:
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param core.lifecycleHooks LifecycleHook for the Harbor Core container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1624,7 +1621,6 @@ jobservice:
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param jobservice.lifecycleHooks LifecycleHook for the Harbor Jobservice container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1809,7 +1805,6 @@ registry:
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param registry.hostAliases Harbor Registry pods host aliases
   ##
   hostAliases: []
@@ -2387,7 +2382,6 @@ chartmuseum:
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param chartmuseum.lifecycleHooks LifecycleHook for the Chartmuseum container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -2538,7 +2532,6 @@ clair:
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param clair.hostAliases Clair pods host aliases
   ##
   hostAliases: []
@@ -3064,7 +3057,6 @@ notary:
     ##
     updateStrategy:
       type: RollingUpdate
-      rollingUpdate: {}
     ## @param notary.server.lifecycleHooks LifecycleHook for the Harbor Notary Server container(s) to automate configuration before or after startup
     ##
     lifecycleHooks: {}
@@ -3301,7 +3293,6 @@ notary:
     ##
     updateStrategy:
       type: RollingUpdate
-      rollingUpdate: {}
     ## @param notary.signer.lifecycleHooks LifecycleHook for the Harbor Notary Signer container(s) to automate configuration before or after startup
     ##
     lifecycleHooks: {}
@@ -3608,7 +3599,6 @@ trivy:
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param trivy.lifecycleHooks LifecycleHook for the Trivy container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -3862,7 +3852,6 @@ exporter:
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param exporter.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
   ##
   lifecycleHooks: {}
