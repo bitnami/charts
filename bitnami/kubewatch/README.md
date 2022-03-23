@@ -6,10 +6,8 @@ Kubewatch is a Kubernetes watcher that currently publishes notification to Slack
 
 [Overview of Kubewatch](https://github.com/bitnami-labs/kubewatch)
 
-## This Helm chart is deprecated
 
-The upstream project has been discontinued and no new features.
-
+                           
 ## TL;DR
 
 ```console
