@@ -1,6 +1,6 @@
 This Helm chart is deprecated
 
-The upstream project has been discontinued and no new features.
+The upstream project has been discontinued and no new features are expected.
 
 CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
