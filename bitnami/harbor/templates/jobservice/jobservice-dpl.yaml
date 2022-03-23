@@ -17,7 +17,13 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: jobservice
   {{- if .Values.jobservice.updateStrategy }}
-  strategy: {{- toYaml .Values.jobservice.updateStrategy | nindent 4 }}
+  strategy:
+    type: {{ .Values.jobservice.updateStrategy.type }}
+    {{- if (eq "Recreate" .Values.jobservice.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- else }}
+    rollingUpdate: {{ toYaml .Values.jobservice.updateStrategy.rollingUpdate | nindent 6 }}
+    {{- end }}
   {{- end }}
   template:
     metadata:

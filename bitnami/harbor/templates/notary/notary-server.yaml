@@ -18,7 +18,13 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: notary-server
   {{- if .Values.notary.server.updateStrategy }}
-  strategy: {{- toYaml .Values.notary.server.updateStrategy | nindent 4 }}
+  strategy:
+    type: {{ .Values.notary.server.updateStrategy.type }}
+    {{- if (eq "Recreate" .Values.notary.server.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- else }}
+    rollingUpdate: {{ toYaml .Values.notary.server.updateStrategy.rollingUpdate | nindent 6 }}
+    {{- end }}
   {{- end }}
   template:
     metadata:

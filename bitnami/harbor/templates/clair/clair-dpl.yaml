@@ -18,7 +18,13 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: clair
   {{- if .Values.clair.updateStrategy }}
-  strategy: {{- toYaml .Values.clair.updateStrategy | nindent 4 }}
+  strategy:
+    type: {{ .Values.clair.updateStrategy.type }}
+    {{- if (eq "Recreate" .Values.clair.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- else }}
+    rollingUpdate: {{ toYaml .Values.clair.updateStrategy.rollingUpdate | nindent 6 }}
+    {{- end }}
   {{- end }}
   template:
     metadata:

@@ -18,7 +18,13 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: chartmuseum
   {{- if .Values.chartmuseum.updateStrategy }}
-  strategy: {{- toYaml .Values.chartmuseum.updateStrategy | nindent 4 }}
+  strategy:
+    type: {{ .Values.chartmuseum.updateStrategy.type }}
+    {{- if (eq "Recreate" .Values.chartmuseum.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- else }}
+    rollingUpdate: {{ toYaml .Values.chartmuseum.updateStrategy.rollingUpdate | nindent 6 }}
+    {{- end }}
   {{- end }}
   template:
     metadata:

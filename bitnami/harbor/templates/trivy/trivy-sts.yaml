@@ -15,7 +15,15 @@ metadata:
 spec:
   replicas: {{ .Values.trivy.replicaCount }}
   serviceName: {{ template "harbor.trivy" . }}
-  updateStrategy: {{- toYaml .Values.trivy.updateStrategy | nindent 4 }}
+  {{- if .Values.trivy.updateStrategy }}
+  updateStrategy:
+    type: {{ .Values.trivy.updateStrategy.type }}
+    {{- if (eq "Recreate" .Values.trivy.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- else }}
+    rollingUpdate: {{ toYaml .Values.trivy.updateStrategy.rollingUpdate | nindent 6 }}
+    {{- end }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: trivy
