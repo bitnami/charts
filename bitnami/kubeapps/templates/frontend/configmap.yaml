@@ -31,7 +31,7 @@ data:
     {{- end }}
 {{- range .Values.clusters }}
   {{- if .certificateAuthorityData }}
-  {{ .name }}-ca.pem: {{ .certificateAuthorityData }}
+  {{ printf "%s-ca.pem" .name }}: {{ .certificateAuthorityData }}
   {{- end }}
 {{- end }}
   vhost.conf: |-
@@ -46,12 +46,12 @@ data:
     proxy_set_header Connection $connection_upgrade;
 
     server {
-      listen {{ .Values.frontend.containerPort }};
+      listen {{ .Values.frontend.containerPorts.http }};
     {{- if .Values.frontend.largeClientHeaderBuffers }}
       large_client_header_buffers {{ .Values.frontend.largeClientHeaderBuffers }};
     {{- end }}
     {{- if .Values.enableIPv6 }}
-      listen [::]:{{ .Values.frontend.containerPort }};
+      listen [::]:{{ .Values.frontend.containerPorts.http }};
     {{- end }}
       server_name _;
 
@@ -95,12 +95,12 @@ data:
     {{- if .certificateAuthorityData }}
         proxy_set_header PINNIPED_PROXY_API_SERVER_CERT {{ .certificateAuthorityData }};
     {{- end }}
-        proxy_pass http://{{ template "kubeapps.pinniped-proxy.fullname" $ }}.{{ $.Release.Namespace }}:{{ $.Values.pinnipedProxy.containerPort }};
+        proxy_pass {{ printf "http://%s.%s:%d" (include "kubeapps.pinniped-proxy.fullname" $) $.Release.Namespace (int $.Values.pinnipedProxy.service.ports.pinnipedProxy) }};
     {{- else }}
         # Otherwise we route directly through to the clusters with existing credentials.
         proxy_pass {{ $apiServiceBaseURL }};
     {{- if .certificateAuthorityData }}
-        proxy_ssl_trusted_certificate "./server_blocks/{{ .name }}-ca.pem";
+        proxy_ssl_trusted_certificate {{ printf "./server_blocks/%s-ca.pem" .name | quote }};
     {{- end }}
     {{- end }}
         include "./server_blocks/k8s-api-proxy.conf";
@@ -190,6 +190,6 @@ data:
         # Add the Authorization header if exists
         add_header Authorization $http_authorization;
 
-        proxy_pass http://{{ template "kubeapps.dashboard.fullname" . }}:{{ .Values.dashboard.service.port }};
+        proxy_pass {{ printf "http://%s:%d" (include "kubeapps.dashboard.fullname" .) (int .Values.dashboard.service.ports.http) }};
       }
     }
