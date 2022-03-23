@@ -78,14 +78,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Ghost Image parameters
 
-| Name                | Description                                      | Value                  |
-| ------------------- | ------------------------------------------------ | ---------------------- |
-| `image.registry`    | Ghost image registry                             | `docker.io`            |
-| `image.repository`  | Ghost image repository                           | `bitnami/ghost`        |
-| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.37.0-debian-10-r12` |
-| `image.pullPolicy`  | Ghost image pull policy                          | `IfNotPresent`         |
-| `image.pullSecrets` | Ghost image pull secrets                         | `[]`                   |
-| `image.debug`       | Enable image debug mode                          | `false`                |
+| Name                | Description                                      | Value                 |
+| ------------------- | ------------------------------------------------ | --------------------- |
+| `image.registry`    | Ghost image registry                             | `docker.io`           |
+| `image.repository`  | Ghost image repository                           | `bitnami/ghost`       |
+| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.41.1-debian-10-r0` |
+| `image.pullPolicy`  | Ghost image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | Ghost image pull secrets                         | `[]`                  |
+| `image.debug`       | Enable image debug mode                          | `false`               |
 
 
 ### Ghost Configuration parameters
@@ -214,10 +214,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`                    |
 | `persistence.size`                            | Persistent Volume size                                                                          | `8Gi`                   |
 | `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `""`                    |
+| `persistence.subPath`                         | The name of a volume's sub path to mount for persistence                                        | `""`                    |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r351`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r374`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
