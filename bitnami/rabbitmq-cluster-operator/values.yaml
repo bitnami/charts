@@ -41,6 +41,13 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param installCRDs Specifies whether to install the CRDs as part of the chart templates. Defaults to false.
+## This is particularly useful for upgrades, as the CRDs are only install and updated when the chart is installed for the first time.
+## For more details see:
+## - https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#some-caveats-and-explanations
+## - https://github.com/helm/helm/issues/7735
+##
+installCRDs: false
 
 ## @section RabbitMQ Cluster Operator Parameters
 ##

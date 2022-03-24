@@ -142,15 +142,16 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 
 ### Common parameters
 
-| Name                | Description                                        | Value           |
-| ------------------- | -------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `""`            |
-| `nameOverride`      | String to partially override common.names.fullname | `""`            |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `""`            |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
-| `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
+| Name                | Description                                                                              | Value           |
+| ------------------- | ---------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`       | Override Kubernetes version                                                              | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname                                       | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname                                           | `""`            |
+| `commonLabels`      | Labels to add to all deployed objects                                                    | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects                                               | `{}`            |
+| `clusterDomain`     | Kubernetes cluster domain name                                                           | `cluster.local` |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                        | `[]`            |
+| `installCRDs`       | Specifies whether to install the CRDs as part of the chart templates. Defaults to false. | `false`         |
 
 
 ### RabbitMQ Cluster Operator Parameters
@@ -159,7 +160,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
 | `rabbitmqImage.registry`                                          | RabbitMQ Image registry                                                                                 | `docker.io`                              |
 | `rabbitmqImage.repository`                                        | RabbitMQ Image repository                                                                               | `bitnami/rabbitmq`                       |
-| `rabbitmqImage.tag`                                               | RabbitMQ Image tag (immutable tags are recommended)                                                     | `3.8.27-debian-10-r49`                   |
+| `rabbitmqImage.tag`                                               | RabbitMQ Image tag (immutable tags are recommended)                                                     | `3.8.27-debian-10-r58`                   |
 | `rabbitmqImage.pullSecrets`                                       | RabbitMQ Image pull secrets                                                                             | `[]`                                     |
 | `credentialUpdaterImage.registry`                                 | RabbitMQ Default User Credential Updater Image registry                                                 | `docker.io`                              |
 | `credentialUpdaterImage.repository`                               | RabbitMQ Default User Credential Updater Image repository                                               | `bitnami/rmq-default-credential-updater` |
@@ -167,7 +168,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `credentialUpdaterImage.pullSecrets`                              | RabbitMQ Default User Credential Updater Image pull secrets                                             | `[]`                                     |
 | `clusterOperator.image.registry`                                  | RabbitMQ Cluster Operator image registry                                                                | `docker.io`                              |
 | `clusterOperator.image.repository`                                | RabbitMQ Cluster Operator image repository                                                              | `bitnami/rabbitmq-cluster-operator`      |
-| `clusterOperator.image.tag`                                       | RabbitMQ Cluster Operator image tag (immutable tags are recommended)                                    | `1.12.1-scratch-r0`                      |
+| `clusterOperator.image.tag`                                       | RabbitMQ Cluster Operator image tag (immutable tags are recommended)                                    | `1.12.1-scratch-r1`                      |
 | `clusterOperator.image.pullPolicy`                                | RabbitMQ Cluster Operator image pull policy                                                             | `IfNotPresent`                           |
 | `clusterOperator.image.pullSecrets`                               | RabbitMQ Cluster Operator image pull secrets                                                            | `[]`                                     |
 | `clusterOperator.replicaCount`                                    | Number of RabbitMQ Cluster Operator replicas to deploy                                                  | `1`                                      |
