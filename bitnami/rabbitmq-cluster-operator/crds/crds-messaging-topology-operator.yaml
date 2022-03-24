@@ -2,14 +2,15 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: bindings.rabbitmq.com
 spec:
   group: rabbitmq.com
   names:
     categories:
-      - all
+    - all
+    - rabbitmq
     kind: Binding
     listKind: BindingList
     plural: bindings
@@ -56,16 +57,29 @@ spec:
                     Reference to the RabbitmqCluster that the binding will
                     be created in. Required property.
                   properties:
+                    connectionSecret:
+                      description:
+                        Secret contains the http management uri for the RabbitMQ
+                        cluster. The Secret must contain the key `uri`, `username` and
+                        `password` or operator will error. Have to set either name or
+                        connectionSecret, but not both.
+                      properties:
+                        name:
+                          description:
+                            "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                            TODO: Add other useful fields. apiVersion, kind, uid?"
+                          type: string
+                      type: object
                     name:
-                      description: The name of the RabbitMQ cluster to reference.
+                      description:
+                        The name of the RabbitMQ cluster to reference. Have
+                        to set either name or connectionSecret, but not both.
                       type: string
                     namespace:
                       description:
                         The namespace of the RabbitMQ cluster to reference.
                         Defaults to the namespace of the requested resource if omitted.
                       type: string
-                  required:
-                    - name
                   type: object
                 routingKey:
                   description: Cannot be updated
@@ -135,7 +149,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: exchanges.rabbitmq.com
 spec:
@@ -143,6 +157,7 @@ spec:
   names:
     categories:
       - all
+      - rabbitmq
     kind: Exchange
     listKind: ExchangeList
     plural: exchanges
@@ -188,16 +203,29 @@ spec:
                     Reference to the RabbitmqCluster that the exchange will
                     be created in. Required property.
                   properties:
+                    connectionSecret:
+                      description:
+                        Secret contains the http management uri for the RabbitMQ
+                        cluster. The Secret must contain the key `uri`, `username` and
+                        `password` or operator will error. Have to set either name or
+                        connectionSecret, but not both.
+                      properties:
+                        name:
+                          description:
+                            "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                            TODO: Add other useful fields. apiVersion, kind, uid?"
+                          type: string
+                      type: object
                     name:
-                      description: The name of the RabbitMQ cluster to reference.
+                      description:
+                        The name of the RabbitMQ cluster to reference. Have
+                        to set either name or connectionSecret, but not both.
                       type: string
                     namespace:
                       description:
                         The namespace of the RabbitMQ cluster to reference.
                         Defaults to the namespace of the requested resource if omitted.
                       type: string
-                  required:
-                    - name
                   type: object
                 type:
                   default: direct
@@ -266,7 +294,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: federations.rabbitmq.com
 spec:
@@ -274,6 +302,7 @@ spec:
   names:
     categories:
       - all
+      - rabbitmq
     kind: Federation
     listKind: FederationList
     plural: federations
@@ -330,16 +359,29 @@ spec:
                     Reference to the RabbitmqCluster that this federation
                     upstream will be created in. Required property.
                   properties:
+                    connectionSecret:
+                      description:
+                        Secret contains the http management uri for the RabbitMQ
+                        cluster. The Secret must contain the key `uri`, `username` and
+                        `password` or operator will error. Have to set either name or
+                        connectionSecret, but not both.
+                      properties:
+                        name:
+                          description:
+                            "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                            TODO: Add other useful fields. apiVersion, kind, uid?"
+                          type: string
+                      type: object
                     name:
-                      description: The name of the RabbitMQ cluster to reference.
+                      description:
+                      The name of the RabbitMQ cluster to reference. Have
+                        to set either name or connectionSecret, but not both.
                       type: string
                     namespace:
                       description:
                         The namespace of the RabbitMQ cluster to reference.
                         Defaults to the namespace of the requested resource if omitted.
                       type: string
-                  required:
-                    - name
                   type: object
                 reconnectDelay:
                   type: integer
@@ -421,7 +463,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: permissions.rabbitmq.com
 spec:
@@ -429,6 +471,7 @@ spec:
   names:
     categories:
       - all
+      - rabbitmq
     kind: Permission
     listKind: PermissionList
     plural: permissions
@@ -474,16 +517,29 @@ spec:
                     Reference to the RabbitmqCluster that both the provided
                     user and vhost are. Required property.
                   properties:
+                    connectionSecret:
+                      description:
+                        Secret contains the http management uri for the RabbitMQ
+                        cluster. The Secret must contain the key `uri`, `username` and
+                        `password` or operator will error. Have to set either name or
+                        connectionSecret, but not both.
+                      properties:
+                        name:
+                          description:
+                            "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                            TODO: Add other useful fields. apiVersion, kind, uid?"
+                          type: string
+                      type: object
                     name:
-                      description: The name of the RabbitMQ cluster to reference.
+                      description:
+                        The name of the RabbitMQ cluster to reference. Have
+                        to set either name or connectionSecret, but not both.
                       type: string
                     namespace:
                       description:
                         The namespace of the RabbitMQ cluster to reference.
                         Defaults to the namespace of the requested resource if omitted.
                       type: string
-                  required:
-                    - name
                   type: object
                 user:
                   description:
@@ -567,7 +623,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: policies.rabbitmq.com
 spec:
@@ -575,6 +631,7 @@ spec:
   names:
     categories:
       - all
+      - rabbitmq
     kind: Policy
     listKind: PolicyList
     plural: policies
@@ -637,16 +694,29 @@ spec:
                     Reference to the RabbitmqCluster that the exchange will
                     be created in. Required property.
                   properties:
+                    connectionSecret:
+                      description:
+                        Secret contains the http management uri for the RabbitMQ
+                        cluster. The Secret must contain the key `uri`, `username` and
+                        `password` or operator will error. Have to set either name or
+                        connectionSecret, but not both.
+                      properties:
+                        name:
+                          description:
+                            "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                            TODO: Add other useful fields. apiVersion, kind, uid?"
+                          type: string
+                      type: object
                     name:
-                      description: The name of the RabbitMQ cluster to reference.
+                      description:
+                        The name of the RabbitMQ cluster to reference. Have
+                        to set either name or connectionSecret, but not both.
                       type: string
                     namespace:
                       description:
                         The namespace of the RabbitMQ cluster to reference.
                         Defaults to the namespace of the requested resource if omitted.
                       type: string
-                  required:
-                    - name
                   type: object
                 vhost:
                   default: /
@@ -713,7 +783,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: queues.rabbitmq.com
 spec:
@@ -721,6 +791,7 @@ spec:
   names:
     categories:
       - all
+      - rabbitmq
     kind: Queue
     listKind: QueueList
     plural: queues
@@ -773,16 +844,29 @@ spec:
                     Reference to the RabbitmqCluster that the queue will
                     be created in. Required property.
                   properties:
+                    connectionSecret:
+                      description:
+                        Secret contains the http management uri for the RabbitMQ
+                        cluster. The Secret must contain the key `uri`, `username` and
+                        `password` or operator will error. Have to set either name or
+                        connectionSecret, but not both.
+                      properties:
+                        name:
+                          description:
+                            "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                            TODO: Add other useful fields. apiVersion, kind, uid?"
+                          type: string
+                      type: object
                     name:
-                      description: The name of the RabbitMQ cluster to reference.
+                      description: 
+                        The name of the RabbitMQ cluster to reference. Have
+                        to set either name or connectionSecret, but not both.
                       type: string
                     namespace:
                       description:
                         The namespace of the RabbitMQ cluster to reference.
                         Defaults to the namespace of the requested resource if omitted.
                       type: string
-                  required:
-                    - name
                   type: object
                 type:
                   type: string
@@ -849,7 +933,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: schemareplications.rabbitmq.com
 spec:
@@ -898,16 +982,29 @@ spec:
                     Reference to the RabbitmqCluster that schema replication
                     would be set for. Must be an existing cluster.
                   properties:
+                    connectionSecret:
+                      description: 
+                        Secret contains the http management uri for the RabbitMQ
+                        cluster. The Secret must contain the key `uri`, `username` and
+                        `password` or operator will error. Have to set either name or
+                        connectionSecret, but not both.
+                      properties:
+                        name:
+                          description: 
+                            "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                            TODO: Add other useful fields. apiVersion, kind, uid?"
+                          type: string
+                      type: object
                     name:
-                      description: The name of the RabbitMQ cluster to reference.
+                      description: 
+                        The name of the RabbitMQ cluster to reference. Have
+                        to set either name or connectionSecret, but not both.
                       type: string
                     namespace:
                       description:
                         The namespace of the RabbitMQ cluster to reference.
                         Defaults to the namespace of the requested resource if omitted.
                       type: string
-                  required:
-                    - name
                   type: object
                 upstreamSecret:
                   description:
@@ -979,7 +1076,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: shovels.rabbitmq.com
 spec:
@@ -987,6 +1084,7 @@ spec:
   names:
     categories:
       - all
+      - rabbitmq
     kind: Shovel
     listKind: ShovelList
     plural: shovels
@@ -1057,16 +1155,29 @@ spec:
                     Reference to the RabbitmqCluster that this Shovel will
                     be created in. Required property.
                   properties:
+                    connectionSecret:
+                      description:
+                        Secret contains the http management uri for the RabbitMQ
+                        cluster. The Secret must contain the key `uri`, `username` and
+                        `password` or operator will error. Have to set either name or
+                        connectionSecret, but not both.
+                      properties:
+                        name:
+                          description: 
+                            "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                            TODO: Add other useful fields. apiVersion, kind, uid?"
+                          type: string
+                      type: object
                     name:
-                      description: The name of the RabbitMQ cluster to reference.
+                      description:
+                        The name of the RabbitMQ cluster to reference. Have
+                        to set either name or connectionSecret, but not both.
                       type: string
                     namespace:
                       description:
                         The namespace of the RabbitMQ cluster to reference.
                         Defaults to the namespace of the requested resource if omitted.
                       type: string
-                  required:
-                    - name
                   type: object
                 reconnectDelay:
                   type: integer
@@ -1161,7 +1272,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: superstreams.rabbitmq.com
 spec:
@@ -1169,6 +1280,7 @@ spec:
   names:
     categories:
       - all
+      - rabbitmq
     kind: SuperStream
     listKind: SuperStreamList
     plural: superstreams
@@ -1211,16 +1323,29 @@ spec:
                     Reference to the RabbitmqCluster that the SuperStream
                     will be created in. Required property.
                   properties:
+                    connectionSecret:
+                      description: 
+                      Secret contains the http management uri for the RabbitMQ
+                        cluster. The Secret must contain the key `uri`, `username` and
+                        `password` or operator will error. Have to set either name or
+                        connectionSecret, but not both.
+                      properties:
+                        name:
+                          description: 
+                            "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                            TODO: Add other useful fields. apiVersion, kind, uid?"
+                          type: string
+                      type: object
                     name:
-                      description: The name of the RabbitMQ cluster to reference.
+                      description:
+                        The name of the RabbitMQ cluster to reference. Have
+                        to set either name or connectionSecret, but not both.
                       type: string
                     namespace:
                       description:
                         The namespace of the RabbitMQ cluster to reference.
                         Defaults to the namespace of the requested resource if omitted.
                       type: string
-                  required:
-                    - name
                   type: object
                 routingKeys:
                   description:
@@ -1300,7 +1425,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: users.rabbitmq.com
 spec:
@@ -1308,6 +1433,7 @@ spec:
   names:
     categories:
       - all
+      - rabbitmq
     kind: User
     listKind: UserList
     plural: users
@@ -1357,16 +1483,27 @@ spec:
                     Reference to the RabbitmqCluster that the user will be
                     created for. This cluster must exist for the User object to be created.
                   properties:
+                    connectionSecret:
+                      description: Secret contains the http management uri for the RabbitMQ
+                        cluster. The Secret must contain the key `uri`, `username` and
+                        `password` or operator will error. Have to set either name or
+                        connectionSecret, but not both.
+                      properties:
+                        name:
+                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                            TODO: Add other useful fields. apiVersion, kind, uid?'
+                          type: string
+                      type: object
                     name:
-                      description: The name of the RabbitMQ cluster to reference.
+                      description:
+                        The name of the RabbitMQ cluster to reference. Have
+                        to set either name or connectionSecret, but not both.
                       type: string
                     namespace:
                       description:
                         The namespace of the RabbitMQ cluster to reference.
                         Defaults to the namespace of the requested resource if omitted.
                       type: string
-                  required:
-                    - name
                   type: object
                 tags:
                   description:
@@ -1439,6 +1576,11 @@ spec:
                     which is updated on mutation by the API Server.
                   format: int64
                   type: integer
+                username:
+                  description: Provide rabbitmq Username
+                  type: string
+              required:
+              - username
               type: object
           type: object
       served: true
@@ -1456,7 +1598,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: vhosts.rabbitmq.com
 spec:
@@ -1464,6 +1606,7 @@ spec:
   names:
     categories:
       - all
+      - rabbitmq
     kind: Vhost
     listKind: VhostList
     plural: vhosts
@@ -1500,16 +1643,29 @@ spec:
                     Reference to the RabbitmqCluster that the vhost will
                     be created in. Required property.
                   properties:
+                    connectionSecret:
+                      description: 
+                        Secret contains the http management uri for the RabbitMQ
+                        cluster. The Secret must contain the key `uri`, `username` and
+                        `password` or operator will error. Have to set either name or
+                        connectionSecret, but not both.
+                      properties:
+                        name:
+                          description: 
+                            "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                            TODO: Add other useful fields. apiVersion, kind, uid?"
+                          type: string
+                      type: object
                     name:
-                      description: The name of the RabbitMQ cluster to reference.
+                      description:
+                        The name of the RabbitMQ cluster to reference. Have
+                        to set either name or connectionSecret, but not both.
                       type: string
                     namespace:
                       description:
                         The namespace of the RabbitMQ cluster to reference.
                         Defaults to the namespace of the requested resource if omitted.
                       type: string
-                  required:
-                    - name
                   type: object
                 tags:
                   items:
