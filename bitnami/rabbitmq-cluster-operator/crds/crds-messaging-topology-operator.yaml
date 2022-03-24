@@ -48,8 +48,8 @@ spec:
                 destinationType:
                   description: Cannot be updated
                   enum:
-                  - exchange
-                  - queue
+                    - exchange
+                    - queue
                   type: string
                 rabbitmqClusterReference:
                   description: Reference to the RabbitmqCluster that the binding will
@@ -86,7 +86,7 @@ spec:
                   description: Default to vhost '/'; cannot be updated
                   type: string
               required:
-              - rabbitmqClusterReference
+                - rabbitmqClusterReference
               type: object
             status:
               description: BindingStatus defines the observed state of Binding
@@ -113,8 +113,8 @@ spec:
                           status addressed by the condition.
                         type: string
                     required:
-                    - status
-                    - type
+                      - status
+                      - type
                     type: object
                   type: array
                 observedGeneration:
@@ -220,8 +220,8 @@ spec:
                   description: Default to vhost '/'; cannot be updated
                   type: string
               required:
-              - name
-              - rabbitmqClusterReference
+                - name
+                - rabbitmqClusterReference
               type: object
             status:
               description: ExchangeStatus defines the observed state of Exchange
@@ -248,8 +248,8 @@ spec:
                           status addressed by the condition.
                         type: string
                     required:
-                    - status
-                    - type
+                      - status
+                      - type
                     type: object
                   type: array
                 observedGeneration:
@@ -313,9 +313,9 @@ spec:
               properties:
                 ackMode:
                   enum:
-                  - on-confirm
-                  - on-publish
-                  - no-ack
+                    - on-confirm
+                    - on-publish
+                    - no-ack
                   type: string
                 exchange:
                   type: string
@@ -375,9 +375,9 @@ spec:
                   description: Default to vhost '/'; cannot be updated
                   type: string
               required:
-              - name
-              - rabbitmqClusterReference
-              - uriSecret
+                - name
+                - rabbitmqClusterReference
+                - uriSecret
               type: object
             status:
               description: FederationStatus defines the observed state of Federation
@@ -404,8 +404,8 @@ spec:
                           status addressed by the condition.
                         type: string
                     required:
-                    - status
-                    - type
+                      - status
+                      - type
                     type: object
                   type: array
                 observedGeneration:
@@ -520,9 +520,9 @@ spec:
                     be updated
                   type: string
               required:
-              - permissions
-              - rabbitmqClusterReference
-              - vhost
+                - permissions
+                - rabbitmqClusterReference
+                - vhost
               type: object
             status:
               description: PermissionStatus defines the observed state of Permission
@@ -549,8 +549,8 @@ spec:
                           status addressed by the condition.
                         type: string
                     required:
-                    - status
-                    - type
+                      - status
+                      - type
                     type: object
                   type: array
                 observedGeneration:
@@ -616,9 +616,9 @@ spec:
                   description: 'What this policy applies to: ''queues'', ''exchanges'',
                     or ''all''. Default to ''all''.'
                   enum:
-                  - queues
-                  - exchanges
-                  - all
+                    - queues
+                    - exchanges
+                    - all
                   type: string
                 definition:
                   description: Policy definition. Required property.
@@ -666,10 +666,10 @@ spec:
                   description: Default to vhost '/'; cannot be updated
                   type: string
               required:
-              - definition
-              - name
-              - pattern
-              - rabbitmqClusterReference
+                - definition
+                - name
+                - pattern
+                - rabbitmqClusterReference
               type: object
             status:
               description: PolicyStatus defines the observed state of Policy
@@ -696,8 +696,8 @@ spec:
                           status addressed by the condition.
                         type: string
                     required:
-                    - status
-                    - type
+                      - status
+                      - type
                     type: object
                   type: array
                 observedGeneration:
@@ -806,8 +806,8 @@ spec:
                   description: Default to vhost '/'
                   type: string
               required:
-              - name
-              - rabbitmqClusterReference
+                - name
+                - rabbitmqClusterReference
               type: object
             status:
               description: QueueStatus defines the observed state of Queue
@@ -834,8 +834,8 @@ spec:
                           status addressed by the condition.
                         type: string
                     required:
-                    - status
-                    - type
+                      - status
+                      - type
                     type: object
                   type: array
                 observedGeneration:
@@ -963,8 +963,8 @@ spec:
                           status addressed by the condition.
                         type: string
                     required:
-                    - status
-                    - type
+                      - status
+                      - type
                     type: object
                   type: array
                 observedGeneration:
@@ -1028,9 +1028,9 @@ spec:
               properties:
                 ackMode:
                   enum:
-                  - on-confirm
-                  - on-publish
-                  - no-ack
+                    - on-confirm
+                    - on-publish
+                    - no-ack
                   type: string
                 addForwardHeaders:
                   type: boolean
@@ -1117,9 +1117,9 @@ spec:
                   description: Default to vhost '/'; cannot be updated
                   type: string
               required:
-              - name
-              - rabbitmqClusterReference
-              - uriSecret
+                - name
+                - rabbitmqClusterReference
+                - uriSecret
               type: object
             status:
               description: ShovelStatus defines the observed state of Shovel
@@ -1146,8 +1146,8 @@ spec:
                           status addressed by the condition.
                         type: string
                     required:
-                    - status
-                    - type
+                      - status
+                      - type
                     type: object
                   type: array
                 observedGeneration:
@@ -1252,8 +1252,8 @@ spec:
                   description: Default to vhost '/'; cannot be updated
                   type: string
               required:
-              - name
-              - rabbitmqClusterReference
+                - name
+                - rabbitmqClusterReference
               type: object
             status:
               description: SuperStreamStatus defines the observed state of SuperStream
@@ -1280,8 +1280,8 @@ spec:
                           status addressed by the condition.
                         type: string
                     required:
-                    - status
-                    - type
+                      - status
+                      - type
                     type: object
                   type: array
                 observedGeneration:
@@ -1397,10 +1397,10 @@ spec:
                     description: UserTag defines the level of access to the management
                       UI allocated to the user. For more information, see https://www.rabbitmq.com/management.html#permissions.
                     enum:
-                    - management
-                    - policymaker
-                    - monitoring
-                    - administrator
+                      - management
+                      - policymaker
+                      - monitoring
+                      - administrator
                     type: string
                   type: array
               required:
@@ -1431,8 +1431,8 @@ spec:
                           status addressed by the condition.
                         type: string
                     required:
-                    - status
-                    - type
+                      - status
+                      - type
                     type: object
                   type: array
                 credentials:
@@ -1454,7 +1454,7 @@ spec:
                   description: Provide rabbitmq Username
                   type: string
               required:
-              - username
+                - username
               type: object
           type: object
       served: true
@@ -1541,8 +1541,8 @@ spec:
                 tracing:
                   type: boolean
               required:
-              - name
-              - rabbitmqClusterReference
+                - name
+                - rabbitmqClusterReference
               type: object
             status:
               description: VhostStatus defines the observed state of Vhost
@@ -1569,8 +1569,8 @@ spec:
                           status addressed by the condition.
                         type: string
                     required:
-                    - status
-                    - type
+                      - status
+                      - type
                     type: object
                   type: array
                 observedGeneration:
