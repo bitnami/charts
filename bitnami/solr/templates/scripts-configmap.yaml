@@ -15,7 +15,14 @@ data:
   init-certs.sh: |-
     #!/bin/bash
 
-    if [[ -f "/certs/ca.crt" ]] && [[ -f "/certs/tls.key" ]] && [[ -f "/certs/tls.crt" ]]; then
+    . /opt/bitnami/scripts/liblog.sh
+
+    if [[ -f "/certs/keystore.p12" ]] && [[ -f "/certs/truststore.p12" ]]; then
+        # the user provided keystore.p12 and truststore.p12 files (prefered)
+        cp "/certs/keystore.p12" "/opt/bitnami/solr/certs/keystore.p12"
+        cp "/certs/truststore.p12" "/opt/bitnami/solr/certs/truststore.p12"
+    elif [[ -f "/certs/ca.crt" ]] && [[ -f "/certs/tls.key" ]] && [[ -f "/certs/tls.crt" ]]; then
+        # the user provided ca.crt & tls.key & tls.crt so we "calculate" keystore.p12 and truststore.p12
         openssl pkcs12 -export -in "/certs/tls.crt" \
             -inkey "/certs/tls.key" -out "/tmp/keystore.p12" \
             -passin pass:"/certs/tls.key" -passout pass:"${SOLR_SSL_KEY_STORE_PASSWORD}"
@@ -27,8 +34,7 @@ data:
         rm "/tmp/keystore.p12"
         keytool -import -file "/certs/ca.crt" -keystore "/opt/bitnami/solr/certs/truststore.p12" -storepass "${SOLR_SSL_TRUST_STORE_PASSWORD}" -noprompt
     else
-        cp "/certs/keystore.p12" "/opt/bitnami/solr/certs/keystore.p12"
-        cp "/certs/truststore.p12" "/opt/bitnami/solr/certs/truststore.p12"
+        info "No certificate files provided ... nothing to do ..."
     fi
   setup.sh: |-
     #!/bin/bash
