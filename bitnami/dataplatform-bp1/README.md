@@ -488,6 +488,10 @@ In order to render complete information about the deployment including all the s
 
 ## Upgrading
 
+### To 11.0.0
+
+This major updates the Zookeeper subchart to it newest major, 9.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-900).
+
 ### To 10.0.0
 
 This major release updates the Kafka, Solr and Zookeeper subcharts to their newest major `15.x.x`, `3.x.x` and `8.x.x`, respectively, which contain several changes in the supported values. Also, the new major in Kafka bumps Kafka major version to `3.x` series (check the [upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/kafka/README.md#to-1500) to obtain more information).
