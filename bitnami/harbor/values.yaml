@@ -820,7 +820,6 @@ nginx:
     runAsUser: 1001
     runAsNonRoot: true
   ## @param nginx.updateStrategy.type NGINX deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## @param nginx.updateStrategy.rollingUpdate NGINX deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
@@ -1068,7 +1067,6 @@ portal:
     runAsUser: 1001
     runAsNonRoot: true
   ## @param portal.updateStrategy.type Harbor Portal deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## @param portal.updateStrategy.rollingUpdate Harbor Portal deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
@@ -1354,7 +1352,6 @@ core:
     runAsUser: 1001
     runAsNonRoot: true
   ## @param core.updateStrategy.type Harbor Core deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## @param core.updateStrategy.rollingUpdate Harbor Core deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
@@ -1631,7 +1628,6 @@ jobservice:
     runAsUser: 1001
     runAsNonRoot: true
   ## @param jobservice.updateStrategy.type Harbor Jobservice deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## @param jobservice.updateStrategy.rollingUpdate Harbor Jobservice deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
@@ -1816,7 +1812,6 @@ registry:
     enabled: true
     fsGroup: 1001
   ## @param registry.updateStrategy.type Harbor Registry deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## @param registry.updateStrategy.rollingUpdate Harbor Registry deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
@@ -2394,7 +2389,6 @@ chartmuseum:
     runAsUser: 1001
     runAsNonRoot: true
   ## @param chartmuseum.updateStrategy.type Chartmuseum deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## @param chartmuseum.updateStrategy.rollingUpdate Chartmuseum deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
@@ -2545,7 +2539,6 @@ clair:
     enabled: true
     fsGroup: 1001
   ## @param clair.updateStrategy.type Clair deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## @param clair.updateStrategy.rollingUpdate Clair deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
@@ -3071,7 +3064,6 @@ notary:
       runAsUser: 1001
       runAsNonRoot: true
     ## @param notary.server.updateStrategy.type Harbor Notary Server deployment strategy type - only really applicable for deployments with RWO PVs attached
-    ## @param notary.server.updateStrategy.rollingUpdate Harbor Notary Server deployment rolling update configuration parameters
     ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
     ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
     ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
@@ -3307,7 +3299,6 @@ notary:
       runAsUser: 1001
       runAsNonRoot: true
     ## @param notary.signer.updateStrategy.type Harbor Notary Signer deployment strategy type - only really applicable for deployments with RWO PVs attached
-    ## @param notary.signer.updateStrategy.rollingUpdate Harbor Notary Signer deployment rolling update configuration parameters
     ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
     ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
     ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
@@ -3614,7 +3605,6 @@ trivy:
     runAsUser: 1001
     runAsNonRoot: true
   ## @param trivy.updateStrategy.type Trivy deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## @param trivy.updateStrategy.rollingUpdate Trivy deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
@@ -3868,7 +3858,6 @@ exporter:
     runAsUser: 1001
     runAsNonRoot: true
   ## @param exporter.updateStrategy.type The update strategy for deployments with persistent volumes: RollingUpdate or Recreate. Set it as Recreate when RWM for volumes isn't supported
-  ## @param exporter.updateStrategy.rollingUpdate Exporter deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
