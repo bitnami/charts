@@ -936,7 +936,7 @@ spec:
                       type: string
                   type: object
               required:
-              - rabbitmqClusterReference
+                - rabbitmqClusterReference
               type: object
             status:
               description: SchemaReplicationStatus defines the observed state of SchemaReplication
@@ -1404,7 +1404,7 @@ spec:
                     type: string
                   type: array
               required:
-              - rabbitmqClusterReference
+                - rabbitmqClusterReference
               type: object
             status:
               description: Status exposes the observed state of the User object.
