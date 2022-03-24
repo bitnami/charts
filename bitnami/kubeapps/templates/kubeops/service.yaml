@@ -21,7 +21,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: {{ .Values.kubeops.service.ports.http }}
+    - port: {{ .Values.kubeops.service.port }}
       targetPort: http
       protocol: TCP
       name: http

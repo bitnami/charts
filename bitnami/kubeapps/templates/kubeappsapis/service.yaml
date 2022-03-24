@@ -20,7 +20,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: {{ .Values.kubeappsapis.service.ports.http }}
+    - port: {{ .Values.kubeappsapis.service.port }}
       targetPort: grpc-http
       protocol: TCP
       name: grpc-http
