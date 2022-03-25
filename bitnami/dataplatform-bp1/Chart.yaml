@@ -18,11 +18,11 @@ dependencies:
   - condition: solr.enabled
     name: solr
     repository: https://charts.bitnami.com/bitnami
-    version: 3.x.x
+    version: 4.x.x
   - condition: kafka.enabled
     name: kafka
     repository: https://charts.bitnami.com/bitnami
-    version: 15.x.x
+    version: 16.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:

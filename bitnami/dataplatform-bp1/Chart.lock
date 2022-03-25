@@ -10,12 +10,12 @@ dependencies:
   version: 5.9.5
 - name: solr
   repository: https://charts.bitnami.com/bitnami
-  version: 3.0.12
+  version: 4.0.0
 - name: kafka
   repository: https://charts.bitnami.com/bitnami
-  version: 15.5.1
+  version: 16.0.0
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 1.12.0
-digest: sha256:4529b92f9205294869e9fd8b02358cfe64951a17a48f1dcaef22c5cceb4355a0
-generated: "2022-03-24T11:42:34.468627+01:00"
+  version: 1.13.0
+digest: sha256:fa0456783c3ba31cec2b977366ba925fa124583e7de7948bd362081e117e7a26
+generated: "2022-03-25T11:30:00.387953+01:00"
