@@ -667,6 +667,11 @@ envoy:
   ## Envoy Service properties
   ##
   service:
+    ## @param envoy.service.targetPorts [object] Map the controller service HTTP/HTTPS port
+    ##
+    targetPorts:
+      http: http
+      https: https
     ## @param envoy.service.type Type of Envoy service to create
     ##
     type: LoadBalancer
