@@ -1441,6 +1441,9 @@ provisioning:
   ##     flush.messages: 1
   ##
   topics: []
+  ## @param provisioning.parallel Number of parallel provisioning topic
+  ##
+  parallel: 1
   ## @param provisioning.command Override provisioning container command
   ##
   command: []

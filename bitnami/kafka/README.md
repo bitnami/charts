@@ -414,6 +414,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `provisioning.numPartitions`                         | Default number of partitions for topics when unspecified                                                                      | `1`                   |
 | `provisioning.replicationFactor`                     | Default replication factor for topics when unspecified                                                                        | `1`                   |
 | `provisioning.topics`                                | Kafka provisioning topics                                                                                                     | `[]`                  |
+| `provisioning.parallel`                              | Number of parallel provisioning                                                                                               | `1`                   |
 | `provisioning.command`                               | Override provisioning container command                                                                                       | `[]`                  |
 | `provisioning.args`                                  | Override provisioning container arguments                                                                                     | `[]`                  |
 | `provisioning.podAnnotations`                        | Extra annotations for Kafka provisioning pods                                                                                 | `{}`                  |
