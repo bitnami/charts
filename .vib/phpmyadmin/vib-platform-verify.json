@@ -19,7 +19,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/phpmyadmin"
         },
-        "runtime_parameters": "ZGI6CiAgaG9zdDogbWFyaWFkYgogIGFsbG93QXJiaXRyYXJ5U2VydmVyOiB0cnVlCiAgcG9ydDogMzMwNgogIGJ1bmRsZVRlc3REQjogdHJ1ZQpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cHM6IDQ0MwptYXJpYWRiOgogIGF1dGg6CiAgICB1c2VybmFtZTogdXNlcm5hbWUKICAgIHBhc3N3b3JkOiBwYXNzd29yZAogICAgcm9vdFBhc3N3b3JkOiByb290UGFzc3dvcmQKICBpbWFnZToKICAgIGRlYnVnOiB0cnVlCg==",
+        "runtime_parameters": "ZGI6CiAgaG9zdDogbWFyaWFkYgogIGFsbG93QXJiaXRyYXJ5U2VydmVyOiB0cnVlCiAgcG9ydDogMzMwNgogIGJ1bmRsZVRlc3REQjogdHJ1ZQpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cHM6IDQ0MwptYXJpYWRiOgogIGF1dGg6CiAgICByb290UGFzc3dvcmQ6IHJvb3RQYXNzd29yZAogIGltYWdlOgogICAgZGVidWc6IHRydWUK",
         "target_platform": {
           "target_platform_id": "{TARGET_PLATFORM}",
           "size": {
