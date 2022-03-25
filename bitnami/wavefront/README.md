@@ -344,8 +344,8 @@ In addition, this major release renames several values in this chart and adds mi
 
 Affected values:
 
-- `proxy.replicas` renamed as `proxy.replicaCount`
-- `proxy.args` renamed as `proxy.extraArgs`
+- `proxy.replicas` has been deprecated. We recommend using `proxy.replicaCount` instead.
+- `proxy.args` renamed as `proxy.extraArgs`.
 - Value `proxy.args` is now used to overwrite the pod args.
 
 
