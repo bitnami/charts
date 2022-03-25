@@ -1,4 +1,4 @@
-{{- if .Values.collector.enabled (include "wavefront.collector.createConfigmap" .) }}
+{{- if and .Values.collector.enabled (include "wavefront.collector.createConfigmap" .) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -26,7 +26,7 @@ data:
       {{- if .Values.collector.proxyAddress }}
       - proxyAddress: {{ .Values.collector.proxyAddress }}
       {{- else }}
-      - proxyAddress: {{ printf "%s-proxy:%d" (include "common.names.fullname" .) (int .Values.proxy.ports.wavefront )}}
+      - proxyAddress: {{ printf "%s-proxy:%d" (include "common.names.fullname" .) (int .Values.proxy.port )}}
       {{- end }}
       {{- else }}
       - server: {{ .Values.wavefront.url }}

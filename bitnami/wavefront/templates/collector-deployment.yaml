@@ -102,9 +102,6 @@ spec:
             {{- if .Values.collector.logLevel }}
             - --log-level={{ .Values.collector.logLevel }}
             {{- end }}
-            {{- if .Values.collector.extraArgs }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.collector.extraArgs "context" $) | nindent 12 }}
-            {{- end }}
           {{- end }}
           env:
             {{- if .Values.collector.extraEnvVars }}

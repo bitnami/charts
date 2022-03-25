@@ -261,6 +261,9 @@ collector:
     ## @param collector.events.enabled Events can also be collected and sent to Wavefront
     ##
     enabled: false
+    ## @param collector.events.filters Optional filtering of events collected
+    ##
+    filters: {}
   ## Rules based discovery configuration
   ## Ref: https://github.com/wavefrontHQ/wavefront-kubernetes-collector/blob/master/docs/discovery.md
   ##
