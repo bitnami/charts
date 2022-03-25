@@ -1,3 +1,4 @@
+{{- if .Values.packaging.helm.enabled }}
 {{- if .Values.rbac.create -}}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
@@ -67,14 +68,14 @@ roleRef:
   name: {{ template "kubeapps.apprepository.fullname" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "kubeapps.apprepository.fullname" . }}
+    name: {{ template "kubeapps.apprepository.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 ---
 # Define role, but no binding, so users can be bound to this role
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
-  name: {{ .Release.Name }}-repositories-read
+  name: {{ printf "%s-repositories-read" .Release.Name }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: apprepository
@@ -97,7 +98,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
-  name: {{ .Release.Name }}-repositories-write
+  name: {{ printf "%s-repositories-write" .Release.Name }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: apprepository
@@ -127,7 +128,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: "kubeapps:{{ .Release.Namespace }}:apprepositories-read"
+  name: {{ printf "kubeapps:%s:apprepositories-read" .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: apprepository
     rbac.authorization.k8s.io/aggregate-to-view: "true"
@@ -151,7 +152,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: "kubeapps:controller:{{ .Release.Namespace }}:apprepositories-read"
+  name: {{ printf "kubeapps:controller:%s:apprepositories-read" .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: apprepository
     {{- if .Values.commonLabels }}
@@ -163,16 +164,16 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: "kubeapps:{{ .Release.Namespace }}:apprepositories-read"
+  name: {{ printf "kubeapps:%s:apprepositories-read" .Release.Namespace | quote }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "kubeapps.apprepository.fullname" . }}
+    name: {{ template "kubeapps.apprepository.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: "kubeapps:{{ .Release.Namespace }}:apprepositories-write"
+  name: {{ printf "kubeapps:%s:apprepositories-write" .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: apprepository
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
@@ -199,7 +200,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: "kubeapps:{{ .Release.Namespace }}:apprepositories-refresh"
+  name: {{ printf "kubeapps:%s:apprepositories-refresh" .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: apprepository
     {{- if .Values.commonLabels }}
@@ -220,13 +221,14 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: "kubeapps:{{ .Release.Namespace }}:global-repos-read"
-  namespace: "{{ .Release.Namespace }}{{ .Values.apprepository.globalReposNamespaceSuffix }}"
+  name: {{ printf "kubeapps:%s:global-repos-read" .Release.Namespace | quote }}
+  namespace: {{ include "kubeapps.globalReposNamespace" . | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: "kubeapps:{{ .Release.Namespace }}:apprepositories-read"
+  name: {{ printf "kubeapps:%s:apprepositories-read" .Release.Namespace | quote }}
 subjects:
   - kind: Group
     name: system:authenticated
+{{- end -}}
 {{- end -}}

@@ -53,7 +53,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/contour-operator
-  tag: 1.19.1-scratch-r5
+  tag: 1.20.1-scratch-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -78,7 +78,7 @@ image:
 contourImage:
   registry: docker.io
   repository: bitnami/contour
-  tag: 1.19.1-debian-10-r70
+  tag: 1.20.1-debian-10-r22
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-contourImage-private-registry/
@@ -98,7 +98,7 @@ contourImage:
 envoyImage:
   registry: docker.io
   repository: bitnami/envoy
-  tag: 1.19.1-debian-10-r141
+  tag: 1.21.1-debian-10-r23
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-envoyImage-private-registry/
@@ -192,11 +192,13 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled Contour Operator containers' Security Context
 ## @param containerSecurityContext.runAsUser Set Contour Operator containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set Contour Operator containers' Security Context runAsNonRoot
+## @param containerSecurityContext.readOnlyRootFilesystem Mount / (root) as a readonly filesystem on Contour Operator containers
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
+  readOnlyRootFilesystem: true
 
 ## @param command Override default container command (useful when using custom images)
 ##

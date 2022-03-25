@@ -8,11 +8,27 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 ** Please be patient while the chart is being deployed **
 
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pods you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+{{- else }}
+
 Tip:
 
   Watch the deployment status using the command: kubectl get pods -w --namespace {{ .Release.Namespace }}
 
-Kubeapps can be accessed via port {{ .Values.frontend.service.port }} on the following DNS name from within your cluster:
+Kubeapps can be accessed via port {{ .Values.frontend.service.ports.http }} on the following DNS name from within your cluster:
 
    {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 
@@ -33,7 +49,7 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
 1. Get the Kubeapps URL and associate Kubeapps hostname to your cluster external IP:
 
    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-   echo "Kubeapps URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}/"
+   echo "Kubeapps URL: {{ printf "%s://%s/" (ternary "http" "https" .Values.ingress.tls) .Values.ingress.hostname }}"
    echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
 
 {{- else }}
@@ -52,39 +68,20 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
        Watch the status by running 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-   echo "Kubeapps URL: http{{ if eq ( .Values.frontend.service.port | toString ) "443" }}s{{ end }}://$SERVICE_IP:{{ .Values.frontend.service.port }}"
+   echo "Kubeapps URL: {{ printf "%s://$SERVICE_IP:%d" (ternary "http" "https" (eq ( .Values.frontend.service.ports.http | toString ) "443")) (int .Values.frontend.service.ports.http) }}"
 
 {{- else if contains "ClusterIP" .Values.frontend.service.type }}
 
 {{- $portNumber := include "kubeapps.frontend-port-number" . }}
    echo "Kubeapps URL: http://127.0.0.1:{{ $portNumber }}"
-   kubectl port-forward --namespace {{ .Release.Namespace }} service/{{ template "common.names.fullname" . }} {{ $portNumber }}:{{ .Values.frontend.service.port }}
+   kubectl port-forward --namespace {{ .Release.Namespace }} service/{{ template "common.names.fullname" . }} {{ $portNumber }}:{{ .Values.frontend.service.ports.http }}
 
 {{- end }}
 {{- end }}
 
 2. Open a browser and access Kubeapps using the obtained URL.
 
-{{ if and (not .Values.postgresql.existingSecret) (empty .Values.postgresql.postgresqlPassword) -}}
-##########################################################################################################
-### WARNING: You did not provide a value for the postgresqlPassword so one has been generated randomly ###
-##########################################################################################################
 {{- end }}
 
-{{ if and (.Values.redis.enabled) (not .Values.redis.existingSecret) (empty .Values.redis.redisPassword) -}}
-##########################################################################################################
-### WARNING: You did not provide a value for the redisPassword so one has been generated randomly      ###
-##########################################################################################################
-{{- end }}
-
-{{- $passwordValidationErrors := list -}}
-
-{{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $postgresqlPasswordValidationErrors -}}
-
-{{- $redisPasswordValidationErrors := include "common.validations.values.redis.passwords" (dict "secret" $redisSecretName "subchart" true "context" $) -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $redisPasswordValidationErrors -}}
-
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
 {{- include "kubeapps.checkRollingTags" . }}
 {{- include "kubeapps.validateValues" . }}

@@ -86,7 +86,7 @@ data:
       - plugins: []
       {{- end }}
 
-      {{- if .Values.collector.apiServerMetrics }}
+      {{- if or .Values.collector.apiServerMetrics .Values.collector.controlplane.enabled }}
       # Kubernetes API Server
       prometheus_sources:
       - url: https://kubernetes.default.svc.cluster.local:443/metrics
@@ -98,9 +98,20 @@ data:
         prefix: kube.apiserver.
         filters:
           metricWhitelist:
+          {{- if .Values.collector.apiServerMetrics }}
           - 'kube.apiserver.apiserver.*'
           - 'kube.apiserver.etcd.*'
           - 'kube.apiserver.process.*'
+          {{- end }}
+          {{- if .Values.collector.controlplane.enabled }}
+          - 'kube.apiserver.etcd.request.duration.seconds.bucket'
+          - 'kube.apiserver.etcd.object.counts.gauge'
+          - 'kube.apiserver.etcd.db.total.size.in.bytes.gauge'
+          - 'kube.apiserver.apiserver.request.duration.seconds.bucket'
+          - 'kube.apiserver.apiserver.request.total.counter'
+          - 'kube.apiserver.workqueue.adds.total.counter'
+          - 'kube.apiserver.workqueue.queue.duration.seconds.bucket'
+          {{- end }}
       {{- end }}
 
     {{- if .Values.collector.events.enabled }}
@@ -167,7 +178,10 @@ data:
           - 'kube.coredns.coredns.dns.response.rcode.count.total.counter'
           - 'kube.coredns.coredns.dns.response.size.bytes'
           - 'kube.coredns.process.*'
-
+          {{- if .Values.collector.controlplane.enabled }}
+          - 'kube.coredns.coredns.dns.request.duration.seconds.bucket'
+          - 'kube.coredns.coredns.dns.responses.total.counter'
+          {{- end }}
     {{- if .Values.collector.discovery.config }}
 
     # user supplied discovery config

@@ -287,6 +287,9 @@ spec:
             - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
               value: {{ template "redis.tlsCACert" . }}
             {{- end }}
+            {{- if .Values.metrics.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: metrics
               containerPort: 9121
@@ -389,17 +392,21 @@ spec:
         {{- end }}
         - name: redis-tmp-conf
           {{- if .Values.master.persistence.medium }}
-          emptyDir: {
+          emptyDir:
             medium: {{ .Values.master.persistence.medium | quote }}
-          }
+            {{- if .Values.master.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.master.persistence.sizeLimit | quote }}
+            {{- end }}
           {{- else }}
           emptyDir: {}
           {{- end }}
         - name: tmp
           {{- if .Values.master.persistence.medium }}
-          emptyDir: {
+          emptyDir:
             medium: {{ .Values.master.persistence.medium | quote }}
-          }
+            {{- if .Values.master.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.master.persistence.sizeLimit | quote }}
+            {{- end }}
           {{- else }}
           emptyDir: {}
           {{- end }}

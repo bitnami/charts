@@ -177,4 +177,7 @@ spec:
   {{- if .Values.alertmanager.configSelector }}
   alertmanagerConfigSelector: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.configSelector "context" $) | nindent 4 }}
   {{- end }}
+  {{- if .Values.alertmanager.configuration }}
+  alertmanagerConfiguration: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.configuration "context" $) | nindent 4 }}
+  {{- end }}
 {{- end }}

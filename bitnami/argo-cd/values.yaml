@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.2.5-debian-10-r6
+  tag: 2.3.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1656,7 +1656,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.31.0-debian-10-r1
+    tag: 2.31.0-debian-10-r39
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2239,7 +2239,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r337
+    tag: 10-debian-10-r375
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -2290,7 +2290,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 6.2.6-debian-10-r128
+    tag: 6.2.6-debian-10-r166
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2333,10 +2333,10 @@ redis:
     existingSecretPasswordKey: 'redis-password'
 
   ## Cluster settings
-  ## @disabled-param redis.architecture Redis dependency architecture. Either 'standalone' or 'replicaset'
+  ## @param redis.architecture Redis&trade; architecture. Allowed values: `standalone` or `replication`
   ## TODO(miguelaeh): We need to test the chart with redis sentinel, it seems to be supported at: https://github.com/argoproj/argo-cd/blob/2a410187565e15633b6f2a8c8d8da22cf02b257d/util/cache/cache.go#L40
   ##
-  ## architecture: standalone
+  architecture: standalone
 
 ##
 ## External Redis&trade;

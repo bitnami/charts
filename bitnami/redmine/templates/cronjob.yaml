@@ -13,7 +13,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  schedule: "{{ .Values.mailReceiver.schedule }}"
+  schedule: {{ .Values.mailReceiver.schedule | quote }}
   suspend: {{ .Values.mailReceiver.suspend }}
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -30,14 +30,6 @@ spec:
           {{- end }}
         spec:
           {{- include "redmine.imagePullSecrets" . | nindent 10 }}
-          volumes:
-            - name: mail-receiver
-              configMap:
-                name: {{ include "common.names.fullname" . }}
-                defaultMode: 0744
-            {{- if .Values.mailReceiver.extraVolumes }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.mailReceiver.extraVolumes "context" $) | nindent 12 }}
-            {{- end }}
           restartPolicy: Never
           {{- if .Values.mailReceiver.priorityClassName }}
           priorityClassName: {{ .Values.mailReceiver.priorityClassName | quote }}
@@ -70,19 +62,23 @@ spec:
               {{- if .Values.mailReceiver.containerSecurityContext.enabled }}
               securityContext: {{- omit .Values.mailReceiver.containerSecurityContext "enabled" | toYaml | nindent 16 }}
               {{- end }}
-              {{- if .Values.mailReceiver.command }}
+              {{- if .Values.diagnosticMode.enabled }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
+              {{- else if .Values.mailReceiver.command }}
               command: {{- include "common.tplvalues.render" (dict "value" .Values.mailReceiver.command "context" $) | nindent 16 }}
+              {{- else }}
+              command:
+                - bash
               {{- end }}
-              {{- if .Values.mailReceiver.args }}
+              {{- if .Values.diagnosticMode.enabled }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
+              {{- else if .Values.mailReceiver.args }}
               args: {{- include "common.tplvalues.render" (dict "value" .Values.mailReceiver.args "context" $) | nindent 16 }}
+              {{- else }}
+              args:
+                - -c
+                - /cj/receive.sh
               {{- end }}
-              volumeMounts:
-                - name: mail-receiver
-                  mountPath: /cj
-                {{- if .Values.mailReceiver.extraVolumeMounts }}
-                {{- include "common.tplvalues.render" (dict "value" .Values.mailReceiver.extraVolumeMounts "context" $) | nindent 16 }}
-                {{- end }}
-              resources: {{- toYaml .Values.mailReceiver.resources | nindent 16 }}
               env:
                 - name: REDMINE_DATABASE_TYPE
                   value: {{ .Values.databaseType | quote }}
@@ -99,20 +95,10 @@ spec:
                 - name: REDMINE_MAIL_RECEIVER_DB_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: {{ template "redmine.database.secretName" . }}
-                      {{- if eq .Values.databaseType "mariadb" }}
-                      key: mariadb-password
-                      {{- else }}
-                      key: postgresql-password
-                      {{- end }}
+                      name: {{ include "redmine.database.secretName" . }}
+                      key: {{ include "redmine.database.secretKey" . }}
                 - name: REDMINE_MAIL_RECEIVER_DB_PORT
-                {{- if (include "redmine.useExternalDB" .) }}
-                  value: {{ .Values.externalDatabase.port | quote }}
-                {{- else if eq .Values.databaseType "mariadb" }}
-                  value: "3306"
-                {{- else }}
-                  value: "5432"
-                {{- end }}
+                  value: {{ include "redmine.database.port" . | quote }}
                 - name: REDMINE_MAIL_RECEIVER_HOST
                   value: {{ .Values.mailReceiver.host | quote }}
                 - name: REDMINE_MAIL_RECEIVER_PORT
@@ -176,7 +162,24 @@ spec:
                 - secretRef:
                     name: {{ include "common.tplvalues.render" (dict "value" .Values.mailReceiver.extraEnvVarsSecret "context" $) }}
                 {{- end }}
+              {{- if .Values.mailReceiver.resources }}
+              resources: {{- toYaml .Values.mailReceiver.resources | nindent 16 }}
+              {{- end }}
+              volumeMounts:
+                - name: mail-receiver
+                  mountPath: /cj
+                {{- if .Values.mailReceiver.extraVolumeMounts }}
+                {{- include "common.tplvalues.render" (dict "value" .Values.mailReceiver.extraVolumeMounts "context" $) | nindent 16 }}
+                {{- end }}
             {{- if .Values.mailReceiver.sidecars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.mailReceiver.sidecars "context" $) | nindent 12 }}
+            {{- end }}
+          volumes:
+            - name: mail-receiver
+              configMap:
+                name: {{ include "common.names.fullname" . }}
+                defaultMode: 0744
+            {{- if .Values.mailReceiver.extraVolumes }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.mailReceiver.extraVolumes "context" $) | nindent 12 }}
             {{- end }}
 {{- end }}

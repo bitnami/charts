@@ -13,7 +13,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not .Values.receiveDistributor.autoscaling.enabled }}
   replicas: {{ .Values.receiveDistributor.replicaCount }}
+  {{- end }}
   {{- if .Values.receiveDistributor.updateStrategy }}
   strategy: {{- toYaml .Values.receiveDistributor.updateStrategy | nindent 4 }}
   {{- end }}
@@ -99,6 +101,7 @@ spec:
             - --label={{ .Values.receiveDistributor.replicaLabel }}="$(NAME)"
             - --label=receive="true"
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
+            - --receive.replication-factor={{ .Values.receiveDistributor.replicationFactor }}
             {{- if .Values.receiveDistributor.extraFlags }}
             {{- .Values.receiveDistributor.extraFlags | toYaml | nindent 12 }}
             {{- end }}
@@ -180,7 +183,7 @@ spec:
       volumes:
         - name: hashring-config
           configMap:
-            name: {{ include "common.names.fullname" . }}-receive
+            name: {{ include "thanos.receive.configmapName" . }}
         {{- if .Values.receiveDistributor.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.receiveDistributor.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

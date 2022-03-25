@@ -92,7 +92,7 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.20.0-debian-10-r1
+    tag: 1.20.1-debian-10-r21
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -289,13 +289,18 @@ contour:
     timeoutSeconds: 5
     failureThreshold: 3
     successThreshold: 1
-  ## @param contour.certgen.serviceAccount.create Create a serviceAccount for the Contour pod
-  ## @param contour.certgen.serviceAccount.name Use the serviceAccount with the specified name, a name is generated using the fullname template
+  ## Contour certgen configs
   ##
   certgen:
+    ## @param contour.certgen.serviceAccount.create Create a serviceAccount for the Contour pod
+    ## @param contour.certgen.serviceAccount.name Use the serviceAccount with the specified name, a name is generated using the fullname template
+    ##
     serviceAccount:
       create: true
       name: ""
+    ## @param contour.certgen.certificateLifetime Generated certificate lifetime (in days).
+    ##
+    certificateLifetime: 365
   ## @param contour.tlsExistingSecret Name of the existingSecret to be use in Contour deployment. If it is not nil `contour.certgen` will be disabled.
   ## It will override `tlsExistingSecret`
   ##
@@ -416,7 +421,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.21.0-debian-10-r3
+    tag: 1.21.1-debian-10-r22
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -685,6 +690,9 @@ envoy:
     ## @param envoy.service.loadBalancerSourceRanges [array] List of IP CIDRs allowed access to load balancer (if supported)
     ##
     loadBalancerSourceRanges: []
+    ## @param envoy.service.ipFamilyPolicy [string], support SingleStack, PreferDualStack and RequireDualStack
+    ##
+    ipFamilyPolicy: ""
     ## @param envoy.service.annotations [object] Annotations for Envoy service
     ##
     annotations: {}
@@ -791,7 +799,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-10-r19
+    tag: 1.21.6-debian-10-r48
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

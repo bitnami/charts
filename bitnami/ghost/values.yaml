@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/ghost
-  tag: 4.36.1-debian-10-r0
+  tag: 4.41.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -110,12 +110,14 @@ ghostEnableHttps: false
 ## @param smtpUser SMTP username
 ## @param smtpPassword SMTP user password
 ## @param smtpService SMTP service
+## @param smtpProtocol SMTP protocol (ssl or tls)
 ##
 smtpHost: ""
 smtpPort: ""
 smtpUser: ""
 smtpPassword: ""
 smtpService: ""
+smtpProtocol: ""
 ## @param smtpExistingSecret The name of an existing secret with SMTP credentials
 ## NOTE: Must contain key `smtp-password`
 ## NOTE: When it's set, the `smtpPassword` parameter is ignored
@@ -526,6 +528,9 @@ persistence:
   ## @param persistence.existingClaim The name of an existing PVC to use for persistence
   ##
   existingClaim: ""
+  ## @param persistence.subPath The name of a volume's sub path to mount for persistence
+  ##
+  subPath: ""
 ## 'volumePermissions' init container parameters
 ## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
 ##   based on the podSecurityContext/containerSecurityContext parameters
@@ -545,7 +550,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r341
+    tag: 10-debian-10-r374
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -641,6 +646,12 @@ externalDatabase:
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##
   existingSecret: ""
+  ## @param externalDatabase.ssl External Database ssl
+  ##
+  ssl: false
+  ## @param externalDatabase.sslCaFile External Database ssl CA filepath
+  ##
+  sslCaFile: ""
 
 ## @section NetworkPolicy parameters
 
@@ -718,3 +729,10 @@ networkPolicy:
     ##             label: example
     ##
     customRules: {}
+
+## Service Account
+##
+serviceAccount:
+  ## @param serviceAccount.name Service Account Name
+  ##
+  name: ""

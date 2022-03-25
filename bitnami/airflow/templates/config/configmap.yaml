@@ -66,7 +66,7 @@ data:
       {{- if .Values.worker.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.worker.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      initContainers: {{- include "airflow.git.containers.clone" . | trim | nindent 8 }}
+      initContainers: {{- include "airflow.git.containers.clone" (dict "securityContext" .Values.worker.containerSecurityContext "context" $) | trim | nindent 8 }}
         - name: k8s-executor-init-config
           image: {{ include "airflow.workerImage" . }}
           imagePullPolicy: {{ .Values.worker.image.pullPolicy }}

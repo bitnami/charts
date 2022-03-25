@@ -376,6 +376,12 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 17.0.0
+
+In this version, the mongodb-exporter bundled as part of the bitnami/mongodb dependency was updated to a new version which, even it is not a major change, can contain breaking changes (from `0.11.X` to `0.30.X`).
+
+Please visit the release notes from the upstream project at https://github.com/percona/mongodb_exporter/releases
+
 ### To 15.0.0
 
 This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.hostname` value. When defining more than one, set the `ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.

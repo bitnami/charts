@@ -1,10 +1,10 @@
-<!--- app-name: Bitnami LMS powered by Moodle(&trade;) LMS -->
+<!--- app-name: Bitnami LMS powered by Moodle&trade; LMS -->
 
 # Bitnami LMS powered by Moodle(TM) LMS
 
 Moodle(TM) LMS is an open source online Learning Management System widely used at universities, schools, and corporations. It is modular and highly adaptable to any type of online learning.
 
-[Overview of Bitnami LMS powered by Moodle(&trade;) LMS](http://moodle.org/)
+[Overview of Bitnami LMS powered by Moodle&trade; LMS](http://moodle.org/)
 
 Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide commercial license of any of these products. This listing has an open source license. Moodle(TM) LMS is run and maintained by Moodle HQ, that is a completely and separate project from Bitnami.
                            

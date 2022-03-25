@@ -27,11 +27,17 @@ spec:
   {{- if (or (eq .Values.agent.service.type "LoadBalancer") (eq .Values.agent.service.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.agent.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{ if eq .Values.agent.service.type "LoadBalancer" }}
+  {{- if eq .Values.agent.service.type "LoadBalancer" }}
   loadBalancerSourceRanges: {{ .Values.agent.service.loadBalancerSourceRanges }}
   {{ end }}
   {{- if (and (eq .Values.agent.service.type "LoadBalancer") (not (empty .Values.agent.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.agent.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.agent.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.agent.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.agent.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.agent.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
     - name: metrics
@@ -43,6 +49,9 @@ spec:
       {{- else if eq .Values.agent.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.service.agent.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: agent
 {{- end }}

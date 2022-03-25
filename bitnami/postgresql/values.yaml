@@ -87,7 +87,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 14.1.0-debian-10-r80
+  tag: 14.2.0-debian-10-r35
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -442,6 +442,12 @@ primary:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param primary.hostNetwork Specify if host network should be enabled for PostgreSQL pod (postgresql primary)
+  ##
+  hostNetwork: false
+  ## @param primary.hostIPC Specify if host IPC should be enabled for PostgreSQL pod (postgresql primary)
+  ##
+  hostIPC: false
   ## @param primary.labels Map of labels to add to the statefulset (postgresql primary)
   ##
   labels: {}
@@ -746,6 +752,12 @@ readReplicas:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param readReplicas.hostNetwork Specify if host network should be enabled for PostgreSQL pod (PostgreSQL read only)
+  ##
+  hostNetwork: false
+  ## @param readReplicas.hostIPC Specify if host IPC should be enabled for PostgreSQL pod (postgresql primary)
+  ##
+  hostIPC: false
   ## @param readReplicas.labels Map of labels to add to the statefulset (PostgreSQL read only)
   ##
   labels: {}
@@ -1045,7 +1057,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r327
+    tag: 10-debian-10-r368
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1130,7 +1142,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.10.1-debian-10-r14
+    tag: 0.10.1-debian-10-r56
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

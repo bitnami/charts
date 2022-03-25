@@ -1,29 +1,26 @@
+{{/* vim: set filetype=mustache: */}}
 
 {{/*
 Create a default fully qualified app name
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "postgresql.fullname" -}}
-{{- printf "%s-%s" .Release.Name "postgresql" | trunc 63 | trimSuffix "-" -}}
+{{- define "discourse.postgresql.fullname" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "postgresql" "chartValues" .Values.postgresql "context" $) -}}
 {{- end -}}
 
 {{/*
 Create a default fully qualified app name
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "redis.fullname" -}}
-{{- printf "%s-%s" .Release.Name "redis" | trunc 63 | trimSuffix "-" -}}
+{{- define "discourse.redis.fullname" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "redis" "chartValues" .Values.redis "context" $) -}}
 {{- end -}}
 
 {{/*
-Create the name of the service account to use
+Return the proper Discourse image name
 */}}
-{{- define "discourse.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
-{{- end -}}
+{{- define "discourse.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -34,42 +31,13 @@ Return the proper Docker image registry secret names
 {{- end -}}
 
 {{/*
-Return true if a secret object for Discourse should be created
+Create the name of the service account to use
 */}}
-{{- define "discourse.createSecret" -}}
-{{- if or (not .Values.discourse.existingSecret) (and (not .Values.discourse.smtp.existingSecret) .Values.discourse.smtp.password .Values.discourse.smtp.enabled) }}
-    {{- true -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the Discourse secret name
-*/}}
-{{- define "discourse.secretName" -}}
-{{- if .Values.discourse.existingSecret }}
-    {{- printf "%s" .Values.discourse.existingSecret -}}
+{{- define "discourse.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
-    {{- printf "%s-discourse" (include "common.names.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the Discourse SMTP secret name
-*/}}
-{{- define "discourse.smtp.secretName" -}}
-{{- if .Values.discourse.smtp.existingSecret }}
-    {{- printf "%s" .Values.discourse.smtp.existingSecret -}}
-{{- else -}}
-    {{- printf "%s-discourse" (include "common.names.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return true if Discourse SMTP uses password authentication
-*/}}
-{{- define "discourse.smtp.password.enabled" -}}
-{{- if and (or .Values.discourse.smtp.password .Values.discourse.smtp.existingSecret) .Values.discourse.smtp.enabled }}
-    {{- true -}}
+    {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
@@ -90,123 +58,164 @@ Gets the host to be used for this application.
 If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty
 */}}
 {{- define "discourse.host" -}}
-{{- $host := .Values.discourse.host | default "" -}}
-{{- default (include "discourse.serviceIP" .) $host -}}
+{{- if .Values.ingress.enabled }}
+  {{- $host := .Values.ingress.hostname | default "" -}}
+  {{- default (include "discourse.serviceIP" .) $host -}}
+{{- else -}}
+  {{- $host := .Values.host | default "" -}}
+  {{- default (include "discourse.serviceIP" .) $host -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
-Return the proper Discourse image name
+Return true if a secret object for Discourse should be created
 */}}
-{{- define "discourse.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- define "discourse.createSecret" -}}
+{{- if or (not .Values.auth.existingSecret) (and .Values.smtp.enabled .Values.smtp.password (not .Values.smtp.existingSecret)) }}
+    {{- true -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
-Return the proper Storage Class
+Return the Discourse secret name
 */}}
-{{- define "discourse.storageClass" -}}
-{{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) -}}
+{{- define "discourse.secretName" -}}
+{{- default (printf "%s-discourse" (include "common.names.fullname" .)) (tpl .Values.auth.existingSecret $) -}}
+{{- end -}}
+
+{{/*
+Return the Discourse SMTP secret name
+*/}}
+{{- define "smtp.secretName" -}}
+{{- default (printf "%s-discourse" (include "common.names.fullname" .)) (tpl .Values.smtp.existingSecret $) -}}
+{{- end -}}
+
+{{/*
+Return true if Discourse SMTP uses password authentication
+*/}}
+{{- define "smtp.password.enabled" -}}
+{{- if and .Values.smtp.enabled (or .Values.smtp.password .Values.smtp.existingSecret) }}
+    {{- true -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
 Return the Postgresql hostname
 */}}
-{{- define "discourse.databaseHost" -}}
-{{- if .Values.postgresql.enabled }}
-    {{- printf "%s" (include "postgresql.fullname" .) -}}
-{{- else -}}
-    {{- printf "%s" .Values.externalDatabase.host -}}
-{{- end -}}
+{{- define "discourse.database.host" -}}
+{{- ternary (include "discourse.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
 Return the Postgresql port
 */}}
-{{- define "discourse.databasePort" -}}
-{{- if .Values.postgresql.enabled }}
-    {{- printf "5432" | quote -}}
-{{- else -}}
-    {{- .Values.externalDatabase.port | quote -}}
-{{- end -}}
+{{- define "discourse.database.port" -}}
+{{- ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 {{/*
 Return the Postgresql database name
 */}}
-{{- define "discourse.databaseName" -}}
+{{- define "discourse.database.name" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- printf "%s" .Values.postgresql.postgresqlDatabase -}}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- coalesce .Values.global.postgresql.auth.database .Values.postgresql.auth.database | quote -}}
+        {{- else -}}
+            {{- .Values.postgresql.auth.database | quote -}}
+        {{- end -}}
+    {{- else -}}
+        {{- .Values.postgresql.auth.database | quote -}}
+    {{- end -}}
 {{- else -}}
-    {{- printf "%s" .Values.externalDatabase.database -}}
+    {{- .Values.externalDatabase.database | quote -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
 Return the Postgresql user
 */}}
-{{- define "discourse.databaseUser" -}}
+{{- define "discourse.database.user" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- printf "%s" .Values.postgresql.postgresqlUsername -}}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- coalesce .Values.global.postgresql.auth.username .Values.postgresql.auth.username | quote -}}
+        {{- else -}}
+            {{- .Values.postgresql.auth.username | quote -}}
+        {{- end -}}
+    {{- else -}}
+        {{- .Values.postgresql.auth.username | quote -}}
+    {{- end -}}
 {{- else -}}
-    {{- printf "%s" .Values.externalDatabase.user -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return true if a secret object for Postgres should be created
-*/}}
-{{- define "discourse.postgresql.createSecret" -}}
-{{- if and (not .Values.postgresql.enabled) (not .Values.externalDatabase.existingSecret) }}
-    {{- true -}}
+    {{- .Values.externalDatabase.user | quote -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
 Return the Postgresql secret name
 */}}
-{{- define "discourse.postgresql.secretName" -}}
+{{- define "discourse.database.secretName" -}}
 {{- if .Values.postgresql.enabled }}
-    {{- if .Values.postgresql.existingSecret }}
-        {{- printf "%s" .Values.postgresql.existingSecret -}}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- if .Values.global.postgresql.auth.existingSecret }}
+                {{- tpl .Values.global.postgresql.auth.existingSecret $ -}}
+            {{- else -}}
+                {{- default (include "discourse.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+            {{- end -}}
+        {{- else -}}
+            {{- default (include "discourse.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+        {{- end -}}
     {{- else -}}
-        {{- printf "%s" (include "postgresql.fullname" .) -}}
+        {{- default (include "discourse.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
     {{- end -}}
-{{- else if .Values.externalDatabase.existingSecret }}
-    {{- printf "%s" .Values.externalDatabase.existingSecret -}}
 {{- else -}}
-    {{- printf "%s-database" (include "common.names.fullname" .) -}}
+    {{- default (printf "%s-database" .Release.Name) (tpl .Values.externalDatabase.existingSecret $) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Postgresql password secret key
+*/}}
+{{- define "discourse.database.secretPasswordKey" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- print "password" -}}
+{{- else -}}
+    {{- if .Values.externalDatabase.existingSecret -}}
+        {{- default "password" .Values.externalDatabase.existingSecretPasswordKey }}
+    {{- else -}}
+        {{- print "password" -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Postgresql postgres password secret key
+*/}}
+{{- define "discourse.database.secretPostgresPasswordKey" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- print "postgres-password" -}}
+{{- else -}}
+    {{- if .Values.externalDatabase.existingSecret -}}
+        {{- default "postgres-password" .Values.externalDatabase.existingSecretPostgresPasswordKey }}
+    {{- else -}}
+        {{- print "postgres-password" -}}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
 Return the Redis&trade; hostname
 */}}
-{{- define "discourse.redisHost" -}}
-{{- if .Values.redis.enabled }}
-    {{- printf "%s-master" (include "redis.fullname" .) -}}
-{{- else -}}
-    {{- printf "%s" .Values.externalRedis.host -}}
-{{- end -}}
+{{- define "discourse.redis.host" -}}
+{{- ternary (printf "%s-master" (include "discourse.redis.fullname" .)) .Values.externalRedis.host .Values.redis.enabled | quote -}}
 {{- end -}}
 
 {{/*
 Return the Redis&trade; port
 */}}
-{{- define "discourse.redisPort" -}}
-{{- if .Values.redis.enabled }}
-    {{- printf "6379" | quote -}}
-{{- else -}}
-    {{- .Values.externalRedis.port | quote -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return true if a secret object for Redis&trade; should be created
-*/}}
-{{- define "discourse.redis.createSecret" -}}
-{{- if and (not .Values.redis.enabled) (not .Values.externalRedis.existingSecret) .Values.externalRedis.password }}
-    {{- true -}}
-{{- end -}}
+{{- define "discourse.redis.port" -}}
+{{- ternary "6379" .Values.externalRedis.port .Values.redis.enabled | quote -}}
 {{- end -}}
 
 {{/*
@@ -217,7 +226,7 @@ Return the Redis&trade; secret name
     {{- if .Values.redis.auth.existingSecret }}
         {{- printf "%s" .Values.redis.auth.existingSecret -}}
     {{- else -}}
-        {{- printf "%s" (include "redis.fullname" .) -}}
+        {{- printf "%s" (include "discourse.redis.fullname" .) -}}
     {{- end -}}
 {{- else if .Values.externalRedis.existingSecret }}
     {{- printf "%s" .Values.externalRedis.existingSecret -}}
@@ -230,12 +239,14 @@ Return the Redis&trade; secret name
 Return the Redis&trade; secret key
 */}}
 {{- define "discourse.redis.secretPasswordKey" -}}
-{{- if and .Values.redis.enabled .Values.redis.auth.existingSecret }}
-    {{- required "You need to provide existingSecretPasswordKey when an existingSecret is specified in redis" .Values.redis.auth.existingSecretPasswordKey | printf "%s" }}
-{{- else if and (not .Values.redis.enabled) .Values.externalRedis.existingSecret }}
-    {{- required "You need to provide existingSecretPasswordKey when an existingSecret is specified in redis" .Values.externalRedis.existingSecretPasswordKey | printf "%s" }}
+{{- if .Values.redis.enabled -}}
+    {{- print "redis-password" -}}
 {{- else -}}
-    {{- printf "redis-password" -}}
+    {{- if .Values.externalRedis.existingSecret -}}
+        {{- default "redis-password" .Values.externalRedis.existingSecretPasswordKey }}
+    {{- else -}}
+        {{- print "redis-password" -}}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 

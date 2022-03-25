@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | --------------------- |
 | `image.registry`    | Ghost image registry                             | `docker.io`           |
 | `image.repository`  | Ghost image repository                           | `bitnami/ghost`       |
-| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.32.3-debian-10-r0` |
+| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.41.1-debian-10-r0` |
 | `image.pullPolicy`  | Ghost image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Ghost image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                          | `false`               |
@@ -105,6 +105,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `smtpUser`           | SMTP username                                                        | `""`               |
 | `smtpPassword`       | SMTP user password                                                   | `""`               |
 | `smtpService`        | SMTP service                                                         | `""`               |
+| `smtpProtocol`       | SMTP protocol (ssl or tls)                                           | `""`               |
 | `smtpExistingSecret` | The name of an existing secret with SMTP credentials                 | `""`               |
 | `allowEmptyPassword` | Allow the container to be started with blank passwords               | `true`             |
 | `ghostSkipInstall`   | Skip performing the initial bootstrapping for Ghost                  | `false`            |
@@ -213,10 +214,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`                    |
 | `persistence.size`                            | Persistent Volume size                                                                          | `8Gi`                   |
 | `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `""`                    |
+| `persistence.subPath`                         | The name of a volume's sub path to mount for persistence                                        | `""`                    |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r308`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r374`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -245,6 +247,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.password`                | External Database user password                                           | `""`            |
 | `externalDatabase.database`                | External Database database name                                           | `bitnami_ghost` |
 | `externalDatabase.existingSecret`          | The name of an existing secret with database credentials                  | `""`            |
+| `externalDatabase.ssl`                     | External Database ssl                                                     | `false`         |
+| `externalDatabase.sslCaFile`               | External Database ssl CA filepath                                         | `""`            |
 
 
 ### NetworkPolicy parameters
@@ -263,6 +267,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                        | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                            | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                | `{}`    |
+| `serviceAccount.name`                                         | Service Account Name                                                                                                      | `""`    |
 
 
 The above parameters map to the env variables defined in [bitnami/ghost](https://github.com/bitnami/bitnami-docker-ghost). For more information please refer to the [bitnami/ghost](https://github.com/bitnami/bitnami-docker-ghost) image documentation.

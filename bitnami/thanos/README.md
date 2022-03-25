@@ -53,28 +53,28 @@ helm uninstall my-release
 This charts allows you install several Thanos components, so you deploy an architecture as the one below:
 
 ```
-                       ������������������������������������������������                  ������������������������������������������������      ������������������������������������������������
-                       ��� Thanos       ������������������������������������������������������ ��� Thanos Store ���      ��� Thanos       ���
-                       ��� Query        ���           ���      ��� Gateway      ���      ��� Compactor    ���
-                       ������������������������������������������������           ���      ������������������������������������������������      ������������������������������������������������
-                   push                           ���             ���                     ���
-������������������������������������������������   alerts   ������������������������������������������������      ���             ��� storages            ��� Downsample &
-��� Alertmanager ��� ������������������������������������ Thanos       ��� ������������������             ��� query metrics       ��� compact blocks
-��� (*)          ���            ��� Ruler        ���      ���             ���                     ���
-������������������������������������������������            ������������������������������������������������      ���             ���                     ���
-      ���                            ���              ���      ������������������������������������������������������           ���
-      ��� push alerts                ��������������������������������������������������������������� ��� MinIO&reg; (*) ��� ���������������������������������
-      ���                                           ���      ���                ���
-��� ������ ������ ������ ������ ������ ������ ������ ������ ������ ���������                  ���      ������������������������������������������������������
-���������������������������������������������  ���������������������������������������������                  ���             ���
-������ Prometheus ������������ Thanos     ������ ������������������������������������������������������             ���
-������ (*)        ������������ Sidecar (*)������    query                       ��� inspect
-���������������������������������������������  ���������������������������������������������    metrics                     ��� blocks
-��� ������ ������ ������ ������ ������ ������ ������ ������ ������ ���������                                ���
-                                                         ������������������������������������������������
-                                                         ��� Thanos       ���
-                                                         ��� Bucket Web   ���
-                                                         ������������������������������������������������
+                       +--------------+                  +--------------+      +--------------+
+                       | Thanos       |----------------> | Thanos Store |      | Thanos       |
+                       | Query        |           |      | Gateway      |      | Compactor    |
+                       +--------------+           |      +--------------+      +--------------+
+                   push                           |             |                     |
++--------------+   alerts   +--------------+      |             | storages            | Downsample &
+| Alertmanager | <----------| Thanos       | <----|             | query metrics       | compact blocks
+| (*)          |            | Ruler        |      |             |                     |
++--------------+            +--------------+      |             \/                    |
+      ^                            |              |      +----------------+           |
+      | push alerts                +--------------|----> | MinIO&reg; (*) | <---------+
+      |                                           |      |                |
++------------------------------+                  |      +----------------+
+|+------------+  +------------+|                  |             ^
+|| Prometheus |->| Thanos     || <----------------+             |
+|| (*)        |<-| Sidecar (*)||    query                       | inspect
+|+------------+  +------------+|    metrics                     | blocks
++------------------------------+                                |
+                                                         +--------------+
+                                                         | Thanos       |
+                                                         | Bucket Web   |
+                                                         +--------------+
 ```
 
 > Note: Components marked with (*) are provided by subchart(s) (such as the [Bitnami MinIO&reg; chart](https://github.com/bitnami/charts/tree/master/bitnami/minio)) or external charts (such as the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/master/bitnami/kube-prometheus)).
@@ -111,7 +111,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | ----------------------------- | ----------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`              | Thanos image registry                                                                     | `docker.io`         |
 | `image.repository`            | Thanos image repository                                                                   | `bitnami/thanos`    |
-| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.24.0-scratch-r0` |
+| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.25.0-scratch-r1` |
 | `image.pullPolicy`            | Thanos image pull policy                                                                  | `IfNotPresent`      |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                |
 | `objstoreConfig`              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                    | `""`                |
@@ -150,7 +150,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.containerSecurityContext.runAsUser`                | User ID for the service user running the Thanos Query containers                                                                        | `1001`                   |
 | `query.containerSecurityContext.runAsNonRoot`             | Force the Thanos Query containers to run as a non root user                                                                             | `true`                   |
 | `query.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off for Thanos Query containers                                                            | `false`                  |
-| `query.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Query containers                                                                      | `false`                  |
+| `query.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Query containers                                                                      | `true`                   |
 | `query.resources.limits`                                  | The resources limits for the Thanos Query container                                                                                     | `{}`                     |
 | `query.resources.requests`                                | The requested resources for the Thanos Query container                                                                                  | `{}`                     |
 | `query.livenessProbe.enabled`                             | Enable livenessProbe on Thanos Query containers                                                                                         | `true`                   |
@@ -282,7 +282,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `queryFrontend.containerSecurityContext.runAsUser`                | User ID for the service user running the Thanos Query Frontend containers                                                        | `1001`                   |
 | `queryFrontend.containerSecurityContext.runAsNonRoot`             | Force the Thanos Query Frontend containers to run as a non root user                                                             | `true`                   |
 | `queryFrontend.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off for Thanos Query Frontend containers                                            | `false`                  |
-| `queryFrontend.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Query Frontend containers                                                      | `false`                  |
+| `queryFrontend.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Query Frontend containers                                                      | `true`                   |
 | `queryFrontend.resources.limits`                                  | The resources limits for the Thanos Query Frontend container                                                                     | `{}`                     |
 | `queryFrontend.resources.requests`                                | The requested resources for the Thanos Query Frontend container                                                                  | `{}`                     |
 | `queryFrontend.livenessProbe.enabled`                             | Enable livenessProbe on Thanos Query Frontend containers                                                                         | `true`                   |
@@ -386,7 +386,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `bucketweb.containerSecurityContext.runAsUser`                | User ID for the service user running the Thanos Bucket Web containers                                                            | `1001`                   |
 | `bucketweb.containerSecurityContext.runAsNonRoot`             | Force the Thanos Bucket Web containers to run as a non root user                                                                 | `true`                   |
 | `bucketweb.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off for Thanos Bucket Web containers                                                | `false`                  |
-| `bucketweb.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Bucket Web containers                                                          | `false`                  |
+| `bucketweb.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Bucket Web containers                                                          | `true`                   |
 | `bucketweb.resources.limits`                                  | The resources limits for the Thanos Bucket Web container                                                                         | `{}`                     |
 | `bucketweb.resources.requests`                                | The requested resources for the Thanos Bucket Web container                                                                      | `{}`                     |
 | `bucketweb.livenessProbe.enabled`                             | Enable livenessProbe on Thanos Bucket Web containers                                                                             | `true`                   |
@@ -488,7 +488,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `compactor.containerSecurityContext.runAsUser`                | User ID for the service user running the Thanos Compactor containers                                                             | `1001`                   |
 | `compactor.containerSecurityContext.runAsNonRoot`             | Force the Thanos Compactor containers to run as a non root user                                                                  | `true`                   |
 | `compactor.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off for Thanos Compactor containers                                                 | `false`                  |
-| `compactor.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Compactor containers                                                           | `false`                  |
+| `compactor.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Compactor containers                                                           | `true`                   |
 | `compactor.resources.limits`                                  | The resources limits for the Thanos Compactor container                                                                          | `{}`                     |
 | `compactor.resources.requests`                                | The requested resources for the Thanos Compactor container                                                                       | `{}`                     |
 | `compactor.livenessProbe.enabled`                             | Enable livenessProbe on Thanos Compactor containers                                                                              | `true`                   |
@@ -594,7 +594,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `storegateway.containerSecurityContext.runAsUser`                | User ID for the service user running the Thanos Store Gateway containers                                                                 | `1001`                      |
 | `storegateway.containerSecurityContext.runAsNonRoot`             | Force the Thanos Store Gateway containers to run as a non root user                                                                      | `true`                      |
 | `storegateway.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off for Thanos Store Gateway containers                                                     | `false`                     |
-| `storegateway.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Store Gateway containers                                                               | `false`                     |
+| `storegateway.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Store Gateway containers                                                               | `true`                      |
 | `storegateway.resources.limits`                                  | The resources limits for the Thanos Store Gateway container                                                                              | `{}`                        |
 | `storegateway.resources.requests`                                | The requested resources for the Thanos Store Gateway container                                                                           | `{}`                        |
 | `storegateway.livenessProbe.enabled`                             | Enable livenessProbe on Thanos Store Gateway containers                                                                                  | `true`                      |
@@ -730,7 +730,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `ruler.containerSecurityContext.runAsUser`                | User ID for the service user running the Thanos Ruler containers                                                                 | `1001`                   |
 | `ruler.containerSecurityContext.runAsNonRoot`             | Force the Thanos Ruler containers to run as a non root user                                                                      | `true`                   |
 | `ruler.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off for Thanos Ruler containers                                                     | `false`                  |
-| `ruler.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Ruler containers                                                               | `false`                  |
+| `ruler.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Ruler containers                                                               | `true`                   |
 | `ruler.resources.limits`                                  | The resources limits for the Thanos Ruler container                                                                              | `{}`                     |
 | `ruler.resources.requests`                                | The requested resources for the Thanos Ruler container                                                                           | `{}`                     |
 | `ruler.livenessProbe.enabled`                             | Enable livenessProbe on Thanos Ruler containers                                                                                  | `true`                   |
@@ -850,7 +850,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `receive.containerSecurityContext.runAsUser`                | User ID for the service user running the Thanos Receive containers                                                               | `1001`                   |
 | `receive.containerSecurityContext.runAsNonRoot`             | Force the Thanos Receive containers to run as a non root user                                                                    | `true`                   |
 | `receive.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off for Thanos Receive containers                                                   | `false`                  |
-| `receive.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Receive containers                                                             | `false`                  |
+| `receive.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Receive containers                                                             | `true`                   |
 | `receive.resources.limits`                                  | The resources limits for the Thanos Receive container                                                                            | `{}`                     |
 | `receive.resources.requests`                                | The requested resources for the Thanos Receive container                                                                         | `{}`                     |
 | `receive.livenessProbe.enabled`                             | Enable livenessProbe on Thanos Receive containers                                                                                | `true`                   |
@@ -947,6 +947,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `receiveDistributor.logLevel`                                          | Thanos Receive Distributor log level                                                                                        | `info`          |
 | `receiveDistributor.logFormat`                                         | Thanos Receive Distributor log format                                                                                       | `logfmt`        |
 | `receiveDistributor.replicaLabel`                                      | Label to treat as a replica indicator along which data is de-duplicated                                                     | `replica`       |
+| `receiveDistributor.replicationFactor`                                 | Thanos Receive Distributor replication-factor                                                                               | `1`             |
 | `receiveDistributor.extraEnvVars`                                      | Extra environment variables for Thanos Receive Distributor container                                                        | `[]`            |
 | `receiveDistributor.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Thanos Receive Distributor nodes                                   | `""`            |
 | `receiveDistributor.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Thanos Receive Distributor nodes                                      | `""`            |
@@ -961,7 +962,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `receiveDistributor.containerSecurityContext.runAsUser`                | User ID for the service user running the Thanos Receive Distributor containers                                              | `1001`          |
 | `receiveDistributor.containerSecurityContext.runAsNonRoot`             | Force the Thanos Receive Distributor containers to run as a non root user                                                   | `true`          |
 | `receiveDistributor.containerSecurityContext.allowPrivilegeEscalation` | Switch privilegeEscalation possibility on or off for Thanos Receive Distributor containers                                  | `false`         |
-| `receiveDistributor.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Receive Distributor containers                                            | `false`         |
+| `receiveDistributor.containerSecurityContext.readOnlyRootFilesystem`   | mount / (root) as a readonly filesystem on Thanos Receive Distributor containers                                            | `true`          |
 | `receiveDistributor.resources.limits`                                  | The resources limits for the Thanos Receive container                                                                       | `{}`            |
 | `receiveDistributor.resources.requests`                                | The requested resources for the Thanos Receive container                                                                    | `{}`            |
 | `receiveDistributor.livenessProbe.enabled`                             | Enable livenessProbe on Thanos Receive Distributor containers                                                               | `true`          |
@@ -1044,19 +1045,20 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `10-debian-10-r287`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `10-debian-10-r358`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                | `[]`                    |
 
 
 ### MinIO&reg; chart parameters
 
-| Name                      | Description                                                               | Value    |
-| ------------------------- | ------------------------------------------------------------------------- | -------- |
-| `minio.enabled`           | Enable/disable MinIO&reg; chart installation                              | `false`  |
-| `minio.auth.rootUser`     | MinIO&reg; root username                                                  | `admin`  |
-| `minio.auth.rootPassword` | Password for MinIO&reg; root user                                         | `""`     |
-| `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create | `thanos` |
+| Name                      | Description                                                                                                                         | Value    |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `minio`                   | For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/master/bitnami/minio) |          |
+| `minio.enabled`           | Enable/disable MinIO&reg; chart installation                                                                                        | `false`  |
+| `minio.auth.rootUser`     | MinIO&reg; root username                                                                                                            | `admin`  |
+| `minio.auth.rootPassword` | Password for MinIO&reg; root user                                                                                                   | `""`     |
+| `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create                                                           | `thanos` |
 
 
 ### NetWorkPolicy parameters
@@ -1268,6 +1270,12 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 10.0.0
+
+This version deprecates the usage of `MINIO_ACCESS_KEY` and `MINIO_SECRET_KEY` environment variables in MINIO&reg; container in favor of `MINIO_ROOT_USER` and `MINIO_ROOT_PASSWORD`.
+
+If you were already using the new variables, no issues are expected during upgrade.
 
 ### To 9.0.0
 

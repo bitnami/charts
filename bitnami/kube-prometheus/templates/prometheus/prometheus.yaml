@@ -316,6 +316,18 @@ spec:
         failureThreshold: {{ .Values.prometheus.readinessProbe.failureThreshold }}
         successThreshold: {{ .Values.prometheus.readinessProbe.successThreshold }}
       {{- end }}
+      {{- if .Values.prometheus.startupProbe.enabled }}
+      startupProbe:
+        httpGet:
+          path: {{ .Values.prometheus.startupProbe.path }}
+          port: web
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.prometheus.startupProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.prometheus.startupProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.prometheus.startupProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.prometheus.startupProbe.failureThreshold }}
+        successThreshold: {{ .Values.prometheus.startupProbe.successThreshold }}
+      {{- end }}
     {{- end }}
     {{- if or .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.livenessProbe.enabled .Values.operator.prometheusConfigReloader.readinessProbe.enabled }}
     ## This monkey patching is needed until the securityContexts are

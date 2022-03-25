@@ -56,14 +56,20 @@ Return the hostname of every ElasticSearch seed node
 {{- define "elasticsearch.hosts" -}}
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $releaseNamespace := .Release.Namespace }}
+{{- if gt (.Values.master.replicas | int) 0 }}
 {{- $masterFullname := include "elasticsearch.master.fullname" . }}
-{{- $coordinatingFullname := include "elasticsearch.coordinating.fullname" . }}
-{{- $dataFullname := include "elasticsearch.data.fullname" . }}
-{{- $ingestFullname := include "elasticsearch.ingest.fullname" . }}
 {{- $masterFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- end -}}
+{{- if gt (.Values.coordinating.replicas | int) 0 }}
+{{- $coordinatingFullname := include "elasticsearch.coordinating.fullname" . }}
 {{- $coordinatingFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- end -}}
+{{- if gt (.Values.data.replicas | int) 0 }}
+{{- $dataFullname := include "elasticsearch.data.fullname" . }}
 {{- $dataFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
-{{- if .Values.ingest.enabled }}
+{{- end -}}
+{{- if and (eq .Values.ingest.enabled true) (gt (.Values.ingest.replicas | int) 0) }}
+{{- $ingestFullname := include "elasticsearch.ingest.fullname" . }}
 {{- $ingestFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
 {{- end -}}
 {{- end -}}

@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -56,6 +58,7 @@ diagnosticMode:
     - infinity
 
 ## @section SonarQube Image parameters
+##
 
 ## Bitnami SonarQube image
 ## ref: https://hub.docker.com/r/bitnami/sonarqube/tags/
@@ -69,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/sonarqube
-  tag: 9.3.0-debian-10-r0
+  tag: 9.3.0-debian-10-r33
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -165,6 +168,7 @@ extraEnvVarsCM: ""
 extraEnvVarsSecret: ""
 
 ## @section SonarQube deployment parameters
+##
 
 ## @param replicaCount Number of SonarQube replicas to deploy
 ## NOTE: ReadWriteMany PVC(s) are required if replicaCount > 1
@@ -354,6 +358,7 @@ sidecars: {}
 initContainers: {}
 
 ## @section Traffic Exposure Parameters
+##
 
 ## SonarQube service parameters
 ##
@@ -493,6 +498,7 @@ ingress:
   secrets: []
 
 ## @section Persistence Parameters
+##
 
 ## Persistence Parameters
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -539,7 +545,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r325
+    tag: 10-debian-10-r373
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -568,6 +574,7 @@ volumePermissions:
     runAsUser: 0
 
 ## @section Sysctl Image parameters
+##
 
 ## Kernel settings modifier image
 ##
@@ -586,7 +593,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r325
+    tag: 10-debian-10-r373
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -606,6 +613,7 @@ sysctl:
     requests: {}
 
 ## @section Other Parameters
+##
 
 ## RBAC configuration
 ##
@@ -642,6 +650,7 @@ autoscaling:
   targetMemory: 50
 
 ## @section Metrics parameters
+##
 
 ## Prometheus Exporters / Metrics
 ##
@@ -663,7 +672,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.16.1-debian-10-r195
+      tag: 0.16.1-debian-10-r245
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
       ## Secrets must be manually created in the namespace.
@@ -776,6 +785,7 @@ metrics:
     selector: {}
 
 ## @section PostgreSQL subchart settings
+##
 
 ## PostgreSQL chart configuration
 ## https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
@@ -787,25 +797,27 @@ postgresql:
   ## @param postgresql.nameOverride Override name of the PostgreSQL chart
   ##
   nameOverride: ""
-  ## @param postgresql.existingSecret Existing secret containing the password of the PostgreSQL chart
-  ##
-  existingSecret: ""
-  ## @param postgresql.postgresqlPassword Password for the postgres user of the PostgreSQL chart (auto-generated if not set)
-  ## ref: https://hub.docker.com/_/postgres/
-  ##
-  postgresqlPassword: ""
-  ## @param postgresql.postgresqlUsername Username to create when deploying the PostgreSQL chart
-  ##
-  postgresqlUsername: bn_sonarqube
-  ## @param postgresql.postgresqlDatabase Database to create when deploying the PostgreSQL chart
-  ##
-  postgresqlDatabase: bitnami_sonarqube
+  auth:
+    ## @param postgresql.auth.existingSecret Existing secret containing the password of the PostgreSQL chart
+    ##
+    existingSecret: ""
+    ## @param postgresql.auth.password Password for the postgres user of the PostgreSQL chart (auto-generated if not set)
+    ## ref: https://hub.docker.com/_/postgres/
+    ##
+    password: ""
+    ## @param postgresql.auth.username Username to create when deploying the PostgreSQL chart
+    ##
+    username: bn_sonarqube
+    ## @param postgresql.auth.database Database to create when deploying the PostgreSQL chart
+    ##
+    database: bitnami_sonarqube
   ## PostgreSQL service
   ##
   service:
-    ## @param postgresql.service.port PostgreSQL service port
+    ## @param postgresql.service.ports.postgresql PostgreSQL service port
     ##
-    port: 5432
+    ports:
+      postgresql: 5432
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -833,6 +845,7 @@ postgresql:
     size: 8Gi
 
 ## @section External Database settings
+##
 
 ## External Database Configuration
 ## All of these values are only used when postgresql.enabled is set to false
@@ -848,7 +861,7 @@ externalDatabase:
   ##
   password: ""
   ## @param externalDatabase.existingSecret Secret containing the password of an external PostgreSQL instance to connect (only if postgresql.enabled=false)
-  ## Name of an existing secret resource containing the DB password in a 'postgresql-password' key
+  ## Name of an existing secret resource containing the DB password in a 'password' key
   ##
   existingSecret: ""
   ## @param externalDatabase.database Database inside an external PostgreSQL to connect (only if postgresql.enabled=false)

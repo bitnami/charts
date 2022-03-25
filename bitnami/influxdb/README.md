@@ -1,11 +1,13 @@
-<!--- app-name: InfluxDB(TM) -->
+<!--- app-name: InfluxDB&trade; -->
 
-# InfluxDB&trade;
+# Bitnami Stack for InfluxDB(TM)
 
-[InfluxDB&trade;](https://www.influxdata.com/products/influxdb-overview/) is an open source time-series database designed to handle large write and read loads in real-time.
+InfluxDB(TM) is an open source time-series database. It is a core component of the TICK (Telegraf, InfluxDB(TM), Chronograf, Kapacitor) stack.
 
-Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. InfluxDB&trade; and InfluxDB Relay&trade; are run and maintained by InfluxData, which is a completely separate project from Bitnami.
+[Overview of InfluxDB&trade;](https://www.influxdata.com/products/influxdb-overview)
 
+InfluxDB(TM) is a trademark owned by InfluxData, which is not affiliated with, and does not endorse, this site.
+                           
 ## TL;DR
 
 ```console
@@ -54,7 +56,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Global parameters
 
 | Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
+|:--------------------------|:------------------------------------------------|:------|
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global storage class for dynamic provisioning   | `""`  |
@@ -63,7 +65,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Common parameters
 
 | Name                     | Description                                                                                           | Value           |
-| ------------------------ | ----------------------------------------------------------------------------------------------------- | --------------- |
+|:-------------------------|:------------------------------------------------------------------------------------------------------|:----------------|
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                  | `""`            |
 | `nameOverride`           | String to partially override influxdb.fullname template with a string (will prepend the release name) | `""`            |
 | `fullnameOverride`       | String to fully override influxdb.fullname template with a string                                     | `""`            |
@@ -79,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### InfluxDB&trade; parameters
 
 | Name                                             | Description                                                                                                                                                                                                                                                          | Value                 |
-| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+|:-------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------|
 | `image.registry`                                 | InfluxDB&trade; image registry                                                                                                                                                                                                                                       | `docker.io`           |
 | `image.repository`                               | InfluxDB&trade; image repository                                                                                                                                                                                                                                     | `bitnami/influxdb`    |
 | `image.tag`                                      | InfluxDB&trade; image tag (immutable tags are recommended)                                                                                                                                                                                                           | `2.1.1-debian-10-r48` |
@@ -183,7 +185,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### InfluxDB Relay&trade; parameters
 
 | Name                                          | Description                                                                                                            | Value                      |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+|:----------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------|:---------------------------|
 | `relay.image.registry`                        | InfluxDB Relay&trade; image registry                                                                                   | `docker.io`                |
 | `relay.image.repository`                      | InfluxDB Relay&trade; image repository                                                                                 | `bitnami/influxdb-relay`   |
 | `relay.image.tag`                             | InfluxDB Relay&trade; image tag (immutable tags are recommended)                                                       | `0.20200717.0-scratch-r14` |
@@ -262,7 +264,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### InfluxDB Collectd&trade; parameters
 
 | Name                                        | Description                                                                               | Value       |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------- |
+|:--------------------------------------------|:------------------------------------------------------------------------------------------|:------------|
 | `collectd.enabled`                          | InfluxDB Collectd&trade; service enable                                                   | `false`     |
 | `collectd.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                       | `ClusterIP` |
 | `collectd.service.port`                     | InfluxDB Collectd&trade; UDP port (should match with corresponding port in influxdb.conf) | `25826`     |
@@ -280,12 +282,12 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Exposing parameters
 
 | Name                       | Description                                                                                                                      | Value                    |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+|:---------------------------|:---------------------------------------------------------------------------------------------------------------------------------|:-------------------------|
 | `ingress.enabled`          | Enable ingress controller resource                                                                                               | `false`                  |
 | `ingress.tls`              | Create TLS Secret                                                                                                                | `false`                  |
 | `ingress.pathType`         | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`       | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`         | Default host for the ingress resource                                                                                            | `influxdb.local`         |
+| `ingress.hostname`         | Default host for the ingress resource (evaluated as template)                                                                    | `influxdb.local`         |
 | `ingress.path`             | Ingress path*' in order to use this                                                                                              | `/`                      |
 | `ingress.annotations`      | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `ingress.extraHosts`       | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
@@ -298,7 +300,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Metrics parameters
 
 | Name                                       | Description                                                                                                                                 | Value               |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+|:-------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------|:--------------------|
 | `metrics.enabled`                          | Enable the export of Prometheus metrics                                                                                                     | `false`             |
 | `metrics.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                                         | `ClusterIP`         |
 | `metrics.service.port`                     | InfluxDB&trade; Prometheus port                                                                                                             | `9122`              |
@@ -336,7 +338,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Volume permissions parameters
 
 | Name                                          | Description                                                                                                       | Value                   |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------- |
+|:----------------------------------------------|:------------------------------------------------------------------------------------------------------------------|:------------------------|
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                      | `bitnami/bitnami-shell` |
@@ -349,7 +351,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### InfluxDB&trade; backup parameters
 
 | Name                                              | Description                                                                                             | Value                      |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------- |
+|:--------------------------------------------------|:--------------------------------------------------------------------------------------------------------|:---------------------------|
 | `backup.enabled`                                  | Enable InfluxDB&trade; backup                                                                           | `false`                    |
 | `backup.directory`                                | Directory where backups are stored                                                                      | `/backups`                 |
 | `backup.retentionDays`                            | Retention time in days for backups (older backups are deleted)                                          | `10`                       |
@@ -439,64 +441,64 @@ architecture="high-availability"
 The standalone architecture installs a deployment with one InfluxDB&trade; server (it cannot be scaled):
 
 ```
-               ┌──────────────────┐
-               │     Ingress      │
-               │    Controller    │
-               └────────┬─────────┘
+                ------------------
+               |     Ingress      |
+               |    Controller    |
+                ------------------
                         |
-                        │ /query
-                        │ /write
-                        ▼
-                ┌────────────────┐
-                │  InfluxDB(TM)  │
-                |      svc       │
-                └───────┬────────┘
-                        │
-                        ▼
-                 ┌──────────────┐
-                 │ InfluxDB(TM) │
-                 │    Server    │
-                 │     Pod      │
-                 └──────────────┘
+                        | /query
+                        | /write
+                        \/
+                 ----------------
+                |  InfluxDB(TM)  |
+                |      svc       |
+                 ----------------
+                        |
+                        \/
+                  --------------
+                 | InfluxDB(TM) |
+                 |    Server    |
+                 |     Pod      |
+                  --------------
 ```
 
 The high availability install a statefulset with N InfluxDB&trade; servers and M InfluxDB Relay&trade; instances:
 
 ```
-                   ┌──────────────────┐
-                   │     Ingress      │
-                   │    Controller    │
-                   └───────┬─┬────────┘
-                           │ │
-                           │ │
-              ┌────────────┘ └─────────────┐
-              │                            │
-              │ /write              /query │
-              ▼                            ▼
-      ┌────────────────────┐  ┌────────────────────┐
-      │ InfluxDB Relay(TM) │  │    InfluxDB(TM)    │
-      │          svc       │  │         svc        │
-      └───────────┬─┬──────┘  └─────┬─────┬────────┘
-      ┌────────── │─|───────────────|─────│───────┐
-      |           │ |               |     │       ▼
-┌─────┴────────┐  │ |               |     │  ┌──────────────┐
-│   InfluxDB   │  │ |               |     │  │ InfluxDB(TM) │
-│  Relay(TM)   │◀─┘ |               |     └─▶│    Server    │
-│     Pod      │    │               │        │     Pod      │
-└─────┬────────┘    │               │        └──────────────┘
-      |             │               │           ▲
-      └─────────────│───────────────│───────┐   |
-                    │               │       |   |
-  ┌──────────────── │───────────────│───────────┘
-  |                 │               │       |
-  |                 │               │       ▼
-┌─┴─────────────┐   │               │   ┌──────────────┐
-│    InfluxDB   │   │               │   │ InfluxDB(TM) │
-│   Relay(TM)   │◀──┘               └──▶│  Server      │
-│      Pod      │                       │   Pod        │
-└─────┬─────────┘                       └──────────────┘
-      |                                   ▲
-      └───────────────────────────────────┘
+                    ------------------
+                   |     Ingress      |
+                   |    Controller    |
+                    ------------------
+                           | |
+                           | |
+               ------------   -------------
+              |                            |
+              | /write              /query |
+             \/                            \/
+       --------------------    --------------------
+      | InfluxDB Relay(TM) |  |    InfluxDB(TM)    |
+      |          svc       |  |         svc        |
+       --------------------    --------------------
+       -----------|-|---------------|-----|-----------|
+      |           | |               |     |           \/
+ --------------   | |               |     |   --------------
+|   InfluxDB   |  | |               |     |  | InfluxDB(TM) |
+|  Relay(TM)   |<-| |               |     |->|    Server    |
+|     Pod      |    |               |        |     Pod      |
+ --------------     |               |         --------------
+      |             |               |           ^
+      --------------|---------------|--------   |
+                    |               |       |   |
+  ------------------|---------------|------------
+  |                 |               |       |
+  |                 |               |       \/
+ ---------------    |               |    --------------
+|    InfluxDB   |   |               |   | InfluxDB(TM) |
+|   Relay(TM)   |<--|               |-->|  Server      |
+|      Pod      |                       |   Pod        |
+ ---------------                         --------------
+      |                                   ^
+      |-----------------------------------|
 ```
 
 When using the high-availability architecture, it is recommended to configure sticky sessions using `--set influxdb.service.sessionAffinity="ClientIP"` or configuring the IngressController accordingly.
@@ -578,6 +580,12 @@ $ helm upgrade my-release bitnami/influxdb \
 > Note: you need to substitute the placeholders _[ADMIN_USER_PASSWORD]_, _[USER_PASSWORD]_, _[READ_USER_PASSWORD]_, and _[WRITE_USER_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
 ## Upgrading
+
+### To 4.0.0
+
+This major release completely removes support for InfluxDB&trade; branch 1.x.x. You can use images for versions ~1.x.x taking into account the chart may need some modification to run with them.
+
+If you were using InfluxDB&trade; +2.0 no issues are expected during upgrade.
 
 ### To 3.0.0
 
@@ -684,4 +692,3 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.

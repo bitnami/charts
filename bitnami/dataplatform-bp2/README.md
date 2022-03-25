@@ -1,9 +1,13 @@
 <!--- app-name: Data Platform Blueprint 2 -->
 
-# Data Platform Blueprint 2 with Kafka-Spark-Elasticsearch
+# Data Platform Blueprint 2 packaged by Bitnami
 
-This Helm chart enables the fully automated Kubernetes deployment of such multi-stack data platform, covering the following software components: Kafka, Spark, Elasticsearch, Kibana, Logstash and Signature state controller
+This Helm chart can be used for the automated deployment of a data platform blueprint containing Kafka, Apache Spark and Elasticsearch. It covers optimized pod sizing and placement diversity rules.
 
+[Overview of Data Platform Blueprint 2](https://github.com/bitnami/dataplatform-emitter)
+
+
+                           
 ## TL;DR
 
 ```console
@@ -18,16 +22,16 @@ Open source and commercial supported software stacks are available to implement 
 
 This Helm chart enables the fully automated Kubernetes deployment of such multi-stack data platform, covering the following software components:
 
--   Apache Kafka              – Data distribution bus with buffering capabilities
--   Apache Spark              – In-memory data analytics
--   Elasticsearch with Kibana – Data persistence and search
+-   Apache Kafka              - Data distribution bus with buffering capabilities
+-   Apache Spark              - In-memory data analytics
+-   Elasticsearch with Kibana - Data persistence and search
 -   Logstash                  - Data Processing Pipeline
 -   Data Platform Signature State Controller - Kubernetes controller that emits data platform health and state metrics in Prometheus format.
 
 These containerized stateful software stacks are deployed in multi-node cluster configurations, which is defined by the Helm Chart blueprint for this data platform deployment, covering:
 
--   Pod placement rules – Affinity rules to ensure placement diversity to prevent single point of failures and optimize load distribution
--   Pod resource sizing rules – Optimized Pod and JVM sizing settings for optimal performance and efficient resource usage
+-   Pod placement rules - Affinity rules to ensure placement diversity to prevent single point of failures and optimize load distribution
+-   Pod resource sizing rules - Optimized Pod and JVM sizing settings for optimal performance and efficient resource usage
 -   Default settings to ensure Pod access security
 -   Optional [Tanzu Observability](https://docs.wavefront.com/kubernetes.html) framework configuration.
 
@@ -537,6 +541,18 @@ Elasticsearch dependency version was bumped to a new major version changing the 
 Regular upgrade is compatible from previous versions.
 
 ## Upgrading
+
+### To 10.0.0
+
+This major release updates the Kafka subchart to its newest major `15.x.x`, which contain several changes in the supported values and bumps Kafka major version to `3.x` series (check the [upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/kafka/README.md#to-1500) to obtain more information).
+
+To upgrade to *10.0.0* from *9.x* it's recommended to maintain the Kafka `2.x` series (to avoid incompatibility issues). To do so, follow the instructions below (the following example assumes that the release name is *dataplatform* and the release namespace *default*):
+
+```bash
+export CURRENT_KAFKA_VERSION=$(kubectl exec dataplatform-kafka-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade dataplatform bitnami/dataplatform-bp2 \
+  --set kafka.image.tag=$CURRENT_KAFKA_VERSION
+```
 
 ### To 9.0.0
 

@@ -47,7 +47,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.54.0-debian-10-r0
+    tag: 0.55.0-debian-10-r9
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -357,7 +357,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.32.1-debian-10-r39
+    tag: 2.33.5-debian-10-r10
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -662,6 +662,24 @@ prometheus:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 3
+  ## Configure extra options for startup probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param prometheus.startupProbe.enabled Turn on and off readiness probe
+  ## @param prometheus.startupProbe.path Path of the HTTP service for checking the ready state
+  ## @param prometheus.startupProbe.initialDelaySeconds Delay before readiness probe is initiated
+  ## @param prometheus.startupProbe.periodSeconds How often to perform the probe
+  ## @param prometheus.startupProbe.timeoutSeconds When the probe times out
+  ## @param prometheus.startupProbe.failureThreshold Minimum consecutive failures for the probe
+  ## @param prometheus.startupProbe.successThreshold Minimum consecutive successes for the probe
+  ##
+  startupProbe:
+    enabled: true
+    path: /-/ready
+    initialDelaySeconds: 0
+    failureThreshold: 60
+    periodSeconds: 15
+    successThreshold: 1
+    timeoutSeconds: 3
   ## @param prometheus.enableAdminAPI Enable Prometheus adminitrative API
   ## ref: https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis
   ##
@@ -921,7 +939,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.24.0-scratch-r4
+      tag: 0.25.1-scratch-r2
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
@@ -1136,7 +1154,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.23.0-debian-10-r150
+    tag: 0.23.0-debian-10-r199
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1540,6 +1558,9 @@ alertmanager:
   ## @param alertmanager.configSelector Namespaces to be selected for AlertmanagerConfig discovery. If nil, only check own namespace. This defaults to {}
   ##
   configSelector: {}
+  ## @param alertmanager.configuration EXPERIMENTAL: alertmanagerConfiguration specifies the global Alertmanager configuration. If defined, it takes precedence over the `configSecret` field. This field may change in future releases. The specified global alertmanager config will not force add a namespace label in routes and inhibitRules
+  ##
+  configuration: {}
 
 ## @section Exporters
 

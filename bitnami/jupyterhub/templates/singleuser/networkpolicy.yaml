@@ -40,7 +40,7 @@ spec:
   egress:
     # Single User --> Hub
     - ports:
-        - port: {{ .Values.hub.containerPort }}
+        - port: {{ coalesce .Values.hub.containerPorts.http .Values.hub.containerPort }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
@@ -62,9 +62,9 @@ spec:
     ## PostgreSQL access
     - ports:
         - protocol: UDP
-          port: {{ .Values.postgresql.service.port }}
+          port: {{ .Values.postgresql.service.ports.postgresql }}
         - protocol: TCP
-          port: {{ .Values.postgresql.service.port }}
+          port: {{ .Values.postgresql.service.ports.postgresql }}
     {{- if .Values.singleuser.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
