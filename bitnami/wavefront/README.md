@@ -6,8 +6,6 @@ Wavefront is a high-performance streaming analytics platform for monitoring and 
 
 [Overview of Wavefront](https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes)
 
-
-                           
 ## TL;DR
 
 ```console
@@ -70,7 +68,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                             | Value |
@@ -78,7 +75,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonLabels`      | Add labels to all the deployed resources                | `{}`  |
 | `commonAnnotations` | Add annotations to all the deployed resources           | `{}`  |
 | `extraDeploy`       | Extra objects to deploy (value evaluated as a template) | `[]`  |
-
 
 ### Wavefront Common parameters
 
@@ -94,7 +90,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`      | Name of Wavefront service account                                                                                                           | `""`                                 |
 | `projectPacific.enabled`   | Enable and create role binding for Tanzu Kubernetes cluster                                                                                 | `false`                              |
 | `tkgi.enabled`             | Properties for TKGI environments. If enabled, a role binding to handle pod security policy will be installed within the TKGI cluster        | `false`                              |
-
 
 ### Collector parameters
 
@@ -162,7 +157,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for collector container                                        | `[]`                                     |
 | `collector.initContainers`                                  | Add init containers to the Wavefront proxy pods                                                                         | `[]`                                     |
 | `collector.sidecars`                                        | Add sidecars to the Wavefront proxy pods                                                                                | `[]`                                     |
-
 
 ### Proxy parameters
 
@@ -238,13 +232,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.existingConfigmap`                               | Name of existing ConfigMap with Proxy preprocessor configuration                                                                        | `""`                      |
 | `proxy.preprocessor`                                    | Preprocessor rules is a powerful way to apply filtering or to enhance metrics as they flow                                              | `{}`                      |
 
-
 ### Kube State Metrics parameters
 
 | Name                         | Description                                                                                                                      | Value   |
 | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `kube-state-metrics.enabled` | If enabled the kube-state-metrics chart will be installed as a subchart and the collector will be configured to capture metrics. | `false` |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -312,6 +304,9 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 4.0.0
+
+This major updates the `wavefront-proxy` component to branch [11](https://github.com/wavefrontHQ/wavefront-proxy/releases/tag/proxy-11.0). No issues are expected during upgrade.
 ### To 3.0.0
 
 This major updates the kube-state-metrics subchart to it newest major, 2.0.0, which contains name changes to a few of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics#to-200).
