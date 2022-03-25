@@ -1,5 +1,5 @@
 {
-    "baseUrl": "http://localhost/",
+    "baseUrl": "https://localhost/",
     "env": {
       "username": "root",
       "password": "rootPassword"
