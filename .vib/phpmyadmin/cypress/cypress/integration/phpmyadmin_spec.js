@@ -5,7 +5,7 @@ import {
 
 it('allows the user to log out', () => {
     cy.login();
-    cy.contains('#pma_errors','Access denied').should('not.exist');
+    cy.contains('[role="alert"]','Access denied').should('not.exist');
     cy.get('a[title="Log out"]').should('be.visible').click();
     cy.get('#login_form').should('be.visible');
 })
@@ -22,13 +22,13 @@ it('allows creating a database and a table', () => {
         cy.get('#field_0_1').type(`${td.columnName}.${random}`);
         cy.get('.btn-primary').click();
         cy.visit('index.php');
-        cy.get('#pma_navigation_tree_content').contains(`${td.databaseName}.${random}`).click({
+        cy.contains('a', `${td.databaseName}.${random}`).scrollIntoView().click({
             force: true
         });
-        cy.get('#pma_navigation_tree_content').contains(`${td.tableName}.${random}`).click({
+        cy.contains('#pma_navigation_tree_content', `${td.tableName}.${random}`).should('be.visible').click({
             force: true
-        });
-        cy.get('.table-responsive-md').contains(`${td.columnName}.${random}`);
+        })
+        cy.contains('.table-responsive-md', `${td.columnName}.${random}`).should('be.visible');
     });
 })
 
