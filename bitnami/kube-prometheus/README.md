@@ -7,7 +7,7 @@ Prometheus Operator provides easy monitoring definitions for Kubernetes services
 [Overview of Prometheus Operator](https://github.com/coreos/prometheus-operator)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -243,6 +243,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.readinessProbe.timeoutSeconds`                            | When the probe times out                                                                                                         | `3`                      |
 | `prometheus.readinessProbe.failureThreshold`                          | Minimum consecutive failures for the probe                                                                                       | `10`                     |
 | `prometheus.readinessProbe.successThreshold`                          | Minimum consecutive successes for the probe                                                                                      | `1`                      |
+| `prometheus.startupProbe.enabled`                                     | Turn on and off startup probe                                                                                                  | `true`                   |
+| `prometheus.startupProbe.path`                                        | Path of the HTTP service for checking the ready state                                                                            | `/-/ready`               |
+| `prometheus.startupProbe.initialDelaySeconds`                         | Delay before startup probe is initiated                                                                                        | `0`                      |
+| `prometheus.startupProbe.periodSeconds`                               | How often to perform the probe                                                                                                   | `15`                     |
+| `prometheus.startupProbe.timeoutSeconds`                              | When the probe times out                                                                                                         | `3`                      |
+| `prometheus.startupProbe.failureThreshold`                            | Minimum consecutive failures for the probe                                                                                       | `60`                     |
+| `prometheus.startupProbe.successThreshold`                            | Minimum consecutive successes for the probe                                                                                      | `1`                      |
 | `prometheus.enableAdminAPI`                                           | Enable Prometheus adminitrative API                                                                                              | `false`                  |
 | `prometheus.enableFeatures`                                           | Enable access to Prometheus disabled features.                                                                                   | `[]`                     |
 | `prometheus.alertingEndpoints`                                        | Alertmanagers to which alerts will be sent                                                                                       | `[]`                     |
