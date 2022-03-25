@@ -71,27 +71,36 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                             | Value |
-| ------------------- | ------------------------------------------------------- | ----- |
-| `commonLabels`      | Add labels to all the deployed resources                | `{}`  |
-| `commonAnnotations` | Add annotations to all the deployed resources           | `{}`  |
-| `extraDeploy`       | Extra objects to deploy (value evaluated as a template) | `[]`  |
+| Name                     | Description                                                                                                     | Value          |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------- | -------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                            | `""`           |
+| `nameOverride`           | String to partially override %%COMPONENT_NAME%%.fullname template with a string (will prepend the release name) | `""`           |
+| `fullnameOverride`       | String to fully override %%COMPONENT_NAME%%.fullname template with a string                                     | `""`           |
+| `commonLabels`           | Add labels to all the deployed resources                                                                        | `{}`           |
+| `commonAnnotations`      | Add annotations to all the deployed resources                                                                   | `{}`           |
+| `extraDeploy`            | Extra objects to deploy (value evaluated as a template)                                                         | `[]`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                         | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                                      | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                                         | `["infinity"]` |
 
 
 ### Wavefront Common parameters
 
-| Name                       | Description                                                                                                                                 | Value                                |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| `clusterName`              | This is a unique name for the cluster (required)                                                                                            | `KUBERNETES_CLUSTER_NAME`            |
-| `wavefront.url`            | Wavefront URL for your cluster (required)                                                                                                   | `https://YOUR_CLUSTER.wavefront.com` |
-| `wavefront.token`          | Wavefront API Token (required)                                                                                                              | `YOUR_API_TOKEN`                     |
-| `wavefront.existingSecret` | Name of an existing secret containing the token                                                                                             | `""`                                 |
-| `podSecurityPolicy.create` | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`                              |
-| `rbac.create`              | Specifies whether RBAC resources should be created                                                                                          | `true`                               |
-| `serviceAccount.create`    | Create Wavefront service account                                                                                                            | `true`                               |
-| `serviceAccount.name`      | Name of Wavefront service account                                                                                                           | `""`                                 |
-| `projectPacific.enabled`   | Enable and create role binding for Tanzu Kubernetes cluster                                                                                 | `false`                              |
-| `tkgi.enabled`             | Properties for TKGI environments. If enabled, a role binding to handle pod security policy will be installed within the TKGI cluster        | `false`                              |
+| Name                                          | Description                                                                                                                                 | Value                                |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `clusterName`                                 | This is a unique name for the cluster (required)                                                                                            | `KUBERNETES_CLUSTER_NAME`            |
+| `wavefront.url`                               | Wavefront URL for your cluster (required)                                                                                                   | `https://YOUR_CLUSTER.wavefront.com` |
+| `wavefront.token`                             | Wavefront API Token (required)                                                                                                              | `YOUR_API_TOKEN`                     |
+| `wavefront.existingSecret`                    | Name of an existing secret containing the token                                                                                             | `""`                                 |
+| `podSecurityPolicy.create`                    | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`                              |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                                          | `true`                               |
+| `rbac.rules`                                  | Custom RBAC rules to set                                                                                                                    | `[]`                                 |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                        | `true`                               |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                         | `""`                                 |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                              | `true`                               |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                  | `{}`                                 |
+| `projectPacific.enabled`                      | Enable and create role binding for Tanzu Kubernetes cluster                                                                                 | `false`                              |
+| `tkgi.enabled`                                | Properties for TKGI environments. If enabled, a role binding to handle pod security policy will be installed within the TKGI cluster        | `false`                              |
 
 
 ### Collector parameters
@@ -146,12 +155,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.affinity`                                        | Wavefront collector affinity for pod assignment                                                                         | `{}`                                     |
 | `collector.nodeSelector`                                    | Wavefront collector node labels for pod assignment                                                                      | `{}`                                     |
 | `collector.tolerations`                                     | Wavefront collector tolerations for pod assignment                                                                      | `[]`                                     |
+| `collector.schedulerName`                                   | Name of the k8s scheduler (other than default)                                                                          | `""`                                     |
+| `collector.terminationGracePeriodSeconds`                   | In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully                             | `""`                                     |
+| `collector.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment                                                                          | `[]`                                     |
 | `collector.podLabels`                                       | Wavefront collector pod extra labels                                                                                    | `{}`                                     |
 | `collector.podAnnotations`                                  | Annotations for Wavefront collector pods                                                                                | `{}`                                     |
 | `collector.priorityClassName`                               | Wavefront Collector pods' priority                                                                                      | `""`                                     |
 | `collector.lifecycleHooks`                                  | Lifecycle hooks for the Wavefront Collector container to automate configuration before or after startup                 | `{}`                                     |
 | `collector.customLivenessProbe`                             | Override default liveness probe                                                                                         | `{}`                                     |
 | `collector.customReadinessProbe`                            | Override default readiness probe                                                                                        | `{}`                                     |
+| `collector.customStartupProbe`                              | Override default startup probe                                                                                          | `{}`                                     |
 | `collector.updateStrategy.type`                             | Update strategy - only really applicable for deployments with RWO PVs attached                                          | `RollingUpdate`                          |
 | `collector.extraEnvVars`                                    | Extra environment variables to be set on collector container                                                            | `[]`                                     |
 | `collector.extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra environment variables                                                       | `""`                                     |
@@ -189,6 +202,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.affinity`                                        | Wavefront proxy affinity for pod assignment                                                                                             | `{}`                      |
 | `proxy.nodeSelector`                                    | Wavefront proxy node labels for pod assignment                                                                                          | `{}`                      |
 | `proxy.tolerations`                                     | Wavefront proxy tolerations for pod assignment                                                                                          | `[]`                      |
+| `proxy.schedulerName`                                   | Name of the k8s scheduler (other than default)                                                                                          | `""`                      |
+| `proxy.terminationGracePeriodSeconds`                   | In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully                                             | `""`                      |
+| `proxy.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment                                                                                          | `[]`                      |
 | `proxy.podLabels`                                       | Wavefront proxy pod extra labels                                                                                                        | `{}`                      |
 | `proxy.podAnnotations`                                  | Annotations for Wavefront proxy pods                                                                                                    | `{}`                      |
 | `proxy.priorityClassName`                               | Wavefront proxy pods' priority class name                                                                                               | `""`                      |
@@ -205,8 +221,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                                                      | `1`                       |
 | `proxy.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                                    | `6`                       |
 | `proxy.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                                                    | `1`                       |
+| `proxy.startupProbe.enabled`                            | Enable startupProbe                                                                                                                     | `false`                   |
+| `proxy.startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                                                  | `10`                      |
+| `proxy.startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                                                         | `20`                      |
+| `proxy.startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                                                        | `1`                       |
+| `proxy.startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                                                      | `6`                       |
+| `proxy.startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                                                      | `1`                       |
 | `proxy.customLivenessProbe`                             | Override default liveness probe                                                                                                         | `{}`                      |
 | `proxy.customReadinessProbe`                            | Override default readiness probe                                                                                                        | `{}`                      |
+| `proxy.customStartupProbe`                              | Override default startup probe                                                                                                          | `{}`                      |
 | `proxy.updateStrategy.type`                             | Update strategy - only really applicable for deployments with RWO PVs attached                                                          | `RollingUpdate`           |
 | `proxy.extraEnvVars`                                    | Extra environment variables to be set on proxy container                                                                                | `[]`                      |
 | `proxy.extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra environment variables                                                                       | `""`                      |
@@ -215,7 +238,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for proxy container                                                            | `[]`                      |
 | `proxy.initContainers`                                  | Add init containers to the Wavefront proxy pods                                                                                         | `[]`                      |
 | `proxy.sidecars`                                        | Add sidecars to the Wavefront proxy pods                                                                                                | `[]`                      |
-| `proxy.replicas`                                        | Replicas to deploy for Wavefront proxy (usually 1)                                                                                      | `1`                       |
+| `proxy.replicaCount`                                    | ReplicaCount to deploy for Wavefront proxy (usually 1)                                                                                  | `1`                       |
 | `proxy.port`                                            | The port number the proxy will listen on for metrics in Wavefront data format                                                           | `2878`                    |
 | `proxy.tracePort`                                       | The port number the proxy will listen on for tracing spans in Wavefront trace data format (usually 30000)                               | `""`                      |
 | `proxy.jaegerPort`                                      | The port number the proxy will listen on for tracing spans in Jaeger data format (usually 30001)                                        | `""`                      |
@@ -231,7 +254,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.histogramHourPort`                               | Port to accumulate 1-hour based histograms on Wavefront data format (usually 40002)                                                     | `""`                      |
 | `proxy.histogramDayPort`                                | Port to accumulate 1-day based histograms on Wavefront data format (usually 40003)                                                      | `""`                      |
 | `proxy.deltaCounterPort`                                | Port to accumulate 1-minute delta counters on Wavefront data format (usually 50000)                                                     | `""`                      |
-| `proxy.args`                                            | Any configuration property can be passed to the proxy via command line args in the format: `--<property_name> <value>`                  | `""`                      |
+| `proxy.command`                                         | Override default container command (useful when using custom images)                                                                    | `[]`                      |
+| `proxy.args`                                            | Override default container args (useful when using custom images)                                                                       | `[]`                      |
+| `proxy.extraArgs`                                       | Any configuration property can be passed to the proxy via command line args in the format: `--<property_name> <value>`                  | `""`                      |
 | `proxy.heap`                                            | Wavefront proxy Java heap maximum usage (java -Xmx command line option)                                                                 | `""`                      |
 | `proxy.existingConfigmap`                               | Name of existing ConfigMap with Proxy preprocessor configuration                                                                        | `""`                      |
 | `proxy.preprocessor`                                    | Preprocessor rules is a powerful way to apply filtering or to enhance metrics as they flow                                              | `{}`                      |
