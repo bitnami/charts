@@ -4,6 +4,6 @@
       "username": "root",
       "password": "rootPassword"
     },
-    "defaultCommandTimeout":10000
+    "defaultCommandTimeout":30000
   }
   

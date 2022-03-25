@@ -5,15 +5,13 @@ import {
 
 it('allows the user to log out', () => {
     cy.login();
-    cy.get('a[title="Log out"]').click({force:true})
+    cy.get('a[title="Log out"]').should('be.visible').click();
     cy.get('#login_form').should('be.visible');
 })
 
 it('allows creating a database and a table', () => {
     cy.login();
-    cy.get('#pma_navigation_tree_content').contains('a', 'New').click({
-        force: true
-    });
+    cy.visit('index.php?route=/server/databases');
     cy.fixture('testdata').then((td) => {
         cy.get('#text_create_db').type(`${td.databaseName}.${random}`);
         cy.get('#buttonGo').click();
@@ -35,23 +33,22 @@ it('allows creating a database and a table', () => {
 
 it('allows importing a table and executing a query', () => {
     cy.login();
-    cy.get('#pma_navigation_tree_content').contains('mysql').click();
+    cy.visit('index.php?route=/database/structure&server=1&db=mysql')
     cy.contains('Import').click();
-    cy.get('#input_import_file').selectFile('cypress/fixtures/testdata.sql', {
+    cy.get('#input_import_file').should('be.visible').selectFile('cypress/fixtures/testdata.sql', {
         force: true
     });
     cy.get('#buttonGo').click();
+    cy.contains('No database selected').should('not.exist');
+    cy.contains('Import has been successfully finished');
+    cy.contains('No database selected', '[role="alert"]').should('not.exist');
     cy.contains('Import has been successfully finished');
     cy.fixture('testdata').then((td) => {
-        cy.get('#pma_navigation_tree_content').contains('mysql').click({
-            force: true
-        });
-        cy.get('#pma_navigation_tree_content').contains('authors').click({
-            force: true
-        });
-        cy.get('#topmenu').contains('SQL').click();
-        cy.get('#button_submit_query').click();
-        cy.get('.result_query').contains('Showing rows');
+        cy.contains('[title="Browse"]', 'authors').should('be.visible').click();
+        cy.get('#topmenu').should('be.visible').contains('SQL');
+        cy.get('[title="SQL"]').should('be.visible').click();
+        cy.get('#button_submit_query').should('be.visible').click();
+        cy.get('.result_query').should('be.visible').contains('Showing rows');
     })
 })
 
@@ -65,7 +62,7 @@ it('allows adding a user', () => {
         cy.get('#adduser_submit').type(td.password);
         cy.get('#adduser_submit').scrollIntoView().click();
     })
-    cy.get('.result_query').contains('You have added a new user.');
+    cy.get('.result_query').should('be.visible').contains('You have added a new user.');
 })
 
 it('shows the list of installed plugins', () => {
