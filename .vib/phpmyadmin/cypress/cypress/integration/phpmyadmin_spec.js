@@ -5,6 +5,7 @@ import {
 
 it('allows the user to log out', () => {
     cy.login();
+    cy.contains('#pma_errors','Access denied').should('not.exist');
     cy.get('a[title="Log out"]').should('be.visible').click();
     cy.get('#login_form').should('be.visible');
 })

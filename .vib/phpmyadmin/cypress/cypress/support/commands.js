@@ -20,5 +20,4 @@ Cypress.Commands.add("login", (
     cy.get('#input_username').should('be.visible').type(username);
     cy.get('#input_password').should('be.visible').type(password);
     cy.get('#input_go').click();
-    cy.contains('#pma_errors','Access denied').should('not.exist');
 });
