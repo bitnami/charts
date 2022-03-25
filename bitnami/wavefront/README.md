@@ -6,8 +6,6 @@ Wavefront is a high-performance streaming analytics platform for monitoring and 
 
 [Overview of Wavefront](https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes)
 
-
-                           
 ## TL;DR
 
 ```console
@@ -103,7 +101,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.enabled`                                         | Setup and enable the Wavefront collector to gather metrics                                                              | `true`                                   |
 | `collector.image.registry`                                  | Wavefront collector Image registry                                                                                      | `docker.io`                              |
 | `collector.image.repository`                                | Wavefront collector Image repository                                                                                    | `bitnami/wavefront-kubernetes-collector` |
-| `collector.image.tag`                                       | Wavefront collector Image tag (immutable tags are recommended)                                                          | `1.9.0-scratch-r1`                       |
+| `collector.image.tag`                                       | Wavefront collector Image tag (immutable tags are recommended)                                                          | `1.10.0-scratch-r2`                      |
 | `collector.image.pullPolicy`                                | Image pull policy                                                                                                       | `IfNotPresent`                           |
 | `collector.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                        | `[]`                                     |
 | `collector.hostAliases`                                     | Deployment pod host aliases                                                                                             | `[]`                                     |
@@ -171,7 +169,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.enabled`                                         | Setup and enable Wavefront proxy to send metrics through                                                                                | `true`                    |
 | `proxy.image.registry`                                  | Wavefront proxy image registry                                                                                                          | `docker.io`               |
 | `proxy.image.repository`                                | Wavefront proxy image repository                                                                                                        | `bitnami/wavefront-proxy` |
-| `proxy.image.tag`                                       | Wavefront proxy image tag (immutable tags are recommended)                                                                              | `10.14.0-debian-10-r43`   |
+| `proxy.image.tag`                                       | Wavefront proxy image tag (immutable tags are recommended)                                                                              | `11.0.0-debian-10-r0`     |
 | `proxy.image.pullPolicy`                                | Wavefront proxy image pull policy                                                                                                       | `IfNotPresent`            |
 | `proxy.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                        | `[]`                      |
 | `proxy.hostAliases`                                     | Deployment pod host aliases                                                                                                             | `[]`                      |
@@ -311,6 +309,19 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 4.0.0
+
+This major updates the `wavefront-proxy` component to branch [11](https://github.com/wavefrontHQ/wavefront-proxy/releases/tag/proxy-11.0).
+
+In addition, this major release renames several values in this chart and adds missing features, in order to get aligned with the rest of the assets in the Bitnami charts repository.
+
+Affected values:
+
+- `proxy.replicas` renamed as `proxy.replicaCount`
+- `proxy.args` renamed as `proxy.extraArgs`
+- Value `proxy.args` is now used to overwrite the pod args.
+
 
 ### To 3.0.0
 

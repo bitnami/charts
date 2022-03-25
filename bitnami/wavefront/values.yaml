@@ -20,6 +20,15 @@ global:
 ## @section Common parameters
 ##
 
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
+## @param nameOverride String to partially override %%COMPONENT_NAME%%.fullname template with a string (will prepend the release name)
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override %%COMPONENT_NAME%%.fullname template with a string
+##
+fullnameOverride: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -29,6 +38,20 @@ commonAnnotations: {}
 ## @param extraDeploy Extra objects to deploy (value evaluated as a template)
 ##
 extraDeploy: []
+## Enable diagnostic mode in the deployment(s)/statefulset(s)
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  args:
+    - infinity
 
 ## @section Wavefront Common parameters
 ##
@@ -49,18 +72,37 @@ wavefront:
 ##
 podSecurityPolicy:
   create: false
-## @param rbac.create Specifies whether RBAC resources should be created
+
+## RBAC configuration
 ##
 rbac:
+  ## @param rbac.create Specifies whether RBAC resources should be created
+  ##
   create: true
+  ## @param query.rbac.rules Custom RBAC rules to set
+  ## e.g:
+  ## rules:
+  ##   - apiGroups:
+  ##       - ""
+  ##     resources:
+  ##       - pods
+  ##     verbs:
+  ##       - get
+  ##       - list
+  ##
+  rules: []
+
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+## @param serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
 serviceAccount:
-  ## @param serviceAccount.create Create Wavefront service account
-  ##
   create: true
-  ## @param serviceAccount.name Name of Wavefront service account
-  ## If not set and create is true, a name is generated using the fullname template
-  ##
   name: ""
+  automountServiceAccountToken: true
+  annotations: {}
 ## @param projectPacific.enabled Enable and create role binding for Tanzu Kubernetes cluster
 ## If enabled, a role binding to handle pod security policy will be installed within the Kubernetes cluster
 ##
@@ -373,6 +415,19 @@ collector:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param collector.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param collector.terminationGracePeriodSeconds In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param collector.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## @param collector.podLabels Wavefront collector pod extra labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
@@ -394,6 +449,9 @@ collector:
   ## @param collector.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
+  ## @param collector.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
   ## @param collector.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -465,7 +523,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/wavefront-proxy
-    tag: 10.14.0-debian-10-r57
+    tag: 11.0.0-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -565,6 +623,19 @@ proxy:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param collector.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param collector.terminationGracePeriodSeconds In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param collector.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## @param proxy.podLabels Wavefront proxy pod extra labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
@@ -612,12 +683,31 @@ proxy:
     periodSeconds: 20
     failureThreshold: 6
     successThreshold: 1
+  ## Wavefront Proxy startup probe. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param proxy.startupProbe.enabled Enable startupProbe
+  ## @param proxy.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param proxy.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param proxy.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param proxy.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param proxy.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    timeoutSeconds: 1
+    periodSeconds: 20
+    failureThreshold: 6
+    successThreshold: 1
   ## @param proxy.customLivenessProbe Override default liveness probe
   ##
   customLivenessProbe: {}
   ## @param proxy.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
+  ## @param proxy.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
   ## @param proxy.updateStrategy.type Update strategy - only really applicable for deployments with RWO PVs attached
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
@@ -665,9 +755,9 @@ proxy:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param proxy.replicas Replicas to deploy for Wavefront proxy (usually 1)
+  ## @param proxy.replicaCount ReplicaCount to deploy for Wavefront proxy (usually 1)
   ##
-  replicas: 1
+  replicaCount: 1
   ## @param proxy.port The port number the proxy will listen on for metrics in Wavefront data format
   ##
   port: 2878
@@ -744,11 +834,17 @@ proxy:
   ## deltaCounterPort: 50000
   ##
   deltaCounterPort: ""
-  ## @param proxy.args Any configuration property can be passed to the proxy via command line args in the format: `--<property_name> <value>`
+  ## @param proxy.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param proxy.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param proxy.extraArgs Any configuration property can be passed to the proxy via command line args in the format: `--<property_name> <value>`
   ## Multiple properties can be specified separated by whitespace
   ## Ref: https://docs.wavefront.com/proxies_configuring.html
   ##
-  args: ""
+  extraArgs: ""
   ## @param proxy.heap Wavefront proxy Java heap maximum usage (java -Xmx command line option)
   ## By default Java will consume up to 4G of heap memory
   ## e.g:
