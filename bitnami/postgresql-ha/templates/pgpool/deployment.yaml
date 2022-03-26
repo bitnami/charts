@@ -384,19 +384,6 @@ spec:
             sources:
               - secret:
                   name: {{ include "postgresql-ha.tlsSecretName" . }}
-                  items:
-                    - key: ca.crt
-                      path: {{ template "postgresql-ha.pgpool.tlsCACert" . }}
-              - secret:
-                  name: {{ include "postgresql-ha.tlsSecretName" . }}
-                  items:
-                    - key: tls.crt
-                      path: {{ template "postgresql-ha.pgpool.tlsCert" . }}
-              - secret:
-                  name: {{ include "postgresql-ha.tlsSecretName" . }}
-                  items:
-                    - key: tls.key
-                      path: {{ template "postgresql-ha.pgpool.tlsCertKey" . }}
         {{- end }}
       {{- if .Values.pgpool.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.extraVolumes "context" $) | nindent 8 }}
