@@ -24,4 +24,4 @@ maintainers:
 name: redis
 sources:
   - https://github.com/bitnami/bitnami-docker-redis
-version: 16.6.0
+version: 16.6.1
