@@ -1129,7 +1129,7 @@ networkPolicy:
   ##                   - frontend
   ##
   extraIngress: []
-  ## @param networkPolicy.extraEgress Add extra ingress rules to the NetworkPolicy
+  ## @param networkPolicy.extraEgress Add extra egress rules to the NetworkPolicy
   ## e.g:
   ## extraEgress:
   ##   - ports:
