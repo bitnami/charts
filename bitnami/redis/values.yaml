@@ -38,6 +38,9 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
+## @param secretAnnotations Annotations to add to secret
+##
+secretAnnotations: {}
 ## @param clusterDomain Kubernetes cluster domain name
 ##
 clusterDomain: cluster.local
@@ -75,7 +78,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 6.2.6-debian-10-r158
+  tag: 6.2.6-debian-10-r169
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -857,7 +860,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 6.2.6-debian-10-r156
+    tag: 6.2.6-debian-10-r167
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1129,7 +1132,7 @@ networkPolicy:
   ##                   - frontend
   ##
   extraIngress: []
-  ## @param networkPolicy.extraEgress Add extra ingress rules to the NetworkPolicy
+  ## @param networkPolicy.extraEgress Add extra egress rules to the NetworkPolicy
   ## e.g:
   ## extraEgress:
   ##   - ports:
@@ -1258,7 +1261,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.36.0-debian-10-r5
+    tag: 1.37.0-debian-10-r9
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1451,7 +1454,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r367
+    tag: 10-debian-10-r378
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1497,7 +1500,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r367
+    tag: 10-debian-10-r378
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
