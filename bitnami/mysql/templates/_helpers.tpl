@@ -46,7 +46,7 @@ Get the initialization scripts ConfigMap name.
 */}}
 {{- define "mysql.initdbScriptsCM" -}}
 {{- if .Values.initdbScriptsConfigMap -}}
-    {{- printf "%s" .Values.initdbScriptsConfigMap -}}
+    {{- printf "%s" (tpl .Values.initdbScriptsConfigMap $) -}}
 {{- else -}}
     {{- printf "%s-init-scripts" (include "mysql.primary.fullname" .) -}}
 {{- end -}}
