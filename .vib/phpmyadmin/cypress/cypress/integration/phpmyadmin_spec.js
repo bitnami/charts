@@ -5,7 +5,7 @@ import {
 
 it('allows the user to log out', () => {
     cy.login();
-    cy.contains('[role="alert"]','Access denied').should('not.exist');
+    cy.contains('[role="alert"]', 'Access denied').should('not.exist');
     cy.get('a[title="Log out"]').should('be.visible').click();
     cy.get('#login_form').should('be.visible');
 })
@@ -40,8 +40,6 @@ it('allows importing a table and executing a query', () => {
         force: true
     });
     cy.get('#buttonGo').click();
-    cy.contains('No database selected').should('not.exist');
-    cy.contains('Import has been successfully finished');
     cy.contains('No database selected', '[role="alert"]').should('not.exist');
     cy.contains('Import has been successfully finished');
     cy.fixture('testdata').then((td) => {
