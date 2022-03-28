@@ -127,6 +127,43 @@ dags:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+## @param extraEnvVars Add extra environment variables for all the Airflow pods
+##
+extraEnvVars: []
+## @param extraEnvVarsCM ConfigMap with extra environment variables for all the Airflow pods
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Secret with extra environment variables for all the Airflow pods
+##
+extraEnvVarsSecret: ""
+## @param sidecars Add additional sidecar containers to all the Airflow pods
+## Example:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+## @param initContainers Add additional init containers to all the Airflow pods
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: []
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for all the Airflow pods
+##
+extraVolumeMounts: []
+## @param extraVolumes Optionally specify extra list of additional volumes for the all the Airflow pods
+##
+extraVolumes: []
 
 ## @section Airflow web parameters
 
