@@ -78,7 +78,8 @@ spec:
           {{- end }}
           volumeMounts:
             - name: foo
-              mountPath: /bitnami/%%MAIN_OBJECT_BLOCK%%
+              mountPath: {{ .Values.persistence.path }}
+              subPath: {{ .Values.persistence.subPath }}
         {{- end }}
         {{- if .Values.%%MAIN_OBJECT_BLOCK%%.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.initContainers "context" $) | nindent 8 }}
@@ -150,7 +151,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: foo
-              mountPath: /bitnami/%%MAIN_OBJECT_BLOCK%%
+              mountPath: {{ .Values.persistence.path }}
               readOnly: true
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumeMounts "context" $) | nindent 12 }}
@@ -169,3 +170,31 @@ spec:
         {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+  {{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        annotations:
+          {{- if .Values.persistence.annotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.commonAnnotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
+          {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size | quote }}
+        {{- if .Values.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
+  {{- end }}
+{{- end }}

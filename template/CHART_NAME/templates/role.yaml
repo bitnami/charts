@@ -13,12 +13,13 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
+  # TODO: Update resources and verbs to the proper values for the application cases
   - apiGroups: [""]
-    resources: ["pods", "persistentvolumeclaims"]
-    verbs: ["get", "watch", "list", "create", "delete"]
-  - apiGroups: [""]       # "" indicates the core API group
-    resources: ["events"]
-    verbs: ["get", "watch", "list"]
+    resources: ["*"]
+    verbs: ["*"]
+  - apiGroups: [""]
+    resources: ["*"]
+    verbs: ["*"]
   {{- if .Values.rbac.rules }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}

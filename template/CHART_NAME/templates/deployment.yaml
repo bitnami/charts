@@ -55,7 +55,7 @@ spec:
       {{- if .Values.%%MAIN_OBJECT_BLOCK%%.schedulerName }}
       schedulerName: {{ .Values.%%MAIN_OBJECT_BLOCK%%.schedulerName | quote }}
       {{- end }}
-      {{- if .Values.topologySpreadConstraints }}
+      {{- if .Values.%%MAIN_OBJECT_BLOCK%%.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.%%MAIN_OBJECT_BLOCK%%.podSecurityContext.enabled }}
@@ -74,7 +74,8 @@ spec:
           {{- end }}
           volumeMounts:
             - name: foo
-              mountPath: /bitnami/%%MAIN_OBJECT_BLOCK%%
+              mountPath: {{ .Values.persistence.path }}
+              subPath: {{ .Values.persistence.subPath }}
         {{- end }}
         {{- if .Values.%%MAIN_OBJECT_BLOCK%%.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.initContainers "context" $) | nindent 8 }}
@@ -146,7 +147,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: foo
-              mountPath: /bitnami/%%MAIN_OBJECT_BLOCK%%
+              mountPath: {{ .Values.persistence.path }}
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
