@@ -63,32 +63,6 @@ spec:
       serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name }}
       {{- end }}
       initContainers:
-      {{- if .Values.pgpool.tls.enabled }}
-        - name: init-chmod-data
-          image: {{ template "postgresql-ha.volumePermissionsImage" . }}
-          imagePullPolicy: {{ .Values.volumePermissionsImage.pullPolicy | quote }}
-          command:
-            - /bin/sh
-            - -cx
-            - |
-              cp /tmp/certs/* /opt/bitnami/pgpool/certs/
-              {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-              chown -R `id -u`:`id -G | cut -d " " -f2` /opt/bitnami/pgpool/certs/
-              {{- else }}
-              chown -R {{ .Values.pgpool.containerSecurityContext.runAsUser }}:{{ .Values.pgpool.securityContext.fsGroup }} /opt/bitnami/pgpool/certs/
-              {{- end }}
-              chmod 600 {{ template "postgresql-ha.pgpool.tlsCertKey" . }}
-          {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-          securityContext: {{- omit .Values.volumePermissions.securityContext "runAsUser" | toYaml | nindent 12 }}
-          {{- else }}
-          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: raw-certificates
-              mountPath: /tmp/certs
-            - name: pgpool-certificates
-              mountPath: /opt/bitnami/pgpool/certs
-      {{- end }}
       {{- if .Values.pgpool.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.initContainers "context" $) | nindent 8 }}
       {{- end }}
@@ -361,6 +335,7 @@ spec:
             {{- if .Values.pgpool.tls.enabled }}
             - name: pgpool-certificates
               mountPath: /opt/bitnami/pgpool/certs
+              readOnly: true
             {{- end }}
             {{- if .Values.pgpool.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.extraVolumeMounts "context" $) | nindent 12 }}
@@ -403,11 +378,12 @@ spec:
                 path: admin-password
         {{- end }}
         {{- if .Values.pgpool.tls.enabled }}
-        - name: raw-certificates
-          secret:
-            secretName: {{ include "postgresql-ha.tlsSecretName" . }}
         - name: pgpool-certificates
-          emptyDir: {}
+          projected:
+            defaultMode: 0600
+            sources:
+              - secret:
+                  name: {{ include "postgresql-ha.tlsSecretName" . }}
         {{- end }}
       {{- if .Values.pgpool.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.extraVolumes "context" $) | nindent 8 }}
