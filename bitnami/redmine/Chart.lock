@@ -1,12 +1,12 @@
 dependencies:
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 11.1.8
+  version: 11.1.11
 - name: mariadb
   repository: https://charts.bitnami.com/bitnami
-  version: 10.4.1
+  version: 10.4.2
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 1.12.0
-digest: sha256:3723385ff0a2c22b6ac11f8f8fa1208e3c645f5531dd8fcaff89a6c7eefde4ae
-generated: "2022-03-17T19:33:25.977853422Z"
+  version: 1.13.0
+digest: sha256:b1e4462deed6ec737208c8840df8f313894b74a32fe1eb811df89c1cd50fa7f6
+generated: "2022-03-28T01:36:32.471173387Z"

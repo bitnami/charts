@@ -46,7 +46,7 @@ spec:
       {{- end }}
       {{- if and (or (eq .Values.frontend.service.type "NodePort") (eq .Values.frontend.service.type "LoadBalancer")) (not (empty .Values.frontend.service.nodePorts.http)) }}
       nodePort: {{ .Values.frontend.service.nodePorts.http }}
-      {{- else }}
+      {{- else if eq .Values.frontend.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     {{- if .Values.frontend.service.extraPorts }}

@@ -414,6 +414,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `provisioning.numPartitions`                         | Default number of partitions for topics when unspecified                                                                      | `1`                   |
 | `provisioning.replicationFactor`                     | Default replication factor for topics when unspecified                                                                        | `1`                   |
 | `provisioning.topics`                                | Kafka provisioning topics                                                                                                     | `[]`                  |
+| `provisioning.parallel`                              | Number of parallel provisioning                                                                                               | `1`                   |
 | `provisioning.command`                               | Override provisioning container command                                                                                       | `[]`                  |
 | `provisioning.args`                                  | Override provisioning container arguments                                                                                     | `[]`                  |
 | `provisioning.podAnnotations`                        | Extra annotations for Kafka provisioning pods                                                                                 | `{}`                  |
@@ -781,6 +782,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 16.0.0
+
+This major updates the Zookeeper subchart to it newest major, 9.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-900).
 
 ### To 15.0.0
 
