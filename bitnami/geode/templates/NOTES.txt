@@ -91,7 +91,7 @@ To access the Locator multicast port:
 1. Obtain the NodePort IP and ports:
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export LOCATOR_NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ printf "%s-locator" (include "common.names.fullname" .)}})
+    export LOCATOR_NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ printf "%s-locator" (include "common.names.fullname" .) }})
     echo "Locator URL: ${NODE_IP}[${LOCATOR_NODE_PORT}]"
 
 {{- else if contains "LoadBalancer" .Values.locator.service.type }}
@@ -99,16 +99,16 @@ To access the Locator multicast port:
 1. Obtain the LoadBalancer IP:
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ printf "%s-locator" (include "common.names.fullname" .)}}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ printf "%s-locator" (include "common.names.fullname" .) }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ printf "%s-locator" (include "common.names.fullname" .)}} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ printf "%s-locator" (include "common.names.fullname" .) }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     echo "Locator URL: ${SERVICE_IP}[{{ .Values.locator.service.ports.locator }}]"
 
 {{- else if contains "ClusterIP" .Values.locator.service.type }}
 
 1. Create a port-forward to the Locator multicast port:
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-locator" (include "common.names.fullname" .)}} {{ .Values.locator.service.ports.locator }}:{{ .Values.locator.service.ports.locator }} &
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-locator" (include "common.names.fullname" .) }} {{ .Values.locator.service.ports.locator }}:{{ .Values.locator.service.ports.locator }} &
     echo "Locator URL: 127.0.0.1[{{ .Values.locator.service.ports.locator }}]"
 
 {{- end }}
@@ -131,8 +131,8 @@ To Access the Pulse dashboard:
 1. Obtain the NodePort IP and ports:
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export LOCATOR_NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ printf "%s-locator" (include "common.names.fullname" .)}})
-    export HTTP_NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[1].nodePort}" services {{ printf "%s-locator" (include "common.names.fullname" .)}})
+    export LOCATOR_NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ printf "%s-locator" (include "common.names.fullname" .) }})
+    export HTTP_NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[1].nodePort}" services {{ printf "%s-locator" (include "common.names.fullname" .) }})
 
 2. Access the Locator and Pulse dashboard:
 
@@ -144,9 +144,9 @@ To Access the Pulse dashboard:
 1. Obtain the LoadBalancer IP:
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ printf "%s-locator" (include "common.names.fullname" .)}}'
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ printf "%s-locator" (include "common.names.fullname" .) }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ printf "%s-locator" (include "common.names.fullname" .)}} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ printf "%s-locator" (include "common.names.fullname" .) }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
 2. Access the Locator and Pulse dashboard:
 
@@ -157,8 +157,8 @@ To Access the Pulse dashboard:
 
 1.  Create a port-forward to the ports:
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-locator" (include "common.names.fullname" .)}} {{ .Values.locator.service.ports.locator }}:{{ .Values.locator.service.ports.locator }} &
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-locator" (include "common.names.fullname" .)}} {{ .Values.locator.service.ports.http }}:{{ .Values.locator.service.ports.http }} &
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-locator" (include "common.names.fullname" .) }} {{ .Values.locator.service.ports.locator }}:{{ .Values.locator.service.ports.locator }} &
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-locator" (include "common.names.fullname" .) }} {{ .Values.locator.service.ports.http }}:{{ .Values.locator.service.ports.http }} &
 
 2. Access the Locator and Pulse dashboard:
 

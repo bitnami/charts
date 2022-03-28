@@ -5,9 +5,16 @@ metadata:
   name: {{ include "common.names.fullname" . }}-aggregator-hpa
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
-  {{- if .Values.aggregator.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.annotations "context" $) | nindent 4 }}
-  {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.aggregator.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

@@ -49,5 +49,4 @@ spec:
     {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: messaging-topology-operator
-    app.kubernetes.io/part-of: rabbitmq
 {{- end }}

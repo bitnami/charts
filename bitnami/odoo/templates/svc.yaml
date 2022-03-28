@@ -1,13 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "odoo.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.service.annotations .Values.commonAnnotations }}
   annotations:
     {{- if .Values.service.annotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
@@ -15,28 +14,30 @@ metadata:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- end }}
 spec:
   type: {{ .Values.service.type }}
+  sessionAffinity: {{ .Values.service.sessionAffinity }}
   {{- if and .Values.service.clusterIP (eq .Values.service.type "ClusterIP") }}
   clusterIP: {{ .Values.service.clusterIP }}
   {{- end }}
   {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{- if (and (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerSourceRanges) }}
-  loadBalancerSourceRanges: {{- toYaml . | nindent 4 }}
+  {{- if eq .Values.service.type "LoadBalancer" }}
+  {{- if .Values.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
-  {{- if (and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP))) }}
+  {{- if not (empty .Values.service.loadBalancerIP) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  {{- end }}
   {{- end }}
   ports:
     - name: http
-      port: {{ .Values.service.port }}
+      port: {{ coalesce .Values.service.ports.http .Values.service.port }}
       protocol: TCP
       targetPort: http
-      {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePort))) }}
-      nodePort: {{ .Values.service.nodePort }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty (coalesce .Values.service.nodePorts.http .Values.service.nodePort))) }}
+      nodePort: {{ coalesce .Values.service.nodePorts.http .Values.service.nodePort }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

@@ -12,7 +12,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  annotations: 
+  annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-delete-policy: before-hook-creation
     {{- if .Values.commonAnnotations }}
@@ -69,15 +69,38 @@ spec:
               set -e;
               echo "Start Minio provisioning";
 
+              function addPolicy() {
+                local tmp=$(mc admin $1 info {{ $minioAlias }} $2 | sed -n -e 's/^Policy.*: \(.*\)$/\1/p');
+                IFS=',' read -r -a CURRENT_POLICIES <<< "$tmp";
+                if [[ ! "${CURRENT_POLICIES[*]}" =~ "$3" ]]; then
+                  mc admin policy update {{ $minioAlias }} $3 $1=$2;
+                fi;
+              };
+
               {{- $minioUrl := printf "$MINIO_SCHEME://%s:%d" (include "common.names.fullname" .) (.Values.service.ports.api | int) }}
-              {{- $minioRootUser := ternary ("$(<$MINIO_ROOT_USER_FILE)") ("$MINIO_ROOT_USER") (.Values.auth.useCredentialsFiles)}}
-              {{- $minioRootPassword := ternary ("$(<$MINIO_ROOT_PASSWORD_FILE)") ("$MINIO_ROOT_PASSWORD") (.Values.auth.useCredentialsFiles)}}
+              {{- $minioRootUser := ternary ("$(<$MINIO_ROOT_USER_FILE)") ("$MINIO_ROOT_USER") (.Values.auth.useCredentialsFiles) }}
+              {{- $minioRootPassword := ternary ("$(<$MINIO_ROOT_PASSWORD_FILE)") ("$MINIO_ROOT_PASSWORD") (.Values.auth.useCredentialsFiles) }}
               mc alias set {{ $minioAlias }} {{ $minioUrl }} {{ $minioRootUser }} {{ $minioRootPassword }};
+
+              {{- range $config := .Values.provisioning.config }}
+              {{- $options := list }}
+              {{- range $name, $value := $config.options }}
+              {{- $options = (printf "%s=%s" $name $value) | append $options }}
+              {{- end }}
+              {{- $options := join " " $options }}
+              mc admin config set {{ $minioAlias }} {{ $config.name }} {{ $options }};
+              {{- end }}
+
+              mc admin service restart {{ $minioAlias }};
 
               {{- range $user := .Values.provisioning.users }}
               mc admin user add {{ $minioAlias }} {{ $user.username }} {{ $user.password }};
+              {{- if $user.setPolicies }}
+              mc admin policy set {{ $minioAlias }} "{{ join "," $user.policies }}" user={{ $user.username }};
+              {{- else }}
               {{- range $policy := $user.policies }}
-              mc admin policy update {{ $minioAlias }} {{ $policy }} user={{ $user.username }};
+              addPolicy user {{ $user.username }} {{ $policy }};
+              {{- end }}
               {{- end }}
               {{- $userStatus := ternary ("disable") ("enable") (and (not (empty $user.disabled)) $user.disabled) }}
               mc admin user {{ $userStatus }} {{ $minioAlias }} {{ $user.username }};
@@ -85,13 +108,18 @@ spec:
 
               {{- range $group := .Values.provisioning.groups }}
               mc admin group add {{ $minioAlias }} {{ $group.name }} {{ join " " $group.members }};
+              {{- if $group.setPolicies }}
+              mc admin policy set {{ $minioAlias }} "{{ join "," $group.policies }}" group={{ $group.name }};
+              {{- else }}
               {{- range $policy := $group.policies }}
-              mc admin policy update {{ $minioAlias }} {{ $policy }} group={{ $group.name }};
+              addPolicy group {{ $group.name }} {{ $policy }};
               {{- end }}
-              {{- $groupStatus := ternary ("disable") ("enable") (and (not (empty $group.disabled)) $group.disabled)}}
+              {{- end }}
+              {{- $groupStatus := ternary ("disable") ("enable") (and (not (empty $group.disabled)) $group.disabled) }}
               mc admin group {{ $groupStatus }} {{ $minioAlias }} {{ $group.name }};
               {{- end }}
 
+              {{- $isDistributedMode := and (eq .Values.mode "distributed") (not .Values.gateway.enabled) }}
               {{- range $bucket := .Values.provisioning.buckets }}
               {{- $target := printf "%s/%s" $minioAlias $bucket.name }}
               {{- $region := ternary (printf "--region=%s" $bucket.region) ("") (not (empty $bucket.region)) }}
@@ -106,6 +134,13 @@ spec:
               mc admin bucket quota {{ $minioAlias }}/{{ $bucket.name }} --{{ .type }} {{ .size }};
               {{- end }}
 
+              {{- if $isDistributedMode }}
+              {{- if (or ((empty $bucket.withLock)) (not $bucket.withLock)) }}
+              {{- $versioning := ternary ("enable") ("suspend") (and (not (empty $bucket.versioning)) $bucket.versioning) }}
+              mc version {{ $versioning }} {{ $minioAlias }}/{{ $bucket.name }};
+              {{- end }}
+              {{- end }}
+
               {{- if $bucket.tags }}
               {{- $target := printf "%s/%s" $minioAlias $bucket.name }}
               {{- $tags := list }}
@@ -115,15 +150,6 @@ spec:
               {{- $tags := join "&" $tags | quote }}
               mc tag set {{ $target }} {{ $tags }};
               {{- end }}
-              {{- end }}
-
-              {{- range $config := .Values.provisioning.config }}
-              {{- $options := list }}
-              {{- range $name, $value := $config.options }}
-              {{- $options = (printf "%s=%s" $name $value) | append $options }}
-              {{- end }}
-              {{- $options := join " " $options }}
-              mc admin config set {{ $minioAlias }} {{ $config.name }} {{ $options }};
               {{- end }}
 
               echo "End Minio provisioning";
@@ -186,6 +212,9 @@ spec:
             {{- if .Values.provisioning.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}            
       volumes:
         {{- if .Values.provisioning.enabled }}
         - name: minio-provisioning

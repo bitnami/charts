@@ -17,11 +17,9 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: skipper
-  strategy:
-    type: {{ .Values.skipper.strategyType }}
-    {{- if (eq "Recreate" .Values.skipper.strategyType) }}
-    rollingUpdate: null
-    {{- end }}
+  {{- if .Values.skipper.updateStrategy }}
+  strategy: {{- toYaml .Values.skipper.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       {{- if or (include "scdf.skipper.createConfigmap" .) .Values.skipper.podAnnotations }}
@@ -35,6 +33,9 @@ spec:
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: skipper
+        {{- if .Values.skipper.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.skipper.podLabels "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "scdf.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "scdf.serviceAccountName" . }}
@@ -55,11 +56,17 @@ spec:
       {{- if .Values.skipper.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.skipper.schedulerName }}
+      schedulerName: {{ .Values.skipper.schedulerName }}
+      {{- end }}
+      {{- if .Values.skipper.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.skipper.priorityClassName }}
       priorityClassName: {{ .Values.skipper.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.skipper.podSecurityContext }}
-      securityContext: {{- toYaml .Values.skipper.podSecurityContext | nindent 8 }}
+      {{- if .Values.skipper.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.skipper.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if or .Values.skipper.initContainers .Values.waitForBackends.enabled }}
       initContainers:
@@ -85,8 +92,17 @@ spec:
         - name: skipper
           image: {{ include "scdf.skipper.image" . }}
           imagePullPolicy: {{ .Values.skipper.image.pullPolicy | quote }}
-          {{- if .Values.skipper.containerSecurityContext }}
-          securityContext: {{- toYaml .Values.skipper.containerSecurityContext | nindent 12 }}
+          {{- if .Values.skipper.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.skipper.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.skipper.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.skipper.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.skipper.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -135,6 +151,19 @@ spec:
               containerPort: {{ .Values.skipper.jdwp.port }}
               protocol: TCP
             {{- end }}
+          {{- if .Values.skipper.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            initialDelaySeconds: {{ .Values.skipper.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.skipper.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.skipper.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.skipper.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.skipper.startupProbe.failureThreshold }}
+          {{- else if .Values.skipper.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.skipper.livenessProbe.enabled }}
           livenessProbe:
             httpGet:

@@ -25,14 +25,14 @@ data:
 
         port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
         port=${!port_var}
-        
+
         if [ -z "$port" ]; then
             case $type in
                 "SENTINEL")
-                    echo {{ .Values.sentinel.containerPort }}
+                    echo {{ .Values.sentinel.containerPorts.sentinel }}
                     ;;
                 "REDIS")
-                    echo {{ .Values.master.containerPort }}
+                    echo {{ .Values.master.containerPorts.redis }}
                     ;;
             esac
         else
@@ -43,49 +43,39 @@ data:
     get_full_hostname() {
         hostname="$1"
 
-        {{- if eq .Values.sentinel.service.type "NodePort" }}
+        {{- if .Values.useExternalDNS.enabled }}
+        echo "${hostname}.{{- include "redis.externalDNS.suffix" . }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
         echo "${hostname}.{{- .Release.Namespace }}"
         {{- else }}
         echo "${hostname}.${HEADLESS_SERVICE}"
-        {{- end}}
+        {{- end }}
     }
 
     REDISPORT=$(get_port "$HOSTNAME" "REDIS")
 
-    myip=$(hostname -i)
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
 
-    # If there are more than one IP, use the first IPv4 address
-    if [[ "$myip" = *" "* ]]; then
-        myip=$(echo $myip | awk '{if ( match($0,/([0-9]+\.)([0-9]+\.)([0-9]+\.)[0-9]+/) ) { print substr($0,RSTART,RLENGTH); } }')
+    if [ -n "$REDIS_EXTERNAL_MASTER_HOST" ]; then
+        REDIS_SERVICE="$REDIS_EXTERNAL_MASTER_HOST"
+    else
+        REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
     fi
 
-    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
-    REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
     SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "TCP_SENTINEL")
-
-    not_exists_dns_entry() {
-        if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep "^${myip}" )" ]]; then
-            warn "$HEADLESS_SERVICE does not contain the IP of this pod: ${myip}"
-            return 1
-        fi
-        debug "$HEADLESS_SERVICE has my IP: ${myip}"
-        return 0
-    }
-
     validate_quorum() {
-        if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel master {{ .Values.sentinel.masterSet }}"
+        if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel master {{ .Values.sentinel.masterSet }}"
         else
             quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel master {{ .Values.sentinel.masterSet }}"
         fi
-
         info "about to run the command: $quorum_info_command"
         eval $quorum_info_command | grep -Fq "s_down"
     }
 
     trigger_manual_failover() {
-        if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            failover_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel failover {{ .Values.sentinel.masterSet }}"
+        if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+            failover_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel failover {{ .Values.sentinel.masterSet }}"
         else
             failover_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel failover {{ .Values.sentinel.masterSet }}"
         fi
@@ -95,10 +85,10 @@ data:
     }
 
     get_sentinel_master_info() {
-        if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+        if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         else
-            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         fi
 
         info "about to run the command: $sentinel_info_command"
@@ -113,50 +103,77 @@ data:
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
     [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"
 
-    # Waits for DNS to add this ip to the service DNS entry
-    retry_while not_exists_dns_entry
+    # check if there is a master
+    master_in_persisted_conf="$(get_full_hostname "$HOSTNAME")"
+    master_port_in_persisted_conf="$REDIS_MASTER_PORT_NUMBER"
+    master_in_sentinel="$(get_sentinel_master_info)"
+    redisRetVal=$?
 
-    if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep -v "^${myip}")" ]]; then
-        # Only node available on the network, master by default
-        export REDIS_REPLICATION_MODE="master"
+    {{- if .Values.sentinel.persistence.enabled }}
+    if [[ -f /opt/bitnami/redis-sentinel/etc/sentinel.conf ]]; then
+        master_in_persisted_conf="$(awk '/monitor/ {print $4}' /opt/bitnami/redis-sentinel/etc/sentinel.conf)"
+        master_port_in_persisted_conf="$(awk '/monitor/ {print $5}' /opt/bitnami/redis-sentinel/etc/sentinel.conf)"
+        info "Found previous master ${master_in_persisted_conf}:${master_port_in_persisted_conf} in /opt/bitnami/redis-sentinel/etc/sentinel.conf"
+        debug "$(cat /opt/bitnami/redis-sentinel/etc/sentinel.conf | grep monitor)"
+        touch /opt/bitnami/redis-sentinel/etc/.node_read
+    fi
+    {{- end }}
+
+    if [[ $redisRetVal -ne 0 ]]; then
+        if [[ "$master_in_persisted_conf" == "$(get_full_hostname "$HOSTNAME")" ]]; then
+            # Case 1: No active sentinel and in previous sentinel.conf we were the master --> MASTER
+            info "Configuring the node as master"
+            export REDIS_REPLICATION_MODE="master"
+        else
+            # Case 2: No active sentinel and in previous sentinel.conf we were not master --> REPLICA
+            info "Configuring the node as replica"
+            export REDIS_REPLICATION_MODE="slave"
+            REDIS_MASTER_HOST=${master_in_persisted_conf}
+            REDIS_MASTER_PORT_NUMBER=${master_port_in_persisted_conf}
+        fi
     else
-        export REDIS_REPLICATION_MODE="slave"
-
-        {{- if and .Values.sentinel.automateClusterRecovery (le (int .Values.sentinel.downAfterMilliseconds) 2000) }}
-        retry_count=1
-        while validate_quorum
-        do
-            info "sleeping, waiting for Redis master to come up"
-            sleep 1s
-            if ! ((retry_count % 11)); then
-                info "Trying to manually failover"
-                failover_result=$(trigger_manual_failover)
-                
-                debug "Failover result: $failover_result"
-            fi
-            
-            ((retry_count+=1))
-        done
-        info "Redis master is up now"
-        {{- end }}
-        
         # Fetches current master's host and port
         REDIS_SENTINEL_INFO=($(get_sentinel_master_info))
-        info "printing REDIS_SENTINEL_INFO=(${REDIS_SENTINEL_INFO[0]},${REDIS_SENTINEL_INFO[1]})"
+        info "Current master: REDIS_SENTINEL_INFO=(${REDIS_SENTINEL_INFO[0]},${REDIS_SENTINEL_INFO[1]})"
         REDIS_MASTER_HOST=${REDIS_SENTINEL_INFO[0]}
         REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
+
+        if [[ "$REDIS_MASTER_HOST" == "$(get_full_hostname "$HOSTNAME")" ]]; then
+            # Case 3: Active sentinel and master it is this node --> MASTER
+            info "Configuring the node as master"
+            export REDIS_REPLICATION_MODE="master"
+        else
+            # Case 4: Active sentinel and master is not this node --> REPLICA
+            info "Configuring the node as replica"
+            export REDIS_REPLICATION_MODE="slave"
+
+            {{- if and .Values.sentinel.automateClusterRecovery (le (int .Values.sentinel.downAfterMilliseconds) 2000) }}
+            retry_count=1
+            while validate_quorum
+            do
+                info "sleeping, waiting for Redis master to come up"
+                sleep 1s
+                if ! ((retry_count % 11)); then
+                    info "Trying to manually failover"
+                    failover_result=$(trigger_manual_failover)
+
+                    debug "Failover result: $failover_result"
+                fi
+
+                ((retry_count+=1))
+            done
+            info "Redis master is up now"
+            {{- end }}
+        fi
     fi
 
-    if [[ "$REDIS_REPLICATION_MODE" = "master" ]]; then
-        debug "Starting as master node"
-        if [[ ! -f /opt/bitnami/redis/etc/master.conf ]]; then
-            cp /opt/bitnami/redis/mounted-etc/master.conf /opt/bitnami/redis/etc/master.conf
-        fi
-    else
-        debug "Starting as replica node"
-        if [[ ! -f /opt/bitnami/redis/etc/replica.conf ]];then
-            cp /opt/bitnami/redis/mounted-etc/replica.conf /opt/bitnami/redis/etc/replica.conf
-        fi
+    if [[ -n "$REDIS_EXTERNAL_MASTER_HOST" ]]; then
+      REDIS_MASTER_HOST="$REDIS_EXTERNAL_MASTER_HOST"
+      REDIS_MASTER_PORT_NUMBER="${REDIS_EXTERNAL_MASTER_PORT}"
+    fi
+
+    if [[ ! -f /opt/bitnami/redis/etc/replica.conf ]];then
+        cp /opt/bitnami/redis/mounted-etc/replica.conf /opt/bitnami/redis/etc/replica.conf
     fi
 
     if [[ ! -f /opt/bitnami/redis/etc/redis.conf ]];then
@@ -166,7 +183,7 @@ data:
     echo "" >> /opt/bitnami/redis/etc/replica.conf
     echo "replica-announce-port $REDISPORT" >> /opt/bitnami/redis/etc/replica.conf
     echo "replica-announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/redis/etc/replica.conf
-    
+
     {{- if .Values.tls.enabled }}
     ARGS=("--port" "0")
     ARGS+=("--tls-port" "${REDIS_TLS_PORT}")
@@ -192,11 +209,7 @@ data:
     {{- else }}
     ARGS+=("--protected-mode" "no")
     {{- end }}
-    if [[ "$REDIS_REPLICATION_MODE" = "master" ]]; then
-        ARGS+=("--include" "/opt/bitnami/redis/etc/master.conf")
-    else
-        ARGS+=("--include" "/opt/bitnami/redis/etc/replica.conf")
-    fi
+    ARGS+=("--include" "/opt/bitnami/redis/etc/replica.conf")
     ARGS+=("--include" "/opt/bitnami/redis/etc/redis.conf")
     {{- if .Values.replica.extraFlags }}
     {{- range .Values.replica.extraFlags }}
@@ -205,7 +218,7 @@ data:
     {{- end }}
 
     {{- if .Values.replica.preExecCmds }}
-    {{- .Values.replica.preExecCmds | nindent 4}}
+    {{- .Values.replica.preExecCmds | nindent 4 }}
     {{- end }}
 
     {{- if .Values.replica.command }}
@@ -230,42 +243,36 @@ data:
 
         port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
         port=${!port_var}
-        
+
         if [ -z "$port" ]; then
             case $type in
                 "SENTINEL")
-                    echo {{ .Values.sentinel.containerPort }}
+                    echo {{ .Values.sentinel.containerPorts.sentinel }}
                     ;;
                 "REDIS")
-                    echo {{ .Values.master.containerPort }}
+                    echo {{ .Values.master.containerPorts.redis }}
                     ;;
             esac
         else
             echo $port
         fi
     }
-    
+
     get_full_hostname() {
         hostname="$1"
 
-        {{- if eq .Values.sentinel.service.type "NodePort" }}
+        {{- if .Values.useExternalDNS.enabled }}
+        echo "${hostname}.{{- include "redis.externalDNS.suffix" . }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
         echo "${hostname}.{{- .Release.Namespace }}"
         {{- else }}
         echo "${hostname}.${HEADLESS_SERVICE}"
-        {{- end}}
+        {{- end }}
     }
 
     SERVPORT=$(get_port "$HOSTNAME" "SENTINEL")
     REDISPORT=$(get_port "$HOSTNAME" "REDIS")
     SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "TCP_SENTINEL")
-    
-    myip=$(hostname -i)
-
-    # If there are more than one IP, use the first IPv4 address
-    if [[ "$myip" = *" "* ]]; then
-        myip=$(echo $myip | awk '{if ( match($0,/([0-9]+\.)([0-9]+\.)([0-9]+\.)[0-9]+/) ) { print substr($0,RSTART,RLENGTH); } }')
-    fi
-
 
     sentinel_conf_set() {
         local -r key="${1:?missing key}"
@@ -285,40 +292,33 @@ data:
     host_id() {
         echo "$1" | openssl sha1 | awk '{print $2}'
     }
-    not_exists_dns_entry() {
-        if [[ -z "$(getent ahosts "$HEADLESS_SERVICE" | grep "^${myip}" )" ]]; then
-            warn "$HEADLESS_SERVICE does not contain the IP of this pod: ${myip}"
-            return 1
-        fi
-        debug "$HEADLESS_SERVICE has my IP: ${myip}"
-        return 0
-    }
     get_sentinel_master_info() {
-        if is_boolean_yes "$REDIS_TLS_ENABLED"; then
-            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+        if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         else
             sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         fi
-
         info "about to run the command: $sentinel_info_command"
         eval $sentinel_info_command
     }
 
-    # Waits for DNS to add this ip to the service DNS entry
-    retry_while not_exists_dns_entry
-
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
 
-    cp /opt/bitnami/redis-sentinel/mounted-etc/sentinel.conf /opt/bitnami/redis-sentinel/etc/sentinel.conf
-    {{- if .Values.auth.enabled }}
-    printf "\nsentinel auth-pass %s %s" "{{ .Values.sentinel.masterSet }}" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
-    {{- if and .Values.auth.enabled .Values.auth.sentinel }}
-    printf "\nrequirepass %s" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
-    {{- end }}
-    {{- end }}
-    printf "\nsentinel myid %s" "$(host_id "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    master_in_persisted_conf="$(get_full_hostname "$HOSTNAME")"
 
-    if ! $(get_sentinel_master_info); then
+    {{- if .Values.sentinel.persistence.enabled }}
+    if [[ -f /opt/bitnami/redis-sentinel/etc/sentinel.conf ]]; then
+        check_lock_file() {
+            [[ -f /opt/bitnami/redis-sentinel/etc/.node_read ]]
+        }
+        retry_while "check_lock_file"
+        rm -f /opt/bitnami/redis-sentinel/etc/.node_read
+        master_in_persisted_conf="$(awk '/monitor/ {print $4}' /opt/bitnami/redis-sentinel/etc/sentinel.conf)"
+        info "Found previous master $master_in_persisted_conf in /opt/bitnami/redis-sentinel/etc/sentinel.conf"
+        debug "$(cat /opt/bitnami/redis-sentinel/etc/sentinel.conf | grep monitor)"
+    fi
+    {{- end }}
+    if ! get_sentinel_master_info && [[ "$master_in_persisted_conf" == "$(get_full_hostname "$HOSTNAME")" ]]; then
         # No master found, lets create a master node
         export REDIS_REPLICATION_MODE="master"
 
@@ -329,10 +329,24 @@ data:
 
         # Fetches current master's host and port
         REDIS_SENTINEL_INFO=($(get_sentinel_master_info))
-        info "printing REDIS_SENTINEL_INFO=(${REDIS_SENTINEL_INFO[0]},${REDIS_SENTINEL_INFO[1]})" 
+        info "printing REDIS_SENTINEL_INFO=(${REDIS_SENTINEL_INFO[0]},${REDIS_SENTINEL_INFO[1]})"
         REDIS_MASTER_HOST=${REDIS_SENTINEL_INFO[0]}
         REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
     fi
+
+    if [[ -n "$REDIS_EXTERNAL_MASTER_HOST" ]]; then
+      REDIS_MASTER_HOST="$REDIS_EXTERNAL_MASTER_HOST"
+      REDIS_MASTER_PORT_NUMBER="${REDIS_EXTERNAL_MASTER_PORT}"
+    fi
+
+    cp /opt/bitnami/redis-sentinel/mounted-etc/sentinel.conf /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    {{- if .Values.auth.enabled }}
+    printf "\nsentinel auth-pass %s %s" "{{ .Values.sentinel.masterSet }}" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    {{- if and .Values.auth.enabled .Values.auth.sentinel }}
+    printf "\nrequirepass %s" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    {{- end }}
+    {{- end }}
+    printf "\nsentinel myid %s" "$(host_id "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
 
     sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} "$REDIS_MASTER_HOST" "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
 
@@ -342,7 +356,7 @@ data:
 
         if [[ -n "$hostname" && -n "$ip" && "$hostname" != "$HOSTNAME" ]]; then
             sentinel_conf_add "sentinel known-sentinel {{ .Values.sentinel.masterSet }} $(get_full_hostname "$hostname") $(get_port "$hostname" "SENTINEL") $(host_id "$hostname")"
-        fi 
+        fi
     }
     add_known_replica() {
         hostname="$1"
@@ -360,7 +374,7 @@ data:
         add_known_sentinel "$hostname" "$ip"
         add_known_replica "$hostname" "$ip"
     done
-    
+
     echo "" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
     echo "sentinel announce-hostnames yes" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
     echo "sentinel resolve-hostnames yes" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
@@ -396,11 +410,13 @@ data:
     get_full_hostname() {
         hostname="$1"
 
-        {{- if eq .Values.sentinel.service.type "NodePort" }}
+        {{- if .Values.useExternalDNS.enabled }}
+        echo "${hostname}.{{- include "redis.externalDNS.suffix" . }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
         echo "${hostname}.{{- .Release.Namespace }}"
         {{- else }}
         echo "${hostname}.${HEADLESS_SERVICE}"
-        {{- end}}
+        {{- end }}
     }
     run_sentinel_command() {
         if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
@@ -506,7 +522,7 @@ data:
     {{- end }}
     {{- end }}
     {{- if .Values.master.preExecCmds }}
-    {{ .Values.master.preExecCmds | nindent 4}}
+    {{ .Values.master.preExecCmds | nindent 4 }}
     {{- end }}
     {{- if .Values.master.command }}
     exec {{ .Values.master.command }} "${ARGS[@]}"
@@ -523,14 +539,14 @@ data:
 
         port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
         port=${!port_var}
-        
+
         if [ -z "$port" ]; then
             case $type in
                 "SENTINEL")
-                    echo {{ .Values.sentinel.containerPort }}
+                    echo {{ .Values.sentinel.containerPorts.sentinel }}
                     ;;
                 "REDIS")
-                    echo {{ .Values.master.containerPort }}
+                    echo {{ .Values.master.containerPorts.redis }}
                     ;;
             esac
         else
@@ -541,15 +557,17 @@ data:
     get_full_hostname() {
         hostname="$1"
 
-        {{- if eq .Values.sentinel.service.type "NodePort" }}
+        {{- if .Values.useExternalDNS.enabled }}
+        echo "${hostname}.{{- include "redis.externalDNS.suffix" . }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
         echo "${hostname}.{{- .Release.Namespace }}"
         {{- else }}
         echo "${hostname}.${HEADLESS_SERVICE}"
-        {{- end}}
+        {{- end }}
     }
 
     REDISPORT=$(get_port "$HOSTNAME" "REDIS")
-    
+
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
     [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"
     {{- if and .Values.replica.containerSecurityContext.runAsUser (eq (.Values.replica.containerSecurityContext.runAsUser | int) 0) }}
@@ -596,7 +614,7 @@ data:
     {{- end }}
     {{- end }}
     {{- if .Values.replica.preExecCmds }}
-    {{ .Values.replica.preExecCmds | nindent 4}}
+    {{ .Values.replica.preExecCmds | nindent 4 }}
     {{- end }}
     {{- if .Values.replica.command }}
     exec {{ .Values.replica.command }} "${ARGS[@]}"

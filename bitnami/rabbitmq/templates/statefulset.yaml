@@ -82,8 +82,8 @@ spec:
           args:
             - -ec
             - |
-              mkdir -p "/bitnami/rabbitmq/mnesia"
-              chown -R "{{ .Values.podSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/rabbitmq/mnesia"
+              mkdir -p "{{ .Values.persistence.mountPath }}"
+              chown -R "{{ .Values.podSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "{{ .Values.persistence.mountPath }}"
           securityContext:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
@@ -91,7 +91,10 @@ spec:
           {{- end }}
           volumeMounts:
             - name: data
-              mountPath: /bitnami/rabbitmq/mnesia
+              mountPath: {{ .Values.persistence.mountPath }}
+              {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+              {{- end }}
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -145,7 +148,7 @@ spec:
               value: "rabbit@$(MY_POD_NAME)"
             {{- end }}
             - name: RABBITMQ_MNESIA_DIR
-              value: "/bitnami/rabbitmq/mnesia/$(RABBITMQ_NODE_NAME)"
+              value: "{{ .Values.persistence.mountPath }}/$(RABBITMQ_NODE_NAME)"
             - name: RABBITMQ_LDAP_ENABLE
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
             {{- if .Values.ldap.enabled }}
@@ -173,6 +176,10 @@ spec:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretErlangName" . }}
                   key: rabbitmq-erlang-cookie
+            {{- if and .Values.clustering.rebalance (gt (.Values.replicaCount | int) 1) }}
+            - name: RABBITMQ_CLUSTER_REBALANCE
+              value: "true"
+            {{- end }}
             {{- if .Values.loadDefinition.enabled }}
             - name: RABBITMQ_LOAD_DEFINITIONS
               value: "yes"
@@ -268,19 +275,6 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           lifecycle:
-          {{- if and .Values.clustering.rebalance (gt (.Values.replicaCount | int) 1) }}
-            postStart:
-              exec:
-                command:
-                  - /bin/bash
-                  - -ec
-                  - |
-                    until rabbitmqctl cluster_status >/dev/null; do
-                        echo "Waiting for cluster readiness..."
-                        sleep 5
-                    done
-                    rabbitmq-queues rebalance "all"
-          {{- end }}
             preStop:
               exec:
                 command:
@@ -300,7 +294,10 @@ spec:
             - name: configuration
               mountPath: /bitnami/rabbitmq/conf
             - name: data
-              mountPath: /bitnami/rabbitmq/mnesia
+              mountPath: {{ .Values.persistence.mountPath }}
+              {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+              {{- end }}
             {{- if .Values.auth.tls.enabled }}
             - name: certs
               mountPath: /opt/bitnami/rabbitmq/certs
@@ -338,7 +335,7 @@ spec:
             items:
               - key: rabbitmq.conf
                 path: rabbitmq.conf
-              {{- if .Values.advancedConfiguration}}
+              {{- if .Values.advancedConfiguration }}
               - key: advanced.config
                 path: advanced.config
               {{- end }}

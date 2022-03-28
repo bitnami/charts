@@ -23,6 +23,9 @@ spec:
   {{- if .Values.replica.updateStrategy }}
   updateStrategy: {{- toYaml .Values.replica.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- if .Values.replica.podManagementPolicy }}
+  podManagementPolicy: {{ .Values.replica.podManagementPolicy | quote }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -72,8 +75,8 @@ spec:
       {{- if .Values.replica.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.replica.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.replica.spreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.replica.spreadConstraints "context" $) | nindent 8 }}
+      {{- if .Values.replica.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.replica.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.replica.shareProcessNamespace }}
       shareProcessNamespace: {{ .Values.replica.shareProcessNamespace }}
@@ -119,7 +122,7 @@ spec:
             - name: REDIS_MASTER_HOST
               value: {{ template "common.names.fullname" . }}-master-0.{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             - name: REDIS_MASTER_PORT_NUMBER
-              value: {{ .Values.master.containerPort | quote }}
+              value: {{ .Values.master.containerPorts.redis | quote }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
             {{- if .Values.auth.enabled }}
@@ -145,7 +148,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_TLS_PORT
-              value: {{ .Values.replica.containerPort | quote }}
+              value: {{ .Values.replica.containerPorts.redis | quote }}
             - name:  REDIS_TLS_AUTH_CLIENTS
               value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
             - name:  REDIS_TLS_CERT_FILE
@@ -160,7 +163,7 @@ spec:
             {{- end }}
             {{- else }}
             - name: REDIS_PORT
-              value: {{ .Values.replica.containerPort | quote }}
+              value: {{ .Values.replica.containerPorts.redis | quote }}
             {{- end }}
             {{- if .Values.replica.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.replica.extraEnvVars "context" $) | nindent 12 }}
@@ -178,22 +181,29 @@ spec:
           {{- end }}
           ports:
             - name: redis
-              containerPort: {{ .Values.replica.containerPort }}
+              containerPort: {{ .Values.replica.containerPorts.redis }}
           {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.replica.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.replica.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: redis
+          {{- else if .Values.replica.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.replica.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.replica.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.replica.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ add1 .Values.replica.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.replica.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.replica.livenessProbe.failureThreshold}}
+            failureThreshold: {{ .Values.replica.livenessProbe.failureThreshold }}
             exec:
               command:
                 - sh
                 - -c
                 - /health/ping_liveness_local_and_master.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
           {{- else if .Values.replica.customLivenessProbe }}
-          livenessProbe: {{- toYaml .Values.replica.customLivenessProbe | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.replica.readinessProbe.enabled }}
           readinessProbe:
@@ -208,7 +218,7 @@ spec:
                 - -c
                 - /health/ping_readiness_local_and_master.sh {{ .Values.replica.readinessProbe.timeoutSeconds }}
           {{- else if .Values.replica.customReadinessProbe }}
-          readinessProbe: {{- toYaml .Values.replica.customReadinessProbe | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.replica.resources }}
@@ -247,6 +257,8 @@ spec:
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /bin/bash
@@ -276,7 +288,7 @@ spec:
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_ADDR
-              value: rediss://{{ .Values.metrics.redisTargetHost }}:{{ .Values.replica.containerPort }}
+              value: rediss://{{ .Values.metrics.redisTargetHost }}:{{ .Values.replica.containerPorts.redis }}
               {{- if .Values.tls.authClients }}
             - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}

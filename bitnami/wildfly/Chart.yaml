@@ -1,14 +1,14 @@
 annotations:
   category: ApplicationServer
 apiVersion: v2
-appVersion: 25.0.1
+appVersion: 26.0.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
     version: 1.x.x
-description: Chart for Wildfly
+description: Wildfly is a lightweight, open source application server, formerly known as JBoss, that implements the latest enterprise Java standards.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/wildfly
 icon: https://bitnami.com/assets/stacks/wildfly/img/wildfly-stack-220x234.png
@@ -26,4 +26,4 @@ name: wildfly
 sources:
   - https://github.com/bitnami/bitnami-docker-wildfly
   - http://wildfly.org
-version: 12.0.2
+version: 13.2.2

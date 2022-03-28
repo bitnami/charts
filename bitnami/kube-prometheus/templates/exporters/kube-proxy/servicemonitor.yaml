@@ -24,7 +24,7 @@ spec:
       scheme: https
       tlsConfig:
         caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-      {{- end}}
+      {{- end }}
       {{- if .Values.kubeProxy.serviceMonitor.metricRelabelings }}
       metricRelabelings: {{- toYaml .Values.kubeProxy.serviceMonitor.metricRelabelings | nindent 8 }}
       {{- end }}

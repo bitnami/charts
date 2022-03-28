@@ -1,7 +1,9 @@
+{{- $port := ternary .Values.portal.containerPorts.https .Values.portal.containerPorts.http .Values.internalTLS.enabled | int -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "harbor.portal" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -25,12 +27,12 @@ data:
         scgi_temp_path /tmp/scgi_temp;
         server {
             {{- if .Values.internalTLS.enabled }}
-            {{- if .Values.ipFamily.ipv4.enabled}}
-            listen {{ template "harbor.portal.containerPort" . }} ssl;
+            {{- if .Values.ipFamily.ipv4.enabled }}
+            listen {{ $port }} ssl;
             {{- end }}
-            {{- if .Values.ipFamily.ipv6.enabled}}
-            listen [::]:{{ template "harbor.portal.containerPort" . }} ssl;
-            {{- end }}            
+            {{- if .Values.ipFamily.ipv6.enabled }}
+            listen [::]:{{ $port }} ssl;
+            {{- end }}
             # SSL
             ssl_certificate /etc/harbor/ssl/portal/tls.crt;
             ssl_certificate_key /etc/harbor/ssl/portal/tls.key;
@@ -42,10 +44,10 @@ data:
             ssl_session_cache shared:SSL:10m;
             {{- else }}
             {{- if .Values.ipFamily.ipv4.enabled }}
-            listen {{ template "harbor.portal.containerPort" . }};
+            listen {{ $port }};
             {{- end }}
-            {{- if .Values.ipFamily.ipv6.enabled}}
-            listen [::]:{{ template "harbor.portal.containerPort" . }};
+            {{- if .Values.ipFamily.ipv6.enabled }}
+            listen [::]:{{ $port }};
             {{- end }}
             {{- end }}
             server_name  localhost;

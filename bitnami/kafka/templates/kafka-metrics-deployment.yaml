@@ -2,12 +2,13 @@
 {{- $replicaCount := int .Values.replicaCount -}}
 {{- $releaseNamespace := .Release.Namespace -}}
 {{- $clusterDomain := .Values.clusterDomain -}}
-{{- $fullname := include "kafka.fullname" . -}}
-{{- $servicePort := int .Values.service.port -}}
+{{- $fullname := include "common.names.fullname" . -}}
+{{- $servicePort := int .Values.service.ports.client -}}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "kafka.metrics.kafka.fullname" . }}
+  name: {{ include "kafka.metrics.kafka.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: metrics
     {{- if .Values.commonLabels }}
@@ -34,8 +35,34 @@ spec:
         {{- end }}
     spec:
       {{- include "kafka.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.metrics.kafka.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.kafka.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.kafka.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metrics.kafka.podAffinityPreset "component" "metrics" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metrics.kafka.podAntiAffinityPreset "component" "metrics" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.metrics.kafka.nodeAffinityPreset.type "key" .Values.metrics.kafka.nodeAffinityPreset.key "values" .Values.metrics.kafka.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.metrics.kafka.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.kafka.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.kafka.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.kafka.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metrics.kafka.priorityClassName }}
+      priorityClassName: {{ .Values.metrics.kafka.priorityClassName }}
+      {{- end }}
       {{- if .Values.metrics.kafka.schedulerName }}
-      schedulerName: {{ .Values.metrics.kafka.schedulerName | quote }}
+      schedulerName: {{ .Values.metrics.kafka.schedulerName }}
+      {{- end }}
+      {{- if .Values.metrics.kafka.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.metrics.kafka.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "kafka.metrics.kafka.serviceAccountName" . }}
       {{- if .Values.metrics.kafka.initContainers }}
@@ -50,40 +77,46 @@ spec:
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.command "context" $) | nindent 12 }}
           {{- else }}
           command:
-            - /bin/bash
-            - -ec
-            - |
-              kafka_exporter \
-              {{- range $i, $e := until $replicaCount }}
-              --kafka.server={{ $fullname }}-{{ $i }}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }} \
-              {{- end }}
-              {{- if (include "kafka.client.saslAuthentication" .) }}
-              --sasl.enabled \
-              --sasl.username="$SASL_USERNAME" \
-              --sasl.password="${SASL_USER_PASSWORD%%,*}" \
-              --sasl.mechanism="{{ include "kafka.metrics.kafka.saslMechanism" . }}" \
-              {{- end }}
-              {{- if (include "kafka.client.tlsEncryption" .) }}
-              --tls.enabled \
-              {{- if .Values.metrics.kafka.certificatesSecret }}
-              --tls.key-file="/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsKey }}" \
-              --tls.cert-file="/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsCert }}" \
-              {{- if .Values.metrics.kafka.tlsCaSecret }}
-              --tls.ca-file="/opt/bitnami/kafka-exporter/cacert/{{ .Values.metrics.kafka.tlsCaCert }}" \
-              {{- else}}
-              --tls.ca-file="/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsCaCert }}" \
-              {{- end }}
-              {{- end }}
-              {{- end }}
-              {{- range $key, $value := .Values.metrics.kafka.extraFlags }}
-              --{{ $key }}{{ if $value }}={{ $value }}{{ end }} \
-              {{- end }}
-              --web.listen-address=:9308
+            - kafka_exporter
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            {{- range $i, $e := until $replicaCount }}
+            - --kafka.server={{ $fullname }}-{{ $i }}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }}
+            {{- end }}
+            {{- if (include "kafka.client.saslAuthentication" .) }}
+            - --sasl.enabled
+            - --sasl.username="$SASL_USERNAME"
+            - --sasl.password="${SASL_USER_PASSWORD%%,*}"
+            - --sasl.mechanism={{ include "kafka.metrics.kafka.saslMechanism" . }}
+            {{- end }}
+            {{- if (include "kafka.client.tlsEncryption" .) }}
+            - --tls.enabled
+            {{- if .Values.metrics.kafka.certificatesSecret }}
+            - --tls.key-file=/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsKey }}
+            - --tls.cert-file=/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsCert }}
+            {{- if .Values.metrics.kafka.tlsCaSecret }}
+            - --tls.ca-file=/opt/bitnami/kafka-exporter/cacert/{{ .Values.metrics.kafka.tlsCaCert }}
+            {{- else }}
+            - --tls.ca-file=/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsCaCert }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+            {{- range $key, $value := .Values.metrics.kafka.extraFlags }}
+            - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
+            {{- end }}
+            - --web.listen-address=:{{ .Values.metrics.kafka.containerPorts.metrics }}
+          {{- end }}
           {{- if (include "kafka.client.saslAuthentication" .) }}
-          {{- $clientUsers := coalesce .Values.auth.sasl.jaas.clientUsers .Values.auth.jaas.clientUsers }}
+          {{- $clientUsers := .Values.auth.sasl.jaas.clientUsers }}
           env:
             - name: SASL_USERNAME
               value: {{ index $clientUsers 0 | quote }}
@@ -93,45 +126,43 @@ spec:
                   name: {{ include "kafka.jaasSecretName" . }}
                   key: client-passwords
           {{- end }}
-          {{- end }}
           ports:
             - name: metrics
-              containerPort: 9308
+              containerPort: {{ .Values.metrics.kafka.containerPorts.metrics }}
           {{- if .Values.metrics.kafka.resources }}
           resources: {{ toYaml .Values.metrics.kafka.resources | nindent 12 }}
           {{- end }}
-      {{- if and (include "kafka.client.tlsEncryption" .) .Values.metrics.kafka.certificatesSecret }}
           volumeMounts:
+            {{- if .Values.metrics.kafka.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if and (include "kafka.client.tlsEncryption" .) .Values.metrics.kafka.certificatesSecret }}
             - name: kafka-exporter-certificates
               mountPath: /opt/bitnami/kafka-exporter/certs/
               readOnly: true
-      {{- if .Values.metrics.kafka.tlsCaSecret }}
+            {{- if .Values.metrics.kafka.tlsCaSecret }}
             - name: kafka-exporter-ca-certificate
               mountPath: /opt/bitnami/kafka-exporter/cacert/
               readOnly: true
-      {{- end }}
+            {{- end }}
+            {{- end }}
+        {{- if .Values.metrics.kafka.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
+        {{- if .Values.metrics.kafka.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and (include "kafka.client.tlsEncryption" .) .Values.metrics.kafka.certificatesSecret }}
         - name: kafka-exporter-certificates
           secret:
             secretName: {{ .Values.metrics.kafka.certificatesSecret }}
             defaultMode: 0440
-      {{- if .Values.metrics.kafka.tlsCaSecret }}
+        {{- if .Values.metrics.kafka.tlsCaSecret }}
         - name: kafka-exporter-ca-certificate
           secret:
             secretName: {{ .Values.metrics.kafka.tlsCaSecret }}
             defaultMode: 0440
-      {{- end }}
-      {{- end }}
-      {{- if .Values.metrics.kafka.affinity }}
-      affinity:
-        {{ toYaml .Values.metrics.kafka.affinity | nindent 8 }}
-      {{- end }}
-      {{- if .Values.metrics.kafka.tolerations }}
-      tolerations:
-        {{ toYaml .Values.metrics.kafka.tolerations | nindent 8 }}
-      {{- end }}
-      {{- if .Values.metrics.kafka.nodeSelector }}
-      nodeSelector:
-        {{ toYaml .Values.metrics.kafka.nodeSelector | nindent 8 }}
-      {{- end }}
+        {{- end }}
+        {{- end }}
 {{- end }}

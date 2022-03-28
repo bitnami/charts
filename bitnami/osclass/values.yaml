@@ -23,23 +23,18 @@ global:
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
-
 ## @param nameOverride String to partially override common.names.fullname
 ##
 nameOverride: ""
-
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride: ""
-
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
-
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
-
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
@@ -59,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/osclass
-  tag: 8.0.0-debian-10-r25
+  tag: 8.0.1-debian-10-r77
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -83,34 +78,27 @@ image:
 ## ref: https://github.com/bitnami/bitnami-docker-osclass#connect-osclass-docker-container-to-an-existing-database
 ##
 osclassSkipInstall: false
-
 ## @param osclassUsername Osclass username
 ##
 osclassUsername: user
-
 ## @param osclassSiteTitle Osclass site title
 ##
 osclassSiteTitle: user
-
 ## @param osclassPassword Osclass user password
 ## Defaults to a random 10-character alphanumeric string if not set
 ##
 osclassPassword: ""
-
 ## @param osclassEmail Osclass user email
 ##
 osclassEmail: user@example.com
-
 ## @param existingSecret Name of existing secret containing Osclass credentials
 ## NOTE: Must contain key `osclass-password`
 ## NOTE: When it's set, the `osclassPassword` parameter is ignored
 ##
 existingSecret: ""
-
 ## @param allowEmptyPassword Allow the container to be started with blank passwords
 ##
 allowEmptyPassword: true
-
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/bitnami-docker-osclass/#smtp-configuration
 ## @param smtpHost SMTP server host
@@ -136,7 +124,6 @@ hostAliases:
   - ip: "127.0.0.1"
     hostnames:
       - "status.localhost"
-
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled Osclass pods' Security Context
@@ -145,7 +132,6 @@ hostAliases:
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled Osclass containers' Security Context
@@ -156,9 +142,24 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
-
-## Configure extra options for Osclass containers' liveness and readiness probes
+## Configure extra options for Osclass containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.path Path for the HTTP probe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  path: /oc-admin
+  initialDelaySeconds: 600
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 5
+  successThreshold: 1
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.path Path for the HTTP probe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -175,7 +176,6 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 5
   successThreshold: 1
-
 ## @param readinessProbe.enabled Enable readinessProbe
 ## @param readinessProbe.path Path for the HTTP probe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -192,15 +192,15 @@ readinessProbe:
   timeoutSeconds: 1
   failureThreshold: 5
   successThreshold: 1
-
+## @param customStartupProbe Custom livenessProbe that overrides the default one
+##
+customStartupProbe: {}
 ## @param customLivenessProbe Custom livenessProbe that overrides the default one
 ##
 customLivenessProbe: {}
-
 ## @param customReadinessProbe Custom readinessProbe that overrides the default one
 ##
 customReadinessProbe: {}
-
 ## Add custom certificates and certificate authorities to Osclass container
 ##
 certificates:
@@ -236,15 +236,12 @@ certificates:
   ## @param certificates.extraEnvVars An array to add extra env vars
   ##
   extraEnvVars: []
-
   ## @param certificates.extraEnvVarsCM ConfigMap with extra environment variables
   ##
   extraEnvVarsCM: ""
-
   ## @param certificates.extraEnvVarsSecret Secret with extra environment variables
   ##
   extraEnvVarsSecret: ""
-
   ## Bitnami Apache Exporter image
   ## ref: https://hub.docker.com/r/bitnami/apache-exporter/tags/
   ## @param certificates.image.registry Apache Exporter image registry
@@ -256,7 +253,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r282
+    tag: 10-debian-10-r376
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -269,37 +266,31 @@ certificates:
 ## @param lifecycleHooks lifecycleHooks for the container to automate configuration before or after startup.
 ##
 lifecycleHooks: {}
-
 ## @param podAnnotations Annotations for Osclass pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
 ## @param podLabels Extra labels for Osclass pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
 ## @param replicaCount Number of Osclass replicas to deploy
 ## NOTE: ReadWriteMany PVC(s) are required if replicaCount > 1
 ##
 replicaCount: 1
-
 ## Container ports
-## @param containerPorts.http WordPress HTTP container port
-## @param containerPorts.https WordPress HTTPS container port
+## @param containerPorts.http Osclass HTTP container port
+## @param containerPorts.https Osclass HTTPS container port
 ##
 containerPorts:
   http: 8080
   https: 8443
-
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
-
 ## @param updateStrategy.type Osclass deployment strategy type
 ## @param updateStrategy.rollingUpdate Osclass deployment rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -314,7 +305,6 @@ args: []
 updateStrategy:
   type: RollingUpdate
   rollingUpdate: {}
-
 ## @param extraEnvVars Array with extra environment variables to add to the Osclass container
 ## e.g:
 ## extraEnvVars:
@@ -322,23 +312,18 @@ updateStrategy:
 ##     value: "bar"
 ##
 extraEnvVars: []
-
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
 extraEnvVarsCM: ""
-
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret: ""
-
 ## @param extraVolumes Optionally specify extra list of additional volumes for Osclass pods
 ##
 extraVolumes: []
-
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Osclass container(s)
 ##
 extraVolumeMounts: []
-
 ## @param initContainers Add additional init containers to the Osclass pods
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
@@ -349,7 +334,6 @@ extraVolumeMounts: []
 ##    command: ['sh', '-c', 'copy themes and plugins from git and push to /bitnami/osclass/wp-content. Should work with extraVolumeMounts and extraVolumes']
 ##
 initContainers: []
-
 ## @param sidecars Add additional sidecar containers to the Osclass pod
 ## e.g:
 ## sidecars:
@@ -361,17 +345,14 @@ initContainers: []
 ##         containerPort: 1234
 ##
 sidecars: []
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -395,12 +376,10 @@ nodeAffinityPreset:
 ## NOTE: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
 ## @param nodeSelector Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## Osclass containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits The resources limits for the Osclass container
@@ -411,11 +390,22 @@ resources:
     memory: 512Mi
     cpu: 300m
   limits: {}
-
 ## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+## @param priorityClassName Osclass pods' priorityClassName
+##
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 
 ## @section Traffic Exposure Parameters
 ##
@@ -423,16 +413,16 @@ tolerations: []
 ## Osclass service parameters
 ##
 service:
-  ## @param service.type WordPress service type
+  ## @param service.type Osclass service type
   ##
   type: LoadBalancer
-  ## @param service.port WordPress service HTTP port
+  ## @param service.ports.http Osclass service HTTP port
+  ## @param service.ports.https Osclass service HTTPS port
   ##
-  port: 80
-  ## @param service.httpsPort WordPress service HTTPS port
-  ##
-  httpsPort: 443
-  ## @param service.clusterIP WordPress service Cluster IP
+  ports:
+    http: 80
+    https: 443
+  ## @param service.clusterIP Osclass service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
@@ -448,13 +438,22 @@ service:
   ##   - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
-
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.annotations Additional custom annotations for Osclass service
+  ##
+  annotations: {}
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
   ## ref: https://kubernetes.io/docs/user-guide/services/
   ##
   sessionAffinity: "None"
-
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  sessionAffinityConfig: {}
   ## Node ports to expose
   ## @param service.nodePorts.http Node port for HTTP
   ## @param service.nodePorts.https Node port for HTTPS
@@ -483,20 +482,16 @@ ingress:
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
-
   ## @param ingress.hostname Default host for the ingress record
   ##
   hostname: osclass.local
-
   ## @param ingress.path Default path for the ingress record
   ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
   ##
   path: /
-
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -509,7 +504,6 @@ ingress:
   ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
-
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
   ## You can:
@@ -518,7 +512,6 @@ ingress:
   ##   - Relay on Helm to create self-signed certificates by setting `ingress.tls=true` and `ingress.certManager=false`
   ##
   tls: false
-
   ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
   ## e.g:
   ## extraHosts:
@@ -526,7 +519,6 @@ ingress:
   ##     path: /
   ##
   extraHosts: []
-
   ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
   ## e.g:
   ## extraPaths:
@@ -536,7 +528,6 @@ ingress:
   ##     servicePort: use-annotation
   ##
   extraPaths: []
-
   ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## e.g:
@@ -546,7 +537,6 @@ ingress:
   ##   secretName: osclass.local-tls
   ##
   extraTls: []
-
   ## @param ingress.secrets Custom TLS certificates as secrets
   ## NOTE: 'key' and 'certificate' are expected in PEM format
   ## NOTE: 'name' should line up with a 'secretName' set further up
@@ -567,6 +557,11 @@ ingress:
   ##       -----END CERTIFICATE-----
   ##
   secrets: []
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
 
 ## @section Database Parameters
 ##
@@ -578,22 +573,21 @@ externalDatabase:
   ## @param externalDatabase.host External Database server host
   ##
   host: ""
-
   ## @param externalDatabase.port External Database server port
   ##
   port: 3306
-
   ## @param externalDatabase.user External Database username
   ##
   user: bn_osclass
-
   ## @param externalDatabase.password External Database user password
   ##
   password: ""
-
   ## @param externalDatabase.database External Database database name
   ##
   database: bitnami_osclass
+  ## @param externalDatabase.existingSecret Name of an existing secret resource containing the DB password
+  ##
+  existingSecret: ""
 
 ##
 ## MariaDB chart configuration
@@ -605,11 +599,9 @@ mariadb:
   ## To use an external database set this to false and configure the `externalDatabase.*` parameters
   ##
   enabled: true
-
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
   architecture: standalone
-
   ## MariaDB Authentication parameters
   ## @param mariadb.auth.rootPassword MariaDB root password
   ## @param mariadb.auth.database MariaDB custom database
@@ -649,7 +641,6 @@ persistence:
   ## @param persistence.enabled Enable persistence using Persistent Volume Claims
   ##
   enabled: true
-
   ## @param persistence.storageClass Persistent Volume storage class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -660,21 +651,21 @@ persistence:
   ##
   accessModes:
     - ReadWriteOnce
-
   ## @param persistence.size Persistent Volume size
   ##
   size: 8Gi
-
   ## @param persistence.existingClaim The name of an existing PVC to use for persistence
   ##
   existingClaim: ""
-
   ## @param persistence.hostPath If defined, the osclass-data volume will mount to the specified hostPath.
   ## Requires persistence.enabled: true
   ## Requires persistence.existingClaim: nil|false
   ## Default: nil.
   ##
   hostPath: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -694,7 +685,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r282
+    tag: 10-debian-10-r376
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -770,7 +761,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.10.1-debian-10-r84
+    tag: 0.11.0-debian-10-r96
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -821,15 +812,30 @@ metrics:
     ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.relabellings Metrics relabellings to add to the scrape endpoint
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
-    relabellings: []
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    metricRelabelings: []
     ## @param metrics.serviceMonitor.honorLabels Labels to honor to add to the scrape endpoint
     ##
     honorLabels: false
-    ## @param metrics.serviceMonitor.additionalLabels Additional custom labels for the ServiceMonitor
+    ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
-    additionalLabels: {}
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
 
 ## @section NetworkPolicy parameters
 

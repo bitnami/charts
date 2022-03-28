@@ -69,11 +69,9 @@ spec:
           image: {{ template "node.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           workingDir: /app
-          command:
-            - /bin/bash
-            - -ec
-            - |
-              npm install
+          {{- if .Values.installCommand }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.installCommand "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: HOME
               value: /tmp

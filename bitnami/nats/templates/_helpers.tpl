@@ -50,16 +50,6 @@ Return the NATS configuration secret name
 {{- end -}}
 
 {{/*
-Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
-Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
-*/}}
-{{- define "nats.ingress.certManagerRequest" -}}
-{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
-    {{- true -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "nats.validateValues" -}}

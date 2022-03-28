@@ -9,7 +9,6 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   name: {{ template "rmqco.msgTopologyOperator.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -209,6 +208,26 @@ rules:
       - rabbitmq.com
     resources:
       - shovels/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - rabbitmq.com
+    resources:
+      - superstreams
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - rabbitmq.com
+    resources:
+      - superstreams/status
     verbs:
       - get
       - patch

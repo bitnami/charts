@@ -62,7 +62,7 @@ To Access the RabbitMQ AMQP port:
 NOTE: It may take a few minutes for the LoadBalancer IP to be available.
       Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "rabbitmq.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "rabbitmq.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "rabbitmq.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     echo "URL : amqp://$SERVICE_IP:{{ $servicePort }}/"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
@@ -112,7 +112,7 @@ Obtain the LoadBalancer IP:
 NOTE: It may take a few minutes for the LoadBalancer IP to be available.
       Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "rabbitmq.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "rabbitmq.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "rabbitmq.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
 To Access the RabbitMQ AMQP port:
 

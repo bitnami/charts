@@ -95,7 +95,7 @@ spec:
             - |
               mkdir -p /bitnami/geode/config /bitnami/geode/data
               chmod 700 /bitnami/geode/config /bitnami/geode/data
-              find /bitnami/geode -mindepth 1 -maxdepth 1 -not -name "config" -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.locator.containerSecurityContext.runAsUser}}:{{ .Values.locator.podSecurityContext.fsGroup }}
+              find /bitnami/geode -mindepth 1 -maxdepth 1 -not -name "config" -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.locator.containerSecurityContext.runAsUser }}:{{ .Values.locator.podSecurityContext.fsGroup }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}

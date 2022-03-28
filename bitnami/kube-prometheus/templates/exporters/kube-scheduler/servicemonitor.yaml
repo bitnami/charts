@@ -26,11 +26,11 @@ spec:
         caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
         {{- if .Values.kubeScheduler.serviceMonitor.insecureSkipVerify }}
         insecureSkipVerify: {{ .Values.kubeScheduler.serviceMonitor.insecureSkipVerify }}
-        {{- end}}
+        {{- end }}
         {{- if .Values.kubeScheduler.serviceMonitor.serverName }}
         serverName: {{ .Values.kubeScheduler.serviceMonitor.serverName }}
-        {{- end}}
-      {{- end}}
+        {{- end }}
+      {{- end }}
       {{- if .Values.kubeScheduler.serviceMonitor.metricRelabelings }}
       metricRelabelings: {{- include "common.tplvalues.render" (dict "value" .Values.kubeScheduler.serviceMonitor.metricRelabelings "context" $) | nindent 6 }}
       {{- end }}

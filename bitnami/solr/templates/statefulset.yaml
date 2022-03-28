@@ -1,7 +1,7 @@
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ include "solr.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: solr
     {{- if .Values.commonLabels }}
@@ -17,24 +17,30 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: solr
-  serviceName: {{ include "solr.fullname" . }}-headless
-  updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $) | nindent 4 }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
   template:
     metadata:
       annotations:
-        {{- if .Values.podAnnotations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
-        {{- end }}
         {{- if .Values.commonAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
+        {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if or (include "solr.createSecret" .) (include "solr.createTlsPasswordsSecret" .) }}
+        checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if (include "solr.createTlsSecret" .)}}
+        checksum/tls-secrets: {{ include (print $.Template.BasePath "/tls-secrets.yaml") . | sha256sum }}
+        {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: solr
-        {{- if .Values.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
-        {{- end }}
         {{- if .Values.commonLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
       serviceAccountName: {{ include "solr.serviceAccountName" . }}
@@ -46,8 +52,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "solr" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "solr" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
@@ -56,8 +62,14 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
@@ -65,12 +77,15 @@ spec:
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
-          image: {{ include "volumePermissions.image" . }}
+          image: {{ include "solr.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
-            - sh
-            - -c
-            - chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/solr"
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              mkdir -p /bitnami/solr
+              find /bitnami/solr -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -81,11 +96,7 @@ spec:
             - name: data
               mountPath: /bitnami/solr
         {{- end }}
-        {{- if .Values.initContainers }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.tls.enabled}}
-        {{- $fullname := include "solr.fullname" . }}
+        {{- if .Values.tls.enabled }}
         - name: init-certs
           image: {{ include "solr.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -93,83 +104,58 @@ spec:
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           command:
-          - /bin/bash
-          - -ec
-          - |-
-            if [[ -f "/certs/ca.crt" ]] && [[ -f "/certs/tls.key" ]] && [[ -f "/certs/tls.crt" ]]; then
-              openssl pkcs12 -export -in "/certs/tls.crt" \
-                  -inkey "/certs/tls.key" -out "/tmp/keystore.p12" \
-                  -passin pass:"/certs/tls.key" -passout pass:"${SOLR_SSL_KEY_STORE_PASSWORD}"
-
-              keytool -importkeystore -srckeystore "/tmp/keystore.p12" \
-                  -srcstoretype PKCS12 \
-                  -srcstorepass "${SOLR_SSL_KEY_STORE_PASSWORD}" \
-                  -deststorepass "${SOLR_SSL_KEY_STORE_PASSWORD}" \
-                  -destkeystore "/opt/bitnami/solr/certs/keystore.p12"
-
-              rm "/tmp/keystore.p12"
-
-              keytool -import -file "/certs/ca.crt" -keystore "/opt/bitnami/solr/certs/truststore.p12" -storepass "${SOLR_SSL_TRUST_STORE_PASSWORD}" -noprompt
-            else
-              cp "/certs/keystore.p12" "/opt/bitnami/solr/certs/keystore.p12"
-              cp "/certs/truststore.p12" "/opt/bitnami/solr/certs/truststore.p12"
-            fi
+            - /scripts/init-certs.sh
           env:
-          - name: MY_POD_NAME
-            valueFrom:
-              fieldRef:
-                apiVersion: v1
-                fieldPath: metadata.name
-          - name: SOLR_SSL_KEY_STORE_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: {{ include "solr.tlsPasswordsSecret" . }}
-                key: tls-keystore-password
-          - name: SOLR_SSL_TRUST_STORE_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: {{ include "solr.tlsPasswordsSecret" . }}
-                key: tls-truststore-password
-          {{- if .Values.resources }}
-          resources: {{- include "common.tplvalues.render" (dict "value" .Values.tls.resources "context" $) | nindent 12 }}
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: SOLR_SSL_KEY_STORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "solr.tlsPasswordsSecret" . }}
+                  key: keystore-password
+            - name: SOLR_SSL_TRUST_STORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "solr.tlsPasswordsSecret" . }}
+                  key: truststore-password
+          {{- if .Values.tls.resources }}
+          resources: {{- toYaml .Values.tls.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-          - name: certs
-            mountPath: '/certs'
-          - name: certs-shared
-            mountPath: '/opt/bitnami/solr/certs'
+            - name: scripts
+              mountPath: /scripts/init-certs.sh
+              subPath: init-certs.sh
+            - name: certs
+              mountPath: '/certs'
+            - name: shared-certs
+              mountPath: '/opt/bitnami/solr/certs'
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: solr
           image: {{ include "solr.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
-          {{- else }}
-          command:
-            - bash
-            - -ec
-            - |
-              {{- if .Values.cloudBootstrap }}
-              NODE_ID="${MY_POD_NAME#"{{ include "solr.fullname" . }}-"}"
-              if [[ "$NODE_ID" -eq "0" ]]; then
-                export SOLR_CLOUD_BOOTSTRAP=yes
-              fi
-              {{- end }}
-              # Use hostname instead of IP to register in Zookeeper
-              export SOLR_HOST="${MY_POD_NAME}.{{ include "solr.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
-              /opt/bitnami/scripts/solr/entrypoint.sh /opt/bitnami/scripts/solr/run.sh
           {{- end }}
-          {{- if .Values.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: MY_POD_NAME
               valueFrom:
                 fieldRef:
@@ -179,15 +165,15 @@ spec:
             - name: SOLR_NUMBER_OF_NODES
               value: {{ .Values.replicaCount | quote }}
             - name: SOLR_PORT_NUMBER
-              value: {{ .Values.containerPort | quote }}
+              value: {{ .Values.containerPorts.http | quote }}
             - name: SOLR_SERVER_DIRECTORY
               value: {{ .Values.serverDirectory | quote }}
             {{- if .Values.cloudEnabled }}
             - name: SOLR_COLLECTION
               value: {{ .Values.collection | quote }}
             {{- else }}
-            - name: SOLR_CORE
-              value: {{ .Values.coreName | quote }}
+            - name: SOLR_CORES
+              value: {{ .Values.coreNames | join "," | quote }}
             {{- end }}
             - name: SOLR_COLLECTION_SHARDS
               value: {{ .Values.collectionShards | quote }}
@@ -201,16 +187,16 @@ spec:
             - name: SOLR_JAVA_MEM
               value: {{ .Values.javaMem | quote }}
             {{- end }}
-            {{- if .Values.authentication.enabled }}
             - name: SOLR_ENABLE_AUTHENTICATION
-              value: "yes"
+              value: {{ ternary "yes" "no" .Values.auth.enabled | quote }}
+            {{- if .Values.auth.enabled }}
             - name: SOLR_ADMIN_USERNAME
-              value: {{ .Values.authentication.adminUsername | quote }}
+              value: {{ .Values.auth.adminUsername | quote }}
             - name: SOLR_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "solr.secretName" . }}
-                  key: solr-password
+                  key: {{ include "solr.secretPasswordKey" . }}
             {{- end }}
             - name: SOLR_ZK_HOSTS
               value: {{ include "solr.zookeeper.host" . | quote }}
@@ -229,20 +215,21 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "solr.tlsPasswordsSecret" . }}
-                  key: tls-keystore-password
+                  key: keystore-password
             - name: SOLR_SSL_TRUST_STORE
               value: /opt/bitnami/solr/certs/truststore.p12
             - name: SOLR_SSL_TRUST_STORE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "solr.tlsPasswordsSecret" . }}
-                  key: tls-truststore-password
+                  key: truststore-password
             - name: SOLR_SSL_CHECK_PEER_NAME
               value: "false"
             {{- end }}
             {{- if .Values.extraEnvVars }}
-            {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
@@ -252,77 +239,69 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.containerPort }}
+              containerPort: {{ .Values.containerPorts.http }}
           {{- if .Values.resources }}
-          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
-          livenessProbe:
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              {{- if .Values.tls.enabled }}
-              scheme: "HTTPS"
-              {{- else }}
-              scheme: "HTTP"
-              {{- end }}
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.tls.enabled }}
               path: "/solr"
-              port: {{ .Values.containerPort }}
+              port: {{ .Values.containerPorts.http }}
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
-          readinessProbe:
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              {{- if .Values.tls.enabled }}
-              scheme: "HTTPS"
-              {{- else }}
-              scheme: "HTTP"
-              {{- end }}
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.tls.enabled }}
               path: "/solr"
-              port: {{ .Values.containerPort }}
+              port: {{ .Values.containerPorts.http }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ .Values.containerPorts.http }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           volumeMounts:
+            - name: scripts
+              mountPath: /scripts/setup.sh
+              subPath: setup.sh
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
             {{- if .Values.tls.enabled }}
-            - name: certs-shared
+            - name: shared-certs
               mountPath: '/opt/bitnami/solr/certs'
-            - name: certs
-              mountPath: '/certs'
             {{- end }}
-
-          {{- if .Values.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
-          {{- range .Values.persistence.extraVolumeClaimTemplates }}
-            - name: {{ .name }}
-              mountPath: {{ .mountPath }}
-          {{- end}}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
-        {{- end }}
+        - name: scripts
+          configMap:
+            name: {{ printf "%s-scripts" (include "common.names.fullname" .) }}
+            defaultMode: 0755
         {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: data
           persistentVolumeClaim:
             claimName: {{ printf "%s" (tpl .Values.persistence.existingClaim .) }}
-        {{- else }}
+        {{- else if not .Values.persistence.enabled }}
         - name: data
           emptyDir: {}
         {{- end }}
@@ -330,15 +309,25 @@ spec:
         - name: certs
           secret:
             secretName: {{ include "solr.tlsSecretName" . }}
-        - name: certs-shared
+        - name: shared-certs
           emptyDir: {}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
   {{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
   volumeClaimTemplates:
     - metadata:
         name: data
-        {{- if .Values.persistence.annotations }}
-        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
+        annotations:
+          {{- if .Values.persistence.annotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.commonAnnotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
+          {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
         {{- end }}
       spec:
         accessModes:
@@ -348,21 +337,8 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
-        {{ include "solr.storageClass" . | nindent 8 }}
-    {{- range .Values.persistence.extraVolumeClaimTemplates }}
-    - metadata:
-        name: {{ .name }}
-        {{- if $.Values.persistence.annotations }}
-        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
+        {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
+        {{- if .Values.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
         {{- end }}
-      spec:
-        accessModes:
-        {{- range $.Values.persistence.accessModes }}
-          - {{ . | quote }}
-        {{- end }}
-        resources:
-          requests:
-            storage: {{ .size | quote }}
-        {{ include "solr.storageClass" $ | nindent 8 }}
-    {{- end }}
   {{- end }}

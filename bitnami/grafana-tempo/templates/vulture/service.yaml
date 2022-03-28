@@ -20,6 +20,7 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.vulture.service.type }}
+  sessionAffinity: {{ .Values.vulture.service.sessionAffinity }}
   {{- if .Values.vulture.service.clusterIP }}
   clusterIP: {{ .Values.vulture.service.clusterIP }}
   {{- end }}
@@ -33,15 +34,18 @@ spec:
   loadBalancerIP: {{ .Values.vulture.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: prom-metrics
-      port: {{ .Values.vulture.service.port }}
-      targetPort: prom-metrics
+    - name: http
+      port: {{ .Values.vulture.service.ports.http }}
+      targetPort: http
       protocol: TCP
       {{- if (and (or (eq .Values.vulture.service.type "NodePort") (eq .Values.vulture.service.type "LoadBalancer")) (not (empty .Values.vulture.service.nodePorts.http))) }}
       nodePort: {{ .Values.vulture.service.nodePorts.http }}
       {{- else if eq .Values.vulture.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.vulture.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.vulture.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: vulture
 {{- end }}

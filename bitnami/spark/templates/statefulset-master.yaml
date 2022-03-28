@@ -142,19 +142,25 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- end }}
           ports:
+            {{- if .Values.security.ssl.enabled }}
+            - name: https
+              containerPort: {{ .Values.master.webPortHttps }}
+              protocol: TCP
+            {{- else }}
             - name: http
               containerPort: {{ .Values.master.webPort }}
               protocol: TCP
+            {{- end }}
             - name: cluster
               containerPort: {{ .Values.master.clusterPort }}
           volumeMounts:
             {{- if .Values.master.configurationConfigMap }}
             - name: config
-              mountPath: '/opt/bitnami/spark/conf/'
+              mountPath: /bitnami/spark/conf/
             {{- end }}
             {{- if .Values.security.ssl.enabled }}
             - name: shared-certs
-              mountPath: '/opt/bitnami/spark/conf/certs'
+              mountPath: /bitnami/spark/conf/certs
               readOnly: true
             {{- end }}
             {{- if .Values.master.extraVolumeMounts }}
@@ -168,7 +174,7 @@ spec:
             {{- if .Values.metrics.enabled }}
             - name: SPARK_METRICS_ENABLED
               value: "true"
-            {{- end}}
+            {{- end }}
             - name: SPARK_DAEMON_MEMORY
               value: {{ .Values.master.daemonMemoryLimit | quote }}
             {{- if .Values.master.clusterPort }}
@@ -222,6 +228,8 @@ spec:
               value: {{ .Values.security.ssl.needClientAuth | quote }}
             - name: SPARK_SSL_PROTOCOL
               value: {{ .Values.security.ssl.protocol | quote }}
+            - name: SPARK_WEBUI_SSL_PORT
+              value: {{ .Values.master.webPortHttps | quote }}
             {{- end }}
             {{- if .Values.master.extraEnvVars }}
             {{- toYaml .Values.master.extraEnvVars | nindent 12 }}

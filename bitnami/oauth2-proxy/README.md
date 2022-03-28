@@ -1,7 +1,13 @@
-# OAuth2 Proxy
+<!--- app-name: OAuth2 Proxy -->
 
-[oauth2-proxy](https://github.com/oauth2-proxy/oauth2-proxy) is a reverse proxy and static file server that provides authentication using Providers (Google, GitHub, and others) to validate accounts by email, domain or group.
+# OAuth2 Proxy packaged by Bitnami
 
+A reverse proxy and static file server that provides authentication using Providers (Google, GitHub, and others) to validate accounts by email, domain or group.
+
+[Overview of OAuth2 Proxy](https://github.com/oauth2-proxy/oauth2-proxy)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -19,8 +25,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -84,10 +90,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.loadBalancerIP`           | OAuth2 Proxy service Load Balancer IP                                                                                            | `""`                     |
 | `service.loadBalancerSourceRanges` | OAuth2 Proxy service Load Balancer sources                                                                                       | `[]`                     |
 | `service.externalTrafficPolicy`    | OAuth2 Proxy service external traffic policy                                                                                     | `Cluster`                |
+| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
 | `service.annotations`              | Additional custom annotations for OAuth2 Proxy service                                                                           | `{}`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ingress.enabled`                  | Enable ingress record generation for OAuth2 Proxy                                                                                | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                                              | `oaut2-proxy.local`      |
 | `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
 | `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
@@ -95,6 +105,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
 | `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.certManager`              | Add the corresponding annotations for cert-manager integration                                                                   | `false`                  |
+| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 
 
 ### OAuth2 Proxy Image parameters
@@ -103,7 +116,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------- | ---------------------- |
 | `image.registry`    | OAuth2 Proxy image registry                             | `docker.io`            |
 | `image.repository`  | OAuth2 Proxy image repository                           | `bitnami/oauth2-proxy` |
-| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.2.0-debian-10-r32`  |
+| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.2.1-debian-10-r26`  |
 | `image.pullPolicy`  | OAuth2 Proxy image pull policy                          | `IfNotPresent`         |
 | `image.pullSecrets` | OAuth2 Proxy image pull secrets                         | `[]`                   |
 
@@ -133,59 +146,70 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### OAuth2 Proxy deployment parameters
 
-| Name                                 | Description                                                                                | Value           |
-| ------------------------------------ | ------------------------------------------------------------------------------------------ | --------------- |
-| `containerPort`                      | OAuth2 Proxy port number                                                                   | `4180`          |
-| `replicaCount`                       | Number of OAuth2 Proxy replicas to deploy                                                  | `1`             |
-| `extraArgs`                          | add extra args to the default command                                                      | `[]`            |
-| `livenessProbe.enabled`              | Enable livenessProbe on OAuth2 Proxy nodes                                                 | `true`          |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                    | `0`             |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                           | `10`            |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                          | `1`             |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                        | `5`             |
-| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                        | `1`             |
-| `readinessProbe.enabled`             | Enable readinessProbe on OAuth2 Proxy nodes                                                | `true`          |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                   | `0`             |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                          | `10`            |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                         | `1`             |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                       | `5`             |
-| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                       | `1`             |
-| `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                        | `{}`            |
-| `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                       | `{}`            |
-| `resources.limits`                   | The resources limits for the OAuth2 Proxy containers                                       | `{}`            |
-| `resources.requests`                 | The requested resources for the OAuth2 Proxy containers                                    | `{}`            |
-| `pdb.create`                         | Enable a Pod Disruption Budget creation                                                    | `false`         |
-| `pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled                             | `1`             |
-| `pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                             | `1`             |
-| `podSecurityContext.enabled`         | Enabled OAuth2 Proxy pods' Security Context                                                | `true`          |
-| `podSecurityContext.fsGroup`         | Set OAuth2 Proxy pod's Security Context fsGroup                                            | `1001`          |
-| `containerSecurityContext.enabled`   | Enabled OAuth2 Proxy containers' Security Context                                          | `true`          |
-| `containerSecurityContext.runAsUser` | Set OAuth2 Proxy containers' Security Context runAsUser                                    | `1001`          |
-| `command`                            | Override default container command (useful when using custom images)                       | `[]`            |
-| `args`                               | Override default container args (useful when using custom images)                          | `[]`            |
-| `hostAliases`                        | OAuth2 Proxy pods host aliases                                                             | `[]`            |
-| `podLabels`                          | Extra labels for OAuth2 Proxy pods                                                         | `{}`            |
-| `podAnnotations`                     | Annotations for OAuth2 Proxy pods                                                          | `{}`            |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`            |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`   | `soft`          |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `""`            |
-| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set                                      | `""`            |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set                                   | `[]`            |
-| `affinity`                           | Affinity for OAuth2 Proxy pods assignment                                                  | `{}`            |
-| `nodeSelector`                       | Node labels for OAuth2 Proxy pods assignment                                               | `{}`            |
-| `tolerations`                        | Tolerations for OAuth2 Proxy pods assignment                                               | `[]`            |
-| `updateStrategy.type`                | OAuth2 Proxy statefulset strategy type                                                     | `RollingUpdate` |
-| `priorityClassName`                  | OAuth2 Proxy pods' priorityClassName                                                       | `""`            |
-| `lifecycleHooks`                     | for the OAuth2 Proxy container(s) to automate configuration before or after startup        | `{}`            |
-| `extraEnvVars`                       | Array with extra environment variables to add to OAuth2 Proxy nodes                        | `[]`            |
-| `extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for OAuth2 Proxy nodes                | `""`            |
-| `extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for OAuth2 Proxy nodes                   | `""`            |
-| `extraVolumes`                       | Optionally specify extra list of additional volumes for the OAuth2 Proxy pod(s)            | `[]`            |
-| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the OAuth2 Proxy container(s) | `[]`            |
-| `sidecars`                           | Add additional sidecar containers to the OAuth2 Proxy pod(s)                               | `[]`            |
-| `initContainers`                     | Add additional init containers to the OAuth2 Proxy pod(s)                                  | `[]`            |
-| `serviceAccount.create`              | Specifies whether a ServiceAccount should be created                                       | `true`          |
-| `serviceAccount.name`                | The name of the ServiceAccount to use                                                      | `""`            |
+| Name                                          | Description                                                                                | Value           |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------- |
+| `containerPort`                               | OAuth2 Proxy port number                                                                   | `4180`          |
+| `replicaCount`                                | Number of OAuth2 Proxy replicas to deploy                                                  | `1`             |
+| `extraArgs`                                   | add extra args to the default command                                                      | `[]`            |
+| `startupProbe.enabled`                        | Enable startupProbe on OAuth2 Proxy nodes                                                  | `false`         |
+| `startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                     | `0`             |
+| `startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                            | `10`            |
+| `startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                           | `1`             |
+| `startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                         | `5`             |
+| `startupProbe.successThreshold`               | Success threshold for startupProbe                                                         | `1`             |
+| `livenessProbe.enabled`                       | Enable livenessProbe on OAuth2 Proxy nodes                                                 | `true`          |
+| `livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                    | `0`             |
+| `livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                           | `10`            |
+| `livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                          | `1`             |
+| `livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                        | `5`             |
+| `livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                        | `1`             |
+| `readinessProbe.enabled`                      | Enable readinessProbe on OAuth2 Proxy nodes                                                | `true`          |
+| `readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                   | `0`             |
+| `readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                          | `10`            |
+| `readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                         | `1`             |
+| `readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                       | `5`             |
+| `readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                       | `1`             |
+| `customStartupProbe`                          | Custom startupProbe that overrides the default one                                         | `{}`            |
+| `customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                        | `{}`            |
+| `customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                       | `{}`            |
+| `resources.limits`                            | The resources limits for the OAuth2 Proxy containers                                       | `{}`            |
+| `resources.requests`                          | The requested resources for the OAuth2 Proxy containers                                    | `{}`            |
+| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                                    | `false`         |
+| `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                             | `1`             |
+| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                             | `1`             |
+| `podSecurityContext.enabled`                  | Enabled OAuth2 Proxy pods' Security Context                                                | `true`          |
+| `podSecurityContext.fsGroup`                  | Set OAuth2 Proxy pod's Security Context fsGroup                                            | `1001`          |
+| `containerSecurityContext.enabled`            | Enabled OAuth2 Proxy containers' Security Context                                          | `true`          |
+| `containerSecurityContext.runAsUser`          | Set OAuth2 Proxy containers' Security Context runAsUser                                    | `1001`          |
+| `command`                                     | Override default container command (useful when using custom images)                       | `[]`            |
+| `args`                                        | Override default container args (useful when using custom images)                          | `[]`            |
+| `hostAliases`                                 | OAuth2 Proxy pods host aliases                                                             | `[]`            |
+| `podLabels`                                   | Extra labels for OAuth2 Proxy pods                                                         | `{}`            |
+| `podAnnotations`                              | Annotations for OAuth2 Proxy pods                                                          | `{}`            |
+| `podAffinityPreset`                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`            |
+| `podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`   | `soft`          |
+| `nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `""`            |
+| `nodeAffinityPreset.key`                      | Node label key to match. Ignored if `affinity` is set                                      | `""`            |
+| `nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set                                   | `[]`            |
+| `affinity`                                    | Affinity for OAuth2 Proxy pods assignment                                                  | `{}`            |
+| `nodeSelector`                                | Node labels for OAuth2 Proxy pods assignment                                               | `{}`            |
+| `tolerations`                                 | Tolerations for OAuth2 Proxy pods assignment                                               | `[]`            |
+| `updateStrategy.type`                         | OAuth2 Proxy statefulset strategy type                                                     | `RollingUpdate` |
+| `priorityClassName`                           | OAuth2 Proxy pods' priorityClassName                                                       | `""`            |
+| `schedulerName`                               | Name of the k8s scheduler (other than default)                                             | `""`            |
+| `topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                             | `[]`            |
+| `lifecycleHooks`                              | for the OAuth2 Proxy container(s) to automate configuration before or after startup        | `{}`            |
+| `extraEnvVars`                                | Array with extra environment variables to add to OAuth2 Proxy nodes                        | `[]`            |
+| `extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for OAuth2 Proxy nodes                | `""`            |
+| `extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for OAuth2 Proxy nodes                   | `""`            |
+| `extraVolumes`                                | Optionally specify extra list of additional volumes for the OAuth2 Proxy pod(s)            | `[]`            |
+| `extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the OAuth2 Proxy container(s) | `[]`            |
+| `sidecars`                                    | Add additional sidecar containers to the OAuth2 Proxy pod(s)                               | `[]`            |
+| `initContainers`                              | Add additional init containers to the OAuth2 Proxy pod(s)                                  | `[]`            |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                       | `true`          |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use                                                      | `""`            |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                             | `true`          |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`            |
 
 
 ### External Redis&trade; parameters
@@ -290,6 +314,28 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 2.0.0
+
+This major update the Redis&trade; subchart to its newest major, 16.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1600) you can find more info about the specific changes.
+
+Additionally, this chart has been standardised adding features from other charts.
+
 ### To 1.0.0
 
 This major update the Redis&trade; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

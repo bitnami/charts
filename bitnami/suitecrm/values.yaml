@@ -51,7 +51,7 @@ commonLabels: {}
 image:
   registry: docker.io
   repository: bitnami/suitecrm
-  tag: 7.12.2-debian-10-r0
+  tag: 7.12.5-debian-10-r24
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -150,6 +150,18 @@ sidecars: []
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+## @param priorityClassName SuiteCRM pods' priorityClassName
+##
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 ## @param existingSecret Name of a secret with the application password
 ##
 existingSecret: ""
@@ -241,11 +253,13 @@ podSecurityContext:
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable SuiteCRM containers' Security Context
-## @param containerSecurityContext.runAsUser SuiteCRM containers' Security Context
+## @param containerSecurityContext.runAsUser SuiteCRM containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot SuiteCRM containers' Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -399,6 +413,9 @@ externalDatabase:
   ## @param externalDatabase.database Name of the existing database
   ##
   database: bitnami_suitecrm
+  ## @param externalDatabase.existingSecret Name of an existing secret resource containing the DB password
+  ##
+  existingSecret: ""
 
 ## @section Persistence parameters
 
@@ -417,13 +434,12 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
-  ## @param persistence.accessMode PVC Access Mode for SuiteCRM volume
+  ## @param persistence.accessModes PVC Access Mode for SuiteCRM volume
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
   ##
-  ## @param persistence.accessMode PVC Access Mode for SuiteCRM volume
-  ##
-  accessMode: ReadWriteOnce
+  accessModes:
+    - ReadWriteOnce
   ## @param persistence.size PVC Storage Request for SuiteCRM volume
   ##
   size: 8Gi
@@ -438,6 +454,9 @@ persistence:
   ## Default: nil.
   ##
   hostPath: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
 
 ## @section Volume Permissions parameters
 
@@ -457,7 +476,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r282
+    tag: 10-debian-10-r377
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -495,12 +514,12 @@ service:
   ## @param service.type Kubernetes Service type
   ##
   type: LoadBalancer
-  ## @param service.port Service HTTP port
+  ## @param service.ports.http Service HTTP port
+  ## @param service.ports.https Service HTTPS port
   ##
-  port: 8080
-  ## @param service.httpsPort Service HTTPS port
-  ##
-  httpsPort: 8443
+  ports:
+    http: 8080
+    https: 8443
   ## @param service.clusterIP Static clusterIP or None for headless services
   ## e.g.:
   ## clusterIP: None
@@ -529,6 +548,24 @@ service:
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.annotations Additional custom annotations for SuiteCRM service
+  ##
+  annotations: {}
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+
 ## Configure the ingress resource that allows you to access the
 ## SuiteCRM installation. Set up the URL
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -537,6 +574,12 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
   ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
   ## certManager: false
   ##
@@ -544,6 +587,10 @@ ingress:
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: suitecrm.local
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -556,21 +603,39 @@ ingress:
   ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
-  ## @param ingress.hosts The list of additional hostnames to be covered with this ingress record.
-  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## hosts:
-  ## - name: suitecrm.local
-  ##   path: /
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Relay on cert-manager to create it by setting `ingress.certManager=true`
+  ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
   ##
-  hosts: []
-  ## @param ingress.tls The tls configuration for the ingress
-  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ## tls:
+  tls: false
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: %%COMPONENT_NAME%%.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
   ## - hosts:
   ##     - suitecrm.local
   ##   secretName: suitecrm.local-tls
   ##
-  tls: []
+  extraTls: []
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -586,15 +651,11 @@ ingress:
   ##   certificate:
   ##
   secrets: []
-  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
-  apiVersion: ""
-  ## @param ingress.path Ingress path
-  ##
-  path: /
-  ## @param ingress.pathType Ingress path type
-  ##
-  pathType: ImplementationSpecific
+  ingressClassName: ""
 
 ## @section Metrics parameters
 
@@ -613,7 +674,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-10-r0
+    tag: 0.11.0-debian-10-r97
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -632,6 +693,52 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
+
+  ## Prometheus exporter service parameters
+  ##
+  service:
+    ## @param metrics.service.type Kubernetes service type for Prometheus metrics
+    ##
+    type: ClusterIP
+    ## @param metrics.service.port Prometheus metrics service port
+    ##
+    port: 9117
+    ## @param metrics.service.annotations [object] Annotations for the Prometheus metrics service
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+    ## @param metrics.service.clusterIP SuiteCRM service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param metrics.service.loadBalancerIP SuiteCRM service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param metrics.service.loadBalancerSourceRanges SuiteCRM service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param metrics.service.externalTrafficPolicy SuiteCRM service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param metrics.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
 
 ## @section Certificate injection parameters
 
@@ -683,7 +790,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r282
+    tag: 10-debian-10-r377
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

@@ -1,9 +1,10 @@
 ingress:
   enabled: true
   tls: true
-
+  selfSigned: true
 service:
   type: ClusterIP
-
 metrics:
   enabled: true
+  serviceMonitor:
+    enabled: true

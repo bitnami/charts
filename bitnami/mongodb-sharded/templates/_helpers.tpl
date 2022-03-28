@@ -133,7 +133,7 @@ in the values file. If the name is not explicitly set it will take the "common.n
   {{- if .Values.service.name -}}
     {{ .Values.service.name }}
   {{- else -}}
-    {{ include "common.names.fullname" .}}
+    {{ include "common.names.fullname" . }}
   {{- end -}}
 {{- end -}}
 

@@ -27,6 +27,12 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
 fullnameOverride: ""
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
 ## @param clusterDomain Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -63,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.14.3-debian-10-r0
+  tag: 1.14.5-debian-10-r43
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -104,12 +110,12 @@ forwarder:
   hostAliases: []
   ## K8s Security Context for forwarder pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param forwarder.securityContext.enabled Enable security context for forwarder pods
-  ## @param forwarder.securityContext.runAsUser User ID for forwarder's containers
-  ## @param forwarder.securityContext.runAsGroup Group ID for forwarder's containers
-  ## @param forwarder.securityContext.fsGroup Group ID for forwarder's containers filesystem
+  ## @param forwarder.podSecurityContext.enabled Enable security context for forwarder pods
+  ## @param forwarder.podSecurityContext.runAsUser User ID for forwarder's containers
+  ## @param forwarder.podSecurityContext.runAsGroup Group ID for forwarder's containers
+  ## @param forwarder.podSecurityContext.fsGroup Group ID for forwarder's containers filesystem
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     runAsUser: 0
     runAsGroup: 0
@@ -210,7 +216,7 @@ forwarder:
           standby
           {{- end }}
         </server>
-        {{- end}}
+        {{- end }}
         <buffer>
           @type file
           path /opt/bitnami/fluentd/logs/buffers/logs.buffer
@@ -235,33 +241,39 @@ forwarder:
       <source>
         @type prometheus_monitor
         <labels>
-          host #{hostname}
+          host ${hostname}
         </labels>
       </source>
       # input plugin that collects metrics for output plugin
       <source>
         @type prometheus_output_monitor
         <labels>
-          host #{hostname}
+          host ${hostname}
         </labels>
       </source>
       # input plugin that collects metrics for in_tail plugin
       <source>
         @type prometheus_tail_monitor
         <labels>
-          host #{hostname}
+          host ${hostname}
         </labels>
       </source>
   ## @param forwarder.extraArgs Extra arguments for the Fluentd command line
   ## ref: https://docs.fluentd.org/deployment/command-line-option
   ##
   extraArgs: ""
-  ## @param forwarder.extraEnv Extra environment variables to pass to the container
+  ## @param forwarder.extraEnvVars Extra environment variables to pass to the container
   ## extraEnv:
   ##   - name: MY_ENV_VAR
   ##     value: my_value
   ##
-  extraEnv: []
+  extraEnvVars: []
+  ## @param forwarder.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Fluentd Forwarder nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param forwarder.extraEnvVarsSecret Name of existing Secret containing extra env vars for Fluentd Forwarder nodes
+  ##
+  extraEnvVarsSecret: ""
   ## @param forwarder.containerPorts [array] Ports the forwarder containers will listen on
   ##
   containerPorts:
@@ -315,6 +327,10 @@ forwarder:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
+    ## @param forwarder.service.externalTrafficPolicy Fluentd Forwarder service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
     ## @param forwarder.service.clusterIP Static clusterIP or None for headless services
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
     ## e.g:
@@ -324,6 +340,39 @@ forwarder:
     ## @param forwarder.service.annotations Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## @param forwarder.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param forwarder.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+
+  ## Configure extra options for startup probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param forwarder.startupProbe.enabled Enable startupProbe
+  ## @param forwarder.startupProbe.httpGet.path Request path for startupProbe
+  ## @param forwarder.startupProbe.httpGet.port Port for startupProbe
+  ## @param forwarder.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param forwarder.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param forwarder.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param forwarder.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param forwarder.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    httpGet:
+      path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+      port: http
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param forwarder.livenessProbe.enabled Enable livenessProbe
@@ -366,6 +415,16 @@ forwarder:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## @param forwarder.customStartupProbe Custom liveness probe for the Fluend Forwarder
+  ##
+  customStartupProbe: {}
+  ## @param forwarder.customLivenessProbe Custom liveness probe for the Fluend Forwarder
+  ##
+  customLivenessProbe: {}
+  ## @param forwarder.customReadinessProbe Custom rediness probe for the Fluend Forwarder
+  ##
+  customReadinessProbe: {}
+
   ## @param forwarder.updateStrategy.type Set up update strategy.
   ## ref: https://kubernetes.io/docs/tasks/manage-daemon/update-daemon-set/#daemonset-update-strategy
   ## Example:
@@ -401,6 +460,15 @@ forwarder:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
+  ## @param forwarder.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param forwarder.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## @param forwarder.podAffinityPreset Forwarder Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -461,6 +529,10 @@ forwarder:
     ## @param forwarder.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
     ##
     annotations: {}
+    ## @param forwarder.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
+
   ## Role Based Access
   ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
   ## @param forwarder.rbac.create Specify whether RBAC resources should be created and used, allowing the get, watch and list of pods/namespaces
@@ -485,7 +557,13 @@ forwarder:
     ##
     hostPath:
       path: /opt/bitnami/fluentd/logs/buffers
-  ## @param forwarder.lifecycle Additional lifecycles to add to the pods
+  ## @param forwarder.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param forwarder.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param forwarder.lifecycleHooks Additional lifecycles to add to the pods
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
   ## e.g:
   ## postStart:
@@ -494,7 +572,8 @@ forwarder:
   ## preStop:
   ##   exec:
   ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
-  lifecycle: {}
+  ##
+  lifecycleHooks: {}
   ## @param forwarder.initContainers Additional init containers to add to the pods
   ## For example:
   ## initContainers:
@@ -545,12 +624,12 @@ aggregator:
   replicaCount: 1
   ## K8s Security Context for Aggregator pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param aggregator.securityContext.enabled Enable security context for aggregator pods
-  ## @param aggregator.securityContext.runAsUser User ID for aggregator's containers
-  ## @param aggregator.securityContext.runAsGroup Group ID for aggregator's containers
-  ## @param aggregator.securityContext.fsGroup Group ID for aggregator's containers filesystem
+  ## @param aggregator.podSecurityContext.enabled Enable security context for aggregator pods
+  ## @param aggregator.podSecurityContext.runAsUser User ID for aggregator's containers
+  ## @param aggregator.podSecurityContext.runAsGroup Group ID for aggregator's containers
+  ## @param aggregator.podSecurityContext.fsGroup Group ID for aggregator's containers filesystem
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsGroup: 1001
@@ -647,7 +726,7 @@ aggregator:
       <source>
         @type prometheus_monitor
         <labels>
-          host #{hostname}
+          host ${hostname}
         </labels>
       </source>
 
@@ -655,7 +734,7 @@ aggregator:
       <source>
         @type prometheus_output_monitor
         <labels>
-          host #{hostname}
+          host ${hostname}
         </labels>
       </source>
 
@@ -667,12 +746,18 @@ aggregator:
   ## ref: https://docs.fluentd.org/deployment/command-line-option
   ##
   extraArgs: ""
-  ## @param aggregator.extraEnv Extra environment variables to pass to the container
+  ## @param aggregator.extraEnvVars Extra environment variables to pass to the container
   ## extraEnv:
   ##   - name: MY_ENV_VAR
   ##     value: my_value
   ##
-  extraEnv: []
+  extraEnvVars: []
+  ## @param aggregator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Fluentd Aggregator nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param aggregator.extraEnvVarsSecret Name of existing Secret containing extra env vars for Fluentd Aggregator nodes
+  ##
+  extraEnvVarsSecret: ""
   ## @param aggregator.containerPorts [array] Ports the aggregator containers will listen on
   ##
   containerPorts:
@@ -718,9 +803,25 @@ aggregator:
     ## @param aggregator.service.annotations Provide any additional annotations which may be required
     ##
     annotations: {}
+    ## @param aggregator.service.externalTrafficPolicy Fluentd Aggregator service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param aggregator.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param aggregator.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param aggregator.service.annotationsHeadless Provide any additional annotations which may be required on headless service
     ##
     annotationsHeadless: {}
+
   ## Configure the ingress resource that allows you to access the
   ## Fluentd aggregator. Set up the URL
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -802,6 +903,33 @@ aggregator:
     ##   certificate:
     ##
     secrets: []
+    ## @param aggregator.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+
+  ## Configure extra options for startup probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param aggregator.startupProbe.enabled Enable startupProbe
+  ## @param aggregator.startupProbe.httpGet.path Request path for startupProbe
+  ## @param aggregator.startupProbe.httpGet.port Port for startupProbe
+  ## @param aggregator.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param aggregator.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param aggregator.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param aggregator.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param aggregator.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    httpGet:
+      path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+      port: http
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param aggregator.livenessProbe.enabled Enable livenessProbe
@@ -844,6 +972,16 @@ aggregator:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## @param aggregator.customStartupProbe Custom liveness probe for the Fluentd Aggregator
+  ##
+  customStartupProbe: {}
+  ## @param aggregator.customLivenessProbe Custom liveness probe for the Fluentd Aggregator
+  ##
+  customLivenessProbe: {}
+  ## @param aggregator.customReadinessProbe Custom rediness probe for the Fluentd Aggregator
+  ##
+  customReadinessProbe: {}
+
   ## @param aggregator.updateStrategy.type Set up update strategy.
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
   ## Example:
@@ -875,6 +1013,22 @@ aggregator:
     ##    cpu: 300m
     ##    memory: 512Mi
     requests: {}
+  ## @param aggregator.priorityClassName Fluentd Aggregator pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param aggregator.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param aggregator.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
+  ## @param aggregator.podManagementPolicy podManagementPolicy to manage scaling operation of Fluentd Aggregator pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: ""
   ## @param aggregator.podAffinityPreset Aggregator Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -933,6 +1087,9 @@ aggregator:
     ## @param aggregator.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
     ##
     annotations: {}
+    ## @param aggregator.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
   ## Autoscaling parameters
   ## This is not recommended in a forwarder+aggregator architecture
   ## @param aggregator.autoscaling.enabled Create an Horizontal Pod Autoscaler
@@ -958,13 +1115,12 @@ aggregator:
             type: Utilization
             averageUtilization: 60
   ## Persist data to a persistent volume
-  ## @param aggregator.persistence.enabled Enable persistence volume for the aggregator
-  ## @param aggregator.persistence.storageClass Persistent Volume storage class
-  ## @param aggregator.persistence.accessMode Persistent Volume access mode
-  ## @param aggregator.persistence.size Persistent Volume size
   ##
   persistence:
+    ## @param aggregator.persistence.enabled Enable persistence volume for the aggregator
+    ##
     enabled: false
+    ## @param aggregator.persistence.storageClass Persistent Volume storage class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is
@@ -972,9 +1128,28 @@ aggregator:
     ##   GKE, AWS & OpenStack)
     ##
     storageClass: ""
-    accessMode: ReadWriteOnce
+    ## @param aggregator.persistence.accessModes Persistent Volume access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param aggregator.persistence.size Persistent Volume size
+    ##
     size: 10Gi
-  ## @param aggregator.lifecycle Additional lifecycles to add to the pods
+    ## @param aggregator.persistence.selector Selector to match an existing Persistent Volume (this value is evaluated as a template)
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    selector: {}
+    ## @param aggregator.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+  ## @param aggregator.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param aggregator.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param aggregator.lifecycleHooks Additional lifecycles to add to the pods
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
   ## e.g:
   ## postStart:
@@ -983,7 +1158,8 @@ aggregator:
   ## preStop:
   ##   exec:
   ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
-  lifecycle: {}
+  ##
+  lifecycleHooks: {}
   ## @param aggregator.initContainers Add init containers to aggregator pods
   ## Example
   ##
@@ -1019,16 +1195,7 @@ aggregator:
   ## @param aggregator.extraVolumeClaimTemplates Optionally specify extra list of additional volume claim templates for the Fluentd Aggregator pods in StatefulSet
   ##
   extraVolumeClaimTemplates: []
-## @param serviceAccount Pods Service Account. This top-level global entry is DEPRECATED. Please use "forwarder.serviceAccount" instead.
-## Only the forwarder was affected by the historical usage here.
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-##
-serviceAccount: {}
-## @param rbac Role Based Access. This top-level global entry is DEPRECATED. Please use "forwarder.rbac" instead.
-## Only the forwarder was affected by the historical usage here.
-## ref: https://kubernetes.io/docs/admin/authorization/rbac/
-##
-rbac: {}
+
 ## Prometheus Exporter / Metrics
 ##
 metrics:
@@ -1048,12 +1215,39 @@ metrics:
     ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
     ##
     loadBalancerIP: ""
+    ## @param metrics.service.clusterIP Prometheus metrics service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param metrics.service.loadBalancerSourceRanges Prometheus metrics service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param metrics.service.externalTrafficPolicy Prometheus metrics service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
     ## @param metrics.service.annotations [object] Annotations for the Prometheus Exporter service service
     ##
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "24231"
       prometheus.io/path: "/metrics"
+    ## @param metrics.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -1075,6 +1269,17 @@ metrics:
     ## scrapeTimeout: 10s
     ##
     scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    metricRelabelings: []
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
@@ -1088,6 +1293,9 @@ metrics:
     ## @param metrics.serviceMonitor.annotations ServiceMonitor annotations
     ##
     annotations: {}
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
 ## Enable internal SSL/TLS encryption
 ##
 tls:

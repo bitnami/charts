@@ -10,7 +10,7 @@ metadata:
 data:
   rabbitmq.conf: |-
     {{- include "common.tplvalues.render" (dict "value" .Values.configuration "context" $) | nindent 4 }}
-  {{- if .Values.advancedConfiguration}}
+  {{- if .Values.advancedConfiguration }}
   advanced.config: |-
     {{- include "common.tplvalues.render" (dict "value" .Values.advancedConfiguration "context" $) | nindent 4 }}
   {{- end }}

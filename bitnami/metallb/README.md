@@ -1,7 +1,13 @@
-# MetalLB
+<!--- app-name: MetalLB -->
 
-[MetalLB](https://metallb.universe.tf/faq/) is an open source, rock solid LoadBalancer. It handles the `ServiceType: Loadbalancer`.
+# MetalLB packaged by Bitnami
 
+MetalLB is a load-balancer implementation for bare metal Kubernetes clusters, using standard routing protocols.
+
+[Overview of MetalLB](https://metallb.universe.tf/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -18,8 +24,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - Virtual IPs for Layer 2 or Route Reflector for BGP setup.
 
 ## Installing the Chart
@@ -86,7 +92,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `controller.image.registry`                              | MetalLB Controller image registry                                                                                                           | `docker.io`                  |
 | `controller.image.repository`                            | MetalLB Controller image repository                                                                                                         | `bitnami/metallb-controller` |
-| `controller.image.tag`                                   | MetalLB Controller  image tag (immutable tags are recommended)                                                                              | `0.11.0-debian-10-r27`       |
+| `controller.image.tag`                                   | MetalLB Controller  image tag (immutable tags are recommended)                                                                              | `0.11.0-debian-10-r73`       |
 | `controller.image.pullPolicy`                            | MetalLB Controller image pull policy                                                                                                        | `IfNotPresent`               |
 | `controller.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                            | `[]`                         |
 | `controller.hostAliases`                                 | Deployment pod host aliases                                                                                                                 | `[]`                         |
@@ -142,7 +148,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `speaker.image.registry`                              | MetalLB Speaker image registry                                                                                                              | `docker.io`               |
 | `speaker.image.repository`                            | MetalLB Speaker image repository                                                                                                            | `bitnami/metallb-speaker` |
-| `speaker.image.tag`                                   | MetalLB Speaker  image tag (immutable tags are recommended)                                                                                 | `0.11.0-debian-10-r27`    |
+| `speaker.image.tag`                                   | MetalLB Speaker  image tag (immutable tags are recommended)                                                                                 | `0.11.0-debian-10-r74`    |
 | `speaker.image.pullPolicy`                            | MetalLB Speaker image pull policy                                                                                                           | `IfNotPresent`            |
 | `speaker.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                            | `[]`                      |
 | `speaker.rbac.create`                                 | create specifies whether to install and use RBAC rules.                                                                                     | `true`                    |
@@ -235,7 +241,7 @@ configInline:
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
@@ -283,3 +289,19 @@ Please, note this Helm chart is a community-supported solution. This means that 
 The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
 
 New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

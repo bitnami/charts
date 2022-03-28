@@ -1,7 +1,13 @@
-# Magento
+<!--- app-name: Magento -->
 
-[Magento](https://magento.org/) is a feature-rich flexible e-commerce solution. It includes transaction options, multi-store functionality, loyalty programs, product categorization and shopper filtering, promotion rules, and more.
+# Magento packaged by Bitnami
 
+Magento is a powerful open source e-commerce platform. With easy customizations and rich features, it allows retailers to grow their online businesses in a cost-effective way.
+
+[Overview of Magento](http://www.magento.com)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -19,8 +25,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -75,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                     | Magento image registry                                                                                               | `docker.io`           |
 | `image.repository`                   | Magento image repository                                                                                             | `bitnami/magento`     |
-| `image.tag`                          | Magento image tag (immutable tags are recommended)                                                                   | `2.4.3-debian-10-r63` |
+| `image.tag`                          | Magento image tag (immutable tags are recommended)                                                                   | `2.4.3-debian-10-r92` |
 | `image.pullPolicy`                   | Magento image pull policy                                                                                            | `IfNotPresent`        |
 | `image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                     | `[]`                  |
 | `image.debug`                        | Specify if debug logs should be enabled                                                                              | `false`               |
@@ -176,28 +182,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                                                              | Value                  |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------- |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.    | `true`                 |
-| `mariadb.image.registry`                    | MariaDB image registry                                                                   | `docker.io`            |
-| `mariadb.image.repository`                  | MariaDB image repository                                                                 | `bitnami/mariadb`      |
-| `mariadb.image.tag`                         | MariaDB image tag (immutable tags are recommended)                                       | `10.3.32-debian-10-r2` |
-| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                      | `standalone`           |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`                   |
-| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_magento`      |
-| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_magento`           |
-| `mariadb.auth.password`                     | Password for the database                                                                | `""`                   |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`                 |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`                   |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `["ReadWriteOnce"]`    |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`                  |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`                   |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`                   |
-| `externalDatabase.host`                     | Host of the existing database                                                            | `""`                   |
-| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`                 |
-| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_magento`           |
-| `externalDatabase.password`                 | Password for the above username                                                          | `""`                   |
-| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_magento`      |
+| Name                                        | Description                                                                              | Value                   |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.    | `true`                  |
+| `mariadb.image.registry`                    | MariaDB image registry                                                                   | `docker.io`             |
+| `mariadb.image.repository`                  | MariaDB image repository                                                                 | `bitnami/mariadb`       |
+| `mariadb.image.tag`                         | MariaDB image tag (immutable tags are recommended)                                       | `10.3.32-debian-10-r59` |
+| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                      | `standalone`            |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`                    |
+| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_magento`       |
+| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_magento`            |
+| `mariadb.auth.password`                     | Password for the database                                                                | `""`                    |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`                  |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`                    |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `["ReadWriteOnce"]`     |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`                   |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`                    |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`                    |
+| `externalDatabase.host`                     | Host of the existing database                                                            | `""`                    |
+| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`                  |
+| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_magento`            |
+| `externalDatabase.password`                 | Password for the above username                                                          | `""`                    |
+| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_magento`       |
 
 
 ### Elasticsearch parameters
@@ -232,7 +238,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r250`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r305`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the init container                                                                                                               | `{}`                    |
@@ -271,7 +277,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`             | Start a side-car prometheus exporter                       | `false`                   |
 | `metrics.image.registry`      | Apache exporter image registry                             | `docker.io`               |
 | `metrics.image.repository`    | Apache exporter image repository                           | `bitnami/apache-exporter` |
-| `metrics.image.tag`           | Apache exporter image tag (immutable tags are recommended) | `0.10.1-debian-10-r52`    |
+| `metrics.image.tag`           | Apache exporter image tag (immutable tags are recommended) | `0.11.0-debian-10-r23`    |
 | `metrics.image.pullPolicy`    | Image pull policy                                          | `IfNotPresent`            |
 | `metrics.image.pullSecrets`   | Specify docker-registry secret names as an array           | `[]`                      |
 | `metrics.resources.limits`    | The resources limits for the metrics container             | `{}`                      |
@@ -299,7 +305,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r250`                      |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r305`                      |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 
@@ -561,7 +567,7 @@ kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Notable changes
 
@@ -769,3 +775,19 @@ Please, note this Helm chart is a community-supported solution. This means that 
 The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
 
 New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

@@ -1,14 +1,14 @@
-name: Generate Chart Readme
+name: Check README metadata
 
 on:
   pull_request:
     branches:
       - master
     paths:
-      - 'bitnami/**/values.yaml'
+      - 'bitnami/*/values.yaml'
 
 jobs:
-  generate-chart-readme:
+  check-readme-metadata:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: 'bitnami-labs/readme-generator-for-helm'
-          ref: '967764dacee72c05fc5d01c84c13ebb5dab7ac8b'
+          ref: '1af12881436b1f58f0643d733fd5196b4a11caa8'
           path: readme-generator-for-helm
 
       - name: Cache node modules
@@ -51,7 +51,4 @@ jobs:
           cat raw-inputs | sed 's/bitnami/charts\/bitnami/' > prepared-inputs
 
       - name: Execute readme-generator-for-helm
-        run: readme-generator-for-helm/bin/index.js -r $(cat prepared-inputs | grep README) -v $(cat prepared-inputs | grep values)
-
-      - name: Output generated README.md
-        run: cat $(cat prepared-inputs | grep README)
+        run: readme-generator-for-helm/bin/index.js --values $(cat prepared-inputs | grep values) --schema /tmp/chart-schema.json

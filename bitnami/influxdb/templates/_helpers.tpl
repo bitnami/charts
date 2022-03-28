@@ -37,6 +37,13 @@ Return the proper azure-cli image name
 {{- end -}}
 
 {{/*
+Return the proper aws-cli image name
+*/}}
+{{- define "awsCli.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.backup.uploadProviders.aws.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "influxdb.imagePullSecrets" -}}

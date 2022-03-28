@@ -54,7 +54,7 @@ spec:
   {{- if index .Values.prometheus "externalUrl" }}
   externalUrl: "{{ .Values.prometheus.externalUrl }}"
   {{- else if and .Values.prometheus.ingress.enabled .Values.prometheus.ingress.hosts }}
-  externalUrl: {{ if .Values.prometheus.ingress.tls }}https{{else}}http{{ end }}://{{ (index .Values.prometheus.ingress.hosts 0).name }}{{ .Values.prometheus.routePrefix }}
+  externalUrl: {{ if .Values.prometheus.ingress.tls }}https{{ else }}http{{ end }}://{{ (index .Values.prometheus.ingress.hosts 0).name }}{{ .Values.prometheus.routePrefix }}
   {{- else }}
   externalUrl: http://{{ template "kube-prometheus.prometheus.fullname" . }}.{{ .Release.Namespace }}:9090{{ .Values.prometheus.routePrefix }}
   {{- end }}
@@ -68,7 +68,7 @@ spec:
     {{- range .Values.prometheus.enableFeatures }}
     - {{ . | quote }}
     {{- end }}
-  {{- end }}  
+  {{- end }}
   {{- if .Values.prometheus.scrapeInterval }}
   scrapeInterval: {{ .Values.prometheus.scrapeInterval }}
   {{- end }}
@@ -315,6 +315,18 @@ spec:
         timeoutSeconds: {{ .Values.prometheus.readinessProbe.timeoutSeconds }}
         failureThreshold: {{ .Values.prometheus.readinessProbe.failureThreshold }}
         successThreshold: {{ .Values.prometheus.readinessProbe.successThreshold }}
+      {{- end }}
+      {{- if .Values.prometheus.startupProbe.enabled }}
+      startupProbe:
+        httpGet:
+          path: {{ .Values.prometheus.startupProbe.path }}
+          port: web
+          scheme: HTTP
+        initialDelaySeconds: {{ .Values.prometheus.startupProbe.initialDelaySeconds }}
+        periodSeconds: {{ .Values.prometheus.startupProbe.periodSeconds }}
+        timeoutSeconds: {{ .Values.prometheus.startupProbe.timeoutSeconds }}
+        failureThreshold: {{ .Values.prometheus.startupProbe.failureThreshold }}
+        successThreshold: {{ .Values.prometheus.startupProbe.successThreshold }}
       {{- end }}
     {{- end }}
     {{- if or .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.livenessProbe.enabled .Values.operator.prometheusConfigReloader.readinessProbe.enabled }}

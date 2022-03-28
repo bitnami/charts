@@ -49,11 +49,12 @@ extraDeploy: []
 ## @param image.tag MediaWiki image tag (immutable tags are recommended)
 ## @param image.pullPolicy Image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Enable MediaWiki image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/mediawiki
-  tag: 1.37.1-debian-10-r0
+  tag: 1.37.1-debian-10-r96
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -67,6 +68,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
 ## @param hostAliases [array] Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -120,6 +124,9 @@ command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
+## @param lifecycleHooks for the Mediawiki container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## @param extraEnvVars Extra environment variables to be set on Mediawki container
 ## Example:
 ## extraEnvVars:
@@ -153,10 +160,12 @@ podSecurityContext:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param containerSecurityContext.enabled Enable Mediawiki containers' SecurityContext
 ## @param containerSecurityContext.runAsUser User ID to run Mediawiki containers
+## @param containerSecurityContext.runAsNonRoot Set Mediawiki container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
 ## Mediawiki resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -175,6 +184,32 @@ resources:
   requests:
     memory: 512Mi
     cpu: 300m
+## Mediawiki containers' startup probe.
+## Configure extra options for startup probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.httpGet.path Request path for startupProbe
+## @param startupProbe.httpGet.port Port for startupProbe
+## @param startupProbe.httpGet.httpHeaders [array] Headers for startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  httpGet:
+    path: /api.php?action=query&meta=siteinfo&format=none
+    port: http
+    httpHeaders:
+      - name: Host
+        value: "{{ include \"mediawiki.host\" . }}"
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
 ## Mediawiki containers' liveness probe.
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -227,6 +262,9 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+## @param customStartupProbe Override default startup probe
+##
+customStartupProbe: {}
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
@@ -282,6 +320,18 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+## @param priorityClassName Mediawiki pods' priorityClassName
+##
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 ## @param extraVolumes Optionally specify extra list of additional volumes for Mediawki pods
 ##
 extraVolumes: []
@@ -330,12 +380,16 @@ persistence:
   ## If defined, PVC must be created manually before volume will be bound
   ##
   existingClaim: ""
-  ## @param persistence.accessMode PVC Access Mode for MediaWiki volume
+  ## @param persistence.accessModes [array] Persistent Volume access modes
   ##
-  accessMode: ReadWriteOnce
+  accessModes:
+    - ReadWriteOnce
   ## @param persistence.size PVC Storage Request for MediaWiki volume
   ##
   size: 8Gi
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
 
 ## @section Traffic Exposure parameters
 
@@ -348,16 +402,12 @@ service:
   ## For minikube, set this to NodePort, elsewhere use LoadBalancer
   ##
   type: LoadBalancer
-  ## @param service.loadBalancerIP Use serviceLoadBalancerIP to request a specific static IP,
-  ## otherwise leave blank
+  ## @param service.ports.http Service HTTP port
+  ## @param service.ports.https HTTPS Port. Set this to any value (recommended: 443) to enable the https service port
   ##
-  loadBalancerIP: ""
-  ## @param service.port Service HTTP port
-  ##
-  port: 80
-  ## @param service.httpsPort HTTPS Port. Set this to any value (recommended: 443) to enable the https service port
-  ##
-  httpsPort: ""
+  ports:
+    http: 80
+    https: 443
   ## Use nodePorts to requests some specific ports when using NodePort
   ## @param service.nodePorts.http Kubernetes http node port
   ## @param service.nodePorts.https Kubernetes https node port
@@ -372,6 +422,39 @@ service:
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+  ## @param service.clusterIP Mediawiki service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP Mediawiki service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Mediawiki service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.annotations Additional custom annotations for Mediawiki service
+  ##
+  annotations: {}
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 ## Configure the ingress resource that allows you to access the Mediawiki installation. Set up the URL
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
@@ -451,6 +534,11 @@ ingress:
   ##   certificate:
   ##
   secrets: []
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
 
 ## @section Database parameters
 
@@ -553,7 +641,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.10.1-debian-10-r83
+    tag: 0.11.0-debian-10-r97
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -594,15 +682,27 @@ metrics:
     ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.relabellings Metrics relabellings to add to the scrape endpoint
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
-    relabellings: []
-    ## @param metrics.serviceMonitor.honorLabels Labels to honor to add to the scrape endpoint
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
-    ## @param metrics.serviceMonitor.additionalLabels Additional custom labels for the ServiceMonitor
-    ##
-    additionalLabels: {}
 
 ## @section NetworkPolicy parameters
 

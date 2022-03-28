@@ -1,11 +1,13 @@
-# MongoDB&reg; Sharded packaged by Bitnami
+<!--- app-name: MongoDB&reg; Sharded -->
 
-[MongoDB&reg; Sharded](https://www.mongodb.com/) is a cross-platform document-oriented database. Classified as a NoSQL database, MongoDB&reg; eschews the traditional table-based relational database structure in favor of JSON-like documents with dynamic schemas, making the integration of data in certain types of applications easier and faster.
+# MongoDB(R) Sharded packaged by Bitnami
 
-This chart uses the [sharding method](https://docs.mongodb.com/manual/sharding/) for distributing data across multiple machines. This is meant for deployments with very large data sets and high throughput operations.
+MongoDB(R) is an open source NoSQL database that uses JSON for data storage. MongoDB(TM) Sharded improves scalability and reliability for large datasets by distributing data across multiple machines.
 
-Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB&reg;  is run and maintained by MongoDB, which is a completely separate project from Bitnami.
+[Overview of MongoDB&reg; Sharded](http://www.mongodb.org)
 
+Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB(R) is run and maintained by MongoDB, which is a completely separate project from Bitnami.
+                           
 ## TL;DR
 
 ```bash
@@ -15,14 +17,18 @@ $ helm install my-release bitnami/mongodb-sharded
 
 ## Introduction
 
-This chart bootstraps a [MongoDB&reg; Sharded](https://github.com/bitnami/bitnami-docker-mongodb-sharded) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MongoDB(&reg;) Sharded](https://github.com/bitnami/bitnami-docker-mongodb-sharded) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+
+Classified as a NoSQL database, MongoDB&reg; eschews the traditional table-based relational database structure in favor of JSON-like documents with dynamic schemas, making the integration of data in certain types of applications easier and faster.
+
+This chart uses the [sharding method](https://docs.mongodb.com/manual/sharding/) for distributing data across multiple machines. This is meant for deployments with very large data sets and high throughput operations.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -72,14 +78,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 
-### MongoDB&reg; Sharded parameters
+### MongoDB(&reg;) Sharded parameters
 
 | Name                                  | Description                                                                                                                                               | Value                     |
 | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `image.registry`                      | MongoDB&reg; Sharded image registry                                                                                                                       | `docker.io`               |
-| `image.repository`                    | MongoDB&reg; Sharded Image name                                                                                                                           | `bitnami/mongodb-sharded` |
-| `image.tag`                           | MongoDB&reg; Sharded image tag (immutable tags are recommended)                                                                                           | `4.4.10-debian-10-r45`    |
-| `image.pullPolicy`                    | MongoDB&reg; Sharded image pull policy                                                                                                                    | `IfNotPresent`            |
+| `image.registry`                      | MongoDB(&reg;) Sharded image registry                                                                                                                       | `docker.io`               |
+| `image.repository`                    | MongoDB(&reg;) Sharded Image name                                                                                                                           | `bitnami/mongodb-sharded` |
+| `image.tag`                           | MongoDB(&reg;) Sharded image tag (immutable tags are recommended)                                                                                           | `4.4.11-debian-10-r6`     |
+| `image.pullPolicy`                    | MongoDB(&reg;) Sharded image pull policy                                                                                                                    | `IfNotPresent`            |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                          | `[]`                      |
 | `image.debug`                         | Specify if debug logs should be enabled                                                                                                                   | `false`                   |
 | `mongodbRootPassword`                 | MongoDB&reg; root password                                                                                                                                | `""`                      |
@@ -111,7 +117,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                   |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`               |
 | `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`   |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r265`       |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r308`       |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`            |
 | `volumePermissions.image.pullSecrets` | Init container volume-permissions image pull secrets                                                                                                      | `[]`                      |
 | `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `{}`                      |
@@ -338,9 +344,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                               | `false`                    |
 | `metrics.image.registry`                     | MongoDB&reg; exporter image registry                                               | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB&reg; exporter image name                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB&reg; exporter image tag                                                    | `0.11.2-debian-10-r354`    |
+| `metrics.image.tag`                          | MongoDB&reg; exporter image tag                                                    | `0.30.0-debian-10-r53`     |
 | `metrics.image.pullPolicy`                   | MongoDB&reg; exporter image pull policy                                            | `Always`                   |
 | `metrics.image.pullSecrets`                  | MongoDB&reg; exporter image pull secrets                                           | `[]`                       |
+| `metrics.useTLS`                             | Whether to connect to MongoDB&reg; with TLS                                        | `false`                    |
 | `metrics.extraArgs`                          | String with extra arguments to the metrics exporter                                | `""`                       |
 | `metrics.resources`                          | Metrics exporter resource requests and limits                                      | `{}`                       |
 | `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                               | `false`                    |
@@ -476,7 +483,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
@@ -487,6 +494,11 @@ $ helm upgrade my-release bitnami/mongodb-sharded --set mongodbRootPassword=[PAS
 ```
 
 > Note: you need to substitute the placeholders [PASSWORD] and [REPLICASETKEY] with the values obtained in the installation notes.
+
+### To 4.0.0
+
+In this version, the mongodb-exporter bundled as part of this Helm chart was updated to a new version which, even it is not a major change, can contain breaking changes (from `0.11.X` to `0.30.X`).
+Please visit the release notes from the upstream project at https://github.com/percona/mongodb_exporter/releases
 
 ### To 3.1.0
 
@@ -518,3 +530,19 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 MongoDB&reg; container images were updated to `4.4.x` and it can affect compatibility with older versions of MongoDB&reg;. Refer to the following guide to upgrade your applications:
 
 - [Upgrade a Sharded Cluster to 4.4](https://docs.mongodb.com/manual/release-notes/4.4-upgrade-sharded-cluster/)
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

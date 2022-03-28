@@ -1,5 +1,5 @@
 {{- if .Values.healthIngress.enabled -}}
-apiVersion: extensions/v1beta1
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "aspnet-core.fullname" . }}-health
@@ -18,6 +18,9 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
+  {{- if and .Values.healthIngress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.healthIngress.ingressClassName | quote }}
+  {{- end }}
   rules:
     {{- if .Values.healthIngress.hostname }}
     - host: {{ .Values.healthIngress.hostname }}
@@ -40,10 +43,10 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.healthIngress.extraPaths  "context" $) | nindent 10 }}
           {{- end }}
           - path: {{ .Values.healthIngress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ .Values.healthIngress.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "aspnet-core.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "aspnet-core.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
   {{- if or .Values.healthIngress.tls .Values.healthIngress.extraTls .Values.healthIngress.hosts }}
   tls:

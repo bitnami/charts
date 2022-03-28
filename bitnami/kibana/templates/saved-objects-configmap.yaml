@@ -15,7 +15,7 @@ data:
     {{- range $i, $url := .Values.savedObjects.urls }}
     echo "Importing saved objects from NDJSON in url {{ add $i 1 }} out of {{ $totalURLs }}: {{ $url }}"
     download_tmp_file="$(mktemp)"
-    curl "{{$url}}" > "${download_tmp_file}.ndjson"
+    curl "{{ $url }}" > "${download_tmp_file}.ndjson"
     curl -s --connect-timeout 60 --max-time 60 -XPOST {{ $savedObjectsUrl }} -H 'kbn-xsrf:true' --form file=@${download_tmp_file}.ndjson
     {{- end }}
     {{- end }}

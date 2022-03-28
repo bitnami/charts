@@ -1,7 +1,13 @@
-# Kafka
+<!--- app-name: Apache Kafka -->
 
-[Kafka](https://kafka.apache.org/) is a distributed streaming platform used for building real-time data pipelines and streaming apps. It is horizontally scalable, fault-tolerant, wicked fast, and runs in production in thousands of companies.
+# Apache Kafka packaged by Bitnami
 
+Apache Kafka is a distributed streaming platform designed to build real-time pipelines and can be used as a message broker or as a replacement for a log aggregation solution for big data applications.
+
+[Overview of Apache Kafka](http://kafka.apache.org/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -17,8 +23,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -59,232 +65,251 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                     | Description                                                                             | Value           |
 | ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`           | String to partially override kafka.fullname                                             | `""`            |
-| `fullnameOverride`       | String to fully override kafka.fullname                                                 | `""`            |
+| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
 | `clusterDomain`          | Default Kubernetes cluster domain                                                       | `cluster.local` |
 | `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
+| `diagnosticMode.command` | Command to override all containers in the statefulset                                   | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the statefulset                                      | `["infinity"]`  |
 
 
 ### Kafka parameters
 
-| Name                                       | Description                                                                                                                                          | Value                               |
-| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
-| `image.registry`                           | Kafka image registry                                                                                                                                 | `docker.io`                         |
-| `image.repository`                         | Kafka image repository                                                                                                                               | `bitnami/kafka`                     |
-| `image.tag`                                | Kafka image tag (immutable tags are recommended)                                                                                                     | `2.8.1-debian-10-r73`               |
-| `image.pullPolicy`                         | Kafka image pull policy                                                                                                                              | `IfNotPresent`                      |
-| `image.pullSecrets`                        | Specify docker-registry secret names as an array                                                                                                     | `[]`                                |
-| `image.debug`                              | Set to true if you would like to see extra information on logs                                                                                       | `false`                             |
-| `config`                                   | Configuration file for Kafka. Auto-generated based on other parameters when not specified (see [below](                                              | `""`                                |
-| `existingConfigmap`                        | ConfigMap with Kafka Configuration                                                                                                                   | `""`                                |
-| `log4j`                                    | An optional log4j.properties file to overwrite the default of the Kafka brokers.                                                                     | `""`                                |
-| `existingLog4jConfigMap`                   | The name of an existing ConfigMap containing a log4j.properties file.                                                                                | `""`                                |
-| `heapOpts`                                 | Kafka's Java Heap size                                                                                                                               | `-Xmx1024m -Xms1024m`               |
-| `deleteTopicEnable`                        | Switch to enable topic deletion or not                                                                                                               | `false`                             |
-| `autoCreateTopicsEnable`                   | Switch to enable auto creation of topics. Enabling auto creation of topics not recommended for production or similar environments                    | `true`                              |
-| `logFlushIntervalMessages`                 | The number of messages to accept before forcing a flush of data to disk                                                                              | `_10000`                            |
-| `logFlushIntervalMs`                       | The maximum amount of time a message can sit in a log before we force a flush                                                                        | `1000`                              |
-| `logRetentionBytes`                        | A size-based retention policy for logs                                                                                                               | `_1073741824`                       |
-| `logRetentionCheckIntervalMs`              | The interval at which log segments are checked to see if they can be deleted                                                                         | `300000`                            |
-| `logRetentionHours`                        | The minimum age of a log file to be eligible for deletion due to age                                                                                 | `168`                               |
-| `logSegmentBytes`                          | The maximum size of a log segment file. When this size is reached a new log segment will be created                                                  | `_1073741824`                       |
-| `logsDirs`                                 | A comma separated list of directories under which to store log files                                                                                 | `/bitnami/kafka/data`               |
-| `maxMessageBytes`                          | The largest record batch size allowed by Kafka                                                                                                       | `_1000012`                          |
-| `defaultReplicationFactor`                 | Default replication factors for automatically created topics                                                                                         | `1`                                 |
-| `offsetsTopicReplicationFactor`            | The replication factor for the offsets topic                                                                                                         | `1`                                 |
-| `transactionStateLogReplicationFactor`     | The replication factor for the transaction topic                                                                                                     | `1`                                 |
-| `transactionStateLogMinIsr`                | Overridden min.insync.replicas config for the transaction topic                                                                                      | `1`                                 |
-| `numIoThreads`                             | The number of threads doing disk I/O                                                                                                                 | `8`                                 |
-| `numNetworkThreads`                        | The number of threads handling network requests                                                                                                      | `3`                                 |
-| `numPartitions`                            | The default number of log partitions per topic                                                                                                       | `1`                                 |
-| `numRecoveryThreadsPerDataDir`             | The number of threads per data directory to be used for log recovery at startup and flushing at shutdown                                             | `1`                                 |
-| `socketReceiveBufferBytes`                 | The receive buffer (SO_RCVBUF) used by the socket server                                                                                             | `102400`                            |
-| `socketRequestMaxBytes`                    | The maximum size of a request that the socket server will accept (protection against OOM)                                                            | `_104857600`                        |
-| `socketSendBufferBytes`                    | The send buffer (SO_SNDBUF) used by the socket server                                                                                                | `102400`                            |
-| `zookeeperConnectionTimeoutMs`             | Timeout in ms for connecting to Zookeeper                                                                                                            | `6000`                              |
-| `zookeeperChrootPath`                      | Path which puts data under some path in the global ZooKeeper namespace                                                                               | `""`                                |
-| `authorizerClassName`                      | The Authorizer is configured by setting authorizer.class.name=kafka.security.authorizer.AclAuthorizer in server.properties.                          | `""`                                |
-| `allowEveryoneIfNoAclFound`                | By default, if a resource has no associated ACLs, then no one is allowed to access that resource except super users.                                 | `true`                              |
-| `superUsers`                               | You can add super users in server.properties                                                                                                         | `User:admin`                        |
-| `command`                                  | Override kafka container command                                                                                                                     | `["/scripts/setup.sh"]`             |
-| `args`                                     | Override kafka container arguments                                                                                                                   | `[]`                                |
-| `extraEnvVars`                             | Extra environment variables to add to kafka pods (see [below]({KEY}                                                                                  | `[]`                                |
-| `extraVolumes`                             | Extra volume(s) to add to Kafka statefulset                                                                                                          | `[]`                                |
-| `extraVolumeMounts`                        | Extra volumeMount(s) to add to Kafka containers                                                                                                      | `[]`                                |
-| `auth.clientProtocol`                      | Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`                        | `plaintext`                         |
-| `auth.interBrokerProtocol`                 | Authentication protocol for inter-broker communications. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`                        | `plaintext`                         |
-| `auth.sasl.mechanisms`                     | SASL mechanisms when either `auth.interBrokerProtocol` or `auth.clientProtocol` are `sasl`. Allowed types: `plain`, `scram-sha-256`, `scram-sha-512` | `plain,scram-sha-256,scram-sha-512` |
-| `auth.sasl.interBrokerMechanism`           | SASL mechanism for inter broker communication.                                                                                                       | `plain`                             |
-| `auth.sasl.jaas.clientUsers`               | Kafka client user list                                                                                                                               | `["user"]`                          |
-| `auth.sasl.jaas.clientPasswords`           | Kafka client passwords. This is mandatory if more than one user is specified in clientUsers                                                          | `[]`                                |
-| `auth.sasl.jaas.interBrokerUser`           | Kafka inter broker communication user for SASL authentication                                                                                        | `admin`                             |
-| `auth.sasl.jaas.interBrokerPassword`       | Kafka inter broker communication password for SASL authentication                                                                                    | `""`                                |
-| `auth.sasl.jaas.zookeeperUser`             | Kafka Zookeeper user for SASL authentication                                                                                                         | `""`                                |
-| `auth.sasl.jaas.zookeeperPassword`         | Kafka Zookeeper password for SASL authentication                                                                                                     | `""`                                |
-| `auth.sasl.jaas.existingSecret`            | Name of the existing secret containing credentials for clientUsers, interBrokerUser and zookeeperUser                                                | `""`                                |
-| `auth.saslMechanisms`                      | DEPRECATED: use `auth.sasl.mechanisms` instead.                                                                                                      | `plain,scram-sha-256,scram-sha-512` |
-| `auth.saslInterBrokerMechanism`            | DEPRECATED: use `auth.sasl.interBrokerMechanism` instead.                                                                                            | `plain`                             |
-| `auth.jaas`                                | DEPRECATED: use `auth.sasl.jaas` instead.                                                                                                            | `{}`                                |
-| `auth.tls.type`                            | Format to use for TLS certificates. Allowed types: `jks` and `pem`                                                                                   | `jks`                               |
-| `auth.tls.existingSecrets`                 | Array existing secrets containing the TLS certificates for the Kafka brokers                                                                         | `[]`                                |
-| `auth.tls.existingSecret`                  | DEPRECATED: use `auth.tls.existingSecrets` instead.                                                                                                  | `""`                                |
-| `auth.tls.autoGenerated`                   | Generate automatically self-signed TLS certificates for Kafka brokers. Currently only supported if `auth.tls.type` is `pem`                          | `false`                             |
-| `auth.tls.password`                        | Password to access the JKS files or PEM key when they are password-protected.                                                                        | `""`                                |
-| `auth.tls.jksTruststoreSecret`             | Name of the existing secret containing your truststore if truststore not existing or different from the ones in the `auth.tls.existingSecrets`       | `""`                                |
-| `auth.tls.jksKeystoreSAN`                  | The secret key from the `auth.tls.existingSecret` containing the keystore with a SAN certificate                                                     | `""`                                |
-| `auth.tls.jksTruststore`                   | The secret key from the `auth.tls.existingSecret` or `auth.tls.jksTruststoreSecret` containing the truststore                                        | `""`                                |
-| `auth.tls.endpointIdentificationAlgorithm` | The endpoint identification algorithm to validate server hostname using server certificate                                                           | `https`                             |
-| `auth.jksSecret`                           | DEPRECATED: use `auth.tls.existingSecrets` instead.                                                                                                  | `""`                                |
-| `auth.jksTruststoreSecret`                 | DEPRECATED: use `auth.tls.jksTruststoreSecret` instead.                                                                                              | `""`                                |
-| `auth.jksKeystoreSAN`                      | DEPRECATED: use `auth.tls.jksKeystoreSAN` instead.                                                                                                   | `""`                                |
-| `auth.jksTruststore`                       | DEPRECATED: use `auth.tls.jksTruststore` instead.                                                                                                    | `""`                                |
-| `auth.jksPassword`                         | DEPRECATED: use `auth.tls.password` instead.                                                                                                         | `""`                                |
-| `auth.tlsEndpointIdentificationAlgorithm`  | DEPRECATED: use `auth.tls.endpointIdentificationAlgorithm` instead.                                                                                  | `https`                             |
-| `listeners`                                | The address(es) the socket server listens on. Auto-calculated it's set to an empty array                                                             | `[]`                                |
-| `advertisedListeners`                      | The address(es) (hostname:port) the broker will advertise to producers and consumers. Auto-calculated it's set to an empty array                     | `[]`                                |
-| `listenerSecurityProtocolMap`              | The protocol->listener mapping. Auto-calculated it's set to nil                                                                                      | `""`                                |
-| `allowPlaintextListener`                   | Allow to use the PLAINTEXT listener                                                                                                                  | `true`                              |
-| `interBrokerListenerName`                  | The listener that the brokers should communicate on                                                                                                  | `INTERNAL`                          |
+| Name                                       | Description                                                                                                                                                                         | Value                               |
+| ------------------------------------------ |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------|
+| `image.registry`                           | Kafka image registry                                                                                                                                                                | `docker.io`                         |
+| `image.repository`                         | Kafka image repository                                                                                                                                                              | `bitnami/kafka`                     |
+| `image.tag`                                | Kafka image tag (immutable tags are recommended)                                                                                                                                    | `3.1.0-debian-10-r31`               |
+| `image.pullPolicy`                         | Kafka image pull policy                                                                                                                                                             | `IfNotPresent`                      |
+| `image.pullSecrets`                        | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                                |
+| `image.debug`                              | Specify if debug values should be set                                                                                                                                               | `false`                             |
+| `config`                                   | Configuration file for Kafka. Auto-generated based on other parameters when not specified                                                                                           | `""`                                |
+| `existingConfigmap`                        | ConfigMap with Kafka Configuration                                                                                                                                                  | `""`                                |
+| `log4j`                                    | An optional log4j.properties file to overwrite the default of the Kafka brokers                                                                                                     | `""`                                |
+| `existingLog4jConfigMap`                   | The name of an existing ConfigMap containing a log4j.properties file                                                                                                                | `""`                                |
+| `heapOpts`                                 | Kafka Java Heap size                                                                                                                                                                | `-Xmx1024m -Xms1024m`               |
+| `deleteTopicEnable`                        | Switch to enable topic deletion or not                                                                                                                                              | `false`                             |
+| `autoCreateTopicsEnable`                   | Switch to enable auto creation of topics. Enabling auto creation of topics not recommended for production or similar environments                                                   | `true`                              |
+| `logFlushIntervalMessages`                 | The number of messages to accept before forcing a flush of data to disk                                                                                                             | `_10000`                            |
+| `logFlushIntervalMs`                       | The maximum amount of time a message can sit in a log before we force a flush                                                                                                       | `1000`                              |
+| `logRetentionBytes`                        | A size-based retention policy for logs                                                                                                                                              | `_1073741824`                       |
+| `logRetentionCheckIntervalMs`              | The interval at which log segments are checked to see if they can be deleted                                                                                                        | `300000`                            |
+| `logRetentionHours`                        | The minimum age of a log file to be eligible for deletion due to age                                                                                                                | `168`                               |
+| `logSegmentBytes`                          | The maximum size of a log segment file. When this size is reached a new log segment will be created                                                                                 | `_1073741824`                       |
+| `logsDirs`                                 | A comma separated list of directories under which to store log files                                                                                                                | `/bitnami/kafka/data`               |
+| `maxMessageBytes`                          | The largest record batch size allowed by Kafka                                                                                                                                      | `_1000012`                          |
+| `defaultReplicationFactor`                 | Default replication factors for automatically created topics                                                                                                                        | `1`                                 |
+| `offsetsTopicReplicationFactor`            | The replication factor for the offsets topic                                                                                                                                        | `1`                                 |
+| `transactionStateLogReplicationFactor`     | The replication factor for the transaction topic                                                                                                                                    | `1`                                 |
+| `transactionStateLogMinIsr`                | Overridden min.insync.replicas config for the transaction topic                                                                                                                     | `1`                                 |
+| `numIoThreads`                             | The number of threads doing disk I/O                                                                                                                                                | `8`                                 |
+| `numNetworkThreads`                        | The number of threads handling network requests                                                                                                                                     | `3`                                 |
+| `numPartitions`                            | The default number of log partitions per topic                                                                                                                                      | `1`                                 |
+| `numRecoveryThreadsPerDataDir`             | The number of threads per data directory to be used for log recovery at startup and flushing at shutdown                                                                            | `1`                                 |
+| `socketReceiveBufferBytes`                 | The receive buffer (SO_RCVBUF) used by the socket server                                                                                                                            | `102400`                            |
+| `socketRequestMaxBytes`                    | The maximum size of a request that the socket server will accept (protection against OOM)                                                                                           | `_104857600`                        |
+| `socketSendBufferBytes`                    | The send buffer (SO_SNDBUF) used by the socket server                                                                                                                               | `102400`                            |
+| `zookeeperConnectionTimeoutMs`             | Timeout in ms for connecting to ZooKeeper                                                                                                                                           | `6000`                              |
+| `zookeeperChrootPath`                      | Path which puts data under some path in the global ZooKeeper namespace                                                                                                              | `""`                                |
+| `authorizerClassName`                      | The Authorizer is configured by setting authorizer.class.name=kafka.security.authorizer.AclAuthorizer in server.properties                                                          | `""`                                |
+| `allowEveryoneIfNoAclFound`                | By default, if a resource has no associated ACLs, then no one is allowed to access that resource except super users                                                                 | `true`                              |
+| `superUsers`                               | You can add super users in server.properties                                                                                                                                        | `User:admin`                        |
+| `auth.clientProtocol`                      | Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`                                                       | `plaintext`                         |
+| `auth.externalClientProtocol`              | Authentication protocol for communications with external clients. Defaults to value of `auth.clientProtocol`. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`  | `""`                                |
+| `auth.interBrokerProtocol`                 | Authentication protocol for inter-broker communications. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`                                                       | `plaintext`                         |
+| `auth.sasl.mechanisms`                     | SASL mechanisms when either `auth.interBrokerProtocol`, `auth.clientProtocol` or `auth.externalClientProtocol` are `sasl`. Allowed types: `plain`, `scram-sha-256`, `scram-sha-512` | `plain,scram-sha-256,scram-sha-512` |
+| `auth.sasl.interBrokerMechanism`           | SASL mechanism for inter broker communication.                                                                                                                                      | `plain`                             |
+| `auth.sasl.jaas.clientUsers`               | Kafka client user list                                                                                                                                                              | `["user"]`                          |
+| `auth.sasl.jaas.clientPasswords`           | Kafka client passwords. This is mandatory if more than one user is specified in clientUsers                                                                                         | `[]`                                |
+| `auth.sasl.jaas.interBrokerUser`           | Kafka inter broker communication user for SASL authentication                                                                                                                       | `admin`                             |
+| `auth.sasl.jaas.interBrokerPassword`       | Kafka inter broker communication password for SASL authentication                                                                                                                   | `""`                                |
+| `auth.sasl.jaas.zookeeperUser`             | Kafka ZooKeeper user for SASL authentication                                                                                                                                        | `""`                                |
+| `auth.sasl.jaas.zookeeperPassword`         | Kafka ZooKeeper password for SASL authentication                                                                                                                                    | `""`                                |
+| `auth.sasl.jaas.existingSecret`            | Name of the existing secret containing credentials for clientUsers, interBrokerUser and zookeeperUser                                                                               | `""`                                |
+| `auth.tls.type`                            | Format to use for TLS certificates. Allowed types: `jks` and `pem`                                                                                                                  | `jks`                               |
+| `auth.tls.pemChainIncluded`                | Flag to denote whether the TLS authority chain is included inside the PEM                                                                                                           | `false`                             |
+| `auth.tls.existingSecrets`                 | Array existing secrets containing the TLS certificates for the Kafka brokers                                                                                                        | `[]`                                |
+| `auth.tls.autoGenerated`                   | Generate automatically self-signed TLS certificates for Kafka brokers. Currently only supported if `auth.tls.type` is `pem`                                                         | `false`                             |
+| `auth.tls.password`                        | Password to access the JKS files or PEM key when they are password-protected.                                                                                                       | `""`                                |
+| `auth.tls.existingSecret`                  | Name of the secret containing the password to access the JKS files or PEM key when they are password-protected. (`key`: `password`)                                                 | `""`                                |
+| `auth.tls.jksTruststoreSecret`             | Name of the existing secret containing your truststore if truststore not existing or different from the ones in the `auth.tls.existingSecrets`                                      | `""`                                |
+| `auth.tls.jksKeystoreSAN`                  | The secret key from the `auth.tls.existingSecrets` containing the keystore with a SAN certificate                                                                                   | `""`                                |
+| `auth.tls.jksTruststore`                   | The secret key from the `auth.tls.existingSecrets` or `auth.tls.jksTruststoreSecret` containing the truststore                                                                      | `""`                                |
+| `auth.tls.endpointIdentificationAlgorithm` | The endpoint identification algorithm to validate server hostname using server certificate                                                                                          | `https`                             |
+| `listeners`                                | The address(es) the socket server listens on. Auto-calculated it's set to an empty array                                                                                            | `[]`                                |
+| `advertisedListeners`                      | The address(es) (hostname:port) the broker will advertise to producers and consumers. Auto-calculated it's set to an empty array                                                    | `[]`                                |
+| `listenerSecurityProtocolMap`              | The protocol->listener mapping. Auto-calculated it's set to nil                                                                                                                     | `""`                                |
+| `allowPlaintextListener`                   | Allow to use the PLAINTEXT listener                                                                                                                                                 | `true`                              |
+| `interBrokerListenerName`                  | The listener that the brokers should communicate on                                                                                                                                 | `INTERNAL`                          |
+| `command`                                  | Override Kafka container command                                                                                                                                                    | `["/scripts/setup.sh"]`             |
+| `args`                                     | Override Kafka container arguments                                                                                                                                                  | `[]`                                |
+| `extraEnvVars`                             | Extra environment variables to add to Kafka pods                                                                                                                                    | `[]`                                |
+| `extraEnvVarsCM`                           | ConfigMap with extra environment variables                                                                                                                                          | `""`                                |
+| `extraEnvVarsSecret`                       | Secret with extra environment variables                                                                                                                                             | `""`                                |
 
 
 ### Statefulset parameters
 
-| Name                                 | Description                                                                                                                                                                                   | Value           |
-| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `replicaCount`                       | Number of Kafka nodes                                                                                                                                                                         | `1`             |
-| `minBrokerId`                        | Minimal broker.id value, nodes increment their `broker.id` respectively                                                                                                                       | `0`             |
-| `updateStrategy`                     | Update strategy for the stateful set                                                                                                                                                          | `RollingUpdate` |
-| `rollingUpdatePartition`             | Partition update strategy                                                                                                                                                                     | `""`            |
-| `hostAliases`                        | Add deployment host aliases                                                                                                                                                                   | `[]`            |
-| `podManagementPolicy`                | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel | `Parallel`      |
-| `schedulerName`                      | Name of the k8s scheduler (other than default)                                                                                                                                                | `""`            |
-| `podLabels`                          | Kafka pod labels                                                                                                                                                                              | `{}`            |
-| `podAnnotations`                     | Kafka Pod annotations                                                                                                                                                                         | `{}`            |
-| `priorityClassName`                  | Name of the existing priority class to be used by kafka pods                                                                                                                                  | `""`            |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                           | `""`            |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                      | `soft`          |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                     | `""`            |
-| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                                                                                         | `""`            |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                                                                                                     | `[]`            |
-| `affinity`                           | Affinity for pod assignment                                                                                                                                                                   | `{}`            |
-| `nodeSelector`                       | Node labels for pod assignment                                                                                                                                                                | `{}`            |
-| `tolerations`                        | Tolerations for pod assignment                                                                                                                                                                | `[]`            |
-| `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                      | `{}`            |
-| `terminationGracePeriodSeconds`      | Seconds the pod needs to gracefully terminate                                                                                                                                                 | `""`            |
-| `podSecurityContext.enabled`         | Enable security context for the pods                                                                                                                                                          | `true`          |
-| `podSecurityContext.fsGroup`         | Group ID for the filesystem used by the containers                                                                                                                                            | `1001`          |
-| `podSecurityContext.runAsUser`       | User ID for the service user running the pod                                                                                                                                                  | `1001`          |
-| `containerSecurityContext.enabled`   | Enable Kafka containers' Security Context                                                                                                                                                     | `false`         |
-| `resources.limits`                   | The resources limits for Kafka containers                                                                                                                                                     | `{}`            |
-| `resources.requests`                 | The requested resources for Kafka containers                                                                                                                                                  | `{}`            |
-| `livenessProbe.enabled`              | Enable livenessProbe                                                                                                                                                                          | `true`          |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                                                                       | `10`            |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                                                                                              | `10`            |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                                                                                             | `5`             |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                                                                                           | `3`             |
-| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                                                                                           | `1`             |
-| `readinessProbe.enabled`             | Enable readinessProbe                                                                                                                                                                         | `true`          |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                                                                                      | `5`             |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                                                                                             | `10`            |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                                                                                            | `5`             |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                                                                                          | `6`             |
-| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                                                                                          | `1`             |
-| `customLivenessProbe`                | Custom Liveness probe configuration for Kafka                                                                                                                                                 | `{}`            |
-| `customReadinessProbe`               | Custom Readiness probe configuration for Kafka                                                                                                                                                | `{}`            |
-| `pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                                                                                                                               | `false`         |
-| `pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled                                                                                                                                | `""`            |
-| `pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                                                                                                                                | `1`             |
-| `sidecars`                           | Attach additional sidecar containers to the Kafka pod                                                                                                                                         | `[]`            |
-| `initContainers`                     | Add extra init containers                                                                                                                                                                     | `[]`            |
+| Name                                    | Description                                                                                                                                                                                   | Value           |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `replicaCount`                          | Number of Kafka nodes                                                                                                                                                                         | `1`             |
+| `minBrokerId`                           | Minimal broker.id value, nodes increment their `broker.id` respectively                                                                                                                       | `0`             |
+| `containerPorts.client`                 | Kafka client container port                                                                                                                                                                   | `9092`          |
+| `containerPorts.internal`               | Kafka inter-broker container port                                                                                                                                                             | `9093`          |
+| `containerPorts.external`               | Kafka external container port                                                                                                                                                                 | `9094`          |
+| `livenessProbe.enabled`                 | Enable livenessProbe on Kafka containers                                                                                                                                                      | `true`          |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                                                                                       | `10`            |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                                                                                              | `10`            |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                                                                                             | `5`             |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                                                                                           | `3`             |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                                                                                           | `1`             |
+| `readinessProbe.enabled`                | Enable readinessProbe on Kafka containers                                                                                                                                                     | `true`          |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                                                                                      | `5`             |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                                                                                             | `10`            |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                                                                                            | `5`             |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                                                                                          | `6`             |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                                                                                          | `1`             |
+| `startupProbe.enabled`                  | Enable startupProbe on Kafka containers                                                                                                                                                       | `false`         |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                                                                                        | `30`            |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                                                                                               | `10`            |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                                                                                              | `1`             |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                                                                                            | `15`            |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                                                                                            | `1`             |
+| `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                                                                                                           | `{}`            |
+| `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                                                                                                          | `{}`            |
+| `customStartupProbe`                    | Custom startupProbe that overrides the default one                                                                                                                                            | `{}`            |
+| `lifecycleHooks`                        | lifecycleHooks for the Kafka container to automate configuration before or after startup                                                                                                      | `{}`            |
+| `resources.limits`                      | The resources limits for the container                                                                                                                                                        | `{}`            |
+| `resources.requests`                    | The requested resources for the container                                                                                                                                                     | `{}`            |
+| `podSecurityContext.enabled`            | Enable security context for the pods                                                                                                                                                          | `true`          |
+| `podSecurityContext.fsGroup`            | Set Kafka pod's Security Context fsGroup                                                                                                                                                      | `1001`          |
+| `containerSecurityContext.enabled`      | Enable Kafka containers' Security Context                                                                                                                                                     | `true`          |
+| `containerSecurityContext.runAsUser`    | Set Kafka containers' Security Context runAsUser                                                                                                                                              | `1001`          |
+| `containerSecurityContext.runAsNonRoot` | Set Kafka containers' Security Context runAsNonRoot                                                                                                                                           | `true`          |
+| `hostAliases`                           | Kafka pods host aliases                                                                                                                                                                       | `[]`            |
+| `hostNetwork`                           | Specify if host network should be enabled for Kafka pods                                                                                                                                      | `false`         |
+| `hostIPC`                               | Specify if host IPC should be enabled for Kafka pods                                                                                                                                          | `false`         |
+| `podLabels`                             | Extra labels for Kafka pods                                                                                                                                                                   | `{}`            |
+| `podAnnotations`                        | Extra annotations for Kafka pods                                                                                                                                                              | `{}`            |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                           | `""`            |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                      | `soft`          |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                     | `""`            |
+| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                                                                                         | `""`            |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                                                                                                     | `[]`            |
+| `affinity`                              | Affinity for pod assignment                                                                                                                                                                   | `{}`            |
+| `nodeSelector`                          | Node labels for pod assignment                                                                                                                                                                | `{}`            |
+| `tolerations`                           | Tolerations for pod assignment                                                                                                                                                                | `[]`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                      | `{}`            |
+| `terminationGracePeriodSeconds`         | Seconds the pod needs to gracefully terminate                                                                                                                                                 | `""`            |
+| `podManagementPolicy`                   | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel | `Parallel`      |
+| `priorityClassName`                     | Name of the existing priority class to be used by kafka pods                                                                                                                                  | `""`            |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                                                                                                                                | `""`            |
+| `updateStrategy.type`                   | Kafka statefulset strategy type                                                                                                                                                               | `RollingUpdate` |
+| `updateStrategy.rollingUpdate`          | Kafka statefulset rolling update configuration parameters                                                                                                                                     | `{}`            |
+| `extraVolumes`                          | Optionally specify extra list of additional volumes for the Kafka pod(s)                                                                                                                      | `[]`            |
+| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Kafka container(s)                                                                                                           | `[]`            |
+| `sidecars`                              | Add additional sidecar containers to the Kafka pod(s)                                                                                                                                         | `[]`            |
+| `initContainers`                        | Add additional Add init containers to the Kafka pod(s)                                                                                                                                        | `[]`            |
+| `pdb.create`                            | Deploy a pdb object for the Kafka pod                                                                                                                                                         | `false`         |
+| `pdb.minAvailable`                      | Maximum number/percentage of unavailable Kafka replicas                                                                                                                                       | `""`            |
+| `pdb.maxUnavailable`                    | Maximum number/percentage of unavailable Kafka replicas                                                                                                                                       | `1`             |
 
 
-### Exposure parameters
+### Traffic Exposure parameters
 
-| Name                                              | Description                                                                                    | Value                 |
-| ------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------- |
-| `networkPolicy.enabled`                           | Enable creation of NetworkPolicy resources.                                                    | `false`               |
-| `networkPolicy.allowExternal`                     | Don't require client label for connections                                                     | `true`                |
-| `networkPolicy.explicitNamespacesSelector`        | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed | `{}`                  |
-| `networkPolicy.externalAccess.from`               | customize the from section for External Access on tcp-external port                            | `[]`                  |
-| `networkPolicy.egressRules.customRules`           | Custom network policy rule                                                                     | `{}`                  |
-| `service.type`                                    | Kubernetes Service type                                                                        | `ClusterIP`           |
-| `service.port`                                    | Kafka port for client connections                                                              | `9092`                |
-| `service.internalPort`                            | Kafka port for inter-broker connections                                                        | `9093`                |
-| `service.externalPort`                            | Kafka port for external connections                                                            | `9094`                |
-| `service.nodePorts`                               | Specify the nodePort value for the LoadBalancer and NodePort service types.                    | `{}`                  |
-| `service.loadBalancerIP`                          | loadBalancerIP for Kafka Service                                                               | `""`                  |
-| `service.loadBalancerSourceRanges`                | Address(es) that are allowed when service is LoadBalancer                                      | `[]`                  |
-| `service.annotations`                             | Service annotations                                                                            | `{}`                  |
-| `externalAccess.enabled`                          | Enable Kubernetes external cluster access to Kafka brokers                                     | `false`               |
-| `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs/ports by querying the K8s API       | `false`               |
-| `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry                                                   | `docker.io`           |
-| `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image repository                                                 | `bitnami/kubectl`     |
-| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                       | `1.23.0-debian-10-r5` |
-| `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy                                                | `IfNotPresent`        |
-| `externalAccess.autoDiscovery.image.pullSecrets`  | Init container auto-discovery image pull secrets                                               | `[]`                  |
-| `externalAccess.autoDiscovery.resources.limits`   | Init container auto-discovery resource limits                                                  | `{}`                  |
-| `externalAccess.autoDiscovery.resources.requests` | Init container auto-discovery resource requests                                                | `{}`                  |
-| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort or LoadBalancer                | `LoadBalancer`        |
-| `externalAccess.service.port`                     | Kafka port used for external access when service type is LoadBalancer                          | `9094`                |
-| `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount      | `[]`                  |
-| `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                      | `[]`                  |
-| `externalAccess.service.nodePorts`                | Array of node ports used for each Kafka broker. Length must be the same as replicaCount        | `[]`                  |
-| `externalAccess.service.useHostIPs`               | Use service host IPs to configure Kafka external listener when service type is NodePort        | `false`               |
-| `externalAccess.service.domain`                   | Domain or external ip used to configure Kafka external listener when service type is NodePort  | `""`                  |
-| `externalAccess.service.annotations`              | Service annotations for external access                                                        | `{}`                  |
-| `externalAccess.service.usePodIPs`                | using the MY_POD_IP address for external access.                                               | `false`               |
+| Name                                              | Description                                                                                       | Value                 |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------- | --------------------- |
+| `service.type`                                    | Kubernetes Service type                                                                           | `ClusterIP`           |
+| `service.ports.client`                            | Kafka svc port for client connections                                                             | `9092`                |
+| `service.ports.internal`                          | Kafka svc port for inter-broker connections                                                       | `9093`                |
+| `service.ports.external`                          | Kafka svc port for external connections                                                           | `9094`                |
+| `service.nodePorts.client`                        | Node port for the Kafka client connections                                                        | `""`                  |
+| `service.nodePorts.external`                      | Node port for the Kafka external connections                                                      | `""`                  |
+| `service.sessionAffinity`                         | Control where client requests go, to the same pod or round-robin                                  | `None`                |
+| `service.clusterIP`                               | Kafka service Cluster IP                                                                          | `""`                  |
+| `service.loadBalancerIP`                          | Kafka service Load Balancer IP                                                                    | `""`                  |
+| `service.loadBalancerSourceRanges`                | Kafka service Load Balancer sources                                                               | `[]`                  |
+| `service.externalTrafficPolicy`                   | Kafka service external traffic policy                                                             | `Cluster`             |
+| `service.annotations`                             | Additional custom annotations for Kafka service                                                   | `{}`                  |
+| `service.extraPorts`                              | Extra ports to expose in the Kafka service (normally used with the `sidecar` value)               | `[]`                  |
+| `externalAccess.enabled`                          | Enable Kubernetes external cluster access to Kafka brokers                                        | `false`               |
+| `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs/ports by querying the K8s API          | `false`               |
+| `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry                                                      | `docker.io`           |
+| `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image repository                                                    | `bitnami/kubectl`     |
+| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                          | `1.23.4-debian-10-r9` |
+| `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy                                                   | `IfNotPresent`        |
+| `externalAccess.autoDiscovery.image.pullSecrets`  | Init container auto-discovery image pull secrets                                                  | `[]`                  |
+| `externalAccess.autoDiscovery.resources.limits`   | The resources limits for the auto-discovery init container                                        | `{}`                  |
+| `externalAccess.autoDiscovery.resources.requests` | The requested resources for the auto-discovery init container                                     | `{}`                  |
+| `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort or LoadBalancer                   | `LoadBalancer`        |
+| `externalAccess.service.ports.external`           | Kafka port used for external access when service type is LoadBalancer                             | `9094`                |
+| `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount         | `[]`                  |
+| `externalAccess.service.loadBalancerNames`        | Array of load balancer Names for each Kafka broker. Length must be the same as replicaCount       | `[]`                  |
+| `externalAccess.service.loadBalancerAnnotations`  | Array of load balancer annotations for each Kafka broker. Length must be the same as replicaCount | `[]`                  |
+| `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                         | `[]`                  |
+| `externalAccess.service.nodePorts`                | Array of node ports used for each Kafka broker. Length must be the same as replicaCount           | `[]`                  |
+| `externalAccess.service.useHostIPs`               | Use service host IPs to configure Kafka external listener when service type is NodePort           | `false`               |
+| `externalAccess.service.usePodIPs`                | using the MY_POD_IP address for external access.                                                  | `false`               |
+| `externalAccess.service.domain`                   | Domain or external ip used to configure Kafka external listener when service type is NodePort     | `""`                  |
+| `externalAccess.service.annotations`              | Service annotations for external access                                                           | `{}`                  |
+| `externalAccess.service.extraPorts`               | Extra ports to expose in the Kafka external service                                               | `[]`                  |
+| `networkPolicy.enabled`                           | Specifies whether a NetworkPolicy should be created                                               | `false`               |
+| `networkPolicy.allowExternal`                     | Don't require client label for connections                                                        | `true`                |
+| `networkPolicy.explicitNamespacesSelector`        | A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed    | `{}`                  |
+| `networkPolicy.externalAccess.from`               | customize the from section for External Access on tcp-external port                               | `[]`                  |
+| `networkPolicy.egressRules.customRules`           | Custom network policy rule                                                                        | `{}`                  |
 
 
 ### Persistence parameters
 
-| Name                              | Description                                                                                                                              | Value                     |
-| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `persistence.enabled`             | Enable Kafka data persistence using PVC, note that Zookeeper persistence is unaffected                                                   | `true`                    |
-| `persistence.existingClaim`       | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template                                                        | `""`                      |
-| `persistence.storageClass`        | PVC Storage Class for Kafka data volume                                                                                                  | `""`                      |
-| `persistence.accessModes`         | PV Access Mode                                                                                                                           | `["ReadWriteOnce"]`       |
-| `persistence.size`                | PVC Storage Request for Kafka data volume                                                                                                | `8Gi`                     |
-| `persistence.annotations`         | Annotations for the PVC                                                                                                                  | `{}`                      |
-| `persistence.selector`            | Selector to match an existing Persistent Volume for Kafka's data PVC. If set, the PVC can't have a PV dynamically provisioned for it     | `{}`                      |
-| `persistence.mountPath`           | Mount path of the Kafka data volume                                                                                                      | `/bitnami/kafka`          |
-| `logPersistence.enabled`          | Enable Kafka logs persistence using PVC, note that Zookeeper persistence is unaffected                                                   | `false`                   |
-| `logPersistence.existingClaim`    | A manually managed Persistent Volume and Claim                                                                                           | `""`                      |
-| `logPersistence.existingLogClaim` | PV Storage Class                                                                                                                         | `""`                      |
-| `logPersistence.accessModes`      | PV Access Mode                                                                                                                           | `["ReadWriteOnce"]`       |
-| `logPersistence.size`             | PVC Storage Request for Kafka logs volume                                                                                                | `8Gi`                     |
-| `logPersistence.annotations`      | Annotations for the PVC                                                                                                                  | `{}`                      |
-| `logPersistence.selector`         | Selector to match an existing Persistent Volume for Kafka's log data PVC. If set, the PVC can't have a PV dynamically provisioned for it | `{}`                      |
-| `logPersistence.mountPath`        | Mount path of the Kafka logs volume                                                                                                      | `/opt/bitnami/kafka/logs` |
+| Name                           | Description                                                                                                                            | Value                     |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `persistence.enabled`          | Enable Kafka data persistence using PVC, note that ZooKeeper persistence is unaffected                                                 | `true`                    |
+| `persistence.existingClaim`    | A manually managed Persistent Volume and Claim                                                                                         | `""`                      |
+| `persistence.storageClass`     | PVC Storage Class for Kafka data volume                                                                                                | `""`                      |
+| `persistence.accessModes`      | Persistent Volume Access Modes                                                                                                         | `["ReadWriteOnce"]`       |
+| `persistence.size`             | PVC Storage Request for Kafka data volume                                                                                              | `8Gi`                     |
+| `persistence.annotations`      | Annotations for the PVC                                                                                                                | `{}`                      |
+| `persistence.selector`         | Selector to match an existing Persistent Volume for Kafka data PVC. If set, the PVC can't have a PV dynamically provisioned for it     | `{}`                      |
+| `persistence.mountPath`        | Mount path of the Kafka data volume                                                                                                    | `/bitnami/kafka`          |
+| `logPersistence.enabled`       | Enable Kafka logs persistence using PVC, note that ZooKeeper persistence is unaffected                                                 | `false`                   |
+| `logPersistence.existingClaim` | A manually managed Persistent Volume and Claim                                                                                         | `""`                      |
+| `logPersistence.storageClass`  | PVC Storage Class for Kafka logs volume                                                                                                | `""`                      |
+| `logPersistence.accessModes`   | Persistent Volume Access Modes                                                                                                         | `["ReadWriteOnce"]`       |
+| `logPersistence.size`          | PVC Storage Request for Kafka logs volume                                                                                              | `8Gi`                     |
+| `logPersistence.annotations`   | Annotations for the PVC                                                                                                                | `{}`                      |
+| `logPersistence.selector`      | Selector to match an existing Persistent Volume for Kafka log data PVC. If set, the PVC can't have a PV dynamically provisioned for it | `{}`                      |
+| `logPersistence.mountPath`     | Mount path of the Kafka logs volume                                                                                                    | `/opt/bitnami/kafka/logs` |
 
 
-### RBAC parameters
+### Volume Permissions parameters
+
+| Name                                                   | Description                                                                     | Value                   |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
+| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
+| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r351`     |
+| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
+| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
+| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                             | `{}`                    |
+| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                  | `0`                     |
+
+
+### Other Parameters
 
 | Name                                          | Description                                                                                    | Value   |
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------- |
 | `serviceAccount.create`                       | Enable creation of ServiceAccount for Kafka pods                                               | `true`  |
 | `serviceAccount.name`                         | The name of the service account to use. If not set and `create` is `true`, a name is generated | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                         | `true`  |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                           | `{}`    |
 | `rbac.create`                                 | Whether to create & use RBAC resources or not                                                  | `false` |
-
-
-### Volume Permissions parameters
-
-| Name                                          | Description                                                                                                          | Value                   |
-| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.securityContext.runAsUser` | User ID for the container                                                                                            | `0`                     |
-| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                     | `docker.io`             |
-| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                          | `10-debian-10-r279`     |
-| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                     | `[]`                    |
-| `volumePermissions.resources.limits`          | Init container volume-permissions resource  limits                                                                   | `{}`                    |
-| `volumePermissions.resources.requests`        | Init container volume-permissions resource  requests                                                                 | `{}`                    |
 
 
 ### Metrics parameters
@@ -294,90 +319,136 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.kafka.enabled`                                     | Whether or not to create a standalone Kafka exporter to expose Kafka metrics                                                     | `false`                                                                                 |
 | `metrics.kafka.image.registry`                              | Kafka exporter image registry                                                                                                    | `docker.io`                                                                             |
 | `metrics.kafka.image.repository`                            | Kafka exporter image repository                                                                                                  | `bitnami/kafka-exporter`                                                                |
-| `metrics.kafka.image.tag`                                   | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.4.2-debian-10-r87`                                                                   |
+| `metrics.kafka.image.tag`                                   | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.4.2-debian-10-r160`                                                                  |
 | `metrics.kafka.image.pullPolicy`                            | Kafka exporter image pull policy                                                                                                 | `IfNotPresent`                                                                          |
 | `metrics.kafka.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
-| `metrics.kafka.serviceAccount.create`                       | Enable creation of ServiceAccount for Kafka exporter pods                                                                        | `true`                                                                                  |
-| `metrics.kafka.serviceAccount.name`                         | The name of the service account to use. If not set and `create` is `true`, a name is generated                                   | `""`                                                                                    |
-| `metrics.kafka.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                           | `true`                                                                                  |
-| `metrics.kafka.schedulerName`                               | Name of the k8s scheduler (other than default) for Kafka Exporter                                                                | `""`                                                                                    |
-| `metrics.kafka.extraFlags`                                  | Extra flags to be passed to Kafka exporter                                                                                       | `{}`                                                                                    |
 | `metrics.kafka.certificatesSecret`                          | Name of the existing secret containing the optional certificate and key files                                                    | `""`                                                                                    |
 | `metrics.kafka.tlsCert`                                     | The secret key from the certificatesSecret if 'client-cert' key different from the default (cert-file)                           | `cert-file`                                                                             |
 | `metrics.kafka.tlsKey`                                      | The secret key from the certificatesSecret if 'client-key' key different from the default (key-file)                             | `key-file`                                                                              |
-| `metrics.kafka.tlsCaSecret`                                 | Name of the existing secret containing the optional ca certificate for Kafka Exporter client authentication                      | `""`                                                                                    |
+| `metrics.kafka.tlsCaSecret`                                 | Name of the existing secret containing the optional ca certificate for Kafka exporter client authentication                      | `""`                                                                                    |
 | `metrics.kafka.tlsCaCert`                                   | The secret key from the certificatesSecret or tlsCaSecret if 'ca-cert' key different from the default (ca-file)                  | `ca-file`                                                                               |
-| `metrics.kafka.podLabels`                                   | Kafka exporter pod labels                                                                                                        | `{}`                                                                                    |
-| `metrics.kafka.podAnnotations`                              | Kafka exporter pod annotations                                                                                                   | `{}`                                                                                    |
-| `metrics.kafka.containerSecurityContext.enabled`            | Enable Prometheus Kafka Exporter containers' Security Context                                                                    | `false`                                                                                 |
-| `metrics.kafka.resources.limits`                            | Kafka Exporter container resource limits                                                                                         | `{}`                                                                                    |
-| `metrics.kafka.resources.requests`                          | Kafka Exporter container resource requests                                                                                       | `{}`                                                                                    |
-| `metrics.kafka.affinity`                                    | Affinity for Kafka Exporter pod assignment                                                                                       | `{}`                                                                                    |
-| `metrics.kafka.nodeSelector`                                | Node labels for Kafka Exporter pod assignment                                                                                    | `{}`                                                                                    |
-| `metrics.kafka.tolerations`                                 | Tolerations for Kafka Exporter pod assignment                                                                                    | `[]`                                                                                    |
+| `metrics.kafka.extraFlags`                                  | Extra flags to be passed to Kafka exporter                                                                                       | `{}`                                                                                    |
+| `metrics.kafka.command`                                     | Override Kafka exporter container command                                                                                        | `[]`                                                                                    |
+| `metrics.kafka.args`                                        | Override Kafka exporter container arguments                                                                                      | `[]`                                                                                    |
+| `metrics.kafka.containerPorts.metrics`                      | Kafka exporter metrics container port                                                                                            | `9308`                                                                                  |
+| `metrics.kafka.resources.limits`                            | The resources limits for the container                                                                                           | `{}`                                                                                    |
+| `metrics.kafka.resources.requests`                          | The requested resources for the container                                                                                        | `{}`                                                                                    |
+| `metrics.kafka.podSecurityContext.enabled`                  | Enable security context for the pods                                                                                             | `true`                                                                                  |
+| `metrics.kafka.podSecurityContext.fsGroup`                  | Set Kafka exporter pod's Security Context fsGroup                                                                                | `1001`                                                                                  |
+| `metrics.kafka.containerSecurityContext.enabled`            | Enable Kafka exporter containers' Security Context                                                                               | `true`                                                                                  |
+| `metrics.kafka.containerSecurityContext.runAsUser`          | Set Kafka exporter containers' Security Context runAsUser                                                                        | `1001`                                                                                  |
+| `metrics.kafka.containerSecurityContext.runAsNonRoot`       | Set Kafka exporter containers' Security Context runAsNonRoot                                                                     | `true`                                                                                  |
+| `metrics.kafka.hostAliases`                                 | Kafka exporter pods host aliases                                                                                                 | `[]`                                                                                    |
+| `metrics.kafka.podLabels`                                   | Extra labels for Kafka exporter pods                                                                                             | `{}`                                                                                    |
+| `metrics.kafka.podAnnotations`                              | Extra annotations for Kafka exporter pods                                                                                        | `{}`                                                                                    |
+| `metrics.kafka.podAffinityPreset`                           | Pod affinity preset. Ignored if `metrics.kafka.affinity` is set. Allowed values: `soft` or `hard`                                | `""`                                                                                    |
+| `metrics.kafka.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `metrics.kafka.affinity` is set. Allowed values: `soft` or `hard`                           | `soft`                                                                                  |
+| `metrics.kafka.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `metrics.kafka.affinity` is set. Allowed values: `soft` or `hard`                          | `""`                                                                                    |
+| `metrics.kafka.nodeAffinityPreset.key`                      | Node label key to match Ignored if `metrics.kafka.affinity` is set.                                                              | `""`                                                                                    |
+| `metrics.kafka.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `metrics.kafka.affinity` is set.                                                          | `[]`                                                                                    |
+| `metrics.kafka.affinity`                                    | Affinity for pod assignment                                                                                                      | `{}`                                                                                    |
+| `metrics.kafka.nodeSelector`                                | Node labels for pod assignment                                                                                                   | `{}`                                                                                    |
+| `metrics.kafka.tolerations`                                 | Tolerations for pod assignment                                                                                                   | `[]`                                                                                    |
+| `metrics.kafka.schedulerName`                               | Name of the k8s scheduler (other than default) for Kafka exporter                                                                | `""`                                                                                    |
+| `metrics.kafka.extraVolumes`                                | Optionally specify extra list of additional volumes for the Kafka exporter pod(s)                                                | `[]`                                                                                    |
+| `metrics.kafka.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the Kafka exporter container(s)                                     | `[]`                                                                                    |
+| `metrics.kafka.sidecars`                                    | Add additional sidecar containers to the Kafka exporter pod(s)                                                                   | `[]`                                                                                    |
 | `metrics.kafka.initContainers`                              | Add init containers to the Kafka exporter pods                                                                                   | `[]`                                                                                    |
-| `metrics.kafka.service.type`                                | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for Kafka Exporter                                           | `ClusterIP`                                                                             |
-| `metrics.kafka.service.port`                                | Kafka Exporter Prometheus port                                                                                                   | `9308`                                                                                  |
-| `metrics.kafka.service.nodePort`                            | Kubernetes HTTP node port                                                                                                        | `""`                                                                                    |
-| `metrics.kafka.service.loadBalancerIP`                      | loadBalancerIP if service type is `LoadBalancer`                                                                                 | `""`                                                                                    |
-| `metrics.kafka.service.loadBalancerSourceRanges`            | Load Balancer sources                                                                                                            | `[]`                                                                                    |
+| `metrics.kafka.service.ports.metrics`                       | Kafka exporter metrics service port                                                                                              | `9308`                                                                                  |
 | `metrics.kafka.service.clusterIP`                           | Static clusterIP or None for headless services                                                                                   | `""`                                                                                    |
-| `metrics.kafka.service.annotations`                         | Annotations for the Kafka Exporter Prometheus metrics service                                                                    | `{}`                                                                                    |
+| `metrics.kafka.service.sessionAffinity`                     | Control where client requests go, to the same pod or round-robin                                                                 | `None`                                                                                  |
+| `metrics.kafka.service.annotations`                         | Annotations for the Kafka exporter service                                                                                       | `{}`                                                                                    |
+| `metrics.kafka.serviceAccount.create`                       | Enable creation of ServiceAccount for Kafka exporter pods                                                                        | `true`                                                                                  |
+| `metrics.kafka.serviceAccount.name`                         | The name of the service account to use. If not set and `create` is `true`, a name is generated                                   | `""`                                                                                    |
+| `metrics.kafka.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                           | `true`                                                                                  |
 | `metrics.jmx.enabled`                                       | Whether or not to expose JMX metrics to Prometheus                                                                               | `false`                                                                                 |
 | `metrics.jmx.image.registry`                                | JMX exporter image registry                                                                                                      | `docker.io`                                                                             |
 | `metrics.jmx.image.repository`                              | JMX exporter image repository                                                                                                    | `bitnami/jmx-exporter`                                                                  |
-| `metrics.jmx.image.tag`                                     | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.16.1-debian-10-r149`                                                                 |
+| `metrics.jmx.image.tag`                                     | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.16.1-debian-10-r222`                                                                 |
 | `metrics.jmx.image.pullPolicy`                              | JMX exporter image pull policy                                                                                                   | `IfNotPresent`                                                                          |
 | `metrics.jmx.image.pullSecrets`                             | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
-| `metrics.jmx.containerSecurityContext.enabled`              | Enable Prometheus JMX Exporter Containers' Security Context                                                                      | `false`                                                                                 |
-| `metrics.jmx.resources.limits`                              | JMX Exporter container resource limits                                                                                           | `{}`                                                                                    |
-| `metrics.jmx.resources.requests`                            | JMX Exporter container resource requests                                                                                         | `{}`                                                                                    |
-| `metrics.jmx.service.type`                                  | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for JMX Exporter                                             | `ClusterIP`                                                                             |
-| `metrics.jmx.service.port`                                  | JMX Exporter Prometheus port                                                                                                     | `5556`                                                                                  |
-| `metrics.jmx.service.nodePort`                              | Kubernetes HTTP node port                                                                                                        | `""`                                                                                    |
-| `metrics.jmx.service.loadBalancerIP`                        | loadBalancerIP if service type is `LoadBalancer`                                                                                 | `""`                                                                                    |
-| `metrics.jmx.service.loadBalancerSourceRanges`              | Load Balancer sources                                                                                                            | `[]`                                                                                    |
+| `metrics.jmx.containerSecurityContext.enabled`              | Enable Prometheus JMX exporter containers' Security Context                                                                      | `true`                                                                                  |
+| `metrics.jmx.containerSecurityContext.runAsUser`            | Set Prometheus JMX exporter containers' Security Context runAsUser                                                               | `1001`                                                                                  |
+| `metrics.jmx.containerSecurityContext.runAsNonRoot`         | Set Prometheus JMX exporter containers' Security Context runAsNonRoot                                                            | `true`                                                                                  |
+| `metrics.jmx.containerPorts.metrics`                        | Prometheus JMX exporter metrics container port                                                                                   | `5556`                                                                                  |
+| `metrics.jmx.resources.limits`                              | The resources limits for the JMX exporter container                                                                              | `{}`                                                                                    |
+| `metrics.jmx.resources.requests`                            | The requested resources for the JMX exporter container                                                                           | `{}`                                                                                    |
+| `metrics.jmx.service.ports.metrics`                         | Prometheus JMX exporter metrics service port                                                                                     | `5556`                                                                                  |
 | `metrics.jmx.service.clusterIP`                             | Static clusterIP or None for headless services                                                                                   | `""`                                                                                    |
-| `metrics.jmx.service.annotations`                           | Annotations for the JMX Exporter Prometheus metrics service                                                                      | `{}`                                                                                    |
-| `metrics.jmx.whitelistObjectNames`                          | Allows setting which JMX objects you want to expose to via JMX stats to JMX Exporter                                             | `["kafka.controller:*","kafka.server:*","java.lang:*","kafka.network:*","kafka.log:*"]` |
+| `metrics.jmx.service.sessionAffinity`                       | Control where client requests go, to the same pod or round-robin                                                                 | `None`                                                                                  |
+| `metrics.jmx.service.annotations`                           | Annotations for the Prometheus JMX exporter service                                                                              | `{}`                                                                                    |
+| `metrics.jmx.whitelistObjectNames`                          | Allows setting which JMX objects you want to expose to via JMX stats to JMX exporter                                             | `["kafka.controller:*","kafka.server:*","java.lang:*","kafka.network:*","kafka.log:*"]` |
 | `metrics.jmx.config`                                        | Configuration file for JMX exporter                                                                                              | `""`                                                                                    |
 | `metrics.jmx.existingConfigmap`                             | Name of existing ConfigMap with JMX exporter configuration                                                                       | `""`                                                                                    |
 | `metrics.serviceMonitor.enabled`                            | if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.kafka.enabled` or `metrics.jmx.enabled` to be `true`) | `false`                                                                                 |
 | `metrics.serviceMonitor.namespace`                          | Namespace in which Prometheus is running                                                                                         | `""`                                                                                    |
 | `metrics.serviceMonitor.interval`                           | Interval at which metrics should be scraped                                                                                      | `""`                                                                                    |
 | `metrics.serviceMonitor.scrapeTimeout`                      | Timeout after which the scrape is ended                                                                                          | `""`                                                                                    |
-| `metrics.serviceMonitor.selector`                           | ServiceMonitor selector labels                                                                                                   | `{}`                                                                                    |
-| `metrics.serviceMonitor.relabelings`                        | Relabel configuration for the metrics                                                                                            | `[]`                                                                                    |
+| `metrics.serviceMonitor.labels`                             | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                            | `{}`                                                                                    |
+| `metrics.serviceMonitor.selector`                           | Prometheus instance selector labels                                                                                              | `{}`                                                                                    |
+| `metrics.serviceMonitor.relabelings`                        | RelabelConfigs to apply to samples before scraping                                                                               | `[]`                                                                                    |
 | `metrics.serviceMonitor.metricRelabelings`                  | MetricRelabelConfigs to apply to samples before ingestion                                                                        | `[]`                                                                                    |
+| `metrics.serviceMonitor.honorLabels`                        | Specify honorLabels parameter to add the scrape endpoint                                                                         | `false`                                                                                 |
+| `metrics.serviceMonitor.jobLabel`                           | The name of the label on the target service to use as the job name in prometheus.                                                | `""`                                                                                    |
 
 
 ### Kafka provisioning parameters
 
-| Name                              | Description                                                           | Value   |
-| --------------------------------- | --------------------------------------------------------------------- | ------- |
-| `provisioning.enabled`            | Enable kafka provisioning Job                                         | `false` |
-| `provisioning.numPartitions`      | Default number of partitions for topics when unspecified.             | `1`     |
-| `provisioning.replicationFactor`  | Default replication factor for topics when unspecified.               | `1`     |
-| `provisioning.schedulerName`      | Name of the k8s scheduler (other than default) for kafka provisioning | `""`    |
-| `provisioning.podAnnotations`     | Provisioning Pod annotations.                                         | `{}`    |
-| `provisioning.resources.limits`   | The resources limits for the container                                | `{}`    |
-| `provisioning.resources.requests` | The requested resources for the container                             | `{}`    |
-| `provisioning.command`            | Override provisioning container command                               | `[]`    |
-| `provisioning.args`               | Override provisioning container arguments                             | `[]`    |
-| `provisioning.topics`             | Kafka provisioning topics                                             | `[]`    |
+| Name                                                 | Description                                                                                                                   | Value                 |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `provisioning.enabled`                               | Enable kafka provisioning Job                                                                                                 | `false`               |
+| `provisioning.auth.tls.type`                         | Format to use for TLS certificates. Allowed types: `jks` and `pem`.                                                           | `jks`                 |
+| `provisioning.auth.tls.certificatesSecret`           | Existing secret containing the TLS certificates for the Kafka provisioning Job.                                               | `""`                  |
+| `provisioning.auth.tls.cert`                         | The secret key from the certificatesSecret if 'cert' key different from the default (tls.crt)                                 | `tls.crt`             |
+| `provisioning.auth.tls.key`                          | The secret key from the certificatesSecret if 'key' key different from the default (tls.key)                                  | `tls.key`             |
+| `provisioning.auth.tls.caCert`                       | The secret key from the certificatesSecret if 'caCert' key different from the default (ca.crt)                                | `ca.crt`              |
+| `provisioning.auth.tls.keystore`                     | The secret key from the certificatesSecret if 'keystore' key different from the default (keystore.jks)                        | `keystore.jks`        |
+| `provisioning.auth.tls.truststore`                   | The secret key from the certificatesSecret if 'truststore' key different from the default (truststore.jks)                    | `truststore.jks`      |
+| `provisioning.auth.tls.passwordsSecret`              | Name of the secret containing passwords to access the JKS files or PEM key when they are password-protected.                  | `""`                  |
+| `provisioning.auth.tls.keyPasswordSecretKey`         | The secret key from the passwordsSecret if 'keyPasswordSecretKey' key different from the default (key-password)               | `key-password`        |
+| `provisioning.auth.tls.keystorePasswordSecretKey`    | The secret key from the passwordsSecret if 'keystorePasswordSecretKey' key different from the default (keystore-password)     | `keystore-password`   |
+| `provisioning.auth.tls.truststorePasswordSecretKey`  | The secret key from the passwordsSecret if 'truststorePasswordSecretKey' key different from the default (truststore-password) | `truststore-password` |
+| `provisioning.auth.tls.keyPassword`                  | Password to access the password-protected PEM key if necessary. Ignored if 'passwordsSecret' is provided.                     | `""`                  |
+| `provisioning.auth.tls.keystorePassword`             | Password to access the JKS keystore. Ignored if 'passwordsSecret' is provided.                                                | `""`                  |
+| `provisioning.auth.tls.truststorePassword`           | Password to access the JKS truststore. Ignored if 'passwordsSecret' is provided.                                              | `""`                  |
+| `provisioning.numPartitions`                         | Default number of partitions for topics when unspecified                                                                      | `1`                   |
+| `provisioning.replicationFactor`                     | Default replication factor for topics when unspecified                                                                        | `1`                   |
+| `provisioning.topics`                                | Kafka provisioning topics                                                                                                     | `[]`                  |
+| `provisioning.parallel`                              | Number of parallel provisioning                                                                                               | `1`                   |
+| `provisioning.command`                               | Override provisioning container command                                                                                       | `[]`                  |
+| `provisioning.args`                                  | Override provisioning container arguments                                                                                     | `[]`                  |
+| `provisioning.podAnnotations`                        | Extra annotations for Kafka provisioning pods                                                                                 | `{}`                  |
+| `provisioning.podLabels`                             | Extra labels for Kafka provisioning pods                                                                                      | `{}`                  |
+| `provisioning.resources.limits`                      | The resources limits for the Kafka provisioning container                                                                     | `{}`                  |
+| `provisioning.resources.requests`                    | The requested resources for the Kafka provisioning container                                                                  | `{}`                  |
+| `provisioning.podSecurityContext.enabled`            | Enable security context for the pods                                                                                          | `true`                |
+| `provisioning.podSecurityContext.fsGroup`            | Set Kafka provisioning pod's Security Context fsGroup                                                                         | `1001`                |
+| `provisioning.containerSecurityContext.enabled`      | Enable Kafka provisioning containers' Security Context                                                                        | `true`                |
+| `provisioning.containerSecurityContext.runAsUser`    | Set Kafka provisioning containers' Security Context runAsUser                                                                 | `1001`                |
+| `provisioning.containerSecurityContext.runAsNonRoot` | Set Kafka provisioning containers' Security Context runAsNonRoot                                                              | `true`                |
+| `provisioning.schedulerName`                         | Name of the k8s scheduler (other than default) for kafka provisioning                                                         | `""`                  |
+| `provisioning.extraVolumes`                          | Optionally specify extra list of additional volumes for the Kafka provisioning pod(s)                                         | `[]`                  |
+| `provisioning.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Kafka provisioning container(s)                              | `[]`                  |
+| `provisioning.sidecars`                              | Add additional sidecar containers to the Kafka provisioning pod(s)                                                            | `[]`                  |
+| `provisioning.initContainers`                        | Add additional Add init containers to the Kafka provisioning pod(s)                                                           | `[]`                  |
 
 
-### Zookeeper chart parameters
+### ZooKeeper chart parameters
 
-| Name                             | Description                                                                                                                                                             | Value   |
-| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `zookeeper.enabled`              | Switch to enable or disable the Zookeeper helm chart                                                                                                                    | `true`  |
-| `zookeeper.auth.enabled`         | Enable Zookeeper auth                                                                                                                                                   | `false` |
-| `zookeeper.auth.clientUser`      | User that will use Zookeeper clients to auth                                                                                                                            | `""`    |
-| `zookeeper.auth.clientPassword`  | Password that will use Zookeeper clients to auth                                                                                                                        | `""`    |
-| `zookeeper.auth.serverUsers`     | Comma, semicolon or whitespace separated list of user to be created. Specify them as a string, for example: "user1,user2,admin"                                         | `""`    |
-| `zookeeper.auth.serverPasswords` | Comma, semicolon or whitespace separated list of passwords to assign to users when created. Specify them as a string, for example: "pass4user1, pass4user2, pass4admin" | `""`    |
-| `externalZookeeper.servers`      | Server or list of external Zookeeper servers to use                                                                                                                     | `[]`    |
+| Name                                 | Description                                                                                                                                                             | Value               |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `zookeeper.enabled`                  | Switch to enable or disable the ZooKeeper helm chart                                                                                                                    | `true`              |
+| `zookeeper.replicaCount`             | Number of ZooKeeper nodes                                                                                                                                               | `1`                 |
+| `zookeeper.auth.enabled`             | Enable ZooKeeper auth                                                                                                                                                   | `false`             |
+| `zookeeper.auth.clientUser`          | User that will use ZooKeeper clients to auth                                                                                                                            | `""`                |
+| `zookeeper.auth.clientPassword`      | Password that will use ZooKeeper clients to auth                                                                                                                        | `""`                |
+| `zookeeper.auth.serverUsers`         | Comma, semicolon or whitespace separated list of user to be created. Specify them as a string, for example: "user1,user2,admin"                                         | `""`                |
+| `zookeeper.auth.serverPasswords`     | Comma, semicolon or whitespace separated list of passwords to assign to users when created. Specify them as a string, for example: "pass4user1, pass4user2, pass4admin" | `""`                |
+| `zookeeper.persistence.enabled`      | Enable persistence on ZooKeeper using PVC(s)                                                                                                                            | `true`              |
+| `zookeeper.persistence.storageClass` | Persistent Volume storage class                                                                                                                                         | `""`                |
+| `zookeeper.persistence.accessModes`  | Persistent Volume access modes                                                                                                                                          | `["ReadWriteOnce"]` |
+| `zookeeper.persistence.size`         | Persistent Volume size                                                                                                                                                  | `8Gi`               |
+| `externalZookeeper.servers`          | List of external zookeeper servers to use                                                                                                                               | `[]`                |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -461,6 +532,7 @@ If, for some reason (like using Cert-Manager) you can not use the default JKS se
 - `auth.tls.jksTruststoreSecret` to define additional secret, where the `kafka.truststore.jks` is being kept. The truststore password **must** be the same as in `auth.tls.password`
 - `auth.tls.jksTruststore` to overwrite the default value of the truststore key (`kafka.truststore.jks`).
 - `auth.tls.jksKeystoreSAN` if you want to use a SAN certificate for your brokers. Setting this parameter would mean that the chart expects a existing key in the `auth.tls.jksTruststoreSecret` with the `auth.tls.jksKeystoreSAN` value and use this as a keystore for **all** brokers
+> **Note**: If you are using cert-manager, particularly when an ACME issuer is used, the `ca.crt` field is not put in the `Secret` that cert-manager creates. To handle this, the `auth.tls.pemChainIncluded` property can be set to `true` and the initContainer created by this Chart will attempt to extract the intermediate certs from the `tls.crt` field of the secret (which is a PEM chain)
 
 > **Note**: The truststore/keystore from above **must** be protected with the same password as in `auth.tls.password`
 
@@ -528,7 +600,7 @@ You have two alternatives to use LoadBalancer services:
 ```console
 externalAccess.enabled=true
 externalAccess.service.type=LoadBalancer
-externalAccess.service.port=9094
+externalAccess.service.ports.external=9094
 externalAccess.autoDiscovery.enabled=true
 serviceAccount.create=true
 rbac.create=true
@@ -541,7 +613,7 @@ Note: This option requires creating RBAC rules on clusters where RBAC policies a
 ```console
 externalAccess.enabled=true
 externalAccess.service.type=LoadBalancer
-externalAccess.service.port=9094
+externalAccess.service.ports.external=9094
 externalAccess.service.loadBalancerIPs[0]='external-ip-1'
 externalAccess.service.loadBalancerIPs[1]='external-ip-2'}
 ```
@@ -589,6 +661,7 @@ externalAccess:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: "{{ .targetPod }}.example.com"
 ```
+
 ### Sidecars
 
 If you have a need for additional containers to run within the same pod as Kafka (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
@@ -706,9 +779,26 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 16.0.0
+
+This major updates the Zookeeper subchart to it newest major, 9.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-900).
+
+### To 15.0.0
+
+This major release bumps Kafka major version to `3.x` series.
+It also renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository. Some affected values are:
+
+- `service.port`, `service.internalPort` and `service.externalPort` have been regrouped under the `service.ports` map.
+- `metrics.kafka.service.port` has been regrouped under the `metrics.kafka.service.ports` map.
+- `metrics.jmx.service.port` has been regrouped under the `metrics.jmx.service.ports` map.
+- `updateStrategy` (string) and `rollingUpdatePartition` are regrouped under the `updateStrategy` map.
+- Several parameters marked as deprecated `14.x.x` are not supported anymore.
+
+Additionally updates the ZooKeeper subchart to it newest major, `8.0.0`, which contains similar changes.
 
 ### To 14.0.0
 
@@ -720,7 +810,9 @@ image:
   repository: bitnami/kafka
   tag: 2.8.0
 ```
+
 VS
+
 ```yaml
 image:
   registry: docker.io
@@ -860,3 +952,19 @@ Use the workaround below to upgrade from versions previous to 1.0.0. The followi
 kubectl delete statefulset kafka-kafka --cascade=false
 kubectl delete statefulset kafka-zookeeper --cascade=false
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

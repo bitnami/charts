@@ -20,10 +20,10 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  rules:
   {{- if and .Values.proxy.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
   ingressClassName: {{ .Values.proxy.ingress.ingressClassName | quote }}
   {{- end }}
+  rules:
     {{- if .Values.proxy.ingress.hostname }}
     - host: {{ .Values.proxy.ingress.hostname | quote }}
       http:
@@ -47,9 +47,9 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
-  {{- if or .Values.proxy.ingress.tls .Values.proxy.ingress.extraTls }}
+  {{- if or (and .Values.proxy.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.proxy.ingress.annotations )) .Values.proxy.ingress.selfSigned)) .Values.proxy.ingress.extraTls }}
   tls:
-    {{- if and .Values.proxy.ingress.tls (or (include "jupyterhub.ingress.certManagerRequest" .Values.proxy.ingress.annotations) .Values.proxy.ingress.selfSigned) }}
+    {{- if and .Values.proxy.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.proxy.ingress.annotations )) .Values.proxy.ingress.selfSigned) }}
     - hosts:
         - {{ .Values.proxy.ingress.hostname | quote }}
       secretName: {{ printf "%s-tls" .Values.proxy.ingress.hostname }}

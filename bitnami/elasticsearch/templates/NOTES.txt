@@ -116,7 +116,7 @@ In order to replicate the container startup scripts execute this command:
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "elasticsearch.coordinating.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "elasticsearch.coordinating.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "elasticsearch.coordinating.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     curl http://$SERVICE_IP:{{ .Values.coordinating.service.port }}/
 {{- else if contains "ClusterIP"  .Values.coordinating.service.type }}
 

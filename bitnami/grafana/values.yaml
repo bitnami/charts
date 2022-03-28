@@ -53,7 +53,7 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 8.3.3-debian-10-r3
+  tag: 8.4.4-debian-10-r9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -416,7 +416,7 @@ grafana:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## @param grafana.extraVolumes Additional volumes for the Grafana pod
   ## Example:
   ## extraVolumes:
@@ -443,7 +443,7 @@ grafana:
   ##  - name: GF_DEFAULT_INSTANCE_NAME
   ##    value: my-instance
   ##
-  extraEnvVars: {}
+  extraEnvVars: []
   ## @param grafana.extraConfigmaps Array to mount extra ConfigMaps to configure Grafana
   ## For example:
   ## extraConfigmaps:
@@ -452,7 +452,7 @@ grafana:
   ##     subPath: file-name.extension (optional)
   ##     readOnly: true
   ##
-  extraConfigmaps: {}
+  extraConfigmaps: []
   ## @param grafana.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -686,7 +686,31 @@ metrics:
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
-
+  ## Prometheus Operator PrometheusRule configuration
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace Namespace for the PrometheusRule Resource (defaults to the Release Namespace)
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so PrometheusRule will be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.prometheusRule.rules PrometheusRule rules to configure
+    ## e.g:
+    ##  - alert: Grafana-Down
+    ##    annotations:
+    ##      message: 'Grafana instance is down'
+    ##      summary: Grafana instance is down
+    ##    expr: absent(up{job="grafana"} == 1)
+    ##    labels:
+    ##      severity: warning
+    ##      service: grafana
+    ##    for: 5m
+    ##
+    rules: []
 ## @section Grafana Image Renderer parameters
 
 imageRenderer:
@@ -704,7 +728,7 @@ imageRenderer:
   image:
     registry: docker.io
     repository: bitnami/grafana-image-renderer
-    tag: 3.3.0-debian-10-r26
+    tag: 3.4.2-debian-10-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -892,6 +916,29 @@ imageRenderer:
       ## scrapeTimeout: 10s
       ##
       scrapeTimeout: ""
+    ## Prometheus Operator PrometheusRule configuration
+    ##
+    prometheusRule:
+      ## @param imageRenderer.metrics.prometheusRule.enabled if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)
+      ##
+      enabled: false
+      ## @param imageRenderer.metrics.prometheusRule.namespace Namespace for the PrometheusRule Resource (defaults to the Release Namespace)
+      ##
+      namespace: ""
+      ## @param imageRenderer.metrics.prometheusRule.additionalLabels Additional labels that can be used so PrometheusRule will be discovered by Prometheus
+      ##
+      additionalLabels: {}
+      ## @param imageRenderer.metrics.prometheusRule.rules Prometheus Rule definitions
+      ##      - alert: Grafana-Image-Renderer-Down
+      ##        expr: absent(up{job="grafana-image-renderer"} == 1)
+      ##        for: 1s
+      ##        labels:
+      ##          severity: critical
+      ##        annotations:
+      ##          summary: Grafana Image Renderer Down
+      ##          description: "Grafana Image Renderer is down. There are no values coming from grafana-image-renderer."
+      ##
+      rules: []
   ## @param imageRenderer.initContainers Add additional init containers to the Grafana Image Renderer pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -901,7 +948,7 @@ imageRenderer:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
   ## @param imageRenderer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes
   ##
   extraEnvVarsCM: ""
@@ -937,7 +984,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r282
+    tag: 10-debian-10-r377
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

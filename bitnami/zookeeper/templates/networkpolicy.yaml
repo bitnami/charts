@@ -1,6 +1,6 @@
 {{- if .Values.networkPolicy.enabled }}
 kind: NetworkPolicy
-apiVersion: networking.k8s.io/v1
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ template "zookeeper.namespace" . }}
@@ -17,9 +17,9 @@ spec:
   policyTypes:
     - Ingress
   ingress:
-    # Allow inbound connections to zookeeper
+    # Allow inbound connections to ZooKeeper
     - ports:
-        - port: {{ .Values.containerPort }}
+        - port: {{ .Values.containerPorts.client }}
         {{- if .Values.metrics.enabled }}
         - port: {{ .Values.metrics.containerPort }}
         {{- end }}
@@ -33,8 +33,8 @@ spec:
       {{- end }}
     # Allow internal communications between nodes
     - ports:
-        - port: {{ .Values.service.followerPort }}
-        - port: {{ .Values.service.electionPort }}
+        - port: {{ .Values.containerPorts.follower }}
+        - port: {{ .Values.containerPorts.election }}
       from:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}

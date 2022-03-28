@@ -17,7 +17,7 @@ spec:
   {{- if .Values.agent.iptables }}
   allowedCapabilities:
     - "NET_ADMIN"
-  {{ end }}
+  {{- end }}
   allowPrivilegeEscalation: false
   volumes:
     - 'secret'

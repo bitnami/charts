@@ -30,9 +30,15 @@ spec:
   {{- if (and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
+  {{- if .Values.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
   ports:
     - name: http
-      port: {{ .Values.service.port}}
+      port: {{ coalesce .Values.service.ports.http .Values.service.port }}
       targetPort: http
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http)) }}
       nodePort: {{ .Values.service.nodePorts.http }}
@@ -41,12 +47,15 @@ spec:
       {{- end }}
     {{- if or (eq .Values.service.type "ClusterIP") .Values.exposeManagementConsole }}
     - name: mgmt
-      port: {{ .Values.service.mgmtPort}}
+      port: {{ coalesce .Values.service.ports.mgmt .Values.service.mgmtPort }}
       targetPort: mgmt
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.mgmt)) }}
       nodePort: {{ .Values.service.nodePorts.mgmt }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- end }}
+    {{- if .Values.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

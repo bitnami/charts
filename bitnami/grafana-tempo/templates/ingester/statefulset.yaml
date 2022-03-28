@@ -22,9 +22,11 @@ spec:
   serviceName: {{ template "grafana-tempo.ingester.fullname" . }}
   template:
     metadata:
-      {{- if .Values.ingester.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/tempo-configmap.yaml") . | sha256sum }}
+        {{- if .Values.ingester.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.ingester.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: ingester
         tempo-gossip-member: "true"
@@ -51,8 +53,14 @@ spec:
       {{- if .Values.ingester.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.tolerations "context" .) | nindent 8 }}
       {{- end }}
+      {{- if .Values.ingester.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.ingester.priorityClassName }}
       priorityClassName: {{ .Values.ingester.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.ingester.schedulerName }}
+      schedulerName: {{ .Values.ingester.schedulerName }}
       {{- end }}
       {{- if .Values.ingester.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.ingester.podSecurityContext "enabled" | toYaml | nindent 8 }}
@@ -67,12 +75,12 @@ spec:
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
             - /bin/bash
-            - -ec
           args:
+            - -ec
             - |
               mkdir -p {{ .Values.tempo.dataDir }}{{- if .Values.ingester.persistence.subPath }}/{{ .Values.ingester.persistence.subPath }}{{- end }}
-              {{- if and .Values.podSecurityContext.enabled .Values.containerSecurityContext.enabled }}
-              chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "{{ .Values.tempo.dataDir }}{{- if .Values.ingester.persistence.subPath }}/{{ .Values.ingester.persistence.subPath }}{{- end }}"
+              {{- if and .Values.ingester.podSecurityContext.enabled .Values.ingester.containerSecurityContext.enabled }}
+              find {{ .Values.tempo.dataDir }}{{- if .Values.ingester.persistence.subPath }}/{{ .Values.ingester.persistence.subPath }}{{- end }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.ingester.containerSecurityContext.runAsUser }}:{{ .Values.ingester.podSecurityContext.fsGroup }}
               {{- end }}
           {{- if eq ( toString ( .Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
           securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "runAsUser" | toYaml | nindent 12 }}
@@ -121,43 +129,40 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.ingester.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - containerPort: {{ .Values.tempo.containerPort }}
+            - containerPort: {{ .Values.tempo.containerPorts.web }}
               name: http
-            - containerPort: {{ .Values.tempo.gossipRing.containerPort }}
+            - containerPort: {{ .Values.tempo.containerPorts.gossipRing }}
               name: http-memberlist
-            - containerPort: {{ .Values.tempo.grpcContainerPort }}
+            - containerPort: {{ .Values.tempo.containerPorts.grpc }}
               name: grpc
           {{- if .Values.ingester.resources }}
           resources: {{- toYaml .Values.ingester.resources | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.ingester.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingester.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-            initialDelaySeconds: {{ .Values.ingester.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.ingester.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.ingester.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.ingester.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.ingester.livenessProbe.failureThreshold }}
           {{- else if .Values.ingester.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.ingester.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingester.readinessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-            initialDelaySeconds: {{ .Values.ingester.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.ingester.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.ingester.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.ingester.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.ingester.readinessProbe.failureThreshold }}
           {{- else if .Values.ingester.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.ingester.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingester.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- else if .Values.ingester.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
           {{- if .Values.ingester.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
           {{- end }}
           volumeMounts:
             - name: tempo-config
@@ -191,9 +196,16 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        {{- if .Values.ingester.persistence.annotations }}
-        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.persistence.annotations "context" $) | nindent 10 }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
         {{- end }}
+        annotations:
+          {{- if .Values.ingester.persistence.annotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.ingester.persistence.annotations "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.commonAnnotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
+          {{- end }}
       spec:
         accessModes:
         {{- range .Values.ingester.persistence.accessModes }}
@@ -202,14 +214,8 @@ spec:
         resources:
           requests:
             storage: {{ .Values.ingester.persistence.size | quote }}
-            {{- if .Values.ingester.persistence.volumeClaimTemplates.requests }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.ingester.persistence.volumeClaimTemplates.requests "context" $) | nindent 12 }}
-            {{- end }}
-        {{- if .Values.ingester.persistence.volumeClaimTemplates.dataSource }}
-        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.persistence.volumeClaimTemplates.dataSource "context" $) | nindent 10 }}
+        {{- if .Values.ingester.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.persistence.selector "context" $) | nindent 10 }}
         {{- end }}
-        {{- if .Values.ingester.persistence.volumeClaimTemplates.selector }}
-        selector: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.persistence.volumeClaimTemplates.selector "context" $) | nindent 10 }}
-        {{- end }}
-        {{ include "common.storage.class" (dict "persistence" .Values.ingester.persistence "global" .Values.global) }}
+        {{- include "common.storage.class" (dict "persistence" .Values.ingester.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}

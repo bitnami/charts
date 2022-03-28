@@ -51,7 +51,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/moodle
-  tag: 3.11.4-debian-10-r33
+  tag: 3.11.6-debian-10-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -133,10 +133,26 @@ initContainers: []
 ## @param sidecars Extra sidecar containers to add to the deployment
 ##
 sidecars: []
+## @param hostAliases Moodle&trade; pods host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 ## @param tolerations Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+## @param priorityClassName Moodle&trade; pods' priorityClassName
+##
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 ## @param existingSecret Name of a secret with the application password
 ##
 existingSecret: ""
@@ -192,12 +208,13 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
-  ## @param persistence.accessMode PVC Access Mode for Moodle
+  ## @param persistence.accessModes PVC Access Mode for Moodle
   ## Requires persistence.enabled: true
   ## If defined, and no customStorageClass is defined, then
   ## PVC must be created manually before volume will be bound
   ##
-  accessMode: ReadWriteOnce
+  accessModes:
+    - ReadWriteOnce
   ## @param persistence.size PVC Storage Request for Moodle
   ##
   size: 8Gi
@@ -212,6 +229,9 @@ persistence:
   ## Default: nil.
   ##
   hostPath: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
 ## @param podAffinityPreset Pod affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ## Allowed values: soft, hard
@@ -253,13 +273,15 @@ affinity: {}
 ##
 nodeSelector: {}
 ## Configure resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-## @param resources.requests [object] CPU/Memory resource requests/limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param resources.requests [object] CPU/Memory resource requests
+## @param resources.limits CPU/Memory resource limits
 ##
 resources:
   requests:
     memory: 512Mi
     cpu: 300m
+  limits: {}
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable Moodle&trade; pods' Security Context
@@ -271,17 +293,35 @@ podSecurityContext:
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable Moodle&trade; containers' Security Context
-## @param containerSecurityContext.runAsUser Moodle&trade; containers' Security Context
+## @param containerSecurityContext.runAsUser Moodle&trade; containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Moodle&trade; containers' Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
 ## Configure extra options for liveness and readiness probes
 ## Moodle&trade; core exposes /user/login to unauthenticated requests, making it a good
 ## default liveness and readiness path. However, that may not always be the
 ## case. For example, if the image value is overridden to an image containing a
 ## module that alters that route, or an image that does not auto-install Moodle&trade;.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.path Request path for startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  path: /login/index.php
+  initialDelaySeconds: 600
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.path Request path for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -316,6 +356,9 @@ readinessProbe:
   timeoutSeconds: 3
   failureThreshold: 6
   successThreshold: 1
+## @param customStartupProbe Override default startup probe
+##
+customStartupProbe: {}
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
@@ -343,12 +386,21 @@ service:
   ## @param service.type Service type
   ##
   type: LoadBalancer
-  ## @param service.port Service HTTP port
+  ## @param service.ports.http Service HTTP port
+  ## @param service.ports.https Service HTTPS port
   ##
-  port: 80
-  ## @param service.httpsPort Service HTTPS port
+  ports:
+    http: 80
+    https: 443
+  ## @param service.nodePorts.http Kubernetes HTTP node port
+  ## @param service.nodePorts.https Kubernetes HTTPS node port
+  ## nodePorts:
+  ##   http: <to set explicitly, choose port between 30000-32767>
+  ##   https: <to set explicitly, choose port between 30000-32767>
   ##
-  httpsPort: 443
+  nodePorts:
+    http: ""
+    https: ""
   ## @param service.clusterIP Service Cluster IP
   ##
   clusterIP: ""
@@ -362,19 +414,28 @@ service:
   ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
   loadBalancerIP: ""
-  ## @param service.nodePorts.http Kubernetes HTTP node port
-  ## @param service.nodePorts.https Kubernetes HTTPS node port
-  ## nodePorts:
-  ##   http: <to set explicitly, choose port between 30000-32767>
-  ##   https: <to set explicitly, choose port between 30000-32767>
-  ##
-  nodePorts:
-    http: ""
-    https: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.annotations Additional custom annotations for Moodle&trade; service
+  ##
+  annotations: {}
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+
 ## Configure the ingress resource that allows you to access the
 ## Moodle&trade; installation. Set up the URL
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -395,7 +456,7 @@ ingress:
   apiVersion: ""
   ## @param ingress.hostname When the ingress is enabled, a host pointing to this will be created
   ##
-  hostname: minio.local
+  hostname: moodle.local
   ## @param ingress.path The Path to Moodle&trade;. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
@@ -455,6 +516,11 @@ ingress:
   ##   certificate:
   ##
   secrets: []
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
 
 ## @section Database parameters
 
@@ -519,6 +585,9 @@ mariadb:
 ## External database configuration
 ##
 externalDatabase:
+  ## @param externalDatabase.type Type of the existing database
+  ##
+  type: ""
   ## @param externalDatabase.host Host of the existing database
   ##
   host: ""
@@ -534,6 +603,9 @@ externalDatabase:
   ## @param externalDatabase.database Name of the existing database
   ##
   database: bitnami_moodle
+  ## @param externalDatabase.existingSecret Name of an existing secret resource containing the DB password
+  ##
+  existingSecret: ""
 
 ## @section Volume Permissions parameters
 
@@ -553,7 +625,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r280
+    tag: 10-debian-10-r377
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -597,7 +669,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.10.1-debian-10-r83
+    tag: 0.11.0-debian-10-r96
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -617,13 +689,41 @@ metrics:
     ##
     port: 9117
     ## @param metrics.service.loadBalancerIP Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`, otherwise leave blank
+    ##
     loadBalancerIP: ""
+    ## @param metrics.service.loadBalancerSourceRanges Prometheus metrics service service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param metrics.service.clusterIP Prometheus metrics service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param metrics.service.externalTrafficPolicy Prometheus metrics service service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
     ## @param metrics.service.annotations [object] Annotations for Prometheus Exporter pods. Evaluated as a template.
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.metrics.service.port }}"
+    ## @param metrics.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
   ## @param metrics.resources Exporter resource requests/limit
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -684,7 +784,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r280
+    tag: 10-debian-10-r377
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

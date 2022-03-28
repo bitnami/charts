@@ -1,22 +1,22 @@
 annotations:
   category: CMS
 apiVersion: v2
-appVersion: 5.8.2
+appVersion: 5.9.2
 dependencies:
-  - condition: mariadb.enabled
-    name: mariadb
-    repository: https://charts.bitnami.com/bitnami
-    version: 9.x.x
   - condition: memcached.enabled
     name: memcached
     repository: https://charts.bitnami.com/bitnami
-    version: 5.x.x
+    version: 6.x.x
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
     version: 1.x.x
-description: Web publishing platform for building blogs and websites.
+description: WordPress is the world's most popular blogging and content management platform. Powerful yet simple, everyone from students to global corporations use it to build beautiful, functional websites.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/wordpress
 icon: https://bitnami.com/assets/stacks/wordpress/img/wordpress-stack-220x234.png
@@ -35,4 +35,4 @@ name: wordpress
 sources:
   - https://github.com/bitnami/bitnami-docker-wordpress
   - https://wordpress.org/
-version: 12.2.7
+version: 13.1.6

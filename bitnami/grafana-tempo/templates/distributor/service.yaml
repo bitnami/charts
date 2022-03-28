@@ -19,6 +19,7 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.distributor.service.type }}
+  sessionAffinity: {{ .Values.distributor.service.sessionAffinity }}
   {{- if .Values.distributor.service.clusterIP }}
   clusterIP: {{ .Values.distributor.service.clusterIP }}
   {{- end }}
@@ -33,7 +34,7 @@ spec:
   {{- end }}
   ports:
     - name: http
-      port: {{ .Values.distributor.service.port }}
+      port: {{ .Values.distributor.service.ports.http }}
       targetPort: http
       protocol: TCP
       {{- if (and (or (eq .Values.distributor.service.type "NodePort") (eq .Values.distributor.service.type "LoadBalancer")) (not (empty .Values.distributor.service.nodePorts.http))) }}
@@ -42,7 +43,7 @@ spec:
       nodePort: null
       {{- end }}
     - name: grpc
-      port: {{ .Values.distributor.service.grpcPort }}
+      port: {{ .Values.distributor.service.ports.grpc }}
       protocol: TCP
       targetPort: grpc
       {{- if (and (or (eq .Values.distributor.service.type "NodePort") (eq .Values.distributor.service.type "LoadBalancer")) (not (empty .Values.distributor.service.nodePorts.grpc))) }}
@@ -102,6 +103,9 @@ spec:
       port: 55678
       protocol: TCP
       targetPort: opencensus
+    {{- end }}
+    {{- if .Values.distributor.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.distributor.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: distributor

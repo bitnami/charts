@@ -1,7 +1,13 @@
-# etcd
+<!--- app-name: Etcd -->
 
-[etcd](https://etcd.io/) is an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
+# Etcd packaged by Bitnami
 
+etcd is a distributed key-value store designed to securely store data across a cluster. etcd is widely used in production on account of its reliability, fault-tolerance and ease of use.
+
+[Overview of Etcd](https://etcd.io/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -17,8 +23,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -77,11 +83,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                       | etcd image registry                                                                             | `docker.io`           |
 | `image.repository`                     | etcd image name                                                                                 | `bitnami/etcd`        |
-| `image.tag`                            | etcd image tag                                                                                  | `3.5.1-debian-10-r31` |
+| `image.tag`                            | etcd image tag                                                                                  | `3.5.1-debian-10-r88` |
 | `image.pullPolicy`                     | etcd image pull policy                                                                          | `IfNotPresent`        |
 | `image.pullSecrets`                    | etcd image pull secrets                                                                         | `[]`                  |
 | `image.debug`                          | Enable image debug mode                                                                         | `false`               |
-| `auth.rbac.enabled`                    | Switch to enable RBAC authentication                                                            | `true`                |
+| `auth.rbac.create`                     | Switch to enable RBAC authentication                                                            | `true`                |
 | `auth.rbac.allowNoneAuthentication`    | Allow to use etcd without configuring RBAC authentication                                       | `true`                |
 | `auth.rbac.rootPassword`               | Root user password. The root user is always `root`                                              | `""`                  |
 | `auth.rbac.existingSecret`             | Name of the existing secret containing credentials for the root user                            | `""`                  |
@@ -105,7 +111,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.peer.certFilename`               | Name of the file containing the peer certificate                                                | `cert.pem`            |
 | `auth.peer.certKeyFilename`            | Name of the file containing the peer certificate private key                                    | `key.pem`             |
 | `auth.peer.caFilename`                 | Name of the file containing the peer CA certificate                                             | `""`                  |
-| `autoCompactionMode`                   | Auto compaction mode, by default periodic. Valid values: ‘periodic’, ‘revision’.                | `""`                  |
+| `autoCompactionMode`                   | Auto compaction mode, by default periodic. Valid values: "periodic", "revision".                | `""`                  |
 | `autoCompactionRetention`              | Auto compaction retention for mvcc key value store in hour, by default 0, means disabled        | `""`                  |
 | `initialClusterState`                  | Initial cluster state. Allowed values: 'new' or 'existing'                                      | `""`                  |
 | `maxProcs`                             | Limits the number of operating system threads that can execute user-level                       | `""`                  |
@@ -173,25 +179,32 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
 | `tolerations`                           | Tolerations for pod assignment                                                            | `[]`            |
 | `terminationGracePeriodSeconds`         | Seconds the pod needs to gracefully terminate                                             | `""`            |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`            |
 | `priorityClassName`                     | Name of the priority class to be used by etcd pods                                        | `""`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`            |
 
 
 ### Traffic exposure parameters
 
-| Name                               | Description                                                                       | Value       |
-| ---------------------------------- | --------------------------------------------------------------------------------- | ----------- |
-| `service.type`                     | Kubernetes Service type                                                           | `ClusterIP` |
-| `service.enabled`                  | create second service if equal true                                               | `true`      |
-| `service.clusterIP`                | Kubernetes service Cluster IP                                                     | `""`        |
-| `service.port`                     | etcd client port                                                                  | `2379`      |
-| `service.clientPortNameOverride`   | etcd client port name override                                                    | `""`        |
-| `service.peerPort`                 | etcd peer port                                                                    | `2380`      |
-| `service.peerPortNameOverride`     | etcd peer port name override                                                      | `""`        |
-| `service.nodePorts`                | Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types. | `{}`        |
-| `service.loadBalancerIP`           | loadBalancerIP for the etcd service (optional, cloud specific)                    | `""`        |
-| `service.loadBalancerSourceRanges` | Load Balancer source ranges                                                       | `[]`        |
-| `service.externalIPs`              | External IPs                                                                      | `[]`        |
-| `service.annotations`              | Additional annotations for the etcd service                                       | `{}`        |
+| Name                               | Description                                                                        | Value       |
+| ---------------------------------- | ---------------------------------------------------------------------------------- | ----------- |
+| `service.type`                     | Kubernetes Service type                                                            | `ClusterIP` |
+| `service.enabled`                  | create second service if equal true                                                | `true`      |
+| `service.clusterIP`                | Kubernetes service Cluster IP                                                      | `""`        |
+| `service.ports.client`             | etcd client port                                                                   | `2379`      |
+| `service.ports.peer`               | etcd peer port                                                                     | `2380`      |
+| `service.nodePorts.client`         | Specify the nodePort client value for the LoadBalancer and NodePort service types. | `""`        |
+| `service.nodePorts.peer`           | Specify the nodePort peer value for the LoadBalancer and NodePort service types.   | `""`        |
+| `service.clientPortNameOverride`   | etcd client port name override                                                     | `""`        |
+| `service.peerPortNameOverride`     | etcd peer port name override                                                       | `""`        |
+| `service.loadBalancerIP`           | loadBalancerIP for the etcd service (optional, cloud specific)                     | `""`        |
+| `service.loadBalancerSourceRanges` | Load Balancer source ranges                                                        | `[]`        |
+| `service.externalIPs`              | External IPs                                                                       | `[]`        |
+| `service.externalTrafficPolicy`    | %%MAIN_CONTAINER_NAME%% service external traffic policy                            | `Cluster`   |
+| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                     | `[]`        |
+| `service.annotations`              | Additional annotations for the etcd service                                        | `{}`        |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"               | `None`      |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                        | `{}`        |
 
 
 ### Persistence parameters
@@ -213,7 +226,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r256`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r312`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                    |
@@ -369,8 +382,8 @@ extraEnvVars:
 
 Since etcd keeps an exact history of its keyspace, this history should be periodically compacted to avoid performance degradation and eventual storage space exhaustion. Compacting the keyspace history drops all information about keys superseded prior to a given keyspace revision. The space used by these keys then becomes available for additional writes to the keyspace.
 
-`autoCompactionMode`, by default periodic. Valid values: ‘periodic’, ‘revision’.
-- 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ‘5m’).
+`autoCompactionMode`, by default periodic. Valid values: "periodic", "revision".
+- 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. "5m").
 - 'revision' for revision number based retention.
 `autoCompactionRetention` for mvcc key value store in hour, by default 0, means disabled.
 
@@ -419,7 +432,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
@@ -494,3 +507,19 @@ Use the workaround below to upgrade from versions previous to 1.0.0. The followi
 ```console
 $ kubectl delete statefulset etcd --cascade=false
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

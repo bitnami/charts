@@ -1,6 +1,13 @@
-# wavefront-prometheus-storage-adapter
+<!--- app-name: Wavefront Prometheus Adapter -->
 
-[Wavefront Storage Adapter for Prometheus](https://github.com/wavefrontHQ/prometheus-storage-adapter) is a Prometheus integration to transfer metrics from Prometheus to Wavefront. It works as a "fork", such that data written to Prometheus is also written to Wavefront. It supports metrics path conversion and direct ingestion of metrics.
+# Wavefront Prometheus Adapter packaged by Bitnami
+
+Wavefront Storage Adapter is a Prometheus integration to transfer metrics from Prometheus to Wavefront. It lets you save Prometheus data in Wavefront without changing your existing Prometheus setup.
+
+[Overview of Wavefront Prometheus Adapter](https://github.com/wavefrontHQ/prometheus-storage-adapter)
+
+
+                           
 ## TL;DR
 
 ```console
@@ -9,7 +16,10 @@ $ helm install my-release bitnami/wavefront-prometheus-storage-adapter
 ```
 
 ## Introduction
+
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
+
+Wavefront Prometheus Adapter  works as a "fork", such that data written to Prometheus is also written to Wavefront. It supports metrics path conversion and direct ingestion of metrics.
 
 This chart bootstraps a [Wavefront Storage Adapter for Prometheus](https://github.com/wavefrontHQ/prometheus-storage-adapter) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
@@ -17,8 +27,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -67,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------- |
 | `image.registry`                        | Adapter image registry                                                                    | `docker.io`                                    |
 | `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-prometheus-storage-adapter` |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `1.0.5-debian-10-r0`                           |
+| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `1.0.5-debian-10-r54`                          |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                 | `IfNotPresent`                                 |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                | `[]`                                           |
 | `image.debug`                           | Enable image debug mode                                                                   | `false`                                        |
@@ -191,7 +201,7 @@ remote_write:
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
@@ -202,3 +212,19 @@ $ helm upgrade my-release bitnami/wavefront-prometheus-storage-adapter
 ### To 1.0.0
 
 This major updates the Wavefront subchart to its newest major release, 3.0.0, which contains a new major version for kube-state-metrics. For more information on this subchart's major version, please refer to the [Wavefront upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/wavefront#to-300).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

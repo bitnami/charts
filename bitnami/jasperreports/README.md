@@ -1,7 +1,13 @@
-# JasperReports
+<!--- app-name: JasperReports -->
 
-[JasperReports](http://community.jaspersoft.com/project/jasperreports-server) The JasperReports server can be used as a stand-alone or embedded reporting and BI server that offers web-based reporting, analytic tools and visualization, and a dashboard feature for compiling multiple custom views
+# JasperReports packaged by Bitnami
 
+JasperReports Server is a stand-alone and embeddable reporting server. It is a central information hub, with reporting and analytics that can be embedded into web and mobile applications.
+
+[Overview of JasperReports](http://community.jaspersoft.com/project/jasperreports-server)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -19,8 +25,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -76,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------- | ---------------------------------------------------------------------- | ----------------------- |
 | `image.registry`        | JasperReports image registry                                           | `docker.io`             |
 | `image.repository`      | JasperReports image repository                                         | `bitnami/jasperreports` |
-| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.1-debian-10-r0`    |
+| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.1-debian-10-r57`   |
 | `image.pullPolicy`      | JasperReports image pull policy                                        | `IfNotPresent`          |
 | `image.pullSecrets`     | Specify docker-registry secret names as an array                       | `[]`                    |
 | `jasperreportsUsername` | JasperReports user                                                     | `jasperadmin`           |
@@ -99,75 +105,94 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Jasperreports deployment parameters
 
-| Name                                 | Description                                                                               | Value                      |
-| ------------------------------------ | ----------------------------------------------------------------------------------------- | -------------------------- |
-| `hostAliases`                        | Add deployment host aliases                                                               | `[]`                       |
-| `containerPort`                      | HTTP port to expose at container level                                                    | `8080`                     |
-| `podSecurityContext.enabled`         | Enable pod's Security Context                                                             | `true`                     |
-| `podSecurityContext.fsGroup`         | Set pod's Security Context fsGroup                                                        | `1001`                     |
-| `containerSecurityContext.enabled`   | Enable container's Security Context                                                       | `true`                     |
-| `containerSecurityContext.runAsUser` | Set container's Security Context runAsUser                                                | `1001`                     |
-| `resources.limits`                   | The resources limits for the Jasperreports container                                      | `{}`                       |
-| `resources.requests`                 | The requested resources for the Jasperreports container                                   | `{}`                       |
-| `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`                     |
-| `livenessProbe.path`                 | Request path for livenessProbe                                                            | `/jasperserver/login.html` |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `450`                      |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `10`                       |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`                        |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `6`                        |
-| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`                        |
-| `readinessProbe.enabled`             | Enable readinessProbe                                                                     | `true`                     |
-| `readinessProbe.path`                | Request path for readinessProbe                                                           | `/jasperserver/login.html` |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `30`                       |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `10`                       |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`                        |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                      | `6`                        |
-| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                      | `1`                        |
-| `customLivenessProbe`                | Override default liveness probe                                                           | `{}`                       |
-| `customReadinessProbe`               | Override default readiness probe                                                          | `{}`                       |
-| `podLabels`                          | Extra labels for Jasperreports pods                                                       | `{}`                       |
-| `podAnnotations`                     | Annotations for Jasperreports pods                                                        | `{}`                       |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                       |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                     |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                       |
-| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set.                                    | `""`                       |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                       |
-| `affinity`                           | Affinity for pod assignment                                                               | `{}`                       |
-| `nodeSelector`                       | Node labels for pod assignment                                                            | `{}`                       |
-| `tolerations`                        | Tolerations for pod assignment                                                            | `[]`                       |
-| `lifecycleHooks`                     | LifecycleHooks to set additional configuration at startup.                                | `{}`                       |
-| `extraVolumes`                       | Optionally specify extra list of additional volumes for Jasperreports pods                | `[]`                       |
-| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Jasperreports container(s)   | `[]`                       |
-| `initContainers`                     | Add additional init containers to the Jasperreports pods                                  | `[]`                       |
-| `sidecars`                           | Add additional sidecar containers to the Jasperreports pods                               | `[]`                       |
-| `persistence.enabled`                | Enable persistence using PVC                                                              | `true`                     |
-| `persistence.storageClass`           | PVC Storage Class for Jasperreports volume                                                | `""`                       |
-| `persistence.accessModes`            | Persistent Volume Access Mode                                                             | `["ReadWriteOnce"]`        |
-| `persistence.size`                   | PVC Storage Request for Jasperreports volume                                              | `8Gi`                      |
-| `persistence.existingClaim`          | An Existing PVC name for Jasperreports volume                                             | `""`                       |
+| Name                                    | Description                                                                               | Value                      |
+| --------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------- |
+| `hostAliases`                           | Add deployment host aliases                                                               | `[]`                       |
+| `containerPorts.http`                   | HTTP port to expose at container level                                                    | `8080`                     |
+| `podSecurityContext.enabled`            | Enable pod's Security Context                                                             | `true`                     |
+| `podSecurityContext.fsGroup`            | Set pod's Security Context fsGroup                                                        | `1001`                     |
+| `containerSecurityContext.enabled`      | Enable container's Security Context                                                       | `true`                     |
+| `containerSecurityContext.runAsUser`    | Set container's Security Context runAsUser                                                | `1001`                     |
+| `containerSecurityContext.runAsNonRoot` | Set container's Security Context runAsNonRoot                                             | `true`                     |
+| `resources.limits`                      | The resources limits for the Jasperreports container                                      | `{}`                       |
+| `resources.requests`                    | The requested resources for the Jasperreports container                                   | `{}`                       |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`                    |
+| `startupProbe.path`                     | Request path for startupProbe                                                             | `/jasperserver/login.html` |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `450`                      |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`                       |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `5`                        |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `6`                        |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`                        |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`                     |
+| `livenessProbe.path`                    | Request path for livenessProbe                                                            | `/jasperserver/login.html` |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `450`                      |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`                       |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`                        |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`                        |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`                        |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`                     |
+| `readinessProbe.path`                   | Request path for readinessProbe                                                           | `/jasperserver/login.html` |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `30`                       |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `10`                       |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `5`                        |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `6`                        |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                        |
+| `customStartupProbe`                    | Override default startup probe                                                            | `{}`                       |
+| `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`                       |
+| `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`                       |
+| `podLabels`                             | Extra labels for Jasperreports pods                                                       | `{}`                       |
+| `podAnnotations`                        | Annotations for Jasperreports pods                                                        | `{}`                       |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                       |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                     |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                       |
+| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                    | `""`                       |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                       |
+| `affinity`                              | Affinity for pod assignment                                                               | `{}`                       |
+| `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`                       |
+| `tolerations`                           | Tolerations for pod assignment                                                            | `[]`                       |
+| `priorityClassName`                     | JasperReports pods' priorityClassName                                                     | `""`                       |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`                       |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`                       |
+| `lifecycleHooks`                        | LifecycleHooks to set additional configuration at startup.                                | `{}`                       |
+| `extraVolumes`                          | Optionally specify extra list of additional volumes for Jasperreports pods                | `[]`                       |
+| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Jasperreports container(s)   | `[]`                       |
+| `initContainers`                        | Add additional init containers to the Jasperreports pods                                  | `[]`                       |
+| `sidecars`                              | Add additional sidecar containers to the Jasperreports pods                               | `[]`                       |
+| `persistence.enabled`                   | Enable persistence using PVC                                                              | `true`                     |
+| `persistence.storageClass`              | PVC Storage Class for Jasperreports volume                                                | `""`                       |
+| `persistence.accessModes`               | Persistent Volume Access Mode                                                             | `["ReadWriteOnce"]`        |
+| `persistence.size`                      | PVC Storage Request for Jasperreports volume                                              | `8Gi`                      |
+| `persistence.existingClaim`             | An Existing PVC name for Jasperreports volume                                             | `""`                       |
+| `persistence.annotations`               | Persistent Volume Claim annotations                                                       | `{}`                       |
 
 
 ### Exposure parameters
 
-| Name                            | Description                                                                                                                      | Value                    |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                  | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
-| `service.port`                  | Service HTTP port                                                                                                                | `80`                     |
-| `service.nodePort`              | Kubernetes http node port                                                                                                        | `""`                     |
-| `service.loadBalancerIP`        | Kubernetes LoadBalancerIP to request                                                                                             | `""`                     |
-| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                                             | `Cluster`                |
-| `service.annotations`           | Annotations for Jasperreports service                                                                                            | `{}`                     |
-| `ingress.enabled`               | Enable ingress controller resource                                                                                               | `false`                  |
-| `ingress.pathType`              | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`              | Default host for the ingress resource                                                                                            | `jasperreports.local`    |
-| `ingress.path`                  | Ingress path                                                                                                                     | `/`                      |
-| `ingress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
-| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
-| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
-| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.ports.http`               | Service HTTP port                                                                                                                | `80`                     |
+| `service.nodePorts.http`           | Kubernetes http node port                                                                                                        | `""`                     |
+| `service.clusterIP`                | Jarperreports service Cluster IP                                                                                                 | `""`                     |
+| `service.loadBalancerIP`           | Kubernetes LoadBalancerIP to request                                                                                             | `""`                     |
+| `service.loadBalancerSourceRanges` | Jasperreports service Load Balancer sources                                                                                      | `[]`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
+| `service.annotations`              | Annotations for Jasperreports service                                                                                            | `{}`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `ingress.enabled`                  | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `jasperreports.local`    |
+| `ingress.path`                     | Ingress path                                                                                                                     | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 
 
 ### Database parameters
@@ -295,9 +320,21 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 12.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+
+- `service.port` was deprecated, we recommend using `service.ports.http` instead.
+- `service.nodePort` was deprecated, we recommend using `service.nodePorts.http` instead .
+- `containerPort` was deprecated, we recommend using `containerPorts.http` instead.
+
+Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
 
 ### To 11.0.0
 
@@ -439,3 +476,19 @@ Please, note this Helm chart is a community-supported solution. This means that 
 The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
 
 New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

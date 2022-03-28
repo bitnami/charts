@@ -1,7 +1,13 @@
-# Node
+<!--- app-name: Node.js -->
 
-[Node](https://www.nodejs.org) Event-driven I/O server-side JavaScript environment based on V8.
+# Node.js packaged by Bitnami
 
+Node.js is a runtime environment built on V8 JavaScript engine. Its event-driven, non-blocking I/O model enables the development of fast, scalable, and data-intensive server applications.
+
+[Overview of Node.js](http://nodejs.org/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -19,8 +25,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -75,6 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                    | Description                                                                                                          | Value                             |
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `installCommand`                        | Override default container install command (useful when using custom images or repositories)                         | `["/bin/bash","-ec","npm install"]` |
 | `command`                               | Override default container command (useful when using custom images)                                                 | `["/bin/bash","-ec","npm start"]` |
 | `args`                                  | Override default container args (useful when using custom images)                                                    | `[]`                              |
 | `hostAliases`                           | Deployment pod host aliases                                                                                          | `[]`                              |
@@ -100,7 +107,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                              | NodeJS image registry                                                                     | `docker.io`            |
 | `image.repository`                            | NodeJS image repository                                                                   | `bitnami/node`         |
-| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                         | `16.13.1-debian-10-r0` |
+| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                         | `16.13.2-debian-10-r7` |
 | `image.pullPolicy`                            | NodeJS image pull policy                                                                  | `IfNotPresent`         |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                          | `[]`                   |
 | `replicaCount`                                | Specify the number of replicas for the application                                        | `1`                    |
@@ -157,7 +164,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | --------------------------------------------------- | -------------------------------------------- |
 | `git.image.registry`           | Git image registry                                  | `docker.io`                                  |
 | `git.image.repository`         | Git image repository                                | `bitnami/git`                                |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)      | `2.34.1-debian-10-r5`                        |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)      | `2.34.1-debian-10-r50`                       |
 | `git.image.pullPolicy`         | Git image pull policy                               | `IfNotPresent`                               |
 | `git.image.pullSecrets`        | Specify docker-registry secret names as an array    | `[]`                                         |
 | `git.extraVolumeMounts`        | Add extra volume mounts for the Git container       | `[]`                                         |
@@ -173,7 +180,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory  | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                             | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r266`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r312`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                          | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                             | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                       | `{}`                    |
@@ -365,9 +372,15 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 17.0.0
+
+In this version, the mongodb-exporter bundled as part of the bitnami/mongodb dependency was updated to a new version which, even it is not a major change, can contain breaking changes (from `0.11.X` to `0.30.X`).
+
+Please visit the release notes from the upstream project at https://github.com/percona/mongodb_exporter/releases
 
 ### To 15.0.0
 
@@ -433,3 +446,19 @@ Please, note this Helm chart is a community-supported solution. This means that 
 The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
 
 New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

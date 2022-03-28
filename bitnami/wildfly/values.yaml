@@ -39,6 +39,20 @@ clusterDomain: cluster.local
 ## @param extraDeploy [array] Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## Enable diagnostic mode in the deployment(s)/statefulset(s)
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  args:
+    - infinity
 
 ## @section WildFly Image parameters
 
@@ -54,7 +68,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/wildfly
-  tag: 25.0.1-debian-10-r27
+  tag: 26.0.1-debian-10-r64
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -92,6 +106,9 @@ command: []
 ## @param args [array] Override default container args (useful when using custom images)
 ##
 args: []
+## @param lifecycleHooks for the container to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## @param extraEnvVars [array] Array with extra environment variables to add to the WildFly container
 ## e.g:
 ## extraEnvVars:
@@ -202,6 +219,18 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: {}
+## @param priorityClassName Pod priorityClassName
+##
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 ## WildFly containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits [object] The resources limits for the WildFly container
@@ -237,8 +266,25 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
-## Configure extra options for WildFly containers' liveness and readiness probes
+## Configure extra options for WildFly containers' startup and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @skip startupProbe.tcpSocket
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  tcpSocket:
+    port: http
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @skip livenessProbe.httpGet
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -275,6 +321,9 @@ readinessProbe:
   timeoutSeconds: 3
   failureThreshold: 3
   successThreshold: 1
+## @param customStartupProbe [object] Custom startupProbe that overrides the default one
+##
+customStartupProbe: {}
 ## @param customLivenessProbe [object] Custom livenessProbe that overrides the default one
 ##
 customLivenessProbe: {}
@@ -290,12 +339,13 @@ service:
   ## @param service.type WildFly service type
   ##
   type: LoadBalancer
-  ## @param service.port WildFly service HTTP port
+  ## @param service.ports.http WildFly service HTTP port
+  ## @param service.ports.mgmt WildFly service management console port
+  ## TODO: service.port and service.mgmtPort still supported for backward-compatibility. Deprecate with the next major release 14.0.0
   ##
-  port: 80
-  ## @param service.mgmtPort WildFly service management console port
-  ##
-  mgmtPort: 9990
+  ports:
+    http: 80
+    mgmt: 9990
   ## Node ports to expose
   ## @param service.nodePorts.http Node port for HTTP
   ## @param service.nodePorts.mgmt Node port for Management console
@@ -330,6 +380,17 @@ service:
   ## @param service.extraPorts [array] Extra ports to expose on WildFly service
   ##
   extraPorts: []
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 ## Configure the ingress resource that allows you to access the WildFly installation
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
@@ -419,6 +480,12 @@ ingress:
   ##       -----END CERTIFICATE-----
   ##
   secrets: []
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+
 ## Management Console Ingress parameters
 ##
 mgmtIngress:
@@ -495,6 +562,12 @@ mgmtIngress:
   ##     certificate:
   ##
   secrets: []
+  ## @param mgmtIngress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+
 
 ## @section Persistence Parameters
 
@@ -511,6 +584,9 @@ persistence:
   ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
   ##
   storageClass: ""
+  ## @param persistence.existingClaim Use a existing PVC which must be created manually before bound
+  ##
+  existingClaim: ""
   ## @param persistence.accessModes [array] Persistent Volume access modes
   ##
   accessModes:
@@ -518,6 +594,9 @@ persistence:
   ## @param persistence.size Persistent Volume size
   ##
   size: 8Gi
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
 ## 'volumePermissions' init container parameters
 ## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
 ##   based on the podSecurityContext/containerSecurityContext parameters
@@ -537,7 +616,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r269
+    tag: 10-debian-10-r377
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

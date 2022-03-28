@@ -18,10 +18,13 @@ global:
 
 ## @section Common parameters
 
-## @param nameOverride String to partially override kafka.fullname
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname
 ##
 nameOverride: ""
-## @param fullnameOverride String to fully override kafka.fullname
+## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride: ""
 ## @param clusterDomain Default Kubernetes cluster domain
@@ -36,18 +39,17 @@ commonAnnotations: {}
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
-## Enable diagnostic mode in the deployment
+## Enable diagnostic mode in the statefulset
 ##
 diagnosticMode:
   ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
   ##
   enabled: false
-  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ## @param diagnosticMode.command Command to override all containers in the statefulset
   ##
   command:
     - sleep
-  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ## @param diagnosticMode.args Args to override all containers in the statefulset
   ##
   args:
     - infinity
@@ -61,20 +63,21 @@ diagnosticMode:
 ## @param image.tag Kafka image tag (immutable tags are recommended)
 ## @param image.pullPolicy Kafka image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
-## @param image.debug Set to true if you would like to see extra information on logs
+## @param image.debug Specify if debug values should be set
 ##
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 2.8.1-debian-10-r73
+  tag: 3.1.0-debian-10-r58
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
   pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ## Example:
+  ## e.g:
   ## pullSecrets:
   ##   - myRegistryKeySecretName
   ##
@@ -82,12 +85,11 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-## @param config Configuration file for Kafka. Auto-generated based on other parameters when not specified (see [below](
+## @param config Configuration file for Kafka. Auto-generated based on other parameters when not specified
 ## Specify content for server.properties
 ## NOTE: This will override any KAFKA_CFG_ environment variables (including those set by the chart)
 ## The server.properties is auto-generated based on other parameters when this parameter is not specified
-##
-## Example:
+## e.g:
 ## config: |-
 ##   broker.id=-1
 ##   listeners=PLAINTEXT://:9092
@@ -115,21 +117,20 @@ image:
 ##
 config: ""
 ## @param existingConfigmap ConfigMap with Kafka Configuration
-## NOTE: This will override config AND any KAFKA_CFG_ environment variables.
+## NOTE: This will override `config` AND any KAFKA_CFG_ environment variables
 ##
 existingConfigmap: ""
-## @param log4j An optional log4j.properties file to overwrite the default of the Kafka brokers.
-## An optional log4j.properties file to overwrite the default of the Kafka brokers.
-## See an example log4j.properties at:
-## https://github.com/apache/kafka/blob/trunk/config/log4j.properties
+## @param log4j An optional log4j.properties file to overwrite the default of the Kafka brokers
+## An optional log4j.properties file to overwrite the default of the Kafka brokers
+## ref: https://github.com/apache/kafka/blob/trunk/config/log4j.properties
 ##
 log4j: ""
-## @param existingLog4jConfigMap The name of an existing ConfigMap containing a log4j.properties file.
-## The name of an existing ConfigMap containing a log4j.properties file.
-## NOTE: this will override log4j.
+## @param existingLog4jConfigMap The name of an existing ConfigMap containing a log4j.properties file
+## The name of an existing ConfigMap containing a log4j.properties file
+## NOTE: this will override `log4j`
 ##
 existingLog4jConfigMap: ""
-## @param heapOpts Kafka's Java Heap size
+## @param heapOpts Kafka Java Heap size
 ##
 heapOpts: -Xmx1024m -Xms1024m
 ## @param deleteTopicEnable Switch to enable topic deletion or not
@@ -195,51 +196,23 @@ socketRequestMaxBytes: _104857600
 ## @param socketSendBufferBytes The send buffer (SO_SNDBUF) used by the socket server
 ##
 socketSendBufferBytes: 102400
-## @param zookeeperConnectionTimeoutMs Timeout in ms for connecting to Zookeeper
+## @param zookeeperConnectionTimeoutMs Timeout in ms for connecting to ZooKeeper
 ##
 zookeeperConnectionTimeoutMs: 6000
 ## @param zookeeperChrootPath Path which puts data under some path in the global ZooKeeper namespace
 ## ref: https://kafka.apache.org/documentation/#brokerconfigs_zookeeper.connect
 ##
 zookeeperChrootPath: ""
-## @param authorizerClassName The Authorizer is configured by setting authorizer.class.name=kafka.security.authorizer.AclAuthorizer in server.properties.
+## @param authorizerClassName The Authorizer is configured by setting authorizer.class.name=kafka.security.authorizer.AclAuthorizer in server.properties
 ##
 authorizerClassName: ""
-## @param allowEveryoneIfNoAclFound By default, if a resource has no associated ACLs, then no one is allowed to access that resource except super users.
+## @param allowEveryoneIfNoAclFound By default, if a resource has no associated ACLs, then no one is allowed to access that resource except super users
 ##
 allowEveryoneIfNoAclFound: true
 ## @param superUsers You can add super users in server.properties
 ##
 superUsers: User:admin
-## @param command Override kafka container command
-##
-command:
-  - /scripts/setup.sh
-## @param args Override kafka container arguments
-##
-args: []
-## @param extraEnvVars Extra environment variables to add to kafka pods (see [below]({KEY}
-## ref: https://github.com/bitnami/bitnami-docker-kafka#configuration
-## Example:
-## extraEnvVars:
-##   - name: KAFKA_CFG_BACKGROUND_THREADS
-##     value: "10"
-##
-extraEnvVars: []
-## @param extraVolumes Extra volume(s) to add to Kafka statefulset
-## Examples:
-## extraVolumes:
-##   - name: kafka-jaas
-##     secret:
-##       secretName: kafka-jaas
-extraVolumes: []
-## @param extraVolumeMounts Extra volumeMount(s) to add to Kafka containers
-## extraVolumeMounts:
-##   - name: kafka-jaas
-##     mountPath: /bitnami/kafka/config/kafka_jaas.conf
-##     subPath: kafka_jaas.conf
-extraVolumeMounts: []
-## Authentication parameteres
+## Authentication parameters
 ## https://github.com/bitnami/bitnami-docker-kafka#security
 ##
 auth:
@@ -252,14 +225,18 @@ auth:
   ## | sasl      | Yes (via SASL)                | No                 |
   ## | sasl_tls  | Yes (via SASL)                | Yes                |
   ## @param auth.clientProtocol Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`
+  ## @param auth.externalClientProtocol Authentication protocol for communications with external clients. Defaults to value of `auth.clientProtocol`. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`
   ## @param auth.interBrokerProtocol Authentication protocol for inter-broker communications. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`
   ##
   clientProtocol: plaintext
+  # Note: empty by default for backwards compatibility reasons, find more information at
+  # https://github.com/bitnami/charts/pull/8902/
+  externalClientProtocol: ""
   interBrokerProtocol: plaintext
   ## SASL configuration
   ##
   sasl:
-    ## @param auth.sasl.mechanisms SASL mechanisms when either `auth.interBrokerProtocol` or `auth.clientProtocol` are `sasl`. Allowed types: `plain`, `scram-sha-256`, `scram-sha-512`
+    ## @param auth.sasl.mechanisms SASL mechanisms when either `auth.interBrokerProtocol`, `auth.clientProtocol` or `auth.externalClientProtocol` are `sasl`. Allowed types: `plain`, `scram-sha-256`, `scram-sha-512`
     ##
     mechanisms: plain,scram-sha-256,scram-sha-512
     ## @param auth.sasl.interBrokerMechanism SASL mechanism for inter broker communication.
@@ -289,10 +266,10 @@ auth:
       ## @param auth.sasl.jaas.interBrokerPassword Kafka inter broker communication password for SASL authentication
       ##
       interBrokerPassword: ""
-      ## @param auth.sasl.jaas.zookeeperUser Kafka Zookeeper user for SASL authentication
+      ## @param auth.sasl.jaas.zookeeperUser Kafka ZooKeeper user for SASL authentication
       ##
       zookeeperUser: ""
-      ## @param auth.sasl.jaas.zookeeperPassword Kafka Zookeeper password for SASL authentication
+      ## @param auth.sasl.jaas.zookeeperPassword Kafka ZooKeeper password for SASL authentication
       ##
       zookeeperPassword: ""
       ## @param auth.sasl.jaas.existingSecret Name of the existing secret containing credentials for clientUsers, interBrokerUser and zookeeperUser
@@ -300,30 +277,16 @@ auth:
       ##       kubectl create secret generic SECRET_NAME --from-literal=client-passwords=CLIENT_PASSWORD1,CLIENT_PASSWORD2 --from-literal=inter-broker-password=INTER_BROKER_PASSWORD --from-literal=zookeeper-password=ZOOKEEPER_PASSWORD
       ##
       existingSecret: ""
-  ## @param auth.saslMechanisms DEPRECATED: use `auth.sasl.mechanisms` instead.
-  ##
-  saslMechanisms: plain,scram-sha-256,scram-sha-512
-  ## @param auth.saslInterBrokerMechanism DEPRECATED: use `auth.sasl.interBrokerMechanism` instead.
-  ##
-  saslInterBrokerMechanism: plain
-  ## @param auth.jaas [object] DEPRECATED: use `auth.sasl.jaas` instead.
-  ## @skip auth.jaas.clientUsers
-  ##
-  jaas:
-    clientUsers:
-      - user
-    clientPasswords: []
-    interBrokerUser: admin
-    interBrokerPassword: ""
-    zookeeperUser: ""
-    zookeeperPassword: ""
-    existingSecret: ""
   ## TLS configuration
   ##
   tls:
     ## @param auth.tls.type Format to use for TLS certificates. Allowed types: `jks` and `pem`
     ##
     type: jks
+    ## @param auth.tls.pemChainIncluded Flag to denote that the Certificate Authority (CA) certificates are bundled with the endpoint cert.
+    ## Certificates must be in proper order, where the top certificate is the leaf and the bottom certificate is the top-most intermediate CA.
+    ##
+    pemChainIncluded: false
     ## @param auth.tls.existingSecrets Array existing secrets containing the TLS certificates for the Kafka brokers
     ## When using 'jks' format for certificates, each secret should contain a truststore and a keystore.
     ## Create these secrets following the steps below:
@@ -347,21 +310,22 @@ auth:
     ##       ...
     ##
     existingSecrets: []
-    ## @param auth.tls.existingSecret DEPRECATED: use `auth.tls.existingSecrets` instead.
-    ##
-    existingSecret: ""
     ## @param auth.tls.autoGenerated Generate automatically self-signed TLS certificates for Kafka brokers. Currently only supported if `auth.tls.type` is `pem`
     ## Note: ignored when using 'jks' format or `auth.tls.existingSecrets` is not empty
     ##
     autoGenerated: false
     ## @param auth.tls.password Password to access the JKS files or PEM key when they are password-protected.
+    ## Note: ignored when using 'existingSecret'.
     ##
     password: ""
+    ## @param auth.tls.existingSecret Name of the secret containing the password to access the JKS files or PEM key when they are password-protected. (`key`: `password`)
+    ##
+    existingSecret: ""
     ## @param auth.tls.jksTruststoreSecret Name of the existing secret containing your truststore if truststore not existing or different from the ones in the `auth.tls.existingSecrets`
-    ## Note: ignored when using 'pem' format for certificates .
+    ## Note: ignored when using 'pem' format for certificates.
     ##
     jksTruststoreSecret: ""
-    ## @param auth.tls.jksKeystoreSAN The secret key from the `auth.tls.existingSecret` containing the keystore with a SAN certificate
+    ## @param auth.tls.jksKeystoreSAN The secret key from the `auth.tls.existingSecrets` containing the keystore with a SAN certificate
     ## The SAN certificate in it should be issued with Subject Alternative Names for all headless services:
     ##  - kafka-0.kafka-headless.kafka.svc.cluster.local
     ##  - kafka-1.kafka-headless.kafka.svc.cluster.local
@@ -369,7 +333,7 @@ auth:
     ## Note: ignored when using 'pem' format for certificates.
     ##
     jksKeystoreSAN: ""
-    ## @param auth.tls.jksTruststore The secret key from the `auth.tls.existingSecret` or `auth.tls.jksTruststoreSecret` containing the truststore
+    ## @param auth.tls.jksTruststore The secret key from the `auth.tls.existingSecrets` or `auth.tls.jksTruststoreSecret` containing the truststore
     ## Note: ignored when using 'pem' format for certificates.
     ##
     jksTruststore: ""
@@ -378,36 +342,18 @@ auth:
     ## ref: https://docs.confluent.io/current/kafka/authentication_ssl.html#optional-settings
     ##
     endpointIdentificationAlgorithm: https
-  ## @param auth.jksSecret DEPRECATED: use `auth.tls.existingSecrets` instead.
-  ##
-  jksSecret: ""
-  ## @param auth.jksTruststoreSecret DEPRECATED: use `auth.tls.jksTruststoreSecret` instead.
-  ##
-  jksTruststoreSecret: ""
-  ## @param auth.jksKeystoreSAN DEPRECATED: use `auth.tls.jksKeystoreSAN` instead.
-  ##
-  jksKeystoreSAN: ""
-  ## @param auth.jksTruststore DEPRECATED: use `auth.tls.jksTruststore` instead.
-  ##
-  jksTruststore: ""
-  ## @param auth.jksPassword DEPRECATED: use `auth.tls.password` instead.
-  ##
-  jksPassword: ""
-  ## @param auth.tlsEndpointIdentificationAlgorithm DEPRECATED: use `auth.tls.endpointIdentificationAlgorithm` instead.
-  ##
-  tlsEndpointIdentificationAlgorithm: https
 ## @param listeners The address(es) the socket server listens on. Auto-calculated it's set to an empty array
 ## When it's set to an empty array, the listeners will be configured
-## based on the authentication protocols (auth.clientProtocol and auth.interBrokerProtocol parameters)
+## based on the authentication protocols (auth.clientProtocol, auth.externalClientProtocol and auth.interBrokerProtocol parameters)
 ##
 listeners: []
 ## @param advertisedListeners The address(es) (hostname:port) the broker will advertise to producers and consumers. Auto-calculated it's set to an empty array
 ## When it's set to an empty array, the advertised listeners will be configured
-## based on the authentication protocols (auth.clientProtocol and auth.interBrokerProtocol parameters)
+## based on the authentication protocols (auth.clientProtocol, auth.externalClientProtocol and auth.interBrokerProtocol parameters)
 ##
 advertisedListeners: []
 ## @param listenerSecurityProtocolMap The protocol->listener mapping. Auto-calculated it's set to nil
-## When it's nil, the listeners will be configured based on the authentication protocols (auth.clientProtocol and auth.interBrokerProtocol parameters)
+## When it's nil, the listeners will be configured based on the authentication protocols (auth.clientProtocol, auth.externalClientProtocol and auth.interBrokerProtocol parameters)
 ##
 listenerSecurityProtocolMap: ""
 ## @param allowPlaintextListener Allow to use the PLAINTEXT listener
@@ -416,6 +362,27 @@ allowPlaintextListener: true
 ## @param interBrokerListenerName The listener that the brokers should communicate on
 ##
 interBrokerListenerName: INTERNAL
+## @param command Override Kafka container command
+##
+command:
+  - /scripts/setup.sh
+## @param args Override Kafka container arguments
+##
+args: []
+## @param extraEnvVars Extra environment variables to add to Kafka pods
+## ref: https://github.com/bitnami/bitnami-docker-kafka#configuration
+## e.g:
+## extraEnvVars:
+##   - name: KAFKA_CFG_BACKGROUND_THREADS
+##     value: "10"
+##
+extraEnvVars: []
+## @param extraEnvVarsCM ConfigMap with extra environment variables
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Secret with extra environment variables
+##
+extraEnvVarsSecret: ""
 
 ## @section Statefulset parameters
 
@@ -427,38 +394,120 @@ replicaCount: 1
 ## E.g., with `minBrokerId=100` and 3 nodes, IDs will be 100, 101, 102 for brokers 0, 1, and 2, respectively.
 ##
 minBrokerId: 0
-## @param updateStrategy Update strategy for the stateful set
-## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+## @param containerPorts.client Kafka client container port
+## @param containerPorts.internal Kafka inter-broker container port
+## @param containerPorts.external Kafka external container port
 ##
-updateStrategy: RollingUpdate
-## @param rollingUpdatePartition Partition update strategy
-## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#partitions
+containerPorts:
+  client: 9092
+  internal: 9093
+  external: 9094
+## Configure extra options for Kafka containers' liveness, readiness and startup probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe on Kafka containers
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
 ##
-rollingUpdatePartition: ""
-## @param hostAliases Add deployment host aliases
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+  periodSeconds: 10
+  successThreshold: 1
+## @param readinessProbe.enabled Enable readinessProbe on Kafka containers
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  failureThreshold: 6
+  timeoutSeconds: 5
+  periodSeconds: 10
+  successThreshold: 1
+## @param startupProbe.enabled Enable startupProbe on Kafka containers
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 15
+  successThreshold: 1
+## @param customLivenessProbe Custom livenessProbe that overrides the default one
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom readinessProbe that overrides the default one
+##
+customReadinessProbe: {}
+## @param customStartupProbe Custom startupProbe that overrides the default one
+##
+customStartupProbe: {}
+## @param lifecycleHooks lifecycleHooks for the Kafka container to automate configuration before or after startup
+##
+lifecycleHooks: {}
+## Kafka resource requests and limits
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## @param resources.limits The resources limits for the container
+## @param resources.requests The requested resources for the container
+##
+resources:
+  limits: {}
+  requests: {}
+## Kafka pods' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enable security context for the pods
+## @param podSecurityContext.fsGroup Set Kafka pod's Security Context fsGroup
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+## Kafka containers' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enable Kafka containers' Security Context
+## @param containerSecurityContext.runAsUser Set Kafka containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set Kafka containers' Security Context runAsNonRoot
+## e.g:
+##   containerSecurityContext:
+##     enabled: true
+##     capabilities:
+##       drop: ["NET_RAW"]
+##     readOnlyRootFilesystem: true
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
+## @param hostAliases Kafka pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param podManagementPolicy StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel
-## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
+## @param hostNetwork Specify if host network should be enabled for Kafka pods
 ##
-podManagementPolicy: Parallel
-## @param schedulerName Name of the k8s scheduler (other than default)
-## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+hostNetwork: false
+## @param hostIPC Specify if host IPC should be enabled for Kafka pods
 ##
-schedulerName: ""
-## @param podLabels Kafka pod labels
+hostIPC: false
+## @param podLabels Extra labels for Kafka pods
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-## @param podAnnotations Kafka Pod annotations
+## @param podAnnotations Extra annotations for Kafka pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-## @param priorityClassName Name of the existing priority class to be used by kafka pods
-## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-##
-priorityClassName: ""
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -507,102 +556,42 @@ topologySpreadConstraints: {}
 ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
 ##
 terminationGracePeriodSeconds: ""
-## Kafka pods' Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enable security context for the pods
-## @param podSecurityContext.fsGroup Group ID for the filesystem used by the containers
-## @param podSecurityContext.runAsUser User ID for the service user running the pod
+## @param podManagementPolicy StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel
+## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
 ##
-podSecurityContext:
-  enabled: true
-  fsGroup: 1001
-  runAsUser: 1001
-## Kafka containers' Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enable Kafka containers' Security Context
-## Example:
-##   containerSecurityContext:
-##     enabled: true
-##     capabilities:
-##       drop: ["NET_RAW"]
-##     readOnlyRootFilesystem: true
+podManagementPolicy: Parallel
+## @param priorityClassName Name of the existing priority class to be used by kafka pods
+## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
-containerSecurityContext:
-  enabled: false
-## Kafka containers' resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-## We usually recommend not to specify default resources and to leave this as a conscious
-## choice for the user. This also increases chances charts run on environments with little
-## resources, such as Minikube. If you do want to specify resources, uncomment the following
-## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits The resources limits for Kafka containers
-## @param resources.requests The requested resources for Kafka containers
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 250m
-  ##    memory: 1Gi
-  limits: {}
-  ## Examples:
-  ## requests:
-  ##    cpu: 250m
-  ##    memory: 256Mi
-  requests: {}
-## Kafka containers' liveness probe. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-## @param livenessProbe.periodSeconds Period seconds for livenessProbe
-## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
-## @param livenessProbe.successThreshold Success threshold for livenessProbe
+schedulerName: ""
+## @param updateStrategy.type Kafka statefulset strategy type
+## @param updateStrategy.rollingUpdate Kafka statefulset rolling update configuration parameters
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 3
-  periodSeconds: 10
-  successThreshold: 1
-## Kafka containers' readiness probe. Evaluated as a template.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-## @param readinessProbe.enabled Enable readinessProbe
-## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-## @param readinessProbe.periodSeconds Period seconds for readinessProbe
-## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
-## @param readinessProbe.successThreshold Success threshold for readinessProbe
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate: {}
+## @param extraVolumes Optionally specify extra list of additional volumes for the Kafka pod(s)
+## e.g:
+## extraVolumes:
+##   - name: kafka-jaas
+##     secret:
+##       secretName: kafka-jaas
 ##
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 5
-  failureThreshold: 6
-  timeoutSeconds: 5
-  periodSeconds: 10
-  successThreshold: 1
-## @param customLivenessProbe Custom Liveness probe configuration for Kafka
+extraVolumes: []
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Kafka container(s)
+## extraVolumeMounts:
+##   - name: kafka-jaas
+##     mountPath: /bitnami/kafka/config/kafka_jaas.conf
+##     subPath: kafka_jaas.conf
 ##
-customLivenessProbe: {}
-## @param customReadinessProbe Custom Readiness probe configuration for Kafka
-##
-customReadinessProbe: {}
-## Pod Disruption Budget configuration
-## The PDB will only be created if replicaCount is greater than 1
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions
-##
-pdb:
-  ## @param pdb.create Enable/disable a Pod Disruption Budget creation
-  ##
-  create: false
-  ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ##
-  minAvailable: ""
-  ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
-  ##
-  maxUnavailable: 1
-## @param sidecars Attach additional sidecar containers to the Kafka pod
-## Example:
+extraVolumeMounts: []
+## @param sidecars Add additional sidecar containers to the Kafka pod(s)
+## e.g:
 ## sidecars:
 ##   - name: your-image-name
 ##     image: your-image
@@ -612,91 +601,82 @@ pdb:
 ##         containerPort: 1234
 ##
 sidecars: []
-## @param initContainers Add extra init containers
+## @param initContainers Add additional Add init containers to the Kafka pod(s)
+## e.g:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
 ##
 initContainers: []
+## Kafka Pod Disruption Budget
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+## @param pdb.create Deploy a pdb object for the Kafka pod
+## @param pdb.minAvailable Maximum number/percentage of unavailable Kafka replicas
+## @param pdb.maxUnavailable Maximum number/percentage of unavailable Kafka replicas
+##
+pdb:
+  create: false
+  minAvailable: ""
+  maxUnavailable: 1
 
-## @section Exposure parameters
-networkPolicy:
-  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources.
-  ##
-  enabled: false
-  ## @param networkPolicy.allowExternal Don't require client label for connections
-  ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to Kafka port for client connections (service.port).
-  ## When true, kafka will accept connections from any source
-  ## (with the correct destination port).
-  ##
-  allowExternal: true
-  ## @param networkPolicy.explicitNamespacesSelector A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed
-  ## If explicitNamespacesSelector is missing or set to {}, only client Pods that are in the networkPolicy's namespace
-  ## and that match other criteria, the ones that have the good label, can reach the kafka.
-  ## But sometimes, we want the kafka to be accessible to clients from other namespaces, in this case, we can use this
-  ## LabelSelector to select these namespaces, note that the networkPolicy's namespace should also be explicitly added.
-  ##
-  ## Example:
-  ## explicitNamespacesSelector:
-  ##   matchLabels:
-  ##     role: frontend
-  ##   matchExpressions:
-  ##    - {key: role, operator: In, values: [frontend]}
-  ##
-  explicitNamespacesSelector: {}
-  ## @param networkPolicy.externalAccess.from customize the from section for External Access on tcp-external port
-  ## Example:
-  ## - ipBlock:
-  ##    cidr: 172.9.0.0/16
-  ##    except:
-  ##    - 172.9.1.0/24
-  ##
-  externalAccess:
-    from: []
-  ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
-  ##
-  egressRules:
-    ## Additional custom egress rules
-    ## e.g:
-    ## customRules:
-    ##   - to:
-    ##       - namespaceSelector:
-    ##           matchLabels:
-    ##             label: example
-    customRules: []
+## @section Traffic Exposure parameters
+
 ## Service parameters
 ##
 service:
   ## @param service.type Kubernetes Service type
   ##
   type: ClusterIP
-  ## @param service.port Kafka port for client connections
+  ## @param service.ports.client Kafka svc port for client connections
+  ## @param service.ports.internal Kafka svc port for inter-broker connections
+  ## @param service.ports.external Kafka svc port for external connections
   ##
-  port: 9092
-  ## @param service.internalPort Kafka port for inter-broker connections
-  ##
-  internalPort: 9093
-  ## @param service.externalPort Kafka port for external connections
-  ##
-  externalPort: 9094
-  ## @param service.nodePorts [object] Specify the nodePort value for the LoadBalancer and NodePort service types.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ports:
+    client: 9092
+    internal: 9093
+    external: 9094
+  ## @param service.nodePorts.client Node port for the Kafka client connections
+  ## @param service.nodePorts.external Node port for the Kafka external connections
+  ## NOTE: choose port between <30000-32767>
   ##
   nodePorts:
     client: ""
     external: ""
-  ## @param service.loadBalancerIP loadBalancerIP for Kafka Service
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
+  ## Values: ClientIP or None
+  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ##
+  sessionAffinity: None
+  ## @param service.clusterIP Kafka service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP Kafka service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
   loadBalancerIP: ""
-  ## @param service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer
+  ## @param service.loadBalancerSourceRanges Kafka service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-  ## Example:
+  ## e.g:
   ## loadBalancerSourceRanges:
-  ## - 10.10.10.0/24
+  ##   - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
-  ## @param service.annotations Service annotations
+  ## @param service.externalTrafficPolicy Kafka service external traffic policy
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.annotations Additional custom annotations for Kafka service
   ##
   annotations: {}
+  ## @param service.extraPorts Extra ports to expose in the Kafka service (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
 ## External Access to Kafka brokers configuration
 ##
 externalAccess:
@@ -722,7 +702,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.23.0-debian-10-r5
+      tag: 1.23.5-debian-10-r6
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -730,57 +710,60 @@ externalAccess:
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-      ## Example:
+      ## e.g:
       ## pullSecrets:
       ##   - myRegistryKeySecretName
       ##
       pullSecrets: []
     ## Init Container resource requests and limits
     ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param externalAccess.autoDiscovery.resources.limits Init container auto-discovery resource limits
-    ## @param externalAccess.autoDiscovery.resources.requests Init container auto-discovery resource requests
+    ## @param externalAccess.autoDiscovery.resources.limits The resources limits for the auto-discovery init container
+    ## @param externalAccess.autoDiscovery.resources.requests The requested resources for the auto-discovery init container
     ##
     resources:
-      ## Example:
-      ## limits:
-      ##    cpu: 100m
-      ##    memory: 128Mi
       limits: {}
-      ## Examples:
-      ## requests:
-      ##    cpu: 100m
-      ##    memory: 128Mi
       requests: {}
   ## Parameters to configure K8s service(s) used to externally access Kafka brokers
-  ## A new service per broker will be created
+  ## Note: A new service per broker will be created
   ##
   service:
     ## @param externalAccess.service.type Kubernetes Service type for external access. It can be NodePort or LoadBalancer
     ##
     type: LoadBalancer
-    ## @param externalAccess.service.port Kafka port used for external access when service type is LoadBalancer
+    ## @param externalAccess.service.ports.external Kafka port used for external access when service type is LoadBalancer
     ##
-    port: 9094
+    ports:
+      external: 9094
     ## @param externalAccess.service.loadBalancerIPs Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount
-    ## Example:
+    ## e.g:
     ## loadBalancerIPs:
     ##   - X.X.X.X
     ##   - Y.Y.Y.Y
     ##
     loadBalancerIPs: []
+    ## @param externalAccess.service.loadBalancerNames Array of load balancer Names for each Kafka broker. Length must be the same as replicaCount
+    ## e.g:
+    ## loadBalancerNames:
+    ##   - broker1.external.example.com
+    ##   - broker2.external.example.com
+    ##
+    loadBalancerNames: []
+    ## @param externalAccess.service.loadBalancerAnnotations Array of load balancer annotations for each Kafka broker. Length must be the same as replicaCount
+    ## e.g:
+    ## loadBalancerAnnotations:
+    ##   - external-dns.alpha.kubernetes.io/hostname: broker1.external.example.com.
+    ##   - external-dns.alpha.kubernetes.io/hostname: broker2.external.example.com.
+    ##
+    loadBalancerAnnotations: []
     ## @param externalAccess.service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ## Example:
+    ## e.g:
     ## loadBalancerSourceRanges:
     ## - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
     ## @param externalAccess.service.nodePorts Array of node ports used for each Kafka broker. Length must be the same as replicaCount
-    ## Example:
+    ## e.g:
     ## nodePorts:
     ##   - 30001
     ##   - 30002
@@ -789,6 +772,9 @@ externalAccess:
     ## @param externalAccess.service.useHostIPs Use service host IPs to configure Kafka external listener when service type is NodePort
     ##
     useHostIPs: false
+    ## @param externalAccess.service.usePodIPs using the MY_POD_IP address for external access.
+    ##
+    usePodIPs: false
     ## @param externalAccess.service.domain Domain or external ip used to configure Kafka external listener when service type is NodePort
     ## If not specified, the container will try to get the kubernetes node external IP
     ##
@@ -796,19 +782,66 @@ externalAccess:
     ## @param externalAccess.service.annotations Service annotations for external access
     ##
     annotations: {}
-    ## @param externalAccess.service.usePodIPs using the MY_POD_IP address for external access.
+    ## @param externalAccess.service.extraPorts Extra ports to expose in the Kafka external service
     ##
-    usePodIPs: false
+    extraPorts: []
+## Network policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: false
+  ## @param networkPolicy.allowExternal Don't require client label for connections
+  ## When set to false, only pods with the correct client label will have network access to the port Kafka is
+  ## listening on. When true, zookeeper accept connections from any source (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.explicitNamespacesSelector A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed
+  ## If explicitNamespacesSelector is missing or set to {}, only client Pods that are in the networkPolicy's namespace
+  ## and that match other criteria, the ones that have the good label, can reach the kafka.
+  ## But sometimes, we want the kafka to be accessible to clients from other namespaces, in this case, we can use this
+  ## LabelSelector to select these namespaces, note that the networkPolicy's namespace should also be explicitly added.
+  ##
+  ## e.g:
+  ## explicitNamespacesSelector:
+  ##   matchLabels:
+  ##     role: frontend
+  ##   matchExpressions:
+  ##    - {key: role, operator: In, values: [frontend]}
+  ##
+  explicitNamespacesSelector: {}
+  ## @param networkPolicy.externalAccess.from customize the from section for External Access on tcp-external port
+  ## e.g:
+  ## - ipBlock:
+  ##    cidr: 172.9.0.0/16
+  ##    except:
+  ##    - 172.9.1.0/24
+  ##
+  externalAccess:
+    from: []
+  ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
+  ##
+  egressRules:
+    ## Additional custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customRules: []
 
 ## @section Persistence parameters
 
-## Persistence parameters
+## Enable persistence using Persistent Volume Claims
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
-  ## @param persistence.enabled Enable Kafka data persistence using PVC, note that Zookeeper persistence is unaffected
+  ## @param persistence.enabled Enable Kafka data persistence using PVC, note that ZooKeeper persistence is unaffected
   ##
   enabled: true
-  ## @param persistence.existingClaim Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template
+  ## @param persistence.existingClaim A manually managed Persistent Volume and Claim
   ## If defined, PVC must be created manually before volume will be bound
   ## The value is evaluated as a template
   ##
@@ -820,7 +853,7 @@ persistence:
   ## set, choosing the default provisioner.
   ##
   storageClass: ""
-  ## @param persistence.accessModes PV Access Mode
+  ## @param persistence.accessModes Persistent Volume Access Modes
   ##
   accessModes:
     - ReadWriteOnce
@@ -830,10 +863,11 @@ persistence:
   ## @param persistence.annotations Annotations for the PVC
   ##
   annotations: {}
-  ## @param persistence.selector Selector to match an existing Persistent Volume for Kafka's data PVC. If set, the PVC can't have a PV dynamically provisioned for it
+  ## @param persistence.selector Selector to match an existing Persistent Volume for Kafka data PVC. If set, the PVC can't have a PV dynamically provisioned for it
   ## selector:
   ##   matchLabels:
   ##     app: my-app
+  ##
   selector: {}
   ## @param persistence.mountPath Mount path of the Kafka data volume
   ##
@@ -841,7 +875,7 @@ persistence:
 ## Log Persistence parameters
 ##
 logPersistence:
-  ## @param logPersistence.enabled Enable Kafka logs persistence using PVC, note that Zookeeper persistence is unaffected
+  ## @param logPersistence.enabled Enable Kafka logs persistence using PVC, note that ZooKeeper persistence is unaffected
   ##
   enabled: false
   ## @param logPersistence.existingClaim A manually managed Persistent Volume and Claim
@@ -849,13 +883,14 @@ logPersistence:
   ## The value is evaluated as a template
   ##
   existingClaim: ""
-  ## @param logPersistence.existingLogClaim PV Storage Class
+  ## @param logPersistence.storageClass PVC Storage Class for Kafka logs volume
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
   ## set, choosing the default provisioner.
-  existingLogClaim: ""
-  ## @param logPersistence.accessModes PV Access Mode
+  ##
+  storageClass: ""
+  ## @param logPersistence.accessModes Persistent Volume Access Modes
   ##
   accessModes:
     - ReadWriteOnce
@@ -865,18 +900,64 @@ logPersistence:
   ## @param logPersistence.annotations Annotations for the PVC
   ##
   annotations: {}
-  ## @param logPersistence.selector Selector to match an existing Persistent Volume for Kafka's log data PVC. If set, the PVC can't have a PV dynamically provisioned for it
+  ## @param logPersistence.selector Selector to match an existing Persistent Volume for Kafka log data PVC. If set, the PVC can't have a PV dynamically provisioned for it
   ## selector:
   ##   matchLabels:
   ##     app: my-app
+  ##
   selector: {}
   ## @param logPersistence.mountPath Mount path of the Kafka logs volume
   ##
   mountPath: /opt/bitnami/kafka/logs
 
-## @section RBAC parameters
+## @section Volume Permissions parameters
+##
 
-## Kafka pods ServiceAccount
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
+  ##
+  enabled: false
+  ## @param volumePermissions.image.registry Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository Init container volume-permissions image repository
+  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+  ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 10-debian-10-r377
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
+  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Init container' Security Context
+  ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
+  ## and not the below volumePermissions.containerSecurityContext.runAsUser
+  ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
+  ##
+  containerSecurityContext:
+    runAsUser: 0
+
+## @section Other Parameters
+
+## ServiceAccount for Kafka
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
 serviceAccount:
@@ -891,7 +972,10 @@ serviceAccount:
   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
   ##
   automountServiceAccountToken: true
-## Role Based Access
+  ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+  ##
+  annotations: {}
+## Role Based Access Control
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
 rbac:
@@ -901,71 +985,12 @@ rbac:
   ##
   create: false
 
-## @section Volume Permissions parameters
-
-## Init Container parameters
-## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
-## values from the securityContext section of the component
-##
-volumePermissions:
-  ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`
-  ##
-  enabled: false
-  ## The security context for the volumePermissions init container
-  ## @param volumePermissions.securityContext.runAsUser User ID for the container.
-  ## Can be set to "auto". "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed).
-  ##
-  securityContext:
-    runAsUser: 0
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image name
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
-  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
-  ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r279
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## Example:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-  ## Init Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  ## We usually recommend not to specify default resources and to leave this as a conscious
-  ## choice for the user. This also increases chances charts run on environments with little
-  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resources.limits Init container volume-permissions resource  limits
-  ## @param volumePermissions.resources.requests Init container volume-permissions resource  requests
-  ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
-
 ## @section Metrics parameters
 
 ## Prometheus Exporters / Metrics
 ##
 metrics:
-  ## Prometheus Kafka Exporter: exposes complimentary metrics to JMX Exporter
+  ## Prometheus Kafka exporter: exposes complimentary metrics to JMX exporter
   ##
   kafka:
     ## @param metrics.kafka.enabled Whether or not to create a standalone Kafka exporter to expose Kafka metrics
@@ -982,7 +1007,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.4.2-debian-10-r87
+      tag: 1.4.2-debian-10-r186
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -990,11 +1015,192 @@ metrics:
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-      ## Example:
+      ## e.g:
       ## pullSecrets:
       ##   - myRegistryKeySecretName
       ##
       pullSecrets: []
+
+    ## @param metrics.kafka.certificatesSecret Name of the existing secret containing the optional certificate and key files
+    ## for Kafka exporter client authentication
+    ##
+    certificatesSecret: ""
+    ## @param metrics.kafka.tlsCert The secret key from the certificatesSecret if 'client-cert' key different from the default (cert-file)
+    ##
+    tlsCert: cert-file
+    ## @param metrics.kafka.tlsKey The secret key from the certificatesSecret if 'client-key' key different from the default (key-file)
+    ##
+    tlsKey: key-file
+    ## @param metrics.kafka.tlsCaSecret Name of the existing secret containing the optional ca certificate for Kafka exporter client authentication
+    ##
+    tlsCaSecret: ""
+    ## @param metrics.kafka.tlsCaCert The secret key from the certificatesSecret or tlsCaSecret if 'ca-cert' key different from the default (ca-file)
+    ##
+    tlsCaCert: ca-file
+    ## @param metrics.kafka.extraFlags Extra flags to be passed to Kafka exporter
+    ## e.g:
+    ## extraFlags:
+    ##   tls.insecure-skip-tls-verify: ""
+    ##   web.telemetry-path: "/metrics"
+    ##
+    extraFlags: {}
+    ## @param metrics.kafka.command Override Kafka exporter container command
+    ##
+    command: []
+    ## @param metrics.kafka.args Override Kafka exporter container arguments
+    ##
+    args: []
+    ## @param metrics.kafka.containerPorts.metrics Kafka exporter metrics container port
+    ##
+    containerPorts:
+      metrics: 9308
+    ## Kafka exporter resource requests and limits
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## @param metrics.kafka.resources.limits The resources limits for the container
+    ## @param metrics.kafka.resources.requests The requested resources for the container
+    ##
+    resources:
+      limits: {}
+      requests: {}
+    ## Kafka exporter pods' Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param metrics.kafka.podSecurityContext.enabled Enable security context for the pods
+    ## @param metrics.kafka.podSecurityContext.fsGroup Set Kafka exporter pod's Security Context fsGroup
+    ##
+    podSecurityContext:
+      enabled: true
+      fsGroup: 1001
+    ## Kafka exporter containers' Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param metrics.kafka.containerSecurityContext.enabled Enable Kafka exporter containers' Security Context
+    ## @param metrics.kafka.containerSecurityContext.runAsUser Set Kafka exporter containers' Security Context runAsUser
+    ## @param metrics.kafka.containerSecurityContext.runAsNonRoot Set Kafka exporter containers' Security Context runAsNonRoot
+    ## e.g:
+    ##   containerSecurityContext:
+    ##     enabled: true
+    ##     capabilities:
+    ##       drop: ["NET_RAW"]
+    ##     readOnlyRootFilesystem: true
+    ##
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+    ## @param metrics.kafka.hostAliases Kafka exporter pods host aliases
+    ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+    ##
+    hostAliases: []
+    ## @param metrics.kafka.podLabels Extra labels for Kafka exporter pods
+    ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+    ##
+    podLabels: {}
+    ## @param metrics.kafka.podAnnotations Extra annotations for Kafka exporter pods
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    podAnnotations: {}
+    ## @param metrics.kafka.podAffinityPreset Pod affinity preset. Ignored if `metrics.kafka.affinity` is set. Allowed values: `soft` or `hard`
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ##
+    podAffinityPreset: ""
+    ## @param metrics.kafka.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `metrics.kafka.affinity` is set. Allowed values: `soft` or `hard`
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ##
+    podAntiAffinityPreset: soft
+    ## Node metrics.kafka.affinity preset
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+    ##
+    nodeAffinityPreset:
+      ## @param metrics.kafka.nodeAffinityPreset.type Node affinity preset type. Ignored if `metrics.kafka.affinity` is set. Allowed values: `soft` or `hard`
+      ##
+      type: ""
+      ## @param metrics.kafka.nodeAffinityPreset.key Node label key to match Ignored if `metrics.kafka.affinity` is set.
+      ## E.g.
+      ## key: "kubernetes.io/e2e-az-name"
+      ##
+      key: ""
+      ## @param metrics.kafka.nodeAffinityPreset.values Node label values to match. Ignored if `metrics.kafka.affinity` is set.
+      ## E.g.
+      ## values:
+      ##   - e2e-az1
+      ##   - e2e-az2
+      ##
+      values: []
+    ## @param metrics.kafka.affinity Affinity for pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## Note: metrics.kafka.podAffinityPreset, metrics.kafka.podAntiAffinityPreset, and metrics.kafka.nodeAffinityPreset will be ignored when it's set
+    ##
+    affinity: {}
+    ## @param metrics.kafka.nodeSelector Node labels for pod assignment
+    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
+    ## @param metrics.kafka.tolerations Tolerations for pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+    ## @param metrics.kafka.schedulerName Name of the k8s scheduler (other than default) for Kafka exporter
+    ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+    ##
+    schedulerName: ""
+    ## @param metrics.kafka.extraVolumes Optionally specify extra list of additional volumes for the Kafka exporter pod(s)
+    ## e.g:
+    ## extraVolumes:
+    ##   - name: kafka-jaas
+    ##     secret:
+    ##       secretName: kafka-jaas
+    ##
+    extraVolumes: []
+    ## @param metrics.kafka.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Kafka exporter container(s)
+    ## extraVolumeMounts:
+    ##   - name: kafka-jaas
+    ##     mountPath: /bitnami/kafka/config/kafka_jaas.conf
+    ##     subPath: kafka_jaas.conf
+    ##
+    extraVolumeMounts: []
+    ## @param metrics.kafka.sidecars Add additional sidecar containers to the Kafka exporter pod(s)
+    ## e.g:
+    ## sidecars:
+    ##   - name: your-image-name
+    ##     image: your-image
+    ##     imagePullPolicy: Always
+    ##     ports:
+    ##       - name: portname
+    ##         containerPort: 1234
+    ##
+    sidecars: []
+    ## @param metrics.kafka.initContainers Add init containers to the Kafka exporter pods
+    ## e.g:
+    ## initContainers:
+    ##   - name: your-image-name
+    ##     image: your-image
+    ##     imagePullPolicy: Always
+    ##     ports:
+    ##       - name: portname
+    ##         containerPort: 1234
+    ##
+    initContainers: []
+    ## Kafka exporter service configuration
+    ##
+    service:
+      ## @param metrics.kafka.service.ports.metrics Kafka exporter metrics service port
+      ##
+      ports:
+        metrics: 9308
+      ## @param metrics.kafka.service.clusterIP Static clusterIP or None for headless services
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
+      ##
+      clusterIP: ""
+      ## @param metrics.kafka.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ##
+      sessionAffinity: None
+      ## @param metrics.kafka.service.annotations [object] Annotations for the Kafka exporter service
+      ##
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.metrics.kafka.service.ports.metrics }}"
+        prometheus.io/path: "/metrics"
     ## Kafka exporter pods ServiceAccount
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
     ##
@@ -1010,133 +1216,7 @@ metrics:
       ## Can be set to false if pods using this serviceAccount do not need to use K8s API
       ##
       automountServiceAccountToken: true
-    ## @param metrics.kafka.schedulerName Name of the k8s scheduler (other than default) for Kafka Exporter
-    ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-    ##
-    schedulerName: ""
-    ## @param metrics.kafka.extraFlags Extra flags to be passed to Kafka exporter
-    ## Example:
-    ## extraFlags:
-    ##   tls.insecure-skip-tls-verify: ""
-    ##   web.telemetry-path: "/metrics"
-    ##
-    extraFlags: {}
-    ## @param metrics.kafka.certificatesSecret Name of the existing secret containing the optional certificate and key files
-    ## for Kafka Exporter client authentication
-    ##
-    certificatesSecret: ""
-    ## @param metrics.kafka.tlsCert The secret key from the certificatesSecret if 'client-cert' key different from the default (cert-file)
-    ##
-    tlsCert: cert-file
-    ## @param metrics.kafka.tlsKey The secret key from the certificatesSecret if 'client-key' key different from the default (key-file)
-    ##
-    tlsKey: key-file
-    ## @param metrics.kafka.tlsCaSecret Name of the existing secret containing the optional ca certificate for Kafka Exporter client authentication
-    ##
-    tlsCaSecret: ""
-    ## @param metrics.kafka.tlsCaCert The secret key from the certificatesSecret or tlsCaSecret if 'ca-cert' key different from the default (ca-file)
-    ##
-    tlsCaCert: ca-file
-    ## @param metrics.kafka.podLabels Kafka exporter pod labels
-    ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-    ##
-    podLabels: {}
-    ## @param metrics.kafka.podAnnotations Kafka exporter pod annotations
-    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-    ##
-    podAnnotations: {}
-    ## Prometheus Kafka Exporter containers' Security Context
-    ## @param metrics.kafka.containerSecurityContext.enabled Enable Prometheus Kafka Exporter containers' Security Context
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## Example:
-    ##   containerSecurityContext:
-    ##     enabled: true
-    ##     capabilities:
-    ##       drop: ["NET_RAW"]
-    ##     readOnlyRootFilesystem: true
-    ##
-    containerSecurityContext:
-      enabled: false
-    ## Prometheus Kafka Exporter' resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param metrics.kafka.resources.limits Kafka Exporter container resource limits
-    ## @param metrics.kafka.resources.requests Kafka Exporter container resource requests
-    ##
-    resources:
-      ## Example:
-      ## limits:
-      ##    cpu: 100m
-      ##    memory: 128Mi
-      limits: {}
-      ## Examples:
-      ## requests:
-      ##    cpu: 100m
-      ##    memory: 128Mi
-      requests: {}
-    ## @param metrics.kafka.affinity Affinity for Kafka Exporter pod assignment
-    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-    ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
-    ##
-    affinity: {}
-    ## @param metrics.kafka.nodeSelector Node labels for Kafka Exporter pod assignment
-    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-    ##
-    nodeSelector: {}
-    ## @param metrics.kafka.tolerations Tolerations for Kafka Exporter pod assignment
-    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-    ##
-    tolerations: []
-    ## @param metrics.kafka.initContainers Add init containers to the Kafka exporter pods
-    ## Example:
-    ## initContainers:
-    ##   - name: your-image-name
-    ##     image: your-image
-    ##     imagePullPolicy: Always
-    ##     ports:
-    ##       - name: portname
-    ##         containerPort: 1234
-    ##
-    initContainers: []
-    ## Service configuration
-    ##
-    service:
-      ## @param metrics.kafka.service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for Kafka Exporter
-      ##
-      type: ClusterIP
-      ## @param metrics.kafka.service.port Kafka Exporter Prometheus port
-      ##
-      port: 9308
-      ## @param metrics.kafka.service.nodePort Kubernetes HTTP node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
-      ## @param metrics.kafka.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
-      ## Set the LoadBalancer service type to internal only
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-      ##
-      loadBalancerIP: ""
-      ## @param metrics.kafka.service.loadBalancerSourceRanges Load Balancer sources
-      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-      ## Example:
-      ## loadBalancerSourceRanges:
-      ## - 10.10.10.0/24
-      ##
-      loadBalancerSourceRanges: []
-      ## @param metrics.kafka.service.clusterIP Static clusterIP or None for headless services
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
-      ##
-      clusterIP: ""
-      ## @param metrics.kafka.service.annotations [object] Annotations for the Kafka Exporter Prometheus metrics service
-      ##
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.metrics.kafka.service.port }}"
-        prometheus.io/path: "/metrics"
-  ## Prometheus JMX Exporter: exposes the majority of Kafkas metrics
+  ## Prometheus JMX exporter: exposes the majority of Kafkas metrics
   ##
   jmx:
     ## @param metrics.jmx.enabled Whether or not to expose JMX metrics to Prometheus
@@ -1153,7 +1233,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.16.1-debian-10-r149
+      tag: 0.16.1-debian-10-r249
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1161,16 +1241,17 @@ metrics:
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
       ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-      ## Example:
+      ## e.g:
       ## pullSecrets:
       ##   - myRegistryKeySecretName
       ##
       pullSecrets: []
-
-    ## Prometheus JMX Exporter Containers' Security Context
-    ## @param metrics.jmx.containerSecurityContext.enabled Enable Prometheus JMX Exporter Containers' Security Context
+    ## Prometheus JMX exporter containers' Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## Example:
+    ## @param metrics.jmx.containerSecurityContext.enabled Enable Prometheus JMX exporter containers' Security Context
+    ## @param metrics.jmx.containerSecurityContext.runAsUser Set Prometheus JMX exporter containers' Security Context runAsUser
+    ## @param metrics.jmx.containerSecurityContext.runAsNonRoot Set Prometheus JMX exporter containers' Security Context runAsNonRoot
+    ## e.g:
     ##   containerSecurityContext:
     ##     enabled: true
     ##     capabilities:
@@ -1178,63 +1259,45 @@ metrics:
     ##     readOnlyRootFilesystem: true
     ##
     containerSecurityContext:
-      enabled: false
-    ## Prometheus JMX Exporter' resource requests and limits
+      enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+    ## @param metrics.jmx.containerPorts.metrics Prometheus JMX exporter metrics container port
+    ##
+    containerPorts:
+      metrics: 5556
+    ## Prometheus JMX exporter resource requests and limits
     ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param metrics.jmx.resources.limits JMX Exporter container resource limits
-    ## @param metrics.jmx.resources.requests JMX Exporter container resource requests
+    ## @param metrics.jmx.resources.limits The resources limits for the JMX exporter container
+    ## @param metrics.jmx.resources.requests The requested resources for the JMX exporter container
     ##
     resources:
-      ## Example:
-      ## limits:
-      ##    cpu: 100m
-      ##    memory: 128Mi
       limits: {}
-      ## Examples:
-      ## requests:
-      ##    cpu: 100m
-      ##    memory: 128Mi
       requests: {}
-    ## Service configuration
+    ## Prometheus JMX exporter service configuration
     ##
     service:
-      ## @param metrics.jmx.service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`) for JMX Exporter
+      ## @param metrics.jmx.service.ports.metrics Prometheus JMX exporter metrics service port
       ##
-      type: ClusterIP
-      ## @param metrics.jmx.service.port JMX Exporter Prometheus port
-      ##
-      port: 5556
-      ## @param metrics.jmx.service.nodePort Kubernetes HTTP node port
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-      ##
-      nodePort: ""
-      ## @param metrics.jmx.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-      ##
-      loadBalancerIP: ""
-      ## @param metrics.jmx.service.loadBalancerSourceRanges Load Balancer sources
-      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-      ## Example:
-      ## loadBalancerSourceRanges:
-      ## - 10.10.10.0/24
-      ##
-      loadBalancerSourceRanges: []
+      ports:
+        metrics: 5556
       ## @param metrics.jmx.service.clusterIP Static clusterIP or None for headless services
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
       ##
       clusterIP: ""
-      ## @param metrics.jmx.service.annotations [object] Annotations for the JMX Exporter Prometheus metrics service
+      ## @param metrics.jmx.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ##
+      sessionAffinity: None
+      ## @param metrics.jmx.service.annotations [object] Annotations for the Prometheus JMX exporter service
       ##
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.metrics.jmx.service.port }}"
+        prometheus.io/port: "{{ .Values.metrics.jmx.service.ports.metrics }}"
         prometheus.io/path: "/"
-    ## @param metrics.jmx.whitelistObjectNames Allows setting which JMX objects you want to expose to via JMX stats to JMX Exporter
-    ## Only whitelisted values will be exposed via JMX Exporter. They must also be exposed via Rules. To expose all metrics
+    ## @param metrics.jmx.whitelistObjectNames Allows setting which JMX objects you want to expose to via JMX stats to JMX exporter
+    ## Only whitelisted values will be exposed via JMX exporter. They must also be exposed via Rules. To expose all metrics
     ## (warning its crazy excessive and they aren't formatted in a prometheus style) (1) `whitelistObjectNames: []`
     ## (2) commented out above `overrideConfig`.
     ##
@@ -1279,19 +1342,25 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
+    ## @param metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
-    ## e.g:
-    ## selector:
-    ##   prometheus: my-prometheus
     ##
     selector: {}
-    ## @param metrics.serviceMonitor.relabelings Relabel configuration for the metrics
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
     ##
     relabelings: []
     ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
     ##
     metricRelabelings: []
+    ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
 
 ## @section Kafka provisioning parameters
 
@@ -1301,41 +1370,67 @@ provisioning:
   ## @param provisioning.enabled Enable kafka provisioning Job
   ##
   enabled: false
-  ## @param provisioning.numPartitions Default number of partitions for topics when unspecified.
+  ## Auth Configuration for kafka provisioning Job
+  ##
+  auth:
+    ## TLS configuration for kafka provisioning Job
+    ##
+    tls:
+      ## @param provisioning.auth.tls.type Format to use for TLS certificates. Allowed types: `jks` and `pem`.
+      ## Note: ignored if auth.tls.clientProtocol different from one of these values: "tls" "mtls" "sasl_tls".
+      ##
+      type: jks
+      ## @param provisioning.auth.tls.certificatesSecret Existing secret containing the TLS certificates for the Kafka provisioning Job.
+      ## When using 'jks' format for certificates, the secret should contain a truststore and a keystore.
+      ## When using 'pem' format for certificates, the secret should contain a public CA certificate, a public certificate and one private key.
+      ##
+      certificatesSecret: ""
+      ## @param provisioning.auth.tls.cert The secret key from the certificatesSecret if 'cert' key different from the default (tls.crt)
+      ##
+      cert: tls.crt
+      ## @param provisioning.auth.tls.key The secret key from the certificatesSecret if 'key' key different from the default (tls.key)
+      ##
+      key: tls.key
+      ## @param provisioning.auth.tls.caCert The secret key from the certificatesSecret if 'caCert' key different from the default (ca.crt)
+      ##
+      caCert: ca.crt
+      ## @param provisioning.auth.tls.keystore The secret key from the certificatesSecret if 'keystore' key different from the default (keystore.jks)
+      ##
+      keystore: keystore.jks
+      ## @param provisioning.auth.tls.truststore The secret key from the certificatesSecret if 'truststore' key different from the default (truststore.jks)
+      ##
+      truststore: truststore.jks
+      ## @param provisioning.auth.tls.passwordsSecret Name of the secret containing passwords to access the JKS files or PEM key when they are password-protected.
+      ## It should contain two keys called "keystore-password" and "truststore-password", or "key-password" if using a password-protected PEM key.
+      ##
+      passwordsSecret: ""
+      ## @param provisioning.auth.tls.keyPasswordSecretKey The secret key from the passwordsSecret if 'keyPasswordSecretKey' key different from the default (key-password)
+      ## Note: must not be used if `passwordsSecret` is not defined.
+      ##
+      keyPasswordSecretKey: key-password
+      ## @param provisioning.auth.tls.keystorePasswordSecretKey The secret key from the passwordsSecret if 'keystorePasswordSecretKey' key different from the default (keystore-password)
+      ## Note: must not be used if `passwordsSecret` is not defined.
+      ##
+      keystorePasswordSecretKey: keystore-password
+      ## @param provisioning.auth.tls.truststorePasswordSecretKey The secret key from the passwordsSecret if 'truststorePasswordSecretKey' key different from the default (truststore-password)
+      ## Note: must not be used if `passwordsSecret` is not defined.
+      ##
+      truststorePasswordSecretKey: truststore-password
+      ## @param provisioning.auth.tls.keyPassword Password to access the password-protected PEM key if necessary. Ignored if 'passwordsSecret' is provided.
+      ##
+      keyPassword: ""
+      ## @param provisioning.auth.tls.keystorePassword Password to access the JKS keystore. Ignored if 'passwordsSecret' is provided.
+      ##
+      keystorePassword: ""
+      ## @param provisioning.auth.tls.truststorePassword Password to access the JKS truststore. Ignored if 'passwordsSecret' is provided.
+      ##
+      truststorePassword: ""
+  ## @param provisioning.numPartitions Default number of partitions for topics when unspecified
+  ##
   numPartitions: 1
-  ## @param provisioning.replicationFactor Default replication factor for topics when unspecified.
+  ## @param provisioning.replicationFactor Default replication factor for topics when unspecified
+  ##
   replicationFactor: 1
-  ## @param provisioning.schedulerName Name of the k8s scheduler (other than default) for kafka provisioning
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param provisioning.podAnnotations Provisioning Pod annotations.
-  ##
-  podAnnotations: {}
-  ## We usually recommend not to specify default resources and to leave this as a conscious
-  ## choice for the user. This also increases chances charts run on environments with little
-  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param provisioning.resources.limits The resources limits for the container
-  ## @param provisioning.resources.requests The requested resources for the container
-  ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 250m
-    ##    memory: 1Gi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    requests: {}
-  ## @param provisioning.command Override provisioning container command
-  ##
-  command: []
-  ## @param provisioning.args Override provisioning container arguments
-  ##
-  args: []
   ## @param provisioning.topics Kafka provisioning topics
   ## - name: topic-name
   ##   partitions: 1
@@ -1346,24 +1441,118 @@ provisioning:
   ##     flush.messages: 1
   ##
   topics: []
+  ## @param provisioning.parallel Number of parallel provisioning topic
+  ##
+  parallel: 1
+  ## @param provisioning.command Override provisioning container command
+  ##
+  command: []
+  ## @param provisioning.args Override provisioning container arguments
+  ##
+  args: []
+  ## @param provisioning.podAnnotations Extra annotations for Kafka provisioning pods
+  ##
+  podAnnotations: {}
+  ## @param provisioning.podLabels Extra labels for Kafka provisioning pods
+  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## Kafka provisioning resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param provisioning.resources.limits The resources limits for the Kafka provisioning container
+  ## @param provisioning.resources.requests The requested resources for the Kafka provisioning container
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Kafka provisioning pods' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param provisioning.podSecurityContext.enabled Enable security context for the pods
+  ## @param provisioning.podSecurityContext.fsGroup Set Kafka provisioning pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Kafka provisioning containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param provisioning.containerSecurityContext.enabled Enable Kafka provisioning containers' Security Context
+  ## @param provisioning.containerSecurityContext.runAsUser Set Kafka provisioning containers' Security Context runAsUser
+  ## @param provisioning.containerSecurityContext.runAsNonRoot Set Kafka provisioning containers' Security Context runAsNonRoot
+  ## e.g:
+  ##   containerSecurityContext:
+  ##     enabled: true
+  ##     capabilities:
+  ##       drop: ["NET_RAW"]
+  ##     readOnlyRootFilesystem: true
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param provisioning.schedulerName Name of the k8s scheduler (other than default) for kafka provisioning
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param provisioning.extraVolumes Optionally specify extra list of additional volumes for the Kafka provisioning pod(s)
+  ## e.g:
+  ## extraVolumes:
+  ##   - name: kafka-jaas
+  ##     secret:
+  ##       secretName: kafka-jaas
+  ##
+  extraVolumes: []
+  ## @param provisioning.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Kafka provisioning container(s)
+  ## extraVolumeMounts:
+  ##   - name: kafka-jaas
+  ##     mountPath: /bitnami/kafka/config/kafka_jaas.conf
+  ##     subPath: kafka_jaas.conf
+  ##
+  extraVolumeMounts: []
+  ## @param provisioning.sidecars Add additional sidecar containers to the Kafka provisioning pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param provisioning.initContainers Add additional Add init containers to the Kafka provisioning pod(s)
+  ## e.g:
+  ## initContainers:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  initContainers: []
 
-## @section Zookeeper chart parameters
+## @section ZooKeeper chart parameters
 
-## Zookeeper chart configuration
+## ZooKeeper chart configuration
 ## https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
 ##
 zookeeper:
-  ## @param zookeeper.enabled Switch to enable or disable the Zookeeper helm chart
+  ## @param zookeeper.enabled Switch to enable or disable the ZooKeeper helm chart
   ##
   enabled: true
+  ## @param zookeeper.replicaCount Number of ZooKeeper nodes
+  ##
+  replicaCount: 1
+  ## ZooKeeper authenticaiton
+  ##
   auth:
-    ## @param zookeeper.auth.enabled Enable Zookeeper auth
+    ## @param zookeeper.auth.enabled Enable ZooKeeper auth
     ##
     enabled: false
-    ## @param zookeeper.auth.clientUser User that will use Zookeeper clients to auth
+    ## @param zookeeper.auth.clientUser User that will use ZooKeeper clients to auth
     ##
     clientUser: ""
-    ## @param zookeeper.auth.clientPassword Password that will use Zookeeper clients to auth
+    ## @param zookeeper.auth.clientPassword Password that will use ZooKeeper clients to auth
     ##
     clientPassword: ""
     ## @param zookeeper.auth.serverUsers Comma, semicolon or whitespace separated list of user to be created. Specify them as a string, for example: "user1,user2,admin"
@@ -1372,9 +1561,24 @@ zookeeper:
     ## @param zookeeper.auth.serverPasswords Comma, semicolon or whitespace separated list of passwords to assign to users when created. Specify them as a string, for example: "pass4user1, pass4user2, pass4admin"
     ##
     serverPasswords: ""
-## This value is only used when zookeeper.enabled is set to false
+  ## ZooKeeper Persistence parameters
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## @param zookeeper.persistence.enabled Enable persistence on ZooKeeper using PVC(s)
+  ## @param zookeeper.persistence.storageClass Persistent Volume storage class
+  ## @param zookeeper.persistence.accessModes Persistent Volume access modes
+  ## @param zookeeper.persistence.size Persistent Volume size
+  ##
+  persistence:
+    enabled: true
+    storageClass: ""
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+
+## External Zookeeper Configuration
+## All of these values are only used if `zookeeper.enabled=false`
 ##
 externalZookeeper:
-  ## @param externalZookeeper.servers Server or list of external Zookeeper servers to use
+  ## @param externalZookeeper.servers List of external zookeeper servers to use
   ##
   servers: []

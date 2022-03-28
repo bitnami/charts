@@ -1,19 +1,20 @@
-{{- if and .Values.worker.podDisruptionBudget.enabled (or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor")) }}
+{{- if and .Values.worker.pdb.create (or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor")) }}
 kind: PodDisruptionBudget
-apiVersion: policy/v1beta1
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 metadata:
-  name: {{ include "common.names.fullname" . }}-worker
+  name: {{ printf "%s-worker" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: worker
     {{- if .Values.commonLabels }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.raender" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
 spec:
-  {{- if .Values.worker.podDisruptionBudget.minAvailable }}
-  minAvailable: {{ .Values.worker.podDisruptionBudget.minAvailable }}
+  {{- if .Values.worker.pdb.minAvailable }}
+  minAvailable: {{ .Values.worker.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.worker.podDisruptionBudget.maxUnavailable }}
-  maxUnavailable: {{ .Values.worker.podDisruptionBudget.maxUnavailable }}
+  {{- if .Values.worker.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.worker.pdb.maxUnavailable }}
   {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}

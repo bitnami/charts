@@ -13,7 +13,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not .Values.storegateway.autoscaling.enabled }}
   replicas: {{ .Values.storegateway.replicaCount }}
+  {{- end }}
   podManagementPolicy: {{ .Values.storegateway.podManagementPolicy }}
   serviceName: {{ include "common.names.fullname" . }}-storegateway-headless
   {{- if .Values.storegateway.updateStrategy }}

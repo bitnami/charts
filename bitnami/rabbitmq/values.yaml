@@ -29,7 +29,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.9.11-debian-10-r0
+  tag: 3.9.14-debian-10-r4
 
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -691,7 +691,14 @@ persistence:
   ## So, for example, the name can depend on .Release or .Chart
   ##
   existingClaim: ""
-
+  ## @param persistence.mountPath The path the volume will be mounted at
+  ## Note: useful when using custom RabbitMQ images
+  ##
+  mountPath: /bitnami/rabbitmq/mnesia
+  ## @param persistence.subPath The subdirectory of the volume to mount to
+  ## Useful in dev environments and one PV for multiple services
+  ##
+  subPath: ""
   ## @param persistence.size PVC Storage Request for RabbitMQ data volume
   ## If you change this value, you might have to adjust `rabbitmq.diskFreeLimit` as well
   ##
@@ -751,6 +758,10 @@ service:
   ##
   tlsNodePort: ""
 
+  ## @param service.distPortEnabled Erlang distribution server port
+  ##
+  distPortEnabled: true
+
   ## @param service.distPort Erlang distribution server port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
@@ -798,6 +809,10 @@ service:
   ## metricsNodePort: 30674
   ##
   metricsNodePort: ""
+
+  ## @param service.epmdPortEnabled RabbitMQ EPMD Discovery service port
+  ##
+  epmdPortEnabled: true
 
   ## @param service.epmdNodePort Node port override for `epmd` port, if serviceType is `NodePort`
   ## e.g:
@@ -917,6 +932,11 @@ ingress:
   ##
   extraHosts: []
 
+  ## @param ingress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
+  ## Useful when looking for additional customization, such as using different backend
+  ##
+  extraRules: []
+
   ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## e.g:
@@ -1019,9 +1039,15 @@ metrics:
     ## scrapeTimeout: 30s
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.relabellings Specify Metric Relabellings to add to the scrape endpoint
+    ## @param metrics.serviceMonitor.relabellings MetricsRelabelConfigs to apply to samples before ingestion. DEPRECATED: Will be removed in next major.
     ##
     relabellings: []
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping.
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricsRelabelConfigs to apply to samples before ingestion.
+    ##
+    metricRelabelings: []
     ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
@@ -1136,7 +1162,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r267
+    tag: 10-debian-10-r377
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

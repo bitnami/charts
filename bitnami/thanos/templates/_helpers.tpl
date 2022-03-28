@@ -325,6 +325,17 @@ Return true if a hashring configmap object should be created
 {{- end -}}
 
 
+{{/*
+Return the Thanos receive hashring configuration configmap.
+*/}}
+{{- define "thanos.receive.configmapName" -}}
+{{- if .Values.receive.existingConfigmap -}}
+    {{- printf "%s" (tpl .Values.receive.existingConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-receive" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
 {{/* Return the proper pod fqdn of the replica.
 Usage:
 {{ include "thanos.receive.podFqdn" (dict "root" . "extra" $suffix ) }}
@@ -364,20 +375,10 @@ Usage:
 ]
 {{- end -}}
 {{- else -}}
-{{- if (typeIs "string" .Values.receive.config)}}
+{{- if (typeIs "string" .Values.receive.config) }}
 {{- .Values.receive.config -}}
 {{- else -}}
 {{- .Values.receive.config | toPrettyJson -}}
 {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
-Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
-*/}}
-{{- define "thanos.ingress.certManagerRequest" -}}
-{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
-    {{- true -}}
 {{- end -}}
 {{- end -}}

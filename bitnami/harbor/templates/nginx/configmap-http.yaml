@@ -1,9 +1,10 @@
-{{- if and (not .Values.ingress.enabled) (not .Values.service.tls.enabled) }}
-{{- $scheme := include "harbor.component.scheme" . -}}
+{{- if and (eq .Values.exposureType "proxy") (not .Values.nginx.tls.enabled) }}
+{{- $scheme := ternary "https" "http" .Values.internalTLS.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "harbor.nginx" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -35,11 +36,11 @@ data:
       proxy_http_version 1.1;
 
       upstream core {
-        server {{ template "harbor.core" . }}:{{ template "harbor.core.servicePort" . }};
+        server {{ printf "%s:%d" (include "harbor.core" .) (ternary .Values.core.service.ports.https .Values.core.service.ports.http .Values.internalTLS.enabled | int) }};
       }
 
       upstream portal {
-        server {{ template "harbor.portal" . }}:{{ template "harbor.portal.servicePort" . }};
+        server {{ printf "%s:%d" (include "harbor.portal" .) (ternary .Values.portal.service.ports.https .Values.portal.service.ports.http .Values.internalTLS.enabled | int) }};
       }
 
       log_format timed_combined '[$time_local]:$remote_addr - '
@@ -50,11 +51,11 @@ data:
       access_log /dev/stdout timed_combined;
 
       server {
-        {{- if .Values.ipFamily.ipv4.enabled}}
-        listen 8080;
-        {{- end}}
+        {{- if .Values.ipFamily.ipv4.enabled }}
+        listen {{ .Values.nginx.containerPorts.http }};
+        {{- end }}
         {{- if .Values.ipFamily.ipv6.enabled }}
-        listen [::]:8080;
+        listen [::]:{{ .Values.nginx.containerPorts.http }};
         {{- end }}
         server_tokens off;
         # disable any limits to avoid HTTP 413 for large image uploads

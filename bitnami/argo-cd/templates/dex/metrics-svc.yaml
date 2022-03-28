@@ -20,14 +20,23 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.dex.metrics.service.type }}
+  {{- if and .Values.dex.metrics.service.clusterIP (eq .Values.dex.metrics.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.dex.metrics.service.clusterIP }}
+  {{- end }}
   {{- if (or (eq .Values.dex.metrics.service.type "LoadBalancer") (eq .Values.dex.metrics.service.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.dex.metrics.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{ if eq .Values.dex.metrics.service.type "LoadBalancer" }}
+  {{- if eq .Values.dex.metrics.service.type "LoadBalancer" }}
   loadBalancerSourceRanges: {{ .Values.dex.metrics.service.loadBalancerSourceRanges }}
-  {{ end }}
+  {{- end }}
   {{- if (and (eq .Values.dex.metrics.service.type "LoadBalancer") (not (empty .Values.dex.metrics.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.dex.metrics.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.dex.metrics.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.dex.metrics.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.dex.metrics.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dex.metrics.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
     - name: metrics

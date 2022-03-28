@@ -3,12 +3,18 @@ kind: StatefulSet
 metadata:
   name: {{ template "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-  serviceName: {{ template "common.names.fullname" . }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy:
     type: {{ .Values.updateStrategy.type }}
     {{- if (eq "Recreate" .Values.updateStrategy.type) }}
@@ -53,26 +59,34 @@ spec:
       {{- if .Values.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.securityContext.enabled }}
+      {{- if .Values.podSecurityContext.enabled }}
       securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
+        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
+        runAsUser: {{ .Values.podSecurityContext.runAsUser }}
       {{- end }}
-      {{- if .Values.extraInitContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.extraInitContainers "context" $) | nindent 8 }}
+      {{- if .Values.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: "mariadb-galera"
           image: {{ template "mariadb-galera.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" ( dict "value" .Values.lifecycleHooks "context" $ ) | nindent 12 }}
+          {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - bash
             - -ec
             - |
-                {{- if (not (empty .Values.galera.bootstrap.bootstrapFromNode))}}
+                {{- if .Values.galera.bootstrap.forceBootstrap }}
                 {{- $fullname := include "common.names.fullname" . }}
                 {{- $bootstrapFromNode := int .Values.galera.bootstrap.bootstrapFromNode }}
                 # Bootstrap from the indicated node
@@ -88,6 +102,8 @@ spec:
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: MY_POD_NAME
@@ -96,10 +112,19 @@ spec:
                   fieldPath: metadata.name
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: MARIADB_DEFAULT_PORT_NUMBER
+              value: {{ .Values.containerPorts.mysql | quote }}
             - name: MARIADB_GALERA_CLUSTER_NAME
               value: {{ .Values.galera.name | quote }}
+            {{- $fullName := include "common.names.fullname" . }}
+            {{- $releaseName := .Release.Namespace }}
+            {{- $clusterDomain := .Values.clusterDomain }}
+            {{- $initialCluster := list }}
+            {{- range $e, $i := until (int .Values.replicaCount) }}
+            {{- $initialCluster = append $initialCluster (printf "%s-%d.%s-headless.%s.svc.%s" $fullName $i $fullName $releaseName $clusterDomain) }}
+            {{- end }}
             - name: MARIADB_GALERA_CLUSTER_ADDRESS
-              value: "gcomm://{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+              value: {{ printf "gcomm://%s" (join "," $initialCluster) | quote }}
             - name: MARIADB_ROOT_USER
               value: {{ .Values.rootUser.user | quote }}
             {{- if .Values.usePasswordFiles }}
@@ -211,13 +236,13 @@ spec:
           {{- end }}
           ports:
             - name: mysql
-              containerPort: 3306
+              containerPort: {{ .Values.containerPorts.mysql }}
             - name: galera
-              containerPort: 4567
+              containerPort: {{ .Values.containerPorts.galera }}
             - name: ist
-              containerPort: 4568
+              containerPort: {{ .Values.containerPorts.ist }}
             - name: sst
-              containerPort: 4444
+              containerPort: {{ .Values.containerPorts.sst }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
@@ -236,6 +261,8 @@ spec:
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- else if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
@@ -244,6 +271,13 @@ spec:
                 - bash
                 - -ec
                 - |
+                  {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.initdbScriptsConfigMap .Values.initdbScripts }}
+                  # If the init scripts don't get executed there can be race conditions with the Galera bootstrap
+                  if [[ ! -f "{{ .Values.persistence.mountPath }}/.user_scripts_initialized" ]]; then
+                      echo "Init scripts still not executed. Skipping check"
+                      exit 1
+                  fi
+                  {{- end }}
                   password_aux="${MARIADB_ROOT_PASSWORD:-}"
                   if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
@@ -254,6 +288,8 @@ spec:
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- else if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.startupProbe.enabled }}
           startupProbe:
@@ -262,6 +298,13 @@ spec:
                 - bash
                 - -ec
                 - |
+                  {{- if or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.initdbScriptsConfigMap .Values.initdbScripts }}
+                  # If the init scripts don't get executed there can be race conditions with the Galera bootstrap
+                  if [[ ! -f "{{ .Values.persistence.mountPath }}/.user_scripts_initialized" ]]; then
+                      echo "Init scripts still not executed. Skipping check"
+                      exit 1
+                  fi
+                  {{- end }}
                   password_aux="${MARIADB_ROOT_PASSWORD:-}"
                   if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
@@ -272,6 +315,8 @@ spec:
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.resources }}
@@ -291,7 +336,7 @@ spec:
             {{- end }}
             {{- if or (.Files.Glob "files/my.cnf") .Values.mariadbConfiguration .Values.configurationConfigMap }}
             - name: mariadb-galera-config
-              mountPath: /opt/bitnami/mariadb/conf/my.cnf
+              mountPath: /bitnami/conf/my.cnf
               subPath: my.cnf
             {{- end }}
             {{- if .Values.tls.enabled }}
@@ -367,8 +412,8 @@ spec:
               mountPath: /opt/bitnami/mysqld-exporter/secrets/
           {{- end }}
         {{- end }}
-        {{- if .Values.extraContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.extraContainers "context" $) | nindent 8 }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         - name: previous-boot
@@ -417,6 +462,13 @@ spec:
         name: data
         labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/managed-by: {{ .Release.Service }}
+          {{- if .Values.persistence.labels }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.persistence.labels "context" $) | nindent 10 }}
+          {{- end }}
+        {{- if .Values.persistence.annotations }}
+        annotations:
+        {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
         {{- range .Values.persistence.accessModes }}

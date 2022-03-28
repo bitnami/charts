@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 6.2.6-debian-10-r53
+  tag: 6.2.6-debian-10-r168
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -125,6 +125,7 @@ auth:
   ## @param auth.usePasswordFiles Mount credentials as files instead of using an environment variable
   ##
   usePasswordFiles: false
+
 ## @param commonConfiguration [string] Common configuration to be added into the ConfigMap
 ## ref: https://redis.io/topics/config
 ##
@@ -181,11 +182,26 @@ master:
   ## @param master.extraEnvVarsSecret Name of existing Secret containing extra env vars for Redis&trade; master nodes
   ##
   extraEnvVarsSecret: ""
-  ## @param master.containerPort Container port to open on Redis&trade; master nodes
+  ## @param master.containerPorts.redis Container port to open on Redis&trade; master nodes
   ##
-  containerPort: 6379
+  containerPorts:
+    redis: 6379
   ## Configure extra options for Redis&trade; containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param master.startupProbe.enabled Enable startupProbe on Redis&trade; master nodes
+  ## @param master.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param master.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param master.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param master.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param master.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
   ## @param master.livenessProbe.enabled Enable livenessProbe on Redis&trade; master nodes
   ## @param master.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param master.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -214,6 +230,9 @@ master:
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 5
+  ## @param master.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## @param master.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
@@ -244,6 +263,10 @@ master:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+  ## @param master.kind Use either Deployment or StatefulSet (default)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+  ##
+  kind: StatefulSet
   ## @param master.schedulerName Alternate scheduler for Redis&trade; master pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -315,15 +338,15 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param master.spreadConstraints [array] Spread Constraints for Redis&trade; master pod assignment
+  ## @param master.topologySpreadConstraints Spread Constraints for Redis&trade; master pod assignment
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   ## E.g.
-  ## spreadConstraints:
+  ## topologySpreadConstraints:
   ##   - maxSkew: 1
   ##     topologyKey: node
   ##     whenUnsatisfiable: DoNotSchedule
   ##
-  spreadConstraints: []
+  topologySpreadConstraints: []
   ## @param master.lifecycleHooks for the Redis&trade; master container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -364,6 +387,9 @@ master:
     ## @param master.persistence.medium Provide a medium for `emptyDir` volumes.
     ##
     medium: ""
+    ## @param master.persistence.sizeLimit Set this to enable a size limit for `emptyDir` volumes.
+    ##
+    sizeLimit: ""
     ## @param master.persistence.path The path the volume will be mounted at on Redis&trade; master containers
     ## NOTE: Useful when using different Redis&trade; images
     ##
@@ -396,6 +422,7 @@ master:
     ##
     selector: {}
     ## @param master.persistence.dataSource Custom PVC data source
+    ##
     dataSource: {}
     ## @param master.persistence.existingClaim Use a existing PVC which must be created manually before bound
     ## NOTE: requires master.persistence.enabled: true
@@ -407,18 +434,23 @@ master:
     ## @param master.service.type Redis&trade; master service type
     ##
     type: ClusterIP
-    ## @param master.service.port Redis&trade; master service port
+    ## @param master.service.ports.redis Redis&trade; master service port
     ##
-    port: 6379
-    ## @param master.service.nodePort Node port for Redis&trade; master
+    ports:
+      redis: 6379
+    ## @param master.service.nodePorts.redis Node port for Redis&trade; master
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## NOTE: choose port between <30000-32767>
     ##
-    nodePort: ""
+    nodePorts:
+      redis: ""
     ## @param master.service.externalTrafficPolicy Redis&trade; master service external traffic policy
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
+    ## @param master.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
     ## @param master.service.clusterIP Redis&trade; master service Cluster IP
     ##
     clusterIP: ""
@@ -487,11 +519,34 @@ replica:
   ## @param replica.extraEnvVarsSecret Name of existing Secret containing extra env vars for Redis&trade; replicas nodes
   ##
   extraEnvVarsSecret: ""
-  ## @param replica.containerPort Container port to open on Redis&trade; replicas nodes
+  ## @param replica.externalMaster.enabled Use external master for bootstrapping
+  ## @param replica.externalMaster.host External master host to bootstrap from
+  ## @param replica.externalMaster.port Port for Redis service external master host
   ##
-  containerPort: 6379
+  externalMaster:
+    enabled: false
+    host: ""
+    port: 6379
+  ## @param replica.containerPorts.redis Container port to open on Redis&trade; replicas nodes
+  ##
+  containerPorts:
+    redis: 6379
   ## Configure extra options for Redis&trade; containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param replica.startupProbe.enabled Enable startupProbe on Redis&trade; replicas nodes
+  ## @param replica.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param replica.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param replica.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param replica.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param replica.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 22
   ## @param replica.livenessProbe.enabled Enable livenessProbe on Redis&trade; replicas nodes
   ## @param replica.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param replica.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -520,6 +575,9 @@ replica:
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 5
+  ## @param replica.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## @param replica.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
@@ -575,6 +633,10 @@ replica:
   ## @param replica.priorityClassName Redis&trade; replicas pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param replica.podManagementPolicy podManagementPolicy to manage scaling operation of %%MAIN_CONTAINER_NAME%% pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: ""
   ## @param replica.hostAliases Redis&trade; replicas pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -629,15 +691,15 @@ replica:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param replica.spreadConstraints [array] Spread Constraints for Redis&trade; replicas pod assignment
+  ## @param replica.topologySpreadConstraints Spread Constraints for Redis&trade; replicas pod assignment
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   ## E.g.
-  ## spreadConstraints:
+  ## topologySpreadConstraints:
   ##   - maxSkew: 1
   ##     topologyKey: node
   ##     whenUnsatisfiable: DoNotSchedule
   ##
-  spreadConstraints: []
+  topologySpreadConstraints: []
   ## @param replica.lifecycleHooks for the Redis&trade; replica container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -710,6 +772,7 @@ replica:
     ##
     selector: {}
     ## @param replica.persistence.dataSource Custom PVC data source
+    ##
     dataSource: {}
   ## Redis&trade; replicas service parameters
   ##
@@ -717,18 +780,23 @@ replica:
     ## @param replica.service.type Redis&trade; replicas service type
     ##
     type: ClusterIP
-    ## @param replica.service.port Redis&trade; replicas service port
+    ## @param replica.service.ports.redis Redis&trade; replicas service port
     ##
-    port: 6379
-    ## @param replica.service.nodePort Node port for Redis&trade; replicas
+    ports:
+      redis: 6379
+    ## @param replica.service.nodePorts.redis Node port for Redis&trade; replicas
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## NOTE: choose port between <30000-32767>
     ##
-    nodePort: ""
+    nodePorts:
+      redis: ""
     ## @param replica.service.externalTrafficPolicy Redis&trade; replicas service external traffic policy
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
+    ## @param replica.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
     ## @param replica.service.clusterIP Redis&trade; replicas service Cluster IP
     ##
     clusterIP: ""
@@ -789,7 +857,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 6.2.6-debian-10-r54
+    tag: 6.2.6-debian-10-r166
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -812,6 +880,9 @@ sentinel:
   ## @param sentinel.quorum Sentinel Quorum
   ##
   quorum: 2
+  ## @param sentinel.getMasterTimeout Amount of time to allow before get_sentinel_master_info() times out.
+  ## NOTE: This is directly related to the startupProbes which are configured to run every 10 seconds for a total of 22 failures. If adjusting this value, also adjust the startupProbes.
+  getMasterTimeout: 220
   ## @param sentinel.automateClusterRecovery Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it.
   ## This also prevents any new replica from starting until the last remaining replica is elected as master to guarantee that it is the one to be elected by Sentinel, and not a newly started replica with no data.
   ## NOTE: This feature requires a "downAfterMilliseconds" value less or equal to 2000.
@@ -852,11 +923,34 @@ sentinel:
   ## @param sentinel.extraEnvVarsSecret Name of existing Secret containing extra env vars for Redis&trade; Sentinel nodes
   ##
   extraEnvVarsSecret: ""
-  ## @param sentinel.containerPort Container port to open on Redis&trade; Sentinel nodes
+  ## @param sentinel.externalMaster.enabled Use external master for bootstrapping
+  ## @param sentinel.externalMaster.host External master host to bootstrap from
+  ## @param sentinel.externalMaster.port Port for Redis service external master host
   ##
-  containerPort: 26379
+  externalMaster:
+    enabled: false
+    host: ""
+    port: 6379
+  ## @param sentinel.containerPorts.sentinel Container port to open on Redis&trade; Sentinel nodes
+  ##
+  containerPorts:
+    sentinel: 26379
   ## Configure extra options for Redis&trade; containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param sentinel.startupProbe.enabled Enable startupProbe on Redis&trade; Sentinel nodes
+  ## @param sentinel.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param sentinel.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param sentinel.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param sentinel.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param sentinel.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 22
   ## @param sentinel.livenessProbe.enabled Enable livenessProbe on Redis&trade; Sentinel nodes
   ## @param sentinel.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param sentinel.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -885,12 +979,48 @@ sentinel:
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 5
+  ## @param sentinel.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## @param sentinel.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
   ## @param sentinel.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
+  ## Persistence parameters
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## @param sentinel.persistence.enabled Enable persistence on Redis&trade; sentinel nodes using Persistent Volume Claims (Experimental)
+    ##
+    enabled: false
+    ## @param sentinel.persistence.storageClass Persistent Volume storage class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
+    ##
+    storageClass: ""
+    ## @param sentinel.persistence.accessModes Persistent Volume access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param sentinel.persistence.size Persistent Volume size
+    ##
+    size: 100Mi
+    ## @param sentinel.persistence.annotations Additional custom annotations for the PVC
+    ##
+    annotations: {}
+    ## @param sentinel.persistence.selector Additional labels to match for the PVC
+    ## e.g:
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param sentinel.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
   ## Redis&trade; Sentinel resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## @param sentinel.resources.limits The resources limits for the Redis&trade; Sentinel containers
@@ -922,12 +1052,12 @@ sentinel:
     ## @param sentinel.service.type Redis&trade; Sentinel service type
     ##
     type: ClusterIP
-    ## @param sentinel.service.port Redis&trade; service port for Redis&trade;
+    ## @param sentinel.service.ports.redis Redis&trade; service port for Redis&trade;
+    ## @param sentinel.service.ports.sentinel Redis&trade; service port for Redis&trade; Sentinel
     ##
-    port: 6379
-    ## @param sentinel.service.sentinelPort Redis&trade; service port for Sentinel
-    ##
-    sentinelPort: 26379
+    ports:
+      redis: 6379
+      sentinel: 26379
     ## @param sentinel.service.nodePorts.redis Node port for Redis&trade;
     ## @param sentinel.service.nodePorts.sentinel Node port for Sentinel
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
@@ -942,6 +1072,9 @@ sentinel:
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
+    ## @param sentinel.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
     ## @param sentinel.service.clusterIP Redis&trade; Sentinel service Cluster IP
     ##
     clusterIP: ""
@@ -996,7 +1129,7 @@ networkPolicy:
   ##                   - frontend
   ##
   extraIngress: []
-  ## @param networkPolicy.extraEgress Add extra ingress rules to the NetworkPolicy
+  ## @param networkPolicy.extraEgress Add extra egress rules to the NetworkPolicy
   ## e.g:
   ## extraEgress:
   ##   - ports:
@@ -1125,7 +1258,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.31.4-debian-10-r11
+    tag: 1.37.0-debian-10-r8
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1135,6 +1268,9 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param metrics.command Override default metrics container init command (useful when using custom images)
+  ##
+  command: []
   ## @param metrics.redisTargetHost A way to specify an alternative Redis&trade; hostname
   ## Useful for certificate CN/SAN matching
   ##
@@ -1145,6 +1281,13 @@ metrics:
   ##   check-keys: myKey,myOtherKey
   ##
   extraArgs: {}
+  ## @param metrics.extraEnvVars Array with extra environment variables to add to Redis&trade; exporter
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param metrics.containerSecurityContext.enabled Enabled Redis&trade; exporter containers' Security Context
@@ -1190,6 +1333,9 @@ metrics:
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
+    ## @param metrics.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
     ## @param metrics.service.loadBalancerIP Redis&trade; exporter service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -1305,7 +1451,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r265
+    tag: 10-debian-10-r377
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1351,7 +1497,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r265
+    tag: 10-debian-10-r377
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1375,3 +1521,16 @@ sysctl:
   resources:
     limits: {}
     requests: {}
+
+## @section useExternalDNS Parameters
+##
+## @param useExternalDNS.enabled Enable various syntax that would enable external-dns to work.  Note this requires a working installation of `external-dns` to be usable.
+## @param useExternalDNS.additionalAnnotations Extra annotations to be utilized when `external-dns` is enabled.
+## @param useExternalDNS.annotationKey The annotation key utilized when `external-dns` is enabled.
+## @param useExternalDNS.suffix The DNS suffix utilized when `external-dns` is enabled.  Note that we prepend the suffix with the full name of the release.
+##
+useExternalDNS:
+  enabled: false
+  suffix: ""
+  annotationKey: external-dns.alpha.kubernetes.io/
+  additionalAnnotations: {}

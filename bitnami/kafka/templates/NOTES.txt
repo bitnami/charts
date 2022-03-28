@@ -25,46 +25,16 @@ In order to replicate the container startup scripts execute this command:
 {{- $replicaCount := int .Values.replicaCount -}}
 {{- $releaseNamespace := .Release.Namespace -}}
 {{- $clusterDomain := .Values.clusterDomain -}}
-{{- $fullname := include "kafka.fullname" . -}}
+{{- $fullname := include "common.names.fullname" . -}}
 {{- $clientProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.clientProtocol) -}}
-{{- $saslMechanisms := coalesce .Values.auth.sasl.mechanisms .Values.auth.saslMechanisms -}}
-{{- $tlsEndpointIdentificationAlgorithm := default "" (coalesce .Values.auth.tls.endpointIdentificationAlgorithm .Values.auth.tlsEndpointIdentificationAlgorithm) -}}
-{{- $tlsPassword := coalesce .Values.auth.tls.password .Values.auth.jksPassword -}}
-{{- $servicePort := int .Values.service.port -}}
-{{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs -}}
-{{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer") }}
+{{- $externalClientProtocol := include "kafka.listenerType" (dict "protocol" (include "kafka.externalClientProtocol" . )) -}}
+{{- $saslMechanisms := .Values.auth.sasl.mechanisms -}}
+{{- $tlsEndpointIdentificationAlgorithm := default "" .Values.auth.tls.endpointIdentificationAlgorithm -}}
+{{- $tlsPasswordSecret := printf "$(kubectl get secret %s --namespace %s -o jsonpath='{.data.password}' | base64 --decode | cut -d , -f 1)" .Values.auth.tls.existingSecret $releaseNamespace -}}
+{{- $tlsPassword :=  ternary .Values.auth.tls.password $tlsPasswordSecret (eq .Values.auth.tls.existingSecret "") -}}
+{{- $servicePort := int .Values.service.ports.client -}}
 
-###############################################################################
-### ERROR: You enabled external access to Kafka brokers without specifying  ###
-###   the array of load balancer IPs for Kafka brokers.                     ###
-###############################################################################
-
-This deployment will be incomplete until you configure the array of load balancer
-IPs for Kafka brokers. To complete your deployment follow the steps below:
-
-1. Wait for the load balancer IPs (it may take a few minutes for them to be available):
-
-    kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -w
-
-2. Obtain the load balancer IPs and upgrade your chart:
-
-    {{- range $i, $e := until $replicaCount }}
-    LOAD_BALANCER_IP_{{ add $i 1 }}="$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullname }}-{{ $i }}-external -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
-    {{- end }}
-
-3. Upgrade you chart:
-
-    helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-      --set replicaCount={{ $replicaCount }} \
-      --set externalAccess.enabled=true \
-      {{- range $i, $e := until $replicaCount }}
-      --set externalAccess.service.loadBalancerIPs[{{ $i }}]=$LOAD_BALANCER_IP_{{ add $i 1 }} \
-      {{- end }}
-      --set externalAccess.service.type=LoadBalancer
-
-{{- else }}
-
-{{- if and (or (eq .Values.service.type "LoadBalancer") .Values.externalAccess.enabled) (eq $clientProtocol "PLAINTEXT") }}
+{{- if and (or (eq .Values.service.type "LoadBalancer") .Values.externalAccess.enabled) (eq $externalClientProtocol "PLAINTEXT") }}
 ---------------------------------------------------------------------------------------------
  WARNING
 
@@ -103,7 +73,7 @@ org.apache.kafka.common.security.scram.ScramLoginModule required
 {{- else }}
 org.apache.kafka.common.security.plain.PlainLoginModule required
 {{- end }}
-username="{{ index (coalesce .Values.auth.sasl.jaas.clientUsers .Values.auth.jaas.clientUsers) 0 }}"
+username="{{ index .Values.auth.sasl.jaas.clientUsers 0 }}"
 password="$(kubectl get secret {{ $fullname }}-jaas --namespace {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 --decode | cut -d , -f 1)";
 };
 
@@ -201,7 +171,7 @@ To create a pod that you can use as a Kafka client run the following commands:
     CONSUMER:
         kafka-console-consumer.sh \
             {{ if or (include "kafka.client.saslAuthentication" .) (include "kafka.client.tlsEncryption" .) }}--consumer.config /tmp/client.properties \{{ end }}
-            --bootstrap-server {{ $fullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.port }} \
+            --bootstrap-server {{ $fullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.ports.client }} \
             --topic test \
             --from-beginning
 
@@ -241,16 +211,94 @@ To connect to your Kafka server from outside the cluster, follow the instruction
 
         echo "$(kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "kafka.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=kafka,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
 
-    Kafka Brokers port: {{ .Values.externalAccess.service.port }}
+    Kafka Brokers port: {{ .Values.externalAccess.service.ports.external }}
+
+{{- end }}
+
+{{- if not (eq $clientProtocol $externalClientProtocol) }}
+{{- if (include "kafka.client.saslAuthentication" .) }}
+
+You need to configure your Kafka client to access using SASL authentication. To do so, you need to create the 'kafka_jaas.conf' and 'client.properties' configuration files with the content below:
+
+    - kafka_jaas.conf:
+
+KafkaClient {
+{{- if $saslMechanisms | regexFind "scram" }}
+org.apache.kafka.common.security.scram.ScramLoginModule required
+{{- else }}
+org.apache.kafka.common.security.plain.PlainLoginModule required
+{{- end }}
+username="{{ index .Values.auth.sasl.jaas.clientUsers 0 }}"
+password="$(kubectl get secret {{ $fullname }}-jaas --namespace {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 --decode | cut -d , -f 1)";
+};
+
+    - client.properties:
+
+security.protocol={{ $externalClientProtocol }}
+{{- if $saslMechanisms | regexFind "scram-sha-256" }}
+sasl.mechanism=SCRAM-SHA-256
+{{- else if $saslMechanisms | regexFind "scram-sha-512" }}
+sasl.mechanism=SCRAM-SHA-512
+{{- else }}
+sasl.mechanism=PLAIN
+{{- end }}
+{{- if eq $externalClientProtocol "SASL_SSL" }}
+ssl.truststore.type={{ upper .Values.auth.tls.type }}
+    {{- if eq .Values.auth.tls.type "jks" }}
+ssl.truststore.location=/tmp/kafka.truststore.jks
+        {{- if not (empty $tlsPassword) }}
+ssl.truststore.password={{ $tlsPassword }}
+        {{- end }}
+    {{- else if eq .Values.auth.tls.type "pem" }}
+ssl.truststore.certificates=-----BEGIN CERTIFICATE----- \
+... \
+-----END CERTIFICATE-----
+    {{- end }}
+    {{- if eq $tlsEndpointIdentificationAlgorithm "" }}
+ssl.endpoint.identification.algorithm=
+    {{- end }}
+{{- end }}
+
+{{- else if (include "kafka.externalClient.tlsEncryption" .) }}
+
+You need to configure your Kafka client to access using TLS authentication. To do so, you need to create the 'client.properties' configuration file with the content below:
+
+security.protocol={{ $externalClientProtocol }}
+ssl.truststore.type={{ upper .Values.auth.tls.type }}
+{{- if eq .Values.auth.tls.type "jks" }}
+ssl.truststore.location=/tmp/kafka.truststore.{{ .Values.auth.tls.type }}
+    {{- if not (empty $tlsPassword) }}
+ssl.truststore.password={{ $tlsPassword }}
+    {{- end }}
+{{- else if eq .Values.auth.tls.type "pem" }}
+ssl.truststore.certificates=-----BEGIN CERTIFICATE----- \
+... \
+-----END CERTIFICATE-----
+{{- end }}
+{{- if eq .Values.auth.externalClientProtocol "mtls" }}
+ssl.keystore.type={{ upper .Values.auth.tls.type }}
+    {{- if eq .Values.auth.tls.type "jks" }}
+ssl.keystore.location=/tmp/client.keystore.jks
+        {{- if not (empty $tlsPassword) }}
+ssl.keystore.password={{ $tlsPassword }}
+        {{- end }}
+    {{- else if eq .Values.auth.tls.type "pem" }}
+ssl.keystore.certificate.chain=-----BEGIN CERTIFICATE----- \
+... \
+-----END CERTIFICATE-----
+ssl.keystore.key=-----BEGIN ENCRYPTED PRIVATE KEY----- \
+... \
+-----END ENCRYPTED PRIVATE KEY-----
+    {{- end }}
+{{- end }}
+{{- if eq $tlsEndpointIdentificationAlgorithm "" }}
+ssl.endpoint.identification.algorithm=
+{{- end }}
 
 {{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
 
-{{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.externalAccess.autoDiscovery.image }}
-{{- include "common.warnings.rollingTag" .Values.metrics.kafka.image }}
-{{- include "common.warnings.rollingTag" .Values.metrics.jmx.image }}
-{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "kafka.checkRollingTags" . }}
 {{- include "kafka.validateValues" . }}

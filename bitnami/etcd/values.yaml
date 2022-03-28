@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.1-debian-10-r56
+  tag: 3.5.2-debian-10-r51
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -93,9 +93,9 @@ auth:
   ## ref: https://etcd.io/docs/current/op-guide/authentication/
   ##
   rbac:
-    ## @param auth.rbac.enabled Switch to enable RBAC authentication
+    ## @param auth.rbac.create Switch to enable RBAC authentication
     ##
-    enabled: true
+    create: true
     ## @param auth.rbac.allowNoneAuthentication Allow to use etcd without configuring RBAC authentication
     ##
     allowNoneAuthentication: true
@@ -184,8 +184,8 @@ auth:
     ## If not specified and `auth.peer.enableAuthentication=true` or `rbac.enabled=true`, the default is is `ca.crt`
     ##
     caFilename: ""
-## @param autoCompactionMode Auto compaction mode, by default periodic. Valid values: ‘periodic’, ‘revision’.
-## - 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. ‘5m’).
+## @param autoCompactionMode Auto compaction mode, by default periodic. Valid values: "periodic", "revision".
+## - 'periodic' for duration based retention, defaulting to hours if no time unit is provided (e.g. 5m).
 ## - 'revision' for revision number based retention.
 ##
 autoCompactionMode: ""
@@ -438,11 +438,20 @@ tolerations: []
 ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
 ##
 terminationGracePeriodSeconds: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
 ## @param priorityClassName Name of the priority class to be used by etcd pods
 ## Priority class needs to be created beforehand
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 
 ## @section Traffic exposure parameters
 
@@ -458,24 +467,25 @@ service:
   ## clusterIP: None
   ##
   clusterIP: ""
-  ## @param service.port etcd client port
+  ## @param service.ports.client etcd client port
+  ## @param service.ports.peer etcd peer port
   ##
-  port: 2379
-  ## @param service.clientPortNameOverride etcd client port name override
-  ##
-  clientPortNameOverride: ""
-  ## @param service.peerPort etcd peer port
-  ##
-  peerPort: 2380
-  ## @param service.peerPortNameOverride etcd peer port name override
-  ##
-  peerPortNameOverride: ""
-  ## @param service.nodePorts [object] Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
+  ports:
+    client: 2379
+    peer: 2380
+  ## @param service.nodePorts.client Specify the nodePort client value for the LoadBalancer and NodePort service types.
+  ## @param service.nodePorts.peer Specify the nodePort peer value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePorts:
-    clientPort: ""
-    peerPort: ""
+    client: ""
+    peer: ""
+  ## @param service.clientPortNameOverride etcd client port name override
+  ##
+  clientPortNameOverride: ""
+  ## @param service.peerPortNameOverride etcd peer port name override
+  ##
+  peerPortNameOverride: ""
   ## @param service.loadBalancerIP loadBalancerIP for the etcd service (optional, cloud specific)
   ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
@@ -491,9 +501,27 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
   ##
   externalIPs: []
+  ## @param service.externalTrafficPolicy %%MAIN_CONTAINER_NAME%% service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
   ## @param service.annotations [object] Additional annotations for the etcd service
   ##
   annotations: {}
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 
 ## @section Persistence parameters
 
@@ -546,7 +574,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r281
+    tag: 10-debian-10-r377
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

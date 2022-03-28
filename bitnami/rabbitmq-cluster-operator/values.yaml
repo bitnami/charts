@@ -55,7 +55,7 @@ extraDeploy: []
 rabbitmqImage:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.8.26-debian-10-r26
+  tag: 3.8.28-debian-10-r1
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-rabbitmqImage-private-registry/
@@ -75,7 +75,7 @@ rabbitmqImage:
 credentialUpdaterImage:
   registry: docker.io
   repository: bitnami/rmq-default-credential-updater
-  tag: 1.0.1-scratch-r0
+  tag: 1.0.2-scratch-r0
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-credentialUpdaterImage-private-registry/
@@ -97,7 +97,7 @@ clusterOperator:
   image:
     registry: docker.io
     repository: bitnami/rabbitmq-cluster-operator
-    tag: 1.10.0-scratch-r5
+    tag: 1.12.1-scratch-r2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -200,11 +200,13 @@ clusterOperator:
   ## @param clusterOperator.containerSecurityContext.enabled Enabled RabbitMQ Cluster Operator containers' Security Context
   ## @param clusterOperator.containerSecurityContext.runAsUser Set RabbitMQ Cluster Operator containers' Security Context runAsUser
   ## @param clusterOperator.containerSecurityContext.runAsNonRoot Force running the container as non root
+  ## @param clusterOperator.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on cluster operator containers
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    readOnlyRootFilesystem: true
 
   ## @param clusterOperator.command Override default container command (useful when using custom images)
   ##
@@ -449,7 +451,7 @@ msgTopologyOperator:
   image:
     registry: docker.io
     repository: bitnami/rmq-messaging-topology-operator
-    tag: 1.2.1-scratch-r0
+    tag: 1.5.0-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -560,11 +562,17 @@ msgTopologyOperator:
   ## @param msgTopologyOperator.containerSecurityContext.enabled Enabled RabbitMQ Messaging Topology Operator containers' Security Context
   ## @param msgTopologyOperator.containerSecurityContext.runAsUser Set RabbitMQ Messaging Topology Operator containers' Security Context runAsUser
   ## @param msgTopologyOperator.containerSecurityContext.runAsNonRoot Force running the container as non root
+  ## @param msgTopologyOperator.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Messaging Topology Operator
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    readOnlyRootFilesystem: true
+
+  ## @param msgTopologyOperator.fullnameOverride String to fully override rmqco.msgTopologyOperator.fullname template
+  ##
+  fullnameOverride: ""
 
   ## @param msgTopologyOperator.command Override default container command (useful when using custom images)
   ##

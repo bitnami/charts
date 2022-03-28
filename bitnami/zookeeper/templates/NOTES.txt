@@ -41,7 +41,7 @@ In order to replicate the container startup scripts execute this command:
 
 {{- else }}
 
-ZooKeeper can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:
+ZooKeeper can be accessed via port {{ .Values.service.ports.client }} on the following DNS name from within your cluster:
 
     {{ template "common.names.fullname" . }}.{{ template "zookeeper.namespace" . }}.svc.{{ .Values.clusterDomain }}
 
@@ -63,13 +63,13 @@ To connect to your ZooKeeper server from outside the cluster execute the followi
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ template "zookeeper.namespace" . }} -w {{ template "common.names.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ template "zookeeper.namespace" . }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-    zkCli.sh $SERVICE_IP:{{ .Values.service.port }}
+    export SERVICE_IP=$(kubectl get svc --namespace {{ template "zookeeper.namespace" . }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    zkCli.sh $SERVICE_IP:{{ .Values.service.ports.client }}
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-    kubectl port-forward --namespace {{ template "zookeeper.namespace" . }} svc/{{ template "common.names.fullname" . }} {{ .Values.service.port }}:{{ .Values.containerPort }} &
-    zkCli.sh 127.0.0.1:{{ .Values.service.port }}
+    kubectl port-forward --namespace {{ template "zookeeper.namespace" . }} svc/{{ template "common.names.fullname" . }} {{ .Values.service.ports.client }}:{{ .Values.containerPort }} &
+    zkCli.sh 127.0.0.1:{{ .Values.service.ports.client }}
 
 {{- end }}
 {{- end }}

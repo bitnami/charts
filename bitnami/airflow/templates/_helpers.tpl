@@ -16,7 +16,7 @@ Create chart name and version as used by the chart label.
 {{/*
 Full path to CA Cert file
 */}}
-{{- define "airflow.ldapCAFilename"}}
+{{- define "airflow.ldapCAFilename" }}
 {{- printf "/opt/bitnami/airflow/certs/%s" .Values.ldap.tls.CAcertificateFilename -}}
 {{- end -}}
 
@@ -149,16 +149,22 @@ Get the Redis&trade; credentials secret.
 Get the Postgresql credentials secret.
 */}}
 {{- define "airflow.postgresql.secretName" -}}
-{{- if and (.Values.postgresql.enabled) (not .Values.postgresql.existingSecret) -}}
-    {{- printf "%s" (include "airflow.postgresql.fullname" .) -}}
-{{- else if and (.Values.postgresql.enabled) (.Values.postgresql.existingSecret) -}}
-    {{- printf "%s" .Values.postgresql.existingSecret -}}
-{{- else }}
-    {{- if .Values.externalDatabase.existingSecret -}}
-        {{- printf "%s" .Values.externalDatabase.existingSecret -}}
+{{- if .Values.postgresql.enabled }}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- if .Values.global.postgresql.auth.existingSecret }}
+                {{- tpl .Values.global.postgresql.auth.existingSecret $ -}}
+            {{- else -}}
+                {{- default (include "airflow.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+            {{- end -}}
+        {{- else -}}
+            {{- default (include "airflow.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+        {{- end -}}
     {{- else -}}
-        {{ printf "%s-%s" .Release.Name "externaldb" }}
+        {{- default (include "airflow.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
     {{- end -}}
+{{- else -}}
+    {{- default (printf "%s-externaldb" .Release.Name) (tpl .Values.externalDatabase.existingSecret $) -}}
 {{- end -}}
 {{- end -}}
 
@@ -177,31 +183,23 @@ Get the secret name
 Get the configmap name
 */}}
 {{- define "airflow.configMapName" -}}
-{{- if .Values.configurationConfigMap -}}
-  {{- printf "%s" .Values.configurationConfigMap -}}
+{{- if .Values.existingConfigmap -}}
+  {{- printf "%s" (tpl .Values.existingConfigmap $) -}}
 {{- else -}}
   {{- printf "%s-configuration" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Should use config from the configmap
-*/}}
-{{- define "airflow.shouldUseConfigFromConfigMap" -}}
-{{- if or .Values.config .Values.configurationConfigMap -}}
-  true
-{{- else -}}{{- end -}}
-{{- end -}}
-
-{{/*
 Load DAGs init-container
 */}}
 {{- define "airflow.loadDAGsInitContainer" -}}
+{{- $compDefinition := (get .context.Values .component) -}}
 - name: load-dags
-  image: {{ include "airflow.dags.image" . }}
-  imagePullPolicy: {{ .Values.dags.image.pullPolicy }}
-  {{- if .Values.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  image: {{ include "airflow.dags.image" .context }}
+  imagePullPolicy: {{ .context.Values.dags.image.pullPolicy }}
+  {{- if $compDefinition.containerSecurityContext.enabled }}
+  securityContext: {{- omit $compDefinition.containerSecurityContext "enabled" | toYaml | nindent 4 }}
   {{- end }}
   command:
     - /bin/bash
@@ -238,14 +236,38 @@ Add environment variables to configure database values
 Add environment variables to configure database values
 */}}
 {{- define "airflow.database.user" -}}
-{{- ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.user .Values.postgresql.enabled | quote -}}
+{{- if .Values.postgresql.enabled }}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- coalesce .Values.global.postgresql.auth.username .Values.postgresql.auth.username | quote -}}
+        {{- else -}}
+            {{- .Values.postgresql.auth.username | quote -}}
+        {{- end -}}
+    {{- else -}}
+        {{- .Values.postgresql.auth.username | quote -}}
+    {{- end -}}
+{{- else -}}
+    {{- .Values.externalDatabase.user | quote -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
 Add environment variables to configure database values
 */}}
 {{- define "airflow.database.name" -}}
-{{- ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.database .Values.postgresql.enabled | quote -}}
+{{- if .Values.postgresql.enabled }}
+    {{- if .Values.global.postgresql }}
+        {{- if .Values.global.postgresql.auth }}
+            {{- coalesce .Values.global.postgresql.auth.database .Values.postgresql.auth.database | quote -}}
+        {{- else -}}
+            {{- .Values.postgresql.auth.database | quote -}}
+        {{- end -}}
+    {{- else -}}
+        {{- .Values.postgresql.auth.database | quote -}}
+    {{- end -}}
+{{- else -}}
+    {{- .Values.externalDatabase.database | quote -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -253,16 +275,16 @@ Add environment variables to configure database values
 */}}
 {{- define "airflow.database.existingsecret.key" -}}
 {{- if .Values.postgresql.enabled -}}
-    {{- printf "%s" "postgresql-password" -}}
+    {{- printf "%s" "password" -}}
 {{- else -}}
     {{- if .Values.externalDatabase.existingSecret -}}
         {{- if .Values.externalDatabase.existingSecretPasswordKey -}}
             {{- printf "%s" .Values.externalDatabase.existingSecretPasswordKey -}}
         {{- else -}}
-            {{- printf "%s" "postgresql-password" -}}
+            {{- printf "%s" "password" -}}
         {{- end -}}
     {{- else -}}
-        {{- printf "%s" "postgresql-password" -}}
+        {{- printf "%s" "password" -}}
     {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -272,6 +294,25 @@ Add environment variables to configure database values
 */}}
 {{- define "airflow.database.port" -}}
 {{- ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote -}}
+{{- end -}}
+
+{{/*
+Add environment variables to configure database values
+*/}}
+{{- define "airflow.redis.existingsecret.key" -}}
+{{- if .Values.redis.enabled -}}
+    {{- printf "%s" "redis-password" -}}
+{{- else -}}
+    {{- if .Values.externalRedis.existingSecret -}}
+        {{- if .Values.externalRedis.existingSecretPasswordKey -}}
+            {{- printf "%s" .Values.externalRedis.existingSecretPasswordKey -}}
+        {{- else -}}
+            {{- printf "%s" "redis-password" -}}
+        {{- end -}}
+    {{- else -}}
+        {{- printf "%s" "redis-password" -}}
+    {{- end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -322,12 +363,12 @@ Add environment variables to configure airflow common values
   valueFrom:
     secretKeyRef:
       name: {{ include "airflow.secretName" . }}
-      key: airflow-fernetKey
+      key: airflow-fernet-key
 - name: AIRFLOW_SECRET_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "airflow.secretName" . }}
-      key: airflow-secretKey
+      key: airflow-secret-key
 - name: AIRFLOW_LOAD_EXAMPLES
   value: {{ ternary "yes" "no" .Values.loadExamples | quote }}
 {{- if .Values.web.image.debug }}
@@ -381,20 +422,23 @@ Gets the host to be used for this application.
 If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value will be empty.
 */}}
 {{- define "airflow.baseUrl" -}}
-{{- $host := include "airflow.serviceIP" . -}}
-
+{{- $host := "" -}}
 {{- $port := "" -}}
-{{- $servicePortString := printf "%v" .Values.service.port -}}
+{{- $servicePortString := printf "%v" .Values.service.ports.http -}}
 {{- if and (not (eq $servicePortString "80")) (not (eq $servicePortString "443")) -}}
   {{- $port = printf ":%s" $servicePortString -}}
 {{- end -}}
-
-{{- $defaultUrl := "" -}}
+{{- if .Values.ingress.enabled }}
+  {{- $host = .Values.ingress.hostname | default "" -}}
+{{- else -}}
+  {{- $host = .Values.web.baseUrl | default "" -}}
+{{- end }}
+{{- $host = default (include "airflow.serviceIP" .) $host -}}
 {{- if $host -}}
-  {{- $defaultUrl = printf "http://%s%s" $host $port -}}
+  {{- printf "http://%s%s" $host $port -}}
+{{- else -}}
+  {{- default "" .Values.web.baseUrl -}}
 {{- end -}}
-
-{{- default $defaultUrl .Values.web.baseUrl -}}
 {{- end -}}
 
 {{/*

@@ -72,6 +72,15 @@ Params:
   - strong - Boolean - Optional - Whether to add symbols to the generated random password.
   - chartName - String - Optional - Name of the chart used when said chart is deployed as a subchart.
   - context - Context - Required - Parent context.
+
+The order in which this function returns a secret password:
+  1. Already existing 'Secret' resource
+     (If a 'Secret' resource is found under the name provided to the 'secret' parameter to this function and that 'Secret' resource contains a key with the name passed as the 'key' parameter to this function then the value of this existing secret password will be returned)
+  2. Password provided via the values.yaml
+     (If one of the keys passed to the 'providedValues' parameter to this function is a valid path to a key in the values.yaml and has a value, the value of the first key with a value will be returned)
+  3. Randomly generated secret password
+     (A new random secret password with the length specified in the 'length' parameter will be generated and returned)
+
 */}}
 {{- define "common.secrets.passwords.manage" -}}
 
@@ -81,10 +90,12 @@ Params:
 {{- $passwordLength := default 10 .length }}
 {{- $providedPasswordKey := include "common.utils.getKeyFromList" (dict "keys" .providedValues "context" $.context) }}
 {{- $providedPasswordValue := include "common.utils.getValueFromKey" (dict "key" $providedPasswordKey "context" $.context) }}
-{{- $secret := (lookup "v1" "Secret" $.context.Release.Namespace .secret) }}
-{{- if $secret }}
-  {{- if index $secret.data .key }}
-  {{- $password = index $secret.data .key }}
+{{- $secretData := (lookup "v1" "Secret" $.context.Release.Namespace .secret).data }}
+{{- if $secretData }}
+  {{- if hasKey $secretData .key }}
+    {{- $password = index $secretData .key }}
+  {{- else }}
+    {{- printf "\nPASSWORDS ERROR: The secret \"%s\" does not contain the key \"%s\"\n" .secret .key | fail -}}
   {{- end -}}
 {{- else if $providedPasswordValue }}
   {{- $password = $providedPasswordValue | toString | b64enc | quote }}
@@ -98,7 +109,7 @@ Params:
   {{- $requiredPasswordError := include "common.validations.values.single.empty" $requiredPassword -}}
   {{- $passwordValidationErrors := list $requiredPasswordError -}}
   {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $.context) -}}
-  
+
   {{- if .strong }}
     {{- $subStr := list (lower (randAlpha 1)) (randNumeric 1) (upper (randAlpha 1)) | join "_" }}
     {{- $password = randAscii $passwordLength }}

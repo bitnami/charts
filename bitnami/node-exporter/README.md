@@ -1,7 +1,13 @@
-# Node Exporter
+<!--- app-name: Node Exporter -->
 
-[Node Exporter](https://github.com/prometheus/node_exporter) is a Prometheus exporter for hardware and OS metrics exposed by *NIX kernels, written in Go with pluggable metric collectors.
+# Node Exporter packaged by Bitnami
 
+Prometheus exporter for hardware and OS metrics exposed by UNIX kernels, with pluggable metric collectors.
+
+[Overview of Node Exporter](https://prometheus.io/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```bash
@@ -17,8 +23,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -79,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to create                                                                                                                           | `""`                    |
 | `image.registry`                              | Node Exporter image registry                                                                                                                                       | `docker.io`             |
 | `image.repository`                            | Node Exporter image repository                                                                                                                                     | `bitnami/node-exporter` |
-| `image.tag`                                   | Node Exporter Image tag (immutable tags are recommended)                                                                                                           | `1.3.0-debian-10-r0`    |
+| `image.tag`                                   | Node Exporter Image tag (immutable tags are recommended)                                                                                                           | `1.3.1-debian-10-r28`   |
 | `image.pullPolicy`                            | Node Exporter image pull policy                                                                                                                                    | `IfNotPresent`          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                                   | `[]`                    |
 | `extraArgs`                                   | Additional command line arguments to pass to node-exporter                                                                                                         | `{}`                    |
@@ -165,7 +171,7 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
@@ -182,3 +188,19 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
 [Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/node-exporter/administration/upgrade-helm3/).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

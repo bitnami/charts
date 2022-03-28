@@ -1,20 +1,13 @@
-# Kubeapps
+<!--- app-name: Kubeapps -->
 
-[![CircleCI](https://circleci.com/gh/kubeapps/kubeapps/tree/master.svg?style=svg)](https://circleci.com/gh/kubeapps/kubeapps/tree/master)
+# Kubeapps packaged by Bitnami
 
-[Kubeapps](https://kubeapps.com) is an in-cluster web-based application that enables users with a one-time installation to deploy, manage, and upgrade applications on a Kubernetes cluster.
+Kubeapps is a web-based UI for launching and managing applications on Kubernetes. It allows users to deploy trusted applications and operators to control users access to the cluster.
 
-With Kubeapps you can:
+[Overview of Kubeapps](https://kubeapps.com)
 
-- Customize deployments through an intuitive, form-based user interface
-- Inspect, upgrade and delete applications installed in the cluster
-- Browse and deploy [Helm](https://github.com/helm/helm) charts from public or private chart repositories (including [VMware Marketplace™](https://marketplace.cloud.vmware.com) and [Bitnami Application Catalog](https://bitnami.com/application-catalog))
-- Browse and deploy [Kubernetes Operators](https://operatorhub.io/)
-- Secure authentication to Kubeapps using a [standalone OAuth2/OIDC provider](https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md) or [using Pinniped](https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider-with-pinniped.md)
-- Secure authorization based on Kubernetes [Role-Based Access Control](https://github.com/kubeapps/kubeapps/blob/master/docs/user/access-control.md)
 
-**_Note:_** Kubeapps 2.0 and onwards supports Helm 3 only. While only the Helm 3 API is supported, in most cases, charts made for Helm 2 will still work.
-
+                           
 ## TL;DR
 
 ```bash
@@ -23,13 +16,26 @@ kubectl create namespace kubeapps
 helm install kubeapps --namespace kubeapps bitnami/kubeapps
 ```
 
-> Check out the [getting started](https://github.com/kubeapps/kubeapps/blob/master/docs/user/getting-started.md) to start deploying apps with Kubeapps.
+> Check out the [getting started](https://github.com/kubeapps/kubeapps/blob/main/docs/user/getting-started.md) to start deploying apps with Kubeapps.
 
 ## Introduction
 
+[![CircleCI](https://circleci.com/gh/kubeapps/kubeapps/tree/main.svg?style=svg)](https://circleci.com/gh/kubeapps/kubeapps/tree/main)
+
 This chart bootstraps a [Kubeapps](https://kubeapps.com) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) which is required for bootstrapping a deployment for the database requirements of the Kubeapps application.
+With Kubeapps you can:
+
+- Customize deployments through an intuitive, form-based user interface
+- Inspect, upgrade and delete applications installed in the cluster
+- Browse and deploy [Helm](https://github.com/helm/helm) charts from public or private chart repositories (including [VMware Marketplace&trade;](https://marketplace.cloud.vmware.com) and [Bitnami Application Catalog](https://bitnami.com/application-catalog))
+- Browse and deploy [Kubernetes Operators](https://operatorhub.io/)
+- Secure authentication to Kubeapps using a [standalone OAuth2/OIDC provider](https://github.com/kubeapps/kubeapps/blob/main/docs/user/using-an-OIDC-provider.md) or [using Pinniped](https://github.com/kubeapps/kubeapps/blob/main/docs/user/using-an-OIDC-provider-with-pinniped.md)
+- Secure authorization based on Kubernetes [Role-Based Access Control](https://github.com/kubeapps/kubeapps/blob/main/docs/user/access-control.md)
+
+**_Note:_** Kubeapps 2.0 and onwards supports Helm 3 only. While only the Helm 3 API is supported, in most cases, charts made for Helm 2 will still work.
+
+It also packages the [Bitnami PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql), which is required for bootstrapping a deployment for the database requirements of the Kubeapps application.
 
 ## Prerequisites
 
@@ -52,7 +58,7 @@ The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespa
 
 > **Caveat**: Only one Kubeapps installation is supported per namespace
 
-Once you have installed Kubeapps follow the [Getting Started Guide](https://github.com/kubeapps/kubeapps/blob/master/docs/user/getting-started.md) for additional information on how to access and use Kubeapps.
+Once you have installed Kubeapps follow the [Getting Started Guide](https://github.com/kubeapps/kubeapps/blob/main/docs/user/getting-started.md) for additional information on how to access and use Kubeapps.
 
 ## Parameters
 
@@ -67,33 +73,46 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 ### Common parameters
 
-| Name                | Description                                        | Value   |
-| ------------------- | -------------------------------------------------- | ------- |
-| `kubeVersion`       | Override Kubernetes version                        | `""`    |
-| `nameOverride`      | String to partially override common.names.fullname | `""`    |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `""`    |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`    |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`    |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`    |
-| `enableIPv6`        | Enable IPv6 configuration                          | `false` |
+| Name                     | Description                                                                             | Value          |
+| ------------------------ | --------------------------------------------------------------------------------------- | -------------- |
+| `kubeVersion`            | Override Kubernetes version                                                             | `""`           |
+| `nameOverride`           | String to partially override common.names.fullname                                      | `""`           |
+| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`           |
+| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`           |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`           |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`           |
+| `enableIPv6`             | Enable IPv6 configuration                                                               | `false`        |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
 
 
 ### Traffic Exposure Parameters
 
-| Name                  | Description                                                                                                                      | Value                    |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `ingress.enabled`     | Enable ingress record generation for Kubeapps                                                                                    | `false`                  |
-| `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`    | Default host for the ingress record                                                                                              | `kubeapps.local`         |
-| `ingress.path`        | Default path for the ingress record                                                                                              | `/`                      |
-| `ingress.pathType`    | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.annotations` | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`         | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
-| `ingress.selfSigned`  | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `ingress.extraHosts`  | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `ingress.extraPaths`  | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `ingress.extraTls`    | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `ingress.secrets`     | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| Name                       | Description                                                                                                                      | Value                    |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `ingress.enabled`          | Enable ingress record generation for Kubeapps                                                                                    | `false`                  |
+| `ingress.apiVersion`       | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`         | Default host for the ingress record                                                                                              | `kubeapps.local`         |
+| `ingress.path`             | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.pathType`         | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.annotations`      | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`              | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.selfSigned`       | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.extraHosts`       | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`       | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`         | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`          | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.ingressClassName` | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+
+
+### Kubeapps packaging options
+
+| Name                       | Description                                                | Value   |
+| -------------------------- | ---------------------------------------------------------- | ------- |
+| `packaging.helm.enabled`   | Enable the standard Helm packaging.                        | `true`  |
+| `packaging.carvel.enabled` | Enable support for the Carvel (kapp-controller) packaging. | `false` |
+| `packaging.flux.enabled`   | Enable support for Flux (v2) packaging.                    | `false` |
 
 
 ### Frontend parameters
@@ -102,7 +121,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | ------------------------------------------------ | ----------------------------------------------------------------------------------------- | ---------------------- |
 | `frontend.image.registry`                        | NGINX image registry                                                                      | `docker.io`            |
 | `frontend.image.repository`                      | NGINX image repository                                                                    | `bitnami/nginx`        |
-| `frontend.image.tag`                             | NGINX image tag (immutable tags are recommended)                                          | `1.21.4-debian-10-r26` |
+| `frontend.image.tag`                             | NGINX image tag (immutable tags are recommended)                                          | `1.21.6-debian-10-r50` |
 | `frontend.image.pullPolicy`                      | NGINX image pull policy                                                                   | `IfNotPresent`         |
 | `frontend.image.pullSecrets`                     | NGINX image pull secrets                                                                  | `[]`                   |
 | `frontend.image.debug`                           | Enable image debug mode                                                                   | `false`                |
@@ -110,6 +129,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `frontend.proxypassExtraSetHeader`               | Set an additional proxy header for all requests proxied via NGINX                         | `""`                   |
 | `frontend.largeClientHeaderBuffers`              | Set large_client_header_buffers in NGINX config                                           | `4 32k`                |
 | `frontend.replicaCount`                          | Number of frontend replicas to deploy                                                     | `2`                    |
+| `frontend.updateStrategy.type`                   | Frontend deployment strategy type.                                                        | `RollingUpdate`        |
 | `frontend.resources.limits.cpu`                  | The CPU limits for the NGINX container                                                    | `250m`                 |
 | `frontend.resources.limits.memory`               | The memory limits for the NGINX container                                                 | `128Mi`                |
 | `frontend.resources.requests.cpu`                | The requested CPU for the NGINX container                                                 | `25m`                  |
@@ -117,7 +137,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `frontend.extraEnvVars`                          | Array with extra environment variables to add to the NGINX container                      | `[]`                   |
 | `frontend.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for the NGINX container              | `""`                   |
 | `frontend.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for the NGINX container                 | `""`                   |
-| `frontend.containerPort`                         | NGINX HTTP container port                                                                 | `8080`                 |
+| `frontend.containerPorts.http`                   | NGINX HTTP container port                                                                 | `8080`                 |
 | `frontend.podSecurityContext.enabled`            | Enabled frontend pods' Security Context                                                   | `true`                 |
 | `frontend.podSecurityContext.fsGroup`            | Set frontend pod's Security Context fsGroup                                               | `1001`                 |
 | `frontend.containerSecurityContext.enabled`      | Enabled NGINX containers' Security Context                                                | `true`                 |
@@ -135,9 +155,18 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `frontend.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `5`                    |
 | `frontend.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `6`                    |
 | `frontend.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                    |
+| `frontend.startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`                |
+| `frontend.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `0`                    |
+| `frontend.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`                   |
+| `frontend.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `5`                    |
+| `frontend.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `6`                    |
+| `frontend.startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`                    |
 | `frontend.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`                   |
 | `frontend.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`                   |
+| `frontend.customStartupProbe`                    | Custom startupProbe that overrides the default one                                        | `{}`                   |
 | `frontend.lifecycleHooks`                        | Custom lifecycle hooks for frontend containers                                            | `{}`                   |
+| `frontend.command`                               | Override default container command (useful when using custom images)                      | `[]`                   |
+| `frontend.args`                                  | Override default container args (useful when using custom images)                         | `[]`                   |
 | `frontend.podLabels`                             | Extra labels for frontend pods                                                            | `{}`                   |
 | `frontend.podAnnotations`                        | Annotations for frontend pods                                                             | `{}`                   |
 | `frontend.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                   |
@@ -149,19 +178,24 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `frontend.nodeSelector`                          | Node labels for pod assignment                                                            | `{}`                   |
 | `frontend.tolerations`                           | Tolerations for pod assignment                                                            | `[]`                   |
 | `frontend.priorityClassName`                     | Priority class name for frontend pods                                                     | `""`                   |
+| `frontend.schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`                   |
+| `frontend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`                   |
 | `frontend.hostAliases`                           | Custom host aliases for frontend pods                                                     | `[]`                   |
 | `frontend.extraVolumes`                          | Optionally specify extra list of additional volumes for frontend pods                     | `[]`                   |
 | `frontend.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for frontend container(s)        | `[]`                   |
 | `frontend.sidecars`                              | Add additional sidecar containers to the frontend pod                                     | `[]`                   |
 | `frontend.initContainers`                        | Add additional init containers to the frontend pods                                       | `[]`                   |
 | `frontend.service.type`                          | Frontend service type                                                                     | `ClusterIP`            |
-| `frontend.service.port`                          | Frontend service HTTP port                                                                | `80`                   |
-| `frontend.service.nodePort`                      | Node port for HTTP                                                                        | `""`                   |
+| `frontend.service.ports.http`                    | Frontend service HTTP port                                                                | `80`                   |
+| `frontend.service.nodePorts.http`                | Node port for HTTP                                                                        | `""`                   |
 | `frontend.service.clusterIP`                     | Frontend service Cluster IP                                                               | `""`                   |
 | `frontend.service.loadBalancerIP`                | Frontend service Load Balancer IP                                                         | `""`                   |
 | `frontend.service.loadBalancerSourceRanges`      | Frontend service Load Balancer sources                                                    | `[]`                   |
 | `frontend.service.externalTrafficPolicy`         | Frontend service external traffic policy                                                  | `Cluster`              |
+| `frontend.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                            | `[]`                   |
 | `frontend.service.annotations`                   | Additional custom annotations for frontend service                                        | `{}`                   |
+| `frontend.service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                      | `None`                 |
+| `frontend.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                               | `{}`                   |
 
 
 ### Dashboard parameters
@@ -170,7 +204,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | ------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------- |
 | `dashboard.image.registry`                        | Dashboard image registry                                                                     | `docker.io`                  |
 | `dashboard.image.repository`                      | Dashboard image repository                                                                   | `bitnami/kubeapps-dashboard` |
-| `dashboard.image.tag`                             | Dashboard image tag (immutable tags are recommended)                                         | `2.4.2-debian-10-r0`         |
+| `dashboard.image.tag`                             | Dashboard image tag (immutable tags are recommended)                                         | `2.4.3-debian-10-r29`        |
 | `dashboard.image.pullPolicy`                      | Dashboard image pull policy                                                                  | `IfNotPresent`               |
 | `dashboard.image.pullSecrets`                     | Dashboard image pull secrets                                                                 | `[]`                         |
 | `dashboard.image.debug`                           | Enable image debug mode                                                                      | `false`                      |
@@ -182,10 +216,11 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `dashboard.customLocale`                          | Custom translations injected to the Dashboard to customize the strings used in Kubeapps      | `""`                         |
 | `dashboard.defaultTheme`                          | Default theme used in the Dashboard if the user has not selected any theme yet.              | `""`                         |
 | `dashboard.replicaCount`                          | Number of Dashboard replicas to deploy                                                       | `2`                          |
+| `dashboard.updateStrategy.type`                   | Dashboard deployment strategy type.                                                          | `RollingUpdate`              |
 | `dashboard.extraEnvVars`                          | Array with extra environment variables to add to the Dashboard container                     | `[]`                         |
 | `dashboard.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for the Dashboard container             | `""`                         |
 | `dashboard.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for the Dashboard container                | `""`                         |
-| `dashboard.containerPort`                         | Dashboard HTTP container port                                                                | `8080`                       |
+| `dashboard.containerPorts.http`                   | Dashboard HTTP container port                                                                | `8080`                       |
 | `dashboard.resources.limits.cpu`                  | The CPU limits for the Dashboard container                                                   | `250m`                       |
 | `dashboard.resources.limits.memory`               | The memory limits for the Dashboard container                                                | `128Mi`                      |
 | `dashboard.resources.requests.cpu`                | The requested CPU for the Dashboard container                                                | `25m`                        |
@@ -207,9 +242,18 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `dashboard.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                           | `5`                          |
 | `dashboard.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                         | `6`                          |
 | `dashboard.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                         | `1`                          |
+| `dashboard.startupProbe.enabled`                  | Enable startupProbe                                                                          | `true`                       |
+| `dashboard.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                       | `0`                          |
+| `dashboard.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                              | `10`                         |
+| `dashboard.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                             | `5`                          |
+| `dashboard.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                           | `6`                          |
+| `dashboard.startupProbe.successThreshold`         | Success threshold for startupProbe                                                           | `1`                          |
 | `dashboard.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                          | `{}`                         |
 | `dashboard.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                         | `{}`                         |
+| `dashboard.customStartupProbe`                    | Custom startupProbe that overrides the default one                                           | `{}`                         |
 | `dashboard.lifecycleHooks`                        | Custom lifecycle hooks for Dashboard containers                                              | `{}`                         |
+| `dashboard.command`                               | Override default container command (useful when using custom images)                         | `[]`                         |
+| `dashboard.args`                                  | Override default container args (useful when using custom images)                            | `[]`                         |
 | `dashboard.podLabels`                             | Extra labels for Dasbhoard pods                                                              | `{}`                         |
 | `dashboard.podAnnotations`                        | Annotations for Dasbhoard pods                                                               | `{}`                         |
 | `dashboard.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`          | `""`                         |
@@ -221,118 +265,162 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `dashboard.nodeSelector`                          | Node labels for pod assignment                                                               | `{}`                         |
 | `dashboard.tolerations`                           | Tolerations for pod assignment                                                               | `[]`                         |
 | `dashboard.priorityClassName`                     | Priority class name for Dashboard pods                                                       | `""`                         |
+| `dashboard.schedulerName`                         | Name of the k8s scheduler (other than default)                                               | `""`                         |
+| `dashboard.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                               | `[]`                         |
 | `dashboard.hostAliases`                           | Custom host aliases for Dashboard pods                                                       | `[]`                         |
 | `dashboard.extraVolumes`                          | Optionally specify extra list of additional volumes for Dasbhoard pods                       | `[]`                         |
 | `dashboard.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Dasbhoard container(s)          | `[]`                         |
 | `dashboard.sidecars`                              | Add additional sidecar containers to the Dasbhoard pod                                       | `[]`                         |
 | `dashboard.initContainers`                        | Add additional init containers to the Dasbhoard pods                                         | `[]`                         |
-| `dashboard.service.port`                          | Dasbhoard service HTTP port                                                                  | `8080`                       |
+| `dashboard.service.ports.http`                    | Dasbhoard service HTTP port                                                                  | `8080`                       |
 | `dashboard.service.annotations`                   | Additional custom annotations for Dasbhoard service                                          | `{}`                         |
 
 
 ### AppRepository Controller parameters
 
-| Name                                                  | Description                                                                               | Value                                       |
-| ----------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------- |
-| `apprepository.image.registry`                        | Kubeapps AppRepository Controller image registry                                          | `docker.io`                                 |
-| `apprepository.image.repository`                      | Kubeapps AppRepository Controller image repository                                        | `bitnami/kubeapps-apprepository-controller` |
-| `apprepository.image.tag`                             | Kubeapps AppRepository Controller image tag (immutable tags are recommended)              | `2.4.2-scratch-r0`                          |
-| `apprepository.image.pullPolicy`                      | Kubeapps AppRepository Controller image pull policy                                       | `IfNotPresent`                              |
-| `apprepository.image.pullSecrets`                     | Kubeapps AppRepository Controller image pull secrets                                      | `[]`                                        |
-| `apprepository.syncImage.registry`                    | Kubeapps Asset Syncer image registry                                                      | `docker.io`                                 |
-| `apprepository.syncImage.repository`                  | Kubeapps Asset Syncer image repository                                                    | `bitnami/kubeapps-asset-syncer`             |
-| `apprepository.syncImage.tag`                         | Kubeapps Asset Syncer image tag (immutable tags are recommended)                          | `2.4.2-scratch-r0`                          |
-| `apprepository.syncImage.pullPolicy`                  | Kubeapps Asset Syncer image pull policy                                                   | `IfNotPresent`                              |
-| `apprepository.syncImage.pullSecrets`                 | Kubeapps Asset Syncer image pull secrets                                                  | `[]`                                        |
-| `apprepository.initialRepos`                          | Initial chart repositories to configure                                                   | `[]`                                        |
-| `apprepository.customAnnotations`                     | Custom annotations be added to each AppRepository-generated CronJob, Job and Pod          | `{}`                                        |
-| `apprepository.customLabels`                          | Custom labels be added to each AppRepository-generated CronJob, Job and Pod               | `{}`                                        |
-| `apprepository.initialReposProxy`                     | Proxy configuration to access chart repositories                                          | `{}`                                        |
-| `apprepository.crontab`                               | Schedule for syncing App repositories (default to 10 minutes)                             | `""`                                        |
-| `apprepository.watchAllNamespaces`                    | Watch all namespaces to support separate AppRepositories per namespace                    | `true`                                      |
-| `apprepository.replicaCount`                          | Number of AppRepository Controller replicas to deploy                                     | `1`                                         |
-| `apprepository.resources.limits.cpu`                  | The CPU limits for the AppRepository Controller container                                 | `250m`                                      |
-| `apprepository.resources.limits.memory`               | The memory limits for the AppRepository Controller container                              | `128Mi`                                     |
-| `apprepository.resources.requests.cpu`                | The requested CPU for the AppRepository Controller container                              | `25m`                                       |
-| `apprepository.resources.requests.memory`             | The requested memory for the AppRepository Controller container                           | `32Mi`                                      |
-| `apprepository.podSecurityContext.enabled`            | Enabled AppRepository Controller pods' Security Context                                   | `true`                                      |
-| `apprepository.podSecurityContext.fsGroup`            | Set AppRepository Controller pod's Security Context fsGroup                               | `1001`                                      |
-| `apprepository.containerSecurityContext.enabled`      | Enabled AppRepository Controller containers' Security Context                             | `true`                                      |
-| `apprepository.containerSecurityContext.runAsUser`    | Set AppRepository Controller container's Security Context runAsUser                       | `1001`                                      |
-| `apprepository.containerSecurityContext.runAsNonRoot` | Set AppRepository Controller container's Security Context runAsNonRoot                    | `true`                                      |
-| `apprepository.lifecycleHooks`                        | Custom lifecycle hooks for AppRepository Controller containers                            | `{}`                                        |
-| `apprepository.podLabels`                             | Extra labels for AppRepository Controller pods                                            | `{}`                                        |
-| `apprepository.podAnnotations`                        | Annotations for AppRepository Controller pods                                             | `{}`                                        |
-| `apprepository.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                        |
-| `apprepository.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                      |
-| `apprepository.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                        |
-| `apprepository.nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                     | `""`                                        |
-| `apprepository.nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`                                        |
-| `apprepository.affinity`                              | Affinity for pod assignment                                                               | `{}`                                        |
-| `apprepository.nodeSelector`                          | Node labels for pod assignment                                                            | `{}`                                        |
-| `apprepository.tolerations`                           | Tolerations for pod assignment                                                            | `[]`                                        |
-| `apprepository.priorityClassName`                     | Priority class name for AppRepository Controller pods                                     | `""`                                        |
-| `apprepository.hostAliases`                           | Custom host aliases for AppRepository Controller pods                                     | `[]`                                        |
+| Name                                                        | Description                                                                                                         | Value                                       |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| `apprepository.image.registry`                              | Kubeapps AppRepository Controller image registry                                                                    | `docker.io`                                 |
+| `apprepository.image.repository`                            | Kubeapps AppRepository Controller image repository                                                                  | `bitnami/kubeapps-apprepository-controller` |
+| `apprepository.image.tag`                                   | Kubeapps AppRepository Controller image tag (immutable tags are recommended)                                        | `2.4.3-scratch-r1`                          |
+| `apprepository.image.pullPolicy`                            | Kubeapps AppRepository Controller image pull policy                                                                 | `IfNotPresent`                              |
+| `apprepository.image.pullSecrets`                           | Kubeapps AppRepository Controller image pull secrets                                                                | `[]`                                        |
+| `apprepository.syncImage.registry`                          | Kubeapps Asset Syncer image registry                                                                                | `docker.io`                                 |
+| `apprepository.syncImage.repository`                        | Kubeapps Asset Syncer image repository                                                                              | `bitnami/kubeapps-asset-syncer`             |
+| `apprepository.syncImage.tag`                               | Kubeapps Asset Syncer image tag (immutable tags are recommended)                                                    | `2.4.3-scratch-r2`                          |
+| `apprepository.syncImage.pullPolicy`                        | Kubeapps Asset Syncer image pull policy                                                                             | `IfNotPresent`                              |
+| `apprepository.syncImage.pullSecrets`                       | Kubeapps Asset Syncer image pull secrets                                                                            | `[]`                                        |
+| `apprepository.globalReposNamespaceSuffix`                  | Suffix for the namespace of global repos. Defaults to empty for backwards compatibility.                            | `""`                                        |
+| `apprepository.initialRepos`                                | Initial chart repositories to configure                                                                             | `[]`                                        |
+| `apprepository.customAnnotations`                           | Custom annotations be added to each AppRepository-generated CronJob, Job and Pod                                    | `{}`                                        |
+| `apprepository.customLabels`                                | Custom labels be added to each AppRepository-generated CronJob, Job and Pod                                         | `{}`                                        |
+| `apprepository.initialReposProxy.enabled`                   | Enables the proxy                                                                                                   | `false`                                     |
+| `apprepository.initialReposProxy.httpProxy`                 | URL for the http proxy                                                                                              | `""`                                        |
+| `apprepository.initialReposProxy.httpsProxy`                | URL for the https proxy                                                                                             | `""`                                        |
+| `apprepository.initialReposProxy.noProxy`                   | URL to exclude from using the proxy                                                                                 | `""`                                        |
+| `apprepository.crontab`                                     | Schedule for syncing App repositories (default to 10 minutes)                                                       | `""`                                        |
+| `apprepository.watchAllNamespaces`                          | Watch all namespaces to support separate AppRepositories per namespace                                              | `true`                                      |
+| `apprepository.extraFlags`                                  | Additional command line flags for AppRepository Controller                                                          | `[]`                                        |
+| `apprepository.replicaCount`                                | Number of AppRepository Controller replicas to deploy                                                               | `1`                                         |
+| `apprepository.updateStrategy.type`                         | AppRepository Controller deployment strategy type.                                                                  | `RollingUpdate`                             |
+| `apprepository.resources.limits.cpu`                        | The CPU limits for the AppRepository Controller container                                                           | `250m`                                      |
+| `apprepository.resources.limits.memory`                     | The memory limits for the AppRepository Controller container                                                        | `128Mi`                                     |
+| `apprepository.resources.requests.cpu`                      | The requested CPU for the AppRepository Controller container                                                        | `25m`                                       |
+| `apprepository.resources.requests.memory`                   | The requested memory for the AppRepository Controller container                                                     | `32Mi`                                      |
+| `apprepository.podSecurityContext.enabled`                  | Enabled AppRepository Controller pods' Security Context                                                             | `true`                                      |
+| `apprepository.podSecurityContext.fsGroup`                  | Set AppRepository Controller pod's Security Context fsGroup                                                         | `1001`                                      |
+| `apprepository.containerSecurityContext.enabled`            | Enabled AppRepository Controller containers' Security Context                                                       | `true`                                      |
+| `apprepository.containerSecurityContext.runAsUser`          | Set AppRepository Controller container's Security Context runAsUser                                                 | `1001`                                      |
+| `apprepository.containerSecurityContext.runAsNonRoot`       | Set AppRepository Controller container's Security Context runAsNonRoot                                              | `true`                                      |
+| `apprepository.lifecycleHooks`                              | Custom lifecycle hooks for AppRepository Controller containers                                                      | `{}`                                        |
+| `apprepository.command`                                     | Override default container command (useful when using custom images)                                                | `[]`                                        |
+| `apprepository.args`                                        | Override default container args (useful when using custom images)                                                   | `[]`                                        |
+| `apprepository.extraEnvVars`                                | Array with extra environment variables to add to AppRepository Controller pod(s)                                    | `[]`                                        |
+| `apprepository.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for AppRepository Controller pod(s)                            | `""`                                        |
+| `apprepository.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for AppRepository Controller pod(s)                               | `""`                                        |
+| `apprepository.extraVolumes`                                | Optionally specify extra list of additional volumes for the AppRepository Controller pod(s)                         | `[]`                                        |
+| `apprepository.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the AppRepository Controller container(s)              | `[]`                                        |
+| `apprepository.podLabels`                                   | Extra labels for AppRepository Controller pods                                                                      | `{}`                                        |
+| `apprepository.podAnnotations`                              | Annotations for AppRepository Controller pods                                                                       | `{}`                                        |
+| `apprepository.podAffinityPreset`                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `""`                                        |
+| `apprepository.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `soft`                                      |
+| `apprepository.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                           | `""`                                        |
+| `apprepository.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `affinity` is set                                                               | `""`                                        |
+| `apprepository.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set                                                            | `[]`                                        |
+| `apprepository.affinity`                                    | Affinity for pod assignment                                                                                         | `{}`                                        |
+| `apprepository.nodeSelector`                                | Node labels for pod assignment                                                                                      | `{}`                                        |
+| `apprepository.tolerations`                                 | Tolerations for pod assignment                                                                                      | `[]`                                        |
+| `apprepository.priorityClassName`                           | Priority class name for AppRepository Controller pods                                                               | `""`                                        |
+| `apprepository.schedulerName`                               | Name of the k8s scheduler (other than default)                                                                      | `""`                                        |
+| `apprepository.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                                                      | `[]`                                        |
+| `apprepository.hostAliases`                                 | Custom host aliases for AppRepository Controller pods                                                               | `[]`                                        |
+| `apprepository.sidecars`                                    | Add additional sidecar containers to the AppRepository Controller pod(s)                                            | `[]`                                        |
+| `apprepository.initContainers`                              | Add additional init containers to the AppRepository Controller pod(s)                                               | `[]`                                        |
+| `apprepository.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`                                      |
+| `apprepository.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`                                        |
+| `apprepository.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true`                                      |
+| `apprepository.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`                                        |
 
 
 ### Kubeops parameters
 
-| Name                                            | Description                                                                               | Value                      |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------- |
-| `kubeops.enabled`                               | Specifies whether this component should be installed.                                     | `true`                     |
-| `kubeops.image.registry`                        | Kubeops image registry                                                                    | `docker.io`                |
-| `kubeops.image.repository`                      | Kubeops image repository                                                                  | `bitnami/kubeapps-kubeops` |
-| `kubeops.image.tag`                             | Kubeops image tag (immutable tags are recommended)                                        | `2.4.2-scratch-r0`         |
-| `kubeops.image.pullPolicy`                      | Kubeops image pull policy                                                                 | `IfNotPresent`             |
-| `kubeops.image.pullSecrets`                     | Kubeops image pull secrets                                                                | `[]`                       |
-| `kubeops.namespaceHeaderName`                   | Additional header name for trusted namespaces                                             | `""`                       |
-| `kubeops.namespaceHeaderPattern`                | Additional header pattern for trusted namespaces                                          | `""`                       |
-| `kubeops.qps`                                   | Kubeops QPS (queries per second) rate                                                     | `""`                       |
-| `kubeops.burst`                                 | Kubeops burst rate                                                                        | `""`                       |
-| `kubeops.replicaCount`                          | Number of Kubeops replicas to deploy                                                      | `2`                        |
-| `kubeops.terminationGracePeriodSeconds`         | The grace time period for sig term                                                        | `300`                      |
-| `kubeops.extraEnvVars`                          | Array with extra environment variables to add to the Kubeops container                    | `[]`                       |
-| `kubeops.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for the Kubeops container            | `""`                       |
-| `kubeops.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for the Kubeops container               | `""`                       |
-| `kubeops.containerPort`                         | Kubeops HTTP container port                                                               | `8080`                     |
-| `kubeops.resources.limits.cpu`                  | The CPU limits for the Kubeops container                                                  | `250m`                     |
-| `kubeops.resources.limits.memory`               | The memory limits for the Kubeops container                                               | `256Mi`                    |
-| `kubeops.resources.requests.cpu`                | The requested CPU for the Kubeops container                                               | `25m`                      |
-| `kubeops.resources.requests.memory`             | The requested memory for the Kubeops container                                            | `32Mi`                     |
-| `kubeops.podSecurityContext.enabled`            | Enabled Kubeops pods' Security Context                                                    | `true`                     |
-| `kubeops.podSecurityContext.fsGroup`            | Set Kubeops pod's Security Context fsGroup                                                | `1001`                     |
-| `kubeops.containerSecurityContext.enabled`      | Enabled Kubeops containers' Security Context                                              | `true`                     |
-| `kubeops.containerSecurityContext.runAsUser`    | Set Kubeops container's Security Context runAsUser                                        | `1001`                     |
-| `kubeops.containerSecurityContext.runAsNonRoot` | Set Kubeops container's Security Context runAsNonRoot                                     | `true`                     |
-| `kubeops.livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`                     |
-| `kubeops.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `60`                       |
-| `kubeops.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`                       |
-| `kubeops.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`                        |
-| `kubeops.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`                        |
-| `kubeops.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`                        |
-| `kubeops.readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`                     |
-| `kubeops.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `0`                        |
-| `kubeops.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `10`                       |
-| `kubeops.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `5`                        |
-| `kubeops.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `6`                        |
-| `kubeops.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                        |
-| `kubeops.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`                       |
-| `kubeops.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`                       |
-| `kubeops.lifecycleHooks`                        | Custom lifecycle hooks for Kubeops containers                                             | `{}`                       |
-| `kubeops.podLabels`                             | Extra labels for Kubeops pods                                                             | `{}`                       |
-| `kubeops.podAnnotations`                        | Annotations for Kubeops pods                                                              | `{}`                       |
-| `kubeops.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                       |
-| `kubeops.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                     |
-| `kubeops.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                       |
-| `kubeops.nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                     | `""`                       |
-| `kubeops.nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`                       |
-| `kubeops.affinity`                              | Affinity for pod assignment                                                               | `{}`                       |
-| `kubeops.nodeSelector`                          | Node labels for pod assignment                                                            | `{}`                       |
-| `kubeops.tolerations`                           | Tolerations for pod assignment                                                            | `[]`                       |
-| `kubeops.priorityClassName`                     | Priority class name for Kubeops pods                                                      | `""`                       |
-| `kubeops.hostAliases`                           | Custom host aliases for Kubeops pods                                                      | `[]`                       |
-| `kubeops.service.port`                          | Kubeops service HTTP port                                                                 | `8080`                     |
-| `kubeops.service.annotations`                   | Additional custom annotations for Kubeops service                                         | `{}`                       |
+| Name                                                  | Description                                                                                                         | Value                      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `kubeops.enabled`                                     | Specifies whether this component should be installed.                                                               | `true`                     |
+| `kubeops.image.registry`                              | Kubeops image registry                                                                                              | `docker.io`                |
+| `kubeops.image.repository`                            | Kubeops image repository                                                                                            | `bitnami/kubeapps-kubeops` |
+| `kubeops.image.tag`                                   | Kubeops image tag (immutable tags are recommended)                                                                  | `2.4.3-scratch-r2`         |
+| `kubeops.image.pullPolicy`                            | Kubeops image pull policy                                                                                           | `IfNotPresent`             |
+| `kubeops.image.pullSecrets`                           | Kubeops image pull secrets                                                                                          | `[]`                       |
+| `kubeops.namespaceHeaderName`                         | Additional header name for trusted namespaces                                                                       | `""`                       |
+| `kubeops.namespaceHeaderPattern`                      | Additional header pattern for trusted namespaces                                                                    | `""`                       |
+| `kubeops.qps`                                         | Kubeops QPS (queries per second) rate                                                                               | `""`                       |
+| `kubeops.burst`                                       | Kubeops burst rate                                                                                                  | `""`                       |
+| `kubeops.extraFlags`                                  | Additional command line flags for Kubeops                                                                           | `[]`                       |
+| `kubeops.replicaCount`                                | Number of Kubeops replicas to deploy                                                                                | `2`                        |
+| `kubeops.updateStrategy.type`                         | Kubeops deployment strategy type.                                                                                   | `RollingUpdate`            |
+| `kubeops.terminationGracePeriodSeconds`               | The grace time period for sig term                                                                                  | `300`                      |
+| `kubeops.extraEnvVars`                                | Array with extra environment variables to add to the Kubeops container                                              | `[]`                       |
+| `kubeops.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for the Kubeops container                                      | `""`                       |
+| `kubeops.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for the Kubeops container                                         | `""`                       |
+| `kubeops.containerPorts.http`                         | Kubeops HTTP container port                                                                                         | `8080`                     |
+| `kubeops.resources.limits.cpu`                        | The CPU limits for the Kubeops container                                                                            | `250m`                     |
+| `kubeops.resources.limits.memory`                     | The memory limits for the Kubeops container                                                                         | `256Mi`                    |
+| `kubeops.resources.requests.cpu`                      | The requested CPU for the Kubeops container                                                                         | `25m`                      |
+| `kubeops.resources.requests.memory`                   | The requested memory for the Kubeops container                                                                      | `32Mi`                     |
+| `kubeops.podSecurityContext.enabled`                  | Enabled Kubeops pods' Security Context                                                                              | `true`                     |
+| `kubeops.podSecurityContext.fsGroup`                  | Set Kubeops pod's Security Context fsGroup                                                                          | `1001`                     |
+| `kubeops.containerSecurityContext.enabled`            | Enabled Kubeops containers' Security Context                                                                        | `true`                     |
+| `kubeops.containerSecurityContext.runAsUser`          | Set Kubeops container's Security Context runAsUser                                                                  | `1001`                     |
+| `kubeops.containerSecurityContext.runAsNonRoot`       | Set Kubeops container's Security Context runAsNonRoot                                                               | `true`                     |
+| `kubeops.livenessProbe.enabled`                       | Enable livenessProbe                                                                                                | `true`                     |
+| `kubeops.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                             | `60`                       |
+| `kubeops.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                                    | `10`                       |
+| `kubeops.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                                   | `5`                        |
+| `kubeops.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                                 | `6`                        |
+| `kubeops.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                                 | `1`                        |
+| `kubeops.readinessProbe.enabled`                      | Enable readinessProbe                                                                                               | `true`                     |
+| `kubeops.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                                            | `0`                        |
+| `kubeops.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                                   | `10`                       |
+| `kubeops.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                                  | `5`                        |
+| `kubeops.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                                | `6`                        |
+| `kubeops.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                                | `1`                        |
+| `kubeops.startupProbe.enabled`                        | Enable startupProbe                                                                                                 | `false`                    |
+| `kubeops.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                                              | `0`                        |
+| `kubeops.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                                     | `10`                       |
+| `kubeops.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                                    | `5`                        |
+| `kubeops.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                                  | `6`                        |
+| `kubeops.startupProbe.successThreshold`               | Success threshold for startupProbe                                                                                  | `1`                        |
+| `kubeops.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                                 | `{}`                       |
+| `kubeops.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                                | `{}`                       |
+| `kubeops.customStartupProbe`                          | Custom startupProbe that overrides the default one                                                                  | `{}`                       |
+| `kubeops.lifecycleHooks`                              | Custom lifecycle hooks for Kubeops containers                                                                       | `{}`                       |
+| `kubeops.command`                                     | Override default container command (useful when using custom images)                                                | `[]`                       |
+| `kubeops.args`                                        | Override default container args (useful when using custom images)                                                   | `[]`                       |
+| `kubeops.extraVolumes`                                | Optionally specify extra list of additional volumes for the Kubeops pod(s)                                          | `[]`                       |
+| `kubeops.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the Kubeops container(s)                               | `[]`                       |
+| `kubeops.podLabels`                                   | Extra labels for Kubeops pods                                                                                       | `{}`                       |
+| `kubeops.podAnnotations`                              | Annotations for Kubeops pods                                                                                        | `{}`                       |
+| `kubeops.podAffinityPreset`                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `""`                       |
+| `kubeops.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `soft`                     |
+| `kubeops.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                           | `""`                       |
+| `kubeops.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `affinity` is set                                                               | `""`                       |
+| `kubeops.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set                                                            | `[]`                       |
+| `kubeops.affinity`                                    | Affinity for pod assignment                                                                                         | `{}`                       |
+| `kubeops.nodeSelector`                                | Node labels for pod assignment                                                                                      | `{}`                       |
+| `kubeops.tolerations`                                 | Tolerations for pod assignment                                                                                      | `[]`                       |
+| `kubeops.priorityClassName`                           | Priority class name for Kubeops pods                                                                                | `""`                       |
+| `kubeops.schedulerName`                               | Name of the k8s scheduler (other than default)                                                                      | `""`                       |
+| `kubeops.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                                                      | `[]`                       |
+| `kubeops.hostAliases`                                 | Custom host aliases for Kubeops pods                                                                                | `[]`                       |
+| `kubeops.sidecars`                                    | Add additional sidecar containers to the Kubeops pod(s)                                                             | `[]`                       |
+| `kubeops.initContainers`                              | Add additional init containers to the Kubeops pod(s)                                                                | `[]`                       |
+| `kubeops.service.ports.http`                          | Kubeops service HTTP port                                                                                           | `8080`                     |
+| `kubeops.service.annotations`                         | Additional custom annotations for Kubeops service                                                                   | `{}`                       |
+| `kubeops.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`                     |
+| `kubeops.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`                       |
+| `kubeops.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true`                     |
+| `kubeops.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`                       |
 
 
 ### Assetsvc parameters
@@ -342,14 +430,21 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `assetsvc.enabled`                               | Specifies whether this deprecated component should be installed.                          | `false`                     |
 | `assetsvc.image.registry`                        | Kubeapps Assetsvc image registry                                                          | `docker.io`                 |
 | `assetsvc.image.repository`                      | Kubeapps Assetsvc image repository                                                        | `bitnami/kubeapps-assetsvc` |
-| `assetsvc.image.tag`                             | Kubeapps Assetsvc image tag (immutable tags are recommended)                              | `2.4.2-scratch-r0`          |
+| `assetsvc.image.tag`                             | Kubeapps Assetsvc image tag (immutable tags are recommended)                              | `2.4.3-scratch-r2`          |
 | `assetsvc.image.pullPolicy`                      | Kubeapps Assetsvc image pull policy                                                       | `IfNotPresent`              |
 | `assetsvc.image.pullSecrets`                     | Kubeapps Assetsvc image pull secrets                                                      | `[]`                        |
+| `assetsvc.extraFlags`                            | Additional command line flags for Assetsvc                                                | `[]`                        |
 | `assetsvc.replicaCount`                          | Number of Assetsvc replicas to deploy                                                     | `1`                         |
+| `assetsvc.updateStrategy.type`                   | Assetsvc deployment strategy type.                                                        | `RollingUpdate`             |
+| `assetsvc.lifecycleHooks`                        | Custom lifecycle hooks for Assetsvc containers                                            | `{}`                        |
+| `assetsvc.command`                               | Override default container command (useful when using custom images)                      | `[]`                        |
+| `assetsvc.args`                                  | Override default container args (useful when using custom images)                         | `[]`                        |
 | `assetsvc.extraEnvVars`                          | Array with extra environment variables to add to the Assetsvc container                   | `[]`                        |
 | `assetsvc.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for the Assetsvc container           | `""`                        |
 | `assetsvc.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for the Assetsvc container              | `""`                        |
-| `assetsvc.containerPort`                         | Assetsvc HTTP container port                                                              | `8080`                      |
+| `assetsvc.extraVolumes`                          | Optionally specify extra list of additional volumes for the Assetsvc pod(s)               | `[]`                        |
+| `assetsvc.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Assetsvc container(s)    | `[]`                        |
+| `assetsvc.containerPorts.http`                   | Assetsvc HTTP container port                                                              | `8080`                      |
 | `assetsvc.resources.limits.cpu`                  | The CPU limits for the Assetsvc container                                                 | `250m`                      |
 | `assetsvc.resources.limits.memory`               | The memory limits for the Assetsvc container                                              | `128Mi`                     |
 | `assetsvc.resources.requests.cpu`                | The requested CPU for the Assetsvc container                                              | `25m`                       |
@@ -371,9 +466,15 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `assetsvc.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `5`                         |
 | `assetsvc.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `6`                         |
 | `assetsvc.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                         |
+| `assetsvc.startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`                     |
+| `assetsvc.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `0`                         |
+| `assetsvc.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`                        |
+| `assetsvc.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `5`                         |
+| `assetsvc.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `6`                         |
+| `assetsvc.startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`                         |
 | `assetsvc.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`                        |
 | `assetsvc.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`                        |
-| `assetsvc.lifecycleHooks`                        | Custom lifecycle hooks for Assetsvc containers                                            | `{}`                        |
+| `assetsvc.customStartupProbe`                    | Custom startupProbe that overrides the default one                                        | `{}`                        |
 | `assetsvc.podLabels`                             | Extra labels for Assetsvc pods                                                            | `{}`                        |
 | `assetsvc.podAnnotations`                        | Annotations for Assetsvc pods                                                             | `{}`                        |
 | `assetsvc.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                        |
@@ -385,66 +486,85 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `assetsvc.nodeSelector`                          | Node labels for pod assignment                                                            | `{}`                        |
 | `assetsvc.tolerations`                           | Tolerations for pod assignment                                                            | `[]`                        |
 | `assetsvc.priorityClassName`                     | Priority class name for Assetsvc pods                                                     | `""`                        |
+| `assetsvc.schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`                        |
+| `assetsvc.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`                        |
 | `assetsvc.hostAliases`                           | Custom host aliases for Assetsvc pods                                                     | `[]`                        |
-| `assetsvc.service.port`                          | Assetsvc service HTTP port                                                                | `8080`                      |
+| `assetsvc.sidecars`                              | Add additional sidecar containers to the Assetsvc pod(s)                                  | `[]`                        |
+| `assetsvc.initContainers`                        | Add additional init containers to the Assetsvc pod(s)                                     | `[]`                        |
+| `assetsvc.service.ports.http`                    | Assetsvc service HTTP port                                                                | `8080`                      |
 | `assetsvc.service.annotations`                   | Additional custom annotations for Assetsvc service                                        | `{}`                        |
 
 
 ### Auth Proxy parameters
 
-| Name                                              | Description                                                                   | Value                  |
-| ------------------------------------------------- | ----------------------------------------------------------------------------- | ---------------------- |
-| `authProxy.enabled`                               | Specifies whether Kubeapps should configure OAuth login/logout                | `false`                |
-| `authProxy.image.registry`                        | OAuth2 Proxy image registry                                                   | `docker.io`            |
-| `authProxy.image.repository`                      | OAuth2 Proxy image repository                                                 | `bitnami/oauth2-proxy` |
-| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                       | `7.2.0-debian-10-r36`  |
-| `authProxy.image.pullPolicy`                      | OAuth2 Proxy image pull policy                                                | `IfNotPresent`         |
-| `authProxy.image.pullSecrets`                     | OAuth2 Proxy image pull secrets                                               | `[]`                   |
-| `authProxy.external`                              | Use an external Auth Proxy instead of deploying its own one                   | `false`                |
-| `authProxy.oauthLoginURI`                         | OAuth Login URI to which the Kubeapps frontend redirects for authn            | `/oauth2/start`        |
-| `authProxy.oauthLogoutURI`                        | OAuth Logout URI to which the Kubeapps frontend redirects for authn           | `/oauth2/sign_out`     |
-| `authProxy.skipKubeappsLoginPage`                 | Skip the Kubeapps login page when using OIDC and directly redirect to the IdP | `false`                |
-| `authProxy.provider`                              | OAuth provider                                                                | `""`                   |
-| `authProxy.clientID`                              | OAuth Client ID                                                               | `""`                   |
-| `authProxy.clientSecret`                          | OAuth Client secret                                                           | `""`                   |
-| `authProxy.cookieSecret`                          | Secret used by oauth2-proxy to encrypt any credentials                        | `""`                   |
-| `authProxy.cookieRefresh`                         | Duration after which to refresh the cookie                                    | `2m`                   |
-| `authProxy.scope`                                 | OAuth scope specification                                                     | `openid email groups`  |
-| `authProxy.emailDomain`                           | Allowed email domains                                                         | `*`                    |
-| `authProxy.additionalFlags`                       | Additional flags for oauth2-proxy                                             | `[]`                   |
-| `authProxy.extraEnvVars`                          | Array with extra environment variables to add to the Auth Proxy container     | `[]`                   |
-| `authProxy.containerPort`                         | Auth Proxy HTTP container port                                                | `3000`                 |
-| `authProxy.containerSecurityContext.enabled`      | Enabled Auth Proxy containers' Security Context                               | `true`                 |
-| `authProxy.containerSecurityContext.runAsUser`    | Set Auth Proxy container's Security Context runAsUser                         | `1001`                 |
-| `authProxy.containerSecurityContext.runAsNonRoot` | Set Auth Proxy container's Security Context runAsNonRoot                      | `true`                 |
-| `authProxy.resources.limits.cpu`                  | The CPU limits for the OAuth2 Proxy container                                 | `250m`                 |
-| `authProxy.resources.limits.memory`               | The memory limits for the OAuth2 Proxy container                              | `128Mi`                |
-| `authProxy.resources.requests.cpu`                | The requested CPU for the OAuth2 Proxy container                              | `25m`                  |
-| `authProxy.resources.requests.memory`             | The requested memory for the OAuth2 Proxy container                           | `32Mi`                 |
+| Name                                              | Description                                                                              | Value                  |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------- |
+| `authProxy.enabled`                               | Specifies whether Kubeapps should configure OAuth login/logout                           | `false`                |
+| `authProxy.image.registry`                        | OAuth2 Proxy image registry                                                              | `docker.io`            |
+| `authProxy.image.repository`                      | OAuth2 Proxy image repository                                                            | `bitnami/oauth2-proxy` |
+| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                                  | `7.2.1-debian-10-r84`  |
+| `authProxy.image.pullPolicy`                      | OAuth2 Proxy image pull policy                                                           | `IfNotPresent`         |
+| `authProxy.image.pullSecrets`                     | OAuth2 Proxy image pull secrets                                                          | `[]`                   |
+| `authProxy.external`                              | Use an external Auth Proxy instead of deploying its own one                              | `false`                |
+| `authProxy.oauthLoginURI`                         | OAuth Login URI to which the Kubeapps frontend redirects for authn                       | `/oauth2/start`        |
+| `authProxy.oauthLogoutURI`                        | OAuth Logout URI to which the Kubeapps frontend redirects for authn                      | `/oauth2/sign_out`     |
+| `authProxy.skipKubeappsLoginPage`                 | Skip the Kubeapps login page when using OIDC and directly redirect to the IdP            | `false`                |
+| `authProxy.provider`                              | OAuth provider                                                                           | `""`                   |
+| `authProxy.clientID`                              | OAuth Client ID                                                                          | `""`                   |
+| `authProxy.clientSecret`                          | OAuth Client secret                                                                      | `""`                   |
+| `authProxy.cookieSecret`                          | Secret used by oauth2-proxy to encrypt any credentials                                   | `""`                   |
+| `authProxy.cookieRefresh`                         | Duration after which to refresh the cookie                                               | `2m`                   |
+| `authProxy.scope`                                 | OAuth scope specification                                                                | `openid email groups`  |
+| `authProxy.emailDomain`                           | Allowed email domains                                                                    | `*`                    |
+| `authProxy.extraFlags`                            | Additional command line flags for oauth2-proxy                                           | `[]`                   |
+| `authProxy.lifecycleHooks`                        | for the Auth Proxy container(s) to automate configuration before or after startup        | `{}`                   |
+| `authProxy.command`                               | Override default container command (useful when using custom images)                     | `[]`                   |
+| `authProxy.args`                                  | Override default container args (useful when using custom images)                        | `[]`                   |
+| `authProxy.extraEnvVars`                          | Array with extra environment variables to add to the Auth Proxy container                | `[]`                   |
+| `authProxy.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Auth Proxy containers(s)        | `""`                   |
+| `authProxy.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Auth Proxy containers(s)           | `""`                   |
+| `authProxy.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Auth Proxy container(s) | `[]`                   |
+| `authProxy.containerPorts.proxy`                  | Auth Proxy HTTP container port                                                           | `3000`                 |
+| `authProxy.containerSecurityContext.enabled`      | Enabled Auth Proxy containers' Security Context                                          | `true`                 |
+| `authProxy.containerSecurityContext.runAsUser`    | Set Auth Proxy container's Security Context runAsUser                                    | `1001`                 |
+| `authProxy.containerSecurityContext.runAsNonRoot` | Set Auth Proxy container's Security Context runAsNonRoot                                 | `true`                 |
+| `authProxy.resources.limits.cpu`                  | The CPU limits for the OAuth2 Proxy container                                            | `250m`                 |
+| `authProxy.resources.limits.memory`               | The memory limits for the OAuth2 Proxy container                                         | `128Mi`                |
+| `authProxy.resources.requests.cpu`                | The requested CPU for the OAuth2 Proxy container                                         | `25m`                  |
+| `authProxy.resources.requests.memory`             | The requested memory for the OAuth2 Proxy container                                      | `32Mi`                 |
 
 
 ### Pinniped Proxy parameters
 
-| Name                                                  | Description                                                              | Value                             |
-| ----------------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------- |
-| `pinnipedProxy.enabled`                               | Specifies whether Kubeapps should configure Pinniped Proxy               | `false`                           |
-| `pinnipedProxy.image.registry`                        | Pinniped Proxy image registry                                            | `docker.io`                       |
-| `pinnipedProxy.image.repository`                      | Pinniped Proxy image repository                                          | `bitnami/kubeapps-pinniped-proxy` |
-| `pinnipedProxy.image.tag`                             | Pinniped Proxy image tag (immutable tags are recommended)                | `2.4.2-debian-10-r1`              |
-| `pinnipedProxy.image.pullPolicy`                      | Pinniped Proxy image pull policy                                         | `IfNotPresent`                    |
-| `pinnipedProxy.image.pullSecrets`                     | Pinniped Proxy image pull secrets                                        | `[]`                              |
-| `pinnipedProxy.defaultPinnipedNamespace`              | Specify the (default) namespace in which pinniped concierge is installed | `pinniped-concierge`              |
-| `pinnipedProxy.defaultAuthenticatorType`              | Specify the (default) authenticator type                                 | `JWTAuthenticator`                |
-| `pinnipedProxy.defaultAuthenticatorName`              | Specify the (default) authenticator name                                 | `jwt-authenticator`               |
-| `pinnipedProxy.defaultPinnipedAPISuffix`              | Specify the (default) API suffix                                         | `pinniped.dev`                    |
-| `pinnipedProxy.containerPort`                         | Kubeops HTTP container port                                              | `3333`                            |
-| `pinnipedProxy.containerSecurityContext.enabled`      | Enabled Pinniped Proxy containers' Security Context                      | `true`                            |
-| `pinnipedProxy.containerSecurityContext.runAsUser`    | Set Pinniped Proxy container's Security Context runAsUser                | `1001`                            |
-| `pinnipedProxy.containerSecurityContext.runAsNonRoot` | Set Pinniped Proxy container's Security Context runAsNonRoot             | `true`                            |
-| `pinnipedProxy.resources.limits.cpu`                  | The CPU limits for the Pinniped Proxy container                          | `250m`                            |
-| `pinnipedProxy.resources.limits.memory`               | The memory limits for the Pinniped Proxy container                       | `128Mi`                           |
-| `pinnipedProxy.resources.requests.cpu`                | The requested CPU for the Pinniped Proxy container                       | `25m`                             |
-| `pinnipedProxy.resources.requests.memory`             | The requested memory for the Pinniped Proxy container                    | `32Mi`                            |
+| Name                                                  | Description                                                                                  | Value                             |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------------------------------- |
+| `pinnipedProxy.enabled`                               | Specifies whether Kubeapps should configure Pinniped Proxy                                   | `false`                           |
+| `pinnipedProxy.image.registry`                        | Pinniped Proxy image registry                                                                | `docker.io`                       |
+| `pinnipedProxy.image.repository`                      | Pinniped Proxy image repository                                                              | `bitnami/kubeapps-pinniped-proxy` |
+| `pinnipedProxy.image.tag`                             | Pinniped Proxy image tag (immutable tags are recommended)                                    | `2.4.3-debian-10-r34`             |
+| `pinnipedProxy.image.pullPolicy`                      | Pinniped Proxy image pull policy                                                             | `IfNotPresent`                    |
+| `pinnipedProxy.image.pullSecrets`                     | Pinniped Proxy image pull secrets                                                            | `[]`                              |
+| `pinnipedProxy.defaultPinnipedNamespace`              | Specify the (default) namespace in which pinniped concierge is installed                     | `pinniped-concierge`              |
+| `pinnipedProxy.defaultAuthenticatorType`              | Specify the (default) authenticator type                                                     | `JWTAuthenticator`                |
+| `pinnipedProxy.defaultAuthenticatorName`              | Specify the (default) authenticator name                                                     | `jwt-authenticator`               |
+| `pinnipedProxy.defaultPinnipedAPISuffix`              | Specify the (default) API suffix                                                             | `pinniped.dev`                    |
+| `pinnipedProxy.lifecycleHooks`                        | for the Pinniped Proxy container(s) to automate configuration before or after startup        | `{}`                              |
+| `pinnipedProxy.command`                               | Override default container command (useful when using custom images)                         | `[]`                              |
+| `pinnipedProxy.args`                                  | Override default container args (useful when using custom images)                            | `[]`                              |
+| `pinnipedProxy.extraEnvVars`                          | Array with extra environment variables to add to Pinniped Proxy container(s)                 | `[]`                              |
+| `pinnipedProxy.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Pinniped Proxy container(s)         | `""`                              |
+| `pinnipedProxy.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Pinniped Proxy container(s)            | `""`                              |
+| `pinnipedProxy.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Pinniped Proxy container(s) | `[]`                              |
+| `pinnipedProxy.containerPorts.pinnipedProxy`          | Pinniped Proxy container port                                                                | `3333`                            |
+| `pinnipedProxy.containerSecurityContext.enabled`      | Enabled Pinniped Proxy containers' Security Context                                          | `true`                            |
+| `pinnipedProxy.containerSecurityContext.runAsUser`    | Set Pinniped Proxy container's Security Context runAsUser                                    | `1001`                            |
+| `pinnipedProxy.containerSecurityContext.runAsNonRoot` | Set Pinniped Proxy container's Security Context runAsNonRoot                                 | `true`                            |
+| `pinnipedProxy.resources.limits.cpu`                  | The CPU limits for the Pinniped Proxy container                                              | `250m`                            |
+| `pinnipedProxy.resources.limits.memory`               | The memory limits for the Pinniped Proxy container                                           | `128Mi`                           |
+| `pinnipedProxy.resources.requests.cpu`                | The requested CPU for the Pinniped Proxy container                                           | `25m`                             |
+| `pinnipedProxy.resources.requests.memory`             | The requested memory for the Pinniped Proxy container                                        | `32Mi`                            |
+| `pinnipedProxy.service.ports.pinnipedProxy`           | Pinniped Proxy service port                                                                  | `3333`                            |
+| `pinnipedProxy.service.annotations`                   | Additional custom annotations for Pinniped Proxy service                                     | `{}`                              |
 
 
 ### Other Parameters
@@ -453,102 +573,130 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | ------------------------- | ----------------------------------------------------------------------------- | ---------------------- |
 | `allowNamespaceDiscovery` | Allow users to discover available namespaces (only the ones they have access) | `true`                 |
 | `clusters`                | List of clusters that Kubeapps can target for deployments                     | `[]`                   |
-| `featureFlags`            | Feature flags (used to switch on development features)                        | `{}`                   |
+| `featureFlags.operators`  | Enable ingress record generation for Kubeapps                                 | `false`                |
 | `rbac.create`             | Specifies whether RBAC resources should be created                            | `true`                 |
 | `testImage.registry`      | NGINX image registry                                                          | `docker.io`            |
 | `testImage.repository`    | NGINX image repository                                                        | `bitnami/nginx`        |
-| `testImage.tag`           | NGINX image tag (immutable tags are recommended)                              | `1.21.4-debian-10-r26` |
+| `testImage.tag`           | NGINX image tag (immutable tags are recommended)                              | `1.21.6-debian-10-r50` |
 | `testImage.pullPolicy`    | NGINX image pull policy                                                       | `IfNotPresent`         |
 | `testImage.pullSecrets`   | NGINX image pull secrets                                                      | `[]`                   |
 
 
 ### Database Parameters
 
-| Name                                   | Description                                                                  | Value    |
-| -------------------------------------- | ---------------------------------------------------------------------------- | -------- |
-| `postgresql.enabled`                   | Deploy a PostgreSQL server to satisfy the applications database requirements | `true`   |
-| `postgresql.replication.enabled`       | Enable replication for high availability                                     | `true`   |
-| `postgresql.postgresqlDatabase`        | Database name for Kubeapps to be created on the first run                    | `assets` |
-| `postgresql.postgresqlPassword`        | Password for 'postgres' user                                                 | `""`     |
-| `postgresql.persistence.enabled`       | Enable persistence on PostgreSQL using PVC(s)                                | `false`  |
-| `postgresql.persistence.size`          | Persistent Volume size                                                       | `8Gi`    |
-| `postgresql.securityContext.enabled`   | Enabled PostgreSQL replicas pods' Security Context                           | `false`  |
-| `postgresql.resources.limits`          | The resources limits for the PostreSQL container                             | `{}`     |
-| `postgresql.resources.requests.cpu`    | The requested CPU for the PostreSQL container                                | `250m`   |
-| `postgresql.resources.requests.memory` | The requested memory for the PostreSQL container                             | `256Mi`  |
+| Name                                   | Description                                                                  | Value         |
+| -------------------------------------- | ---------------------------------------------------------------------------- | ------------- |
+| `postgresql.enabled`                   | Deploy a PostgreSQL server to satisfy the applications database requirements | `true`        |
+| `postgresql.architecture`              | PostgreSQL architecture (`standalone` or `replication`)                      | `replication` |
+| `postgresql.auth.password`             | Password for the custom user to create                                       | `""`          |
+| `postgresql.auth.database`             | Name for a custom database to create                                         | `assets`      |
+| `postgresql.auth.existingSecret`       | Name of existing secret to use for PostgreSQL credentials                    | `""`          |
+| `postgresql.persistence.enabled`       | Enable persistence on PostgreSQL using PVC(s)                                | `false`       |
+| `postgresql.persistence.size`          | Persistent Volume size                                                       | `8Gi`         |
+| `postgresql.securityContext.enabled`   | Enabled PostgreSQL replicas pods' Security Context                           | `false`       |
+| `postgresql.resources.limits`          | The resources limits for the PostreSQL container                             | `{}`          |
+| `postgresql.resources.requests.cpu`    | The requested CPU for the PostreSQL container                                | `250m`        |
+| `postgresql.resources.requests.memory` | The requested memory for the PostreSQL container                             | `256Mi`       |
 
 
 ### kubeappsapis parameters
 
-| Name                                                                       | Description                                                                               | Value                   |
-| -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------- |
-| `kubeappsapis.enabledPlugins`                                              | Enabled plugins for the Kubeapps-APIs service                                             | `["helm"]`              |
-| `kubeappsapis.pluginConfig.core.packages.v1alpha1.versionsInSummary.major` | Number of major versions to display in the summary                                        | `3`                     |
-| `kubeappsapis.pluginConfig.core.packages.v1alpha1.versionsInSummary.minor` | Number of minor versions to display in the summary                                        | `3`                     |
-| `kubeappsapis.pluginConfig.core.packages.v1alpha1.versionsInSummary.patch` | Number of patch versions to display in the summary                                        | `3`                     |
-| `kubeappsapis.pluginConfig.core.packages.v1alpha1.timeoutSeconds`          | Value to wait for Kubernetes commands to complete                                         | `300`                   |
-| `kubeappsapis.image.registry`                                              | Kubeapps-APIs image registry                                                              | `docker.io`             |
-| `kubeappsapis.image.repository`                                            | Kubeapps-APIs image repository                                                            | `bitnami/kubeapps-apis` |
-| `kubeappsapis.image.tag`                                                   | Kubeapps-APIs image tag (immutable tags are recommended)                                  | `2.4.2-debian-10-r1`    |
-| `kubeappsapis.image.pullPolicy`                                            | Kubeapps-APIs image pull policy                                                           | `IfNotPresent`          |
-| `kubeappsapis.image.pullSecrets`                                           | Kubeapps-APIs image pull secrets                                                          | `[]`                    |
-| `kubeappsapis.replicaCount`                                                | Number of frontend replicas to deploy                                                     | `2`                     |
-| `kubeappsapis.terminationGracePeriodSeconds`                               | The grace time period for sig term                                                        | `300`                   |
-| `kubeappsapis.extraEnvVars`                                                | Array with extra environment variables to add to the KubeappsAPIs container               | `[]`                    |
-| `kubeappsapis.extraEnvVarsCM`                                              | Name of existing ConfigMap containing extra env vars for the KubeappsAPIs container       | `""`                    |
-| `kubeappsapis.extraEnvVarsSecret`                                          | Name of existing Secret containing extra env vars for the KubeappsAPIs container          | `""`                    |
-| `kubeappsapis.containerPort`                                               | KubeappsAPIs HTTP container port                                                          | `50051`                 |
-| `kubeappsapis.resources.limits.cpu`                                        | The CPU limits for the KubeappsAPIs container                                             | `250m`                  |
-| `kubeappsapis.resources.limits.memory`                                     | The memory limits for the KubeappsAPIs container                                          | `256Mi`                 |
-| `kubeappsapis.resources.requests.cpu`                                      | The requested CPU for the KubeappsAPIs container                                          | `25m`                   |
-| `kubeappsapis.resources.requests.memory`                                   | The requested memory for the KubeappsAPIs container                                       | `32Mi`                  |
-| `kubeappsapis.podSecurityContext.enabled`                                  | Enabled KubeappsAPIs pods' Security Context                                               | `true`                  |
-| `kubeappsapis.podSecurityContext.fsGroup`                                  | Set KubeappsAPIs pod's Security Context fsGroup                                           | `1001`                  |
-| `kubeappsapis.containerSecurityContext.enabled`                            | Enabled KubeappsAPIs containers' Security Context                                         | `true`                  |
-| `kubeappsapis.containerSecurityContext.runAsUser`                          | Set KubeappsAPIs container's Security Context runAsUser                                   | `1001`                  |
-| `kubeappsapis.containerSecurityContext.runAsNonRoot`                       | Set KubeappsAPIs container's Security Context runAsNonRoot                                | `true`                  |
-| `kubeappsapis.livenessProbe.enabled`                                       | Enable livenessProbe                                                                      | `true`                  |
-| `kubeappsapis.livenessProbe.initialDelaySeconds`                           | Initial delay seconds for livenessProbe                                                   | `60`                    |
-| `kubeappsapis.livenessProbe.periodSeconds`                                 | Period seconds for livenessProbe                                                          | `10`                    |
-| `kubeappsapis.livenessProbe.timeoutSeconds`                                | Timeout seconds for livenessProbe                                                         | `5`                     |
-| `kubeappsapis.livenessProbe.failureThreshold`                              | Failure threshold for livenessProbe                                                       | `6`                     |
-| `kubeappsapis.livenessProbe.successThreshold`                              | Success threshold for livenessProbe                                                       | `1`                     |
-| `kubeappsapis.readinessProbe.enabled`                                      | Enable readinessProbe                                                                     | `true`                  |
-| `kubeappsapis.readinessProbe.initialDelaySeconds`                          | Initial delay seconds for readinessProbe                                                  | `0`                     |
-| `kubeappsapis.readinessProbe.periodSeconds`                                | Period seconds for readinessProbe                                                         | `10`                    |
-| `kubeappsapis.readinessProbe.timeoutSeconds`                               | Timeout seconds for readinessProbe                                                        | `5`                     |
-| `kubeappsapis.readinessProbe.failureThreshold`                             | Failure threshold for readinessProbe                                                      | `6`                     |
-| `kubeappsapis.readinessProbe.successThreshold`                             | Success threshold for readinessProbe                                                      | `1`                     |
-| `kubeappsapis.customLivenessProbe`                                         | Custom livenessProbe that overrides the default one                                       | `{}`                    |
-| `kubeappsapis.customReadinessProbe`                                        | Custom readinessProbe that overrides the default one                                      | `{}`                    |
-| `kubeappsapis.lifecycleHooks`                                              | Custom lifecycle hooks for KubeappsAPIs containers                                        | `{}`                    |
-| `kubeappsapis.podLabels`                                                   | Extra labels for KubeappsAPIs pods                                                        | `{}`                    |
-| `kubeappsapis.podAnnotations`                                              | Annotations for KubeappsAPIs pods                                                         | `{}`                    |
-| `kubeappsapis.podAffinityPreset`                                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                    |
-| `kubeappsapis.podAntiAffinityPreset`                                       | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                  |
-| `kubeappsapis.nodeAffinityPreset.type`                                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                    |
-| `kubeappsapis.nodeAffinityPreset.key`                                      | Node label key to match. Ignored if `affinity` is set                                     | `""`                    |
-| `kubeappsapis.nodeAffinityPreset.values`                                   | Node label values to match. Ignored if `affinity` is set                                  | `[]`                    |
-| `kubeappsapis.affinity`                                                    | Affinity for pod assignment                                                               | `{}`                    |
-| `kubeappsapis.nodeSelector`                                                | Node labels for pod assignment                                                            | `{}`                    |
-| `kubeappsapis.tolerations`                                                 | Tolerations for pod assignment                                                            | `[]`                    |
-| `kubeappsapis.priorityClassName`                                           | Priority class name for KubeappsAPIs pods                                                 | `""`                    |
-| `kubeappsapis.hostAliases`                                                 | Custom host aliases for KubeappsAPIs pods                                                 | `[]`                    |
-| `kubeappsapis.service.port`                                                | KubeappsAPIs service HTTP port                                                            | `8080`                  |
-| `kubeappsapis.service.annotations`                                         | Additional custom annotations for KubeappsAPIs service                                    | `{}`                    |
+| Name                                                                                            | Description                                                                                                         | Value                   |
+| ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `kubeappsapis.enabledPlugins`                                                                   | Manually override which plugins are enabled for the Kubeapps-APIs service                                           | `[]`                    |
+| `kubeappsapis.pluginConfig.core.packages.v1alpha1.versionsInSummary.major`                      | Number of major versions to display in the summary                                                                  | `3`                     |
+| `kubeappsapis.pluginConfig.core.packages.v1alpha1.versionsInSummary.minor`                      | Number of minor versions to display in the summary                                                                  | `3`                     |
+| `kubeappsapis.pluginConfig.core.packages.v1alpha1.versionsInSummary.patch`                      | Number of patch versions to display in the summary                                                                  | `3`                     |
+| `kubeappsapis.pluginConfig.core.packages.v1alpha1.timeoutSeconds`                               | Value to wait for Kubernetes commands to complete                                                                   | `300`                   |
+| `kubeappsapis.pluginConfig.kappController.packages.v1alpha1.defaultUpgradePolicy`               | Default upgrade policy generating version constraints                                                               | `none`                  |
+| `kubeappsapis.pluginConfig.kappController.packages.v1alpha1.defaultPrereleasesVersionSelection` | Default policy for allowing prereleases containing one of the identifiers                                           | `nil`                   |
+| `kubeappsapis.pluginConfig.kappController.packages.v1alpha1.defaultAllowDowngrades`             | Default policy for allowing applications to be downgraded to previous versions                                      | `false`                 |
+| `kubeappsapis.image.registry`                                                                   | Kubeapps-APIs image registry                                                                                        | `docker.io`             |
+| `kubeappsapis.image.repository`                                                                 | Kubeapps-APIs image repository                                                                                      | `bitnami/kubeapps-apis` |
+| `kubeappsapis.image.tag`                                                                        | Kubeapps-APIs image tag (immutable tags are recommended)                                                            | `2.4.3-debian-10-r37`   |
+| `kubeappsapis.image.pullPolicy`                                                                 | Kubeapps-APIs image pull policy                                                                                     | `IfNotPresent`          |
+| `kubeappsapis.image.pullSecrets`                                                                | Kubeapps-APIs image pull secrets                                                                                    | `[]`                    |
+| `kubeappsapis.replicaCount`                                                                     | Number of frontend replicas to deploy                                                                               | `2`                     |
+| `kubeappsapis.updateStrategy.type`                                                              | KubeappsAPIs deployment strategy type.                                                                              | `RollingUpdate`         |
+| `kubeappsapis.extraFlags`                                                                       | Additional command line flags for KubeappsAPIs                                                                      | `[]`                    |
+| `kubeappsapis.qps`                                                                              | KubeappsAPIs Kubernetes API client QPS limit                                                                        | `50.0`                  |
+| `kubeappsapis.burst`                                                                            | KubeappsAPIs Kubernetes API client Burst limit                                                                      | `100`                   |
+| `kubeappsapis.terminationGracePeriodSeconds`                                                    | The grace time period for sig term                                                                                  | `300`                   |
+| `kubeappsapis.extraEnvVars`                                                                     | Array with extra environment variables to add to the KubeappsAPIs container                                         | `[]`                    |
+| `kubeappsapis.extraEnvVarsCM`                                                                   | Name of existing ConfigMap containing extra env vars for the KubeappsAPIs container                                 | `""`                    |
+| `kubeappsapis.extraEnvVarsSecret`                                                               | Name of existing Secret containing extra env vars for the KubeappsAPIs container                                    | `""`                    |
+| `kubeappsapis.containerPorts.http`                                                              | KubeappsAPIs HTTP container port                                                                                    | `50051`                 |
+| `kubeappsapis.resources.limits.cpu`                                                             | The CPU limits for the KubeappsAPIs container                                                                       | `250m`                  |
+| `kubeappsapis.resources.limits.memory`                                                          | The memory limits for the KubeappsAPIs container                                                                    | `256Mi`                 |
+| `kubeappsapis.resources.requests.cpu`                                                           | The requested CPU for the KubeappsAPIs container                                                                    | `25m`                   |
+| `kubeappsapis.resources.requests.memory`                                                        | The requested memory for the KubeappsAPIs container                                                                 | `32Mi`                  |
+| `kubeappsapis.podSecurityContext.enabled`                                                       | Enabled KubeappsAPIs pods' Security Context                                                                         | `true`                  |
+| `kubeappsapis.podSecurityContext.fsGroup`                                                       | Set KubeappsAPIs pod's Security Context fsGroup                                                                     | `1001`                  |
+| `kubeappsapis.containerSecurityContext.enabled`                                                 | Enabled KubeappsAPIs containers' Security Context                                                                   | `true`                  |
+| `kubeappsapis.containerSecurityContext.runAsUser`                                               | Set KubeappsAPIs container's Security Context runAsUser                                                             | `1001`                  |
+| `kubeappsapis.containerSecurityContext.runAsNonRoot`                                            | Set KubeappsAPIs container's Security Context runAsNonRoot                                                          | `true`                  |
+| `kubeappsapis.livenessProbe.enabled`                                                            | Enable livenessProbe                                                                                                | `true`                  |
+| `kubeappsapis.livenessProbe.initialDelaySeconds`                                                | Initial delay seconds for livenessProbe                                                                             | `60`                    |
+| `kubeappsapis.livenessProbe.periodSeconds`                                                      | Period seconds for livenessProbe                                                                                    | `10`                    |
+| `kubeappsapis.livenessProbe.timeoutSeconds`                                                     | Timeout seconds for livenessProbe                                                                                   | `5`                     |
+| `kubeappsapis.livenessProbe.failureThreshold`                                                   | Failure threshold for livenessProbe                                                                                 | `6`                     |
+| `kubeappsapis.livenessProbe.successThreshold`                                                   | Success threshold for livenessProbe                                                                                 | `1`                     |
+| `kubeappsapis.readinessProbe.enabled`                                                           | Enable readinessProbe                                                                                               | `true`                  |
+| `kubeappsapis.readinessProbe.initialDelaySeconds`                                               | Initial delay seconds for readinessProbe                                                                            | `0`                     |
+| `kubeappsapis.readinessProbe.periodSeconds`                                                     | Period seconds for readinessProbe                                                                                   | `10`                    |
+| `kubeappsapis.readinessProbe.timeoutSeconds`                                                    | Timeout seconds for readinessProbe                                                                                  | `5`                     |
+| `kubeappsapis.readinessProbe.failureThreshold`                                                  | Failure threshold for readinessProbe                                                                                | `6`                     |
+| `kubeappsapis.readinessProbe.successThreshold`                                                  | Success threshold for readinessProbe                                                                                | `1`                     |
+| `kubeappsapis.startupProbe.enabled`                                                             | Enable startupProbe                                                                                                 | `false`                 |
+| `kubeappsapis.startupProbe.initialDelaySeconds`                                                 | Initial delay seconds for startupProbe                                                                              | `0`                     |
+| `kubeappsapis.startupProbe.periodSeconds`                                                       | Period seconds for startupProbe                                                                                     | `10`                    |
+| `kubeappsapis.startupProbe.timeoutSeconds`                                                      | Timeout seconds for startupProbe                                                                                    | `5`                     |
+| `kubeappsapis.startupProbe.failureThreshold`                                                    | Failure threshold for startupProbe                                                                                  | `6`                     |
+| `kubeappsapis.startupProbe.successThreshold`                                                    | Success threshold for startupProbe                                                                                  | `1`                     |
+| `kubeappsapis.customLivenessProbe`                                                              | Custom livenessProbe that overrides the default one                                                                 | `{}`                    |
+| `kubeappsapis.customReadinessProbe`                                                             | Custom readinessProbe that overrides the default one                                                                | `{}`                    |
+| `kubeappsapis.customStartupProbe`                                                               | Custom startupProbe that overrides the default one                                                                  | `{}`                    |
+| `kubeappsapis.lifecycleHooks`                                                                   | Custom lifecycle hooks for KubeappsAPIs containers                                                                  | `{}`                    |
+| `kubeappsapis.command`                                                                          | Override default container command (useful when using custom images)                                                | `[]`                    |
+| `kubeappsapis.args`                                                                             | Override default container args (useful when using custom images)                                                   | `[]`                    |
+| `kubeappsapis.extraVolumes`                                                                     | Optionally specify extra list of additional volumes for the KubeappsAPIs pod(s)                                     | `[]`                    |
+| `kubeappsapis.extraVolumeMounts`                                                                | Optionally specify extra list of additional volumeMounts for the KubeappsAPIs container(s)                          | `[]`                    |
+| `kubeappsapis.podLabels`                                                                        | Extra labels for KubeappsAPIs pods                                                                                  | `{}`                    |
+| `kubeappsapis.podAnnotations`                                                                   | Annotations for KubeappsAPIs pods                                                                                   | `{}`                    |
+| `kubeappsapis.podAffinityPreset`                                                                | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `""`                    |
+| `kubeappsapis.podAntiAffinityPreset`                                                            | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `soft`                  |
+| `kubeappsapis.nodeAffinityPreset.type`                                                          | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                           | `""`                    |
+| `kubeappsapis.nodeAffinityPreset.key`                                                           | Node label key to match. Ignored if `affinity` is set                                                               | `""`                    |
+| `kubeappsapis.nodeAffinityPreset.values`                                                        | Node label values to match. Ignored if `affinity` is set                                                            | `[]`                    |
+| `kubeappsapis.affinity`                                                                         | Affinity for pod assignment                                                                                         | `{}`                    |
+| `kubeappsapis.nodeSelector`                                                                     | Node labels for pod assignment                                                                                      | `{}`                    |
+| `kubeappsapis.tolerations`                                                                      | Tolerations for pod assignment                                                                                      | `[]`                    |
+| `kubeappsapis.priorityClassName`                                                                | Priority class name for KubeappsAPIs pods                                                                           | `""`                    |
+| `kubeappsapis.schedulerName`                                                                    | Name of the k8s scheduler (other than default)                                                                      | `""`                    |
+| `kubeappsapis.topologySpreadConstraints`                                                        | Topology Spread Constraints for pod assignment                                                                      | `[]`                    |
+| `kubeappsapis.hostAliases`                                                                      | Custom host aliases for KubeappsAPIs pods                                                                           | `[]`                    |
+| `kubeappsapis.sidecars`                                                                         | Add additional sidecar containers to the KubeappsAPIs pod(s)                                                        | `[]`                    |
+| `kubeappsapis.initContainers`                                                                   | Add additional init containers to the KubeappsAPIs pod(s)                                                           | `[]`                    |
+| `kubeappsapis.service.ports.http`                                                               | KubeappsAPIs service HTTP port                                                                                      | `8080`                  |
+| `kubeappsapis.service.annotations`                                                              | Additional custom annotations for KubeappsAPIs service                                                              | `{}`                    |
+| `kubeappsapis.serviceAccount.create`                                                            | Specifies whether a ServiceAccount should be created                                                                | `true`                  |
+| `kubeappsapis.serviceAccount.name`                                                              | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`                    |
+| `kubeappsapis.serviceAccount.automountServiceAccountToken`                                      | Automount service account token for the server service account                                                      | `true`                  |
+| `kubeappsapis.serviceAccount.annotations`                                                       | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`                    |
 
 
 ### Redis&trade; chart configuration
 
 | Name                            | Description                                                        | Value                                                    |
 | ------------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------- |
-| `redis.redisPassword`           | Password used in Redis&trade;                                      | `""`                                                     |
-| `redis.enabled`                 | Enable the Redis&trade; deployment when deploying Kubeapps APIs.   | `false`                                                  |
+| `redis.auth.enabled`            | Enable password authentication                                     | `true`                                                   |
+| `redis.auth.password`           | Redis&trade; password                                              | `""`                                                     |
+| `redis.auth.existingSecret`     | The name of an existing secret with Redis&trade; credentials       | `""`                                                     |
 | `redis.master.extraFlags`       | Array with additional command line flags for Redis&trade; master   | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
-| `redis.master.disableCommands`  | Array with commands to disable on Redis&trade                      | `[]`                                                     |
+| `redis.master.disableCommands`  | Array with commands to deactivate on Redis&trade                   | `[]`                                                     |
 | `redis.replica.replicaCount`    | Number of Redis&trade; replicas to deploy                          | `1`                                                      |
 | `redis.replica.extraFlags`      | Array with additional command line flags for Redis&trade; replicas | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
-| `redis.replica.disableCommands` | Array with commands to disable on Redis&trade                      | `[]`                                                     |
+| `redis.replica.disableCommands` | Array with commands to deactivate on Redis&trade                   | `[]`                                                     |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -575,11 +723,11 @@ By default, Kubeapps will track the [Bitnami Application Catalog](https://github
 
 ### Enabling Operators
 
-Since v1.9.0 (and by default since v2.0), Kubeapps supports to deploy and manage Operators within its dashboard. More information about how to enable and use this feature can be found in [this guide](https://github.com/kubeapps/kubeapps/blob/master/docs/user/operators.md).
+Since v1.9.0 (and by default since v2.0), Kubeapps supports deploying and managing Operators within its dashboard. More information about how to enable and use this feature can be found in [this guide](https://github.com/kubeapps/kubeapps/blob/main/docs/user/operators.md).
 
 ### Exposing Externally
 
-> **Note**: The Kubeapps frontend sets up a proxy to the Kubernetes API service which means that when exposing the Kubeapps service to a network external to the Kubernetes cluster (perhaps on an internal or public network), the Kubernetes API will also be exposed for authenticated requests from that network. It is highly recommended that you [use an OAuth2/OIDC provider with Kubeapps](https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md) to ensure that your authentication proxy is exposed rather than the Kubeapps frontend. This ensures that only the configured users trusted by your Identity Provider will be able to reach the Kubeapps frontend and therefore the Kubernetes API. Kubernetes service token authentication should only be used for users for demonstration purposes only, not production environments.
+> **Note**: The Kubeapps frontend sets up a proxy to the Kubernetes API service which means that when exposing the Kubeapps service to a network external to the Kubernetes cluster (perhaps on an internal or public network), the Kubernetes API will also be exposed for authenticated requests from that network. It is highly recommended that you [use an OAuth2/OIDC provider with Kubeapps](https://github.com/kubeapps/kubeapps/blob/main/docs/user/using-an-OIDC-provider.md) to ensure that your authentication proxy is exposed rather than the Kubeapps frontend. This ensures that only the configured users trusted by your Identity Provider will be able to reach the Kubeapps frontend and therefore the Kubernetes API. Kubernetes service token authentication should only be used for users for demonstration purposes only, not production environments.
 
 #### LoadBalancer Service
 
@@ -610,11 +758,11 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are four common use cases:
 
 - Helm generates/manages certificate secrets based on the parameters.
-- User generates/manages certificates separately.
+- The user generates/manages certificates separately.
 - Helm creates self-signed certificates and generates/manages certificate secrets.
 - An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
 
-In the first two cases, it's needed a certificate and a key. We would expect them to look like this:
+In the first two cases, it is needed a certificate and a key. We would expect them to look like this:
 
 - certificate files should look like (and there can be more than one certificate if there is a certificate chain)
 
@@ -699,16 +847,16 @@ kubectl delete namespace kubeapps
 
 ### How to install Kubeapps for demo purposes?
 
-Install Kubeapps for exclusively **demo purposes** by simply following the [getting started](https://github.com/kubeapps/kubeapps/blob/master/docs/user/getting-started.md) docs.
+Install Kubeapps for exclusively **demo purposes** by simply following the [getting started](https://github.com/kubeapps/kubeapps/blob/main/docs/user/getting-started.md) docs.
 
 ### How to install Kubeapps in production scenarios?
 
-For any user-facing installation, you should [configure an OAuth2/OIDC provider](https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md) to enable secure user authentication with Kubeapps and the cluster.
-Please also refer to the [Access Control](https://github.com/kubeapps/kubeapps/blob/master/docs/user/access-control.md) documentation to configure fine-grained access control for users.
+For any user-facing installation, you should [configure an OAuth2/OIDC provider](https://github.com/kubeapps/kubeapps/blob/main/docs/user/using-an-OIDC-provider.md) to enable secure user authentication with Kubeapps and the cluster.
+Please also refer to the [Access Control](https://github.com/kubeapps/kubeapps/blob/main/docs/user/access-control.md) documentation to configure fine-grained access control for users.
 
 ### How to use Kubeapps?
 
-Have a look at the [dashboard documentation](https://github.com/kubeapps/kubeapps/blob/master/docs/user/dashboard.md) for knowing how to use the Kubeapps dashboard: deploying applications, listing and removing the applications running in your cluster and adding new repositories.
+Have a look at the [dashboard documentation](https://github.com/kubeapps/kubeapps/blob/main/docs/user/dashboard.md) for knowing how to use the Kubeapps dashboard: deploying applications, listing and removing the applications running in your cluster and adding new repositories.
 
 ### How to configure Kubeapps with Ingress
 
@@ -735,7 +883,7 @@ helm install kubeapps bitnami/kubeapps \
   --set ingress.annotations."kubernetes\.io/ingress\.class"=nginx # or your preferred ingress controller
 ```
 
-Besides, if you are using the OAuth2/OIDC login (more information at the [using an OIDC provider documentation](https://github.com/kubeapps/kubeapps/blob/master/docs/user/using-an-OIDC-provider.md)), you will need, also, to configure the different URLs:
+Besides, if you are using the OAuth2/OIDC login (more information at the [using an OIDC provider documentation](https://github.com/kubeapps/kubeapps/blob/main/docs/user/using-an-OIDC-provider.md)), you will need, also, to configure the different URLs:
 
 ```bash
 helm install kubeapps bitnami/kubeapps \
@@ -748,19 +896,19 @@ helm install kubeapps bitnami/kubeapps \
 
 ### Can Kubeapps install apps into more than one cluster?
 
-Yes! Kubeapps 2.0+ supports multicluster environments. Have a look at the [Kubeapps dashboard documentation](https://github.com/kubeapps/kubeapps/blob/master/docs/user/deploying-to-multiple-clusters.md) to know more.
+Yes! Kubeapps 2.0+ supports multicluster environments. Have a look at the [Kubeapps dashboard documentation](https://github.com/kubeapps/kubeapps/blob/main/docs/user/deploying-to-multiple-clusters.md) to know more.
 
 ### Can Kubeapps be installed without Internet connection?
 
-Yes! Follow the [offline installation documentation](https://github.com/kubeapps/kubeapps/blob/master/docs/user/offline-installation.md) to discover how to perform an installation in an air-gapped scenario.
+Yes! Follow the [offline installation documentation](https://github.com/kubeapps/kubeapps/blob/main/docs/user/offline-installation.md) to discover how to perform an installation in an air-gapped scenario.
 
 ### Does Kubeapps support private repositories?
 
-Of course! Have a look at the [private app repositories documentation](https://github.com/kubeapps/kubeapps/blob/master/docs/user/private-app-repository.md) to learn how to configure a private repository in Kubeapps.
+Of course! Have a look at the [private app repositories documentation](https://github.com/kubeapps/kubeapps/blob/main/docs/user/private-app-repository.md) to learn how to configure a private repository in Kubeapps.
 
 ### Is there any API documentation?
 
-Yes! But it is not definitive and is still subject to change. Check out the [latest API online documentation](https://app.swaggerhub.com/apis/kubeapps/Kubeapps) or download the Kubeapps [OpenAPI Specification yaml file](https://github.com/kubeapps/kubeapps/blob/master/dashboard/public/openapi.yaml) from the repository.
+Yes! But it is not definitive and is still subject to change. Check out the [latest API online documentation](https://app.swaggerhub.com/apis/kubeapps/Kubeapps) or download the Kubeapps [OpenAPI Specification yaml file](https://github.com/kubeapps/kubeapps/blob/main/dashboard/public/openapi.yaml) from the repository.
 
 ### Why can't I configure global private repositories?
 
@@ -774,19 +922,53 @@ You could alternatively ensure that the `imagePullSecret` is available in all na
 
 ### Does Kubeapps support Operators?
 
-Yes! You can get started by following the [operators documentation](https://github.com/kubeapps/kubeapps/blob/master/docs/user/operators.md).
+Yes! You can get started by following the [operators documentation](https://github.com/kubeapps/kubeapps/blob/main/docs/user/operators.md).
 
 ### Slow response when listing namespaces
 
-Kubeapps uses the currently logged-in user credential to retrieve the list of all namespaces. If the user doesn't have permission to list namespaces, the backend will try again with its own service account to list all namespaces and then iterate through each namespace to check if the user has permissions to get secrets for each namespace (to verify if they should be allowed to use that namespace or not and hence whether it is included in the selector). This can lead to a slow response if the number of namespaces on the cluster is large.
+Kubeapps uses the currently logged-in user credential to retrieve the list of all namespaces. If the user does not have permission to list namespaces, the backend will try again with its own service account. It will list all the namespaces and then will iterate through each namespace to check if the user has permissions to get secrets for each one.
+This can lead to a slow response if the number of namespaces on the cluster is large.
 
-To reduce this time, you can increase the number of checks that Kubeapps will perform in parallel (per connection) setting the value: `kubeops.burst=<desired_number>` and `kubeops.QPS=<desired_number>`. The default value, if not set, is 15 burst requests and 10 QPS afterwards.
+To reduce this response time, you can increase the number of checks that Kubeapps will perform in parallel (per connection) setting the value: `kubeappsapis.burst=<desired_number>` and `kubeappsapis.QPS=<desired_number>`.
 
 ### More questions?
 
 Feel free to [open an issue](https://github.com/kubeapps/kubeapps/issues/new) if you have any questions!
 
 ## Troubleshooting
+
+### Upgrading to chart version 8.0.0
+
+This major release renames several values in this chart and adds missing features, in order to get aligned with the rest of the assets in the Bitnami charts repository.
+
+Additionally, it updates both the [PostgreSQL](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) and the [Redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) subcharts to their latest major versions, 11.0.0 and 16.0.0 respectively, where similar changes have been also performed.
+Check [PostgreSQL Upgrading Notes](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/#to-1100) and [Redis Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1600) for more information.
+
+The following values have been renamed:
+
+- `frontend.service.port` renamed as `frontend.service.ports.http`.
+- `frontend.service.nodePort` renamed as `frontend.service.nodePorts.http`.
+- `frontend.containerPort` renamed as `frontend.containerPorts.http`.
+- `dashboard.service.port` renamed as `dashboard.service.ports.http`.
+- `dashboard.containerPort` renamed as `dashboard.containerPorts.http`.
+- `apprepository.service.port` renamed as `apprepository.service.ports.http`.
+- `apprepository.containerPort` renamed as `apprepository.containerPorts.http`.
+- `kubeops.service.port` renamed as `kubeops.service.ports.http`.
+- `kubeops.containerPort` renamed as `kubeops.containerPorts.http`.
+- `assetsvc.service.port` renamed as `assetsvc.service.ports.http`.
+- `assetsvc.containerPort` renamed as `assetsvc.containerPorts.http`.
+- `authProxy.containerPort` renamed as `authProxy.containerPorts.proxy`.
+- `authProxy.additionalFlags` renamed as `authProxy.extraFlags`,
+- Pinniped Proxy service no longer uses `pinnipedProxy.containerPort`. Use `pinnipedProxy.service.ports.pinnipedProxy` to change the service port.
+- `pinnipedProxy.containerPort` renamed as `pinnipedProxy.containerPorts.pinnipedProxy`.
+- `postgresql.replication.enabled` has been removed. Use `postgresql.architecture` instead.
+- `postgresql.postgresqlDatabase` renamed as `postgresql.auth.database`.
+- `postgresql.postgresqlPassword` renamed as `postgresql.auth.password`.
+- `postgresql.existingSecret` renamed as `postgresql.auth.existingSecret`.
+- `redis.redisPassword` renamed as `redis.auth.password`.
+- `redis.existingSecret` renamed as `redis.auth.existingSecret`.
+
+Note also that if you have an existing Postgresql secret that is used for Kubeapps, you will need to update the key from `postgresql-password` to `postgres-password`.
 
 ### Nginx Ipv6 error
 
@@ -796,7 +978,7 @@ When starting the application with the `--set enableIPv6=true` option, the Nginx
 nginx: [emerg] socket() [::]:8080 failed (97: Address family not supported by protocol)
 ```
 
-This usually means that your cluster is not compatible with IPv6. To disable it, install kubeapps with the flag: `--set enableIPv6=false`.
+This usually means that your cluster is not compatible with IPv6. To deactivate it, install kubeapps with the flag: `--set enableIPv6=false`.
 
 ### Forbidden error while installing the Chart
 
@@ -812,7 +994,7 @@ Or:
 Error: namespaces "kubeapps" is forbidden: User "system:serviceaccount:kube-system:default" cannot get namespaces in the namespace "kubeapps"
 ```
 
-It is possible, though uncommon, that your cluster does not have Role-Based Access Control (RBAC) enabled. To check if your cluster has RBAC you can execute:
+It is possible, though uncommon, that your cluster does not have Role-Based Access Control (RBAC) enabled. To check if your cluster has RBAC you can run the following command:
 
 ```bash
 kubectl api-versions
@@ -847,7 +1029,7 @@ helm del --purge kubeapps
 
 3. (Optional) Delete the App Repositories CRD:
 
-> **Warning**: Don't execute this step if you have more than one Kubeapps installation in your cluster.
+> **Warning**: Do not run this step if you have more than one Kubeapps installation in your cluster.
 
 ```bash
 kubectl delete crd apprepositories.kubeapps.com
@@ -855,7 +1037,7 @@ kubectl delete crd apprepositories.kubeapps.com
 
 4. (Optional) Clean the Kubeapps namespace:
 
-> **Warning**: Don't execute this step if you have workloads other than Kubeapps in the `kubeapps` namespace.
+> **Warning**: Do not run this step if you have workloads other than Kubeapps in the `kubeapps` namespace.
 
 ```bash
 kubectl delete namespace kubeapps
@@ -883,11 +1065,11 @@ In this release, no breaking changes were included in Kubeapps (version 2.3.2). 
 Most of these standardizations simply add new parameters that allow to add more customizations such as adding custom env. variables, volumes or sidecar containers. That said, some of them include breaking changes:
 
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
-- `securityContext.*` parameters are deprecated in favor of `XXX.podSecurityContext.*` and `XXX.containerSecurityContext.*`, where XXX is placeholder you need to replace with the actual component(s). For instance, to modify the container security context for "kubeops" use `kubeops.podSecurityContext` and `kubeops.containerSecurityContext` parameters.
+- `securityContext.*` parameters are deprecated in favor of `XXX.podSecurityContext.*` and `XXX.containerSecurityContext.*`, where _XXX_ is placeholder you need to replace with the actual component(s). For instance, to modify the container security context for "kubeops" use `kubeops.podSecurityContext` and `kubeops.containerSecurityContext` parameters.
 
 ### Upgrading to 2.3.1
 
-Kubeapps 2.3.1 (Chart version 6.0.0) introduces some breaking changes. Helm specific functionality has been removed in order to support other installation methods (like using YAML manifests, [`kapp`](https://carvel.dev/kapp) or `kustomize`(https://kustomize.io/)). Because of that, there are some steps required before upgrading from a previous version:
+Kubeapps 2.3.1 (Chart version 6.0.0) introduces some breaking changes. Helm-specific functionality has been removed in order to support other installation methods (like using YAML manifests, [`kapp`](https://carvel.dev/kapp) or [`kustomize`](https://kustomize.io/)). Because of that, there are some steps required before upgrading from a previous version:
 
 1. Kubeapps will no longer create a database secret for you automatically but rather will rely on the default behavior of the PostgreSQL chart. If you try to upgrade Kubeapps and you installed it without setting a password, you will get the following error:
 
@@ -897,7 +1079,7 @@ PASSWORDS ERROR: you must provide your current passwords when upgrade the releas
     'postgresql.postgresqlPassword' must not be empty, please add '--set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD' to the command. To get the current value:
 ```
 
-The error gives you generic instructions for retrieving the PostgreSQL password, but if you have installed a Kubeapps version prior to 2.3.1, the name of the secret will differ. Execute:
+The error gives you generic instructions for retrieving the PostgreSQL password, but if you have installed a Kubeapps version prior to 2.3.1, the name of the secret will differ. Run the following command:
 
 ```console
 export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "kubeapps" kubeapps-db -o jsonpath="{.data.postgresql-password}" | base64 --decode)
@@ -907,7 +1089,7 @@ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "kubeapps" kubeapps-
 
 Make sure that you have stored the password in the variable `$POSTGRESQL_PASSWORD` before continuing with the next issue.
 
-2. The chart initialRepos are no longer installed using [Helm hooks](https://helm.sh/docs/topics/charts_hooks/) which caused these repos to not be handled by Helm after the first installation. Now they will be tracked for every update but if you don't delete the existing ones, it will fail to update with:
+2. The chart `initialRepos` are no longer installed using [Helm hooks](https://helm.sh/docs/topics/charts_hooks/), which caused these repos not to be handled by Helm after the first installation. Now they will be tracked for every update. However, if you do not delete the existing ones, it will fail to update with:
 
 ```console
 Error: UPGRADE FAILED: rendered manifests contain a resource that already exists. Unable to continue with update: AppRepository "bitnami" in namespace "kubeapps" exists and cannot be imported into the current release: invalid ownership metadata; annotation validation error: missing key "meta.helm.sh/release-name": must be set to "kubeapps"; annotation validation error: missing key "meta.helm.sh/release-namespace": must be set to "kubeapps"
@@ -939,15 +1121,15 @@ $ helm upgrade kubeapps bitnami/kubeapps -n kubeapps --set postgresql.postgresql
 - Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
 - After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
 - The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
-- In the case of PostgreSQL subchart, apart from the same changes that are described in this section, there are also other major changes due to the master/slave nomenclature was replaced by primary/readReplica. [Here](https://github.com/bitnami/charts/pull/4385) you can find more information about the changes introduced.
+- In the case of PostgreSQL subchart, apart from the same changes that are described in this section, there are also other major changes due to the _master/slave_ nomenclature was replaced by _primary/readReplica_. [Here](https://github.com/bitnami/charts/pull/4385) you can find more information about the changes introduced.
 
 **Considerations when upgrading to this version**
 
-- If you want to upgrade to this version using Helm 2, this scenario is not supported as this version doesn't support Helm 2 anymore
+- If you want to upgrade to this version using Helm 2, this scenario is not supported as this version does not support Helm 2 anymore
 - If you installed the previous version with Helm 2 and wants to upgrade to this version with Helm 3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm 2 to 3
-- If you want to upgrade to this version from a previous one installed with Helm 3, you shouldn't face any issues related to the new `apiVersion`. Due to the PostgreSQL major version bump, it's necessary to remove the existing statefulsets:
+- If you want to upgrade to this version from a previous one installed with Helm 3, you should not face any issues related to the new `apiVersion`. Due to the PostgreSQL major version bump, it is necessary to remove the existing statefulsets:
 
-> Note: The command below assumes that Kubeapps has been deployed in the kubeapps namespace using "kubeapps" as release name, if that's not the case, adapt the command accordingly.
+> Note: The command below assumes that Kubeapps has been deployed in the kubeapps namespace using "kubeapps" as release name, if that is not the case, adapt the command accordingly.
 
 ```console
 $ kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postgresql-slave
@@ -967,12 +1149,28 @@ Kubeapps 2.0 (Chart version 4.0.0) introduces some breaking changes:
 - MongoDB&reg; is no longer supported. Since 2.0, the only database supported is PostgreSQL.
 - PostgreSQL chart dependency has been upgraded to a new major version.
 
-Due to the last point, it's necessary to run a command before upgrading to Kubeapps 2.0:
+Due to the last point, it is necessary to run a command before upgrading to Kubeapps 2.0:
 
-> Note: The command below assumes that Kubeapps has been deployed in the kubeapps namespace using "kubeapps" as release name, if that's not the case, adapt the command accordingly.
+> Note: The command below assumes that Kubeapps has been deployed in the kubeapps namespace using "kubeapps" as release name, if that is not the case, adapt the command accordingly.
 
 ```bash
 kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postgresql-slave
 ```
 
-After that you should be able to upgrade Kubeapps as always and the database will be repopulated.
+After that, you should be able to upgrade Kubeapps as always and the database will be repopulated.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

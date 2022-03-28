@@ -45,6 +45,17 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+ Create the name of the service account to use
+ */}}
+{{- define "wordpress.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "wordpress.customHTAccessCM" -}}
@@ -150,7 +161,7 @@ Return the MariaDB Secret Name
         {{- printf "%s" (include "wordpress.mariadb.fullname" .) -}}
     {{- end -}}
 {{- else if .Values.externalDatabase.existingSecret -}}
-    {{- printf "%s" .Values.externalDatabase.existingSecret -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.externalDatabase.existingSecret "context" $) -}}
 {{- else -}}
     {{- printf "%s-externaldb" (include "common.names.fullname" .) -}}
 {{- end -}}

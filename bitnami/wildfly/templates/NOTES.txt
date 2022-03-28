@@ -33,12 +33,14 @@ APP VERSION: {{ .Chart.AppVersion }}
 {{- else }}
 
 1. Get the WildFly URL by running:
+{{- $httpPort:=(coalesce .Values.service.ports.http .Values.service.port) | toString }}
+{{- $mgmtPort:=(coalesce .Values.service.ports.mgmt .Values.service.mgmtPort) | toString }}
 
 {{- if contains "NodePort" .Values.service.type }}
 
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo "WildFly URL:            http://$NODE_IP:$NODE_PORT"
+  echo "WildFly URL: http://$NODE_IP:$NODE_PORT"
   {{- if .Values.exposeManagementConsole }}
   export NODE_MGMT_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[1].nodePort}" services {{ template "common.names.fullname" . }})
   echo "WildFly Management URL: http://$NODE_IP:$NODE_MGMT_PORT"
@@ -49,20 +51,18 @@ APP VERSION: {{ .Chart.AppVersion }}
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-  {{- $port:=.Values.service.port | toString }}
-  echo "WildFly URL:            http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+  echo "WildFly URL: http://$SERVICE_IP{{- if ne $httpPort "80" }}:{{ $httpPort }}{{ end }}/"
   {{- if .Values.exposeManagementConsole }}
-  {{- $mgmtPort:=.Values.service.mgmtPort | toString }}
-  echo "WildFly Management URL: http://$SERVICE_IP{{- if ne $mgmtPort "80" }}:{{ .Values.service.mgmtPort }}{{ end }}/
+  echo "WildFly Management URL: http://$SERVICE_IP{{- if ne $mgmtPort "80" }}:{{ $mgmtPort }}{{ end }}/"
   {{- end }}
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ .Values.service.port }} &
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 9990:{{ .Values.service.mgmtPort }} &
-  echo "WildFly URL:            http://127.0.0.1:8080/"
-  echo "WildFly Management URL: http://127.0.0.1:9990/:
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ $httpPort }} &
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 9990:{{ $mgmtPort }} &
+  echo "WildFly URL: http://127.0.0.1:8080/"
+  echo "WildFly Management URL: http://127.0.0.1:9990/"
 
 {{- end }}
 {{- end }}

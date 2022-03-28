@@ -54,7 +54,7 @@ To connect to your Redis&trade; server from outside the cluster check the follow
 
     To connect to your database from outside the cluster execute the following commands:
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     redis-cli -c -h $SERVICE_IP -p {{ .Values.service.ports.redis }} {{- if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
     {{- end }}
 

@@ -1,5 +1,5 @@
 {{- if and (eq .Values.architecture "replication") .Values.secondary.pdb.enabled }}
-apiVersion: policy/v1beta1
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "mysql.secondary.fullname" . }}

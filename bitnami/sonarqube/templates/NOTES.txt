@@ -51,7 +51,7 @@ To access your SonarQube site from outside the cluster follow the steps below:
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
    echo "SonarQube URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ $port }}{{ end }}/"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
@@ -93,9 +93,5 @@ You can access the JMX Prometheus metrics following the steps below:
     {{- $requiredSonarQubePassword := dict "valueKey" "sonarqubePassword" "secret" $secretName "field" "sonarqube-password" "context" $ -}}
     {{- $requiredSonarQubePasswordError := include "common.validations.values.single.empty" $requiredSonarQubePassword -}}
     {{- $passwordValidationErrors = append $passwordValidationErrors $requiredSonarQubePasswordError -}}
-{{- end }}
-{{- if .Values.postgresql.enabled }}
-    {{- $dbSecretName := include "sonarqube.database.secretName" . -}}
-    {{- $dbPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
 {{- end }}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

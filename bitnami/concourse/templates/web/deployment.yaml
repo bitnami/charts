@@ -1,4 +1,4 @@
-{{- if and .Values.web.enabled (include "concourse.host" .) -}}
+{{- if and .Values.web.enabled (include "concourse.host" .) }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -31,8 +31,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.web.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "concourse.web.serviceAccountName" . }}
-      {{- include "imagePullSecrets" . | nindent 6 }}
+      {{- include "concourse.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.web.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.web.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -50,29 +49,23 @@ spec:
       {{- if .Values.web.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.web.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.web.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.web.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.web.priorityClassName }}
-      priorityClassName: {{ .Values.web.priorityClassName | quote }}
+      priorityClassName: {{ .Values.web.priorityClassName }}
+      {{- end }}
+      {{- if .Values.web.schedulerName }}
+      schedulerName: {{ .Values.web.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.web.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.web.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.web.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.web.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      serviceAccountName: {{ template "concourse.web.serviceAccountName" . }}
       initContainers:
-        {{- if and .Values.volumePermissions.enabled }}
-        - name: volume-permissions
-          image: {{ include "concourse.volumePermissions.image" . }}
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command:
-            - sh
-            - -c
-            - |
-              mkdir -p "/bitnami/concourse"
-              chown -R "{{ .Values.web.containerSecurityContext.runAsUser }}:{{ .Values.web.podSecurityContext.fsGroup }}" "/bitnami/concourse"
-          securityContext:
-            runAsUser: 0
-          {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
-          {{- end }}
-        {{- end }}
         {{- if .Values.postgresql.enabled }}
         # NOTE: The value postgresql.image is not available unless postgresql.enabled is not set. We could change this to use bitnami-shell if
         # it had the binary wait-for-port.
@@ -111,18 +104,18 @@ spec:
           {{- end }}
           env:
             - name: POSTGRESQL_CLIENT_DATABASE_HOST
-              value: {{ ternary (include "concourse.database.host" .) .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
+              value: {{ include "concourse.database.host" . }}
             - name: POSTGRESQL_CLIENT_DATABASE_NAME
-              value: {{ ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.port .Values.postgresql.enabled }}
+              value: {{ include "concourse.database.name" . }}
             - name: POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER
-              value: {{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote}}
+              value: {{ include "concourse.database.port" . }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "concourse.postgresql.secretName" . }}
                   key: {{ include "concourse.database.existingsecret.key" . }}
             - name: POSTGRESQL_CLIENT_POSTGRES_USER
-              value: {{ ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
+              value: {{ include "concourse.database.user" . }}
         {{- end }}
         - name: db-migrate
           image: {{ template "concourse.image" . }}
@@ -139,15 +132,15 @@ spec:
                   name: {{ include "concourse.postgresql.secretName" . }}
                   key: {{ include "concourse.database.existingsecret.key" . }}
             - name: CONCOURSE_POSTGRES_DATABASE
-              value: {{ ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.database .Values.postgresql.enabled | quote }}
+              value: {{ include "concourse.database.name" . }}
             - name: CONCOURSE_POSTGRES_HOST
-              value: {{ ternary (include "concourse.database.host" .) .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
+              value: {{ include "concourse.database.host" . }}
             - name: CONCOURSE_POSTGRES_PORT
-              value: {{ include "concourse.database.port" . | quote }}
+              value: {{ include "concourse.database.port" . }}
             - name: CONCOURSE_POSTGRES_USER
-              value: {{ ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.user .Values.postgresql.enabled | quote  }}
+              value: {{ include "concourse.database.user" . }}
         {{- if .Values.web.initContainers }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainers "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: concourse
@@ -159,13 +152,17 @@ spec:
           {{- if .Values.web.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.web.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.web.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.web.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /opt/bitnami/concourse/bin/concourse
           {{- end }}
-          {{- if .Values.web.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.web.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.web.args "context" $) | nindent 12 }}
           {{- else }}
           args:
@@ -185,17 +182,17 @@ spec:
               value: {{ .Values.web.tsa.bindIp | quote }}
             {{- end }}
             - name: CONCOURSE_TSA_BIND_PORT
-              value: {{ .Values.web.tsa.containerPort | quote }}
-            {{- if .Values.web.tsa.debugbindIp }}
+              value: {{ .Values.web.containerPorts.tsa | quote }}
+            {{- if .Values.web.tsa.debugBindIp }}
             - name: CONCOURSE_TSA_DEBUG_BIND_IP
-              value: {{ .Values.web.tsa.debugbindIp | quote }}
+              value: {{ .Values.web.tsa.debugBindIp | quote }}
             {{- end }}
-            {{- if .Values.web.tsa.debugContainerPort }}
+            {{- if .Values.web.containerPorts.pprof }}
             - name: CONCOURSE_TSA_DEBUG_BIND_PORT
-              value: {{ .Values.web.tsa.debugContainerPort | quote }}
+              value: {{ .Values.web.containerPorts.pprof | quote }}
             {{- end }}
             - name: CONCOURSE_BIND_PORT
-              value: {{ .Values.web.containerPort | quote }}
+              value: {{ .Values.web.containerPorts.http | quote }}
             - name: CONCOURSE_TSA_HOST_KEY
               value: "/bitnami/concourse/concourse-keys/host_key"
             - name: CONCOURSE_TSA_AUTHORIZED_KEYS
@@ -213,7 +210,7 @@ spec:
             - name: CONCOURSE_EXTERNAL_URL
               value: {{ include "concourse.host" . | quote }}
             - name: CONCOURSE_BIND_PORT
-              value: {{ .Values.web.containerPort | quote }}
+              value: {{ .Values.web.containerPorts.http | quote }}
             {{- if .Values.web.peerAddress }}
             - name: CONCOURSE_PEER_ADDRESS
               value: {{ .Values.web.peerAddress | quote }}
@@ -287,28 +284,15 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "concourse.postgresql.secretName" . }}
-                  key: {{ include "concourse.database.existingsecret.key" .}}
+                  key: {{ include "concourse.database.existingsecret.key" . }}
             - name: CONCOURSE_POSTGRES_DATABASE
-              value: {{ ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.database .Values.postgresql.enabled | quote }}
+              value: {{ include "concourse.database.name" . }}
             - name: CONCOURSE_POSTGRES_HOST
-              value: {{ ternary (include "concourse.database.host" .) .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
+              value: {{ include "concourse.database.host" . }}
             - name: CONCOURSE_POSTGRES_PORT
-              value: {{ include "concourse.database.port" . | quote }}
+              value: {{ include "concourse.database.port" . }}
             - name: CONCOURSE_POSTGRES_USER
-              value: {{ ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.user .Values.postgresql.enabled | quote  }}
-          ports:
-            - name: http
-              containerPort: {{ .Values.web.containerPort }}
-            - name: tsa
-              containerPort: {{ .Values.web.tsa.containerPort }}
-            {{- if .Values.web.tls.enabled }}
-            - name: https
-              containerPort: {{ .Values.web.tls.containerPort }}
-            {{- end }}
-            {{- if .Values.web.tsa.debugContainerPort }}
-            - name: http-debug
-              containerPort: {{ .Values.web.tsa.debugContainerPort }}
-            {{- end }}
+              value: {{ include "concourse.database.user" . }}
           envFrom:
             {{- if .Values.web.extraEnvVarsCM }}
             - configMapRef:
@@ -318,34 +302,46 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.web.containerPorts.http }}
+            - name: tsa
+              containerPort: {{ .Values.web.containerPorts.tsa }}
+            {{- if .Values.web.tls.enabled }}
+            - name: https
+              containerPort: {{ .Values.web.containerPorts.https }}
+            {{- end }}
+            {{- if .Values.web.containerPorts.tsa }}
+            - name: http-debug
+              containerPort: {{ .Values.web.containerPorts.tsa }}
+            {{- end }}
           {{- if .Values.web.resources }}
           resources: {{- toYaml .Values.web.resources | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.web.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- else if .Values.web.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.web.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: {{ .Values.web.baseUrl | trimSuffix "/" }}/api/v1/info
               port: http
-            initialDelaySeconds: {{ .Values.web.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.web.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.web.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.web.livenessProbe.failureThreshold }}
-            successThreshold: {{ .Values.web.livenessProbe.successThreshold }}
           {{- else if .Values.web.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.web.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: {{ .Values.web.baseUrl | trimSuffix "/" }}/api/v1/info
               port: http
-            initialDelaySeconds: {{ .Values.web.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.web.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.web.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.web.readinessProbe.failureThreshold }}
-            successThreshold: {{ .Values.web.readinessProbe.successThreshold }}
           {{- else if .Values.web.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           volumeMounts:
             - name: concourse-keys
@@ -368,7 +364,7 @@ spec:
             name: {{ include "concourse.web.configmapName" . }}
         - name: concourse-keys
           secret:
-            secretName: {{ include "concourse.web.secretName" .}}
+            secretName: {{ include "concourse.web.secretName" . }}
             defaultMode: 0400
         {{- if .Values.secrets.teamAuthorizedKeys }}
         - name: team-authorized-keys

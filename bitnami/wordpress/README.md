@@ -1,7 +1,13 @@
-# WordPress
+<!--- app-name: WordPress -->
 
-[WordPress](https://wordpress.org/) is one of the most versatile open source content management systems on the market. A publishing platform for building blogs and websites.
+# WordPress packaged by Bitnami
 
+WordPress is the world's most popular blogging and content management platform. Powerful yet simple, everyone from students to global corporations use it to build beautiful, functional websites.
+
+[Overview of WordPress](http://www.wordpress.org)
+
+
+                           
 ## TL;DR
 
 ```console
@@ -19,8 +25,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -59,30 +65,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                             | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
-| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
-| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
-| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
-| `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
+| Name                     | Description                                                                                  | Value           |
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                  | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
+| `commonLabels`           | Labels to add to all deployed resources                                                      | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed resources                                                 | `{}`            |
+| `clusterDomain`          | Kubernetes Cluster Domain                                                                    | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
 
 
 ### WordPress Image parameters
 
-| Name                | Description                                          | Value                 |
-| ------------------- | ---------------------------------------------------- | --------------------- |
-| `image.registry`    | WordPress image registry                             | `docker.io`           |
-| `image.repository`  | WordPress image repository                           | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.8.2-debian-10-r16` |
-| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable image debug mode                              | `false`               |
+| Name                | Description                                          | Value                |
+| ------------------- | ---------------------------------------------------- | -------------------- |
+| `image.registry`    | WordPress image registry                             | `docker.io`          |
+| `image.repository`  | WordPress image repository                           | `bitnami/wordpress`  |
+| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.8.3-debian-10-r2` |
+| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                 |
+| `image.debug`       | Specify if debug values should be set                | `false`              |
 
 
 ### WordPress Configuration parameters
@@ -137,52 +143,62 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WordPress deployment parameters
 
-| Name                                    | Description                                                                               | Value           |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
-| `replicaCount`                          | Number of WordPress replicas to deploy                                                    | `1`             |
-| `updateStrategy.type`                   | WordPress deployment strategy type                                                        | `RollingUpdate` |
-| `updateStrategy.rollingUpdate`          | WordPress deployment rolling update configuration parameters                              | `{}`            |
-| `schedulerName`                         | Alternate scheduler                                                                       | `""`            |
-| `serviceAccountName`                    | ServiceAccount name                                                                       | `default`       |
-| `hostAliases`                           | WordPress pod host aliases                                                                | `[]`            |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for WordPress pods                    | `[]`            |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for WordPress container(s)       | `[]`            |
-| `extraContainerPorts`                   | Optionally specify extra list of additional ports for WordPress container(s)              | `[]`            |
-| `sidecars`                              | Add additional sidecar containers to the WordPress pod                                    | `[]`            |
-| `initContainers`                        | Add additional init containers to the WordPress pods                                      | `[]`            |
-| `podLabels`                             | Extra labels for WordPress pods                                                           | `{}`            |
-| `podAnnotations`                        | Annotations for WordPress pods                                                            | `{}`            |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                     | `""`            |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
-| `affinity`                              | Affinity for pod assignment                                                               | `{}`            |
-| `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment                                                            | `[]`            |
-| `resources.limits`                      | The resources limits for the WordPress container                                          | `{}`            |
-| `resources.requests`                    | The requested resources for the WordPress container                                       | `{}`            |
-| `containerPorts.http`                   | WordPress HTTP container port                                                             | `8080`          |
-| `containerPorts.https`                  | WordPress HTTPS container port                                                            | `8443`          |
-| `podSecurityContext.enabled`            | Enabled WordPress pods' Security Context                                                  | `true`          |
-| `podSecurityContext.fsGroup`            | Set WordPress pod's Security Context fsGroup                                              | `1001`          |
-| `containerSecurityContext.enabled`      | Enabled WordPress containers' Security Context                                            | `true`          |
-| `containerSecurityContext.runAsUser`    | Set WordPress container's Security Context runAsUser                                      | `1001`          |
-| `containerSecurityContext.runAsNonRoot` | Set WordPress container's Security Context runAsNonRoot                                   | `true`          |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `120`           |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`             |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`             |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`             |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `30`            |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `10`            |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `5`             |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `6`             |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`             |
-| `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
-| `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
+| Name                                    | Description                                                                                                              | Value           |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
+| `replicaCount`                          | Number of WordPress replicas to deploy                                                                                   | `1`             |
+| `updateStrategy.type`                   | WordPress deployment strategy type                                                                                       | `RollingUpdate` |
+| `updateStrategy.rollingUpdate`          | WordPress deployment rolling update configuration parameters                                                             | `{}`            |
+| `schedulerName`                         | Alternate scheduler                                                                                                      | `""`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `priorityClassName`                     | Name of the existing priority class to be used by WordPress pods, priority class needs to be created beforehand          | `""`            |
+| `hostAliases`                           | WordPress pod host aliases                                                                                               | `[]`            |
+| `extraVolumes`                          | Optionally specify extra list of additional volumes for WordPress pods                                                   | `[]`            |
+| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for WordPress container(s)                                      | `[]`            |
+| `sidecars`                              | Add additional sidecar containers to the WordPress pod                                                                   | `[]`            |
+| `initContainers`                        | Add additional init containers to the WordPress pods                                                                     | `[]`            |
+| `podLabels`                             | Extra labels for WordPress pods                                                                                          | `{}`            |
+| `podAnnotations`                        | Annotations for WordPress pods                                                                                           | `{}`            |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`            |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`          |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`            |
+| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                                                    | `""`            |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                                                 | `[]`            |
+| `affinity`                              | Affinity for pod assignment                                                                                              | `{}`            |
+| `nodeSelector`                          | Node labels for pod assignment                                                                                           | `{}`            |
+| `tolerations`                           | Tolerations for pod assignment                                                                                           | `[]`            |
+| `resources.limits`                      | The resources limits for the WordPress containers                                                                        | `{}`            |
+| `resources.requests.memory`             | The requested memory for the WordPress containers                                                                        | `512Mi`         |
+| `resources.requests.cpu`                | The requested cpu for the WordPress containers                                                                           | `300m`          |
+| `containerPorts.http`                   | WordPress HTTP container port                                                                                            | `8080`          |
+| `containerPorts.https`                  | WordPress HTTPS container port                                                                                           | `8443`          |
+| `extraContainerPorts`                   | Optionally specify extra list of additional ports for WordPress container(s)                                             | `[]`            |
+| `podSecurityContext.enabled`            | Enabled WordPress pods' Security Context                                                                                 | `true`          |
+| `podSecurityContext.fsGroup`            | Set WordPress pod's Security Context fsGroup                                                                             | `1001`          |
+| `containerSecurityContext.enabled`      | Enabled WordPress containers' Security Context                                                                           | `true`          |
+| `containerSecurityContext.runAsUser`    | Set WordPress container's Security Context runAsUser                                                                     | `1001`          |
+| `containerSecurityContext.runAsNonRoot` | Set WordPress container's Security Context runAsNonRoot                                                                  | `true`          |
+| `livenessProbe.enabled`                 | Enable livenessProbe on WordPress containers                                                                             | `true`          |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                  | `120`           |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                         | `10`            |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                        | `5`             |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                      | `6`             |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                      | `1`             |
+| `readinessProbe.enabled`                | Enable readinessProbe on WordPress containers                                                                            | `true`          |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `30`            |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                        | `10`            |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `5`             |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                     | `6`             |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                     | `1`             |
+| `startupProbe.enabled`                  | Enable startupProbe on WordPress containers                                                                              | `false`         |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `30`            |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                          | `10`            |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                         | `5`             |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                       | `6`             |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                       | `1`             |
+| `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
+| `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
+| `customStartupProbe`                    | Custom startupProbe that overrides the default one                                                                       | `{}`            |
+| `lifecycleHooks`                        | for the WordPress container(s) to automate configuration before or after startup                                         | `{}`            |
 
 
 ### Traffic Exposure Parameters
@@ -190,11 +206,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | WordPress service type                                                                                                           | `LoadBalancer`           |
-| `service.port`                     | WordPress service HTTP port                                                                                                      | `80`                     |
-| `service.httpsPort`                | WordPress service HTTPS port                                                                                                     | `443`                    |
+| `service.ports.http`               | WordPress service HTTP port                                                                                                      | `80`                     |
+| `service.ports.https`              | WordPress service HTTPS port                                                                                                     | `443`                    |
 | `service.httpsTargetPort`          | Target port for HTTPS                                                                                                            | `https`                  |
 | `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
 | `service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
+| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
 | `service.clusterIP`                | WordPress service Cluster IP                                                                                                     | `""`                     |
 | `service.loadBalancerIP`           | WordPress service Load Balancer IP                                                                                               | `""`                     |
 | `service.loadBalancerSourceRanges` | WordPress service Load Balancer sources                                                                                          | `[]`                     |
@@ -209,6 +226,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
 | `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
 | `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
 | `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
@@ -217,61 +235,91 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                          | Description                                                                                     | Value                   |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------- |
-| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                               | `true`                  |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                 | `""`                    |
-| `persistence.accessModes`                     | Persistent Volume access modes                                                                  | `[]`                    |
-| `persistence.accessMode`                      | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)               | `ReadWriteOnce`         |
-| `persistence.size`                            | Persistent Volume size                                                                          | `10Gi`                  |
-| `persistence.dataSource`                      | Custom PVC data source                                                                          | `{}`                    |
-| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `""`                    |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
-| `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r263`     |
-| `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
-| `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
-| `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`                    |
-| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
+| Name                                                   | Description                                                                                     | Value                   |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------- |
+| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                               | `true`                  |
+| `persistence.storageClass`                             | Persistent Volume storage class                                                                 | `""`                    |
+| `persistence.accessModes`                              | Persistent Volume access modes                                                                  | `[]`                    |
+| `persistence.accessMode`                               | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)               | `ReadWriteOnce`         |
+| `persistence.size`                                     | Persistent Volume size                                                                          | `10Gi`                  |
+| `persistence.dataSource`                               | Custom PVC data source                                                                          | `{}`                    |
+| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                              | `""`                    |
+| `persistence.selector`                                 | Selector to match an existing Persistent Volume for WordPress data PVC                          | `{}`                    |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
+| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
+| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r306`     |
+| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
+| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                  | `0`                     |
 
 
 ### Other Parameters
 
-| Name                       | Description                                                    | Value   |
-| -------------------------- | -------------------------------------------------------------- | ------- |
-| `pdb.create`               | Enable a Pod Disruption Budget creation                        | `false` |
-| `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled | `1`     |
-| `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable | `""`    |
-| `autoscaling.enabled`      | Enable Horizontal POD autoscaling for WordPress                | `false` |
-| `autoscaling.minReplicas`  | Minimum number of WordPress replicas                           | `1`     |
-| `autoscaling.maxReplicas`  | Maximum number of WordPress replicas                           | `11`    |
-| `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `50`    |
-| `autoscaling.targetMemory` | Target Memory utilization percentage                           | `50`    |
+| Name                                          | Description                                                            | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for WordPress pod                    | `false` |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
+| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                | `false` |
+| `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled         | `1`     |
+| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable         | `""`    |
+| `autoscaling.enabled`                         | Enable Horizontal POD autoscaling for WordPress                        | `false` |
+| `autoscaling.minReplicas`                     | Minimum number of WordPress replicas                                   | `1`     |
+| `autoscaling.maxReplicas`                     | Maximum number of WordPress replicas                                   | `11`    |
+| `autoscaling.targetCPU`                       | Target CPU utilization percentage                                      | `50`    |
+| `autoscaling.targetMemory`                    | Target Memory utilization percentage                                   | `50`    |
 
 
 ### Metrics Parameters
 
-| Name                                      | Description                                                                  | Value                     |
-| ----------------------------------------- | ---------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`                         | Start a sidecar prometheus exporter to expose metrics                        | `false`                   |
-| `metrics.image.registry`                  | Apache Exporter image registry                                               | `docker.io`               |
-| `metrics.image.repository`                | Apache Exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                       | Apache Exporter image tag (immutable tags are recommended)                   | `0.10.1-debian-10-r66`    |
-| `metrics.image.pullPolicy`                | Apache Exporter image pull policy                                            | `IfNotPresent`            |
-| `metrics.image.pullSecrets`               | Apache Exporter image pull secrets                                           | `[]`                      |
-| `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                      |
-| `metrics.resources.requests`              | The requested resources for the Prometheus exporter container                | `{}`                      |
-| `metrics.service.port`                    | Metrics service port                                                         | `9117`                    |
-| `metrics.service.annotations`             | Additional custom annotations for Metrics service                            | `{}`                      |
-| `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `false`                   |
-| `metrics.serviceMonitor.namespace`        | The namespace in which the ServiceMonitor will be created                    | `""`                      |
-| `metrics.serviceMonitor.interval`         | The interval at which metrics should be scraped                              | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                  | `""`                      |
-| `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                           | `[]`                      |
-| `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                   |
-| `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                      |
+| Name                                         | Description                                                                           | Value                     |
+| -------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`                            | Start a sidecar prometheus exporter to expose metrics                                 | `false`                   |
+| `metrics.image.registry`                     | Apache exporter image registry                                                        | `docker.io`               |
+| `metrics.image.repository`                   | Apache exporter image repository                                                      | `bitnami/apache-exporter` |
+| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                            | `0.11.0-debian-10-r24`    |
+| `metrics.image.pullPolicy`                   | Apache exporter image pull policy                                                     | `IfNotPresent`            |
+| `metrics.image.pullSecrets`                  | Apache exporter image pull secrets                                                    | `[]`                      |
+| `metrics.containerPorts.metrics`             | Prometheus exporter container port                                                    | `9117`                    |
+| `metrics.livenessProbe.enabled`              | Enable livenessProbe on Prometheus exporter containers                                | `true`                    |
+| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                               | `15`                      |
+| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                      | `10`                      |
+| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                     | `5`                       |
+| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                   | `3`                       |
+| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                   | `1`                       |
+| `metrics.readinessProbe.enabled`             | Enable readinessProbe on Prometheus exporter containers                               | `true`                    |
+| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                              | `5`                       |
+| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                     | `10`                      |
+| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                    | `3`                       |
+| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                  | `3`                       |
+| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                  | `1`                       |
+| `metrics.startupProbe.enabled`               | Enable startupProbe on Prometheus exporter containers                                 | `false`                   |
+| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                | `10`                      |
+| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                       | `10`                      |
+| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                      | `1`                       |
+| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                    | `15`                      |
+| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                    | `1`                       |
+| `metrics.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                   | `{}`                      |
+| `metrics.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                  | `{}`                      |
+| `metrics.customStartupProbe`                 | Custom startupProbe that overrides the default one                                    | `{}`                      |
+| `metrics.resources.limits`                   | The resources limits for the Prometheus exporter container                            | `{}`                      |
+| `metrics.resources.requests`                 | The requested resources for the Prometheus exporter container                         | `{}`                      |
+| `metrics.service.ports.metrics`              | Prometheus metrics service port                                                       | `9150`                    |
+| `metrics.service.annotations`                | Additional custom annotations for Metrics service                                     | `{}`                      |
+| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator         | `false`                   |
+| `metrics.serviceMonitor.namespace`           | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)         | `""`                      |
+| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped.                                          | `""`                      |
+| `metrics.serviceMonitor.scrapeTimeout`       | Timeout after which the scrape is ended                                               | `""`                      |
+| `metrics.serviceMonitor.labels`              | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus | `{}`                      |
+| `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                   | `{}`                      |
+| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping                                    | `[]`                      |
+| `metrics.serviceMonitor.metricRelabelings`   | MetricRelabelConfigs to apply to samples before ingestion                             | `[]`                      |
+| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                              | `false`                   |
+| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.     | `""`                      |
 
 
 ### NetworkPolicy parameters
@@ -297,28 +345,31 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database Parameters
 
-| Name                                       | Description                                                               | Value               |
-| ------------------------------------------ | ------------------------------------------------------------------------- | ------------------- |
-| `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements | `true`              |
-| `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`       | `standalone`        |
-| `mariadb.auth.rootPassword`                | MariaDB root password                                                     | `""`                |
-| `mariadb.auth.database`                    | MariaDB custom database                                                   | `bitnami_wordpress` |
-| `mariadb.auth.username`                    | MariaDB custom user name                                                  | `bn_wordpress`      |
-| `mariadb.auth.password`                    | MariaDB custom user password                                              | `""`                |
-| `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                | `true`              |
-| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                           | `""`                |
-| `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                            | `[]`                |
-| `mariadb.primary.persistence.size`         | Persistent Volume size                                                    | `8Gi`               |
-| `externalDatabase.host`                    | External Database server host                                             | `localhost`         |
-| `externalDatabase.port`                    | External Database server port                                             | `3306`              |
-| `externalDatabase.user`                    | External Database username                                                | `bn_wordpress`      |
-| `externalDatabase.password`                | External Database user password                                           | `""`                |
-| `externalDatabase.database`                | External Database database name                                           | `bitnami_wordpress` |
-| `externalDatabase.existingSecret`          | The name of an existing secret with database credentials                  | `""`                |
-| `memcached.enabled`                        | Deploy a Memcached server for caching database queries                    | `false`             |
-| `memcached.service.port`                   | Memcached service port                                                    | `11211`             |
-| `externalCache.host`                       | External cache server host                                                | `localhost`         |
-| `externalCache.port`                       | External cache server port                                                | `11211`             |
+| Name                                       | Description                                                                       | Value               |
+| ------------------------------------------ | --------------------------------------------------------------------------------- | ------------------- |
+| `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements         | `true`              |
+| `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`               | `standalone`        |
+| `mariadb.auth.rootPassword`                | MariaDB root password                                                             | `""`                |
+| `mariadb.auth.database`                    | MariaDB custom database                                                           | `bitnami_wordpress` |
+| `mariadb.auth.username`                    | MariaDB custom user name                                                          | `bn_wordpress`      |
+| `mariadb.auth.password`                    | MariaDB custom user password                                                      | `""`                |
+| `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                        | `true`              |
+| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                                   | `""`                |
+| `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                                    | `[]`                |
+| `mariadb.primary.persistence.size`         | Persistent Volume size                                                            | `8Gi`               |
+| `externalDatabase.host`                    | External Database server host                                                     | `localhost`         |
+| `externalDatabase.port`                    | External Database server port                                                     | `3306`              |
+| `externalDatabase.user`                    | External Database username                                                        | `bn_wordpress`      |
+| `externalDatabase.password`                | External Database user password                                                   | `""`                |
+| `externalDatabase.database`                | External Database database name                                                   | `bitnami_wordpress` |
+| `externalDatabase.existingSecret`          | The name of an existing secret with database credentials. Evaluated as a template | `""`                |
+| `memcached.enabled`                        | Deploy a Memcached server for caching database queries                            | `false`             |
+| `memcached.auth.enabled`                   | Enable Memcached authentication                                                   | `false`             |
+| `memcached.auth.username`                  | Memcached admin user                                                              | `""`                |
+| `memcached.auth.password`                  | Memcached admin password                                                          | `""`                |
+| `memcached.service.port`                   | Memcached service port                                                            | `11211`             |
+| `externalCache.host`                       | External cache server host                                                        | `localhost`         |
+| `externalCache.port`                       | External cache server port                                                        | `11211`             |
 
 
 The above parameters map to the env variables defined in [bitnami/wordpress](https://github.com/bitnami/bitnami-docker-wordpress). For more information please refer to the [bitnami/wordpress](https://github.com/bitnami/bitnami-docker-wordpress) image documentation.
@@ -384,7 +435,7 @@ Refer to the [documentation on using an external database with WordPress](https:
 
 This chart provides support for using Memcached to cache database queries and objects improving the website performance. To enable this feature, set `wordpressConfigureCache` and `memcached.enabled` parameters to `true`.
 
-When this features is enabled, a Memcached server will be deployed in your K8s cluster using the Bitnami Memcached chart and the [W3 Total Cache](https://wordpress.org/plugins/w3-total-cache/) plugin will be activated and configured to use the Memcached server for database caching.
+When this feature is enabled, a Memcached server will be deployed in your K8s cluster using the Bitnami Memcached chart and the [W3 Total Cache](https://wordpress.org/plugins/w3-total-cache/) plugin will be activated and configured to use the Memcached server for database caching.
 
 It is also possible to use an external cache server rather than installing one inside your cluster. To achieve this, the chart allows you to specify credentials for an external cache server with the [`externalCache` parameter](#database-parameters). You should also disable the Memcached installation with the `memcached.enabled` option. Here is an example:
 
@@ -438,7 +489,7 @@ If additional containers are needed in the same pod as WordPress (such as additi
 
 ### Pod affinity
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` parameter. Learn more about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
@@ -461,6 +512,16 @@ In addition, several new features have been implemented:
 To enable the new features, it is not possible to do it by upgrading an existing deployment. Instead, it is necessary to perform a fresh deploy.
 
 ## Upgrading
+
+### To 5.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+- `service.port` and `service.httpsPort` have been regrouped under the `service.ports` map.
+- `metrics.service.port` has been regrouped under the `metrics.service.ports` map.
+- `serviceAccountName` has been deprecated in favor of `serviceAccount` map.
+
+Additionally updates the MariaDB & Memcached subcharts to their newest major `10.x.x` and `6.x.x`, respectively, which contain similar changes.
 
 ### To 12.0.0
 
@@ -550,3 +611,19 @@ Use the workaround below to upgrade from versions previous to `3.0.0`. The follo
 kubectl patch deployment wordpress-wordpress --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 kubectl delete statefulset wordpress-mariadb --cascade=false
 ```
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

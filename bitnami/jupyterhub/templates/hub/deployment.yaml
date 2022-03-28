@@ -1,13 +1,13 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
+  name: {{ include "jupyterhub.hub.name" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: hub
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  name: {{ include "jupyterhub.hub.name" . }}
-  namespace: {{ .Release.Namespace | quote }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -58,11 +58,20 @@ spec:
       {{- if .Values.hub.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.hub.tolerations "context" .) | nindent 8 }}
       {{- end }}
+      {{- if .Values.hub.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.hub.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.hub.priorityClassName }}
       priorityClassName: {{ .Values.hub.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.hub.schedulerName }}
+      schedulerName: {{ .Values.hub.schedulerName }}
+      {{- end }}
       {{- if .Values.hub.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.hub.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.hub.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.hub.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
         {{- if .Values.postgresql.enabled }}
@@ -105,16 +114,16 @@ spec:
             - name: POSTGRESQL_CLIENT_DATABASE_HOST
               value: {{ ternary (include "jupyterhub.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled }}
             - name: POSTGRESQL_CLIENT_DATABASE_NAME
-              value: {{ ternary .Values.postgresql.postgresqlDatabase .Values.externalDatabase.port .Values.postgresql.enabled }}
+              value: {{ ternary .Values.postgresql.auth.database .Values.externalDatabase.port .Values.postgresql.enabled }}
             - name: POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER
-              value: {{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote}}
+              value: {{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "jupyterhub.databaseSecretName" . }}
-                  key: "postgresql-password"
+                  key: {{ include "jupyterhub.databaseSecretKey" . }}
             - name: POSTGRESQL_CLIENT_POSTGRES_USER
-              value: {{ ternary .Values.postgresql.postgresqlUsername .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
+              value: {{ ternary .Values.postgresql.auth.username .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
         {{- end }}
         {{- if .Values.hub.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.hub.initContainers "context" $) | nindent 8 }}
@@ -129,13 +138,17 @@ spec:
           {{- if .Values.hub.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.hub.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.hub.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.hub.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.hub.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - jupyterhub
           {{- end }}
-          {{- if .Values.hub.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.hub.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.hub.args "context" $) | nindent 12 }}
           {{- else }}
           args:
@@ -148,16 +161,16 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.hub.containerPort }}
+              containerPort: {{ coalesce .Values.hub.containerPorts.http .Values.hub.containerPort }}
           env:
             - name: PYTHONUNBUFFERED
               value: "1"
             - name: HELM_RELEASE_NAME
               value: {{ .Release.Name | quote }}
             - name: PROXY_API_SERVICE_PORT
-              value: {{ .Values.proxy.service.api.port | quote }}
+              value: {{ coalesce .Values.proxy.service.api.ports.http .Values.proxy.service.api.port | quote }}
             - name: HUB_SERVICE_PORT
-              value: {{ .Values.hub.service.port | quote }}
+              value: {{  coalesce .Values.hub.service.ports.http .Values.hub.service.port  | quote }}
             - name: POD_NAMESPACE
               valueFrom:
                 fieldRef:
@@ -171,7 +184,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "jupyterhub.databaseSecretName" . }}
-                  key: {{ ternary "postgresql-password" "db-password" .Values.postgresql.enabled | quote }}
+                  key: {{ include "jupyterhub.databaseSecretKey" . }}
             {{- if .Values.hub.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.hub.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -187,44 +200,31 @@ spec:
           {{- if .Values.hub.resources }}
           resources: {{- toYaml .Values.hub.resources | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.hub.startupProbe.enabled }}
-          startupProbe:
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hub.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
               port: http
-            initialDelaySeconds: {{ .Values.hub.startupProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.hub.startupProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.hub.startupProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.hub.startupProbe.failureThreshold }}
-            successThreshold: {{ .Values.hub.startupProbe.successThreshold }}
           {{- else if .Values.hub.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hub.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.hub.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hub.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
               port: http
-            initialDelaySeconds: {{ .Values.hub.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.hub.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.hub.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.hub.livenessProbe.failureThreshold }}
-            successThreshold: {{ .Values.hub.livenessProbe.successThreshold }}
           {{- else if .Values.hub.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hub.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.hub.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hub.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
               port: http
-            initialDelaySeconds: {{ .Values.hub.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.hub.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.hub.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.hub.readinessProbe.failureThreshold }}
-            successThreshold: {{ .Values.hub.readinessProbe.successThreshold }}
           {{- else if .Values.hub.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hub.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           volumeMounts:
             - mountPath: /etc/jupyterhub/jupyterhub_config.py

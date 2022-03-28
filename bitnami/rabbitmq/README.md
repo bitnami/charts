@@ -1,7 +1,13 @@
-# RabbitMQ
+<!--- app-name: RabbitMQ -->
 
-[RabbitMQ](https://www.rabbitmq.com/) is an open source multi-protocol message broker.
+# RabbitMQ packaged by Bitnami
 
+RabbitMQ is an open source general-purpose message broker that is designed for consistent, highly-available messaging scenarios (both synchronous and asynchronous).
+
+[Overview of RabbitMQ](https://www.rabbitmq.com)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```bash
@@ -17,8 +23,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -56,14 +62,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RabbitMQ Image parameters
 
-| Name                | Description                                                    | Value                 |
-| ------------------- | -------------------------------------------------------------- | --------------------- |
-| `image.registry`    | RabbitMQ image registry                                        | `docker.io`           |
-| `image.repository`  | RabbitMQ image repository                                      | `bitnami/rabbitmq`    |
-| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)            | `3.9.10-debian-10-r4` |
-| `image.pullPolicy`  | RabbitMQ image pull policy                                     | `IfNotPresent`        |
-| `image.pullSecrets` | Specify docker-registry secret names as an array               | `[]`                  |
-| `image.debug`       | Set to true if you would like to see extra information on logs | `false`               |
+| Name                | Description                                                    | Value                  |
+| ------------------- | -------------------------------------------------------------- | ---------------------- |
+| `image.registry`    | RabbitMQ image registry                                        | `docker.io`            |
+| `image.repository`  | RabbitMQ image repository                                      | `bitnami/rabbitmq`     |
+| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)            | `3.9.13-debian-10-r38` |
+| `image.pullPolicy`  | RabbitMQ image pull policy                                     | `IfNotPresent`         |
+| `image.pullSecrets` | Specify docker-registry secret names as an array               | `[]`                   |
+| `image.debug`       | Set to true if you would like to see extra information on logs | `false`                |
 
 
 ### Common parameters
@@ -193,16 +199,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence parameters
 
-| Name                        | Description                                      | Value           |
-| --------------------------- | ------------------------------------------------ | --------------- |
-| `persistence.enabled`       | Enable RabbitMQ data persistence using PVC       | `true`          |
-| `persistence.storageClass`  | PVC Storage Class for RabbitMQ data volume       | `""`            |
-| `persistence.selector`      | Selector to match an existing Persistent Volume  | `{}`            |
-| `persistence.accessMode`    | PVC Access Mode for RabbitMQ data volume         | `ReadWriteOnce` |
-| `persistence.existingClaim` | Provide an existing PersistentVolumeClaims       | `""`            |
-| `persistence.size`          | PVC Storage Request for RabbitMQ data volume     | `8Gi`           |
-| `persistence.volumes`       | Additional volumes without creating PVC          | `[]`            |
-| `persistence.annotations`   | Persistence annotations. Evaluated as a template | `{}`            |
+| Name                        | Description                                      | Value                      |
+| --------------------------- | ------------------------------------------------ | -------------------------- |
+| `persistence.enabled`       | Enable RabbitMQ data persistence using PVC       | `true`                     |
+| `persistence.storageClass`  | PVC Storage Class for RabbitMQ data volume       | `""`                       |
+| `persistence.selector`      | Selector to match an existing Persistent Volume  | `{}`                       |
+| `persistence.accessMode`    | PVC Access Mode for RabbitMQ data volume         | `ReadWriteOnce`            |
+| `persistence.existingClaim` | Provide an existing PersistentVolumeClaims       | `""`                       |
+| `persistence.mountPath`     | The path the volume will be mounted at           | `/bitnami/rabbitmq/mnesia` |
+| `persistence.subPath`       | The subdirectory of the volume to mount to       | `""`                       |
+| `persistence.size`          | PVC Storage Request for RabbitMQ data volume     | `8Gi`                      |
+| `persistence.volumes`       | Additional volumes without creating PVC          | `[]`                       |
+| `persistence.annotations`   | Persistence annotations. Evaluated as a template | `{}`                       |
 
 
 ### Exposure parameters
@@ -217,6 +225,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.tlsPortName`              | Amqp TLS service port name                                                                                                       | `amqp-ssl`               |
 | `service.nodePort`                 | Node port override for `amqp` port, if serviceType is `NodePort` or `LoadBalancer`                                               | `""`                     |
 | `service.tlsNodePort`              | Node port override for `amqp-ssl` port, if serviceType is `NodePort` or `LoadBalancer`                                           | `""`                     |
+| `service.distPortEnabled`          | Erlang distribution server port                                                                                                  | `true`                   |
 | `service.distPort`                 | Erlang distribution server port                                                                                                  | `25672`                  |
 | `service.distPortName`             | Erlang distribution service port name                                                                                            | `dist`                   |
 | `service.distNodePort`             | Node port override for `dist` port, if serviceType is `NodePort`                                                                 | `""`                     |
@@ -227,6 +236,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.metricsPort`              | RabbitMQ Prometheues metrics port                                                                                                | `9419`                   |
 | `service.metricsPortName`          | RabbitMQ Prometheues metrics service port name                                                                                   | `metrics`                |
 | `service.metricsNodePort`          | Node port override for `metrics` port, if serviceType is `NodePort`                                                              | `""`                     |
+| `service.epmdPortEnabled`          | RabbitMQ EPMD Discovery service port                                                                                             | `true`                   |
 | `service.epmdNodePort`             | Node port override for `epmd` port, if serviceType is `NodePort`                                                                 | `""`                     |
 | `service.epmdPortName`             | EPMD Discovery service port name                                                                                                 | `epmd`                   |
 | `service.extraPorts`               | Extra ports to expose in the service                                                                                             | `[]`                     |
@@ -245,6 +255,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                                | `false`                  |
 | `ingress.selfSigned`               | Set this to true in order to create a TLS secret for this ingress record                                                         | `false`                  |
 | `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraRules`               | The list of additional rules to be added to this ingress record. Evaluated as a template                                         | `[]`                     |
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
@@ -255,25 +266,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                      | Description                                                                            | Value                 |
-| ----------------------------------------- | -------------------------------------------------------------------------------------- | --------------------- |
-| `metrics.enabled`                         | Enable exposing RabbitMQ metrics to be gathered by Prometheus                          | `false`               |
-| `metrics.plugins`                         | Plugins to enable Prometheus metrics in RabbitMQ                                       | `rabbitmq_prometheus` |
-| `metrics.podAnnotations`                  | Annotations for enabling prometheus to access the metrics endpoint                     | `{}`                  |
-| `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator           | `false`               |
-| `metrics.serviceMonitor.namespace`        | Specify the namespace in which the serviceMonitor resource will be created             | `""`                  |
-| `metrics.serviceMonitor.interval`         | Specify the interval at which metrics should be scraped                                | `30s`                 |
-| `metrics.serviceMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                    | `""`                  |
-| `metrics.serviceMonitor.relabellings`     | Specify Metric Relabellings to add to the scrape endpoint                              | `[]`                  |
-| `metrics.serviceMonitor.honorLabels`      | honorLabels chooses the metric's labels on collisions with target labels               | `false`               |
-| `metrics.serviceMonitor.additionalLabels` | Used to pass Labels that are required by the installed Prometheus Operator             | `{}`                  |
-| `metrics.serviceMonitor.targetLabels`     | Used to keep given service's labels in target                                          | `{}`                  |
-| `metrics.serviceMonitor.podTargetLabels`  | Used to keep given pod's labels in target                                              | `{}`                  |
-| `metrics.serviceMonitor.path`             | Define the path used by ServiceMonitor to scrap metrics                                | `""`                  |
-| `metrics.prometheusRule.enabled`          | Set this to true to create prometheusRules for Prometheus operator                     | `false`               |
-| `metrics.prometheusRule.additionalLabels` | Additional labels that can be used so prometheusRules will be discovered by Prometheus | `{}`                  |
-| `metrics.prometheusRule.namespace`        | namespace where prometheusRules resource should be created                             | `""`                  |
-| `metrics.prometheusRule.rules`            | List of rules, used as template by Helm.                                               | `[]`                  |
+| Name                                       | Description                                                                                            | Value                 |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | --------------------- |
+| `metrics.enabled`                          | Enable exposing RabbitMQ metrics to be gathered by Prometheus                                          | `false`               |
+| `metrics.plugins`                          | Plugins to enable Prometheus metrics in RabbitMQ                                                       | `rabbitmq_prometheus` |
+| `metrics.podAnnotations`                   | Annotations for enabling prometheus to access the metrics endpoint                                     | `{}`                  |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                           | `false`               |
+| `metrics.serviceMonitor.namespace`         | Specify the namespace in which the serviceMonitor resource will be created                             | `""`                  |
+| `metrics.serviceMonitor.interval`          | Specify the interval at which metrics should be scraped                                                | `30s`                 |
+| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                                    | `""`                  |
+| `metrics.serviceMonitor.relabellings`      | MetricsRelabelConfigs to apply to samples before ingestion. DEPRECATED: Will be removed in next major. | `[]`                  |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping.                                                    | `[]`                  |
+| `metrics.serviceMonitor.metricRelabelings` | MetricsRelabelConfigs to apply to samples before ingestion.                                            | `[]`                  |
+| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                               | `false`               |
+| `metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the installed Prometheus Operator                             | `{}`                  |
+| `metrics.serviceMonitor.targetLabels`      | Used to keep given service's labels in target                                                          | `{}`                  |
+| `metrics.serviceMonitor.podTargetLabels`   | Used to keep given pod's labels in target                                                              | `{}`                  |
+| `metrics.serviceMonitor.path`              | Define the path used by ServiceMonitor to scrap metrics                                                | `""`                  |
+| `metrics.prometheusRule.enabled`           | Set this to true to create prometheusRules for Prometheus operator                                     | `false`               |
+| `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so prometheusRules will be discovered by Prometheus                 | `{}`                  |
+| `metrics.prometheusRule.namespace`         | namespace where prometheusRules resource should be created                                             | `""`                  |
+| `metrics.prometheusRule.rules`             | List of rules, used as template by Helm.                                                               | `[]`                  |
 
 
 ### Init Container Parameters
@@ -283,7 +296,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r261`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r349`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                    | `{}`                    |
@@ -490,7 +503,7 @@ extraConfiguration: |-
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
@@ -572,3 +585,19 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 - [Bitnami Helm charts documentation](https://docs.bitnami.com/kubernetes/apps/)
 - [Kubernetes FAQs](https://docs.bitnami.com/kubernetes/faq/)
 - [Kubernetes Developer guides](https://docs.bitnami.com/tutorials/)
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

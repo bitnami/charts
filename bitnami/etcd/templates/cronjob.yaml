@@ -3,7 +3,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: {{ printf "%s-snapshotter" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -93,18 +93,18 @@ spec:
                 - name: ETCD_CLIENT_CERT_AUTH
                   value: "true"
                 - name: ETCD_TRUSTED_CA_FILE
-                  value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt"}}"
+                  value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
                 {{- else if .Values.auth.client.caFilename }}
                 - name: ETCD_TRUSTED_CA_FILE
-                  value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt"}}"
+                  value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}"
                 {{- end }}
                 {{- end }}
-                {{- if .Values.auth.rbac.enabled }}
+                {{- if or .Values.auth.rbac.create .Values.auth.rbac.enabled }}
                 - name: ETCD_ROOT_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: {{ include "etcd.secretName" . }}
-                      key: etcd-root-password
+                      key: {{ include "etcd.secretPasswordKey" . }}
                 {{- end }}
               {{- if .Values.disasterRecovery.cronjob.resources }}
               resources: {{- toYaml .Values.disasterRecovery.cronjob.resources | nindent 16 }}

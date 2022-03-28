@@ -1,7 +1,13 @@
-# Apache Geode
+<!--- app-name: Apache Geode -->
 
-[Apache Geode](https://geode.apache.org/) is a data management platform that provides advanced capabilities for data-intensive applications.
+# Apache Geode packaged by Bitnami
 
+Apache Geode is a data management platform that provides advanced capabilities for data-intensive applications.
+
+[Overview of Apache Geode](https://geode.apache.org/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -17,8 +23,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -48,7 +54,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Global parameters
 
 | Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
+|:--------------------------|:------------------------------------------------|:------|
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
@@ -57,7 +63,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
+|:-------------------------|:----------------------------------------------------------------------------------------|:----------------|
 | `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
 | `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
@@ -73,10 +79,10 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Apache Geode Common parameters
 
 | Name                                     | Description                                                                            | Value                                                       |
-| ---------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+|:-----------------------------------------|:---------------------------------------------------------------------------------------|:------------------------------------------------------------|
 | `image.registry`                         | Apache Geode image registry                                                            | `docker.io`                                                 |
 | `image.repository`                       | Apache Geode image repository                                                          | `bitnami/geode`                                             |
-| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                | `1.14.0-debian-10-r48`                                      |
+| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                | `1.14.2-debian-10-r23`                                      |
 | `image.pullPolicy`                       | Apache Geode image pull policy                                                         | `IfNotPresent`                                              |
 | `image.pullSecrets`                      | Apache Geode image pull secrets                                                        | `[]`                                                        |
 | `image.debug`                            | Enable Apache Geode image debug mode                                                   | `false`                                                     |
@@ -98,7 +104,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Apache Geode Locator parameters
 
 | Name                                            | Description                                                                                                 | Value               |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------- |
+|:------------------------------------------------|:------------------------------------------------------------------------------------------------------------|:--------------------|
 | `locator.logLevel`                              | Log level for Locator nodes                                                                                 | `info`              |
 | `locator.initialHeapSize`                       | Initial size of the heap on Locator nodes                                                                   | `""`                |
 | `locator.maxHeapSize`                           | Maximum size of the heap on Locator nodes                                                                   | `""`                |
@@ -190,7 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Apache Geode Cache Server parameters
 
 | Name                                             | Description                                                                                                                                 | Value               |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+|:-------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------|:--------------------|
 | `server.logLevel`                                | Log level for Cache Server nodes                                                                                                            | `info`              |
 | `server.initialHeapSize`                         | Initial size of the heap on Cache Server nodes                                                                                              | `""`                |
 | `server.maxHeapSize`                             | Maximum size of the heap on Cache Server nodes                                                                                              | `""`                |
@@ -274,7 +280,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Traffic Exposure Parameters
 
 | Name                  | Description                                                                                                                      | Value                    |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+|:----------------------|:---------------------------------------------------------------------------------------------------------------------------------|:-------------------------|
 | `ingress.enabled`     | Enable ingress record generation for Apache Geode                                                                                | `false`                  |
 | `ingress.pathType`    | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
@@ -292,11 +298,11 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                     | Value                   |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------- |
+|:-------------------------------------------------------|:------------------------------------------------------------------------------------------------|:------------------------|
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r261`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r305`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -306,49 +312,49 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                            | Description                                                                      | Value                |
-| ----------------------------------------------- | -------------------------------------------------------------------------------- | -------------------- |
-| `metrics.enabled`                               | Expose Apache Geode metrics                                                      | `false`              |
-| `metrics.image.registry`                        | Bitnami HAProxy image registry                                                   | `docker.io`          |
-| `metrics.image.repository`                      | Bitnami HAProxy image repository                                                 | `bitnami/haproxy`    |
-| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                       | `2.5.0-debian-10-r1` |
-| `metrics.image.pullPolicy`                      | Bitnami HAProxy image pull policy                                                | `IfNotPresent`       |
-| `metrics.image.pullSecrets`                     | Bitnami HAProxy image pull secrets                                               | `[]`                 |
-| `metrics.containerPort`                         | Metrics container port                                                           | `9914`               |
-| `metrics.livenessProbe.enabled`                 | Enable livenessProbe on Metrics containers                                       | `true`               |
-| `metrics.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                          | `15`                 |
-| `metrics.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                 | `10`                 |
-| `metrics.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                | `5`                  |
-| `metrics.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                              | `5`                  |
-| `metrics.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                              | `1`                  |
-| `metrics.readinessProbe.enabled`                | Enable readinessProbe on Metrics containers                                      | `true`               |
-| `metrics.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                         | `15`                 |
-| `metrics.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                | `10`                 |
-| `metrics.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                               | `5`                  |
-| `metrics.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                             | `5`                  |
-| `metrics.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                             | `1`                  |
-| `metrics.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                              | `{}`                 |
-| `metrics.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                             | `{}`                 |
-| `metrics.containerSecurityContext.enabled`      | Enabled Metrics containers' Security Context                                     | `true`               |
-| `metrics.containerSecurityContext.runAsUser`    | Set Metrics containers' Security Context runAsUser                               | `1001`               |
-| `metrics.containerSecurityContext.runAsNonRoot` | Set Metrics containers' Security Context runAsNonRoot                            | `true`               |
-| `metrics.service.port`                          | Service HTTP management port                                                     | `9914`               |
-| `metrics.service.annotations`                   | Annotations for enabling prometheus to access the metrics endpoints              | `{}`                 |
-| `metrics.serviceMonitor.enabled`                | Specify if a ServiceMonitor will be deployed for Prometheus Operator             | `false`              |
-| `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                         | `""`                 |
-| `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                              | `{}`                 |
-| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in Prometheus | `""`                 |
-| `metrics.serviceMonitor.interval`               | How frequently to scrape metrics                                                 | `""`                 |
-| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                          | `""`                 |
-| `metrics.serviceMonitor.metricRelabelings`      | Specify additional relabeling of metrics                                         | `[]`                 |
-| `metrics.serviceMonitor.relabelings`            | Specify general relabeling                                                       | `[]`                 |
-| `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                              | `{}`                 |
+| Name                                            | Description                                                                      | Value                 |
+|:------------------------------------------------|:---------------------------------------------------------------------------------|:----------------------|
+| `metrics.enabled`                               | Expose Apache Geode metrics                                                      | `false`               |
+| `metrics.image.registry`                        | Bitnami HAProxy image registry                                                   | `docker.io`           |
+| `metrics.image.repository`                      | Bitnami HAProxy image repository                                                 | `bitnami/haproxy`     |
+| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                       | `2.5.0-debian-10-r45` |
+| `metrics.image.pullPolicy`                      | Bitnami HAProxy image pull policy                                                | `IfNotPresent`        |
+| `metrics.image.pullSecrets`                     | Bitnami HAProxy image pull secrets                                               | `[]`                  |
+| `metrics.containerPort`                         | Metrics container port                                                           | `9914`                |
+| `metrics.livenessProbe.enabled`                 | Enable livenessProbe on Metrics containers                                       | `true`                |
+| `metrics.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                          | `15`                  |
+| `metrics.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                 | `10`                  |
+| `metrics.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                | `5`                   |
+| `metrics.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                              | `5`                   |
+| `metrics.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                              | `1`                   |
+| `metrics.readinessProbe.enabled`                | Enable readinessProbe on Metrics containers                                      | `true`                |
+| `metrics.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                         | `15`                  |
+| `metrics.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                | `10`                  |
+| `metrics.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                               | `5`                   |
+| `metrics.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                             | `5`                   |
+| `metrics.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                             | `1`                   |
+| `metrics.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                              | `{}`                  |
+| `metrics.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                             | `{}`                  |
+| `metrics.containerSecurityContext.enabled`      | Enabled Metrics containers' Security Context                                     | `true`                |
+| `metrics.containerSecurityContext.runAsUser`    | Set Metrics containers' Security Context runAsUser                               | `1001`                |
+| `metrics.containerSecurityContext.runAsNonRoot` | Set Metrics containers' Security Context runAsNonRoot                            | `true`                |
+| `metrics.service.port`                          | Service HTTP management port                                                     | `9914`                |
+| `metrics.service.annotations`                   | Annotations for enabling prometheus to access the metrics endpoints              | `{}`                  |
+| `metrics.serviceMonitor.enabled`                | Specify if a ServiceMonitor will be deployed for Prometheus Operator             | `false`               |
+| `metrics.serviceMonitor.namespace`              | Namespace in which Prometheus is running                                         | `""`                  |
+| `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                              | `{}`                  |
+| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in Prometheus | `""`                  |
+| `metrics.serviceMonitor.interval`               | How frequently to scrape metrics                                                 | `""`                  |
+| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                          | `""`                  |
+| `metrics.serviceMonitor.metricRelabelings`      | Specify additional relabeling of metrics                                         | `[]`                  |
+| `metrics.serviceMonitor.relabelings`            | Specify general relabeling                                                       | `[]`                  |
+| `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                              | `{}`                  |
 
 
 ### Other Parameters
 
 | Name                                          | Description                                                            | Value   |
-| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+|:----------------------------------------------|:-----------------------------------------------------------------------|:--------|
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
@@ -384,39 +390,38 @@ helm install my-release -f values.yaml bitnami/geode
 This chart an Apache Geode cluster including a _locator_ statefulset with N _Locator_ nodes, and a _server_ statefulset with M Cache server nodes. The schema below represents the architecture when you used an Ingress controller to expose the Apache Geode Pulse dashboard:
 
 ```
-      ┌──────────────────┐
-      │     Ingress      │
-      │    Controller    │
-      └────────┬─────────┘
-               │ / HTTP monitoring
-               │   dashboard
-               │
-        ┌──────┘
-        │                           ┌────────────────────┐
-        │ (port 7070)               │    Geode client    │
-        ▼                           │        pods        │─────┐
-  ┌───────────────────┐             └───┬────────────────┘     │
-  │     Locator       │                 │                      │
-  │       svc         │                 │                      │
-  └───┬───────────────┘                 │ / server             │ / write
-      │                                 │   discovery          |   read
-      ▼                                 │                      │
-┌──────────────┐                        │    ┌──────────────┐  │
-│   Locator    │                        │    │   Locator    │  │
-│              │◀───────────────────────└───▶│              │  │
-│     Pod      │                             │     Pod      │  │
-└──────────────┘                             └──────────────┘  │
-      ▲                                             ▲          │
-  ┌───└───────────────────────────────────┌─────────┘          │
-  │                                       │                    │
-  │ / configuration      ┌─────────────────────────────────────┘
-  │   service            │                │                    │
-  │                      │                │                    │
-┌─┴─────────────┐        │              ┌───────────────┐      │
-│ Cache server  │        │              │ Cache server  │      │
-│               │◀───────┘              │               │◀─────┘
-│     Pod       │                       │    Pod        │
-└───────────────┘                       └───────────────┘
+       ------------------
+      |     Ingress      |
+      |    Controller    |
+       ------------------
+               | / HTTP monitoring
+               |   dashboard
+        |------|
+        |                            --------------------
+        | (port 7070)               |    Geode client    |
+        \/                          |        pods        |-----|
+   -------------------               --------------------      |
+  |     Locator       |                 |                      |
+  |       svc         |                 |                      |
+   -------------------                  | / server             | / write
+       |                                |   discovery          |   read
+      \/                                |                      |
+ --------------                         |     --------------   |
+|   Locator    |                        |    |   Locator    |  |
+|              |<-----------------------|--->|              |  |
+|     Pod      |                             |     Pod      |  |
+ --------------                               --------------   |
+      ^                                             ^          |
+  |---|---------------------------------------------|          |
+  |                                       |                    |
+  | / configuration      --------------------------------------|
+  |   service            |                |                    |
+  |                      |                |                    |
+ ---------------         |               ---------------       |
+| Cache server  |        |              | Cache server  |      |
+|               |<-------|              |               | <----|
+|     Pod       |                       |     Pod       |
+ ---------------                         ---------------
 ```
 
 > Note: when using several Locator nodes, it is recommended to configure sticky sessions using `--set locator.service.sessionAffinity="ClientIP"` or configuring the IngressController accordingly to access the Pulse monitoring dashboard.
@@ -481,3 +486,19 @@ As an alternative, this chart supports using an initContainer to change the owne
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

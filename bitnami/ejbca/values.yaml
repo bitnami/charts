@@ -66,7 +66,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/ejbca
-  tag: 7.4.3-2-debian-10-r69
+  tag: 7.4.3-2-debian-10-r121
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -162,13 +162,25 @@ nodeSelector: {}
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+## @param updateStrategy.type EJBCA deployment strategy type.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## e.g:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
+##
+updateStrategy:
+  type: RollingUpdate
 ## Enable persistence using Persistent Volume Claims
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ## @param persistence.enabled Whether to enable persistence based on Persistent Volume Claims
-## @param persistence.accessMode PVC Access Mode (RWO, ROX, RWX)
+## @param persistence.accessModes [array] Persistent Volume access modes
 ## @param persistence.size Size of the PVC to request
 ## @param persistence.storageClass PVC Storage Class
 ## @param persistence.existingClaim Name of an existing PVC to reuse
+## @param persistence.annotations Persistent Volume Claim annotations
 ##
 persistence:
   enabled: true
@@ -185,8 +197,10 @@ persistence:
   ## existingClaim: your-claim
   ##
   existingClaim: ""
-  accessMode: ReadWriteOnce
+  accessModes:
+    - ReadWriteOnce
   size: 2Gi
+  annotations: {}
 ## @param sidecars Attach additional sidecar containers to the pod
 ## Example:
 ## sidecars:
@@ -211,6 +225,19 @@ initContainers: []
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
+## @param priorityClassName EJBCA pods' priorityClassName
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 ## @param ejbcaAdminUsername EJBCA administrator username
 ## ref: https://github.com/bitnami/bitnami-docker-ejbca#environment-variables
 ##
@@ -245,18 +272,28 @@ ejbcaCA:
 ## "keystore-password" --> Password used to encrypt keystore.jks
 ##
 ejbcaKeystoreExistingSecret: ""
-## @param extraEnv Additional container environment variables
-## extraEnv:
-##   - name:
-##     value:
+## @param extraEnvVars Array with extra environment variables to add to EJBCA nodes
+## e.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
 ##
-extraEnv: []
+extraEnvVars: []
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for EJBCA nodes
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for EJBCA nodes
+##
+extraEnvVarsSecret: ""
 ## @param command Custom command to override image cmd
 ##
 command: []
 ## @param args Custom args for the custom command
 ##
 args: []
+## @param lifecycleHooks for the EJBCA container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## EJBCA containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits The resources limits for the container
@@ -270,10 +307,28 @@ resources:
 ## K8s Security Context for EJBCA container
 ## @param containerSecurityContext.enabled Enabled EJBCA containers' Security Context
 ## @param containerSecurityContext.runAsUser Set EJBCA containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set EJBCA container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
+## EJBCA pod extra options for startup probe
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param startupProbe.enabled Enable/disable startupProbe
+## @param startupProbe.initialDelaySeconds Delay before startup probe is initiated
+## @param startupProbe.periodSeconds How often to perform the probe
+## @param startupProbe.timeoutSeconds When the probe times out
+## @param startupProbe.failureThreshold Minimum consecutive failures for the probe
+## @param startupProbe.successThreshold Minimum consecutive successes for the probe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 500
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
 ## EJBCA pod extra options for liveness probe
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Enable/disable livenessProbe
@@ -306,6 +361,9 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+## @param customStartupProbe Custom startup probe to execute (when the main one is disabled)
+##
+customStartupProbe: {}
 ## @param customLivenessProbe Custom liveness probe to execute (when the main one is disabled)
 ##
 customLivenessProbe: {}
@@ -326,13 +384,13 @@ service:
   ## @param service.type Kubernetes Service type
   ##
   type: LoadBalancer
-  ## @param service.port Service HTTP port
+  ## @param service.ports.http Service HTTP port
+  ## @param service.ports.https Service HTTPS port
   ##
-  port: 8080
-  ## @param service.httpsPort Service HTTPS port
-  ##
-  httpsPort: 8443
-  ## @param service.advertisedHttpsPort Port used for the administration
+  ports:
+    http: 8080
+    https: 8443
+  ## @param service.advertisedHttpsPort Port number used in the rendered URLs for the admistrator login.
   ##
   advertisedHttpsPort: 443
   ## @param service.httpsTargetPort Service Target HTTPS port
@@ -348,6 +406,15 @@ service:
   nodePorts:
     http: ""
     https: ""
+  ## @param service.clusterIP EJBCA service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP EJBCA service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
@@ -362,6 +429,16 @@ service:
   ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
   ##
   extraPorts: []
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  sessionAffinityConfig: {}
 
 ## @section Ingress parameters
 
@@ -443,6 +520,11 @@ ingress:
   ##   certificate:
   ##
   secrets: []
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
 
 ## @section Database parameters
 

@@ -69,10 +69,10 @@ spec:
       {{- if or $.Values.mongos.initContainers $.Values.common.initContainers }}
       initContainers:
         {{- with $.Values.mongos.initContainers }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
         {{- with $.Values.common.initContainers }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
       {{- end }}
       containers:
@@ -258,7 +258,7 @@ spec:
               {{- if .Values.usePasswordFile }}
               export MONGODB_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
               {{- end }}
-              /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ .Values.service.port }}/admin {{ .Values.metrics.extraArgs }}
+              /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ .Values.service.port }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ .Values.metrics.extraArgs }}
           {{- end }}
           {{- if .Values.usePasswordFile }}
           volumeMounts:
@@ -295,10 +295,10 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
         {{- with $.Values.mongos.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
         {{- with $.Values.common.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8}}
+        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
         {{- if .Values.usePasswordFile }}

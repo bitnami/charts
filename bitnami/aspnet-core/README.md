@@ -1,7 +1,13 @@
-# ASP.NET Core
+<!--- app-name: ASP.NET -->
 
-[ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core) is an open-source framework created by Microsoft for building cloud-enabled, modern applications.
+# ASP.NET packaged by Bitnami
 
+ASP.NET Core is an open-source framework for web application development created by Microsoft. It runs on both the full .NET Framework, on Windows, and the cross-platform .NET Core.
+
+[Overview of ASP.NET](https://github.com/dotnet/aspnetcore)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -19,8 +25,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -75,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------------- | --------------------- |
 | `image.registry`     | ASP.NET Core image registry                                          | `docker.io`           |
 | `image.repository`   | ASP.NET Core image repository                                        | `bitnami/aspnet-core` |
-| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)              | `3.1.21-debian-10-r0` |
+| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)              | `6.0.1-debian-10-r30` |
 | `image.pullPolicy`   | ASP.NET Core image pull policy                                       | `IfNotPresent`        |
 | `image.pullSecrets`  | ASP.NET Core image pull secrets                                      | `[]`                  |
 | `image.debug`        | Enable image debug mode                                              | `false`               |
@@ -159,7 +165,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.enabled`                   | Enable to download/build ASP.NET Core app from external git repository | `true`                                                              |
 | `appFromExternalRepo.clone.image.registry`      | Git image registry                                                     | `docker.io`                                                         |
 | `appFromExternalRepo.clone.image.repository`    | Git image repository                                                   | `bitnami/git`                                                       |
-| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                         | `2.33.0-debian-10-r81`                                              |
+| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                         | `2.34.1-debian-10-r46`                                              |
 | `appFromExternalRepo.clone.image.pullPolicy`    | Git image pull policy                                                  | `IfNotPresent`                                                      |
 | `appFromExternalRepo.clone.image.pullSecrets`   | Git image pull secrets                                                 | `[]`                                                                |
 | `appFromExternalRepo.clone.repository`          | Git repository to clone                                                | `https://github.com/dotnet/AspNetCore.Docs.git`                     |
@@ -167,10 +173,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.clone.extraVolumeMounts`   | Add extra volume mounts for the GIT container                          | `[]`                                                                |
 | `appFromExternalRepo.publish.image.registry`    | .NET SDK image registry                                                | `docker.io`                                                         |
 | `appFromExternalRepo.publish.image.repository`  | .NET SDK image repository                                              | `bitnami/dotnet-sdk`                                                |
-| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                    | `3.1.414-debian-10-r26`                                             |
+| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                    | `6.0.101-debian-10-r29`                                             |
 | `appFromExternalRepo.publish.image.pullPolicy`  | .NET SDK image pull policy                                             | `IfNotPresent`                                                      |
 | `appFromExternalRepo.publish.image.pullSecrets` | .NET SDK image pull secrets                                            | `[]`                                                                |
-| `appFromExternalRepo.publish.subFolder`         | Sub folder under the Git repository containing the ASP.NET Core app    | `aspnetcore/fundamentals/servers/kestrel/samples/3.x/KestrelSample` |
+| `appFromExternalRepo.publish.subFolder`         | Sub folder under the Git repository containing the ASP.NET Core app    | `aspnetcore/fundamentals/servers/kestrel/samples/6.x/KestrelSample` |
 | `appFromExternalRepo.publish.extraFlags`        | Extra flags to be appended to "dotnet publish" command                 | `[]`                                                                |
 | `appFromExternalRepo.startCommand`              | Command used to start ASP.NET Core app                                 | `["dotnet","KestrelSample.dll"]`                                    |
 | `appFromExistingPVC.enabled`                    | Enable mounting your ASP.NET Core app from an existing PVC             | `false`                                                             |
@@ -209,6 +215,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `healthIngress.hostname`           | When the health ingress is enabled, a host pointing to this will be created                                                      | `aspnet-core.local`      |
 | `healthIngress.annotations`        | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `healthIngress.tls`                | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `healthIngress.ingressClassName`   | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `healthIngress.extraHosts`         | n array with additional hostname(s) to be covered with the ingress record                                                        | `[]`                     |
 | `healthIngress.extraTls`           | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `healthIngress.secrets`            | Custom TLS certificates as secrets                                                                                               | `[]`                     |
@@ -399,9 +406,13 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.0.0
+
+The ASP.NET application version has been updated to the major version `6`. The init container of the chart have also been adapted to use the `6.x` files.
 
 ### To 2.0.0
 
@@ -435,3 +446,19 @@ No issues should be expected when upgrading.
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

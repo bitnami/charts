@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
@@ -38,6 +40,7 @@ commonLabels: {}
 extraDeploy: []
 
 ## @section Joomla! parameters
+##
 
 ## Bitnami Joomla! image version
 ## ref: https://hub.docker.com/r/bitnami/joomla/tags/
@@ -51,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/joomla
-  tag: 3.10.4-debian-10-r0
+  tag: 4.1.0-debian-10-r35
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -163,10 +166,11 @@ containerPorts:
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ## @param persistence.enabled Enable persistence using PVC
 ## @param persistence.storageClass PVC Storage Class for Joomla! volume
-## @param persistence.accessMode PVC Access Mode for Joomla! volume
+## @param persistence.accessModes PVC Access Mode for Joomla! volume
 ## @param persistence.size PVC Storage Request for Joomla! volume
 ## @param persistence.existingClaim An Existing PVC name
 ## @param persistence.hostPath Host mount path for Joomla! volume
+## @param persistence.annotations Persistent Volume Claim annotations
 ##
 persistence:
   enabled: true
@@ -177,7 +181,8 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
-  accessMode: ReadWriteOnce
+  accessModes:
+    - ReadWriteOnce
   size: 8Gi
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
@@ -189,6 +194,7 @@ persistence:
   ## Default: nil.
   ##
   hostPath: ""
+  annotations: {}
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -243,6 +249,7 @@ resources:
   ## limits:
   ##    cpu: 100m
   ##    memory: 128Mi
+  ##
   limits: {}
   requests:
     memory: 512Mi
@@ -259,12 +266,28 @@ podSecurityContext:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable Joomla! containers' Security Context
 ## @param containerSecurityContext.runAsUser Joomla! containers' Security Context
+## @param containerSecurityContext.runAsNonRoot Set Joomla! container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
-## Configure extra options for liveness probe
+  runAsNonRoot: true
+## Configure extra options for Joomla! containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 600
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -279,8 +302,6 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-## Configure extra options for readiness probe
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ## @param readinessProbe.enabled Enable readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
@@ -295,6 +316,9 @@ readinessProbe:
   timeoutSeconds: 3
   failureThreshold: 6
   successThreshold: 1
+## @param customStartupProbe Override default startup probe
+##
+customStartupProbe: {}
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
@@ -305,6 +329,15 @@ customReadinessProbe: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 ## @param lifecycleHooks LifecycleHook to set additional configuration at startup Evaluated as a template
 ##
 lifecycleHooks: {}
@@ -318,6 +351,7 @@ podAnnotations: {}
 podLabels: {}
 
 ## @section Traffic Exposure Parameters
+##
 
 ## Kubernetes configuration
 ## For minikube, set this to NodePort, for ingress ClusterIP, elsewhere use LoadBalancer
@@ -326,16 +360,12 @@ service:
   ## @param service.type Kubernetes Service type
   ##
   type: LoadBalancer
-  ## @param service.port Service HTTP port
+  ## @param service.ports.http Service HTTP port
+  ## @param service.ports.https Service HTTPS port
   ##
-  port: 80
-  ## @param service.httpsPort Service HTTPS port
-  ##
-  httpsPort: 443
-  ## @param service.loadBalancerIP loadBalancerIP for the Joomla Service (optional, cloud specific)
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
-  ##
-  loadBalancerIP: ""
+  ports:
+    http: 80
+    https: 443
   ## Node ports to expose
   ## @param service.nodePorts.http Node port for HTTP
   ## @param service.nodePorts.https Node port for HTTPS
@@ -346,10 +376,43 @@ service:
   nodePorts:
     http: ""
     https: ""
+  ## @param service.clusterIP Joomla! service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP loadBalancerIP for the Joomla Service (optional, cloud specific)
+  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Joomla! service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.annotations Additional custom annotations for Joomla! service
+  ##
+  annotations: {}
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 ## Configure the ingress resource that allows you to access the
 ## Joomla! installation. Set up the URL
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -430,8 +493,14 @@ ingress:
   ##   certificate:
   ##
   secrets: []
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
 
 ## @section Database parameters
+##
 
 ## MariaDB chart configuration
 ## https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
@@ -495,6 +564,7 @@ mariadb:
 externalDatabase:
   ## @param externalDatabase.existingSecret Name of the database existing Secret Object
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  ##
   existingSecret: ""
   ## @param externalDatabase.host Host of the existing database
   ##
@@ -513,6 +583,7 @@ externalDatabase:
   database: bitnami_joomla
 
 ## @section Metrics parameters
+##
 
 metrics:
   ## @param metrics.enabled Start a side-car prometheus exporter
@@ -527,7 +598,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.10.1-debian-10-r81
+    tag: 0.11.0-debian-10-r97
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -548,6 +619,7 @@ metrics:
     prometheus.io/port: "9117"
 
 ## @section NetworkPolicy parameters
+##
 
 ## Add networkpolicies
 ##
@@ -637,4 +709,5 @@ networkPolicy:
     ##       - namespaceSelector:
     ##           matchLabels:
     ##             label: example
+    ##
     customRules: {}

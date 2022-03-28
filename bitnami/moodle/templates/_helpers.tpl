@@ -56,6 +56,17 @@ Moodle&trade; credential secret name
 {{- end -}}
 
 {{/*
+Return the Database type
+*/}}
+{{- define "moodle.databaseType" -}}
+{{- if .Values.mariadb.enabled }}
+    {{- printf "mariadb" -}}
+{{- else -}}
+    {{- printf "%s" .Values.externalDatabase.type -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the MariaDB Hostname
 */}}
 {{- define "moodle.databaseHost" -}}

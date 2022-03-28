@@ -132,7 +132,7 @@ spec:
           - name: certs
             mountPath: /certs
           - name: shared-certs
-            mountPath: /opt/bitnami/spark/conf/certs
+            mountPath: /bitnami/spark/conf/certs
         {{- end }}
       {{- end }}
       containers:
@@ -144,9 +144,15 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- end }}
           ports:
+            {{- if .Values.security.ssl.enabled }}
+            - name: https
+              containerPort: {{ .Values.worker.webPortHttps }}
+              protocol: TCP
+            {{- else }}
             - name: http
               containerPort: {{ .Values.worker.webPort }}
               protocol: TCP
+            {{- end }}
           {{- if .Values.worker.clusterPort }}
             - name: cluster
               containerPort: {{ .Values.worker.clusterPort }}
@@ -157,11 +163,11 @@ spec:
           volumeMounts:
             {{- if .Values.worker.configurationConfigMap }}
             - name: config
-              mountPath: '/opt/bitnami/spark/conf/'
+              mountPath: '/bitnami/spark/conf/'
             {{- end }}
             {{- if .Values.security.ssl.enabled }}
             - name: shared-certs
-              mountPath: '/opt/bitnami/spark/conf/certs'
+              mountPath: '/bitnami/spark/conf/certs'
               readOnly: true
             - name: certs
               mountPath: /certs
@@ -179,7 +185,7 @@ spec:
             {{- if .Values.metrics.enabled }}
             - name: SPARK_METRICS_ENABLED
               value: "true"
-            {{- end}}
+            {{- end }}
             ## There are some environment variables whose existence needs
             ## to be checked because Spark checks if they are null instead of an
             ## empty string
@@ -249,6 +255,8 @@ spec:
               value: {{ .Values.security.ssl.needClientAuth | quote }}
             - name: SPARK_SSL_PROTOCOL
               value: {{ .Values.security.ssl.protocol | quote }}
+            - name: SPARK_WEBUI_SSL_PORT
+              value: {{ .Values.worker.webPortHttps | quote }}
             {{- end }}
             {{- if .Values.worker.extraEnvVars }}
             {{- toYaml .Values.worker.extraEnvVars | nindent 12 }}

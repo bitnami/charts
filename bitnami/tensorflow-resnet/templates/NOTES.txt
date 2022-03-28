@@ -16,7 +16,7 @@ APP VERSION: {{ .Chart.AppVersion }}
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
   export APP_PORT=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.spec.ports[0].port}")
 
   {{- else if contains "ClusterIP" .Values.service.type }}

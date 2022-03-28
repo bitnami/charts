@@ -1,7 +1,13 @@
-# Logstash
+<!--- app-name: Logstash -->
 
-[Logstash](https://www.elastic.co/products/logstash) is an open source, server-side data processing pipeline that ingests data from a multitude of sources simultaneously, transforms it, and then sends it to your favorite "stash".
+# Logstash packaged by Bitnami
 
+Logstash is an open source data processing engine. It ingests data from multiple sources, processes it, and sends the output to final destination in real-time. It is a core component of the ELK stack.
+
+[Overview of Logstash](http://logstash.net)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -17,8 +23,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -73,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `image.registry`                              | Logstash image registry                                                                                                          | `docker.io`                 |
 | `image.repository`                            | Logstash image repository                                                                                                        | `bitnami/logstash`          |
-| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                              | `7.15.2-debian-10-r12`      |
+| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                              | `7.16.3-debian-10-r0`       |
 | `image.pullPolicy`                            | Logstash image pull policy                                                                                                       | `IfNotPresent`              |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                 | `[]`                        |
 | `image.debug`                                 | Specify if debug logs should be enabled                                                                                          | `false`                     |
@@ -143,7 +149,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions init container                                                                                 | `0`                         |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                 | `docker.io`                 |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                               | `bitnami/bitnami-shell`     |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                     | `10-debian-10-r259`         |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                     | `10-debian-10-r307`         |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                              | `IfNotPresent`              |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                 | `[]`                        |
 | `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                                                                | `{}`                        |
@@ -162,7 +168,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                             | Enable the export of Prometheus metrics                                                                                          | `false`                     |
 | `metrics.image.registry`                      | Logstash Relay image registry                                                                                                    | `docker.io`                 |
 | `metrics.image.repository`                    | Logstash Relay image repository                                                                                                  | `bitnami/logstash-exporter` |
-| `metrics.image.tag`                           | Logstash Relay image tag (immutable tags are recommended)                                                                        | `7.3.0-debian-10-r360`      |
+| `metrics.image.tag`                           | Logstash Relay image tag (immutable tags are recommended)                                                                        | `7.3.0-debian-10-r409`      |
 | `metrics.image.pullPolicy`                    | Logstash Relay image pull policy                                                                                                 | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                 | `[]`                        |
 | `metrics.resources.limits`                    | The resources limits for the Logstash Prometheus Exporter container                                                              | `{}`                        |
@@ -286,7 +292,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
@@ -307,3 +313,19 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). Subsequently, a major version of the chart was released to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
 [Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/logstash/administration/upgrade-helm3/).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

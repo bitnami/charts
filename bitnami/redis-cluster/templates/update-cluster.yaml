@@ -3,6 +3,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ template "common.names.fullname" . }}-cluster-update
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -115,7 +116,26 @@ spec:
                 done
                 ((newNodeCounter += 1))
               done
+
+              {{- if .Values.tls.enabled }}
+              while ! redis-cli --cluster rebalance --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_TLS_PORT}" --cluster-use-empty-masters; do
               {{- else }}
+              while ! redis-cli --cluster rebalance "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_PORT}" --cluster-use-empty-masters; do
+              {{- end }}
+                echo "Rebalance failed, retrying"
+                sleep 5
+                {{- if .Values.tls.enabled }}
+                redis-cli --cluster fix --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_TLS_PORT}"
+                {{- else }}
+                redis-cli --cluster fix "{{ index .Values.cluster.externalAccess.service.loadBalancerIP 0 }}:${REDIS_PORT}"
+                {{- end }}
+              done
+
+              {{- else }}
+              # number of currently deployed redis master nodes
+              currentMasterNodesNum="$(( {{ .Values.cluster.update.currentNumberOfNodes }} / (( {{ .Values.cluster.update.currentNumberOfReplicas }} + 1 )) ))"
+              # end postion of new replicas that should be assigned to original redis master nodes
+              slaveNodesEndPos="$(( {{ .Values.cluster.update.currentNumberOfNodes }} + (($REDIS_CLUSTER_REPLICAS - {{ .Values.cluster.update.currentNumberOfReplicas }})) * $currentMasterNodesNum ))"
               for node in $(seq $((1+{{ .Values.cluster.update.currentNumberOfNodes }})) {{ .Values.cluster.nodes }}); do
                 newNodeIndex="$(($node - 1))"
                 newNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${newNodeIndex}.{{ template "common.names.fullname" . }}-headless" 120 5)
@@ -129,7 +149,9 @@ spec:
                   sleep 5
                 done
                 slave=()
-                if (( $REDIS_CLUSTER_REPLICAS >= 1 )) && (( newNodeIndex % (( $REDIS_CLUSTER_REPLICAS + 1 )) )); then
+                # when the index of the new node is less than `slaveNodesEndPos`，the added node is a replica that assigned to original redis master node
+                # when the index of the new node is greater than or equal to `slaveNodesEndPos`，and it is not a multiple of `$REDIS_CLUSTER_REPLICAS + 1`, the added node is a replica that assigned to newly added master node
+                if (( $REDIS_CLUSTER_REPLICAS >= 1 )) && (( (( $newNodeIndex < $slaveNodesEndPos )) || (( (( $newNodeIndex >= $slaveNodesEndPos )) && (( $newNodeIndex % (( $REDIS_CLUSTER_REPLICAS + 1 )) )) )) )); then
                   slave+=("--cluster-slave")
                 fi
                 {{- if .Values.tls.enabled }}
@@ -143,6 +165,22 @@ spec:
                   newNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${newNodeIndex}.{{ template "common.names.fullname" . }}-headless" 120 5)
                 done
               done
+
+              {{- if .Values.tls.enabled }}
+              while ! redis-cli --cluster rebalance --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "${firstNodeIP}:${REDIS_TLS_PORT}" --cluster-use-empty-masters; do
+              {{- else }}
+              while ! redis-cli --cluster rebalance "${firstNodeIP}:${REDIS_PORT}" --cluster-use-empty-masters; do
+              {{- end }}
+                echo "Rebalance failed, retrying"
+                sleep 5
+                firstNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless" 120 5)
+                {{- if .Values.tls.enabled }}
+                redis-cli --cluster fix --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "${firstNodeIP}:${REDIS_TLS_PORT}"
+                {{- else }}
+                redis-cli --cluster fix "${firstNodeIP}:${REDIS_PORT}"
+                {{- end }}
+              done
+
               {{- end }}
           {{- end }}
           env:
@@ -150,6 +188,12 @@ spec:
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.cluster.externalAccess.enabled }}
             {{- if .Values.tls.enabled }}
+            - name:  REDIS_TLS_CERT_FILE
+              value: {{ template "redis-cluster.tlsCert" . }}
+            - name:  REDIS_TLS_KEY_FILE
+              value: {{ template "redis-cluster.tlsCertKey" . }}
+            - name:  REDIS_TLS_CA_FILE
+              value: {{ template "redis-cluster.tlsCACert" . }}
             - name: REDIS_TLS_PORT
             {{- else }}
             - name: REDIS_PORT
@@ -157,11 +201,17 @@ spec:
               value: {{ .Values.cluster.externalAccess.service.port | quote }}
             {{- else }}
             {{- if .Values.tls.enabled }}
+            - name:  REDIS_TLS_CERT_FILE
+              value: {{ template "redis-cluster.tlsCert" . }}
+            - name:  REDIS_TLS_KEY_FILE
+              value: {{ template "redis-cluster.tlsCertKey" . }}
+            - name:  REDIS_TLS_CA_FILE
+              value: {{ template "redis-cluster.tlsCACert" . }}
             - name: REDIS_TLS_PORT
             {{- else }}
             - name: REDIS_PORT
             {{- end }}
-              value: {{ .Values.redis.port | quote }}
+              value: {{ .Values.redis.containerPorts.redis | quote }}
             {{- end }}
             - name: REDIS_CLUSTER_REPLICAS
               value: {{ .Values.cluster.replicas | quote }}
@@ -213,3 +263,4 @@ spec:
       {{- end }}
       {{- end }}
 {{- end }}
+

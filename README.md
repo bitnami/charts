@@ -16,9 +16,10 @@ $ helm install my-release bitnami/<chart>
 
 ## Before you begin
 
-### Prerequisites
-- Kubernetes 1.12+
-- Helm 3.1.0
+### Prerequisites 
+
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ### Setup a Kubernetes Cluster
 
@@ -58,15 +59,15 @@ Useful Helm Client Commands:
 * Install a chart: `helm install my-release bitnami/<package-name>`
 * Upgrade your application: `helm upgrade`
 
-# License
+## License
 
-Copyright (c) 2015-2021 Bitnami
+Copyright &copy; 2022 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    https://www.apache.org/licenses/LICENSE-2.0
+    http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

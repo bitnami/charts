@@ -39,13 +39,13 @@ In order to replicate the container startup scripts execute this command:
 
 {{- else }}
 
-etcd can be accessed via port {{ .Values.service.port }} on the following DNS name from within your cluster:
+etcd can be accessed via port {{ coalesce .Values.service.ports.client .Values.service.port }} on the following DNS name from within your cluster:
 
     {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
 To create a pod that you can use as a etcd client run the following command:
 
-    kubectl run {{ template "common.names.fullname" . }}-client --restart='Never' --image {{ template "etcd.image" . }}{{- if .Values.auth.rbac.enabled }} --env ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.etcd-root-password}" | base64 --decode){{- end }} --env ETCDCTL_ENDPOINTS="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }}" --namespace {{ .Release.Namespace }} --command -- sleep infinity
+    kubectl run {{ template "common.names.fullname" . }}-client --restart='Never' --image {{ template "etcd.image" . }}{{- if or .Values.auth.rbac.create .Values.auth.rbac.enabled }} --env ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.etcd-root-password}" | base64 --decode){{- end }} --env ETCDCTL_ENDPOINTS="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ coalesce .Values.service.ports.client .Values.service.port }}" --namespace {{ .Release.Namespace }} --command -- sleep infinity
 
 Then, you can set/get a key using the commands below:
 
@@ -67,16 +67,16 @@ To connect to your etcd server from outside the cluster execute the following co
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-    echo "etcd URL: http://$SERVICE_IP:{{ .Values.service.port }}/"
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    echo "etcd URL: http://$SERVICE_IP:{{ coalesce .Values.service.ports.client .Values.service.port }}/"
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
-    echo "etcd URL: http://127.0.0.1:{{ .Values.service.port }}"
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ coalesce .Values.service.ports.client .Values.service.port }}:{{ coalesce .Values.service.ports.client .Values.service.port }} &
+    echo "etcd URL: http://127.0.0.1:{{ coalesce .Values.service.ports.client .Values.service.port }}"
 
 {{- end }}
-{{- if .Values.auth.rbac.enabled }}
+{{- if or .Values.auth.rbac.create .Values.auth.rbac.enabled }}
 
  * As rbac is enabled you should add the flag `--user root:$ETCD_ROOT_PASSWORD` to the etcdctl commands. Use the command below to export the password:
 
@@ -96,12 +96,12 @@ To connect to your etcd server from outside the cluster execute the following co
 
  * You should also export a proper etcdctl endpoint using the https schema. Eg.
 
-    export ETCDCTL_ENDPOINTS=https://{{ template "common.names.fullname" . }}-0:{{ .Values.service.port }}
+    export ETCDCTL_ENDPOINTS=https://{{ template "common.names.fullname" . }}-0:{{ coalesce .Values.service.ports.client .Values.service.port }}
 
 {{- end }}
 {{- if .Values.auth.client.enableAuthentication }}
 
- * As TLS host authentication is enabled you should add the flag `--ca-file /opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt"}}` to the etcdctl commands.
+ * As TLS host authentication is enabled you should add the flag `--ca-file /opt/bitnami/etcd/certs/client/{{ .Values.auth.client.caFilename | default "ca.crt" }}` to the etcdctl commands.
 
 {{- end }}
 {{- end }}
@@ -111,7 +111,7 @@ To connect to your etcd server from outside the cluster execute the following co
 {{- include "etcd.validateValues" . }}
 {{- $requiredPassword := list -}}
 {{- $secretName := include "etcd.secretName" . -}}
-{{- if and .Values.auth.rbac.enabled (not .Values.auth.rbac.existingSecret) -}}
+{{- if and (or .Values.auth.rbac.create .Values.auth.rbac.enabled) (not .Values.auth.rbac.existingSecret) -}}
   {{- $requiredEtcdPassword := dict "valueKey" "auth.rbac.rootPassword" "secret" $secretName "field" "etcd-root-password" -}}
   {{- $requiredPassword = append $requiredPassword $requiredEtcdPassword -}}
 {{- end -}}

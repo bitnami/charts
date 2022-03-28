@@ -1,7 +1,7 @@
 apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "odoo.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -11,13 +11,13 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
-  {{- end }}
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
   {{- end }}
   template:
     metadata:
@@ -26,19 +26,13 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
       {{- if .Values.podAnnotations }}
-      annotations:
-        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
       {{- include "odoo.imagePullSecrets" . | nindent 6 }}
-      {{- if .Values.schedulerName }}
-      schedulerName: {{ .Values.schedulerName | quote }}
-      {{- end }}
       serviceAccountName: {{ template "odoo.serviceAccountName" . }}
       {{- if .Values.hostAliases }}
-      # yamllint disable rule:indentation
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
-      # yamllint enable rule:indentation
       {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
@@ -54,23 +48,37 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if or (and .Values.volumePermissions.enabled .Values.persistence.enabled) .Values.initContainers }}
-
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "odoo.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           command:
-            - sh
-            - -c
+            - /bin/bash
+          args:
+            - -ec
             - |
-              mkdir -p "/bitnami/odoo"
-              chown -R "odoo:root" "/bitnami/odoo"
-          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
+              mkdir -p /bitnami/odoo
+              find /bitnami/odoo -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R odoo:root
+          {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
+          securityContext: {- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
@@ -83,17 +91,23 @@ spec:
         {{- end }}
       {{- end }}
       containers:
-        - name: {{ template "odoo.fullname" . }}
-          {{- if .Values.containerSecurityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.containerSecurityContext.runAsUser }}
-          {{- end }}
+        - name: {{ template "common.names.fullname" . }}
           image: {{ template "odoo.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.command }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
@@ -112,8 +126,8 @@ spec:
             - name: ODOO_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "odoo.databaseSecretName" . | quote }}
-                  key: "postgresql-password"
+                  name: {{ include "odoo.databaseSecretName" . }}
+                  key: {{ include "odoo.databaseSecretPasswordKey" . }}
             {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.create }}
             - name: POSTGRESQL_CLIENT_DATABASE_HOST
               value: {{ template "odoo.databaseHost" . }}
@@ -125,7 +139,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "odoo.databaseSecretName" . }}
-                  key: "postgresql-postgres-password"
+                  key: {{ include "odoo.databaseSecretPostgresPasswordKey" . }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_NAME
               value: {{ template "odoo.databaseName" . }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME
@@ -134,7 +148,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "odoo.databaseSecretName" . }}
-                  key: "postgresql-password"
+                  key: {{ include "odoo.databaseSecretPasswordKey" . }}
             {{- end }}
             - name: ODOO_EMAIL
               value: {{ .Values.odooEmail | quote }}
@@ -144,7 +158,7 @@ spec:
                   name: {{ template "odoo.secretName" . }}
                   key: odoo-password
             - name: ODOO_SKIP_BOOTSTRAP
-              value: {{ .Values.skipInstall | quote }}
+              value: {{ ternary "yes" "no" .Values.odooSkipInstall | quote }}
             - name: ODOO_LOAD_DEMO_DATA
               value: {{ ternary "yes" "no" .Values.loadDemoData | quote }}
             {{- if .Values.withoutDemo }}
@@ -188,45 +202,32 @@ spec:
             {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.containerPort }}
+              containerPort: {{ coalesce .Values.containerPorts.http .Values.containerPort }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled" "path") "context" $) | nindent 12 }}
             httpGet:
               path: {{ .Values.livenessProbe.path }}
               port: http
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled" "path") "context" $) | nindent 12 }}
             httpGet:
               path: {{ .Values.readinessProbe.path }}
               port: http
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.startupProbe.enabled }}
-          startupProbe:
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled" "path") "context" $) | nindent 12 }}
             httpGet:
               path: {{ .Values.startupProbe.path }}
               port: http
-            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.startupProbe.successThreshold }}
-            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
           {{- else if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
@@ -248,7 +249,7 @@ spec:
         - name: odoo-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (include "odoo.fullname" .) }}
+            claimName: {{ (tpl .Values.persistence.existingClaim $) | default (include "common.names.fullname" .) }}
           {{- else }}
           emptyDir: {}
           {{- end }}

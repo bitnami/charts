@@ -47,11 +47,12 @@ extraDeploy: []
 ## @param image.tag phpMyAdmin image tag (immutable tags are recommended)
 ## @param image.pullPolicy Image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Enable phpmyadmin image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/phpmyadmin
-  tag: 5.1.1-debian-10-r172
+  tag: 5.1.3-debian-10-r40
   ## Specify a imagePullPolicy
   ##
   pullPolicy: IfNotPresent
@@ -63,12 +64,18 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
+## @param lifecycleHooks for the phpmyadmin container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## @param extraEnvVars Extra environment variables to be set on PhpMyAdmin container
 ## For example:
 ## extraEnvVars:
@@ -120,10 +127,12 @@ podSecurityContext:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable phpMyAdmin containers' Security Context
 ## @param containerSecurityContext.runAsUser Group ID for the volumes of the pod
+## @param containerSecurityContext.runAsNonRoot Set phpmyadmin container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
 ## phpMyAdmin containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -144,6 +153,27 @@ resources:
   ##    cpu: 100m
   ##    memory: 128Mi
   requests: {}
+## phpMyAdmin containers' startup probe. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.httpGet.path Request path for startupProbe
+## @param startupProbe.httpGet.port Port for startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 30
+  timeoutSeconds: 30
+  periodSeconds: 10
+  successThreshold: 1
+  failureThreshold: 6
+  httpGet:
+    path: /
+    port: http
 ## phpMyAdmin containers' liveness probe. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -186,6 +216,9 @@ readinessProbe:
   httpGet:
     path: /
     port: http
+## @param customStartupProbe Override default startup probe
+##
+customStartupProbe: {}
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
@@ -240,6 +273,18 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+## @param priorityClassName phpmyadmin pods' priorityClassName
+##
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 ## @param extraVolumes Optionally specify extra list of additional volumes for PhpMyAdmin pods
 ##
 extraVolumes: []
@@ -277,12 +322,12 @@ service:
   ## @param service.type Kubernetes Service type
   ##
   type: ClusterIP
-  ## @param service.port Service HTTP port
+  ## @param service.ports.http Service HTTP port
+  ## @param service.ports.https Service HTTPS port
   ##
-  port: 80
-  ## @param service.httpsPort Service HTTPS port
-  ##
-  httpsPort: 443
+  ports:
+    http: 80
+    https: 443
   ## Specify the nodePort values for the LoadBalancer and NodePort service types
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ## @param service.nodePorts.http Kubernetes http node port
@@ -311,15 +356,33 @@ service:
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
   ## @param service.annotations Provide any additional annotations that may be required for the PhpMyAdmin service
   ##
   annotations: {}
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+
 ## Ingress configuration
 ##
 ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
   ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
   ## certManager: false
   ##
@@ -330,6 +393,19 @@ ingress:
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -381,6 +457,11 @@ ingress:
   ##     certificate: ""
   ##
   secrets: []
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
 
 ## @section Database parameters
 
@@ -451,7 +532,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.10.1-debian-10-r83
+    tag: 0.11.0-debian-10-r97
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -479,10 +560,38 @@ metrics:
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.metrics.service.port }}"
+    ## @param metrics.service.clusterIP phpmyadmin service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
     ## @param metrics.service.loadBalancerIP Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`
     ## Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank
     ##
     loadBalancerIP: ""
+    ## @param metrics.service.loadBalancerSourceRanges phpmyadmin service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param metrics.service.externalTrafficPolicy phpmyadmin service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param metrics.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
@@ -505,21 +614,27 @@ metrics:
     ## scrapeTimeout: 30s
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.relabellings Specify Relabellings to add to the scrape endpoint
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
-    relabellings: []
+    relabelings: []
     ## @param metrics.serviceMonitor.metricRelabelings Specify Metric Relabelings to add to the scrape endpoint
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     metricRelabelings: []
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
     ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
-    ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are required by the installed Prometheus Operator
-    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ##
-    additionalLabels: {}
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
 
 ## @section NetworkPolicy parameters
 

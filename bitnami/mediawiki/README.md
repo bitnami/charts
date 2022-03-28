@@ -1,7 +1,13 @@
-# MediaWiki
+<!--- app-name: MediaWiki -->
 
-[MediaWiki](https://www.mediawiki.org) is an extremely powerful, scalable software and a feature-rich wiki implementation that uses PHP to process and display data stored in a database, such as MySQL.
+# MediaWiki packaged by Bitnami
 
+MediaWiki is the free and open source wiki software that powers Wikipedia. Used by thousands of organizations, it is extremely powerful, scalable software and a feature-rich wiki implementation.
+
+[Overview of MediaWiki](http://www.mediawiki.org/wiki/MediaWiki)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -19,8 +25,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -72,106 +78,130 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Mediawiki parameters
 
-| Name                 | Description                                                          | Value                 |
-| -------------------- | -------------------------------------------------------------------- | --------------------- |
-| `image.registry`     | MediaWiki image registry                                             | `docker.io`           |
-| `image.repository`   | MediaWiki image repository                                           | `bitnami/mediawiki`   |
-| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                 | `1.37.0-debian-10-r0` |
-| `image.pullPolicy`   | Image pull policy                                                    | `IfNotPresent`        |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                  |
-| `hostAliases`        | Deployment pod host aliases                                          | `[]`                  |
-| `mediawikiUser`      | User of the application                                              | `user`                |
-| `mediawikiPassword`  | Application password                                                 | `""`                  |
-| `mediawikiEmail`     | Admin email                                                          | `user@example.com`    |
-| `mediawikiName`      | Name for the wiki                                                    | `My Wiki`             |
-| `mediawikiHost`      | Mediawiki host to create application URLs                            | `""`                  |
-| `allowEmptyPassword` | Allow DB blank passwords                                             | `yes`                 |
-| `smtpHost`           | SMTP host                                                            | `""`                  |
-| `smtpPort`           | SMTP port                                                            | `""`                  |
-| `smtpHostID`         | SMTP host ID                                                         | `""`                  |
-| `smtpUser`           | SMTP user                                                            | `""`                  |
-| `smtpPassword`       | SMTP password                                                        | `""`                  |
-| `command`            | Override default container command (useful when using custom images) | `[]`                  |
-| `args`               | Override default container args (useful when using custom images)    | `[]`                  |
-| `extraEnvVars`       | Extra environment variables to be set on Mediawki container          | `[]`                  |
-| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                 | `""`                  |
-| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                    | `""`                  |
+| Name                 | Description                                                                      | Value                  |
+| -------------------- | -------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`     | MediaWiki image registry                                                         | `docker.io`            |
+| `image.repository`   | MediaWiki image repository                                                       | `bitnami/mediawiki`    |
+| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                             | `1.37.1-debian-10-r20` |
+| `image.pullPolicy`   | Image pull policy                                                                | `IfNotPresent`         |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                                 | `[]`                   |
+| `image.debug`        | Enable MediaWiki image debug mode                                                | `false`                |
+| `hostAliases`        | Deployment pod host aliases                                                      | `[]`                   |
+| `mediawikiUser`      | User of the application                                                          | `user`                 |
+| `mediawikiPassword`  | Application password                                                             | `""`                   |
+| `mediawikiEmail`     | Admin email                                                                      | `user@example.com`     |
+| `mediawikiName`      | Name for the wiki                                                                | `My Wiki`              |
+| `mediawikiHost`      | Mediawiki host to create application URLs                                        | `""`                   |
+| `allowEmptyPassword` | Allow DB blank passwords                                                         | `yes`                  |
+| `smtpHost`           | SMTP host                                                                        | `""`                   |
+| `smtpPort`           | SMTP port                                                                        | `""`                   |
+| `smtpHostID`         | SMTP host ID                                                                     | `""`                   |
+| `smtpUser`           | SMTP user                                                                        | `""`                   |
+| `smtpPassword`       | SMTP password                                                                    | `""`                   |
+| `command`            | Override default container command (useful when using custom images)             | `[]`                   |
+| `args`               | Override default container args (useful when using custom images)                | `[]`                   |
+| `lifecycleHooks`     | for the Mediawiki container(s) to automate configuration before or after startup | `{}`                   |
+| `extraEnvVars`       | Extra environment variables to be set on Mediawki container                      | `[]`                   |
+| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                             | `""`                   |
+| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                                | `""`                   |
 
 
 ### Mediawiki deployment parameters
 
-| Name                                 | Description                                                                               | Value                                             |
-| ------------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| `updateStrategy.type`                | StrategyType can be set to RollingUpdate or OnDelete                                      | `RollingUpdate`                                   |
-| `podSecurityContext.enabled`         | Enable Mediawiki pods' Security Context                                                   | `true`                                            |
-| `podSecurityContext.fsGroup`         | Group ID for the volumes of the pod                                                       | `1001`                                            |
-| `containerSecurityContext.enabled`   | Enable Mediawiki containers' SecurityContext                                              | `true`                                            |
-| `containerSecurityContext.runAsUser` | User ID to run Mediawiki containers                                                       | `1001`                                            |
-| `resources.limits`                   | The resources limits for the Mediawki container                                           | `{}`                                              |
-| `resources.requests`                 | The requested resources for the Mediawki container                                        | `{}`                                              |
-| `livenessProbe.enabled`              | Enable livenessProbe                                                                      | `true`                                            |
-| `livenessProbe.httpGet.path`         | Request path for livenessProbe                                                            | `/api.php?action=query&meta=siteinfo&format=none` |
-| `livenessProbe.httpGet.port`         | Port for livenessProbe                                                                    | `http`                                            |
-| `livenessProbe.httpGet.httpHeaders`  | Headers for livenessProbe                                                                 | `[]`                                              |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                   | `120`                                             |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                          | `10`                                              |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                         | `5`                                               |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                       | `6`                                               |
-| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                       | `1`                                               |
-| `readinessProbe.enabled`             | Enable readinessProbe                                                                     | `true`                                            |
-| `readinessProbe.httpGet.path`        | Request path for readinessProbe                                                           | `/api.php?action=query&meta=siteinfo&format=none` |
-| `readinessProbe.httpGet.port`        | Port for readinessProbe                                                                   | `http`                                            |
-| `readinessProbe.httpGet.httpHeaders` | Headers for livenessProbe                                                                 | `[]`                                              |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                  | `30`                                              |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                         | `10`                                              |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                        | `5`                                               |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                      | `6`                                               |
-| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                      | `1`                                               |
-| `customLivenessProbe`                | Override default liveness probe                                                           | `{}`                                              |
-| `customReadinessProbe`               | Override default readiness probe                                                          | `{}`                                              |
-| `podLabels`                          | Extra labels for Mediawki pods                                                            | `{}`                                              |
-| `podAnnotations`                     | Annotations for Mediawki pods                                                             | `{}`                                              |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                              |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                            |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                              |
-| `nodeAffinityPreset.key`             | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                              |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                              |
-| `affinity`                           | Affinity for pod assignment. Evaluated as a template.                                     | `{}`                                              |
-| `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                                              |
-| `tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`                                              |
-| `extraVolumes`                       | Optionally specify extra list of additional volumes for Mediawki pods                     | `[]`                                              |
-| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Mediawki container(s)        | `[]`                                              |
-| `initContainers`                     | Add additional init containers to the Mediawki pods                                       | `[]`                                              |
-| `sidecars`                           | Add additional sidecar containers to the Mediawki pods                                    | `[]`                                              |
-| `persistence.enabled`                | Enable persistence using PVC                                                              | `true`                                            |
-| `persistence.storageClass`           | PVC Storage Class for MediaWiki volume                                                    | `""`                                              |
-| `persistence.existingClaim`          | An Existing PVC name for MediaWiki volume                                                 | `""`                                              |
-| `persistence.accessMode`             | PVC Access Mode for MediaWiki volume                                                      | `ReadWriteOnce`                                   |
-| `persistence.size`                   | PVC Storage Request for MediaWiki volume                                                  | `8Gi`                                             |
+| Name                                    | Description                                                                               | Value                                             |
+| --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `updateStrategy.type`                   | StrategyType can be set to RollingUpdate or OnDelete                                      | `RollingUpdate`                                   |
+| `podSecurityContext.enabled`            | Enable Mediawiki pods' Security Context                                                   | `true`                                            |
+| `podSecurityContext.fsGroup`            | Group ID for the volumes of the pod                                                       | `1001`                                            |
+| `containerSecurityContext.enabled`      | Enable Mediawiki containers' SecurityContext                                              | `true`                                            |
+| `containerSecurityContext.runAsUser`    | User ID to run Mediawiki containers                                                       | `1001`                                            |
+| `containerSecurityContext.runAsNonRoot` | Set Mediawiki container's Security Context runAsNonRoot                                   | `true`                                            |
+| `resources.limits`                      | The resources limits for the Mediawki container                                           | `{}`                                              |
+| `resources.requests`                    | The requested resources for the Mediawki container                                        | `{}`                                              |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`                                           |
+| `startupProbe.httpGet.path`             | Request path for startupProbe                                                             | `/api.php?action=query&meta=siteinfo&format=none` |
+| `startupProbe.httpGet.port`             | Port for startupProbe                                                                     | `http`                                            |
+| `startupProbe.httpGet.httpHeaders`      | Headers for startupProbe                                                                  | `[]`                                              |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `120`                                             |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`                                              |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `5`                                               |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `6`                                               |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`                                               |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`                                            |
+| `livenessProbe.httpGet.path`            | Request path for livenessProbe                                                            | `/api.php?action=query&meta=siteinfo&format=none` |
+| `livenessProbe.httpGet.port`            | Port for livenessProbe                                                                    | `http`                                            |
+| `livenessProbe.httpGet.httpHeaders`     | Headers for livenessProbe                                                                 | `[]`                                              |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `120`                                             |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`                                              |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`                                               |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`                                               |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`                                               |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`                                            |
+| `readinessProbe.httpGet.path`           | Request path for readinessProbe                                                           | `/api.php?action=query&meta=siteinfo&format=none` |
+| `readinessProbe.httpGet.port`           | Port for readinessProbe                                                                   | `http`                                            |
+| `readinessProbe.httpGet.httpHeaders`    | Headers for livenessProbe                                                                 | `[]`                                              |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `30`                                              |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `10`                                              |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `5`                                               |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `6`                                               |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                                               |
+| `customStartupProbe`                    | Override default startup probe                                                            | `{}`                                              |
+| `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`                                              |
+| `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`                                              |
+| `podLabels`                             | Extra labels for Mediawki pods                                                            | `{}`                                              |
+| `podAnnotations`                        | Annotations for Mediawki pods                                                             | `{}`                                              |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                              |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                                            |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                              |
+| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set.                                    | `""`                                              |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                                              |
+| `affinity`                              | Affinity for pod assignment. Evaluated as a template.                                     | `{}`                                              |
+| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                                              |
+| `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`                                              |
+| `priorityClassName`                     | Mediawiki pods' priorityClassName                                                         | `""`                                              |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`                                              |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`                                              |
+| `extraVolumes`                          | Optionally specify extra list of additional volumes for Mediawki pods                     | `[]`                                              |
+| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Mediawki container(s)        | `[]`                                              |
+| `initContainers`                        | Add additional init containers to the Mediawki pods                                       | `[]`                                              |
+| `sidecars`                              | Add additional sidecar containers to the Mediawki pods                                    | `[]`                                              |
+| `persistence.enabled`                   | Enable persistence using PVC                                                              | `true`                                            |
+| `persistence.storageClass`              | PVC Storage Class for MediaWiki volume                                                    | `""`                                              |
+| `persistence.existingClaim`             | An Existing PVC name for MediaWiki volume                                                 | `""`                                              |
+| `persistence.accessModes`               | Persistent Volume access modes                                                            | `[]`                                              |
+| `persistence.size`                      | PVC Storage Request for MediaWiki volume                                                  | `8Gi`                                             |
+| `persistence.annotations`               | Persistent Volume Claim annotations                                                       | `{}`                                              |
 
 
 ### Traffic Exposure parameters
 
-| Name                            | Description                                                                                                                      | Value                    |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                  | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
-| `service.loadBalancerIP`        | Use serviceLoadBalancerIP to request a specific static IP,                                                                       | `""`                     |
-| `service.port`                  | Service HTTP port                                                                                                                | `80`                     |
-| `service.httpsPort`             | HTTPS Port. Set this to any value (recommended: 443) to enable the https service port                                            | `""`                     |
-| `service.nodePorts.http`        | Kubernetes http node port                                                                                                        | `""`                     |
-| `service.nodePorts.https`       | Kubernetes https node port                                                                                                       | `""`                     |
-| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                                             | `Cluster`                |
-| `ingress.enabled`               | Set to true to enable ingress record generation                                                                                  | `false`                  |
-| `ingress.pathType`              | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`              | Default host for the ingress resource                                                                                            | `mediawiki.local`        |
-| `ingress.path`                  | The Path to Mediawiki. You may need to set this to '/*' in order to use this with ALB ingress controllers.                       | `/`                      |
-| `ingress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
-| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
-| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
-| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.ports.http`               | Service HTTP port                                                                                                                | `80`                     |
+| `service.ports.https`              | HTTPS Port. Set this to any value (recommended: 443) to enable the https service port                                            | `443`                    |
+| `service.nodePorts.http`           | Kubernetes http node port                                                                                                        | `""`                     |
+| `service.nodePorts.https`          | Kubernetes https node port                                                                                                       | `""`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.clusterIP`                | Mediawiki service Cluster IP                                                                                                     | `""`                     |
+| `service.loadBalancerIP`           | Mediawiki service Load Balancer IP                                                                                               | `""`                     |
+| `service.loadBalancerSourceRanges` | Mediawiki service Load Balancer sources                                                                                          | `[]`                     |
+| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
+| `service.annotations`              | Additional custom annotations for Mediawiki service                                                                              | `{}`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `mediawiki.local`        |
+| `ingress.path`                     | The Path to Mediawiki. You may need to set this to '/*' in order to use this with ALB ingress controllers.                       | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 
 
 ### Database parameters
@@ -200,24 +230,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                      | Description                                                                  | Value                     |
-| ----------------------------------------- | ---------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`                         | Start a side-car prometheus exporter                                         | `false`                   |
-| `metrics.image.registry`                  | Apache exporter image registry                                               | `docker.io`               |
-| `metrics.image.repository`                | Apache exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                       | Apache exporter image tag (immutable tags are recommended)                   | `0.10.1-debian-10-r57`    |
-| `metrics.image.pullPolicy`                | Image pull policy                                                            | `IfNotPresent`            |
-| `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                             | `[]`                      |
-| `metrics.resources`                       | Exporter resource requests/limit                                             | `{}`                      |
-| `metrics.port`                            | Metrics service port                                                         | `9117`                    |
-| `metrics.podAnnotations`                  | Additional annotations for Metrics exporter pod                              | `{}`                      |
-| `metrics.serviceMonitor.enabled`          | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `true`                    |
-| `metrics.serviceMonitor.namespace`        | The namespace in which the ServiceMonitor will be created                    | `""`                      |
-| `metrics.serviceMonitor.interval`         | The interval at which metrics should be scraped                              | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`    | The timeout after which the scrape is ended                                  | `""`                      |
-| `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                           | `[]`                      |
-| `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                   |
-| `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                      |
+| Name                                       | Description                                                                  | Value                     |
+| ------------------------------------------ | ---------------------------------------------------------------------------- | ------------------------- |
+| `metrics.enabled`                          | Start a side-car prometheus exporter                                         | `false`                   |
+| `metrics.image.registry`                   | Apache exporter image registry                                               | `docker.io`               |
+| `metrics.image.repository`                 | Apache exporter image repository                                             | `bitnami/apache-exporter` |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                   | `0.11.0-debian-10-r18`    |
+| `metrics.image.pullPolicy`                 | Image pull policy                                                            | `IfNotPresent`            |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                             | `[]`                      |
+| `metrics.resources`                        | Exporter resource requests/limit                                             | `{}`                      |
+| `metrics.port`                             | Metrics service port                                                         | `9117`                    |
+| `metrics.podAnnotations`                   | Additional annotations for Metrics exporter pod                              | `{}`                      |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator | `true`                    |
+| `metrics.serviceMonitor.namespace`         | The namespace in which the ServiceMonitor will be created                    | `""`                      |
+| `metrics.serviceMonitor.interval`          | The interval at which metrics should be scraped                              | `30s`                     |
+| `metrics.serviceMonitor.scrapeTimeout`     | The timeout after which the scrape is ended                                  | `""`                      |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                           | `[]`                      |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                    | `[]`                      |
+| `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                               | `{}`                      |
+| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                          | `{}`                      |
+| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels     | `false`                   |
 
 
 ### NetworkPolicy parameters
@@ -332,9 +364,22 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 13.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+
+- `service.port` was deprecated. We recommend using `service.ports.http` instead.
+- `service.httpsPort` was deprecated. We recommend using `service.ports.https` instead.
+- `metrics.serviceMonitor.additionalLabels` was replaced by `metrics.serviceMonitor.labels`.
+- `metrics.serviceMonitor.relabellings` was replaced by `metrics.serviceMonitor.metricRelabelings`, and new value `metrics.serviceMonitor.relabelings` was introduced, fixing an issue with the values mapping. Now, the ServiceMonitor settings are inline with the chart values.
+
+Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
 
 ### To 12.0.0
 
@@ -470,3 +515,19 @@ Please, note this Helm chart is a community-supported solution. This means that 
 The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
 
 New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

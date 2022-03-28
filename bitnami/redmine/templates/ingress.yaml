@@ -21,6 +21,10 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
+  {{- $ingressClassName := coalesce .Values.ingress.ingressClassName .Values.ingress.className }}
+  {{- if and $ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ $ingressClassName }}
+  {{ end }}
   rules:
     {{- if .Values.ingress.hostname }}
     - host: {{ .Values.ingress.hostname }}
@@ -45,9 +49,9 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
-  {{- if or (and .Values.ingress.tls (or (include "redmine.ingress.certManagerRequest" .Values.ingress.annotations) .Values.ingress.selfSigned)) .Values.ingress.extraTls }}
+  {{- if or (and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.annotations )) .Values.ingress.selfSigned)) .Values.ingress.extraTls }}
   tls:
-    {{- if and .Values.ingress.tls (or (include "redmine.ingress.certManagerRequest" .Values.ingress.annotations) .Values.ingress.selfSigned) }}
+    {{- if and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.annotations )) .Values.ingress.selfSigned) }}
     - hosts:
         - {{ .Values.ingress.hostname | quote }}
       secretName: {{ printf "%s-tls" .Values.ingress.hostname }}

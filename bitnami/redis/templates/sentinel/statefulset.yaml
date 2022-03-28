@@ -22,6 +22,9 @@ spec:
   {{- if .Values.replica.updateStrategy }}
   updateStrategy: {{- toYaml .Values.replica.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- if .Values.replica.podManagementPolicy }}
+  podManagementPolicy: {{ .Values.replica.podManagementPolicy | quote }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -71,8 +74,8 @@ spec:
       {{- if .Values.replica.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.replica.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.replica.spreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.replica.spreadConstraints "context" $) | nindent 8 }}
+      {{- if .Values.replica.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.replica.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.replica.shareProcessNamespace }}
       shareProcessNamespace: {{ .Values.replica.shareProcessNamespace }}
@@ -114,7 +117,7 @@ spec:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: REDIS_MASTER_PORT_NUMBER
-              value: {{ .Values.replica.containerPort | quote }}
+              value: {{ .Values.replica.containerPorts.redis | quote }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
             {{- if .Values.auth.enabled }}
@@ -140,7 +143,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_TLS_PORT
-              value: {{ .Values.replica.containerPort | quote }}
+              value: {{ .Values.replica.containerPorts.redis | quote }}
             - name:  REDIS_TLS_AUTH_CLIENTS
               value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
             - name:  REDIS_TLS_CERT_FILE
@@ -155,10 +158,16 @@ spec:
             {{- end }}
             {{- else }}
             - name: REDIS_PORT
-              value: {{ .Values.replica.containerPort | quote }}
+              value: {{ .Values.replica.containerPorts.redis | quote }}
             {{- end }}
             - name: REDIS_DATA_DIR
               value: {{ .Values.replica.persistence.path }}
+            {{- if .Values.replica.externalMaster.enabled }}
+            - name:  REDIS_EXTERNAL_MASTER_HOST
+              value: {{ .Values.replica.externalMaster.host | quote }}
+            - name:  REDIS_EXTERNAL_MASTER_PORT
+              value: {{ .Values.replica.externalMaster.port | quote }}
+            {{- end }}
             {{- if .Values.replica.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.replica.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
@@ -175,22 +184,29 @@ spec:
           {{- end }}
           ports:
             - name: redis
-              containerPort: {{ .Values.replica.containerPort }}
+              containerPort: {{ .Values.replica.containerPorts.redis }}
           {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.replica.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.replica.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: redis
+          {{- else if .Values.replica.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.replica.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.replica.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.replica.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.replica.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.replica.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.replica.livenessProbe.failureThreshold}}
+            failureThreshold: {{ .Values.replica.livenessProbe.failureThreshold }}
             exec:
               command:
                 - sh
                 - -c
                 - /health/ping_liveness_local.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
           {{- else if .Values.replica.customLivenessProbe }}
-          livenessProbe: {{- toYaml .Values.replica.customLivenessProbe | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.replica.readinessProbe.enabled }}
           readinessProbe:
@@ -205,7 +221,7 @@ spec:
                 - -c
                 - /health/ping_readiness_local.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
           {{- else if .Values.replica.customReadinessProbe }}
-          readinessProbe: {{- toYaml .Values.replica.customReadinessProbe | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.replica.resources }}
@@ -216,6 +232,10 @@ spec:
               mountPath: /opt/bitnami/scripts/start-scripts
             - name: health
               mountPath: /health
+            {{- if .Values.sentinel.persistence.enabled }}
+            - name: sentinel-data
+              mountPath: /opt/bitnami/redis-sentinel/etc
+            {{- end }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
@@ -292,7 +312,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_SENTINEL_TLS_PORT_NUMBER
-              value: {{ .Values.sentinel.containerPort | quote }}
+              value: {{ .Values.sentinel.containerPorts.sentinel | quote }}
             - name:  REDIS_SENTINEL_TLS_AUTH_CLIENTS
               value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
             - name:  REDIS_SENTINEL_TLS_CERT_FILE
@@ -307,7 +327,13 @@ spec:
             {{- end }}
             {{- else }}
             - name: REDIS_SENTINEL_PORT
-              value: {{ .Values.sentinel.containerPort | quote }}
+              value: {{ .Values.sentinel.containerPorts.sentinel | quote }}
+            {{- end }}
+            {{- if .Values.sentinel.externalMaster.enabled }}
+            - name:  REDIS_EXTERNAL_MASTER_HOST
+              value: {{ .Values.sentinel.externalMaster.host | quote }}
+            - name:  REDIS_EXTERNAL_MASTER_PORT
+              value: {{ .Values.sentinel.externalMaster.port | quote }}
             {{- end }}
             {{- if .Values.sentinel.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.extraEnvVars "context" $ ) | nindent 12 }}
@@ -325,8 +351,15 @@ spec:
           {{- end }}
           ports:
             - name: redis-sentinel
-              containerPort: {{ .Values.sentinel.containerPort }}
+              containerPort: {{ .Values.sentinel.containerPorts.sentinel }}
           {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.sentinel.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.sentinel.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: redis-sentinel
+          {{- else if .Values.sentinel.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.sentinel.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.sentinel.livenessProbe.initialDelaySeconds }}
@@ -340,11 +373,11 @@ spec:
                 - -c
                 - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
           {{- else if .Values.sentinel.customLivenessProbe }}
-          livenessProbe: {{- toYaml .Values.sentinel.customLivenessProbe | nindent 12 }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.sentinel.readinessProbe.enabled}}
+          {{- if .Values.sentinel.readinessProbe.enabled }}
           readinessProbe:
             initialDelaySeconds: {{ .Values.sentinel.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.sentinel.readinessProbe.periodSeconds }}
@@ -357,7 +390,7 @@ spec:
                 - -c
                 - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
           {{- else if .Values.sentinel.customReadinessProbe }}
-          readinessProbe: {{- toYaml .Values.sentinel.customReadinessProbe | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
@@ -377,6 +410,10 @@ spec:
               mountPath: /opt/bitnami/scripts/start-scripts
             - name: health
               mountPath: /health
+            {{- if .Values.sentinel.persistence.enabled }}
+            - name: sentinel-data
+              mountPath: /opt/bitnami/redis-sentinel/etc
+            {{- end }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
@@ -386,8 +423,6 @@ spec:
               subPath: {{ .Values.replica.persistence.subPath }}
             - name: config
               mountPath: /opt/bitnami/redis-sentinel/mounted-etc
-            - name: sentinel-tmp-conf
-              mountPath: /opt/bitnami/redis-sentinel/etc
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
@@ -434,7 +469,7 @@ spec:
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_ADDR
-              value: rediss://{{ .Values.metrics.redisTargetHost }}:{{ .Values.replica.containerPort }}
+              value: rediss://{{ .Values.metrics.redisTargetHost }}:{{ .Values.replica.containerPorts.redis }}
             {{- if .Values.tls.authClients }}
             - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
               value: {{ template "redis.tlsCertKey" . }}
@@ -541,14 +576,16 @@ spec:
           hostPath:
             path: /sys
         {{- end }}
-        - name: sentinel-tmp-conf
-          {{- if .Values.replica.persistence.medium }}
+        {{- if not .Values.sentinel.persistence.enabled }}
+        - name: sentinel-data
+          {{- if .Values.sentinel.persistence.medium }}
           emptyDir: {
-            medium: {{ .Values.replica.persistence.medium | quote }}
+            medium: {{ .Values.sentinel.persistence.medium | quote }}
           }
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- end }}
         - name: redis-tmp-conf
           {{- if .Values.replica.persistence.medium }}
           emptyDir: {
@@ -607,6 +644,27 @@ spec:
         selector: {{- include "common.tplvalues.render" ( dict "value" .Values.replica.persistence.selector "context" $) | nindent 10 }}
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.replica.persistence "global" .Values.global) | nindent 8 }}
+    {{- if .Values.sentinel.persistence.enabled }}
+    - metadata:
+        name: sentinel-data
+        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+          app.kubernetes.io/component: node
+        {{- if .Values.sentinel.persistence.annotations }}
+        annotations: {{- toYaml .Values.sentinel.persistence.annotations | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.sentinel.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.sentinel.persistence.size | quote }}
+        {{- if .Values.sentinel.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.sentinel.persistence "global" .Values.global) | nindent 8 }}
+    {{- end }}
   {{- end }}
 {{- end }}
 {{- end }}

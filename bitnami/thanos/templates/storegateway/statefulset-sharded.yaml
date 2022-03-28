@@ -29,7 +29,7 @@ spec:
   replicas: {{ $.Values.storegateway.replicaCount }}
   podManagementPolicy: {{ $.Values.storegateway.podManagementPolicy }}
   {{- $svcNamePrefix := printf "%s-storegateway" (include "common.names.fullname" $) | trunc 61 | trimSuffix "-" }}
-  serviceName: {{ printf "%s-%s" $svcNamePrefix (toString $index)}}
+  serviceName: {{ printf "%s-%s" $svcNamePrefix (toString $index) }}
   {{- if $.Values.storegateway.updateStrategy }}
   updateStrategy: {{- toYaml $.Values.storegateway.updateStrategy | nindent 4 }}
   {{- end }}
@@ -163,7 +163,7 @@ spec:
             {{- $partion := (slice $.Values.storegateway.sharded.timePartitioning  $index) | first }}
             {{- if $partion.max }}
             - --max-time={{ $partion.max }}
-            {{- end}}
+            {{- end }}
             {{- if $partion.min }}
             - --min-time={{ $partion.min }}
             {{- end }}

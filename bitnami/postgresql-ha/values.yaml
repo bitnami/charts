@@ -122,7 +122,7 @@ diagnosticMode:
 postgresqlImage:
   registry: docker.io
   repository: bitnami/postgresql-repmgr
-  tag: 11.14.0-debian-10-r12
+  tag: 11.15.0-debian-10-r43
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -147,9 +147,9 @@ postgresql:
   ## @param postgresql.podLabels Labels to add to the StatefulSet pods. Evaluated as template
   ##
   podLabels: {}
-  ## @param postgresql.replicaCount Number of replicas to deploy
+  ## @param postgresql.replicaCount Number of replicas to deploy. Use an odd number. Having 3 replicas is the minimum to get quorum when promoting a new primary.
   ##
-  replicaCount: 2
+  replicaCount: 3
   ## @param postgresql.updateStrategyType Update strategy for PostgreSQL statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -161,6 +161,12 @@ postgresql:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param postgresql.hostNetwork Specify if host network should be enabled for PostgreSQL pod
+  ##
+  hostNetwork: false
+  ## @param postgresql.hostIPC Specify if host IPC should be enabled for PostgreSQL pod
+  ##
+  hostIPC: false
   ## @param postgresql.podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -392,14 +398,26 @@ postgresql:
   ## @param postgresql.repmgrConnectTimeout Repmgr backend connection timeout (in seconds)
   ## @param postgresql.repmgrReconnectAttempts Repmgr backend reconnection attempts
   ## @param postgresql.repmgrReconnectInterval Repmgr backend reconnection interval (in seconds)
+  ## @param postgresql.repmgrFenceOldPrimary Set if fencing of old primary in multiple primary situation is desired
+  ## @param postgresql.repmgrChildNodesCheckInterval Repmgr child nodes check interval (in seconds)
+  ## @param postgresql.repmgrChildNodesConnectedMinCount Repmgr minimum number of connected child nodes before being considered as failed primary for fencing
+  ## @param postgresql.repmgrChildNodesDisconnectTimeout Repmgr time before node will be fenced when insufficient child nodes are detected (in seconds)
   ##
   repmgrUsername: repmgr
   repmgrPassword: ""
   repmgrDatabase: repmgr
   repmgrLogLevel: NOTICE
   repmgrConnectTimeout: 5
-  repmgrReconnectAttempts: 3
-  repmgrReconnectInterval: 5
+  repmgrReconnectAttempts: 2
+  repmgrReconnectInterval: 3
+  repmgrFenceOldPrimary: false
+  repmgrChildNodesCheckInterval: 5
+  repmgrChildNodesConnectedMinCount: 1
+  repmgrChildNodesDisconnectTimeout: 30
+  ## EXPERMENTAL: Use pg_rewind for standby failover
+  ## @param postgresql.usePgRewind Use pg_rewind for standby failover (experimental)
+  ##
+  usePgRewind: false
   ## Audit settings
   ## https://github.com/bitnami/bitnami-docker-postgresql#auditing
   ##
@@ -576,7 +594,7 @@ postgresql:
 pgpoolImage:
   registry: docker.io
   repository: bitnami/pgpool
-  tag: 4.2.6-debian-10-r11
+  tag: 4.3.1-debian-10-r37
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -618,6 +636,9 @@ pgpool:
   ## The secret must contain the keys "usernames" and "passwords" respectively.
   ##
   customUsersSecret: ""
+  ## @param pgpool.existingSecret Pgpool admin password using existing secret
+  ##
+  existingSecret: ""
   ## @param pgpool.srCheckDatabase Name of the database to perform streaming replication checks
   ##
   srCheckDatabase: postgres
@@ -1004,7 +1025,7 @@ ldap:
 metricsImage:
   registry: docker.io
   repository: bitnami/postgres-exporter
-  tag: 0.10.0-debian-10-r133
+  tag: 0.10.1-debian-10-r65
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -1216,7 +1237,7 @@ metrics:
 volumePermissionsImage:
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r265
+  tag: 10-debian-10-r377
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -1316,6 +1337,10 @@ service:
   ## @param service.port PostgreSQL port
   ##
   port: 5432
+  ## @param service.portName PostgreSQL service port name
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
+  ##
+  portName: postgresql
   ## @param service.nodePort Kubernetes service nodePort
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
@@ -1380,4 +1405,5 @@ networkPolicy:
     ##       - namespaceSelector:
     ##           matchLabels:
     ##             label: example
+    ##
     customRules: []

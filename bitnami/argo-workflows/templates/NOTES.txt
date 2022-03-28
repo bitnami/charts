@@ -30,7 +30,7 @@ Obtain the Argo Workflows UI URL:
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
       Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "argo-workflows.server.fullname" . }}'
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "argo-workflows.server.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "argo-workflows.server.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
   echo "Argo Workflows UI URL: http://$SERVICE_IP:{{ .Values.server.service.ports.http }}/"
 
 {{- end }}
@@ -48,9 +48,6 @@ Obtain the Argo Workflows access token:
 
 {{- if .Release.IsUpgrade -}}
 {{- $passwordValidationErrors := list -}}
-{{- if and .Values.postgresql.enabled (not .Values.postgresql.postgresqlPassword) -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors "Missing 'postgresql.password', please use the same than the current one" -}}
-{{- end -}}
 {{- if and .Values.mysql.enabled (not .Values.mysql.auth.password) -}}
 {{- $passwordValidationErrors = append $passwordValidationErrors "Missing 'mysql.auth.password', please use the same than the current one" -}}
 {{- end -}}

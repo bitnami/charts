@@ -36,6 +36,9 @@ commonAnnotations: {}
 
 ## @section Node parameters
 
+## @param installCommand Override default container install command (useful when using custom images or repositories)
+##
+installCommand: ['/bin/bash', '-ec', 'npm install']
 ## @param command Override default container command (useful when using custom images)
 ##
 command: ['/bin/bash', '-ec', 'npm start']
@@ -125,7 +128,7 @@ externaldb:
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 16.13.1-debian-10-r0
+  tag: 16.14.2-debian-10-r9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -344,7 +347,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.34.1-debian-10-r5
+    tag: 2.35.1-debian-10-r56
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -395,7 +398,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r266
+    tag: 10-debian-10-r377
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

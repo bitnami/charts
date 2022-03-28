@@ -1,7 +1,13 @@
-# Apache MXNet (Incubating)
+<!--- app-name: Apache MXNet (Incubating) -->
 
-[Apache MXNet (Incubating)](https://mxnet.apache.org/) is a deep learning platform that accelerates the transition from research prototyping to production deployment. It is built for full integration into Python that enables you to use it with its libraries and main packages.
+# Apache MXNet (Incubating) packaged by Bitnami
 
+Apache MXNet (Incubating) is a flexible and efficient library for deep learning designed to work as a neural network. Bitnami image ships OpenBLAS as math library.
+
+[Overview of Apache MXNet (Incubating)](https://mxnet.incubator.apache.org/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -17,8 +23,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -71,19 +77,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                       | Apache MXNet (Incubating) image registry                                                              | `docker.io`             |
 | `image.repository`                     | Apache MXNet (Incubating) image repository                                                            | `bitnami/mxnet`         |
-| `image.tag`                            | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                  | `1.8.0-debian-10-r233`  |
+| `image.tag`                            | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                  | `1.9.0-debian-10-r16`   |
 | `image.pullPolicy`                     | Image pull policy                                                                                     | `IfNotPresent`          |
 | `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `image.debug`                          | Specify if debug logs should be enabled                                                               | `false`                 |
 | `git.registry`                         | Git image registry                                                                                    | `docker.io`             |
 | `git.repository`                       | Git image repository                                                                                  | `bitnami/git`           |
-| `git.tag`                              | Git image tag (immutable tags are recommended)                                                        | `2.34.1-debian-10-r5`   |
+| `git.tag`                              | Git image tag (immutable tags are recommended)                                                        | `2.34.1-debian-10-r44`  |
 | `git.pullPolicy`                       | Git image pull policy                                                                                 | `IfNotPresent`          |
 | `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                           | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                      | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                    | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                          | `10-debian-10-r266`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                          | `10-debian-10-r305`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                   | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                | `{}`                    |
@@ -349,7 +355,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
@@ -383,3 +389,19 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

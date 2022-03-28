@@ -1,0 +1,56 @@
+{{- if .Values.healthIngress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "common.names.fullname" . }}-health
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.healthIngress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- if .Values.healthIngress.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.healthIngress.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  rules:
+    {{- if .Values.healthIngress.hostname }}
+    - host: {{ .Values.healthIngress.hostname }}
+      http:
+        paths:
+          {{- if .Values.healthIngress.extraPaths }}
+          {{- toYaml .Values.healthIngress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.healthIngress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.healthIngress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.healthIngress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+  {{- if or .Values.healthIngress.tls .Values.healthIngress.extraTls }}
+  tls:
+    {{- if .Values.healthIngress.tls }}
+    - hosts:
+        - {{ .Values.healthIngress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.healthIngress.hostname }}
+    {{- end }}
+    {{- if .Values.healthIngress.extraTls }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.healthIngress.extraTls "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

@@ -53,6 +53,12 @@ spec:
       {{- if .Values.agent.priorityClassName }}
       priorityClassName: {{ .Values.agent.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.agent.schedulerName }}
+      schedulerName: {{ .Values.agent.schedulerName }}
+      {{- end }}
+      {{- if .Values.agent.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.agent.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.agent.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.agent.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
@@ -69,14 +75,18 @@ spec:
           {{- if .Values.agent.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.agent.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.agent.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.agent.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.agent.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - kiam
             - agent
           {{- end }}
-          {{- if .Values.agent.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.agent.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.agent.args "context" $) | nindent 12 }}
           {{- else }}
           args:
@@ -105,10 +115,10 @@ spec:
             {{- end }}
             - --gateway-timeout-creation={{ .Values.agent.gatewayTimeoutCreation }}
             {{- if .Values.agent.keepaliveParams.time }}
-            - --grpc-keepalive-time-ms={{ .Values.agent.keepaliveParams.time }}
+            - --grpc-keepalive-time-duration={{ .Values.agent.keepaliveParams.time }}
             {{- end }}
             {{- if .Values.agent.keepaliveParams.timeout }}
-            - --grpc-keepalive-timeout-ms={{ .Values.agent.keepaliveParams.timeout }}
+            - --grpc-keepalive-timeout-duration={{ .Values.agent.keepaliveParams.timeout }}
             {{- end }}
             {{- if .Values.agent.keepaliveParams.permitWithoutStream }}
             - --grpc-keepalive-permit-without-stream
@@ -147,6 +157,19 @@ spec:
           {{- if .Values.agent.resources }}
           resources: {{- toYaml .Values.agent.resources | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.agent.startupProbe.enabled }}
+          startupProbe:
+            tcpSocket:
+              port: {{ .Values.agent.containerPort }}
+            initialDelaySeconds: {{ .Values.agent.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.agent.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.agent.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.agent.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.agent.startupProbe.failureThreshold }}
+          {{- else if .Values.agent.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.agent.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -181,6 +204,7 @@ spec:
           {{- else if .Values.agent.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- end }}
           volumeMounts:
             - mountPath: /bitnami/kiam/tls
               name: tls
@@ -202,7 +226,7 @@ spec:
           secret:
             {{- if .Values.agent.tlsSecret }}
             secretName: {{ .Values.agent.tlsSecret }}
-            {{else}}
+            {{ else }}
             secretName: {{ template "common.names.fullname" . }}-agent
             {{- end }}
         {{- if .Values.server.sslCertHostPath }}

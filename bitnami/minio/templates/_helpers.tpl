@@ -30,6 +30,20 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Returns the available value for certain key in an existing secret (if it exists),
+otherwise it generates a random value.
+*/}}
+{{- define "getValueFromSecret" }}
+{{- $len := (default 16 .Length) | int -}}
+{{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
+{{- if $obj }}
+{{- index $obj .Key | b64dec -}}
+{{- else -}}
+{{- randAlphaNum $len -}}
+{{- end -}}
+{{- end }}
+
+{{/*
 Get the user to use to access MinIO&reg;
 */}}
 {{- define "minio.secret.userValue" -}}
@@ -38,19 +52,19 @@ Get the user to use to access MinIO&reg;
         {{- if .Values.gateway.auth.azure.accessKey }}
             {{- .Values.gateway.auth.azure.accessKey -}}
         {{- else -}}
-            {{- randAlphaNum 10 -}}
+            {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-user")  -}}
         {{- end -}}
     {{- else if eq .Values.gateway.type "gcs" }}
         {{- if .Values.gateway.auth.gcs.accessKey }}
             {{- .Values.gateway.auth.gcs.accessKey -}}
         {{- else -}}
-            {{- randAlphaNum 10 -}}
+            {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-user")  -}}
         {{- end -}}
     {{- else if eq .Values.gateway.type "nas" }}
         {{- if .Values.gateway.auth.nas.accessKey }}
             {{- .Values.gateway.auth.nas.accessKey -}}
         {{- else -}}
-            {{- randAlphaNum 10 -}}
+            {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-user")  -}}
         {{- end -}}
     {{- else if eq .Values.gateway.type "s3" }}
         {{- .Values.gateway.auth.s3.accessKey -}}
@@ -59,7 +73,7 @@ Get the user to use to access MinIO&reg;
     {{- if .Values.auth.rootUser }}
         {{- .Values.auth.rootUser -}}
     {{- else if (not .Values.auth.forcePassword) }}
-        {{- randAlphaNum 10 -}}
+        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-user")  -}}
     {{- else -}}
         {{ required "A root username is required!" .Values.auth.rootUser }}
     {{- end -}}
@@ -75,19 +89,19 @@ Get the password to use to access MinIO&reg;
         {{- if .Values.gateway.auth.azure.secretKey }}
             {{- .Values.gateway.auth.azure.secretKey -}}
         {{- else -}}
-            {{- randAlphaNum 40 -}}
+            {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-password")  -}}
         {{- end -}}
     {{- else if eq .Values.gateway.type "gcs" }}
         {{- if .Values.gateway.auth.gcs.secretKey }}
             {{- .Values.gateway.auth.gcs.secretKey -}}
         {{- else -}}
-            {{- randAlphaNum 40 -}}
+            {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-password")  -}}
         {{- end -}}
     {{- else if eq .Values.gateway.type "nas" }}
         {{- if .Values.gateway.auth.nas.secretKey }}
             {{- .Values.gateway.auth.nas.secretKey -}}
         {{- else -}}
-            {{- randAlphaNum 40 -}}
+            {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-password")  -}}
         {{- end -}}
     {{- else if eq .Values.gateway.type "s3" }}
         {{- .Values.gateway.auth.s3.secretKey -}}
@@ -96,7 +110,7 @@ Get the password to use to access MinIO&reg;
     {{- if .Values.auth.rootPassword }}
         {{- .Values.auth.rootPassword -}}
     {{- else if (not .Values.auth.forcePassword) }}
-        {{- randAlphaNum 40 -}}
+        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-password")  -}}
     {{- else -}}
         {{ required "A root password is required!" .Values.auth.rootPassword }}
     {{- end -}}
@@ -155,16 +169,6 @@ is true or default otherwise.
     {{- else -}}
         {{ default "default" .Values.serviceAccount.name }}
     {{- end -}}
-{{- end -}}
-
-{{/*
-Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
-Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
-*/}}
-{{- define "minio.ingress.certManagerRequest" -}}
-{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
-    {{- true -}}
-{{- end -}}
 {{- end -}}
 
 {{/*

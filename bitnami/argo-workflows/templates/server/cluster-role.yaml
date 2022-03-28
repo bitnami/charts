@@ -95,7 +95,7 @@ rules:
       - {{ include "argo-workflows.controller.database.password.secret" . }}
     verbs:
       - get
-  {{- end}}
+  {{- end }}
   - apiGroups:
       - argoproj.io
     resources:

@@ -49,6 +49,12 @@ spec:
       {{- if .Values.controller.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.controller.tolerations "context" .) | nindent 8 }}
       {{- end }}
+      {{- if .Values.controller.schedulerName }}
+      schedulerName: {{ .Values.controller.schedulerName }}
+      {{- end }}
+      {{- if .Values.controller.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.controller.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.controller.priorityClassName }}
       priorityClassName: {{ .Values.controller.priorityClassName | quote }}
       {{- end }}
@@ -168,6 +174,19 @@ spec:
             {{- end }}
           {{- if .Values.controller.resources }}
           resources: {{- toYaml .Values.controller.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.controller.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.controller.containerPorts.controller }}
+            initialDelaySeconds: {{ .Values.controller.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.controller.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.controller.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.controller.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.controller.startupProbe.failureThreshold }}
+          {{- else if .Values.controller.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.controller.livenessProbe.enabled }}
           livenessProbe:

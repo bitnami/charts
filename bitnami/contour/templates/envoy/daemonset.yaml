@@ -54,7 +54,7 @@ spec:
       {{- if .Values.envoy.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.envoy.tolerations}}
+      {{- if .Values.envoy.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.tolerations "context" $) | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.envoy.terminationGracePeriodSeconds }}
@@ -234,6 +234,9 @@ spec:
                 path: /shutdown
                 port: 8090
                 scheme: HTTP
+        {{- if .Values.envoy.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.sidecars "context" $ ) | nindent 8 }}
+        {{- end }}
       initContainers:
         - command:
             - contour
@@ -241,7 +244,7 @@ spec:
             - bootstrap
             - /config/envoy.json
             - --xds-address={{ template "common.names.fullname" . }}
-            - --xds-port=8001
+            - --xds-port={{ .Values.contour.service.ports.xds }}
             - --resources-dir=/config/resources
             - --envoy-cafile=/certs/ca.crt
             - --envoy-cert-file=/certs/tls.crt

@@ -1,7 +1,13 @@
-# NGINX
+<!--- app-name: NGINX Open Source -->
 
-[NGINX](https://nginx.org) (pronounced "engine-x") is an open source reverse proxy server for HTTP, HTTPS, SMTP, POP3, and IMAP protocols, as well as a load balancer, HTTP cache, and a web server (origin server).
+# NGINX Open Source packaged by Bitnami
 
+NGINX Open Source is a web server that can be also used as a reverse proxy, load balancer, and HTTP cache. Recommended for high-demanding sites due to its ability to provide faster content.
+
+[Overview of NGINX Open Source](http://nginx.org)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```bash
@@ -19,8 +25,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -74,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------------- | --------------------- |
 | `image.registry`     | NGINX image registry                                                 | `docker.io`           |
 | `image.repository`   | NGINX image repository                                               | `bitnami/nginx`       |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.4-debian-10-r0` |
+| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.5-debian-10-r3` |
 | `image.pullPolicy`   | NGINX image pull policy                                              | `IfNotPresent`        |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                  |
 | `image.debug`        | Set to true if you would like to see extra information on logs       | `false`               |
@@ -91,6 +97,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                    | Description                                                                               | Value   |
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------- |
 | `replicaCount`                          | Number of NGINX replicas to deploy                                                        | `1`     |
+| `updateStrategy.type`                   | NGINX deployment strategy type                                                            | `""`    |
+| `updateStrategy.rollingUpdate`          | NGINX deployment rolling update configuration parameters                                  | `{}`    |
 | `podLabels`                             | Additional labels for NGINX pods                                                          | `{}`    |
 | `podAnnotations`                        | Annotations for NGINX pods                                                                | `{}`    |
 | `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`    |
@@ -99,6 +107,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                     | `""`    |
 | `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`    |
 | `affinity`                              | Affinity for pod assignment                                                               | `{}`    |
+| `hostNetwork`                           | Specify if host network should be enabled for NGINX pod                                   | `false` |
+| `hostIPC`                               | Specify if host IPC should be enabled for NGINX pod                                       | `false` |
 | `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                  | `{}`    |
 | `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                  | `{}`    |
 | `priorityClassName`                     | Priority class name                                                                       | `""`    |
@@ -152,7 +162,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                               | `false`                |
 | `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                | `docker.io`            |
 | `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                              | `bitnami/git`          |
-| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.33.0-debian-10-r76` |
+| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.34.1-debian-10-r33` |
 | `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                             | `IfNotPresent`         |
 | `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                  | `[]`                   |
 | `cloneStaticSiteFromGit.repository`        | Git Repository to clone static content from                                                       | `""`                   |
@@ -177,7 +187,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ldapDaemon.enabled`                            | Enable LDAP Auth Daemon proxy                                                            | `false`                          |
 | `ldapDaemon.image.registry`                     | LDAP AUth Daemon Image registry                                                          | `docker.io`                      |
 | `ldapDaemon.image.repository`                   | LDAP Auth Daemon Image repository                                                        | `bitnami/nginx-ldap-auth-daemon` |
-| `ldapDaemon.image.tag`                          | LDAP Auth Daemon Image tag (immutable tags are recommended)                              | `0.20200116.0-debian-10-r500`    |
+| `ldapDaemon.image.tag`                          | LDAP Auth Daemon Image tag (immutable tags are recommended)                              | `0.20200116.0-debian-10-r556`    |
 | `ldapDaemon.image.pullPolicy`                   | LDAP Auth Daemon Image pull policy                                                       | `IfNotPresent`                   |
 | `ldapDaemon.port`                               | LDAP Auth Daemon port                                                                    | `8888`                           |
 | `ldapDaemon.ldapConfig.uri`                     | LDAP Server URI, `ldap[s]:/<hostname>:<port>`                                            | `""`                             |
@@ -240,27 +250,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                   | Description                                                                                 | Value                    |
-| -------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------ |
-| `metrics.enabled`                      | Start a Prometheus exporter sidecar container                                               | `false`                  |
-| `metrics.port`                         | NGINX Container Status Port scraped by Prometheus Exporter                                  | `""`                     |
-| `metrics.image.registry`               | NGINX Prometheus exporter image registry                                                    | `docker.io`              |
-| `metrics.image.repository`             | NGINX Prometheus exporter image repository                                                  | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                    | NGINX Prometheus exporter image tag (immutable tags are recommended)                        | `0.9.0-debian-10-r207`   |
-| `metrics.image.pullPolicy`             | NGINX Prometheus exporter image pull policy                                                 | `IfNotPresent`           |
-| `metrics.image.pullSecrets`            | Specify docker-registry secret names as an array                                            | `[]`                     |
-| `metrics.podAnnotations`               | Additional annotations for NGINX Prometheus exporter pod(s)                                 | `{}`                     |
-| `metrics.securityContext.enabled`      | Enabled NGINX Exporter containers' Security Context                                         | `false`                  |
-| `metrics.securityContext.runAsUser`    | Set NGINX Exporter container's Security Context runAsUser                                   | `1001`                   |
-| `metrics.service.port`                 | NGINX Prometheus exporter service port                                                      | `9113`                   |
-| `metrics.service.annotations`          | Annotations for the Prometheus exporter service                                             | `{}`                     |
-| `metrics.resources.limits`             | The resources limits for the NGINX Prometheus exporter container                            | `{}`                     |
-| `metrics.resources.requests`           | The requested resources for the NGINX Prometheus exporter container                         | `{}`                     |
-| `metrics.serviceMonitor.enabled`       | Creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false`                  |
-| `metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                    | `""`                     |
-| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                | `""`                     |
-| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                     | `""`                     |
-| `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                         | `{}`                     |
+| Name                                       | Description                                                                                                                               | Value                    |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `metrics.enabled`                          | Start a Prometheus exporter sidecar container                                                                                             | `false`                  |
+| `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                                                                | `""`                     |
+| `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                                                                  | `docker.io`              |
+| `metrics.image.repository`                 | NGINX Prometheus exporter image repository                                                                                                | `bitnami/nginx-exporter` |
+| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.10.0-debian-10-r8`    |
+| `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                                                               | `IfNotPresent`           |
+| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                          | `[]`                     |
+| `metrics.podAnnotations`                   | Additional annotations for NGINX Prometheus exporter pod(s)                                                                               | `{}`                     |
+| `metrics.securityContext.enabled`          | Enabled NGINX Exporter containers' Security Context                                                                                       | `false`                  |
+| `metrics.securityContext.runAsUser`        | Set NGINX Exporter container's Security Context runAsUser                                                                                 | `1001`                   |
+| `metrics.service.port`                     | NGINX Prometheus exporter service port                                                                                                    | `9113`                   |
+| `metrics.service.annotations`              | Annotations for the Prometheus exporter service                                                                                           | `{}`                     |
+| `metrics.resources.limits`                 | The resources limits for the NGINX Prometheus exporter container                                                                          | `{}`                     |
+| `metrics.resources.requests`               | The requested resources for the NGINX Prometheus exporter container                                                                       | `{}`                     |
+| `metrics.serviceMonitor.enabled`           | Creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                               | `false`                  |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                                                  | `""`                     |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                                              | `""`                     |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                                   | `""`                     |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                                       | `{}`                     |
+| `metrics.serviceMonitor.additionalLabels`  | Additional labels that can be used so PodMonitor will be discovered by Prometheus                                                         | `{}`                     |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                                        | `[]`                     |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                                 | `[]`                     |
+| `metrics.prometheusRule.enabled`           | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                  |
+| `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                     |
+| `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`                     |
+| `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                               | `[]`                     |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -334,11 +351,10 @@ In addition, you can also set an external ConfigMap with the configuration file.
 In some scenarios, you may require users to authenticate in order to gain access to protected resources. By enabling LDAP, NGINX will make use of an Authorization Daemon to proxy those identification requests against a given LDAP Server.
 
 ```
-                ┌────────────────┐           ┌────────────────┐           ┌────────────────┐
-                │     NGINX      │  ----->   │     NGINX      │  ----->   │      LDAP      │
-                │     server     │  <-----   |  ldap daemon   │  <-----   |     server     │
-                └────────────────┘           └────────────────┘           └────────────────┘
-
+                   ------------               --------------              ---------------
+                  |   NGINX    |    ----->   |     NGINX    |   ----->   |     LDAP      |
+                  |   server   |    <-----   |  ldap daemon |   <-----   |     server    |
+                   ------------               --------------              ---------------
 ```
 
 In order to enable LDAP authentication you can set the `ldapDaemon.enabled` property and follow these steps:
@@ -451,7 +467,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
@@ -517,3 +533,19 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 - [Bitnami Helm charts documentation](https://docs.bitnami.com/kubernetes/apps/)
 - [Kubernetes FAQs](https://docs.bitnami.com/kubernetes/faq/)
 - [Kubernetes Developer guides](https://docs.bitnami.com/tutorials/)
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

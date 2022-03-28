@@ -8,7 +8,7 @@ data:
   {{- if .Values.config }}
   elasticsearch.yml: |-
     {{- toYaml .Values.config | nindent 4 }}
-  {{- end}}
+  {{- end }}
   {{- if .Values.extraConfig }}
   my_elasticsearch.yml: |-
     {{- toYaml .Values.extraConfig | nindent 4 }}

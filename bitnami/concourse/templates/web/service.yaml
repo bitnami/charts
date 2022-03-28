@@ -1,21 +1,18 @@
-{{- if .Values.web.enabled -}}
+{{- if .Values.web.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "concourse.web.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "concourse.web.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: web
-    {{- if .Values.service.web.labels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.service.web.labels "context" $ ) | nindent 4 }}
-    {{- end }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.commonAnnotations .Values.service.web.annotations }}
+  {{- if or .Values.service.web.annotations .Values.commonAnnotations }}
   annotations:
     {{- if .Values.service.web.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.service.web.annotations "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.web.annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -23,31 +20,43 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.service.web.type }}
-  {{- if (or (eq .Values.service.web.type "LoadBalancer") (eq .Values.service.web.type "nodePort")) }}
+  sessionAffinity: {{ .Values.service.web.sessionAffinity }}
+  {{- if and .Values.service.web.clusterIP (eq .Values.service.web.type "ClusterIP") }}
+  clusterIP: {{ .Values.service.web.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.service.web.type "LoadBalancer") (eq .Values.service.web.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.service.web.externalTrafficPolicy | quote }}
   {{- end }}
-  {{ if eq .Values.service.web.type "LoadBalancer" }}
-  loadBalancerSourceRanges: {{ .Values.service.web.loadBalancerSourceRanges }}
-  {{ end }}
+  {{- if (and (eq .Values.service.web.type "LoadBalancer") .Values.service.web.loadBalancerSourceRanges) }}
+  {{- with .Values.service.web.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
   {{- if (and (eq .Values.service.web.type "LoadBalancer") (not (empty .Values.service.web.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.service.web.loadBalancerIP }}
   {{- end }}
-  {{- if .Values.service.web.clusterIP }}
-  clusterIP: {{ .Values.service.web.clusterIP }}
-  {{- end }}
   ports:
     - name: http
-      port: {{ .Values.service.web.port }}
+      port: {{ .Values.service.web.ports.http }}
+      protocol: TCP
       targetPort: http
-      {{- if and (eq "nodePort" .Values.service.web.type) .Values.service.web.nodePort }}
-      nodePort: {{ .Values.service.web.nodePort }}
+      {{- if (and (or (eq .Values.service.web.type "NodePort") (eq .Values.service.web.type "LoadBalancer")) (not (empty .Values.service.web.nodePorts.http))) }}
+      nodePort: {{ .Values.service.web.nodePorts.http }}
+      {{- else if eq .Values.service.web.type "ClusterIP" }}
+      nodePort: null
       {{- end }}
     - name: https
-      port: {{ .Values.service.web.tlsPort }}
+      port: {{ .Values.service.web.ports.https }}
+      protocol: TCP
       targetPort: https
-      {{- if and (eq "nodePort" .Values.service.web.type) .Values.service.web.tlsNodePort }}
-      nodePort: {{ .Values.service.web.tlsNodePort }}
+      {{- if (and (or (eq .Values.service.web.type "NodePort") (eq .Values.service.web.type "LoadBalancer")) (not (empty .Values.service.web.nodePorts.https))) }}
+      nodePort: {{ .Values.service.web.nodePorts.https }}
+      {{- else if eq .Values.service.web.type "ClusterIP" }}
+      nodePort: null
       {{- end }}
+    {{- if .Values.service.web.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.web.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: web
 {{- end }}

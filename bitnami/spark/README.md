@@ -1,7 +1,13 @@
-# Apache Spark
+<!--- app-name: Apache Spark -->
 
-[Apache Spark](https://spark.apache.org/) is a high-performance engine for large-scale computing tasks, such as data processing, machine learning and real-time data streaming. It includes APIs for Java, Python, Scala and R.
+# Apache Spark packaged by Bitnami
 
+Apache Spark is a high-performance engine for large-scale computing tasks, such as data processing, machine learning and real-time data streaming. It includes APIs for Java, Python, Scala and R.
+
+[Overview of Apache Spark](https://spark.apache.org/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+                           
 ## TL;DR
 
 ```console
@@ -13,12 +19,14 @@ $ helm install my-release bitnami/spark
 
 This chart bootstraps an [Apache Spark](https://github.com/bitnami/bitnami-docker-spark) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
+Apache Spark includes APIs for Java, Python, Scala and R.
+
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.1.0
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ## Installing the Chart
 
@@ -72,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | --------------------- |
 | `image.registry`    | Spark image registry                             | `docker.io`           |
 | `image.repository`  | Spark image repository                           | `bitnami/spark`       |
-| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.2.0-debian-10-r33` |
+| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.2.0-debian-10-r73` |
 | `image.pullPolicy`  | Spark image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                  |
 | `image.debug`       | Enable image debug mode                          | `false`               |
@@ -94,7 +102,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                        | Description                                                                                                   | Value  |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------ |
 | `master.configurationConfigMap`             | Set a custom configuration by using an existing configMap with the configuration file.                        | `""`   |
-| `master.webPort`                            | Specify the port where the web interface will listen on the master                                            | `8080` |
+| `master.webPort`                            | Specify the port where the web interface will listen on the master over HTTP                                  | `8080` |
+| `master.webPortHttps`                       | Specify the port where the web interface will listen on the master over HTTPS                                 | `8480` |
 | `master.clusterPort`                        | Specify the port where the master listens to communicate with workers                                         | `7077` |
 | `master.hostAliases`                        | Deployment pod host aliases                                                                                   | `[]`   |
 | `master.daemonMemoryLimit`                  | Set the memory limit for the master daemon                                                                    | `""`   |
@@ -137,7 +146,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                        | Description                                                                                                   | Value          |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | -------------- |
 | `worker.configurationConfigMap`             | Set a custom configuration by using an existing configMap with the configuration file.                        | `""`           |
-| `worker.webPort`                            | Specify the port where the web interface will listen on the worker                                            | `8081`         |
+| `worker.webPort`                            | Specify the port where the web interface will listen on the worker over HTTP                                  | `8081`         |
+| `worker.webPortHttps`                       | Specify the port where the web interface will listen on the worker over HTTPS                                 | `8481`         |
 | `worker.clusterPort`                        | Specify the port where the worker listens to communicate with the master                                      | `""`           |
 | `worker.hostAliases`                        | Add deployment host aliases                                                                                   | `[]`           |
 | `worker.extraPorts`                         | Specify the port where the running jobs inside the workers listens                                            | `[]`           |
@@ -207,26 +217,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure parameters
 
-| Name                        | Description                                                                                                                      | Value                    |
-| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`              | Kubernetes Service type                                                                                                          | `ClusterIP`              |
-| `service.clusterPort`       | Spark cluster port                                                                                                               | `7077`                   |
-| `service.webPort`           | Spark client port                                                                                                                | `80`                     |
-| `service.nodePorts.cluster` | Kubernetes cluster node port                                                                                                     | `""`                     |
-| `service.nodePorts.web`     | Kubernetes web node port                                                                                                         | `""`                     |
-| `service.loadBalancerIP`    | Load balancer IP if spark service type is `LoadBalancer`                                                                         | `""`                     |
-| `service.annotations`       | Annotations for spark service                                                                                                    | `{}`                     |
-| `ingress.enabled`           | Enable ingress controller resource                                                                                               | `false`                  |
-| `ingress.pathType`          | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`        | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`          | Default host for the ingress resource                                                                                            | `spark.local`            |
-| `ingress.path`              | The Path to Spark. You may need to set this to '/*' in order to use this with ALB ingress controllers.                           | `/`                      |
-| `ingress.annotations`       | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`               | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
-| `ingress.extraHosts`        | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
-| `ingress.extraPaths`        | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
-| `ingress.extraTls`          | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `ingress.secrets`           | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| Name                         | Description                                                                                                                      | Value                    |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`               | Kubernetes Service type                                                                                                          | `ClusterIP`              |
+| `service.clusterPort`        | Spark cluster port                                                                                                               | `7077`                   |
+| `service.webPort`            | Spark client port for HTTP                                                                                                       | `80`                     |
+| `service.webPortHttps`       | Spark client port for HTTPS                                                                                                      | `443`                    |
+| `service.nodePorts.cluster`  | Kubernetes cluster node port                                                                                                     | `""`                     |
+| `service.nodePorts.web`      | Kubernetes web node port for HTTP                                                                                                | `""`                     |
+| `service.nodePorts.webHttps` | Kubernetes web node port for HTTPS                                                                                               | `""`                     |
+| `service.loadBalancerIP`     | Load balancer IP if spark service type is `LoadBalancer`                                                                         | `""`                     |
+| `service.annotations`        | Annotations for spark service                                                                                                    | `{}`                     |
+| `ingress.enabled`            | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.pathType`           | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`         | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`           | Default host for the ingress resource                                                                                            | `spark.local`            |
+| `ingress.path`               | The Path to Spark. You may need to set this to '/*' in order to use this with ALB ingress controllers.                           | `/`                      |
+| `ingress.annotations`        | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`         | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`         | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`           | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`            | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Metrics parameters
@@ -302,6 +314,28 @@ For a complete walkthrough of the process using a custom application, refer to t
 
 > Be aware that it is currently not possible to submit an application to a standalone cluster if RPC authentication is configured. [Learn more about the issue](https://issues.apache.org/jira/browse/SPARK-25078).
 
+### Configuring Spark Master as reverse proxy
+
+Spark offers configuration to enable running Spark Master as reverse proxy for worker and application UIs. This can be useful as the Spark Master UI may otherwise use private IPv4 addresses for links to Spark workers and Spark apps.
+
+Coupled with `ingress` configuration, you can set `master.configOptions` and `worker.configOptions` to tell Spark to reverse proxy the worker and application UIs to enable access without requiring direct access to their hosts:
+
+```yaml
+master:
+  configOptions:
+    -Dspark.ui.reverseProxy=true
+    -Dspark.ui.reverseProxyUrl=https://spark.your-domain.com
+worker:
+  configOptions:
+    -Dspark.ui.reverseProxy=true
+    -Dspark.ui.reverseProxyUrl=https://spark.your-domain.com
+ingress:
+  enabled: true
+  hostname: spark.your-domain.com
+```
+
+See the [Spark Configuration](https://spark.apache.org/docs/latest/configuration.html) docs for detail on the parameters.
+
 ### Configure security for Apache Spark
 
 ### Configure SSL communication
@@ -328,7 +362,7 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 
 ## Troubleshooting
 
-Find more information about how to deal with common errors related to Bitnami’s Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
@@ -349,3 +383,19 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 - Spark container images are updated to use Hadoop `3.2.x`: [Notable Changes: 3.0.0-debian-10-r44](https://github.com/bitnami/bitnami-docker-spark#300-debian-10-r44)
 
 > Note: Backwards compatibility is not guaranteed due to the above mentioned changes. Please make sure your workloads are compatible with the new version of Hadoop before upgrading. Backups are always recommended before any upgrade operation.
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
