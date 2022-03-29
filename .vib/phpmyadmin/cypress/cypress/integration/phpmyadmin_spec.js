@@ -46,8 +46,8 @@ it('allows importing a table and executing a query', () => {
         cy.contains('[title="Browse"]', td.importedDatabaseName).should('be.visible').click();
     })
     cy.get('#topmenu').should('be.visible').contains('SQL');
-    cy.get('[title="SQL"]').should('be.visible').click();
-    cy.get('#button_submit_query').should('be.visible').click();
+    cy.contains('a','SQL').should('be.visible').click()
+    cy.get('#button_submit_query').scrollIntoView().should('be.visible').click();
     cy.get('.result_query').should('be.visible').contains('Showing rows');
 })
 
@@ -65,8 +65,11 @@ it('allows adding a user', () => {
 })
 
 it('shows the list of installed plugins', () => {
+    const PLUGIN_1 = "Native MySQL authentication";
+    const PLUGIN_2 = "MariaDB";
+
     cy.login();
     cy.visit('index.php?route=/server/plugins');
-    cy.get('#plugins-authentication').contains('Native MySQL authentication');
-    cy.get('#plugins-datatype').contains('MariaDB');
+    cy.get('#plugins-authentication').contains(PLUGIN_1);
+    cy.get('#plugins-datatype').contains(PLUGIN_2);
 })
