@@ -122,6 +122,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.https`                  | Sets https port inside NGINX container                                                    | `""`    |
 | `resources.limits`                      | The resources limits for the NGINX container                                              | `{}`    |
 | `resources.requests`                    | The requested resources for the NGINX container                                           | `{}`    |
+| `lifecycle`                             | The lifecycle hooks for the NGINX container                                               | `{}`    |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`  |
 | `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `30`    |
 | `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`    |
