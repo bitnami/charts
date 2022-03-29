@@ -36,17 +36,6 @@
             }
           },
           {
-            "action_id": "goss",
-            "params": {
-              "resources": {
-                "path": "/.vib/thanos/goss"
-              },
-              "remote": {
-                "workload": "deploy-thanos"
-               }
-            }
-          },
-          {
             "action_id": "cypress",
             "params": {
               "resources": {
