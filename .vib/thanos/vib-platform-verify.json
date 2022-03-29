@@ -1,0 +1,63 @@
+{
+    "phases": {
+      "package": {
+        "context": {
+          "resources": {
+            "url": "{SHA_ARCHIVE}",
+            "path": "/bitnami/thanos"
+          }
+        },
+        "actions": [
+          {
+            "action_id": "helm-package"
+          }
+        ]
+      },
+      "verify": {
+        "context": {
+          "resources": {
+            "url": "{SHA_ARCHIVE}",
+            "path": "/bitnami/thanos"
+          },
+          "runtime_parameters": "b2Jqc3RvcmVDb25maWc6IHwtCiAgdHlwZTogRklMRVNZU1RFTQogIGNvbmZpZzoKICAgIGRpcmVjdG9yeTogIi8iCgpxdWVyeUZyb250ZW5kOgogIGVuYWJsZWQ6IHRydWUKICBzZXJ2aWNlOgogICAgdHlwZTogTG9hZEJhbGFuY2VyCiAgICBwb3J0czoKICAgICAgaHR0cDogODAKCm1pbmlvOgogIGVuYWJsZWQ6IHRydWUKICBhdXRoOgogICAgcm9vdFVzZXI6IHRlc3RfYWRtaW4KICAgIHJvb3RQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CiAgZGVmYXVsdEJ1Y2tldHM6IHRoYW5vcwogIHNlcnZpY2U6CiAgICB0eXBlOiBMb2FkQmFsYW5jZXIKICAgIHBvcnRzOgogICAgICBjb25zb2xlOiA0NDMKICAgICAgCnN0b3JlZ2F0ZXdheToKICBlbmFibGVkOiB0cnVlCnF1ZXJ5OgogIGVuYWJsZWQ6IHRydWUKICBzdG9yZXM6CiAgICAtICJzdG9yZTo5MTExIgogICAgLSAic3RvcmUyOjkxMTIiCiAgICAtICJzdG9yZTM6OTExNCIKYnVja2V0d2ViOgogIGVuYWJsZWQ6IHRydWUKCmNvbXBhY3RvcjoKICBlbmFibGVkOiB0cnVl",
+          "target_platform": {
+            "target_platform_id": "{TARGET_PLATFORM}",
+            "size": {
+              "name": "M4"
+            }
+          }
+        },
+        "actions": [
+          {
+            "action_id": "health-check",
+            "params": {
+              "endpoint": "lb-thanos-http",
+              "app_protocol": "HTTP"
+            }
+          },
+          {
+            "action_id": "goss",
+            "params": {
+              "resources": {
+                "path": "/.vib/thanos/goss"
+              },
+              "remote": {
+                "workload": "deploy-thanos"
+               }
+            }
+          },
+          {
+            "action_id": "cypress",
+            "params": {
+              "resources": {
+                "path": "/.vib/thanos/cypress"
+              },
+              "endpoint": "lb-thanos-http",
+              "app_protocol": "HTTP"
+            }
+          }
+        ]
+      }
+    }
+  }
+  
