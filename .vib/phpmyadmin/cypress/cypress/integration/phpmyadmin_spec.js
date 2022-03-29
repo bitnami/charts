@@ -6,7 +6,7 @@ import {
 it('allows the user to log in and log out', () => {
     cy.login();
     cy.contains('[role="alert"]', 'Access denied').should('not.exist'); //checks if login was successful
-    cy.get('a[title="Log out"]').should('be.visible').click();
+    cy.get('a[title="Log out"]').click();
     cy.get('#login_form').should('be.visible');
 })
 
@@ -25,7 +25,7 @@ it('allows creating a database and a table', () => {
         cy.contains('a', `${td.databaseName}.${random}`).scrollIntoView().click({
             force: true
         });
-        cy.contains('#pma_navigation_tree_content', `${td.tableName}.${random}`).should('be.visible').click({
+        cy.contains('#pma_navigation_tree_content', `${td.tableName}.${random}`).click({
             force: true
         })
         cy.contains('.table-responsive-md', `${td.columnName}.${random}`).should('be.visible');
@@ -36,7 +36,7 @@ it('allows importing a table and executing a query', () => {
     cy.login();
     cy.visit('index.php?route=/database/structure&server=1&db=mysql')
     cy.contains('Import').click();
-    cy.get('#input_import_file').should('be.visible').selectFile('cypress/fixtures/testdata.sql', {
+    cy.get('#input_import_file').selectFile('cypress/fixtures/testdata.sql', {
         force: true
     });
     cy.get('#buttonGo').click();
@@ -45,10 +45,10 @@ it('allows importing a table and executing a query', () => {
     cy.fixture('testdata').then((td) => {
         cy.contains('[title="Browse"]', td.importedDatabaseName).should('be.visible').click();
     })
-    cy.get('#topmenu').should('be.visible').contains('SQL');
-    cy.contains('a','SQL').should('be.visible').click()
-    cy.get('#button_submit_query').scrollIntoView().should('be.visible').click();
-    cy.get('.result_query').should('be.visible').contains('Showing rows');
+    cy.contains('#topmenu', 'SQL');
+    cy.visit('/index.php?route=/table/sql&db=mysql&table=authors');
+    cy.get('#button_submit_query').scrollIntoView().click();
+    cy.get('.result_query').contains('Showing rows');
 })
 
 it('allows adding a user', () => {
