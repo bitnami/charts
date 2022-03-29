@@ -45,6 +45,7 @@ spec:
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceAccount.name" (dict "component" "query-frontend" "context" $) }}
+      automountServiceAccountToken: {{ .Values.queryFrontend.automountServiceAccountToken }}
       {{- if .Values.queryFrontend.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.hostAliases "context" $) | nindent 8 }}
       {{- end }}

@@ -40,6 +40,7 @@ spec:
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceAccount.name" (dict "component" "bucketweb" "context" $) }}
+      automountServiceAccountToken: {{ .Values.bucketweb.automountServiceAccountToken }}
       {{- if .Values.bucketweb.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.hostAliases "context" $) | nindent 8 }}
       {{- end }}

@@ -18,9 +18,9 @@ spec:
   {{- end }}
   {{- if and (eq .Values.service.type "ClusterIP") .Values.service.clusterIP }}
   clusterIP: {{ .Values.service.clusterIP }}
+  {{- end }}
   {{- if .Values.service.externalIPs }}
   externalIPs: {{- toYaml .Values.service.externalIPs | nindent 4 }}
-  {{- end }}
   {{- end }}
   ports:
     - name: mongodb

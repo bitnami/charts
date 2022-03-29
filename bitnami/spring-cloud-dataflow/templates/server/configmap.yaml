@@ -76,6 +76,9 @@ data:
                     {{- if .Values.deployer.secretRefs }}
                     secretRefs: {{- toYaml .Values.deployer.secretRefs | nindent 22 }}
                     {{- end }}
+                    {{- if .Values.deployer.entryPointStyle }}
+                    entryPointStyle: {{ .Values.deployer.entryPointStyle }}
+                    {{- end }}
           {{- end }}
           {{- if .Values.server.configuration.containerRegistries }}
           container:
