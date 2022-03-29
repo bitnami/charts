@@ -3,9 +3,9 @@ import {
     random
 } from './utils'
 
-it('allows the user to log out', () => {
+it('allows the user to log in and log out', () => {
     cy.login();
-    cy.contains('[role="alert"]', 'Access denied').should('not.exist');
+    cy.contains('[role="alert"]', 'Access denied').should('not.exist'); //checks if login was successful
     cy.get('a[title="Log out"]').should('be.visible').click();
     cy.get('#login_form').should('be.visible');
 })
@@ -43,12 +43,12 @@ it('allows importing a table and executing a query', () => {
     cy.contains('No database selected', '[role="alert"]').should('not.exist');
     cy.contains('Import has been successfully finished');
     cy.fixture('testdata').then((td) => {
-        cy.contains('[title="Browse"]', 'authors').should('be.visible').click();
-        cy.get('#topmenu').should('be.visible').contains('SQL');
-        cy.get('[title="SQL"]').should('be.visible').click();
-        cy.get('#button_submit_query').should('be.visible').click();
-        cy.get('.result_query').should('be.visible').contains('Showing rows');
+        cy.contains('[title="Browse"]', td.importedDatabaseName).should('be.visible').click();
     })
+    cy.get('#topmenu').should('be.visible').contains('SQL');
+    cy.get('[title="SQL"]').should('be.visible').click();
+    cy.get('#button_submit_query').should('be.visible').click();
+    cy.get('.result_query').should('be.visible').contains('Showing rows');
 })
 
 it('allows adding a user', () => {
@@ -58,8 +58,8 @@ it('allows adding a user', () => {
     cy.fixture('testdata').then((td) => {
         cy.get('#pma_username').type(`${td.username}.${random}`);
         cy.get('#text_pma_pw').type(td.password);
-        cy.get('#adduser_submit').type(td.password);
-        cy.get('#adduser_submit').scrollIntoView().click();
+        cy.get('#text_pma_pw2').type(td.password);
+        cy.get('#adduser_submit').click();
     })
     cy.get('.result_query').should('be.visible').contains('You have added a new user.');
 })

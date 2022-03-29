@@ -4,5 +4,6 @@
   "columnNumber":"1",
   "columnName":"columnName",
   "username":"test_user",
-  "password":"test_password"
+  "password":"test_password",
+  "importedDatabaseName":"authors"
 }

@@ -19,7 +19,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/phpmyadmin"
         },
-        "runtime_parameters": "ZGI6CiAgaG9zdDogbWFyaWFkYgogIGFsbG93QXJiaXRyYXJ5U2VydmVyOiB0cnVlCiAgcG9ydDogMzMwNgogIGJ1bmRsZVRlc3REQjogdHJ1ZQpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cHM6IDQ0MwptYXJpYWRiOgogIGF1dGg6CiAgICByb290UGFzc3dvcmQ6IHJvb3RQYXNzd29yZAogIGltYWdlOgogICAgZGVidWc6IHRydWUK",
+        "runtime_parameters": "ZGI6CiAgaG9zdDogbWFyaWFkYgogIGFsbG93QXJiaXRyYXJ5U2VydmVyOiB0cnVlCiAgcG9ydDogMzMwNgogIGJ1bmRsZVRlc3REQjogdHJ1ZQpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cHM6IDQ0MwptYXJpYWRiOgogIGF1dGg6CiAgICByb290UGFzc3dvcmQ6IHJvb3RQYXNzd29yZAo=",
         "target_platform": {
           "target_platform_id": "{TARGET_PLATFORM}",
           "size": {
