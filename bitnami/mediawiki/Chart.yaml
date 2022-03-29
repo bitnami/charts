@@ -32,4 +32,4 @@ name: mediawiki
 sources:
   - https://github.com/bitnami/bitnami-docker-mediawiki
   - https://www.mediawiki.org/
-version: 13.0.13
+version: 13.0.14

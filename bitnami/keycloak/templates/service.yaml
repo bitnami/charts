@@ -27,9 +27,8 @@ spec:
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
   {{- end }}
   {{- if eq .Values.service.type "LoadBalancer" }}
-  {{- with .Values.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{ .Values.service.loadBalancerSourceRanges }}
-  {{- end }}
+  loadBalancerSourceRanges:
+  {{ toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
   {{- if not (empty .Values.service.loadBalancerIP) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
