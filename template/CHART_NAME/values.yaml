@@ -505,9 +505,9 @@ persistence:
   ## @param persistence.enabled Enable persistence using Persistent Volume Claims
   ##
   enabled: true
-  ## @param persistence.path Path to mount the volume at.
+  ## @param persistence.mountPath Path to mount the volume at.
   ##
-  path: /bitnami/%%MAIN_OBJECT_BLOCK%%/data
+  mountPath: /bitnami/%%MAIN_OBJECT_BLOCK%%/data
   ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
   ##
   subPath: ""
