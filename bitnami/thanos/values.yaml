@@ -440,6 +440,9 @@ query:
     ##
     additionalHeadless: false
   ## Autoscaling parameters
+  ## @param query.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
+  ##
+  automountServiceAccountToken: true
   ## ServiceAccount configuration
   ## @param query.serviceAccount.annotations Annotations for Thanos Query Service Account
   ## @param query.serviceAccount.existingServiceAccount Name for an existing Thanos Query Service Account
@@ -928,6 +931,9 @@ queryFrontend:
     ## @param queryFrontend.service.labelSelectorsOverride Selector for Thanos Query service
     ##
     labelSelectorsOverride: {}
+  ## @param queryFrontend.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
+  ##
+  automountServiceAccountToken: true
   ## ServiceAccount configuration
   ## @param queryFrontend.serviceAccount.annotations Annotations for Thanos Query Frontend Service Account
   ## @param queryFrontend.serviceAccount.existingServiceAccount Name for an existing Thanos Query Frontend Service Account
@@ -1329,6 +1335,9 @@ bucketweb:
     ## @param bucketweb.service.labelSelectorsOverride Selector for Thanos Query service
     ##
     labelSelectorsOverride: {}
+  ## @param bucketweb.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
+  ##
+  automountServiceAccountToken: true
   ## ServiceAccount configuration
   ## @param bucketweb.serviceAccount.annotations Annotations for Thanos Bucket Web Service Account
   ## @param bucketweb.serviceAccount.existingServiceAccount Name for an existing Thanos Bucket Web Service Account
@@ -1712,6 +1721,9 @@ compactor:
     ## @param compactor.service.labelSelectorsOverride Selector for Thanos Query service
     ##
     labelSelectorsOverride: {}
+  ## @param compactor.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
+  ##
+  automountServiceAccountToken: true
   ## ServiceAccount configuration
   ## @param compactor.serviceAccount.annotations Annotations for Thanos Compactor Service Account
   ## @param compactor.serviceAccount.existingServiceAccount Name for an existing Thanos Compactor Service Account
@@ -2165,6 +2177,9 @@ storegateway:
     ## If defined, PVC must be created manually before volume will be bound
     ##
     existingClaim: ""
+  ## @param storegateway.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the sts
+  ##
+  automountServiceAccountToken: true    
   ## ServiceAccount configuration
   ## @param storegateway.serviceAccount.annotations Annotations for Thanos Store Gateway Service Account
   ## @param storegateway.serviceAccount.existingServiceAccount Name for an existing Thanos Store Gateway Service Account
@@ -2738,6 +2753,9 @@ ruler:
     ## If defined, PVC must be created manually before volume will be bound
     ##
     existingClaim: ""
+  ## @param ruler.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the sts
+  ##
+  automountServiceAccountToken: true  
   ## ServiceAccount configuration
   ## @param ruler.serviceAccount.annotations Annotations for Thanos Ruler Service Account
   ## @param ruler.serviceAccount.existingServiceAccount Name for an existing Thanos Ruler Service Account
@@ -3173,6 +3191,9 @@ receive:
     ## @param receive.service.additionalHeadless Additional Headless service
     ##
     additionalHeadless: false
+  ## @param receive.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the sts
+  ##
+  automountServiceAccountToken: true
   ## ServiceAccount configuration
   ## @param receive.serviceAccount.annotations Annotations for Thanos Receive Service Account
   ## @param receive.serviceAccount.existingServiceAccount Name for an existing Thanos Receive Service Account
@@ -3537,6 +3558,9 @@ receiveDistributor:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
+  ## @param receiveDistributor.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
+  ##
+  automountServiceAccountToken: true  
   ## ServiceAccount configuration
   ## @param receiveDistributor.serviceAccount.annotations Annotations for Thanos Receive Distributor Service Account
   ## @param receiveDistributor.serviceAccount.existingServiceAccount Name for an existing Thanos Receive Distributor Service Account
