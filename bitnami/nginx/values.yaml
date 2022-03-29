@@ -222,6 +222,7 @@ resources:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
 ## If you do want to specify lifecycle hooks, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces on 'lifecycle:{}'.
+## @param lifecycle Optional lifecycle hooks for the NGINX container
 lifecycle: {}
   ## Example:
   ## postStart:
