@@ -1,14 +1,14 @@
-name: Check README metadata
+name: Update README metadata
 
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - master
     paths:
       - 'bitnami/*/values.yaml'
 
 jobs:
-  check-readme-metadata:
+  update-readme-metadata:
     runs-on: ubuntu-latest
 
     steps:
@@ -36,19 +36,30 @@ jobs:
       - name: Checkout bitnami/charts
         uses: actions/checkout@v2
         with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
           path: charts
-
-      - name: Get list of files with changes in Pull Request
-        id: pr-file-changes
-        uses: trilom/file-changes-action@v1.2.4
-        with:
-          fileOutput: ' '
-
-      - name: Prepare readme-generator-for-helm inputs
-        run: |
-          cat $HOME/files.txt | tr " " "\n" | grep \/values\\.yaml > raw-inputs
-          cat raw-inputs | sed 's/values.yaml/README.md/' >> raw-inputs
-          cat raw-inputs | sed 's/bitnami/charts\/bitnami/' > prepared-inputs
+          token: ${{ secrets.BITNAMI_BOT_TOKEN }}
 
       - name: Execute readme-generator-for-helm
-        run: readme-generator-for-helm/bin/index.js --values $(cat prepared-inputs | grep values) --schema /tmp/chart-schema.json
+        run: |
+          # Using the Github API to detect the files changed as git merge-base stops working when the branch is behind
+          # and jitterbit/get-changed-files does not support pull_request_target
+          URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
+          files_changed_data=$(curl -s --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -X GET -G "$URL")
+          files_changed="$(echo $files_changed_data | jq -r '.[] | .filename')"
+          # Adding || true to avoid "Process exited with code 1" errors
+          charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep -o "bitnami/[^/]*" | sort | uniq || true)"
+          for chart in ${charts_dirs_changed}; do
+            echo "Updating README.md for ${chart}"
+            readme-generator-for-helm/bin/index.js --values "charts/${chart}/values.yaml" --readme "charts/${chart}/README.md" --schema "/tmp/schema.json"
+          done
+      - name: Push changes
+        run: |
+          # Push all the changes
+          cd charts
+          if git status -s | grep bitnami; then
+            git config user.name "Bitnami Containers"
+            git config user.email "containers@bitnami.com"
+            git add . && git commit -am "Update README.md with readme-generator-for-helm" --signoff && git push
+          fi
