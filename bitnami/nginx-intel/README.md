@@ -184,41 +184,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `staticSitePVC`                            | Name of existing PVC with the server static site content                                          | `""`                   |
 
 
-### LDAP parameters
-
-| Name                                            | Description                                                                              | Value                            |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------- | -------------------------------- |
-| `ldapDaemon.enabled`                            | Enable LDAP Auth Daemon proxy                                                            | `false`                          |
-| `ldapDaemon.image.registry`                     | LDAP AUth Daemon Image registry                                                          | `docker.io`                      |
-| `ldapDaemon.image.repository`                   | LDAP Auth Daemon Image repository                                                        | `bitnami/nginx-ldap-auth-daemon` |
-| `ldapDaemon.image.tag`                          | LDAP Auth Daemon Image tag (immutable tags are recommended)                              | `0.20200116.0-debian-10-r500`    |
-| `ldapDaemon.image.pullPolicy`                   | LDAP Auth Daemon Image pull policy                                                       | `IfNotPresent`                   |
-| `ldapDaemon.port`                               | LDAP Auth Daemon port                                                                    | `8888`                           |
-| `ldapDaemon.ldapConfig.uri`                     | LDAP Server URI, `ldap[s]:/<hostname>:<port>`                                            | `""`                             |
-| `ldapDaemon.ldapConfig.baseDN`                  | LDAP root DN to begin the search for the user                                            | `""`                             |
-| `ldapDaemon.ldapConfig.bindDN`                  | DN of user to bind to LDAP                                                               | `""`                             |
-| `ldapDaemon.ldapConfig.bindPassword`            | Password for the user to bind to LDAP                                                    | `""`                             |
-| `ldapDaemon.ldapConfig.filter`                  | LDAP search filter for search                                                            | `""`                             |
-| `ldapDaemon.ldapConfig.httpRealm`               | LDAP HTTP auth realm                                                                     | `""`                             |
-| `ldapDaemon.ldapConfig.httpCookieName`          | HTTP cookie name to be used in LDAP Auth                                                 | `""`                             |
-| `ldapDaemon.nginxServerBlock`                   | NGINX server block that configures LDAP communication. Overrides `ldapDaemon.ldapConfig` | `""`                             |
-| `ldapDaemon.existingNginxServerBlockSecret`     | Name of existing Secret with a NGINX server block to use for LDAP communication          | `""`                             |
-| `ldapDaemon.livenessProbe.enabled`              | Enable livenessProbe                                                                     | `true`                           |
-| `ldapDaemon.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                  | `30`                             |
-| `ldapDaemon.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                         | `10`                             |
-| `ldapDaemon.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                        | `5`                              |
-| `ldapDaemon.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                      | `6`                              |
-| `ldapDaemon.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                      | `1`                              |
-| `ldapDaemon.readinessProbe.enabled`             | Enable readinessProbe                                                                    | `true`                           |
-| `ldapDaemon.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                 | `5`                              |
-| `ldapDaemon.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                        | `5`                              |
-| `ldapDaemon.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                       | `3`                              |
-| `ldapDaemon.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                     | `3`                              |
-| `ldapDaemon.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                     | `1`                              |
-| `ldapDaemon.customLivenessProbe`                | Custom Liveness probe                                                                    | `{}`                             |
-| `ldapDaemon.customReadinessProbe`               | Custom Rediness probe                                                                    | `{}`                             |
-
-
 ### Traffic Exposure parameters
 
 | Name                            | Description                                                                                                                      | Value                    |
@@ -342,89 +307,6 @@ serverBlock: |-
 > Warning: The above example is not compatible with enabling Prometheus metrics since it affects the `/status` endpoint.
 
 In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the `existingServerBlockConfigmap` parameter. Note that this will override the previous option.
-
-### Enabling LDAP
-
-In some scenarios, you may require users to authenticate in order to gain access to protected resources. By enabling LDAP, NGINX will make use of an Authorization Daemon to proxy those identification requests against a given LDAP Server.
-
-```
-               ---------              --------------             ---------
-              |  NGINX  |   ----->   |     NGINX    |  ----->   |   LDAP  |
-              |  server |   <-----   |  ldap daemon |  <-----   |  server |
-               ---------              --------------             ---------
-```
-
-In order to enable LDAP authentication you can set the `ldapDaemon.enabled` property and follow these steps:
-
-1. NGINX server needs to be configured to be self-aware of the proxy. In order to do so, use the `ldapDaemon.nginxServerBlock` property to provide with an additional server block, that will instruct NGINX to use it (see `values.yaml`). Alternatively, you can specify this server block configuration using an external Secret using the property `ldapDaemon.existingNginxServerBlockSecret`.
-
-2. Supply your LDAP Server connection details either in the aforementioned server block (setting request headers) or specifying them in `ldapDaemon.ldapConfig`. e.g. The following two approaches are equivalent:
-
-_Approach A) Specify connection details using the `ldapDaemon.ldapConfig` property_
-
-```yaml
-ldapDaemon:
-  enabled: true
-  ldapConfig:
-    uri: "ldap://YOUR_LDAP_SERVER_IP:YOUR_LDAP_SERVER_PORT"
-    baseDN: "dc=example,dc=org"
-    bindDN: "cn=admin,dc=example,dc=org"
-    bindPassword: "adminpassword"
-
-  nginxServerBlock: |-
-    server {
-    listen 0.0.0.0:{{ .Values.containerPorts.http }};
-
-    # You can provide a special subPath or the root
-    location = / {
-        auth_request /auth-proxy;
-    }
-
-    location = /auth-proxy {
-        internal;
-
-        proxy_pass http://127.0.0.1:{{ .Values.ldapDaemon.port }};
-    }
-    }
-```
-
-_Approach B) Specify connection details directly in the server block_
-
-```yaml
-ldapDaemon:
-  enabled: true
-  nginxServerBlock: |-
-    server {
-    listen 0.0.0.0:{{ .Values.containerPorts.http }};
-
-    # You can provide a special subPath or the root
-    location = / {
-        auth_request /auth-proxy;
-    }
-
-    location = /auth-proxy {
-        internal;
-
-        proxy_pass http://127.0.0.1:{{ .Values.ldapDaemon.port }};
-
-        ###############################################################
-        # YOU SHOULD CHANGE THE FOLLOWING TO YOUR LDAP CONFIGURATION  #
-        ###############################################################
-
-        # URL and port for connecting to the LDAP server
-        proxy_set_header X-Ldap-URL "ldap://YOUR_LDAP_SERVER_IP:YOUR_LDAP_SERVER_PORT";
-
-        # Base DN
-        proxy_set_header X-Ldap-BaseDN "dc=example,dc=org";
-
-        # Bind DN
-        proxy_set_header X-Ldap-BindDN "cn=admin,dc=example,dc=org";
-
-        # Bind password
-        proxy_set_header X-Ldap-BindPass "adminpassword";
-    }
-    }
-```
 
 ### Adding extra environment variables
 
