@@ -178,6 +178,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.nodeSelector`                       | Node labels for Redis&trade; master pods assignment                                               | `{}`                     |
 | `master.tolerations`                        | Tolerations for Redis&trade; master pods assignment                                               | `[]`                     |
 | `master.topologySpreadConstraints`          | Spread Constraints for Redis&trade; master pod assignment                                         | `[]`                     |
+| `master.dnsConfig`                          | DNS configuration for Redis&trade; master pod                                                     | `{}`                     |
 | `master.lifecycleHooks`                     | for the Redis&trade; master container(s) to automate configuration before or after startup        | `{}`                     |
 | `master.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis&trade; master pod(s)            | `[]`                     |
 | `master.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis&trade; master container(s) | `[]`                     |
@@ -269,6 +270,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.nodeSelector`                       | Node labels for Redis&trade; replicas pods assignment                                               | `{}`                     |
 | `replica.tolerations`                        | Tolerations for Redis&trade; replicas pods assignment                                               | `[]`                     |
 | `replica.topologySpreadConstraints`          | Spread Constraints for Redis&trade; replicas pod assignment                                         | `[]`                     |
+| `replica.dnsConfig`                          | DNS configuration for Redis&trade; replica pod(s)                                                   | `{}`                     |
 | `replica.lifecycleHooks`                     | for the Redis&trade; replica container(s) to automate configuration before or after startup         | `{}`                     |
 | `replica.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis&trade; replicas pod(s)            | `[]`                     |
 | `replica.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the Redis&trade; replicas container(s) | `[]`                     |
