@@ -94,7 +94,6 @@ image:
 ## Configure extra options for Adapter containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param startupProbe.enabled Enable startupProbe
-## @param startupProbe.path Path for the HTTP probe
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
 ## @param startupProbe.periodSeconds Period seconds for startupProbe
 ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -282,7 +281,7 @@ customLivenessProbe: {}
 ##
 customReadinessProbe: {}
 ## Custom Startup probes wavefront-adapter-for-istio
-## @param primary.customStartupProbe Override default startup probe
+## @param customStartupProbe Override default startup probe
 ##
 customStartupProbe: {}
 ## Update strategy - only really applicable for deployments with RWO PVs attached
@@ -294,7 +293,7 @@ customStartupProbe: {}
 updateStrategy:
   type: RollingUpdate
 ## Adapter Container port
-## @param containerPort DEPRECATED: use containerPorts.grpc instead.
+## containerPort DEPRECATED: use containerPorts.grpc instead.
 ##
 ## containerPort: 8000
 ##
@@ -407,7 +406,7 @@ service:
   ##
   type: ClusterIP
   ## HTTP Port
-  ## @param service.port DEPRECATED: use service.ports.grpc instead.
+  ## service.port DEPRECATED: use service.ports.grpc instead.
   ##
   ## port: 8000
   ## GRPC Port
