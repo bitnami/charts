@@ -294,6 +294,10 @@ diagnosticMode:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## @param %%MAIN_OBJECT_BLOCK%%.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
   ## @param %%MAIN_OBJECT_BLOCK%%.lifecycleHooks for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -497,6 +501,8 @@ ingress:
   ##       -----END CERTIFICATE-----
   ##
   secrets: []
+
+## @section Persistence Parameters
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/

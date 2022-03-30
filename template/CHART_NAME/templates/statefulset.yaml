@@ -63,6 +63,9 @@ spec:
       {{- if .Values.%%MAIN_OBJECT_BLOCK%%.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.%%MAIN_OBJECT_BLOCK%%.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.terminationGracePeriodSeconds }}
+      {{- end }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
