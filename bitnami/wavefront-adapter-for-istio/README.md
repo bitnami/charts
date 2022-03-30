@@ -99,7 +99,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                                                        | `0.1.5-debian-10-r343`                |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                                                | `IfNotPresent`                        |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                                               | `[]`                                  |
-| `image.debug`                           | Enable image debug mode                                                                                                  | `false`                               |
 | `startupProbe.enabled`                  | Enable startupProbe                                                                                                      | `true`                                |
 | `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `10`                                  |
 | `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                          | `10`                                  |

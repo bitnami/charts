@@ -87,10 +87,6 @@ image:
   ##
   pullSecrets: []
   #   - myRegistryKeySecretName
-  ## Enable debug mode
-  ## @param image.debug Enable image debug mode
-  ##
-  debug: false
 ## Configure extra options for Adapter containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param startupProbe.enabled Enable startupProbe
