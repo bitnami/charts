@@ -31,6 +31,14 @@ Set the http prefix if the externalURl doesn't have it
     secretName: {{ .Values.internalTLS.caBundleSecret }}
 {{- end -}}
 
+{{- define "harbor.coreOverridesJsonSecret" -}}
+{{- if .Values.core.configOverwriteJsonSecret -}}
+{{- print .Values.core.configOverwriteJsonSecret }}
+{{- else }}
+{{- printf "%s-config-override" (include "harbor.core" .) -}}
+{{- end -}}
+{{- end -}}
+
 {{- define "harbor.caBundleVolumeMount" -}}
 - name: ca-bundle-certs
   mountPath: /harbor_cust_cert/custom-ca.crt

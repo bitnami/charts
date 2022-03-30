@@ -1,7 +1,7 @@
 annotations:
   category: DeveloperTools
 apiVersion: v2
-appVersion: 2.9.2
+appVersion: 2.9.3
 dependencies:
   - condition: rabbitmq.enabled
     name: rabbitmq
@@ -16,7 +16,7 @@ dependencies:
   - condition: kafka.enabled
     name: kafka
     repository: https://charts.bitnami.com/bitnami
-    version: 15.x.x
+    version: 16.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -39,4 +39,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-spring-cloud-dataflow
   - https://github.com/bitnami/bitnami-docker-spring-cloud-skipper
   - https://dataflow.spring.io/
-version: 6.0.5
+version: 7.0.1

@@ -7,7 +7,7 @@ Redis(TM) is an open source, advanced key-value store. It is often referred to a
 [Overview of Redis&trade;](http://redis.io)
 
 Disclaimer: Redis is a registered trademark of Redis Labs Ltd. Any rights therein are reserved to Redis Labs Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Labs Ltd.
-
+                           
 ## TL;DR
 
 ```bash
@@ -85,6 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
 | `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
+| `secretAnnotations`      | Annotations to add to secret                                                            | `{}`            |
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
@@ -385,7 +386,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.enabled`                       | Enable creation of NetworkPolicy resources                                                                                                  | `false` |
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                  | `true`  |
 | `networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                                                                | `[]`    |
-| `networkPolicy.extraEgress`                   | Add extra ingress rules to the NetworkPolicy                                                                                                | `[]`    |
+| `networkPolicy.extraEgress`                   | Add extra egress rules to the NetworkPolicy                                                                                                | `[]`    |
 | `networkPolicy.ingressNSMatchLabels`          | Labels to match to allow traffic from other namespaces                                                                                      | `{}`    |
 | `networkPolicy.ingressNSPodMatchLabels`       | Pod labels to match to allow traffic from other namespaces                                                                                  | `{}`    |
 | `podSecurityPolicy.create`                    | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
@@ -423,6 +424,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.command`                            | Override default metrics container init command (useful when using custom images)                | `[]`                     |
 | `metrics.redisTargetHost`                    | A way to specify an alternative Redis&trade; hostname                                            | `localhost`              |
 | `metrics.extraArgs`                          | Extra arguments for Redis&trade; exporter, for example:                                          | `{}`                     |
+| `metrics.extraEnvVars`                       | Array with extra environment variables to add to Redis&trade; exporter                           | `[]`                     |
 | `metrics.containerSecurityContext.enabled`   | Enabled Redis&trade; exporter containers' Security Context                                       | `true`                   |
 | `metrics.containerSecurityContext.runAsUser` | Set Redis&trade; exporter containers' Security Context runAsUser                                 | `1001`                   |
 | `metrics.extraVolumes`                       | Optionally specify extra list of additional volumes for the Redis&trade; metrics sidecar         | `[]`                     |

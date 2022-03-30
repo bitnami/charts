@@ -106,7 +106,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                                                 | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                                           | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                                               | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.1.1-debian-10-r35`      |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.2.0-debian-10-r21`      |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                                        | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                                       | `[]`                       |
 | `operator.leaderElect`                                       | Enables or disables the operator leader Election.                                                                                         | `true`                     |
@@ -185,7 +185,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                             | `true`                   |
 | `grafana.image.registry`                                    | Grafana image registry                                                                        | `docker.io`              |
 | `grafana.image.repository`                                  | Grafana image name                                                                            | `bitnami/grafana`        |
-| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.3.3-debian-10-r32`    |
+| `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.4.3-debian-10-r13`    |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                    | `[]`                     |
 | `grafana.serviceAccount`                                    | Additional service account configuration                                                      | `{}`                     |
 | `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                  | `true`                   |
@@ -216,6 +216,9 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.client.timeout`                                    | The timeout in seconds for the Grafana Rest API on that instance                              | `5`                      |
 | `grafana.client.preferService`                              | If the API should be used via Ingress or via the internal service                             | `true`                   |
 | `grafana.labels`                                            | Add additional labels to the grafana deployment, service and ingress resources                | `{}`                     |
+| `grafana.service.type`                                      | Kubernetes Service type                                                                       | `ClusterIP`              |
+| `grafana.service.annotations`                               | Additional custom annotations for Grafana service                                             | `{}`                     |
+| `grafana.service.extraPorts`                                | Extra ports to expose in the Grafana service                                                  | `[]`                     |
 | `grafana.ingress.enabled`                                   | If an ingress or OpenShift Route should be created                                            | `false`                  |
 | `grafana.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                 | `""`                     |
 | `grafana.ingress.hostname`                                  | The hostname under which the grafana instance should be reachable                             | `grafana.local`          |
@@ -234,8 +237,8 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.configMaps`                                        | Extra configMaps to mount into the grafana pod                                                | `[]`                     |
 | `grafana.secrets`                                           | Extra secrets to mount into the grafana pod                                                   | `[]`                     |
 | `grafana.jsonnetLibrarySelector`                            | Configuring the read for jsonnetLibraries to pull in.                                         | `{}`                     |
-| `grafana.dashboardLabelSelectors`                           | This selects dashboards on the label.                                                         | `{}`                     |
-| `grafana.dashboardNamespaceSelector`                        | Watch for dashboards only in the Namespaces that have the specified namespace label           | `[]`                     |
+| `grafana.dashboardLabelSelectors`                           | This selects dashboards on the label.                                                         | `[]`                     |
+| `grafana.dashboardNamespaceSelector`                        | Watch for dashboards only in the Namespaces that have the specified namespace label           | `{}`                     |
 | `grafana.livenessProbe.enabled`                             | Enable livenessProbe                                                                          | `true`                   |
 | `grafana.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                       | `120`                    |
 | `grafana.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                              | `10`                     |
