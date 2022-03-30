@@ -18,9 +18,9 @@ Access the pod you want to debug by executing
 
   kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
 
-In order to replicate the container startup scripts execute this command:
+In order to replicate the container startup execute this command:
 
-    /opt/bitnami/scripts/wavefront-adapter-for-istio/entrypoint.sh /opt/bitnami/scripts/wavefront-adapter-for-istio/run.sh
+    /opt/bitnami/wavefront-adapter-for-istio/bin/wavefront
 
 {{- else }}
 
@@ -34,10 +34,10 @@ In order to replicate the container startup scripts execute this command:
      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
            You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ template "common.names.fullname" . }}
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-    echo http://$SERVICE_IP:{{ .Values.service.port }}
+    echo http://$SERVICE_IP:{{coalesce .Values.service.ports.grpc service.port}}
 {{- else if contains "ClusterIP" .Values.service.type }}
-    echo "The renconciler is available at http://127.0.0.1:{{ .Values.service.port }}"
-    kubectl port-forward svc/{{ template "common.names.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
+    echo "The renconciler is available at http://127.0.0.1:{{coalesce .Values.service.ports.grpc service.port}}"
+    kubectl port-forward svc/{{ template "common.names.fullname" . }} {{coalesce .Values.service.ports.grpc service.port}}:{{coalesce .Values.service.ports.grpc service.port}} &
 {{- end }}
 {{- end }}
 

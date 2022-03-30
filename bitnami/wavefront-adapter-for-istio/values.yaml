@@ -379,9 +379,6 @@ istio:
 ## Adapter Metrics parameters
 ##
 metrics:
-  ## @param metrics.enabled Whether or not to create a standalone Adapter exporter to expose its metrics
-  ##
-  enabled: false
   ## @param metrics.flushInterval Interval to flush the metrics
   ##
   flushInterval: 5s

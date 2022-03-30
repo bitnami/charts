@@ -161,7 +161,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `istio.create`                          | Deploy istio objects                                                                                                     | `true`                                |
 | `istio.namespace`                       | Namespace to deploy the Istio objects                                                                                    | `istio-system`                        |
 | `istio.apiVersion`                      | Override Istio API version                                                                                               | `""`                                  |
-| `metrics.enabled`                       | Whether or not to create a standalone Adapter exporter to expose its metrics                                             | `false`                               |
 | `metrics.flushInterval`                 | Interval to flush the metrics                                                                                            | `5s`                                  |
 | `metrics.source`                        | Source tag for all metrics handled by the adapter                                                                        | `istio`                               |
 | `metrics.prefix`                        | Prefix to prepend to all metrics handled by the adapter                                                                  | `istio`                               |

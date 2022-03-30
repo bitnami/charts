@@ -58,7 +58,9 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
-      terminationGracePeriodSeconds: {{ .Values.envoy.terminationGracePeriodSeconds }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
@@ -96,8 +98,6 @@ spec:
             - {{ .Values.containerPort | quote }}
           {{- end }}
           env:
-            - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -117,7 +117,6 @@ spec:
             - containerPort: {{ coalesce .Values.containerPorts.grpc .Values.containerPort}}
               name: grpc
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.livenessProbe.enabled }}
           {{- if .Values.startupProbe.enabled }}
           startupProbe:
             exec:
@@ -136,6 +135,7 @@ spec:
           {{- else if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
               # As it is a grpc port, we cannot httpGet. tcpSocket cannot be used either

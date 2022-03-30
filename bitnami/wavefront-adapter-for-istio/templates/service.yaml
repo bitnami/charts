@@ -22,8 +22,8 @@ spec:
   {{- if (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{- if not (empty .Values.envoy.service.clusterIP) }}
-  clusterIP: {{ .Values.envoy.service.clusterIP | quote }}
+  {{- if not (empty .Values.service.clusterIP) }}
+  clusterIP: {{ .Values.service.clusterIP | quote }}
   {{- end }}
   {{ if eq .Values.service.type "LoadBalancer" }}
   loadBalancerSourceRanges: {{ .Values.service.loadBalancerSourceRanges }}
