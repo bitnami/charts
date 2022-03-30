@@ -31,7 +31,7 @@ global:
 ##
 haproxy:
   image:
-    registry: projects.registry.vmware.com/mktp-giralda
+    registry: docker.io
     repository: bitnami/haproxy-intel
     tag: 2.5.3-r0
     ## Specify a imagePullPolicy
