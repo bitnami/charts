@@ -1,4 +1,4 @@
-const COMMAND_DELAY = 500;
+const COMMAND_DELAY = 1000;
 
 for (const command of ['click']) {
     Cypress.Commands.overwrite(command, (originalFn, ...args) => {
@@ -18,7 +18,7 @@ Cypress.Commands.add("login", (
 ) => {
     cy.clearCookies();
     cy.visit('/login')
-    cy.get('input#accessKey').should('be.visible').type(username);
-    cy.get('input#secretKey').should('be.visible').type(password);
-    cy.get('button[type="submit"]').should('be.visible').click();
+    cy.get('input#accessKey').type(username);
+    cy.get('input#secretKey').type(password);
+    cy.get('button[type="submit"]').click();
 });
