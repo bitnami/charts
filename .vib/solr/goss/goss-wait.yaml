@@ -1,0 +1,9 @@
+addr:
+  tcp://localhost:8983:
+    reachable: true
+    timeout: 60000
+command:
+  wait-to-be-available:
+    exec: "sleep 60"
+    exit-status: 0
+    timeout: 130000
