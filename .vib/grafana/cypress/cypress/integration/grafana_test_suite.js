@@ -32,8 +32,7 @@ it('allows creating a dashboard with a panel', () => {
   cy.get('button[aria-label*="Close dialogue"]')
     .should('be.visible');
   cy.get('[name*="title"]').clear().type(`${DASHBOARD_TITLE}.${random}`);
-  cy.get('[type*="submit"]')
-    .should('be.visible').click();
+  cy.get('[type*="submit"]').click();
   verifySuccesOfAction();
 })
 
@@ -49,7 +48,7 @@ it('checks if it is possible to upload a dashboard as JSON file', () => {
   cy.get('[data-testid*="data-testid-import-dashboard-submit"]').click();
   cy.visit("dashboards");
   cy.contains('div', DASHBOARD_TITLE)
-    .should('exist').click();
+    .should('exist');
 })
 
 it('allows inviting a user', () => {
@@ -102,7 +101,7 @@ it('checks if it is possible to create and delete a data source', () => {
     cy.contains('button', 'Delete').click();
     cy.contains('div', 'Are you sure you want to delete')
       .should('be.visible');
-    cy.get('button[aria-label*="Confirm Modal Danger Button"]').should('be.visible').click();
+    cy.get('button[aria-label*="Confirm Modal Danger Button"]').click();
     verifySuccesOfAction();
 })
 
@@ -112,8 +111,7 @@ it('checks if an API key can be added and deleted', () => {
   cy.login();
   cy.visit('org/apikeys');
   cy.get('[data-testid*="data-testid Call to action button New API key"]').click();
-  cy.get('input[placeholder*="Name"]')
-    .should('be.visible').type(`${API_KEY_NAME}.${random}`)
+  cy.get('input[placeholder*="Name"]').type(`${API_KEY_NAME}.${random}`)
   cy.contains('button', 'Add').click({force:true});
   cy.contains('h2', 'API Key Created')
     .should('be.visible');
