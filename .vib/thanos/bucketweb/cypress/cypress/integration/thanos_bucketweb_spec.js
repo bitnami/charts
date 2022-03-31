@@ -6,9 +6,9 @@ it('allows to see runtime & build information', () => {
     cy.contains('[class="dropdown-item"]', 'Runtime & Build Information').click();
     cy.contains('Runtime Information').should('be.visible');
     cy.get('h2').contains('Build Information').should('be.visible');
-  })
+})
 
-it('allows to see the Blocks page',() => {
+it('allows to see the Blocks page', () => {
     cy.visit('/');
     cy.get('.nav-link').contains('Blocks').click();
     cy.contains('No blocks found.');
@@ -19,5 +19,3 @@ it('allows changing of the UI', () => {
     cy.contains('[class="nav-link"]', 'Classic UI').should('be.visible').click();
     cy.contains('.nav-link', 'New UI').should('exist');
 })
-
-  
