@@ -42,11 +42,7 @@
                 "path": "/.vib/thanos/queryfrontend/cypress"
               },
               "endpoint": "lb-thanos-query-frontend-http",
-              "app_protocol": "HTTP",
-              "env": {
-                "username": "test_admin",
-                "password": "ComplicatedPassword123!4"
-              }
+              "app_protocol": "HTTP"
             }
           }
         ]

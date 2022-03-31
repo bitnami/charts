@@ -42,11 +42,7 @@
                 "path": "/.vib/thanos/bucketweb/cypress"
               },
               "endpoint": "lb-thanos-bucketweb-http",
-              "app_protocol": "HTTP",
-              "env": {
-                "username": "test_admin",
-                "password": "ComplicatedPassword123!4"
-              }
+              "app_protocol": "HTTP"
             }
           }
         ]
