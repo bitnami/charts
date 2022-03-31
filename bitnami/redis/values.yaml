@@ -350,6 +350,20 @@ master:
   ##     whenUnsatisfiable: DoNotSchedule
   ##
   topologySpreadConstraints: []
+  ## @param master.dnsPolicy DNS Policy for Redis&trade; master pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+  ## E.g.
+  ## dnsPolicy: ClusterFirst
+  dnsPolicy: ""
+  ## @param master.dnsConfig DNS Configuration for Redis&trade; master pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+  ## E.g.
+  ## dnsConfig:
+  ##   options:
+  ##   - name: ndots
+  ##     value: "4"
+  ##   - name: single-request-reopen
+  dnsConfig: {}
   ## @param master.lifecycleHooks for the Redis&trade; master container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -703,6 +717,20 @@ replica:
   ##     whenUnsatisfiable: DoNotSchedule
   ##
   topologySpreadConstraints: []
+  ## @param replica.dnsPolicy DNS Policy for Redis&trade; replica pods
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+  ## E.g.
+  ## dnsPolicy: ClusterFirst
+  dnsPolicy: ""
+  ## @param replica.dnsConfig DNS Configuration for Redis&trade; replica pods
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+  ## E.g.
+  ## dnsConfig:
+  ##   options:
+  ##   - name: ndots
+  ##     value: "4"
+  ##   - name: single-request-reopen
+  dnsConfig: {}
   ## @param replica.lifecycleHooks for the Redis&trade; replica container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
