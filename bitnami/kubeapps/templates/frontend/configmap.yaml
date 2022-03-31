@@ -22,7 +22,7 @@ data:
     # Keep the connection open with the API server even if idle (the default is 60 seconds)
     # Setting it to 1 hour which should be enough for our current use case of deploying/upgrading apps
     # If we enable other use-cases in the future we might need to bump this value
-    # More info here https://github.com/kubeapps/kubeapps/issues/766
+    # More info here https://github.com/vmware-tanzu/kubeapps/issues/766
     proxy_read_timeout 1h;
 
     {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
