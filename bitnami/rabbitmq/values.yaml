@@ -231,7 +231,7 @@ loadDefinition:
   ## @param loadDefinition.enabled Enable loading a RabbitMQ definitions file to configure RabbitMQ
   ##
   enabled: false
-  ## @para loadDefinition.file Name of the definitions file
+  ## @param loadDefinition.file Name of the definitions file
   ##
   file: "/app/load_definition.json"
   ## @param loadDefinition.existingSecret Existing secret with the load definitions file
