@@ -25,8 +25,4 @@ name: mysql
 sources:
   - https://github.com/bitnami/bitnami-docker-mysql
   - https://mysql.com
-<<<<<<< support-overriding-mysql-init-db-configmap
-version: 8.8.29
-=======
-version: 8.8.30
->>>>>>> master
+version: 8.8.31
