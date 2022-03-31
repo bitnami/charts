@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.3.2
+appVersion: 2.3.3
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -30,4 +30,4 @@ sources:
   - https://github.com/argoproj/argo-cd/
   - https://github.com/bitnami/bitnami-docker-dex
   - https://github.com/dexidp/dex
-version: 3.1.6
+version: 3.1.9

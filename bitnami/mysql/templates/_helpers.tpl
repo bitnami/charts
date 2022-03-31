@@ -112,7 +112,7 @@ Return the secret with MySQL credentials
 */}}
 {{- define "mysql.secretName" -}}
     {{- if .Values.auth.existingSecret -}}
-        {{- printf "%s" .Values.auth.existingSecret -}}
+        {{- printf "%s" (tpl .Values.auth.existingSecret $) -}}
     {{- else -}}
         {{- printf "%s" (include "common.names.fullname" .) -}}
     {{- end -}}
