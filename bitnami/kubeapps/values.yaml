@@ -532,7 +532,7 @@ dashboard:
   ##
   customStyle: ""
   ## @param dashboard.customAppViews Package names to signal a custom app view
-  ## ref: https://github.com/vmware-tanzu/kubeapps/blob/main/docs/developer/custom-app-view-support.md
+  ## ref: https://github.com/vmware-tanzu/kubeapps/blob/main/docs/howto/custom-app-view-support.md
   ## e.g:
   ##  customAppViews:
   ##    - plugin: helm
@@ -540,7 +540,7 @@ dashboard:
   ##      repository: bitnami
   customAppViews: []
   ## @param dashboard.customComponents Custom Form components injected into the BasicDeploymentForm
-  ## ref: https://github.com/vmware-tanzu/kubeapps/blob/main/docs/developer/custom-form-component-support.md
+  ## ref: https://github.com/vmware-tanzu/kubeapps/blob/main/docs/howto/custom-form-component-support.md
   ##
   customComponents: ""
   ## @param dashboard.remoteComponentsUrl Remote URL that can be used to load custom components vs loading from the local filesystem
@@ -550,7 +550,7 @@ dashboard:
   ##
   skipAvailablePackageDetails: false
   ## @param dashboard.customLocale Custom translations injected to the Dashboard to customize the strings used in Kubeapps
-  ## ref: https://github.com/vmware-tanzu/kubeapps/blob/main/docs/developer/translate-kubeapps.md
+  ## ref: https://github.com/vmware-tanzu/kubeapps/blob/main/docs/reference/translations/translate-kubeapps.md
   ## e.g:
   ## customLocale:
   ##   "Kubeapps": "My Dashboard"
@@ -1651,7 +1651,7 @@ assetsvc:
 ## @section Auth Proxy parameters
 
 ## Auth Proxy configuration for OIDC support
-## ref: https://github.com/vmware-tanzu/kubeapps/blob/main/docs/user/using-an-OIDC-provider.md
+## ref: https://github.com/vmware-tanzu/kubeapps/blob/main/docs/tutorials/using-an-OIDC-provider.md
 ##
 authProxy:
   ## @param authProxy.enabled Specifies whether Kubeapps should configure OAuth login/logout
