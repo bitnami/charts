@@ -183,11 +183,12 @@ spec:
             {{- if .Values.loadDefinition.enabled }}
             - name: RABBITMQ_LOAD_DEFINITIONS
               value: "yes"
-            - name: RABBITMQ_SECURE_PASSWORD
-              value: "no"
+            - name: RABBITMQ_DEFINITIONS_FILE
+              value: {{ .Values.loadDefinition.file | quote }}
             {{- else }}
             - name: RABBITMQ_LOAD_DEFINITIONS
               value: "no"
+            {{- end }}
             - name: RABBITMQ_SECURE_PASSWORD
               value: "yes"
             - name: RABBITMQ_USERNAME
@@ -197,7 +198,6 @@ spec:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretPasswordName" . }}
                   key: rabbitmq-password
-            {{- end }}
             - name: RABBITMQ_PLUGINS
               value: {{ include "rabbitmq.plugins" . | quote }}
             {{- if .Values.communityPlugins }}
