@@ -36,8 +36,8 @@ it('disallows login to an invalid user', () => {
   cy.clearCookies();
   cy.visit('/wp-login.php')
   cy.fixture('user').then((user) => {
-    cy.get('#user_login').should('not.be.disabled').type(user.username).should('have.value', user.username);
-    cy.get('#user_pass').should('not.be.disabled').type(user.password).should('have.value', user.password);
+    cy.get('#user_login').type(user.username).should('have.value', user.username);
+    cy.get('#user_pass').type(user.password).should('have.value', user.password);
   })
   cy.get('#wp-submit').click();
   cy.fixture('user').then((user) => {
@@ -78,9 +78,9 @@ it('checks if admin can create a post', () => {
   cy.get('.components-modal__header > .components-button').click();
   cy.get('#editor').should('be.visible');
   cy.contains('button[type="button"]',"Publish").click();
-  cy.get('h1[aria-label="Add title"]').should('be.visible').clear().type(`Test Hello World!${random}`);
-  cy.get('.editor-post-save-draft').should('be.visible').click();
-  cy.get('.editor-post-saved-state').should('be.visible').and('have.text','Saved');
+  cy.get('h1[aria-label="Add title"]').clear().type(`Test Hello World!${random}`);
+  cy.get('.editor-post-save-draft').click();
+  cy.get('.editor-post-saved-state').and('have.text','Saved');
 
 })
 
@@ -103,7 +103,7 @@ it('checks the value of auto update status', () => {
 it('allows the upload of a file',() => {
   cy.login();
   cy.visit("wp-admin/upload.php");
-  cy.contains("[role='button']",'Add New').should('be.visible').click();
+  cy.contains("[role='button']",'Add New').click();
   cy.contains("[aria-labelledby]",'Select Files').should('be.visible');
   cy.get('input[type=file]').selectFile('cypress/fixtures/images/test_image.jpeg',
     {force:true});
@@ -115,4 +115,3 @@ it('allows to log out', () => {
   cy.visit('wp-login.php?loggedout=true&wp_lang=en_US');
   cy.contains('.message','logged out');
 })
-
