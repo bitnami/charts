@@ -6,7 +6,7 @@ import {
 it('allows user to log in and log out', () => {
   cy.login();
   cy.get('[data-testid="ErrorOutlineIcon"]').should('not.exist');
-  cy.get("#logout").scrollIntoView().should('be.visible').click();
+  cy.get("#logout").scrollIntoView().click();
 })
 
 it('allows creating a bucket and file upload', () => {  
@@ -14,18 +14,18 @@ it('allows creating a bucket and file upload', () => {
   cy.visit('add-bucket');
   cy.contains('div','Return to Buckets')
   cy.fixture('testdata').then((td) => {
-    cy.get('#bucket-name').should('be.visible').type(`${td.bucketTitle}.${random}`);
+    cy.get('#bucket-name').type(`${td.bucketTitle}.${random}`);
   })
-  cy.contains('button[type="submit"]','Create Bucket').should('be.visible').click();
+  cy.contains('button[type="submit"]','Create Bucket').click();
   cy.fixture('testdata').then((td) => {
     cy.url().should('include',`buckets/${td.bucketTitle}`);
   })
 
-  cy.get('#upload-main').should('be.visible').click();
-  cy.contains('span','Upload File').should('be.visible').click();
-  cy.get('div#object-list-wrapper > input[type="file"]').should('not.be.disabled').selectFile('cypress/fixtures/example.json',
+  cy.get('#upload-main').click();
+  cy.contains('span','Upload File').click();
+  cy.get('div#object-list-wrapper > input[type="file"]').selectFile('cypress/fixtures/example.json',
   {force:true});
-  cy.get('button[aria-label="Clear Completed List"]').should('be.visible').click();
+  cy.get('button[aria-label="Clear Completed List"]').click();
   cy.contains('div','Object uploaded successfully.').should('be.visible');
 })
 
@@ -33,12 +33,12 @@ it('allows creating a user', () => {
   cy.login();
   cy.visit('identity/users');
   cy.contains('Create User');
-  cy.get('[aria-label="Create User"]').should('be.visible').click();
+  cy.get('[aria-label="Create User"]').click();
   cy.fixture('testdata').then((td) => {
-    cy.get('#accesskey-input').should('be.visible').type(`${td.testAccessKey}.${random}`);
-    cy.get('#standard-multiline-static').should('be.visible').type(`${td.testSecretKey}.${random}`);
+    cy.get('#accesskey-input').type(`${td.testAccessKey}.${random}`);
+    cy.get('#standard-multiline-static').type(`${td.testSecretKey}.${random}`);
   })
-  cy.contains('button[type="submit"]','Save').should('be.visible').click();
+  cy.contains('button[type="submit"]','Save').click();
   cy.fixture('testdata').then((td) => {
     cy.contains(td.testAccessKey).should('be.visible');
   })
@@ -48,9 +48,9 @@ it('allows creating a user', () => {
 it('allows creating a group', () => {
   cy.login();
   cy.visit('identity/groups');
-  cy.get('[aria-label="Create Group"]').should('be.visible').click();
+  cy.get('[aria-label="Create Group"]').click();
   cy.fixture('testdata').then((td) => {
-    cy.get('#group-name').should('be.visible').type(`${td.testGroupName}.${random}`);
+    cy.get('#group-name').type(`${td.testGroupName}.${random}`);
     cy.contains('button[type="submit"]','Save').click();
     cy.contains(td.testGroupName);
   })
@@ -60,8 +60,8 @@ it('allows creating a group', () => {
 it('allows creating a service account and downloading credentials', () => {
   cy.login();
   cy.visit('identity/account');
-  cy.get('[aria-label="Create service account"]').should('be.visible').click();
+  cy.get('[aria-label="Create service account"]').click();
   cy.contains('button[type="submit"]','Create').click();
-  cy.get('#download-button').should('be.visible').click(); 
+  cy.get('#download-button').click(); 
   cy.readFile('cypress/downloads/credentials.json').should('exist');
 })
