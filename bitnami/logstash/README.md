@@ -7,7 +7,7 @@ Logstash is an open source data processing engine. It ingests data from multiple
 [Overview of Logstash](http://logstash.net)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -199,9 +199,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.loadBalancerSourceRanges`    | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                        |
 | `metrics.service.clusterIP`                   | Static clusterIP or None for headless services                                                                                   | `""`                        |
 | `metrics.service.annotations`                 | Annotations for the Prometheus metrics service                                                                                   | `{}`                        |
-| `podDisruptionBudget.create`                  | If true, create a pod disruption budget for pods.                                                                                | `false`                     |
-| `podDisruptionBudget.minAvailable`            | Minimum number / percentage of pods that should remain scheduled                                                                 | `1`                         |
-| `podDisruptionBudget.maxUnavailable`          | Maximum number / percentage of pods that may be made unavailable                                                                 | `""`                        |
+| `pdb.create`                  | If true, create a pod disruption budget for pods.                                                                                | `false`                     |
+| `pdb.minAvailable`            | Minimum number / percentage of pods that should remain scheduled                                                                 | `1`                         |
+| `pdb.maxUnavailable`          | Maximum number / percentage of pods that may be made unavailable                                                                 | `""`                        |
 | `initContainers`                              | Extra containers to run before logstash for initialization purposes like custom plugin install.                                  | `[]`                        |
 
 
@@ -295,6 +295,14 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 4.0.0
+
+This major release updates the chart to use Logstash 8. In addition, this chart has been standardized adding missing values and renaming others, in order to get aligned with the rest of the assets in the Bitnami charts repository.
+
+The following values have been renamed:
+
+- `frontend.service.port` renamed as `frontend.service.ports.http`.
 
 ### To 3.0.0
 
