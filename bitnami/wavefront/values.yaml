@@ -759,6 +759,7 @@ proxy:
   ##
   sidecars: []
   ## @param proxy.replicaCount ReplicaCount to deploy for Wavefront proxy (usually 1)
+  ## DEPRECATED: proxy.replicas has been deprecated, and will be removed in the next major release.
   ##
   replicaCount: 1
   ## @param proxy.port The port number the proxy will listen on for metrics in Wavefront data format
@@ -840,14 +841,11 @@ proxy:
   ## @param proxy.command Override default container command (useful when using custom images)
   ##
   command: []
-  ## @param proxy.args Override default container args (useful when using custom images)
-  ##
-  args: []
-  ## @param proxy.extraArgs Any configuration property can be passed to the proxy via command line args in the format: `--<property_name> <value>`
+  ## @param proxy.args Any configuration property can be passed to the proxy via command line args in the format: `--<property_name> <value>`
   ## Multiple properties can be specified separated by whitespace
   ## Ref: https://docs.wavefront.com/proxies_configuring.html
   ##
-  extraArgs: ""
+  args: ""
   ## @param proxy.heap Wavefront proxy Java heap maximum usage (java -Xmx command line option)
   ## By default Java will consume up to 4G of heap memory
   ## e.g:

@@ -84,8 +84,6 @@ spec:
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else if .Values.proxy.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: WAVEFRONT_URL
@@ -96,7 +94,7 @@ spec:
                   name: {{ include "wavefront.token.secretName" . }}
                   key: api-token
             - name: WAVEFRONT_PROXY_ARGS
-              value: {{ .Values.proxy.extraArgs }}
+              value: {{ .Values.proxy.args }}
               {{- if .Values.proxy.tracePort }} --traceListenerPorts {{ .Values.proxy.tracePort }}{{- end -}}
               {{- if .Values.proxy.jaegerPort }} --traceJaegerListenerPorts {{ .Values.proxy.jaegerPort }}{{- end -}}
               {{- if .Values.proxy.traceJaegerHttpListenerPort }} --traceJaegerHttpListenerPorts {{ .Values.proxy.traceJaegerHttpListenerPort }}{{- end -}}
