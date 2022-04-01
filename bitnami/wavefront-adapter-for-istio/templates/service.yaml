@@ -39,7 +39,7 @@ spec:
   {{- end }}
   ports:
     - name: grpc
-      port: {{ coalesce .Values.service.ports.grpc .Values.service.port}}
+      port: {{ coalesce .Values.service.ports.grpc .Values.service.port }}
       targetPort: grpc
       protocol: TCP
       {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http))) }}

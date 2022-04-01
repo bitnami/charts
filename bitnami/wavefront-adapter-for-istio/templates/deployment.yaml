@@ -89,13 +89,14 @@ spec:
           command:
             - wavefront
           {{- end }}
+          {{ $argsPort:= coalesce .Values.containerPorts.grpc .Values.containerPort }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - {{ .Values.containerPort | quote }}
+            - $argsPort
           {{- end }}
           env:
             {{- if .Values.extraEnvVars }}
@@ -114,7 +115,7 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           ports:
-            - containerPort: {{ coalesce .Values.containerPorts.grpc .Values.containerPort}}
+            - containerPort: {{ $argsPort | int }}
               name: grpc
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.startupProbe.enabled }}
