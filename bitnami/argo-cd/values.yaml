@@ -832,7 +832,7 @@ server:
       type: ClusterIP
       ## @param server.metrics.service.port Argo CD server metrics service port
       ##
-      port: 8084
+      port: 8083
 
       ## Node ports to expose
       ## @param server.metrics.service.nodePort Node port for Argo CD server metrics service
@@ -1387,7 +1387,7 @@ repoServer:
   ##
   containerPorts:
     repoServer: 8081
-    metrics: ""
+    metrics: 8084
 
   ## Metrics configuration for Argo CD repo server
   ##
