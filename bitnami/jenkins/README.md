@@ -296,6 +296,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 10.0.0
+
+This major release is no longer contains the metrics, because the container [jenkins-exporter](https://github.com/bitnami/bitnami-docker-jenkins-exporter) was deprecated.
+
 ### To 9.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
