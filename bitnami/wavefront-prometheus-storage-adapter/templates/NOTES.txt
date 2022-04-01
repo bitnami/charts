@@ -45,5 +45,7 @@ In order to replicate the container startup execute this command:
     remote_write:
       - url: "http://{{ template "common.names.fullname" . }}:{{ coalesce .Values.service.ports.http .Values.service.port}}/receive"
 
+{{- end }}
+
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "wfpsa.validateValues" . }}

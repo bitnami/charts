@@ -126,8 +126,7 @@ spec:
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.startupProbe.enabled }}
           startupProbe:
-            httpGet:
-              path: /health
+            tcpSocket:
               port: http
             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
