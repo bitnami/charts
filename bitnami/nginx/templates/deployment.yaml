@@ -201,10 +201,6 @@ spec:
           {{- end }}
           volumeMounts:
             {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
-            - name: nginx-server-block-paths
-              mountPath: /opt/bitnami/nginx/conf/server_blocks
-            {{- end }}
-            {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
             - name: nginx-server-block
               mountPath: /opt/bitnami/nginx/conf/server_blocks/common
             {{- end }}
@@ -246,12 +242,6 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: nginx-server-block-paths
-          configMap:
-            name: {{ template "common.names.fullname" . }}-server-block
-            items:
-              - key: server-blocks-paths.conf
-                path: server-blocks-paths.conf
         {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.extraVolumes (include "nginx.useStaticSite" .) }}
         {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
         - name: nginx-server-block
