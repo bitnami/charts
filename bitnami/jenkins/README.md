@@ -298,7 +298,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 10.0.0
 
-This major release is no longer contains the metrics, because the container [jenkins-exporter](https://github.com/bitnami/bitnami-docker-jenkins-exporter) was deprecated.
+This major release is no longer contains the metrics section because the container `bitnami/enkins-exporter` has been deprecated due to the upstream project is not maintained.
 
 ### To 9.0.0
 
