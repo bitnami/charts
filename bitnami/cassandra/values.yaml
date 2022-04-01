@@ -421,6 +421,9 @@ containerPorts:
 
 ## @section RBAC parameters
 ##
+## @param automountServiceAccountToken Enable/Disable Automount API credentials for a service account in a POD.
+##
+automountServiceAccountToken: true
 
 ## Cassandra pods ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
