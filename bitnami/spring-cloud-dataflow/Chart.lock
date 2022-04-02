@@ -1,15 +1,15 @@
 dependencies:
 - name: rabbitmq
   repository: https://charts.bitnami.com/bitnami
-  version: 8.30.4
+  version: 8.31.0
 - name: mariadb
   repository: https://charts.bitnami.com/bitnami
   version: 10.4.4
 - name: kafka
   repository: https://charts.bitnami.com/bitnami
-  version: 16.1.3
+  version: 16.2.0
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 1.13.0
-digest: sha256:abb8b1f1beac0c8cc9ffb152f3feebe835b7ad508f68e16f1852cc75aded3984
-generated: "2022-03-29T12:15:18.130367926Z"
+digest: sha256:bc9c51f74bd9070aa727418a3758d86770c0808b550f078572f817125cd95d2b
+generated: "2022-04-01T19:52:42.799137193Z"
