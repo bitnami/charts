@@ -475,10 +475,12 @@ envoy:
   ## @param envoy.args Override default args
   ##
   args: []
+  ## @param envoy.shutdownManager.enabled Contour shutdownManager sidecar
   ## @param envoy.shutdownManager.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
   ## @param envoy.shutdownManager.resources.requests [object] Specify resource requests which the container needs to spawn.
   ##
   shutdownManager:
+    enabled: true
     resources:
       ## Example:
       ## limits:
