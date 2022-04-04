@@ -248,7 +248,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 {{- else }}
 kind: RoleBinding
-{{- end }} 
+{{- end }}
 metadata:
   name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
@@ -264,7 +264,7 @@ roleRef:
   kind: ClusterRole
   {{- else }}
   kind: Role
-  {{- end }} 
+  {{- end }}
   apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount
