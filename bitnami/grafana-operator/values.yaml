@@ -307,9 +307,12 @@ operator:
     ## Prometheus Operator service monitors
     ##
     serviceMonitor:
-      ## @param operator.prometheus.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator
+      ## @param operator.prometheus.serviceMonitor.enabled Specify if a ServiceMonitor will be deployed for prometheus-operator
       ##
       enabled: false
+      ## @param operator.prometheus.serviceMonitor.namespace Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)
+      ##
+      namespace: ""
       ## @param operator.prometheus.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
       ##
       jobLabel: app.kubernetes.io/name
