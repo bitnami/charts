@@ -19,7 +19,7 @@ keywords:
   - web
   - www
   - reverse proxy
-kubeVersion: ">= 1.22"
+kubeVersion: '>= 1.19'
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
