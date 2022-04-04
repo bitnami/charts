@@ -28,4 +28,4 @@ name: grafana-tempo
 sources:
   - https://github.com/bitnami/bitnami-docker-grafana-tempo
   - https://github.com/grafana/tempo/
-version: 1.0.15
+version: 1.0.17
