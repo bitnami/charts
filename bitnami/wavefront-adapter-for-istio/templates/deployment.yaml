@@ -95,7 +95,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - {{ coalesce .Values.containerPorts.grpc .Values.containerPort }}
+            - {{ coalesce .Values.containerPorts.grpc .Values.containerPort | quote }}
           {{- end }}
           env:
             {{- if .Values.extraEnvVars }}
