@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 1.14.5
+appVersion: 1.14.6
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -25,4 +25,4 @@ name: fluentd
 sources:
   - https://github.com/bitnami/bitnami-docker-fluentd
   - https://www.fluentd.org/
-version: 5.0.13
+version: 5.0.15

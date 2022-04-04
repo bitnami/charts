@@ -9,27 +9,29 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
-    {{- end }}
     {{- if .Values.metrics.serviceMonitor.labels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.labels "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.labels "context" $ ) | nindent 4 }}
     {{- end }}
-    app.kubernetes.io/component: metrics
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.metrics.serviceMonitor.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel | quote }}
   selector:
-    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: metrics
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       {{- if .Values.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
   endpoints:
-    - port: metrics
-      path: /metrics
+    - port: tcp-metrics
+      path: "/metrics"
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}
@@ -47,5 +49,5 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace | quote }}
+    - {{ .Release.Namespace }}
 {{- end }}
