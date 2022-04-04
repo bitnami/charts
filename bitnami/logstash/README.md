@@ -57,6 +57,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
 ### Common parameters
@@ -67,6 +68,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nameOverride`           | String to partially override logstash.fullname template (will maintain the release name) | `""`            |
 | `fullnameOverride`       | String to fully override logstash.fullname template                                      | `""`            |
 | `clusterDomain`          | Default Kubernetes cluster domain                                                        | `cluster.local` |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                               | `{}`            |
+| `commonLabels`           | Labels to add to all deployed objects                                                    | `{}`            |
 | `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template).             | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)  | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                     | `["sleep"]`     |
@@ -79,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `image.registry`                              | Logstash image registry                                                                                                          | `docker.io`                 |
 | `image.repository`                            | Logstash image repository                                                                                                        | `bitnami/logstash`          |
-| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                              | `7.16.3-debian-10-r0`       |
+| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                              | `7.17.2-debian-10-r2`       |
 | `image.pullPolicy`                            | Logstash image pull policy                                                                                                       | `IfNotPresent`              |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                 | `[]`                        |
 | `image.debug`                                 | Specify if debug logs should be enabled                                                                                          | `false`                     |
@@ -97,11 +100,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `enableMultiplePipelines`                     | Allows user to use multiple pipelines                                                                                            | `false`                     |
 | `extraVolumes`                                | Array to add extra volumes (evaluated as a template)                                                                             | `[]`                        |
 | `extraVolumeMounts`                           | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)                                             | `[]`                        |
-| `containerPorts`                              | Array containing the ports to open in the Logstash container                                                                     | `[]`                        |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for Logstash pods                                                                              | `true`                      |
+| `serviceAccount.name`                         | The name of the service account to use. If not set and `create` is `true`, a name is generated                                   | `""`                        |
+| `serviceAccount.automountServiceAccountToken` | Allows automount of ServiceAccountToken on the serviceAccount created                                                            | `true`                      |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                             | `{}`                        |
+| `containerPorts`                              | Array containing the ports to open in the Logstash container (evaluated as a template)                                           | `[]`                        |
+| `initContainers`                              | Add additional init containers to the Logstash pod(s)                                                                            | `[]`                        |
+| `sidecars`                                    | Add additional sidecar containers to the Logstash pod(s)                                                                         | `[]`                        |
 | `replicaCount`                                | Number of Logstash replicas to deploy                                                                                            | `1`                         |
 | `updateStrategy`                              | Update strategy (`RollingUpdate`, or `OnDelete`)                                                                                 | `RollingUpdate`             |
 | `podManagementPolicy`                         | Pod management policy                                                                                                            | `OrderedReady`              |
 | `podAnnotations`                              | Pod annotations                                                                                                                  | `{}`                        |
+| `podLabels`                                   | Extra labels for Logstash pods                                                                                                   | `{}`                        |
 | `podAffinityPreset`                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                              | `""`                        |
 | `podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                         | `soft`                      |
 | `nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                        | `""`                        |
@@ -111,28 +121,43 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeSelector`                                | Node labels for pod assignment                                                                                                   | `{}`                        |
 | `tolerations`                                 | Tolerations for pod assignment                                                                                                   | `[]`                        |
 | `priorityClassName`                           | Pod priority                                                                                                                     | `""`                        |
-| `securityContext.enabled`                     | Enable security context for Logstash                                                                                             | `true`                      |
-| `securityContext.fsGroup`                     | Group ID for the Logstash filesystem                                                                                             | `1001`                      |
-| `securityContext.runAsUser`                   | User ID for the Logstash container                                                                                               | `1001`                      |
+| `schedulerName`                               | Name of the k8s scheduler (other than default)                                                                                   | `""`                        |
+| `terminationGracePeriodSeconds`               | In seconds, time the given to the Logstash pod needs to terminate gracefully                                                     | `""`                        |
+| `topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                                                                   | `[]`                        |
+| `podSecurityContext.enabled`                  | Enabled Logstash pods' Security Context                                                                                          | `true`                      |
+| `podSecurityContext.fsGroup`                  | Set Logstash pod's Security Context fsGroup                                                                                      | `1001`                      |
+| `containerSecurityContext.enabled`            | Enabled Logstash containers' Security Context                                                                                    | `true`                      |
+| `containerSecurityContext.runAsUser`          | Set Logstash containers' Security Context runAsUser                                                                              | `1001`                      |
+| `containerSecurityContext.runAsNonRoot`       | Set Logstash container's Security Context runAsNonRoot                                                                           | `true`                      |
+| `command`                                     | Override default container command (useful when using custom images)                                                             | `[]`                        |
+| `args`                                        | Override default container args (useful when using custom images)                                                                | `[]`                        |
+| `lifecycleHooks`                              | for the Logstash container(s) to automate configuration before or after startup                                                  | `{}`                        |
 | `resources.limits`                            | The resources limits for the Logstash container                                                                                  | `{}`                        |
 | `resources.requests`                          | The requested resources for the Logstash container                                                                               | `{}`                        |
-| `livenessProbe.httpGet.path`                  | Request path for livenessProbe                                                                                                   | `/`                         |
-| `livenessProbe.httpGet.port`                  | Port for livenessProbe                                                                                                           | `monitoring`                |
+| `startupProbe.enabled`                        | Enable startupProbe                                                                                                              | `false`                     |
+| `startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                                                           | `60`                        |
+| `startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                                                  | `10`                        |
+| `startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                                                 | `5`                         |
+| `startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                                               | `6`                         |
+| `startupProbe.successThreshold`               | Success threshold for startupProbe                                                                                               | `1`                         |
+| `livenessProbe.enabled`                       | Enable livenessProbe                                                                                                             | `true`                      |
 | `livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                                          | `60`                        |
 | `livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                                                 | `10`                        |
 | `livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                                                | `5`                         |
 | `livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                                              | `6`                         |
 | `livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                                              | `1`                         |
-| `readinessProbe.httpGet.path`                 | Request path for readinessProbe                                                                                                  | `/`                         |
-| `readinessProbe.httpGet.port`                 | Port for readinessProbe                                                                                                          | `monitoring`                |
+| `readinessProbe.enabled`                      | Enable readinessProbe                                                                                                            | `true`                      |
 | `readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                                                         | `60`                        |
 | `readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                                                | `10`                        |
 | `readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                                               | `5`                         |
 | `readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                                             | `6`                         |
 | `readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                                             | `1`                         |
-| `lifecycle`                                   | Logstash pods' lifecycle hooks                                                                                                   | `{}`                        |
+| `customStartupProbe`                          | Custom startup probe for the Web component                                                                                       | `{}`                        |
+| `customLivenessProbe`                         | Custom liveness probe for the Web component                                                                                      | `{}`                        |
+| `customReadinessProbe`                        | Custom readiness probe for the Web component                                                                                     | `{}`                        |
 | `service.type`                                | Kubernetes service type (`ClusterIP`, `NodePort`, or `LoadBalancer`)                                                             | `ClusterIP`                 |
-| `service.ports.http`                          | Logstash svc ports                                                                                                               | `{}`                        |
+| `service.ports`                               | Logstash service ports (evaluated as a template)                                                                                 | `[]`                        |
+| `service.extraPorts`                          | Extra ports to expose                                                                                                            | `[]`                        |
 | `service.loadBalancerIP`                      | loadBalancerIP if service type is `LoadBalancer`                                                                                 | `""`                        |
 | `service.loadBalancerSourceRanges`            | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                        |
 | `service.externalTrafficPolicy`               | External traffic policy, configure to Local to preserve client source IP when using an external loadBalancer                     | `""`                        |
@@ -149,12 +174,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions init container                                                                                 | `0`                         |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                 | `docker.io`                 |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                               | `bitnami/bitnami-shell`     |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                     | `10-debian-10-r307`         |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                     | `10-debian-10-r384`         |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                              | `IfNotPresent`              |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                 | `[]`                        |
 | `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                                                                | `{}`                        |
 | `volumePermissions.resources.requests`        | Init container volume-permissions resource requests                                                                              | `{}`                        |
 | `ingress.enabled`                             | Enable ingress controller resource                                                                                               | `false`                     |
+| `ingress.selfSigned`                          | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                     |
 | `ingress.pathType`                            | Ingress Path type                                                                                                                | `ImplementationSpecific`    |
 | `ingress.apiVersion`                          | Override API Version (automatically detected if not set)                                                                         | `""`                        |
 | `ingress.hostname`                            | Default host for the ingress resource                                                                                            | `logstash.local`            |
@@ -168,16 +194,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                             | Enable the export of Prometheus metrics                                                                                          | `false`                     |
 | `metrics.image.registry`                      | Logstash Relay image registry                                                                                                    | `docker.io`                 |
 | `metrics.image.repository`                    | Logstash Relay image repository                                                                                                  | `bitnami/logstash-exporter` |
-| `metrics.image.tag`                           | Logstash Relay image tag (immutable tags are recommended)                                                                        | `7.3.0-debian-10-r409`      |
+| `metrics.image.tag`                           | Logstash Relay image tag (immutable tags are recommended)                                                                        | `7.3.0-debian-10-r486`      |
 | `metrics.image.pullPolicy`                    | Logstash Relay image pull policy                                                                                                 | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                 | `[]`                        |
 | `metrics.resources.limits`                    | The resources limits for the Logstash Prometheus Exporter container                                                              | `{}`                        |
 | `metrics.resources.requests`                  | The requested resources for the Logstash Prometheus Exporter container                                                           | `{}`                        |
 | `metrics.serviceMonitor.enabled`              | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                           | `false`                     |
 | `metrics.serviceMonitor.namespace`            | Namespace in which Prometheus is running                                                                                         | `""`                        |
+| `metrics.serviceMonitor.jobLabel`             | The name of the label on the target service to use as the job name in prometheus.                                                | `""`                        |
 | `metrics.serviceMonitor.interval`             | Interval at which metrics should be scraped.                                                                                     | `""`                        |
 | `metrics.serviceMonitor.scrapeTimeout`        | Timeout after which the scrape is ended                                                                                          | `""`                        |
+| `metrics.serviceMonitor.relabelings`          | RelabelConfigs to apply to samples before scraping                                                                               | `[]`                        |
+| `metrics.serviceMonitor.metricRelabelings`    | MetricRelabelConfigs to apply to samples before ingestion                                                                        | `[]`                        |
 | `metrics.serviceMonitor.selector`             | ServiceMonitor selector labels                                                                                                   | `{}`                        |
+| `metrics.serviceMonitor.labels`               | Extra labels for the ServiceMonitor                                                                                              | `{}`                        |
+| `metrics.serviceMonitor.honorLabels`          | honorLabels chooses the metric's labels on collisions with target labels                                                         | `false`                     |
 | `metrics.livenessProbe.httpGet.path`          | Request path for livenessProbe                                                                                                   | `/metrics`                  |
 | `metrics.livenessProbe.httpGet.port`          | Port for livenessProbe                                                                                                           | `metrics`                   |
 | `metrics.livenessProbe.initialDelaySeconds`   | Initial delay seconds for livenessProbe                                                                                          | `60`                        |
@@ -199,10 +230,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.loadBalancerSourceRanges`    | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                        |
 | `metrics.service.clusterIP`                   | Static clusterIP or None for headless services                                                                                   | `""`                        |
 | `metrics.service.annotations`                 | Annotations for the Prometheus metrics service                                                                                   | `{}`                        |
-| `pdb.create`                  | If true, create a pod disruption budget for pods.                                                                                | `false`                     |
-| `pdb.minAvailable`            | Minimum number / percentage of pods that should remain scheduled                                                                 | `1`                         |
-| `pdb.maxUnavailable`          | Maximum number / percentage of pods that may be made unavailable                                                                 | `""`                        |
-| `initContainers`                              | Extra containers to run before logstash for initialization purposes like custom plugin install.                                  | `[]`                        |
+| `pdb.create`                                  | If true, create a pod disruption budget for pods.                                                                                | `false`                     |
+| `pdb.minAvailable`                            | Minimum number / percentage of pods that should remain scheduled                                                                 | `1`                         |
+| `pdb.maxUnavailable`                          | Maximum number / percentage of pods that may be made unavailable                                                                 | `""`                        |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
