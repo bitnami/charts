@@ -25,7 +25,7 @@ keywords:
   - alertmanager
   - operator
   - monitoring
-kubeVersion: ">= v1.7.0"
+kubeVersion: '>= 1.16.0'
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
