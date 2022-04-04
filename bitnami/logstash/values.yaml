@@ -230,10 +230,11 @@ sidecars: []
 ## @param replicaCount Number of Logstash replicas to deploy
 ##
 replicaCount: 1
-## @param updateStrategy Update strategy (`RollingUpdate`, or `OnDelete`)
+## @param updateStrategy.type Update strategy type (`RollingUpdate`, or `OnDelete`)
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
 ##
-updateStrategy: RollingUpdate
+updateStrategy:
+  type: RollingUpdate
 ## @param podManagementPolicy Pod management policy
 ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
 ##
