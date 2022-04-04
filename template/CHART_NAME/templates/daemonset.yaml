@@ -54,8 +54,11 @@ spec:
       {{- if .Values.%%MAIN_OBJECT_BLOCK%%.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.%%MAIN_OBJECT_BLOCK%%.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.terminationGracePeriodSeconds }}
+      {{- end }}
       initContainers:
-        {{- if .Values.volumePermissions.enabled }}
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "%%TEMPLATE_NAME%%.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -68,7 +71,10 @@ spec:
           {{- end }}
           volumeMounts:
             - name: foo
-              mountPath: bar
+              mountPath: {{ .Values.persistence.mountPath }}
+              {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+              {{- end }}
         {{- end }}
         {{- if .Values.%%MAIN_OBJECT_BLOCK%%.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.initContainers "context" $) | nindent 8 }}
@@ -130,7 +136,10 @@ spec:
           {{- end }}
           volumeMounts:
             - name: foo
-              mountPath: bar
+              mountPath: {{ .Values.persistence.mountPath }}
+              {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+              {{- end }}
               readOnly: true
             {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumeMounts "context" $) | nindent 12 }}
@@ -140,8 +149,12 @@ spec:
         {{- end }}
       volumes:
         - name: foo
-          hostPath:
-            path: bar
+        {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ default (include "common.names.fullname" .) .Values.persistence.existingClaim }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
         {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

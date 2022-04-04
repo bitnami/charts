@@ -68,7 +68,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.1.0-debian-10-r60
+  tag: 3.1.0-debian-10-r65
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -702,7 +702,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.23.5-debian-10-r8
+      tag: 1.23.5-debian-10-r13
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -929,7 +929,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r379
+    tag: 10-debian-10-r384
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1007,7 +1007,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.4.2-debian-10-r188
+      tag: 1.4.2-debian-10-r194
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1233,7 +1233,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.16.1-debian-10-r251
+      tag: 0.16.1-debian-10-r257
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1370,6 +1370,46 @@ provisioning:
   ## @param provisioning.enabled Enable kafka provisioning Job
   ##
   enabled: false
+  ## @param provisioning.numPartitions Default number of partitions for topics when unspecified
+  ##
+  numPartitions: 1
+  ## @param provisioning.replicationFactor Default replication factor for topics when unspecified
+  ##
+  replicationFactor: 1
+  ## @param provisioning.topics Kafka topics to provision
+  ## - name: topic-name
+  ##   partitions: 1
+  ##   replicationFactor: 1
+  ##   ## https://kafka.apache.org/documentation/#topicconfigs
+  ##   config:
+  ##     max.message.bytes: 64000
+  ##     flush.messages: 1
+  ##
+  topics: []
+  ## @param provisioning.extraProvisioningCommands Extra commands to run to provision cluster resources
+  ## - echo "Allow user to consume from any topic"
+  ## - >-
+  ##   /opt/bitnami/kafka/bin/kafka-acls.sh
+  ##   --bootstrap-server $KAFKA_SERVICE
+  ##   --command-config $CLIENT_CONF
+  ##   --add
+  ##   --allow-principal User:user
+  ##   --consumer --topic '*'
+  ## - "/opt/bitnami/kafka/bin/kafka-acls.sh
+  ##      --bootstrap-server $KAFKA_SERVICE
+  ##      --command-config $CLIENT_CONF
+  ##      --list"
+  ##
+  extraProvisioningCommands: []
+  ## @param provisioning.parallel Number of provisioning commands to run at the same time
+  ##
+  parallel: 1
+  ## @param provisioning.preScript Extra bash script to run before topic provisioning. $CLIENT_CONF is path to properties file with most needed configurations
+  ##
+  preScript: ""
+  ## @param provisioning.postScript Extra bash script to run after topic provisioning. $CLIENT_CONF is path to properties file with most needed configurations
+  ##
+  postScript: ""
   ## Auth Configuration for kafka provisioning Job
   ##
   auth:
@@ -1425,31 +1465,25 @@ provisioning:
       ## @param provisioning.auth.tls.truststorePassword Password to access the JKS truststore. Ignored if 'passwordsSecret' is provided.
       ##
       truststorePassword: ""
-  ## @param provisioning.numPartitions Default number of partitions for topics when unspecified
-  ##
-  numPartitions: 1
-  ## @param provisioning.replicationFactor Default replication factor for topics when unspecified
-  ##
-  replicationFactor: 1
-  ## @param provisioning.topics Kafka provisioning topics
-  ## - name: topic-name
-  ##   partitions: 1
-  ##   replicationFactor: 1
-  ##   ## https://kafka.apache.org/documentation/#topicconfigs
-  ##   config:
-  ##     max.message.bytes: 64000
-  ##     flush.messages: 1
-  ##
-  topics: []
-  ## @param provisioning.parallel Number of parallel provisioning topic
-  ##
-  parallel: 1
   ## @param provisioning.command Override provisioning container command
   ##
   command: []
   ## @param provisioning.args Override provisioning container arguments
   ##
   args: []
+  ## @param provisioning.extraEnvVars Extra environment variables to add to the provisioning pod
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: KAFKA_CFG_BACKGROUND_THREADS
+  ##     value: "10"
+  ##
+  extraEnvVars: []
+  ## @param provisioning.extraEnvVarsCM ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM: ""
+  ## @param provisioning.extraEnvVarsSecret Secret with extra environment variables
+  ##
+  extraEnvVarsSecret: ""
   ## @param provisioning.podAnnotations Extra annotations for Kafka provisioning pods
   ##
   podAnnotations: {}
@@ -1530,6 +1564,9 @@ provisioning:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## @param provisioning.waitForKafka If true use an init container to wait until kafka is ready before starting provisioning
+  ##
+  waitForKafka: true
 
 ## @section ZooKeeper chart parameters
 

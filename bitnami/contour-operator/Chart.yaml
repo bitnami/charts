@@ -17,6 +17,7 @@ keywords:
   - operator
   - ingress
   - envoy
+kubeVersion: '>= 1.21'
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
@@ -24,4 +25,4 @@ name: contour-operator
 sources:
   - https://github.com/projectcontour/contour-operator
   - https://github.com/bitnami/bitnami-docker-contour-operator
-version: 1.1.0
+version: 1.1.2

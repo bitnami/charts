@@ -7,7 +7,7 @@ Kubeapps is a web-based UI for launching and managing applications on Kubernetes
 [Overview of Kubeapps](https://kubeapps.com)
 
 
-                           
+
 ## TL;DR
 
 ```bash
@@ -16,7 +16,7 @@ kubectl create namespace kubeapps
 helm install kubeapps --namespace kubeapps bitnami/kubeapps
 ```
 
-> Check out the [getting started](https://github.com/kubeapps/kubeapps/blob/main/docs/user/getting-started.md) to start deploying apps with Kubeapps.
+> Check out the [getting started](https://github.com/vmware-tanzu/kubeapps/blob/main/docs/tutorials/getting-started.md) to start deploying apps with Kubeapps.
 
 ## Introduction
 
@@ -30,8 +30,8 @@ With Kubeapps you can:
 - Inspect, upgrade and delete applications installed in the cluster
 - Browse and deploy [Helm](https://github.com/helm/helm) charts from public or private chart repositories (including [VMware Marketplace&trade;](https://marketplace.cloud.vmware.com) and [Bitnami Application Catalog](https://bitnami.com/application-catalog))
 - Browse and deploy [Kubernetes Operators](https://operatorhub.io/)
-- Secure authentication to Kubeapps using a [standalone OAuth2/OIDC provider](https://github.com/kubeapps/kubeapps/blob/main/docs/user/using-an-OIDC-provider.md) or [using Pinniped](https://github.com/kubeapps/kubeapps/blob/main/docs/user/using-an-OIDC-provider-with-pinniped.md)
-- Secure authorization based on Kubernetes [Role-Based Access Control](https://github.com/kubeapps/kubeapps/blob/main/docs/user/access-control.md)
+- Secure authentication to Kubeapps using a [standalone OAuth2/OIDC provider](https://github.com/vmware-tanzu/kubeapps/blob/main/docs/tutorials/using-an-OIDC-provider.md) or [using Pinniped](https://github.com/vmware-tanzu/kubeapps/blob/main/docs/howto/OIDC/using-an-OIDC-provider-with-pinniped.md)
+- Secure authorization based on Kubernetes [Role-Based Access Control](https://github.com/vmware-tanzu/kubeapps/blob/main/docs/howto/access-control.md)
 
 **_Note:_** Kubeapps 2.0 and onwards supports Helm 3 only. While only the Helm 3 API is supported, in most cases, charts made for Helm 2 will still work.
 
@@ -58,7 +58,7 @@ The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespa
 
 > **Caveat**: Only one Kubeapps installation is supported per namespace
 
-Once you have installed Kubeapps follow the [Getting Started Guide](https://github.com/kubeapps/kubeapps/blob/main/docs/user/getting-started.md) for additional information on how to access and use Kubeapps.
+Once you have installed Kubeapps follow the [Getting Started Guide](https://github.com/vmware-tanzu/kubeapps/blob/main/docs/tutorials/getting-started.md) for additional information on how to access and use Kubeapps.
 
 ## Parameters
 
@@ -121,7 +121,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | ------------------------------------------------ | ----------------------------------------------------------------------------------------- | ---------------------- |
 | `frontend.image.registry`                        | NGINX image registry                                                                      | `docker.io`            |
 | `frontend.image.repository`                      | NGINX image repository                                                                    | `bitnami/nginx`        |
-| `frontend.image.tag`                             | NGINX image tag (immutable tags are recommended)                                          | `1.21.6-debian-10-r50` |
+| `frontend.image.tag`                             | NGINX image tag (immutable tags are recommended)                                          | `1.21.6-debian-10-r62` |
 | `frontend.image.pullPolicy`                      | NGINX image pull policy                                                                   | `IfNotPresent`         |
 | `frontend.image.pullSecrets`                     | NGINX image pull secrets                                                                  | `[]`                   |
 | `frontend.image.debug`                           | Enable image debug mode                                                                   | `false`                |
@@ -204,7 +204,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | ------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------- |
 | `dashboard.image.registry`                        | Dashboard image registry                                                                     | `docker.io`                  |
 | `dashboard.image.repository`                      | Dashboard image repository                                                                   | `bitnami/kubeapps-dashboard` |
-| `dashboard.image.tag`                             | Dashboard image tag (immutable tags are recommended)                                         | `2.4.3-debian-10-r29`        |
+| `dashboard.image.tag`                             | Dashboard image tag (immutable tags are recommended)                                         | `2.4.3-debian-10-r43`        |
 | `dashboard.image.pullPolicy`                      | Dashboard image pull policy                                                                  | `IfNotPresent`               |
 | `dashboard.image.pullSecrets`                     | Dashboard image pull secrets                                                                 | `[]`                         |
 | `dashboard.image.debug`                           | Enable image debug mode                                                                      | `false`                      |
@@ -502,7 +502,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `authProxy.enabled`                               | Specifies whether Kubeapps should configure OAuth login/logout                           | `false`                |
 | `authProxy.image.registry`                        | OAuth2 Proxy image registry                                                              | `docker.io`            |
 | `authProxy.image.repository`                      | OAuth2 Proxy image repository                                                            | `bitnami/oauth2-proxy` |
-| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                                  | `7.2.1-debian-10-r84`  |
+| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                                  | `7.2.1-debian-10-r97`  |
 | `authProxy.image.pullPolicy`                      | OAuth2 Proxy image pull policy                                                           | `IfNotPresent`         |
 | `authProxy.image.pullSecrets`                     | OAuth2 Proxy image pull secrets                                                          | `[]`                   |
 | `authProxy.external`                              | Use an external Auth Proxy instead of deploying its own one                              | `false`                |
@@ -541,7 +541,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `pinnipedProxy.enabled`                               | Specifies whether Kubeapps should configure Pinniped Proxy                                   | `false`                           |
 | `pinnipedProxy.image.registry`                        | Pinniped Proxy image registry                                                                | `docker.io`                       |
 | `pinnipedProxy.image.repository`                      | Pinniped Proxy image repository                                                              | `bitnami/kubeapps-pinniped-proxy` |
-| `pinnipedProxy.image.tag`                             | Pinniped Proxy image tag (immutable tags are recommended)                                    | `2.4.3-debian-10-r34`             |
+| `pinnipedProxy.image.tag`                             | Pinniped Proxy image tag (immutable tags are recommended)                                    | `2.4.3-debian-10-r47`             |
 | `pinnipedProxy.image.pullPolicy`                      | Pinniped Proxy image pull policy                                                             | `IfNotPresent`                    |
 | `pinnipedProxy.image.pullSecrets`                     | Pinniped Proxy image pull secrets                                                            | `[]`                              |
 | `pinnipedProxy.defaultPinnipedNamespace`              | Specify the (default) namespace in which pinniped concierge is installed                     | `pinniped-concierge`              |
@@ -577,7 +577,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `rbac.create`             | Specifies whether RBAC resources should be created                            | `true`                 |
 | `testImage.registry`      | NGINX image registry                                                          | `docker.io`            |
 | `testImage.repository`    | NGINX image repository                                                        | `bitnami/nginx`        |
-| `testImage.tag`           | NGINX image tag (immutable tags are recommended)                              | `1.21.6-debian-10-r50` |
+| `testImage.tag`           | NGINX image tag (immutable tags are recommended)                              | `1.21.6-debian-10-r62` |
 | `testImage.pullPolicy`    | NGINX image pull policy                                                       | `IfNotPresent`         |
 | `testImage.pullSecrets`   | NGINX image pull secrets                                                      | `[]`                   |
 
@@ -613,7 +613,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `kubeappsapis.pluginConfig.kappController.packages.v1alpha1.defaultAllowDowngrades`             | Default policy for allowing applications to be downgraded to previous versions                                      | `false`                 |
 | `kubeappsapis.image.registry`                                                                   | Kubeapps-APIs image registry                                                                                        | `docker.io`             |
 | `kubeappsapis.image.repository`                                                                 | Kubeapps-APIs image repository                                                                                      | `bitnami/kubeapps-apis` |
-| `kubeappsapis.image.tag`                                                                        | Kubeapps-APIs image tag (immutable tags are recommended)                                                            | `2.4.3-debian-10-r37`   |
+| `kubeappsapis.image.tag`                                                                        | Kubeapps-APIs image tag (immutable tags are recommended)                                                            | `2.4.3-debian-10-r50`   |
 | `kubeappsapis.image.pullPolicy`                                                                 | Kubeapps-APIs image pull policy                                                                                     | `IfNotPresent`          |
 | `kubeappsapis.image.pullSecrets`                                                                | Kubeapps-APIs image pull secrets                                                                                    | `[]`                    |
 | `kubeappsapis.replicaCount`                                                                     | Number of frontend replicas to deploy                                                                               | `2`                     |
@@ -723,11 +723,11 @@ By default, Kubeapps will track the [Bitnami Application Catalog](https://github
 
 ### Enabling Operators
 
-Since v1.9.0 (and by default since v2.0), Kubeapps supports deploying and managing Operators within its dashboard. More information about how to enable and use this feature can be found in [this guide](https://github.com/kubeapps/kubeapps/blob/main/docs/user/operators.md).
+Since v1.9.0 (and by default since v2.0), Kubeapps supports deploying and managing Operators within its dashboard. More information about how to enable and use this feature can be found in [this guide](https://github.com/vmware-tanzu/kubeapps/blob/main/docs/tutorials/operators.md).
 
 ### Exposing Externally
 
-> **Note**: The Kubeapps frontend sets up a proxy to the Kubernetes API service which means that when exposing the Kubeapps service to a network external to the Kubernetes cluster (perhaps on an internal or public network), the Kubernetes API will also be exposed for authenticated requests from that network. It is highly recommended that you [use an OAuth2/OIDC provider with Kubeapps](https://github.com/kubeapps/kubeapps/blob/main/docs/user/using-an-OIDC-provider.md) to ensure that your authentication proxy is exposed rather than the Kubeapps frontend. This ensures that only the configured users trusted by your Identity Provider will be able to reach the Kubeapps frontend and therefore the Kubernetes API. Kubernetes service token authentication should only be used for users for demonstration purposes only, not production environments.
+> **Note**: The Kubeapps frontend sets up a proxy to the Kubernetes API service which means that when exposing the Kubeapps service to a network external to the Kubernetes cluster (perhaps on an internal or public network), the Kubernetes API will also be exposed for authenticated requests from that network. It is highly recommended that you [use an OAuth2/OIDC provider with Kubeapps](https://github.com/vmware-tanzu/kubeapps/blob/main/docs/tutorials/using-an-OIDC-provider.md) to ensure that your authentication proxy is exposed rather than the Kubeapps frontend. This ensures that only the configured users trusted by your Identity Provider will be able to reach the Kubeapps frontend and therefore the Kubernetes API. Kubernetes service token authentication should only be used for users for demonstration purposes only, not production environments.
 
 #### LoadBalancer Service
 
@@ -847,16 +847,16 @@ kubectl delete namespace kubeapps
 
 ### How to install Kubeapps for demo purposes?
 
-Install Kubeapps for exclusively **demo purposes** by simply following the [getting started](https://github.com/kubeapps/kubeapps/blob/main/docs/user/getting-started.md) docs.
+Install Kubeapps for exclusively **demo purposes** by simply following the [getting started](https://github.com/vmware-tanzu/kubeapps/blob/main/docs/tutorials/getting-started.md) docs.
 
 ### How to install Kubeapps in production scenarios?
 
-For any user-facing installation, you should [configure an OAuth2/OIDC provider](https://github.com/kubeapps/kubeapps/blob/main/docs/user/using-an-OIDC-provider.md) to enable secure user authentication with Kubeapps and the cluster.
-Please also refer to the [Access Control](https://github.com/kubeapps/kubeapps/blob/main/docs/user/access-control.md) documentation to configure fine-grained access control for users.
+For any user-facing installation, you should [configure an OAuth2/OIDC provider](https://github.com/vmware-tanzu/kubeapps/blob/main/docs/tutorials/using-an-OIDC-provider.md) to enable secure user authentication with Kubeapps and the cluster.
+Please also refer to the [Access Control](https://github.com/vmware-tanzu/kubeapps/blob/main/docs/howto/access-control.md) documentation to configure fine-grained access control for users.
 
 ### How to use Kubeapps?
 
-Have a look at the [dashboard documentation](https://github.com/kubeapps/kubeapps/blob/main/docs/user/dashboard.md) for knowing how to use the Kubeapps dashboard: deploying applications, listing and removing the applications running in your cluster and adding new repositories.
+Have a look at the [dashboard documentation](https://github.com/vmware-tanzu/kubeapps/blob/main/docs/howto/dashboard.md) for knowing how to use the Kubeapps dashboard: deploying applications, listing and removing the applications running in your cluster and adding new repositories.
 
 ### How to configure Kubeapps with Ingress
 
@@ -883,7 +883,7 @@ helm install kubeapps bitnami/kubeapps \
   --set ingress.annotations."kubernetes\.io/ingress\.class"=nginx # or your preferred ingress controller
 ```
 
-Besides, if you are using the OAuth2/OIDC login (more information at the [using an OIDC provider documentation](https://github.com/kubeapps/kubeapps/blob/main/docs/user/using-an-OIDC-provider.md)), you will need, also, to configure the different URLs:
+Besides, if you are using the OAuth2/OIDC login (more information at the [using an OIDC provider documentation](https://github.com/vmware-tanzu/kubeapps/blob/main/docs/tutorials/using-an-OIDC-provider.md)), you will need, also, to configure the different URLs:
 
 ```bash
 helm install kubeapps bitnami/kubeapps \
@@ -896,19 +896,19 @@ helm install kubeapps bitnami/kubeapps \
 
 ### Can Kubeapps install apps into more than one cluster?
 
-Yes! Kubeapps 2.0+ supports multicluster environments. Have a look at the [Kubeapps dashboard documentation](https://github.com/kubeapps/kubeapps/blob/main/docs/user/deploying-to-multiple-clusters.md) to know more.
+Yes! Kubeapps 2.0+ supports multicluster environments. Have a look at the [Kubeapps dashboard documentation](https://github.com/vmware-tanzu/kubeapps/blob/main/docs/howto/deploying-to-multiple-clusters.md) to know more.
 
 ### Can Kubeapps be installed without Internet connection?
 
-Yes! Follow the [offline installation documentation](https://github.com/kubeapps/kubeapps/blob/main/docs/user/offline-installation.md) to discover how to perform an installation in an air-gapped scenario.
+Yes! Follow the [offline installation documentation](https://github.com/vmware-tanzu/kubeapps/blob/main/docs/howto/offline-installation.md) to discover how to perform an installation in an air-gapped scenario.
 
 ### Does Kubeapps support private repositories?
 
-Of course! Have a look at the [private app repositories documentation](https://github.com/kubeapps/kubeapps/blob/main/docs/user/private-app-repository.md) to learn how to configure a private repository in Kubeapps.
+Of course! Have a look at the [private app repositories documentation](https://github.com/vmware-tanzu/kubeapps/blob/main/docs/howto/private-app-repository.md) to learn how to configure a private repository in Kubeapps.
 
 ### Is there any API documentation?
 
-Yes! But it is not definitive and is still subject to change. Check out the [latest API online documentation](https://app.swaggerhub.com/apis/kubeapps/Kubeapps) or download the Kubeapps [OpenAPI Specification yaml file](https://github.com/kubeapps/kubeapps/blob/main/dashboard/public/openapi.yaml) from the repository.
+Yes! But it is not definitive and is still subject to change. Check out the [latest API online documentation](https://app.swaggerhub.com/apis/vmware-tanzu/Kubeapps) or download the Kubeapps [OpenAPI Specification yaml file](https://github.com/vmware-tanzu/kubeapps/blob/main/dashboard/public/openapi.yaml) from the repository.
 
 ### Why can't I configure global private repositories?
 
@@ -922,7 +922,7 @@ You could alternatively ensure that the `imagePullSecret` is available in all na
 
 ### Does Kubeapps support Operators?
 
-Yes! You can get started by following the [operators documentation](https://github.com/kubeapps/kubeapps/blob/main/docs/user/operators.md).
+Yes! You can get started by following the [operators documentation](https://github.com/vmware-tanzu/kubeapps/blob/main/docs/tutorials/operators.md).
 
 ### Slow response when listing namespaces
 
@@ -933,7 +933,7 @@ To reduce this response time, you can increase the number of checks that Kubeapp
 
 ### More questions?
 
-Feel free to [open an issue](https://github.com/kubeapps/kubeapps/issues/new) if you have any questions!
+Feel free to [open an issue](https://github.com/vmware-tanzu/kubeapps/issues/new) if you have any questions!
 
 ## Troubleshooting
 
@@ -1056,7 +1056,7 @@ helm install --name kubeapps --namespace kubeapps bitnami/kubeapps
 kubectl apply -f <repo name>.yaml
 ```
 
-After that you should be able to access the new version of Kubeapps. If the above doesn't work for you or you run into any other issues please open an [issue](https://github.com/kubeapps/kubeapps/issues/new).
+After that you should be able to access the new version of Kubeapps. If the above doesn't work for you or you run into any other issues please open an [issue](https://github.com/vmware-tanzu/kubeapps/issues/new).
 
 ### Upgrading to chart version 7.0.0
 
