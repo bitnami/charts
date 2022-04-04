@@ -85,6 +85,12 @@ spec:
       {{- if .Values.master.schedulerName }}
       schedulerName: {{ .Values.master.schedulerName | quote }}
       {{- end }}
+      {{- if .Values.master.dnsPolicy }}
+      dnsPolicy: {{ .Values.master.dnsPolicy }}
+      {{- end }}
+      {{- if .Values.master.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.master.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}
       terminationGracePeriodSeconds: {{ .Values.master.terminationGracePeriodSeconds }}
       containers:
         - name: redis
