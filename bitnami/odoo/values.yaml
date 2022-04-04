@@ -174,9 +174,11 @@ extraEnvVarsSecret: ""
 replicaCount: 1
 ## Odoo container ports
 ## @param containerPorts.http Odoo HTTP container port
+## @param containerPorts.longpolling Odoo longpolling container port
 ##
 containerPorts:
   http: 8069
+  longpolling: 8072
 ## Odoo containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits The resources limits for the Odoo container
@@ -386,14 +388,18 @@ service:
   ##
   type: LoadBalancer
   ## @param service.ports.http Odoo service HTTP port
+  ## @param service.ports.longpolling Odoo service longpolling port
   ##
   ports:
     http: 80
+    longpolling: 8072
   ## @param service.nodePorts.http NodePort for the Odoo HTTP endpoint
+  ## @param service.nodePorts.longpolling NodePort for the Odoo longpolling endpoint
   ## NOTE: choose port between <30000-32767>
   ##
   nodePorts:
     http: ""
+    longpolling: ""
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
   ## ref: https://kubernetes.io/docs/user-guide/services/

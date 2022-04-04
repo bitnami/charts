@@ -41,6 +41,15 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    - name: longpolling
+      port: {{ .Values.service.ports.longpolling }}
+      protocol: TCP
+      targetPort: longpolling
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.longpolling)) }}
+      nodePort: {{ .Values.service.nodePorts.longpolling }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     {{- if .Values.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

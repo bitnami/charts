@@ -203,6 +203,8 @@ spec:
           ports:
             - name: http
               containerPort: {{ coalesce .Values.containerPorts.http .Values.containerPort }}
+            - name: longpolling
+              containerPort: {{ .Values.containerPorts.longpolling }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled" "path") "context" $) | nindent 12 }}
