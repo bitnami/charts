@@ -63,7 +63,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/tensorflow-serving
-    tag: 2.8.0-debian-10-r39
+    tag: 2.8.0-debian-10-r45
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -89,7 +89,7 @@ client:
   image:
     registry: docker.io
     repository: bitnami/tensorflow-resnet
-    tag: 2.8.0-debian-10-r30
+    tag: 2.8.0-debian-10-r36
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

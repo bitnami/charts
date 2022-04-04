@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets [array] Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
@@ -56,6 +58,7 @@ diagnosticMode:
     - infinity
 
 ## @section etcd parameters
+##
 
 ## Bitnami etcd image version
 ## ref: https://hub.docker.com/r/bitnami/etcd/tags/
@@ -69,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.2-debian-10-r52
+  tag: 3.4.18-debian-10-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -240,6 +243,7 @@ command: []
 args: []
 
 ## @section etcd statefulset parameters
+##
 
 ## @param replicaCount Number of etcd replicas to deploy
 ##
@@ -300,6 +304,7 @@ resources:
   ## limits:
   ##    cpu: 500m
   ##    memory: 1Gi
+  ##
   limits: {}
   requests: {}
 ## Configure extra options for liveness probe
@@ -454,6 +459,7 @@ priorityClassName: ""
 topologySpreadConstraints: []
 
 ## @section Traffic exposure parameters
+##
 
 service:
   ## @param service.type Kubernetes Service type
@@ -524,6 +530,7 @@ service:
   sessionAffinityConfig: {}
 
 ## @section Persistence parameters
+##
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -557,6 +564,7 @@ persistence:
   selector: {}
 
 ## @section Volume Permissions parameters
+##
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -574,7 +582,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r378
+    tag: 10-debian-10-r383
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -598,6 +606,7 @@ volumePermissions:
     ## limits:
     ##    cpu: 500m
     ##    memory: 1Gi
+    ##
     limits: {}
     requests: {}
 
@@ -655,6 +664,7 @@ networkPolicy:
   ingressNSPodMatchLabels: {}
 
 ## @section Metrics parameters
+##
 
 metrics:
   ## @param metrics.enabled Expose etcd metrics
@@ -702,6 +712,7 @@ metrics:
     relabelings: []
 
 ## @section Snapshotting parameters
+##
 
 ## Start a new etcd cluster recovering the data from an existing snapshot before bootstrapping
 ##
@@ -754,6 +765,7 @@ disasterRecovery:
       ## limits:
       ##    cpu: 500m
       ##    memory: 1Gi
+      ##
       limits: {}
       requests: {}
 
@@ -780,6 +792,7 @@ disasterRecovery:
     storageClassName: nfs
 
 ## @section Service account parameters
+##
 
 serviceAccount:
   ## @param serviceAccount.create Enable/disable service account creation
@@ -800,6 +813,7 @@ serviceAccount:
   labels: {}
 
 ## @section Other parameters
+##
 
 ## etcd Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/

@@ -35,4 +35,4 @@ name: wordpress-intel
 sources:
   - https://github.com/bitnami/bitnami-docker-wordpress-intel
   - https://wordpress.org/
-version: 0.1.23
+version: 0.1.26
