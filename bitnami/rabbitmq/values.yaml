@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -29,7 +30,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.9.14-debian-10-r5
+  tag: 3.9.14-debian-10-r12
 
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -51,6 +52,7 @@ image:
   pullSecrets: []
 
 ## @section Common parameters
+##
 
 ## @param nameOverride String to partially override rabbitmq.fullname template (will maintain the release name)
 ##
@@ -229,6 +231,9 @@ loadDefinition:
   ## @param loadDefinition.enabled Enable loading a RabbitMQ definitions file to configure RabbitMQ
   ##
   enabled: false
+  ## @param loadDefinition.file Name of the definitions file
+  ##
+  file: "/app/load_definition.json"
   ## @param loadDefinition.existingSecret Existing secret with the load definitions file
   ## Can be templated if needed, e.g:
   ## existingSecret: "{{ .Release.Name }}-load-definition"
@@ -239,6 +244,7 @@ loadDefinition:
 ##
 command: []
 ## @param args Override default container args (useful when using custom images)
+##
 args: []
 
 ## @param terminationGracePeriodSeconds Default duration in seconds k8s waits for container to exit before sending kill signal.
@@ -275,12 +281,10 @@ extraContainerPorts: []
 ## To add more configuration, use `extraConfiguration` of `advancedConfiguration` instead
 ##
 configuration: |-
-  {{- if not .Values.loadDefinition.enabled -}}
   ## Username and password
   ##
   default_user = {{ .Values.auth.username }}
   default_pass = CHANGEME
-  {{- end }}
   {{- if .Values.clustering.enabled }}
   ## Clustering
   ##
@@ -289,6 +293,9 @@ configuration: |-
   cluster_formation.node_cleanup.interval = 10
   cluster_formation.node_cleanup.only_log_warning = true
   cluster_partition_handling = {{ .Values.clustering.partitionHandling }}
+  {{- end }}
+  {{- if .Values.loadDefinition.enabled }}
+  load_definitions = {{ .Values.loadDefinition.file }}
   {{- end }}
   # queue master locator
   queue_master_locator = min-masters
@@ -333,7 +340,6 @@ configuration: |-
 extraConfiguration: |-
   #default_vhost = {{ .Release.Namespace }}-vhost
   #disk_free_limit.absolute = 50MB
-  #load_definitions = /app/load_definition.json
 
 ## @param advancedConfiguration Configuration file content: advanced configuration
 ## Use this as additional configuration in classic config format (Erlang term configuration format)
@@ -409,6 +415,7 @@ extraSecrets: {}
 extraSecretsPrependReleaseName: false
 
 ## @section Statefulset parameters
+##
 
 ## @param replicaCount Number of RabbitMQ replicas to deploy
 ##
@@ -543,11 +550,13 @@ resources:
   ## limits:
   ##    cpu: 1000m
   ##    memory: 2Gi
+  ##
   limits: {}
   ## Examples:
   ## requests:
   ##    cpu: 1000m
   ##    memory: 2Gi
+  ##
   requests: {}
 
 ## Configure RabbitMQ containers' extra options for liveness probe
@@ -635,6 +644,7 @@ pdb:
   maxUnavailable: ""
 
 ## @section RBAC parameters
+##
 
 ## RabbitMQ pods ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -662,6 +672,7 @@ rbac:
   create: true
 
 ## @section Persistence parameters
+##
 
 persistence:
   ## @param persistence.enabled Enable RabbitMQ data persistence using PVC
@@ -717,6 +728,7 @@ persistence:
   annotations: {}
 
 ## @section Exposure parameters
+##
 
 ## Kubernetes service type
 ##
@@ -726,6 +738,7 @@ service:
   type: ClusterIP
 
   ## @param service.portEnabled Amqp port. Cannot be disabled when `auth.tls.enabled` is `false`. Listener can be disabled with `listeners.tcp = none`.
+  ##
   portEnabled: true
 
   ## @param service.port Amqp port
@@ -1002,6 +1015,7 @@ networkPolicy:
   additionalRules: []
 
 ## @section Metrics Parameters
+##
 
 ## Prometheus Metrics
 ##
@@ -1067,6 +1081,7 @@ metrics:
     podTargetLabels: {}
     ## @param metrics.serviceMonitor.path Define the path used by ServiceMonitor to scrap metrics
     ## Could be /metrics for aggregated metrics or /metrics/per-object for more details
+    ##
     path: ""
 
   ## Custom PrometheusRule to be defined
@@ -1144,6 +1159,7 @@ metrics:
     rules: []
 
 ## @section Init Container Parameters
+##
 
 ## Init Container parameters
 ## Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each component
@@ -1162,7 +1178,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r378
+    tag: 10-debian-10-r384
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1189,9 +1205,11 @@ volumePermissions:
     ## limits:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 128Mi
+    ##
     requests: {}

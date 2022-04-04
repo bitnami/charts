@@ -35,4 +35,4 @@ name: magento
 sources:
   - https://github.com/bitnami/bitnami-docker-magento
   - https://magento.com/
-version: 19.2.17
+version: 19.2.18
