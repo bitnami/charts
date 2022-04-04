@@ -194,10 +194,6 @@ spec:
           {{- end }}
           volumeMounts:
             {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
-            - name: nginx-server-block-paths
-              mountPath: /opt/bitnami/nginx/conf/server_blocks
-            {{- end }}
-            {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
             - name: nginx-server-block
               mountPath: /opt/bitnami/nginx/conf/server_blocks
             {{- end }}
