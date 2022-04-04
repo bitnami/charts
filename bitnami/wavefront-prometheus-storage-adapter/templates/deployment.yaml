@@ -91,7 +91,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - -listen={{ .Values.containerPort }}
+            - -listen={{ coalesce .Values.containerPorts.http .Values.containerPort}}
             - -proxy={{ ternary (include "wfpsa.proxy.fullname" .) .Values.externalProxy.host .Values.wavefront.proxy.enabled }}
             - -proxy-port={{ ternary .Values.wavefront.proxy.port .Values.externalProxy.port .Values.wavefront.proxy.enabled }}
             {{- if .Values.adapterPrefix }}
