@@ -157,7 +157,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customReadinessProbe`                        | Custom readiness probe for the Web component                                                                                     | `{}`                        |
 | `service.type`                                | Kubernetes service type (`ClusterIP`, `NodePort`, or `LoadBalancer`)                                                             | `ClusterIP`                 |
 | `service.ports`                               | Logstash service ports (evaluated as a template)                                                                                 | `[]`                        |
-| `service.extraPorts`                          | Extra ports to expose                                                                                                            | `[]`                        |
 | `service.loadBalancerIP`                      | loadBalancerIP if service type is `LoadBalancer`                                                                                 | `""`                        |
 | `service.loadBalancerSourceRanges`            | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                        |
 | `service.externalTrafficPolicy`               | External traffic policy, configure to Local to preserve client source IP when using an external loadBalancer                     | `""`                        |

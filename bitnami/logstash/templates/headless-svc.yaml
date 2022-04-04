@@ -18,5 +18,5 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.ports "context" $) | nindent 4 }}
   selector: {{ include "common.labels.matchLabels" . | nindent 4 }}

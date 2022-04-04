@@ -428,9 +428,6 @@ service:
     ##   targetPort: syslog-tcp
     ##   protocol: TCP
     ##
-  ## @param service.extraPorts Extra ports to expose
-  ##
-  extraPorts: []
   ## @param service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
   ##
   loadBalancerIP: ""
