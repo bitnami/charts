@@ -20,7 +20,7 @@ Cypress.Commands.add(
       win.sessionStorage.clear();
     });
     cy.visit("/solr/#/");
-    cy.contains("Basic Authentication").should("be.visible");
+    cy.contains("Basic Authentication");
     cy.get("input#username").type(username);
     cy.get("input#password").type(password);
     cy.contains("button", "Login").click();
