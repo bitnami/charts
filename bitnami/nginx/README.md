@@ -76,83 +76,83 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### NGINX parameters
 
-| Name                 | Description                                                          | Value                  |
-| -------------------- | -------------------------------------------------------------------- | ---------------------- |
-| `image.registry`     | NGINX image registry                                                 | `docker.io`            |
-| `image.repository`   | NGINX image repository                                               | `bitnami/nginx`        |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.6-debian-10-r59` |
-| `image.pullPolicy`   | NGINX image pull policy                                              | `IfNotPresent`         |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                   |
-| `image.debug`        | Set to true if you would like to see extra information on logs       | `false`                |
-| `hostAliases`        | Deployment pod host aliases                                          | `[]`                   |
-| `command`            | Override default container command (useful when using custom images) | `[]`                   |
-| `args`               | Override default container args (useful when using custom images)    | `[]`                   |
-| `extraEnvVars`       | Extra environment variables to be set on NGINX containers            | `[]`                   |
-| `extraEnvVarsCM`     | ConfigMap with extra environment variables                           | `""`                   |
-| `extraEnvVarsSecret` | Secret with extra environment variables                              | `""`                   |
+| Name                 | Description                                                          | Value                 |
+| -------------------- | -------------------------------------------------------------------- | --------------------- |
+| `image.registry`     | NGINX image registry                                                 | `docker.io`           |
+| `image.repository`   | NGINX image repository                                               | `bitnami/nginx`       |
+| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.5-debian-10-r3` |
+| `image.pullPolicy`   | NGINX image pull policy                                              | `IfNotPresent`        |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                  |
+| `image.debug`        | Set to true if you would like to see extra information on logs       | `false`               |
+| `hostAliases`        | Deployment pod host aliases                                          | `[]`                  |
+| `command`            | Override default container command (useful when using custom images) | `[]`                  |
+| `args`               | Override default container args (useful when using custom images)    | `[]`                  |
+| `extraEnvVars`       | Extra environment variables to be set on NGINX containers            | `[]`                  |
+| `extraEnvVarsCM`     | ConfigMap with extra environment variables                           | `""`                  |
+| `extraEnvVarsSecret` | Secret with extra environment variables                              | `""`                  |
 
 
 ### NGINX deployment parameters
 
-| Name                                    | Description                                                                               | Value           |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
-| `replicaCount`                          | Number of NGINX replicas to deploy                                                        | `1`             |
-| `updateStrategy.type`                   | NGINX deployment strategy type                                                            | `RollingUpdate` |
-| `updateStrategy.rollingUpdate`          | NGINX deployment rolling update configuration parameters                                  | `{}`            |
-| `podLabels`                             | Additional labels for NGINX pods                                                          | `{}`            |
-| `podAnnotations`                        | Annotations for NGINX pods                                                                | `{}`            |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                     | `""`            |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`            |
-| `affinity`                              | Affinity for pod assignment                                                               | `{}`            |
-| `hostNetwork`                           | Specify if host network should be enabled for NGINX pod                                   | `false`         |
-| `hostIPC`                               | Specify if host IPC should be enabled for NGINX pod                                       | `false`         |
-| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                  | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                  | `{}`            |
-| `priorityClassName`                     | Priority class name                                                                       | `""`            |
-| `podSecurityContext.enabled`            | Enabled NGINX pods' Security Context                                                      | `false`         |
-| `podSecurityContext.fsGroup`            | Set NGINX pod's Security Context fsGroup                                                  | `1001`          |
-| `podSecurityContext.sysctls`            | sysctl settings of the NGINX pods                                                         | `[]`            |
-| `containerSecurityContext.enabled`      | Enabled NGINX containers' Security Context                                                | `false`         |
-| `containerSecurityContext.runAsUser`    | Set NGINX container's Security Context runAsUser                                          | `1001`          |
-| `containerSecurityContext.runAsNonRoot` | Set NGINX container's Security Context runAsNonRoot                                       | `true`          |
-| `containerPorts.http`                   | Sets http port inside NGINX container                                                     | `8080`          |
-| `containerPorts.https`                  | Sets https port inside NGINX container                                                    | `""`            |
-| `resources.limits`                      | The resources limits for the NGINX container                                              | `{}`            |
-| `resources.requests`                    | The requested resources for the NGINX container                                           | `{}`            |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `30`            |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`             |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`             |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`             |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `5`             |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `5`             |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `3`             |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `3`             |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`             |
-| `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`            |
-| `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`            |
-| `autoscaling.enabled`                   | Enable autoscaling for NGINX deployment                                                   | `false`         |
-| `autoscaling.minReplicas`               | Minimum number of replicas to scale back                                                  | `""`            |
-| `autoscaling.maxReplicas`               | Maximum number of replicas to scale out                                                   | `""`            |
-| `autoscaling.targetCPU`                 | Target CPU utilization percentage                                                         | `""`            |
-| `autoscaling.targetMemory`              | Target Memory utilization percentage                                                      | `""`            |
-| `extraVolumes`                          | Array to add extra volumes                                                                | `[]`            |
-| `extraVolumeMounts`                     | Array to add extra mount                                                                  | `[]`            |
-| `serviceAccount.create`                 | Enable creation of ServiceAccount for nginx pod                                           | `false`         |
-| `serviceAccount.name`                   | The name of the ServiceAccount to use.                                                    | `""`            |
-| `serviceAccount.annotations`            | Annotations for service account. Evaluated as a template.                                 | `{}`            |
-| `serviceAccount.autoMount`              | Auto-mount the service account token in the pod                                           | `false`         |
-| `sidecars`                              | Sidecar parameters                                                                        | `[]`            |
-| `sidecarSingleProcessNamespace`         | Enable sharing the process namespace with sidecars                                        | `false`         |
-| `initContainers`                        | Extra init containers                                                                     | `[]`            |
-| `pdb.create`                            | Created a PodDisruptionBudget                                                             | `false`         |
-| `pdb.minAvailable`                      | Min number of pods that must still be available after the eviction                        | `1`             |
-| `pdb.maxUnavailable`                    | Max number of pods that can be unavailable after the eviction                             | `0`             |
+| Name                                    | Description                                                                               | Value   |
+| --------------------------------------- | ----------------------------------------------------------------------------------------- | ------- |
+| `replicaCount`                          | Number of NGINX replicas to deploy                                                        | `1`     |
+| `updateStrategy.type`                   | NGINX deployment strategy type                                                            | `""`    |
+| `updateStrategy.rollingUpdate`          | NGINX deployment rolling update configuration parameters                                  | `{}`    |
+| `podLabels`                             | Additional labels for NGINX pods                                                          | `{}`    |
+| `podAnnotations`                        | Annotations for NGINX pods                                                                | `{}`    |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`    |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`  |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`    |
+| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                     | `""`    |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`    |
+| `affinity`                              | Affinity for pod assignment                                                               | `{}`    |
+| `hostNetwork`                           | Specify if host network should be enabled for NGINX pod                                   | `false` |
+| `hostIPC`                               | Specify if host IPC should be enabled for NGINX pod                                       | `false` |
+| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                  | `{}`    |
+| `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                  | `{}`    |
+| `priorityClassName`                     | Priority class name                                                                       | `""`    |
+| `podSecurityContext.enabled`            | Enabled NGINX pods' Security Context                                                      | `false` |
+| `podSecurityContext.fsGroup`            | Set NGINX pod's Security Context fsGroup                                                  | `1001`  |
+| `podSecurityContext.sysctls`            | sysctl settings of the NGINX pods                                                         | `[]`    |
+| `containerSecurityContext.enabled`      | Enabled NGINX containers' Security Context                                                | `false` |
+| `containerSecurityContext.runAsUser`    | Set NGINX container's Security Context runAsUser                                          | `1001`  |
+| `containerSecurityContext.runAsNonRoot` | Set NGINX container's Security Context runAsNonRoot                                       | `true`  |
+| `containerPorts.http`                   | Sets http port inside NGINX container                                                     | `8080`  |
+| `containerPorts.https`                  | Sets https port inside NGINX container                                                    | `""`    |
+| `resources.limits`                      | The resources limits for the NGINX container                                              | `{}`    |
+| `resources.requests`                    | The requested resources for the NGINX container                                           | `{}`    |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`  |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `30`    |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`    |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`     |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`     |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`     |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`  |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `5`     |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `5`     |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `3`     |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `3`     |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`     |
+| `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`    |
+| `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`    |
+| `autoscaling.enabled`                   | Enable autoscaling for NGINX deployment                                                   | `false` |
+| `autoscaling.minReplicas`               | Minimum number of replicas to scale back                                                  | `""`    |
+| `autoscaling.maxReplicas`               | Maximum number of replicas to scale out                                                   | `""`    |
+| `autoscaling.targetCPU`                 | Target CPU utilization percentage                                                         | `""`    |
+| `autoscaling.targetMemory`              | Target Memory utilization percentage                                                      | `""`    |
+| `extraVolumes`                          | Array to add extra volumes                                                                | `[]`    |
+| `extraVolumeMounts`                     | Array to add extra mount                                                                  | `[]`    |
+| `serviceAccount.create`                 | Enable creation of ServiceAccount for nginx pod                                           | `false` |
+| `serviceAccount.name`                   | The name of the ServiceAccount to use.                                                    | `""`    |
+| `serviceAccount.annotations`            | Annotations for service account. Evaluated as a template.                                 | `{}`    |
+| `serviceAccount.autoMount`              | Auto-mount the service account token in the pod                                           | `false` |
+| `sidecars`                              | Sidecar parameters                                                                        | `[]`    |
+| `sidecarSingleProcessNamespace`         | Enable sharing the process namespace with sidecars                                        | `false` |
+| `initContainers`                        | Extra init containers                                                                     | `[]`    |
+| `pdb.create`                            | Created a PodDisruptionBudget                                                             | `false` |
+| `pdb.minAvailable`                      | Min number of pods that must still be available after the eviction                        | `1`     |
+| `pdb.maxUnavailable`                    | Max number of pods that can be unavailable after the eviction                             | `0`     |
 
 
 ### Custom NGINX application parameters
@@ -162,7 +162,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                               | `false`                |
 | `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                | `docker.io`            |
 | `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                              | `bitnami/git`          |
-| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.35.1-debian-10-r58` |
+| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.34.1-debian-10-r33` |
 | `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                             | `IfNotPresent`         |
 | `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                  | `[]`                   |
 | `cloneStaticSiteFromGit.repository`        | Git Repository to clone static content from                                                       | `""`                   |
@@ -187,7 +187,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ldapDaemon.enabled`                            | Enable LDAP Auth Daemon proxy                                                            | `false`                          |
 | `ldapDaemon.image.registry`                     | LDAP AUth Daemon Image registry                                                          | `docker.io`                      |
 | `ldapDaemon.image.repository`                   | LDAP Auth Daemon Image repository                                                        | `bitnami/nginx-ldap-auth-daemon` |
-| `ldapDaemon.image.tag`                          | LDAP Auth Daemon Image tag (immutable tags are recommended)                              | `0.20200116.0-debian-10-r626`    |
+| `ldapDaemon.image.tag`                          | LDAP Auth Daemon Image tag (immutable tags are recommended)                              | `0.20200116.0-debian-10-r556`    |
 | `ldapDaemon.image.pullPolicy`                   | LDAP Auth Daemon Image pull policy                                                       | `IfNotPresent`                   |
 | `ldapDaemon.port`                               | LDAP Auth Daemon port                                                                    | `8888`                           |
 | `ldapDaemon.ldapConfig.uri`                     | LDAP Server URI, `ldap[s]:/<hostname>:<port>`                                            | `""`                             |
@@ -256,7 +256,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                                                                | `""`                     |
 | `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                                                                  | `docker.io`              |
 | `metrics.image.repository`                 | NGINX Prometheus exporter image repository                                                                                                | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.10.0-debian-10-r92`   |
+| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.10.0-debian-10-r8`    |
 | `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                          | `[]`                     |
 | `metrics.podAnnotations`                   | Additional annotations for NGINX Prometheus exporter pod(s)                                                                               | `{}`                     |
