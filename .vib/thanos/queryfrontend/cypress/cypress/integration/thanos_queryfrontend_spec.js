@@ -9,14 +9,15 @@ it('allows to see runtime & build information', () => {
 })
 
 it('allows the execution of a query', () => {
-  const QUERY = 'No data queried yet';
+  const QUERY_ALERT = 'No data queried yet';
+  const QUERY_VALUE = 'vector(3000)';
   
   cy.visit('/graph');
-  cy.get('.alert').contains(QUERY).should('be.visible');
-  cy.get('.cm-line').type('scalar');
-  cy.contains('.cm-completionLabel', 'scalar').click();
+  cy.get('.alert').contains(QUERY_ALERT).should('be.visible');
+  cy.get('.cm-line').type(QUERY_VALUE);
+  cy.contains('.cm-completionLabel', QUERY_VALUE).click();
   cy.get('.execute-btn').click();
-  cy.contains('.alert', QUERY);
+  cy.contains('.tab-content', QUERY_VALUE);
 })
 
 it('allows listing all installed stores', () => {
