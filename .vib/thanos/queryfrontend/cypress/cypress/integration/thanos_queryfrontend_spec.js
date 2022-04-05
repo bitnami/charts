@@ -13,7 +13,7 @@ it('allows the execution of a query', () => {
   const QUERY_VALUE = 'vector(3000)';
   
   cy.visit('/graph');
-  cy.get('.alert').contains(QUERY_ALERT).should('be.visible');
+  cy.get('.alert', QUERY_ALERT).contains(QUERY_ALERT);
   cy.get('.cm-line').type(QUERY_VALUE);
   cy.contains('.cm-completionLabel', QUERY_VALUE).click();
   cy.get('.execute-btn').click();
