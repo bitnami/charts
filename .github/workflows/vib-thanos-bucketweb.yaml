@@ -33,4 +33,4 @@ jobs:
         with:
           pipeline: thanos/bucketweb/vib-platform-verify.json
         env:
-          TARGET_PLATFORM: ${{ matrix.target-platform-id }}
+          VIB_TARGET_PLATFORM: ${{ matrix.target-platform-id }}

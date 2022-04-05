@@ -35,9 +35,3 @@ it('allows adding a graph', () => {
   cy.contains('button', 'Add Panel').should('be.visible').click();
   cy.get('.execute-btn').should('have.length', 2);
 })
-
-it('can switch from dark to light mode', () => {
-  cy.visit('/');
-  cy.get('[title="Use light theme"]').should('not.be.disabled').click();
-  cy.get('[class="bootstrap-dark"').should('not.exist');
-})
