@@ -639,6 +639,24 @@ $ helm upgrade my-release bitnami/mongodb --set auth.rootPassword=[PASSWORD] (--
 
 > Note: you need to substitute the placeholders [PASSWORD] and [REPLICASETKEY] with the values obtained in the installation notes.
 
+### To 12.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+
+- `strategyType` is replaced by `updateStrategy`
+- `service.port` is renamed to `service.ports.mongodb`
+- `service.nodePort` is renamed to `service.nodePorts.mongodb`
+- `externalAccess.service.port` is renamed to `externalAccess.hidden.service.ports.mongodb`
+- `rbac.rules` is renamed to `rbac.role.rules`
+- `externalAccess.hidden.service.port` is renamed ot `externalAccess.hidden.service.ports.mongodb`
+- `hidden.strategyType` is replaced by `hidden.updateStrategy`
+- `metrics.serviceMonitor.relabellings` is renamed to `metrics.serviceMonitor.relabelings`(typo fixed)
+- `metrics.serviceMonitor.additionalLabels` is renamed to `metrics.serviceMonitor.labels`
+
+Additionally also updates the MongoDB image dependency to it newest major, 5.0
+
 ### To 11.0.0
 
 In this version, the mongodb-exporter bundled as part of this Helm chart was updated to a new version which, even it is not a major change, can contain breaking changes (from `0.11.X` to `0.30.X`).
