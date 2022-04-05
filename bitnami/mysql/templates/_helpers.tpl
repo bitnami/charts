@@ -46,7 +46,7 @@ Get the initialization scripts ConfigMap name.
 */}}
 {{- define "mysql.initdbScriptsCM" -}}
 {{- if .Values.initdbScriptsConfigMap -}}
-    {{- printf "%s" .Values.initdbScriptsConfigMap -}}
+    {{- printf "%s" (tpl .Values.initdbScriptsConfigMap $) -}}
 {{- else -}}
     {{- printf "%s-init-scripts" (include "mysql.primary.fullname" .) -}}
 {{- end -}}
@@ -112,7 +112,7 @@ Return the secret with MySQL credentials
 */}}
 {{- define "mysql.secretName" -}}
     {{- if .Values.auth.existingSecret -}}
-        {{- printf "%s" .Values.auth.existingSecret -}}
+        {{- printf "%s" (tpl .Values.auth.existingSecret $) -}}
     {{- else -}}
         {{- printf "%s" (include "common.names.fullname" .) -}}
     {{- end -}}

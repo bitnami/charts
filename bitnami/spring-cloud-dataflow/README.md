@@ -662,6 +662,10 @@ Find more information about how to deal with common errors related to Bitnami He
 
 If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
 
+### To 7.0.0
+
+This major updates the Kafka subchart to it newest major, 16.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/kafka#to-1600) you can find more information about the changes introduced in that version.
+
 ### To 6.0.0
 
 This major release updates the Kafka subchart to its newest major `15.x.x`, which contain several changes in the supported values and bumps Kafka major version to `3.x` series (check the [upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/kafka/README.md#to-1500) to obtain more information).
