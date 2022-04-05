@@ -14,8 +14,3 @@ it('allows to see the Blocks page', () => {
     cy.contains('No blocks found.');
 })
 
-it('allows changing of the UI', () => {
-    cy.visit('/');
-    cy.contains('[class="nav-link"]', 'Classic UI').should('be.visible').click();
-    cy.contains('.nav-link', 'New UI').should('exist');
-})

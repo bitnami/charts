@@ -27,12 +27,6 @@ it('allows listing all installed stores', () => {
   cy.get('[data-testid="health"]').should('be.visible');
 })
 
-it('allows changing of the UI', () => {
-  cy.visit('/');
-  cy.contains('[class="nav-link"]', 'Classic UI').click();
-  cy.contains('.nav-link', 'New UI').should('exist');
-})
-
 it('allows adding a graph', () => {
   cy.visit('/');
   cy.contains('button', 'Add Panel').should('be.visible').click();
