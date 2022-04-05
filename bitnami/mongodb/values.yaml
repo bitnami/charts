@@ -1732,7 +1732,7 @@ hidden:
       ##
       dataSource: {}
   service:
-    ## @param hidden.service.ports.mongodb MongoDB(&reg;) service port
+    ## @param hidden.service.portName MongoDB(&reg;) service port name
     ##
     portName: "mongodb"
     ## @param hidden.service.ports.mongodb MongoDB(&reg;) service port

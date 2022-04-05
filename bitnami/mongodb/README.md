@@ -223,14 +223,14 @@ Refer to the [chart documentation for more information on each of these architec
 | Name                                                     | Description                                                                                                                                     | Value                  |
 | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `service.nameOverride`                                   | MongoDB(&reg;) service name                                                                                                                     | `""`                   |
-| `service.type`                                           | Kubernetes Service type                                                                                                                         | `ClusterIP`            |
-| `service.portName`                                       | MongoDB(&reg;) service port name                                                                                                                | `mongodb`              |
-| `service.ports.mongodb`                                  | MongoDB(&reg;) service port                                                                                                                     | `27017`                |
-| `service.nodePorts.mongodb`                              | Port to bind to for NodePort and LoadBalancer service types                                                                                     | `""`                   |
-| `service.clusterIP`                                      | MongoDB(&reg;) service cluster IP                                                                                                               | `""`                   |
-| `service.externalIPs`                                    | Specify the externalIP value ClusterIP service type.                                                                                            | `[]`                   |
-| `service.loadBalancerIP`                                 | loadBalancerIP for MongoDB(&reg;) Service                                                                                                       | `""`                   |
-| `service.loadBalancerSourceRanges`                       | Address(es) that are allowed when service is LoadBalancer                                                                                       | `[]`                   |
+| `service.type`                                           | Kubernetes Service type (only for standalone architecture)                                                                                      | `ClusterIP`            |
+| `service.portName`                                       | MongoDB(&reg;) service port name (only for standalone architecture)                                                                             | `mongodb`              |
+| `service.ports.mongodb`                                  | MongoDB(&reg;) service port.                                                                                                                    | `27017`                |
+| `service.nodePorts.mongodb`                              | Port to bind to for NodePort and LoadBalancer service types (only for standalone architecture)                                                  | `""`                   |
+| `service.clusterIP`                                      | MongoDB(&reg;) service cluster IP (only for standalone architecture)                                                                            | `""`                   |
+| `service.externalIPs`                                    | Specify the externalIP value ClusterIP service type (only for standalone architecture)                                                          | `[]`                   |
+| `service.loadBalancerIP`                                 | loadBalancerIP for MongoDB(&reg;) Service (only for standalone architecture)                                                                    | `""`                   |
+| `service.loadBalancerSourceRanges`                       | Address(es) that are allowed when service is LoadBalancer (only for standalone architecture)                                                    | `[]`                   |
 | `service.extraPorts`                                     | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                   |
 | `service.annotations`                                    | Provide any additional annotations that may be required                                                                                         | `{}`                   |
 | `externalAccess.enabled`                                 | Enable Kubernetes external cluster access to MongoDB(&reg;) nodes (only for replicaset architecture)                                            | `false`                |
@@ -255,7 +255,8 @@ Refer to the [chart documentation for more information on each of these architec
 | `externalAccess.service.annotations`                     | Service annotations for external access                                                                                                         | `{}`                   |
 | `externalAccess.hidden.enabled`                          | Enable Kubernetes external cluster access to MongoDB(&reg;) hidden nodes                                                                        | `false`                |
 | `externalAccess.hidden.service.type`                     | Kubernetes Service type for external access. Allowed values: NodePort or LoadBalancer                                                           | `LoadBalancer`         |
-| `externalAccess.hidden.service.port`                     | MongoDB(&reg;) port used for external access when service type is LoadBalancer                                                                  | `27017`                |
+| `externalAccess.hidden.service.portName`                 | MongoDB(&reg;) port name used for external access when service type is LoadBalancer                                                             | `mongodb`              |
+| `externalAccess.hidden.service.ports.mongodb`            | MongoDB(&reg;) port used for external access when service type is LoadBalancer                                                                  | `27017`                |
 | `externalAccess.hidden.service.loadBalancerIPs`          | Array of load balancer IPs for MongoDB(&reg;) nodes                                                                                             | `[]`                   |
 | `externalAccess.hidden.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                                                                       | `[]`                   |
 | `externalAccess.hidden.service.externalTrafficPolicy`    | MongoDB(&reg;) service external traffic policy                                                                                                  | `Local`                |
@@ -389,6 +390,9 @@ Refer to the [chart documentation for more information on each of these architec
 | `arbiter.pdb.minAvailable`                      | Minimum number/percentage of Arbiter pods that should remain scheduled                            | `1`             |
 | `arbiter.pdb.maxUnavailable`                    | Maximum number/percentage of Arbiter pods that may be made unavailable                            | `""`            |
 | `arbiter.service.nameOverride`                  | The arbiter service name                                                                          | `""`            |
+| `arbiter.service.ports.mongodb`                 | MongoDB(&reg;) service port                                                                       | `27017`         |
+| `arbiter.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                    | `[]`            |
+| `arbiter.service.annotations`                   | Provide any additional annotations that may be required                                           | `{}`            |
 
 
 ### Hidden Node parameters
@@ -475,6 +479,10 @@ Refer to the [chart documentation for more information on each of these architec
 | `hidden.persistence.volumeClaimTemplates.selector`   | A label query over volumes to consider for binding (e.g. when using local volumes)                   | `{}`                |
 | `hidden.persistence.volumeClaimTemplates.requests`   | Custom PVC requests attributes                                                                       | `{}`                |
 | `hidden.persistence.volumeClaimTemplates.dataSource` | Set volumeClaimTemplate dataSource                                                                   | `{}`                |
+| `hidden.service.portName`                            | MongoDB(&reg;) service port name                                                                     | `mongodb`           |
+| `hidden.service.ports.mongodb`                       | MongoDB(&reg;) service port                                                                          | `27017`             |
+| `hidden.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                       | `[]`                |
+| `hidden.service.annotations`                         | Provide any additional annotations that may be required                                              | `{}`                |
 
 
 ### Metrics parameters
@@ -497,7 +505,8 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.containerPort`                      | Port of the Prometheus metrics container                                                                              | `9216`                     |
 | `metrics.service.annotations`                | Annotations for Prometheus Exporter pods. Evaluated as a template.                                                    | `{}`                       |
 | `metrics.service.type`                       | Type of the Prometheus metrics service                                                                                | `ClusterIP`                |
-| `metrics.service.port`                       | Port of the Prometheus metrics service                                                                                | `9216`                     |
+| `metrics.service.ports.metrics`              | Port of the Prometheus metrics service                                                                                | `9216`                     |
+| `metrics.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                                        | `[]`                       |
 | `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                                  | `true`                     |
 | `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                               | `15`                       |
 | `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                      | `5`                        |
