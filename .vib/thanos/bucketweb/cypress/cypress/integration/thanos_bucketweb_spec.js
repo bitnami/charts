@@ -13,4 +13,3 @@ it('allows to see the Blocks page', () => {
     cy.get('.nav-link').contains('Blocks').click();
     cy.contains('No blocks found.');
 })
-
