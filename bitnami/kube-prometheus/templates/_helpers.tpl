@@ -40,11 +40,6 @@ If release name contains chart name it will be used as a full name.
 {{- printf "%s-alertmanager" (include "kube-prometheus.name" .) -}}
 {{- end }}
 
-{{/* Name suffixed with thanos */}}
-{{- define "kube-prometheus.thanos.name" -}}
-{{- printf "%s-thanos" (include "kube-prometheus.name" .) -}}
-{{- end }}
-
 {{/* Fullname suffixed with operator */}}
 {{- define "kube-prometheus.operator.fullname" -}}
 {{- printf "%s-operator" (include "kube-prometheus.fullname" .) -}}
@@ -60,14 +55,15 @@ If release name contains chart name it will be used as a full name.
 {{- printf "%s-alertmanager" (include "kube-prometheus.fullname" .) -}}
 {{- end }}
 
+{{/* Fullname suffixed with blackbox-exporter */}}
+{{- define "kube-prometheus.blackboxExporter.fullname" -}}
+{{- printf "%s-blackbox-exporter" (include "kube-prometheus.fullname" .) -}}
+{{- end }}
+
 {{/* Fullname suffixed with thanos */}}
 {{- define "kube-prometheus.thanos.fullname" -}}
 {{- printf "%s-thanos" (include "kube-prometheus.prometheus.fullname" .) -}}
 {{- end }}
-
-{{- define "kube-prometheus.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
 
 {{/*
 Common Labels
@@ -101,6 +97,14 @@ Labels for alertmanager
 {{- define "kube-prometheus.alertmanager.labels" -}}
 {{ include "kube-prometheus.labels" . }}
 app.kubernetes.io/component: alertmanager
+{{- end -}}
+
+{{/*
+Labels for blackbox-exporter
+*/}}
+{{- define "kube-prometheus.blackboxExporter.labels" -}}
+{{ include "kube-prometheus.labels" . }}
+app.kubernetes.io/component: blackbox-exporter
 {{- end -}}
 
 {{/*
@@ -167,10 +171,17 @@ Return the proper Alertmanager Image name
 {{- end -}}
 
 {{/*
+Return the proper Blackbox Exporter Image name
+*/}}
+{{- define "kube-prometheus.blackboxExporter.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.blackboxExporter.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kube-prometheus.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.operator.prometheusConfigReloader.image .Values.prometheus.image .Values.prometheus.thanos.image .Values.alertmanager.image) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.operator.prometheusConfigReloader.image .Values.prometheus.image .Values.prometheus.thanos.image .Values.alertmanager.image .Values.blackboxExporter.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -181,6 +192,17 @@ Create the name of the operator service account to use
     {{ default (include "kube-prometheus.operator.fullname" .) .Values.operator.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.operator.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the blackbox-exporter service account to use
+*/}}
+{{- define "kube-prometheus.blackboxExporter.serviceAccountName" -}}
+{{- if .Values.blackboxExporter.serviceAccount.create -}}
+    {{ default (include "kube-prometheus.blackboxExporter.fullname" .) .Values.blackboxExporter.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.blackboxExporter.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
@@ -203,6 +225,17 @@ Create the name of the alertmanager service account to use
     {{ default (include "kube-prometheus.alertmanager.fullname" .) .Values.alertmanager.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.alertmanager.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the etcd configuration configmap
+*/}}
+{{- define "kube-prometheus.blackboxExporter.configmapName" -}}
+{{- if .Values.blackboxExporter.existingConfigMap -}}
+    {{- printf "%s" (tpl .Values.blackboxExporter.existingConfigMap $) -}}
+{{- else -}}
+    {{- include "kube-prometheus.blackboxExporter.fullname" . -}}
 {{- end -}}
 {{- end -}}
 
