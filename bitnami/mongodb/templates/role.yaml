@@ -17,8 +17,8 @@ rules:
       - get
       - list
       - watch
-{{- if .Values.rbac.role.rules }}
-{{- toYaml .Values.rbac.role.rules | nindent 2 }}
+{{- if .Values.rbac.rules }}
+{{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
 {{- end -}}
 {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
 {{- if and $pspAvailable .Values.podSecurityPolicy.create }}

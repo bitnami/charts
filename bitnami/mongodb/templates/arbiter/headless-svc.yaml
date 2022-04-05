@@ -23,7 +23,7 @@ spec:
   clusterIP: None
   ports:
     - name: tcp-mongodb
-      port: {{ .Values.service.port }}
+      port: {{ coalesce .Values.service.ports.mongodb .Values.service.port }}
       targetPort: mongodb
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: arbiter

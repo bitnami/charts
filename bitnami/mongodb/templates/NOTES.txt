@@ -23,7 +23,7 @@ In order to replicate the container startup scripts execute this command:
 {{- else }}
 
 {{- $replicaCount := int .Values.replicaCount }}
-{{- $portNumber := int .Values.service.port }}
+{{- $portNumber := int .Values.service.ports.mongodb }}
 {{- $fullname := include "mongodb.fullname" . }}
 {{- $releaseNamespace := include "mongodb.namespace" . }}
 {{- $clusterDomain := .Values.clusterDomain }}
