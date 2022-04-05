@@ -1,7 +1,7 @@
 annotations:
   category: MachineLearning
 apiVersion: v2
-appVersion: 1.10.2
+appVersion: 1.11.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -24,4 +24,4 @@ name: pytorch
 sources:
   - https://github.com/bitnami/bitnami-docker-pytorch
   - https://pytorch.org/
-version: 2.3.32
+version: 2.3.37

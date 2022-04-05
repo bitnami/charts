@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common Parameters
+##
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -55,6 +57,7 @@ diagnosticMode:
     - infinity
 
 ## @section Harbor common parameters
+##
 
 ## @param adminPassword The initial password of Harbor admin. Change it from portal after launching Harbor
 ##
@@ -120,6 +123,7 @@ ipFamily:
     enabled: true
 
 ## @section Traffic Exposure Parameters
+##
 
 ## @param exposureType The way to expose Harbor. Allowed values are [ ingress \| proxy ]
 ## Use "proxy" to use a deploy NGINX proxy in front of Harbor services
@@ -182,7 +186,6 @@ service:
   ## @param service.extraPorts Extra port to expose on NGINX proxy service
   ##
   extraPorts: []
-
 
 ingress:
   ## Configure the ingress resource that allows you to access Harbor Core
@@ -373,6 +376,7 @@ ingress:
     secrets: []
 
 ## @section Persistence Parameters
+##
 
 ## The persistence is enabled by default and a default StorageClass
 ## is needed in the k8s cluster to provision volumes dynamically.
@@ -609,6 +613,7 @@ persistence:
       secretkey: ""
 
 ## @section Volume Permissions parameters
+##
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node
@@ -626,7 +631,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r370
+    tag: 10-debian-10-r384
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -655,6 +660,7 @@ volumePermissions:
     runAsUser: 0
 
 ## @section NGINX Parameters
+##
 
 nginx:
   ## Bitnami NGINX image
@@ -669,7 +675,7 @@ nginx:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-10-r50
+    tag: 1.21.6-debian-10-r64
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -919,6 +925,7 @@ nginx:
   extraVolumes: []
 
 ## @section Harbor Portal Parameters
+##
 
 portal:
   ## Bitnami Harbor Portal image
@@ -933,7 +940,7 @@ portal:
   image:
     registry: docker.io
     repository: bitnami/harbor-portal
-    tag: 2.4.2-debian-10-r2
+    tag: 2.4.2-debian-10-r16
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1178,6 +1185,7 @@ portal:
       https: 443
 
 ## @section Harbor Core Parameters
+##
 
 core:
   ## Bitnami Harbor Core image
@@ -1192,7 +1200,7 @@ core:
   image:
     registry: docker.io
     repository: bitnami/harbor-core
-    tag: 2.4.2-debian-10-r2
+    tag: 2.4.2-debian-10-r16
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1249,6 +1257,14 @@ core:
   ## @param core.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Harbor Core pods
   ##
   extraEnvVarsSecret: ""
+  ## @param core.configOverwriteJson String containing a JSON with configuration overrides
+  ## Source: https://goharbor.io/docs/latest/install-config/configure-user-settings-cli/#harbor-user-settings
+  ##
+  configOverwriteJson: ""
+  ## @param core.configOverwriteJsonSecret Secret containing the JSON configuration overrides
+  ## Source: https://goharbor.io/docs/latest/install-config/configure-user-settings-cli/#harbor-user-settings
+  ##
+  configOverwriteJsonSecret: ""
   ## @param core.containerPorts.http Harbor Core HTTP container port
   ## @param core.containerPorts.https Harbor Core HTTPS container port
   ## @param core.containerPorts.metrics Harbor Core metrics container port
@@ -1458,6 +1474,7 @@ core:
       metrics: 8001
 
 ## @section Harbor Jobservice Parameters
+##
 
 jobservice:
   ## Bitnami Harbor Jobservice image
@@ -1472,7 +1489,7 @@ jobservice:
   image:
     registry: docker.io
     repository: bitnami/harbor-jobservice
-    tag: 2.4.2-debian-10-r2
+    tag: 2.4.2-debian-10-r16
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1735,6 +1752,7 @@ jobservice:
       metrics: 8001
 
 ## @section Harbor Registry Parameters
+##
 
 ## Registry Parameters
 ##
@@ -1916,7 +1934,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registry
-      tag: 2.4.2-debian-10-r2
+      tag: 2.4.2-debian-10-r16
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2061,7 +2079,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registryctl
-      tag: 2.4.2-debian-10-r2
+      tag: 2.4.2-debian-10-r17
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2187,6 +2205,7 @@ registry:
         https: 8443
 
 ## @section ChartMuseum Parameters
+##
 
 chartmuseum:
   ## Bitnami ChartMuseum image
@@ -2201,7 +2220,7 @@ chartmuseum:
   image:
     registry: docker.io
     repository: bitnami/chartmuseum
-    tag: 0.14.0-debian-10-r45
+    tag: 0.14.0-debian-10-r59
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2496,6 +2515,7 @@ chartmuseum:
       https: 443
 
 ## @section Clair Parameters
+##
 
 clair:
   ## @param clair.enabled Enable Clair scanner. Add it as an additional interrogation service by following https://goharbor.io/docs/latest/administration/vulnerability-scanning/pluggable-scanners
@@ -2645,7 +2665,7 @@ clair:
     image:
       registry: docker.io
       repository: bitnami/harbor-adapter-clair
-      tag: 2.4.2-debian-10-r3
+      tag: 2.4.2-debian-10-r17
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2784,7 +2804,7 @@ clair:
     image:
       registry: docker.io
       repository: bitnami/harbor-clair
-      tag: 2.4.2-debian-10-r2
+      tag: 2.4.2-debian-10-r16
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2910,6 +2930,7 @@ clair:
         health: 6061
 
 ## @section Notary Parameters
+##
 
 ## Notary Parameters
 ##
@@ -2938,7 +2959,7 @@ notary:
     image:
       registry: docker.io
       repository: bitnami/harbor-notary-server
-      tag: 2.4.2-debian-10-r2
+      tag: 2.4.2-debian-10-r16
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3175,7 +3196,7 @@ notary:
     image:
       registry: docker.io
       repository: bitnami/harbor-notary-signer
-      tag: 2.4.2-debian-10-r2
+      tag: 2.4.2-debian-10-r16
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3410,6 +3431,7 @@ notary:
       signer: 7899
 
 ## @section Harbor Adapter Trivy Parameters
+##
 
 trivy:
   ## Bitnami Harbor Adapter Trivy image
@@ -3424,7 +3446,7 @@ trivy:
   image:
     registry: docker.io
     repository: bitnami/harbor-adapter-trivy
-    tag: 2.4.2-debian-10-r1
+    tag: 2.4.2-debian-10-r16
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3717,6 +3739,7 @@ trivy:
       https: 8443
 
 ## @section Harbor Exporter Parameters
+##
 
 exporter:
   ## Bitnami Harbor Exporter image
@@ -3731,7 +3754,7 @@ exporter:
   image:
     registry: docker.io
     repository: bitnami/harbor-exporter
-    tag: 2.4.2-debian-10-r2
+    tag: 2.4.2-debian-10-r17
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3949,6 +3972,7 @@ exporter:
       metrics: 8001
 
 ## @section PostgreSQL Parameters
+##
 
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
@@ -3971,7 +3995,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 11.15.0-debian-10-r36
+    tag: 11.15.0-debian-10-r51
   auth:
     enablePostgresUser: true
     postgresPassword: not-secure-database-password
@@ -4032,6 +4056,7 @@ externalDatabase:
   notarySignerPassword: ""
 
 ## @section Redis&trade; parameters
+##
 
 ## Redis&trade; chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
@@ -4049,6 +4074,7 @@ redis:
     ## It should always be set using the password value or in the existingSecret to avoid issues
     ## with Harbor.
     ## The password value is ignored if existingSecret is set
+    ##
     password: ""
     existingSecret: ""
   architecture: standalone
@@ -4086,8 +4112,10 @@ externalRedis:
     hosts: ""
 
 ## @section Harbor metrics parameters
+##
 metrics:
   ## @param metrics.enabled Whether or not to enable metrics for different
+  ##
   enabled: false
   ## @param metrics.path Path where metrics are exposed
   ##

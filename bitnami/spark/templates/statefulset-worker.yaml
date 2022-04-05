@@ -132,7 +132,7 @@ spec:
           - name: certs
             mountPath: /certs
           - name: shared-certs
-            mountPath: /opt/bitnami/spark/conf/certs
+            mountPath: /bitnami/spark/conf/certs
         {{- end }}
       {{- end }}
       containers:
@@ -163,11 +163,11 @@ spec:
           volumeMounts:
             {{- if .Values.worker.configurationConfigMap }}
             - name: config
-              mountPath: '/opt/bitnami/spark/conf/'
+              mountPath: '/bitnami/spark/conf/'
             {{- end }}
             {{- if .Values.security.ssl.enabled }}
             - name: shared-certs
-              mountPath: '/opt/bitnami/spark/conf/certs'
+              mountPath: '/bitnami/spark/conf/certs'
               readOnly: true
             - name: certs
               mountPath: /certs
