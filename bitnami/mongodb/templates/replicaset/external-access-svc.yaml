@@ -51,8 +51,8 @@ spec:
       nodePort: null
       {{- end }}
       targetPort: mongodb
-    {{- if .Values.externalAccess.service.extraPorts }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.externalAccess.service.extraPorts "context" $) | nindent 4 }}
+    {{- if $root.Values.externalAccess.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" $root.Values.externalAccess.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
     app.kubernetes.io/component: mongodb

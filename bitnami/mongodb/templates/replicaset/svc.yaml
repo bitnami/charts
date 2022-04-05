@@ -18,21 +18,24 @@ metadata:
     {{- if $root.Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" $root.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.service.annotations .Values.commonAnnotations }}
+  {{- if or $root.Values.service.annotations $root.Values.commonAnnotations }}
   annotations:
-    {{- if .Values.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+    {{- if $root.Values.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $root.Values.service.annotations "context" $) | nindent 4 }}
     {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- if $root.Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $root.Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
 spec:
   type: ClusterIP
   ports:
-    - name: {{ $.Values.service.portName | quote }}
-      port: {{ $root.Values.service.ports.mongodb.port | int }}
+    - name: {{ $root.Values.service.portName | quote }}
+      port: {{ $root.Values.service.ports.mongodb }}
       targetPort: mongodb
+    {{- if $root.Values.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" $root.Values.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
     app.kubernetes.io/component: mongodb
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}

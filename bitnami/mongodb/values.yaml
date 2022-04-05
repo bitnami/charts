@@ -629,35 +629,35 @@ service:
   ## @param service.nameOverride MongoDB(&reg;) service name
   ##
   nameOverride: ""
-  ## @param service.type Kubernetes Service type
+  ## @param service.type Kubernetes Service type (only for standalone architecture)
   ##
   type: ClusterIP
-  ## @param service.portName MongoDB(&reg;) service port name
+  ## @param service.portName MongoDB(&reg;) service port name (only for standalone architecture)
   ##
   portName: mongodb
-  ## @param service.ports.mongodb MongoDB(&reg;) service port
+  ## @param service.ports.mongodb MongoDB(&reg;) service port.
   ##
   ports:
     mongodb: 27017
-  ## @param service.nodePorts.mongodb Port to bind to for NodePort and LoadBalancer service types
+  ## @param service.nodePorts.mongodb Port to bind to for NodePort and LoadBalancer service types (only for standalone architecture)
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePorts:
     mongodb: ""
-  ## @param service.clusterIP MongoDB(&reg;) service cluster IP
+  ## @param service.clusterIP MongoDB(&reg;) service cluster IP (only for standalone architecture)
   ## e.g:
   ## clusterIP: None
   ##
   clusterIP: ""
-  ## @param service.externalIPs Specify the externalIP value ClusterIP service type.
+  ## @param service.externalIPs Specify the externalIP value ClusterIP service type (only for standalone architecture)
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
   ##
   externalIPs: []
-  ## @param service.loadBalancerIP loadBalancerIP for MongoDB(&reg;) Service
+  ## @param service.loadBalancerIP loadBalancerIP for MongoDB(&reg;) Service (only for standalone architecture)
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
   ##
   loadBalancerIP: ""
-  ## @param service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer
+  ## @param service.loadBalancerSourceRanges Address(es) that are allowed when service is LoadBalancer (only for standalone architecture)
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
   loadBalancerSourceRanges: []
@@ -795,9 +795,13 @@ externalAccess:
       ## @param externalAccess.hidden.service.type Kubernetes Service type for external access. Allowed values: NodePort or LoadBalancer
       ##
       type: LoadBalancer
-      ## @param externalAccess.hidden.service.port MongoDB(&reg;) port used for external access when service type is LoadBalancer
+      ## @param externalAccess.hidden.service.portName MongoDB(&reg;) port name used for external access when service type is LoadBalancer
       ##
-      port: 27017
+      portName: "mongodb"
+      ## @param externalAccess.hidden.service.ports.mongodb MongoDB(&reg;) port used for external access when service type is LoadBalancer
+      ##
+      ports:
+        mongodb: 27017
       ## @param externalAccess.hidden.service.loadBalancerIPs Array of load balancer IPs for MongoDB(&reg;) nodes
       ## Example:
       ## loadBalancerIPs:
@@ -1369,6 +1373,16 @@ arbiter:
     ## @param arbiter.service.nameOverride The arbiter service name
     ##
     nameOverride: ""
+    ## @param arbiter.service.ports.mongodb MongoDB(&reg;) service port
+    ##
+    ports:
+      mongodb: 27017
+    ## @param arbiter.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param arbiter.service.annotations Provide any additional annotations that may be required
+    ##
+    annotations: {}
 
 ## @section Hidden Node parameters
 ##
@@ -1717,6 +1731,20 @@ hidden:
       ## @param hidden.persistence.volumeClaimTemplates.dataSource Set volumeClaimTemplate dataSource
       ##
       dataSource: {}
+  service:
+    ## @param hidden.service.ports.mongodb MongoDB(&reg;) service port
+    ##
+    portName: "mongodb"
+    ## @param hidden.service.ports.mongodb MongoDB(&reg;) service port
+    ##
+    ports:
+      mongodb: 27017
+    ## @param hidden.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param hidden.service.annotations Provide any additional annotations that may be required
+    ##
+    annotations: {}
 
 ## @section Metrics parameters
 ##
@@ -1803,9 +1831,13 @@ metrics:
     ## @param metrics.service.type Type of the Prometheus metrics service
     ##
     type: ClusterIP
-    ## @param metrics.service.port Port of the Prometheus metrics service
+    ## @param metrics.service.ports.metrics Port of the Prometheus metrics service
     ##
-    port: 9216
+    ports:
+      metrics: 9216
+    ## @param metrics.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
   ## Metrics exporter liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ## @param metrics.livenessProbe.enabled Enable livenessProbe

@@ -18,13 +18,13 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" $root.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     pod: {{ $targetPod }}
-  {{- if or $root.Values.externalAccess.service.annotations $root.Values.commonAnnotations }}
+  {{- if or $root.Values.externalAccess.hidden.service.annotations $root.Values.commonAnnotations }}
   annotations:
-    {{- if $root.Values.externalAccess.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" $root.Values.externalAccess.service.annotations "context" $) | nindent 4 }}
+    {{- if $root.Values.externalAccess.hidden.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $root.Values.externalAccess.hidden.service.annotations "context" $) | nindent 4 }}
     {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- if $root.Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $root.Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
 spec:
@@ -42,8 +42,8 @@ spec:
   {{- end }}
   publishNotReadyAddresses: true
   ports:
-    - name: {{ $root.Values.service.portName }}
-      port: {{ $root.Values.externalAccess.hidden.service.port }}
+    - name: {{ $root.Values.externalAccess.hidden.service.portName | quote }}
+      port: {{ $root.Values.externalAccess.hidden.service.ports.mongodb }}
       {{- if not (empty $root.Values.externalAccess.hidden.service.nodePorts) }}
       {{- $nodePort := index $root.Values.externalAccess.hidden.service.nodePorts $i -}}
       nodePort: {{ ternary (get $nodePort "mongodb") $nodePort (typeIs "dict" $nodePort)}}
@@ -51,8 +51,8 @@ spec:
       nodePort: null
       {{- end }}
       targetPort: mongodb
-    {{- if .Values.externalAccess.hidden.service.extraPorts }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.externalAccess.hidden.service.extraPorts "context" $) | nindent 4 }}
+    {{- if $root.Values.externalAccess.hidden.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" $root.Values.externalAccess.hidden.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
     app.kubernetes.io/component: hidden

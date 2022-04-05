@@ -37,7 +37,7 @@ spec:
   {{- end }}
   ports:
     - name: {{ .Values.service.portName | quote }}
-      port: {{ coalesce .Values.service.ports.mongodb .Values.service.port }}
+      port: {{ .Values.service.ports.mongodb }}
       targetPort: mongodb
       {{- if and (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) (coalesce .Values.service.nodePorts.mongodb .Values.service.nodePort) }}
       nodePort: {{ coalesce .Values.service.nodePorts.mongodb .Values.service.nodePort }}
