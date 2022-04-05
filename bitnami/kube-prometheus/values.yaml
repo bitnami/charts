@@ -1739,7 +1739,7 @@ blackboxExporter:
   ## @param blackboxExporter.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## @param blackboxExporter.configuration Blackbox Exporter configuration
+  ## @param blackboxExporter.configuration [object] Blackbox Exporter configuration
   ##
   configuration:  |
     "modules":
