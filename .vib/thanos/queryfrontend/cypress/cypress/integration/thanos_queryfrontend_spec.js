@@ -25,7 +25,8 @@ it('allows listing all installed stores', () => {
   cy.visit('/');
   cy.contains('[class="nav-link"]', 'Stores').click();
   cy.get('[data-testid="endpoint"]').should('be.visible');
-  cy.get('[data-testid="health"]').should('be.visible');
+  cy.get('[data-testid="health"]').contains('UP');
+  cy.get('.badge-success').should('exist');
 })
 
 it('allows adding a graph', () => {
