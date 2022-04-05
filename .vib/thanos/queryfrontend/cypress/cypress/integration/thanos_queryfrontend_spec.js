@@ -15,7 +15,7 @@ it('allows the execution of a query', () => {
   const QUERY_VALUE = '3000';
   
   cy.visit('/graph');
-  cy.contains('.alert', QUERY_ALERT).contains(QUERY_ALERT);
+  cy.contains('.alert', QUERY_ALERT);
   cy.get('.cm-line').type(QUERY_KEYWORD, '{enter}').type(`(${QUERY_VALUE})`).click();
   cy.get('.execute-btn').click();
   cy.contains('.tab-content', QUERY_VALUE);
