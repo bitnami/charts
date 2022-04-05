@@ -43,7 +43,7 @@
             },
             "remote": {
               "workload": "deploy-harbor-portal"
-             }
+            }
           }
         },
         {

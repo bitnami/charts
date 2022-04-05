@@ -1,6 +1,6 @@
 {
   "newRegistry": {
-    "provider":"docker-hub",
-    "name":"dockerhub"
+    "provider": "docker-hub",
+    "name": "dockerhub"
   }
 }
