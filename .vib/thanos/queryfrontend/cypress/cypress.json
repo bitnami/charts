@@ -1,4 +1,4 @@
 {
-    "baseUrl": "http://localhost/",
-    "defaultCommandTimeout":40000
+  "baseUrl": "http://localhost/",
+  "defaultCommandTimeout": 40000
 }
