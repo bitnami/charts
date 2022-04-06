@@ -24,7 +24,7 @@ data:
                enabled: true
                rsocket:
                   enabled: true
-                  host: {{ $fullname }}-prometheus-proxy
+                  host: {{ $fullname }}-prometheus-proxy.{{ .Release.Namespace }}
                   port: {{ $rsocketPort }}
     {{- end }}
     spring:
