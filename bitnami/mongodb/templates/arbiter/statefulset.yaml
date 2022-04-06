@@ -237,7 +237,7 @@ spec:
               mountPath: /certs
             {{- end }}
             {{- if .Values.arbiter.extraVolumeMounts }}
-            {{- toYaml .Values.arbiter.extraVolumeMounts | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
           {{- end }}
         {{- if .Values.arbiter.sidecars }}
@@ -269,7 +269,7 @@ spec:
               mode: 0600
         {{- end }}
         {{- if .Values.arbiter.extraVolumes }}
-        {{- toYaml .Values.arbiter.extraVolumes | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
 {{- end }}
