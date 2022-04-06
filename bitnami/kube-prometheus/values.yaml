@@ -1646,15 +1646,17 @@ blackboxExporter:
   enabled: true
   ## Bitnami Alertmanager image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
-  ## @param blackboxExporter.image.registry Prometheus image registry
-  ## @param blackboxExporter.image.repository Prometheus Image repository
-  ## @param blackboxExporter.image.tag Prometheus Image tag (immutable tags are recommended)
+  ## @param blackboxExporter.image.registry Blackbox Exporter image registry
+  ## @param blackboxExporter.image.repository Blackbox Exporter Image repository
+  ## @param blackboxExporter.image.pullPolicy Blackbox Exporter Image pull policy
+  ## @param blackboxExporter.image.tag Blackbox Exporter Image tag (immutable tags are recommended)
   ## @param blackboxExporter.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
     tag: 0.20.0-debian-10-r19
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
