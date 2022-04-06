@@ -91,7 +91,7 @@ $ helm uninstall my-release
 | `contour.enabled`                               | Contour Deployment creation.                                                                                                       | `true`                 |
 | `contour.image.registry`                        | Contour image registry                                                                                                             | `docker.io`            |
 | `contour.image.repository`                      | Contour image name                                                                                                                 | `bitnami/contour`      |
-| `contour.image.tag`                             | Contour image tag                                                                                                                  | `1.19.1-debian-10-r60` |
+| `contour.image.tag`                             | Contour image tag                                                                                                                  | `1.20.1-debian-10-r37` |
 | `contour.image.pullPolicy`                      | Contour Image pull policy                                                                                                          | `IfNotPresent`         |
 | `contour.image.pullSecrets`                     | Contour Image pull secrets                                                                                                         | `[]`                   |
 | `contour.image.debug`                           | Enable image debug mode                                                                                                            | `false`                |
@@ -174,106 +174,107 @@ $ helm uninstall my-release
 
 ### Envoy parameters
 
-| Name                                                | Description                                                                                                           | Value                   |
-| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `envoy.enabled`                                     | Envoy Proxy creation                                                                                                  | `true`                  |
-| `envoy.image.registry`                              | Envoy Proxy image registry                                                                                            | `docker.io`             |
-| `envoy.image.repository`                            | Envoy Proxy image repository                                                                                          | `bitnami/envoy`         |
-| `envoy.image.tag`                                   | Envoy Proxy image tag (immutable tags are recommended)                                                                | `1.19.1-debian-10-r135` |
-| `envoy.image.pullPolicy`                            | Envoy image pull policy                                                                                               | `IfNotPresent`          |
-| `envoy.image.pullSecrets`                           | Envoy image pull secrets                                                                                              | `[]`                    |
-| `envoy.priorityClassName`                           | Priority class assigned to the pods                                                                                   | `""`                    |
-| `envoy.extraArgs`                                   | Extra arguments passed to Envoy container                                                                             | `[]`                    |
-| `envoy.hostAliases`                                 | Add deployment host aliases                                                                                           | `[]`                    |
-| `envoy.resources.limits`                            | Specify resource limits which the container is not allowed to succeed.                                                | `{}`                    |
-| `envoy.resources.requests`                          | Specify resource requests which the container needs to spawn.                                                         | `{}`                    |
-| `envoy.command`                                     | Override default command                                                                                              | `[]`                    |
-| `envoy.args`                                        | Override default args                                                                                                 | `[]`                    |
-| `envoy.shutdownManager.resources.limits`            | Specify resource limits which the container is not allowed to succeed.                                                | `{}`                    |
-| `envoy.shutdownManager.resources.requests`          | Specify resource requests which the container needs to spawn.                                                         | `{}`                    |
-| `envoy.kind`                                        | Install as deployment or daemonset                                                                                    | `daemonset`             |
-| `envoy.replicaCount`                                | Desired number of Controller pods                                                                                     | `1`                     |
-| `envoy.lifecycleHooks`                              | lifecycleHooks for the container to automate configuration before or after startup.                                   | `{}`                    |
-| `envoy.updateStrategy`                              | Strategy to use to update Pods                                                                                        | `{}`                    |
-| `envoy.minReadySeconds`                             | The minimum number of seconds for which a newly created Pod should be ready                                           | `0`                     |
-| `envoy.revisionHistoryLimit`                        | The number of old history to retain to allow rollback                                                                 | `10`                    |
-| `envoy.autoscaling.enabled`                         | Enable autoscaling for Controller                                                                                     | `false`                 |
-| `envoy.autoscaling.minReplicas`                     | Minimum number of Controller replicas                                                                                 | `1`                     |
-| `envoy.autoscaling.maxReplicas`                     | Maximum number of Controller replicas                                                                                 | `11`                    |
-| `envoy.autoscaling.targetCPU`                       | Target CPU utilization percentage                                                                                     | `""`                    |
-| `envoy.autoscaling.targetMemory`                    | Target Memory utilization percentage                                                                                  | `""`                    |
-| `envoy.podAffinityPreset`                           | Envoy Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                    |
-| `envoy.podAntiAffinityPreset`                       | Envoy Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `""`                    |
-| `envoy.nodeAffinityPreset.type`                     | Envoy Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                       | `""`                    |
-| `envoy.nodeAffinityPreset.key`                      | Envoy Node label key to match Ignored if `affinity` is set.                                                           | `""`                    |
-| `envoy.nodeAffinityPreset.values`                   | Envoy Node label values to match. Ignored if `affinity` is set.                                                       | `[]`                    |
-| `envoy.affinity`                                    | Affinity for Envoy pod assignment                                                                                     | `{}`                    |
-| `envoy.nodeSelector`                                | Node labels for Envoy pod assignment                                                                                  | `{}`                    |
-| `envoy.tolerations`                                 | Tolerations for Envoy pod assignment                                                                                  | `[]`                    |
-| `envoy.podAnnotations`                              | Envoy Pod annotations                                                                                                 | `{}`                    |
-| `envoy.podSecurityContext.enabled`                  | Envoy Pod securityContext                                                                                             | `false`                 |
-| `envoy.podSecurityContext.fsGroup`                  | User ID for the for the mounted volumes                                                                               | `0`                     |
-| `envoy.podSecurityContext.sysctls`                  | Array of sysctl options to allow                                                                                      | `[]`                    |
-| `envoy.containerSecurityContext.enabled`            | Envoy Container securityContext                                                                                       | `true`                  |
-| `envoy.containerSecurityContext.runAsUser`          | User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024)                  | `1001`                  |
-| `envoy.hostNetwork`                                 | Envoy Pod host network access                                                                                         | `false`                 |
-| `envoy.dnsPolicy`                                   | Envoy Pod Dns Policy's DNS Policy                                                                                     | `ClusterFirst`          |
-| `envoy.tlsExistingSecret`                           | Name of the existingSecret to be use in Envoy deployment                                                              | `""`                    |
-| `envoy.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                  | `true`                  |
-| `envoy.serviceAccount.name`                         | The name of the ServiceAccount to use. If not set and create is true, a name is generated using the fullname template | `""`                    |
-| `envoy.serviceAccount.automountServiceAccountToken` | Whether to auto mount API credentials for a service account                                                           | `false`                 |
-| `envoy.livenessProbe.enabled`                       | Enable livenessProbe                                                                                                  | `true`                  |
-| `envoy.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                               | `120`                   |
-| `envoy.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                                      | `20`                    |
-| `envoy.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                                     | `5`                     |
-| `envoy.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                                   | `6`                     |
-| `envoy.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                                   | `1`                     |
-| `envoy.readinessProbe.enabled`                      | Enable/disable the readiness probe                                                                                    | `true`                  |
-| `envoy.readinessProbe.initialDelaySeconds`          | Delay before readiness probe is initiated                                                                             | `10`                    |
-| `envoy.readinessProbe.periodSeconds`                | How often to perform the probe                                                                                        | `3`                     |
-| `envoy.readinessProbe.timeoutSeconds`               | When the probe times out                                                                                              | `1`                     |
-| `envoy.readinessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded.                            | `3`                     |
-| `envoy.readinessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed.                          | `1`                     |
-| `envoy.startupProbe.enabled`                        | Enable/disable the startup probe                                                                                      | `false`                 |
-| `envoy.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated                                                                               | `15`                    |
-| `envoy.startupProbe.periodSeconds`                  | How often to perform the probe                                                                                        | `10`                    |
-| `envoy.startupProbe.timeoutSeconds`                 | When the probe times out                                                                                              | `5`                     |
-| `envoy.startupProbe.failureThreshold`               | Minimum consecutive failures for the probe to be considered failed after having succeeded.                            | `3`                     |
-| `envoy.startupProbe.successThreshold`               | Minimum consecutive successes for the probe to be considered successful after having failed.                          | `1`                     |
-| `envoy.customLivenessProbe`                         | Override default liveness probe                                                                                       | `{}`                    |
-| `envoy.customReadinessProbe`                        | Override default readiness probe                                                                                      | `{}`                    |
-| `envoy.customStartupProbe`                          | Override default startup probe                                                                                        | `{}`                    |
-| `envoy.terminationGracePeriodSeconds`               | Envoy termination grace period in seconds                                                                             | `300`                   |
-| `envoy.logLevel`                                    | Envoy log level                                                                                                       | `info`                  |
-| `envoy.service.type`                                | Type of Envoy service to create                                                                                       | `LoadBalancer`          |
-| `envoy.service.externalTrafficPolicy`               | Envoy Service external cluster policy. If `envoy.service.type` is NodePort or LoadBalancer                            | `Local`                 |
-| `envoy.service.labels`                              | Labels to add to te envoy service                                                                                     | `{}`                    |
-| `envoy.service.clusterIP`                           | Internal envoy cluster service IP                                                                                     | `""`                    |
-| `envoy.service.externalIPs`                         | Envoy service external IP addresses                                                                                   | `[]`                    |
-| `envoy.service.loadBalancerIP`                      | IP address to assign to load balancer (if supported)                                                                  | `""`                    |
-| `envoy.service.loadBalancerSourceRanges`            | List of IP CIDRs allowed access to load balancer (if supported)                                                       | `[]`                    |
-| `envoy.service.annotations`                         | Annotations for Envoy service                                                                                         | `{}`                    |
-| `envoy.service.ports.http`                          | Sets service http port                                                                                                | `80`                    |
-| `envoy.service.ports.https`                         | Sets service https port                                                                                               | `443`                   |
-| `envoy.service.nodePorts.http`                      | HTTP Port. If `envoy.service.type` is NodePort and this is non-empty                                                  | `""`                    |
-| `envoy.service.nodePorts.https`                     | HTTPS Port. If `envoy.service.type` is NodePort and this is non-empty                                                 | `""`                    |
-| `envoy.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                                        | `[]`                    |
-| `envoy.service.ipFamilyPolicy`                      | IP family policy, support `SingleStack`, `PreferDualStack` and `RequireDualStack`                                     | `""`                    |
-| `envoy.useHostPort`                                 | Enable/disable `hostPort` for TCP/80 and TCP/443                                                                      | `true`                  |
-| `envoy.useHostIP`                                   | Enable/disable `hostIP`                                                                                               | `false`                 |
-| `envoy.hostPorts.http`                              | Sets `hostPort` http port                                                                                             | `80`                    |
-| `envoy.hostPorts.https`                             | Sets `hostPort` https port                                                                                            | `443`                   |
-| `envoy.hostIPs.http`                                | Sets `hostIP` http IP                                                                                                 | `127.0.0.1`             |
-| `envoy.hostIPs.https`                               | Sets `hostIP` https IP                                                                                                | `127.0.0.1`             |
-| `envoy.containerPorts.http`                         | Sets http port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)                               | `8080`                  |
-| `envoy.containerPorts.https`                        | Sets https port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)                              | `8443`                  |
-| `envoy.initContainers`                              | Attach additional init containers to Envoy pods                                                                       | `[]`                    |
-| `envoy.sidecars`                                    | Add additional sidecar containers to the Envoy pods                                                                   | `[]`                    |
-| `envoy.extraVolumes`                                | Array to add extra volumes                                                                                            | `[]`                    |
-| `envoy.extraVolumeMounts`                           | Array to add extra mounts (normally used with extraVolumes)                                                           | `[]`                    |
-| `envoy.extraEnvVars`                                | Array containing extra env vars to be added to all Envoy containers                                                   | `[]`                    |
-| `envoy.extraEnvVarsCM`                              | ConfigMap containing extra env vars to be added to all Envoy containers                                               | `""`                    |
-| `envoy.extraEnvVarsSecret`                          | Secret containing extra env vars to be added to all Envoy containers                                                  | `""`                    |
+| Name                                                | Description                                                                                                           | Value                  |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `envoy.enabled`                                     | Envoy Proxy creation                                                                                                  | `true`                 |
+| `envoy.image.registry`                              | Envoy Proxy image registry                                                                                            | `docker.io`            |
+| `envoy.image.repository`                            | Envoy Proxy image repository                                                                                          | `bitnami/envoy`        |
+| `envoy.image.tag`                                   | Envoy Proxy image tag (immutable tags are recommended)                                                                | `1.21.1-debian-10-r38` |
+| `envoy.image.pullPolicy`                            | Envoy image pull policy                                                                                               | `IfNotPresent`         |
+| `envoy.image.pullSecrets`                           | Envoy image pull secrets                                                                                              | `[]`                   |
+| `envoy.priorityClassName`                           | Priority class assigned to the pods                                                                                   | `""`                   |
+| `envoy.extraArgs`                                   | Extra arguments passed to Envoy container                                                                             | `[]`                   |
+| `envoy.hostAliases`                                 | Add deployment host aliases                                                                                           | `[]`                   |
+| `envoy.resources.limits`                            | Specify resource limits which the container is not allowed to succeed.                                                | `{}`                   |
+| `envoy.resources.requests`                          | Specify resource requests which the container needs to spawn.                                                         | `{}`                   |
+| `envoy.command`                                     | Override default command                                                                                              | `[]`                   |
+| `envoy.args`                                        | Override default args                                                                                                 | `[]`                   |
+| `envoy.shutdownManager.resources.limits`            | Specify resource limits which the container is not allowed to succeed.                                                | `{}`                   |
+| `envoy.shutdownManager.resources.requests`          | Specify resource requests which the container needs to spawn.                                                         | `{}`                   |
+| `envoy.kind`                                        | Install as deployment or daemonset                                                                                    | `daemonset`            |
+| `envoy.replicaCount`                                | Desired number of Controller pods                                                                                     | `1`                    |
+| `envoy.lifecycleHooks`                              | lifecycleHooks for the container to automate configuration before or after startup.                                   | `{}`                   |
+| `envoy.updateStrategy`                              | Strategy to use to update Pods                                                                                        | `{}`                   |
+| `envoy.minReadySeconds`                             | The minimum number of seconds for which a newly created Pod should be ready                                           | `0`                    |
+| `envoy.revisionHistoryLimit`                        | The number of old history to retain to allow rollback                                                                 | `10`                   |
+| `envoy.autoscaling.enabled`                         | Enable autoscaling for Controller                                                                                     | `false`                |
+| `envoy.autoscaling.minReplicas`                     | Minimum number of Controller replicas                                                                                 | `1`                    |
+| `envoy.autoscaling.maxReplicas`                     | Maximum number of Controller replicas                                                                                 | `11`                   |
+| `envoy.autoscaling.targetCPU`                       | Target CPU utilization percentage                                                                                     | `""`                   |
+| `envoy.autoscaling.targetMemory`                    | Target Memory utilization percentage                                                                                  | `""`                   |
+| `envoy.podAffinityPreset`                           | Envoy Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                   |
+| `envoy.podAntiAffinityPreset`                       | Envoy Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `""`                   |
+| `envoy.nodeAffinityPreset.type`                     | Envoy Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                       | `""`                   |
+| `envoy.nodeAffinityPreset.key`                      | Envoy Node label key to match Ignored if `affinity` is set.                                                           | `""`                   |
+| `envoy.nodeAffinityPreset.values`                   | Envoy Node label values to match. Ignored if `affinity` is set.                                                       | `[]`                   |
+| `envoy.affinity`                                    | Affinity for Envoy pod assignment                                                                                     | `{}`                   |
+| `envoy.nodeSelector`                                | Node labels for Envoy pod assignment                                                                                  | `{}`                   |
+| `envoy.tolerations`                                 | Tolerations for Envoy pod assignment                                                                                  | `[]`                   |
+| `envoy.podAnnotations`                              | Envoy Pod annotations                                                                                                 | `{}`                   |
+| `envoy.podSecurityContext.enabled`                  | Envoy Pod securityContext                                                                                             | `false`                |
+| `envoy.podSecurityContext.fsGroup`                  | User ID for the for the mounted volumes                                                                               | `0`                    |
+| `envoy.podSecurityContext.sysctls`                  | Array of sysctl options to allow                                                                                      | `[]`                   |
+| `envoy.containerSecurityContext.enabled`            | Envoy Container securityContext                                                                                       | `true`                 |
+| `envoy.containerSecurityContext.runAsUser`          | User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024)                  | `1001`                 |
+| `envoy.hostNetwork`                                 | Envoy Pod host network access                                                                                         | `false`                |
+| `envoy.dnsPolicy`                                   | Envoy Pod Dns Policy's DNS Policy                                                                                     | `ClusterFirst`         |
+| `envoy.tlsExistingSecret`                           | Name of the existingSecret to be use in Envoy deployment                                                              | `""`                   |
+| `envoy.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                  | `true`                 |
+| `envoy.serviceAccount.name`                         | The name of the ServiceAccount to use. If not set and create is true, a name is generated using the fullname template | `""`                   |
+| `envoy.serviceAccount.automountServiceAccountToken` | Whether to auto mount API credentials for a service account                                                           | `false`                |
+| `envoy.livenessProbe.enabled`                       | Enable livenessProbe                                                                                                  | `true`                 |
+| `envoy.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                               | `120`                  |
+| `envoy.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                                      | `20`                   |
+| `envoy.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                                     | `5`                    |
+| `envoy.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                                   | `6`                    |
+| `envoy.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                                   | `1`                    |
+| `envoy.readinessProbe.enabled`                      | Enable/disable the readiness probe                                                                                    | `true`                 |
+| `envoy.readinessProbe.initialDelaySeconds`          | Delay before readiness probe is initiated                                                                             | `10`                   |
+| `envoy.readinessProbe.periodSeconds`                | How often to perform the probe                                                                                        | `3`                    |
+| `envoy.readinessProbe.timeoutSeconds`               | When the probe times out                                                                                              | `1`                    |
+| `envoy.readinessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded.                            | `3`                    |
+| `envoy.readinessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed.                          | `1`                    |
+| `envoy.startupProbe.enabled`                        | Enable/disable the startup probe                                                                                      | `false`                |
+| `envoy.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated                                                                               | `15`                   |
+| `envoy.startupProbe.periodSeconds`                  | How often to perform the probe                                                                                        | `10`                   |
+| `envoy.startupProbe.timeoutSeconds`                 | When the probe times out                                                                                              | `5`                    |
+| `envoy.startupProbe.failureThreshold`               | Minimum consecutive failures for the probe to be considered failed after having succeeded.                            | `3`                    |
+| `envoy.startupProbe.successThreshold`               | Minimum consecutive successes for the probe to be considered successful after having failed.                          | `1`                    |
+| `envoy.customLivenessProbe`                         | Override default liveness probe                                                                                       | `{}`                   |
+| `envoy.customReadinessProbe`                        | Override default readiness probe                                                                                      | `{}`                   |
+| `envoy.customStartupProbe`                          | Override default startup probe                                                                                        | `{}`                   |
+| `envoy.terminationGracePeriodSeconds`               | Envoy termination grace period in seconds                                                                             | `300`                  |
+| `envoy.logLevel`                                    | Envoy log level                                                                                                       | `info`                 |
+| `envoy.service.targetPorts`                         | Map the controller service HTTP/HTTPS port                                                                            | `{}`                   |
+| `envoy.service.type`                                | Type of Envoy service to create                                                                                       | `LoadBalancer`         |
+| `envoy.service.externalTrafficPolicy`               | Envoy Service external cluster policy. If `envoy.service.type` is NodePort or LoadBalancer                            | `Local`                |
+| `envoy.service.labels`                              | Labels to add to te envoy service                                                                                     | `{}`                   |
+| `envoy.service.clusterIP`                           | Internal envoy cluster service IP                                                                                     | `""`                   |
+| `envoy.service.externalIPs`                         | Envoy service external IP addresses                                                                                   | `[]`                   |
+| `envoy.service.loadBalancerIP`                      | IP address to assign to load balancer (if supported)                                                                  | `""`                   |
+| `envoy.service.loadBalancerSourceRanges`            | List of IP CIDRs allowed access to load balancer (if supported)                                                       | `[]`                   |
+| `envoy.service.ipFamilyPolicy`                      | , support SingleStack, PreferDualStack and RequireDualStack                                                           | `""`                   |
+| `envoy.service.annotations`                         | Annotations for Envoy service                                                                                         | `{}`                   |
+| `envoy.service.ports.http`                          | Sets service http port                                                                                                | `80`                   |
+| `envoy.service.ports.https`                         | Sets service https port                                                                                               | `443`                  |
+| `envoy.service.nodePorts.http`                      | HTTP Port. If `envoy.service.type` is NodePort and this is non-empty                                                  | `""`                   |
+| `envoy.service.nodePorts.https`                     | HTTPS Port. If `envoy.service.type` is NodePort and this is non-empty                                                 | `""`                   |
+| `envoy.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                                        | `[]`                   |
+| `envoy.useHostPort`                                 | Enable/disable `hostPort` for TCP/80 and TCP/443                                                                      | `true`                 |
+| `envoy.useHostIP`                                   | Enable/disable `hostIP`                                                                                               | `false`                |
+| `envoy.hostPorts.http`                              | Sets `hostPort` http port                                                                                             | `80`                   |
+| `envoy.hostPorts.https`                             | Sets `hostPort` https port                                                                                            | `443`                  |
+| `envoy.hostIPs.http`                                | Sets `hostIP` http IP                                                                                                 | `127.0.0.1`            |
+| `envoy.hostIPs.https`                               | Sets `hostIP` https IP                                                                                                | `127.0.0.1`            |
+| `envoy.containerPorts.http`                         | Sets http port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)                               | `8080`                 |
+| `envoy.containerPorts.https`                        | Sets https port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)                              | `8443`                 |
+| `envoy.initContainers`                              | Attach additional init containers to Envoy pods                                                                       | `[]`                   |
+| `envoy.sidecars`                                    | Add additional sidecar containers to the Envoy pods                                                                   | `[]`                   |
+| `envoy.extraVolumes`                                | Array to add extra volumes                                                                                            | `[]`                   |
+| `envoy.extraVolumeMounts`                           | Array to add extra mounts (normally used with extraVolumes)                                                           | `[]`                   |
+| `envoy.extraEnvVars`                                | Array containing extra env vars to be added to all Envoy containers                                                   | `[]`                   |
+| `envoy.extraEnvVarsCM`                              | ConfigMap containing extra env vars to be added to all Envoy containers                                               | `""`                   |
+| `envoy.extraEnvVarsSecret`                          | Secret containing extra env vars to be added to all Envoy containers                                                  | `""`                   |
 
 
 ### Default backend parameters
@@ -283,7 +284,7 @@ $ helm uninstall my-release
 | `defaultBackend.enabled`                            | Enable a default backend based on NGINX                                                              | `false`                  |
 | `defaultBackend.image.registry`                     | Default backend image registry                                                                       | `docker.io`              |
 | `defaultBackend.image.repository`                   | Default backend image name                                                                           | `bitnami/nginx`          |
-| `defaultBackend.image.tag`                          | Default backend image tag                                                                            | `1.21.5-debian-10-r16`   |
+| `defaultBackend.image.tag`                          | Default backend image tag                                                                            | `1.21.6-debian-10-r64`   |
 | `defaultBackend.image.pullPolicy`                   | Image pull policy                                                                                    | `IfNotPresent`           |
 | `defaultBackend.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                     | `[]`                     |
 | `defaultBackend.extraArgs`                          | Additional command line arguments to pass to NGINX container                                         | `{}`                     |

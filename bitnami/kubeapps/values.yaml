@@ -190,7 +190,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-10-r58
+    tag: 1.21.6-debian-10-r62
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -213,7 +213,7 @@ frontend:
   proxypassAccessTokenAsBearer: false
   ## @param frontend.proxypassExtraSetHeader Set an additional proxy header for all requests proxied via NGINX
   ## Authorization header(s) set in this way will be included with the request from kubeops to the k8s service API URL.
-  ## ref: https://github.com/kubeapps/kubeapps/blob/7e31d0e7241f826aa365856c134cf901d40890e7/pkg/http-handler/http-handler.go#L247
+  ## ref: https://github.com/vmware-tanzu/kubeapps/blob/7e31d0e7241f826aa365856c134cf901d40890e7/pkg/http-handler/http-handler.go#L247
   ## e.g:
   ## proxypassExtraSetHeader: Authorization "Bearer $cookie_sessionid";
   ##
@@ -506,7 +506,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.4.3-debian-10-r39
+    tag: 2.4.3-debian-10-r43
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -532,7 +532,7 @@ dashboard:
   ##
   customStyle: ""
   ## @param dashboard.customAppViews Package names to signal a custom app view
-  ## ref: https://github.com/kubeapps/kubeapps/blob/main/docs/developer/custom-app-view-support.md
+  ## ref: https://github.com/vmware-tanzu/kubeapps/blob/main/docs/howto/custom-app-view-support.md
   ## e.g:
   ##  customAppViews:
   ##    - plugin: helm
@@ -540,7 +540,7 @@ dashboard:
   ##      repository: bitnami
   customAppViews: []
   ## @param dashboard.customComponents Custom Form components injected into the BasicDeploymentForm
-  ## ref: https://github.com/kubeapps/kubeapps/blob/main/docs/developer/custom-form-component-support.md
+  ## ref: https://github.com/vmware-tanzu/kubeapps/blob/main/docs/howto/custom-form-component-support.md
   ##
   customComponents: ""
   ## @param dashboard.remoteComponentsUrl Remote URL that can be used to load custom components vs loading from the local filesystem
@@ -550,7 +550,7 @@ dashboard:
   ##
   skipAvailablePackageDetails: false
   ## @param dashboard.customLocale Custom translations injected to the Dashboard to customize the strings used in Kubeapps
-  ## ref: https://github.com/kubeapps/kubeapps/blob/main/docs/developer/translate-kubeapps.md
+  ## ref: https://github.com/vmware-tanzu/kubeapps/blob/main/docs/reference/translations/translate-kubeapps.md
   ## e.g:
   ## customLocale:
   ##   "Kubeapps": "My Dashboard"
@@ -806,7 +806,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.4.3-scratch-r1
+    tag: 2.4.4-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -831,7 +831,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.4.3-scratch-r2
+    tag: 2.4.4-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1107,7 +1107,7 @@ kubeops:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 2.4.3-scratch-r2
+    tag: 2.4.4-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1404,7 +1404,7 @@ assetsvc:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-assetsvc
-    tag: 2.4.3-scratch-r2
+    tag: 2.4.4-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1651,7 +1651,7 @@ assetsvc:
 ## @section Auth Proxy parameters
 
 ## Auth Proxy configuration for OIDC support
-## ref: https://github.com/kubeapps/kubeapps/blob/main/docs/user/using-an-OIDC-provider.md
+## ref: https://github.com/vmware-tanzu/kubeapps/blob/main/docs/tutorials/using-an-OIDC-provider.md
 ##
 authProxy:
   ## @param authProxy.enabled Specifies whether Kubeapps should configure OAuth login/logout
@@ -1668,7 +1668,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.2.1-debian-10-r93
+    tag: 7.2.1-debian-10-r97
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1800,7 +1800,7 @@ pinnipedProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.4.3-debian-10-r43
+    tag: 2.4.4-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1954,7 +1954,7 @@ rbac:
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.21.6-debian-10-r58
+  tag: 1.21.6-debian-10-r62
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2060,7 +2060,7 @@ kubeappsapis:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.4.3-debian-10-r45
+    tag: 2.4.4-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

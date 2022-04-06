@@ -180,14 +180,10 @@ spec:
             - name: RABBITMQ_CLUSTER_REBALANCE
               value: "true"
             {{- end }}
-            {{- if .Values.loadDefinition.enabled }}
             - name: RABBITMQ_LOAD_DEFINITIONS
-              value: "yes"
-            - name: RABBITMQ_SECURE_PASSWORD
-              value: "no"
-            {{- else }}
-            - name: RABBITMQ_LOAD_DEFINITIONS
-              value: "no"
+              value: {{ ternary "yes" "no" .Values.loadDefinition.enabled | quote }}
+            - name: RABBITMQ_DEFINITIONS_FILE
+              value: {{ .Values.loadDefinition.file | quote }}
             - name: RABBITMQ_SECURE_PASSWORD
               value: "yes"
             - name: RABBITMQ_USERNAME
@@ -197,7 +193,6 @@ spec:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretPasswordName" . }}
                   key: rabbitmq-password
-            {{- end }}
             - name: RABBITMQ_PLUGINS
               value: {{ include "rabbitmq.plugins" . | quote }}
             {{- if .Values.communityPlugins }}
