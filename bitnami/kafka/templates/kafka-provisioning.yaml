@@ -38,7 +38,9 @@ spec:
       {{- end }}
       restartPolicy: OnFailure
       terminationGracePeriodSeconds: 0
+      {{- if or .Values.provisioning.initContainers .Values.provisioning.waitForKafka }}
       initContainers:
+        {{- if .Values.provisioning.waitForKafka }}
         - name: wait-for-available-kafka
           image: {{ include "kafka.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -59,9 +61,11 @@ spec:
           {{- if .Values.provisioning.resources }}
           resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
           {{- end }}
+        {{- end }}
         {{- if .Values.provisioning.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.provisioning.initContainers "context" $ ) | nindent 8 }}
         {{- end }}
+      {{- end }}
       containers:
         - name: kafka-provisioning
           image: {{ include "kafka.image" . }}
@@ -85,6 +89,7 @@ spec:
           args:
             - -ec
             - |
+              echo "Configuring environment"
               . /opt/bitnami/scripts/libkafka.sh
               export CLIENT_CONF="${CLIENT_CONF:-/opt/bitnami/kafka/config/client.properties}"
               if [ ! -f "$CLIENT_CONF" ]; then
@@ -109,16 +114,29 @@ spec:
                 ! is_empty_value "$KAFKA_CLIENT_TRUSTSTORE_PASSWORD" && kafka_common_conf_set "$CLIENT_CONF" ssl.truststore.password "$KAFKA_CLIENT_TRUSTSTORE_PASSWORD"
                 {{- end }}
                 {{- end }}
+                {{- if (include "kafka.client.saslAuthentication" .) }}
+                {{- if contains "plain" .Values.auth.sasl.mechanisms }}
+                kafka_common_conf_set "$CLIENT_CONF" sasl.mechanism PLAIN
+                kafka_common_conf_set "$CLIENT_CONF" sasl.jaas.config "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"$SASL_USERNAME\" password=\"$SASL_USER_PASSWORD\";"
+                {{- else if contains "scram-sha-256" .Values.auth.sasl.mechanisms }}
+                kafka_common_conf_set "$CLIENT_CONF" sasl.mechanism SCRAM-SHA-256
+                kafka_common_conf_set "$CLIENT_CONF" sasl.jaas.config "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"$SASL_USERNAME\" password=\"$SASL_USER_PASSWORD\";"
+                {{- else if contains "scram-sha-512" .Values.auth.sasl.mechanisms }}
+                kafka_common_conf_set "$CLIENT_CONF" sasl.mechanism SCRAM-SHA-512
+                kafka_common_conf_set "$CLIENT_CONF" sasl.jaas.config "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"$SASL_USERNAME\" password=\"$SASL_USER_PASSWORD\";"
+                {{- end }}
+                {{- end }}
               fi
 
-              {{- $bootstrapServer := printf "%s:%d" (include "common.names.fullname" .) (.Values.service.ports.client | int64) }}
+              echo "Running pre-provisioning script if any given"
+              {{ .Values.provisioning.preScript | nindent 14 }}
 
               kafka_provisioning_commands=(
               {{- range $topic := .Values.provisioning.topics }}
                 "/opt/bitnami/kafka/bin/kafka-topics.sh \
                     --create \
                     --if-not-exists \
-                    --bootstrap-server {{ $bootstrapServer }} \
+                    --bootstrap-server ${KAFKA_SERVICE} \
                     --replication-factor {{ $topic.replicationFactor | default $.Values.provisioning.replicationFactor }} \
                     --partitions {{ $topic.partitions | default $.Values.provisioning.numPartitions }} \
                     {{- range $name, $value := $topic.config }}
@@ -127,19 +145,23 @@ spec:
                     --command-config ${CLIENT_CONF} \
                     --topic {{ $topic.name }}"
               {{- end }}
+              {{- range $command := .Values.provisioning.extraProvisioningCommands }}
+                {{- $command | quote | nindent 16 }}
+              {{- end }}
               )
 
               echo "Starting provisioning"
-
               for ((index=0; index < ${#kafka_provisioning_commands[@]}; index+={{ .Values.provisioning.parallel }}))
               do
                 for j in $(seq ${index} $((${index}+{{ .Values.provisioning.parallel }}-1)))
                 do
                     ${kafka_provisioning_commands[j]} & # Async command
                 done
-
                 wait  # Wait the end of the jobs
               done
+
+              echo "Running post-provisioning script if any given"
+              {{ .Values.provisioning.postScript | nindent 14 }}
 
               echo "Provisioning succeeded"
           {{- end }}
@@ -163,6 +185,32 @@ spec:
                   name: {{ template "kafka.client.passwordsSecretName" . }}
                   key: {{ .Values.provisioning.auth.tls.truststorePasswordSecretKey }}
             {{- end }}
+            - name: KAFKA_SERVICE
+              value: {{ printf "%s:%d" (include "common.names.fullname" .) (.Values.service.ports.client | int64) }}
+            {{- if (include "kafka.client.saslAuthentication" .) }}
+            {{- $clientUsers := .Values.auth.sasl.jaas.clientUsers }}
+            - name: SASL_USERNAME
+              value: {{ index $clientUsers 0 | quote }}
+            - name: SASL_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kafka.jaasSecretName" . }}
+                  key: system-user-password
+            {{- end }}
+            {{- if .Values.provisioning.extraEnvVars }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.provisioning.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.provisioning.extraEnvVarsCM .Values.provisioning.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.provisioning.extraEnvVarsCM }}
+            - configMapRef:
+              name: {{ include "common.tplvalues.render" (dict "value" .Values.provisioning.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.provisioning.extraEnvVarsSecret }}
+            - secretRef:
+              name: {{ include "common.tplvalues.render" (dict "value" .Values.provisioning.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
           {{- if .Values.provisioning.resources }}
           resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
           {{- end }}

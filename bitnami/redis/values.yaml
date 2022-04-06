@@ -78,7 +78,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 6.2.6-debian-10-r169
+  tag: 6.2.6-debian-10-r178
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -350,6 +350,20 @@ master:
   ##     whenUnsatisfiable: DoNotSchedule
   ##
   topologySpreadConstraints: []
+  ## @param master.dnsPolicy DNS Policy for Redis&trade; master pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+  ## E.g.
+  ## dnsPolicy: ClusterFirst
+  dnsPolicy: ""
+  ## @param master.dnsConfig DNS Configuration for Redis&trade; master pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+  ## E.g.
+  ## dnsConfig:
+  ##   options:
+  ##   - name: ndots
+  ##     value: "4"
+  ##   - name: single-request-reopen
+  dnsConfig: {}
   ## @param master.lifecycleHooks for the Redis&trade; master container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -703,6 +717,20 @@ replica:
   ##     whenUnsatisfiable: DoNotSchedule
   ##
   topologySpreadConstraints: []
+  ## @param replica.dnsPolicy DNS Policy for Redis&trade; replica pods
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+  ## E.g.
+  ## dnsPolicy: ClusterFirst
+  dnsPolicy: ""
+  ## @param replica.dnsConfig DNS Configuration for Redis&trade; replica pods
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+  ## E.g.
+  ## dnsConfig:
+  ##   options:
+  ##   - name: ndots
+  ##     value: "4"
+  ##   - name: single-request-reopen
+  dnsConfig: {}
   ## @param replica.lifecycleHooks for the Redis&trade; replica container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -860,7 +888,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 6.2.6-debian-10-r167
+    tag: 6.2.6-debian-10-r175
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1261,7 +1289,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.37.0-debian-10-r9
+    tag: 1.37.0-debian-10-r17
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1454,7 +1482,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r378
+    tag: 10-debian-10-r386
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1500,7 +1528,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r378
+    tag: 10-debian-10-r386
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
