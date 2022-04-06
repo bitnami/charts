@@ -212,6 +212,50 @@ Return the name of the secret containing the Keystore and Truststore password
 {{- end -}}
 
 {{/*
+Get the quorum keystore password key to be retrieved from passwordSecretName.
+*/}}
+{{- define "zookeeper.quorum.keystorePasswordSecretKey" -}}
+{{- if and .Values.tls.quorum.passwordsSecretName .Values.tls.quorum.keystorePasswordSecretKey -}}
+    {{- printf "%s" .Values.tls.quorum.keystorePasswordSecretKey -}}
+{{- else -}}
+    {{- printf "keystore-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the quorum truststore password key to be retrieved from passwordSecretName.
+*/}}
+{{- define "zookeeper.quorum.truststorePasswordSecretKey" -}}
+{{- if and .Values.tls.quorum.passwordsSecretName .Values.tls.quorum.truststorePasswordSecretKey -}}
+    {{- printf "%s" .Values.tls.quorum.truststorePasswordSecretKey -}}
+{{- else -}}
+    {{- printf "truststore-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the client keystore password key to be retrieved from passwordSecretName.
+*/}}
+{{- define "zookeeper.client.keystorePasswordSecretKey" -}}
+{{- if and .Values.tls.client.passwordsSecretName .Values.tls.client.keystorePasswordSecretKey -}}
+    {{- printf "%s" .Values.tls.client.keystorePasswordSecretKey -}}
+{{- else -}}
+    {{- printf "keystore-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the client truststore password key to be retrieved from passwordSecretName.
+*/}}
+{{- define "zookeeper.client.truststorePasswordSecretKey" -}}
+{{- if and .Values.tls.client.passwordsSecretName .Values.tls.client.truststorePasswordSecretKey -}}
+    {{- printf "%s" .Values.tls.client.truststorePasswordSecretKey -}}
+{{- else -}}
+    {{- printf "truststore-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message.
 */}}
 {{- define "zookeeper.validateValues" -}}

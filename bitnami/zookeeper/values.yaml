@@ -760,12 +760,12 @@ tls:
     ## @param tls.client.existingSecret Name of the existing secret containing the TLS certificates for ZooKeeper client communications
     ##
     existingSecret: ""
-    ## @param tls.client.keystoreSecretKey The secret key from the existingSecret if 'keystoreSecretKey' key different from the default (zookeeper.keystore.jks)
+    ## @param tls.client.existingSecretKeystoreKey The secret key from the existingSecret if 'existingSecretKeystoreKey' key different from the default (zookeeper.keystore.jks)
     ##
-    keystoreSecretKey: "zookeeper.keystore.jks"
-    ## @param tls.client.truststoreSecretKey The secret key from the existingSecret if 'truststoreSecretKey' key different from the default (zookeeper.truststore.jks)
+    existingSecretKeystoreKey: "zookeeper.keystore.jks"
+    ## @param tls.client.existingSecretTruststoreKey The secret key from the existingSecret if 'existingSecretTruststoreKey' key different from the default (zookeeper.truststore.jks)
     ##
-    truststoreSecretKey: "zookeeper.truststore.jks"
+    existingSecretTruststoreKey: "zookeeper.truststore.jks"
     ## @param tls.client.keystorePath Location of the KeyStore file used for Client connections
     ##
     keystorePath: /opt/bitnami/zookeeper/config/certs/client/zookeeper.keystore.jks
@@ -800,12 +800,12 @@ tls:
     ## @param tls.quorum.existingSecret Name of the existing secret containing the TLS certificates for ZooKeeper quorum protocol
     ##
     existingSecret: ""
-    ## @param tls.quorum.keystoreSecretKey The secret key from the existingSecret if 'keystoreSecretKey' key different from the default (zookeeper.keystore.jks)
+    ## @param tls.quorum.existingSecretKeystoreKey The secret key from the existingSecret if 'existingSecretKeystoreKey' key different from the default (zookeeper.keystore.jks)
     ##
-    keystoreSecretKey: "zookeeper.keystore.jks"
-    ## @param tls.quorum.truststoreSecretKey The secret key from the existingSecret if 'truststoreSecretKey' key different from the default (zookeeper.truststore.jks)
+    existingSecretKeystoreKey: "zookeeper.keystore.jks"
+    ## @param tls.quorum.existingSecretTruststoreKey The secret key from the existingSecret if 'existingSecretTruststoreKey' key different from the default (zookeeper.truststore.jks)
     ##
-    truststoreSecretKey: "zookeeper.truststore.jks"
+    existingSecretTruststoreKey: "zookeeper.truststore.jks"
     ## @param tls.quorum.keystorePath Location of the KeyStore file used for Quorum protocol
     ##
     keystorePath: /opt/bitnami/zookeeper/config/certs/quorum/zookeeper.keystore.jks

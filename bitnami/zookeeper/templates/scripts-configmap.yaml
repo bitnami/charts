@@ -37,9 +37,9 @@ data:
         exit 1
     fi
     {{- else }}
-    elif [[ -f {{ printf "/certs/client/%s" .Values.tls.client.truststoreSecretKey | quote }} ]] && [[ -f {{ printf "/certs/client/%s" .Values.tls.client.keystoreSecretKey | quote }} ]]; then
-        cp {{ printf "/certs/client/%s" .Values.tls.client.truststoreSecretKey | quote }} "/opt/bitnami/zookeeper/config/certs/client/zookeeper.truststore.jks"
-        cp {{ printf "/certs/client/%s" .Values.tls.client.keystoreSecretKey | quote }} "/opt/bitnami/zookeeper/config/certs/client/zookeeper.keystore.jks"
+    elif [[ -f {{ printf "/certs/client/%s" .Values.tls.client.existingSecretTruststoreKey | quote }} ]] && [[ -f {{ printf "/certs/client/%s" .Values.tls.client.existingSecretKeystoreKey | quote }} ]]; then
+        cp {{ printf "/certs/client/%s" .Values.tls.client.existingSecretTruststoreKey | quote }} "/opt/bitnami/zookeeper/config/certs/client/zookeeper.truststore.jks"
+        cp {{ printf "/certs/client/%s" .Values.tls.client.existingSecretKeystoreKey | quote }} "/opt/bitnami/zookeeper/config/certs/client/zookeeper.keystore.jks"
     else
         echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when Client encryption via TLS is enabled."
         exit 1
@@ -68,9 +68,9 @@ data:
         exit 1
     fi
     {{- else }}
-    elif [[ -f {{ printf "/certs/quorum/%s" .Values.tls.quorum.truststoreSecretKey | quote }} ]] && [[ -f {{ printf "/certs/quorum/%s" .Values.tls.quorum.keystoreSecretKey | quote }} ]]; then
-        cp {{ printf "/certs/quorum/%s" .Values.tls.quorum.truststoreSecretKey | quote }} "/opt/bitnami/zookeeper/config/certs/quorum/zookeeper.truststore.jks"
-        cp {{ printf "/certs/quorum/%s" .Values.tls.quorum.keystoreSecretKey | quote }} "/opt/bitnami/zookeeper/config/certs/quorum/zookeeper.keystore.jks"
+    elif [[ -f {{ printf "/certs/quorum/%s" .Values.tls.quorum.existingSecretTruststoreKey | quote }} ]] && [[ -f {{ printf "/certs/quorum/%s" .Values.tls.quorum.existingSecretKeystoreKey | quote }} ]]; then
+        cp {{ printf "/certs/quorum/%s" .Values.tls.quorum.existingSecretTruststoreKey | quote }} "/opt/bitnami/zookeeper/config/certs/quorum/zookeeper.truststore.jks"
+        cp {{ printf "/certs/quorum/%s" .Values.tls.quorum.existingSecretKeystoreKey | quote }} "/opt/bitnami/zookeeper/config/certs/quorum/zookeeper.keystore.jks"
     else
         echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when Quorum encryption via TLS is enabled."
         exit 1
