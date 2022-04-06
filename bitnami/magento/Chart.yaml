@@ -8,11 +8,11 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - magento-database
-    version: 9.x.x
+    version: 10.x.x
   - condition: elasticsearch.enabled
     name: elasticsearch
     repository: https://charts.bitnami.com/bitnami
-    version: 17.x.x
+    version: 18.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -35,4 +35,4 @@ name: magento
 sources:
   - https://github.com/bitnami/bitnami-docker-magento
   - https://magento.com/
-version: 19.2.19
+version: 20.0.0
