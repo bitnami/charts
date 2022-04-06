@@ -117,26 +117,8 @@ spec:
             - containerPort: {{ coalesce .Values.containerPorts.grpc .Values.containerPort | int }}
               name: grpc
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.startupProbe.enabled }}
-          startupProbe:
-            exec:
-              # As it is a grpc port, we cannot httpGet. tcpSocket cannot be used either
-              # because it adds noise in the logs
-              command:
-                - bash
-                - -ec
-                - |
-                  ps auxf | grep wavefront
-            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.startupProbe.successThreshold }}
-            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
-          {{- else if .Values.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
-          {{- end }}
           {{- if .Values.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               # As it is a grpc port, we cannot httpGet. tcpSocket cannot be used either
               # because it adds noise in the logs
@@ -145,16 +127,11 @@ spec:
                 - -ec
                 - |
                   ps auxf | grep wavefront
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               # As it is a grpc port, we cannot httpGet. tcpSocket cannot be used either
               # because it adds noise in the logs
@@ -163,13 +140,21 @@ spec:
                 - -ec
                 - |
                   ps auxf | grep wavefront
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              # As it is a grpc port, we cannot httpGet. tcpSocket cannot be used either
+              # because it adds noise in the logs
+              command:
+                - bash
+                - -ec
+                - |
+                  ps auxf | grep wavefront
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.extraVolumeMounts }}
