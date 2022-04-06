@@ -31,6 +31,6 @@ it('allows listing all installed stores', () => {
 
 it('allows adding a graph', () => {
   cy.visit('/');
-  cy.contains('button', 'Add Panel').should('be.visible').click();
+  cy.contains('button', 'Add Panel').click();
   cy.get('.execute-btn').should('have.length', 2);
 })
