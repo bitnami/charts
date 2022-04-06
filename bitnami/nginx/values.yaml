@@ -52,7 +52,7 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.21.6-debian-10-r65
+  tag: 1.21.6-debian-10-r67
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -344,7 +344,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.35.1-debian-10-r64
+    tag: 2.35.1-debian-10-r65
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -428,147 +428,6 @@ staticSiteConfigmap: ""
 ## NOTE: This will override staticSiteConfigmap
 ##
 staticSitePVC: ""
-
-## @section LDAP parameters
-
-## LDAP Auth Daemon Properties
-## Daemon that will proxy LDAP requests between NGINX and a given LDAP Server
-##
-ldapDaemon:
-  ## @param ldapDaemon.enabled Enable LDAP Auth Daemon proxy
-  ##
-  enabled: false
-  ## Bitnami NGINX LDAP Auth Daemon image
-  ## ref: https://hub.docker.com/r/bitnami/nginx-ldap-auth-daemon/tags/
-  ## @param ldapDaemon.image.registry LDAP AUth Daemon Image registry
-  ## @param ldapDaemon.image.repository LDAP Auth Daemon Image repository
-  ## @param ldapDaemon.image.tag LDAP Auth Daemon Image tag (immutable tags are recommended)
-  ## @param ldapDaemon.image.pullPolicy LDAP Auth Daemon Image pull policy
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/nginx-ldap-auth-daemon
-    tag: 0.20200116.0-debian-10-r632
-    pullPolicy: IfNotPresent
-  ## @param ldapDaemon.port LDAP Auth Daemon port
-  ##
-  port: 8888
-  ## LDAP Auth Daemon Configuration
-  ##
-  ## These different properties define the form of requests performed
-  ## against the given LDAP server
-  ##
-  ## BEWARE THAT THESE VALUES WILL BE IGNORED IF A CUSTOM LDAP SERVER BLOCK
-  ## ALREADY SPECIFIES THEM.
-  ##
-  ##
-  ldapConfig:
-    ## @param ldapDaemon.ldapConfig.uri LDAP Server URI, `ldap[s]:/<hostname>:<port>`
-    ## Must follow the pattern -> ldap[s]:/<hostname>:<port>
-    ##
-    uri: ""
-    ## @param ldapDaemon.ldapConfig.baseDN LDAP root DN to begin the search for the user
-    ##
-    baseDN: ""
-    ## @param ldapDaemon.ldapConfig.bindDN DN of user to bind to LDAP
-    ##
-    bindDN: ""
-    ## @param ldapDaemon.ldapConfig.bindPassword Password for the user to bind to LDAP
-    ##
-    bindPassword: ""
-    ## @param ldapDaemon.ldapConfig.filter LDAP search filter for search
-    ##
-    filter: ""
-    ## @param ldapDaemon.ldapConfig.httpRealm LDAP HTTP auth realm
-    ##
-    httpRealm: ""
-    ## @param ldapDaemon.ldapConfig.httpCookieName HTTP cookie name to be used in LDAP Auth
-    ##
-    httpCookieName: ""
-  ## @param ldapDaemon.nginxServerBlock [string] NGINX server block that configures LDAP communication. Overrides `ldapDaemon.ldapConfig`
-  ## NGINX Configuration File containing the directives (that define how LDAP requests are performed) and tells NGINX to
-  ## use the LDAP Daemon as proxy. Besides, it defines the routes that will require of LDAP auth
-  ## in order to be accessed.
-  ##
-  ## If LDAP directives are provided, they will take precedence over
-  ## the ones specified in ldapConfig.
-  ##
-  ## This will be evaluated as a template.
-  ##
-  nginxServerBlock: |-
-    server {
-    listen 0.0.0.0:{{ .Values.containerPorts.http }};
-
-    # You can provide a special subPath or the root
-    location = / {
-        auth_request /auth-proxy;
-    }
-
-    location = /auth-proxy {
-        internal;
-
-        proxy_pass http://127.0.0.1:{{ .Values.ldapDaemon.port }};
-
-        ###############################################################
-        # YOU SHOULD CHANGE THE FOLLOWING TO YOUR LDAP CONFIGURATION  #
-        ###############################################################
-
-        # URL and port for connecting to the LDAP server
-        # proxy_set_header X-Ldap-URL "ldap://YOUR_LDAP_SERVER_IP:YOUR_LDAP_SERVER_PORT";
-
-        # Base DN
-        # proxy_set_header X-Ldap-BaseDN "dc=example,dc=org";
-
-        # Bind DN
-        # proxy_set_header X-Ldap-BindDN "cn=admin,dc=example,dc=org";
-
-        # Bind password
-        # proxy_set_header X-Ldap-BindPass "adminpassword";
-    }
-    }
-  ## @param ldapDaemon.existingNginxServerBlockSecret Name of existing Secret with a NGINX server block to use for LDAP communication
-  ## Use an existing Secret holding an NGINX Configuration file that configures LDAP requests
-  ## If provided, both nginxServerBlock and ldapConfig properties are ignored.
-  ##
-  existingNginxServerBlockSecret: ""
-  ## LDAP Auth Daemon containers' liveness probe.
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ## @param ldapDaemon.livenessProbe.enabled Enable livenessProbe
-  ## @param ldapDaemon.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param ldapDaemon.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param ldapDaemon.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param ldapDaemon.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param ldapDaemon.livenessProbe.successThreshold Success threshold for livenessProbe
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 30
-    timeoutSeconds: 5
-    periodSeconds: 10
-    failureThreshold: 6
-    successThreshold: 1
-  ## LDAP Auth Daemon containers' readiness probe.
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ## @param ldapDaemon.readinessProbe.enabled Enable readinessProbe
-  ## @param ldapDaemon.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param ldapDaemon.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param ldapDaemon.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param ldapDaemon.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param ldapDaemon.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    timeoutSeconds: 3
-    periodSeconds: 5
-    failureThreshold: 3
-    successThreshold: 1
-  ## @param ldapDaemon.customLivenessProbe Custom Liveness probe
-  ##
-  customLivenessProbe: {}
-  ## @param ldapDaemon.customReadinessProbe Custom Rediness probe
-  ##
-  customReadinessProbe: {}
 
 ## @section Traffic Exposure parameters
 
@@ -780,7 +639,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 0.10.0-debian-10-r98
+    tag: 0.10.0-debian-10-r100
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
