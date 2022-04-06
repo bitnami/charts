@@ -79,7 +79,7 @@ Common Labels
 Labels for operator
 */}}
 {{- define "kube-prometheus.operator.labels" -}}
-{{- include "kube-prometheus.labels" . -}}
+{{- include "kube-prometheus.labels" . }}
 app.kubernetes.io/component: operator
 {{- end -}}
 
@@ -87,7 +87,7 @@ app.kubernetes.io/component: operator
 Labels for prometheus
 */}}
 {{- define "kube-prometheus.prometheus.labels" -}}
-{{- include "kube-prometheus.labels" . -}}
+{{- include "kube-prometheus.labels" . }}
 app.kubernetes.io/component: prometheus
 {{- end -}}
 
@@ -95,7 +95,7 @@ app.kubernetes.io/component: prometheus
 Labels for alertmanager
 */}}
 {{- define "kube-prometheus.alertmanager.labels" -}}
-{{- include "kube-prometheus.labels" . -}}
+{{- include "kube-prometheus.labels" . }}
 app.kubernetes.io/component: alertmanager
 {{- end -}}
 
@@ -103,7 +103,7 @@ app.kubernetes.io/component: alertmanager
 Labels for blackbox-exporter
 */}}
 {{- define "kube-prometheus.blackboxExporter.labels" -}}
-{{- include "kube-prometheus.labels" . -}}
+{{- include "kube-prometheus.labels" . }}
 app.kubernetes.io/component: blackbox-exporter
 {{- end -}}
 
@@ -111,7 +111,7 @@ app.kubernetes.io/component: blackbox-exporter
 matchLabels for operator
 */}}
 {{- define "kube-prometheus.operator.matchLabels" -}}
-{{- include "common.labels.matchLabels" . -}}
+{{- include "common.labels.matchLabels" . }}
 app.kubernetes.io/component: operator
 {{- end -}}
 
@@ -119,7 +119,7 @@ app.kubernetes.io/component: operator
 matchLabels for prometheus
 */}}
 {{- define "kube-prometheus.prometheus.matchLabels" -}}
-{{- include "common.labels.matchLabels" . -}}
+{{- include "common.labels.matchLabels" . }}
 app.kubernetes.io/component: prometheus
 {{- end -}}
 
@@ -127,7 +127,7 @@ app.kubernetes.io/component: prometheus
 matchLabels for alertmanager
 */}}
 {{- define "kube-prometheus.alertmanager.matchLabels" -}}
-{{- include "common.labels.matchLabels" . -}}
+{{- include "common.labels.matchLabels" . }}
 app.kubernetes.io/component: alertmanager
 {{- end -}}
 
