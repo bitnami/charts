@@ -25,7 +25,7 @@ it('allows the execution of a query', () => {
 it('allows listing all installed stores', () => {
   cy.visit('/');
   cy.contains('[class="nav-link"]', 'Stores').click();
-  cy.get('[data-testid="endpoint"]').should('be.visible');
+  cy.get('[data-testid="endpoint"]').should('not.be.empty');
   cy.get('[data-testid="health"]').contains('UP');
 })
 
