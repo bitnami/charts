@@ -476,9 +476,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                           | Description                                                                                                | Value                       |
 | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `blackboxExporter.enabled`                                     | Enable Blackbox Exporter deployment                                                                        | `true`                      |
-| `blackboxExporter.image.registry`                              | Prometheus image registry                                                                                  | `docker.io`                 |
-| `blackboxExporter.image.repository`                            | Prometheus Image repository                                                                                | `bitnami/blackbox-exporter` |
-| `blackboxExporter.image.tag`                                   | Prometheus Image tag (immutable tags are recommended)                                                      | `0.20.0-debian-10-r19`      |
+| `blackboxExporter.image.registry`                              | Blackbox Exporter image registry                                                                           | `docker.io`                 |
+| `blackboxExporter.image.repository`                            | Blackbox Exporter Image repository                                                                         | `bitnami/blackbox-exporter` |
+| `blackboxExporter.image.pullPolicy`                            | Blackbox Exporter Image pull policy                                                                        | `IfNotPresent`              |
+| `blackboxExporter.image.tag`                                   | Blackbox Exporter Image tag (immutable tags are recommended)                                               | `0.20.0-debian-10-r19`      |
 | `blackboxExporter.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                           | `[]`                        |
 | `blackboxExporter.extraEnvVars`                                | Array with extra environment variables to add to blackboxExporter nodes                                    | `[]`                        |
 | `blackboxExporter.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for blackboxExporter nodes                            | `""`                        |
