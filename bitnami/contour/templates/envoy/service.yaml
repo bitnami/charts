@@ -85,6 +85,9 @@ metadata:
 spec:
   type: ClusterIP
   clusterIP: None
+  {{- if not .Values.envoy.shutdownManager.enabled }}
+  publishNotReadyAddresses: true
+  {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: envoy
   ports:
