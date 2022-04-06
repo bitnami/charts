@@ -193,9 +193,9 @@ spec:
             {{- end }}
             - name: ETCD_INITIAL_CLUSTER
               value: {{ join "," $initialCluster | quote }}
+            {{- end }}
             - name: ETCD_CLUSTER_DOMAIN
               value: {{ printf "%s.%s.svc.%s" $etcdHeadlessServiceName $releaseNamespace $clusterDomain | quote }}
-            {{- end }}
             {{- if and .Values.auth.client.secureTransport .Values.auth.client.useAutoTLS }}
             - name: ETCD_AUTO_TLS
               value: "true"
