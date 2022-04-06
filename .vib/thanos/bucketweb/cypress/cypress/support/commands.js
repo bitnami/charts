@@ -1,4 +1,4 @@
-const COMMAND_DELAY = 1000
+const COMMAND_DELAY = 1000;
 
 for (const command of ['click']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
@@ -6,8 +6,8 @@ for (const command of ['click']) {
 
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve(origVal)
-      }, COMMAND_DELAY)
+        resolve(origVal);
+      }, COMMAND_DELAY);
     })
   })
 }
