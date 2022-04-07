@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -19,6 +20,7 @@ global:
   labels: {}
 
 ## @section Common parameters
+##
 
 ## @param nameOverride String to partially override `kube-prometheus.name` template with a string (will prepend the release name)
 ##
@@ -31,6 +33,7 @@ fullnameOverride: ""
 extraDeploy: []
 
 ## @section Prometheus Operator Parameters
+##
 
 operator:
   ## @param operator.enabled Deploy Prometheus Operator to the cluster
@@ -47,7 +50,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.55.1-debian-10-r7
+    tag: 0.55.1-debian-10-r9
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -80,6 +83,7 @@ operator:
     create: true
     ## @param operator.serviceAccount.name The name of the ServiceAccount to create
     ## If not set and create is true, a name is generated using the kube-prometheus.operator.fullname template
+    ##
     name: ""
   ## @param operator.schedulerName Name of the Kubernetess scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
@@ -340,6 +344,7 @@ operator:
       successThreshold: 1
 
 ## @section Prometheus Parameters
+##
 
 ## Deploy a Prometheus instance
 ##
@@ -357,7 +362,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.33.5-debian-10-r24
+    tag: 2.34.0-debian-10-r0
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -375,6 +380,7 @@ prometheus:
     create: true
     ## @param prometheus.serviceAccount.name The name of the ServiceAccount to create
     ## If not set and create is true, a name is generated using the kube-prometheus.prometheus.fullname template
+    ##
     name: ""
     ## @param prometheus.serviceAccount.annotations Additional annotations for created Prometheus ServiceAccount
     ## annotations:
@@ -939,7 +945,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.25.2-scratch-r1
+      tag: 0.25.2-scratch-r2
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
@@ -1005,11 +1011,13 @@ prometheus:
       ## limits:
       ##    cpu: 100m
       ##    memory: 128Mi
+      ##
       limits: {}
       ## Examples:
       ## requests:
       ##    cpu: 100m
       ##    memory: 128Mi
+      ##
       requests: {}
     ## Configure extra options for liveness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -1136,6 +1144,7 @@ prometheus:
   portName: web
 
 ## @section Alertmanager Parameters
+##
 
 ## Configuration for alertmanager
 ## ref: https://prometheus.io/docs/alerting/alertmanager/
@@ -1154,7 +1163,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.24.0-debian-10-r8
+    tag: 0.24.0-debian-10-r11
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1172,6 +1181,7 @@ alertmanager:
     create: true
     ## @param alertmanager.serviceAccount.name The name of the ServiceAccount to create
     ## If not set and create is true, a name is generated using the kube-prometheus.alertmanager.fullname template
+    ##
     name: ""
   ## Prometheus Alertmanager pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -1563,6 +1573,7 @@ alertmanager:
   configuration: {}
 
 ## @section Exporters
+##
 
 ## Exporters
 ##
@@ -1626,6 +1637,351 @@ kubelet:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
     cAdvisorRelabelings: []
+
+## @section Blackbox Exporter Deployment Parameters
+##
+blackboxExporter:
+  ## @param blackboxExporter.enabled Enable Blackbox Exporter deployment
+  ##
+  enabled: true
+  ## Bitnami Alertmanager image version
+  ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
+  ## @param blackboxExporter.image.registry Blackbox Exporter image registry
+  ## @param blackboxExporter.image.repository Blackbox Exporter Image repository
+  ## @param blackboxExporter.image.pullPolicy Blackbox Exporter Image pull policy
+  ## @param blackboxExporter.image.tag Blackbox Exporter Image tag (immutable tags are recommended)
+  ## @param blackboxExporter.image.pullSecrets Specify docker-registry secret names as an array
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/blackbox-exporter
+    tag: 0.20.0-debian-10-r20
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+
+  ## @param blackboxExporter.extraEnvVars Array with extra environment variables to add to blackboxExporter nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param blackboxExporter.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for blackboxExporter nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param blackboxExporter.extraEnvVarsSecret Name of existing Secret containing extra env vars for blackboxExporter nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param blackboxExporter.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param blackboxExporter.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param blackboxExporter.replicaCount Number of Blackbox Exporter replicas to deploy
+  ##
+  replicaCount: 1
+  ## Configure extra options for Blackbox Exporter container liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param blackboxExporter.livenessProbe.enabled Enable livenessProbe on Blackbox Exporter nodes
+  ## @param blackboxExporter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param blackboxExporter.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param blackboxExporter.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param blackboxExporter.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param blackboxExporter.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param blackboxExporter.readinessProbe.enabled Enable readinessProbe on Blackbox Exporter nodes
+  ## @param blackboxExporter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param blackboxExporter.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param blackboxExporter.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param blackboxExporter.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param blackboxExporter.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param blackboxExporter.startupProbe.enabled Enable startupProbe on Blackbox Exporter containers
+  ## @param blackboxExporter.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param blackboxExporter.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param blackboxExporter.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param blackboxExporter.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param blackboxExporter.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param blackboxExporter.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param blackboxExporter.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param blackboxExporter.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param blackboxExporter.configuration [object] Blackbox Exporter configuration
+  ##
+  configuration:  |
+    "modules":
+      "http_2xx":
+        "http":
+          "preferred_ip_protocol": "ip4"
+        "prober": "http"
+      "http_post_2xx":
+        "http":
+          "method": "POST"
+          "preferred_ip_protocol": "ip4"
+        "prober": "http"
+      "irc_banner":
+        "prober": "tcp"
+        "tcp":
+          "preferred_ip_protocol": "ip4"
+          "query_response":
+          - "send": "NICK prober"
+          - "send": "USER prober prober prober :prober"
+          - "expect": "PING :([^ ]+)"
+            "send": "PONG ${1}"
+          - "expect": "^:[^ ]+ 001"
+      "pop3s_banner":
+        "prober": "tcp"
+        "tcp":
+          "preferred_ip_protocol": "ip4"
+          "query_response":
+          - "expect": "^+OK"
+          "tls": true
+          "tls_config":
+            "insecure_skip_verify": false
+      "ssh_banner":
+        "prober": "tcp"
+        "tcp":
+          "preferred_ip_protocol": "ip4"
+          "query_response":
+          - "expect": "^SSH-2.0-"
+      "tcp_connect":
+        "prober": "tcp"
+        "tcp":
+          "preferred_ip_protocol": "ip4"
+
+  ## @param blackboxExporter.existingConfigMap ConfigMap pointing to the Blackbox Exporter configuration
+  ##
+  existingConfigMap: ""
+  ## @param blackboxExporter.containerPorts.http Blackbox Exporter HTTP container port
+  ##
+  containerPorts:
+    http: 19115
+
+  serviceAccount:
+    ## @param blackboxExporter.serviceAccount.create Enable creation of ServiceAccount for WordPress pod
+    ##
+    create: true
+    ## @param blackboxExporter.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param blackboxExporter.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+    ##
+    automountServiceAccountToken: true
+    ## @param blackboxExporter.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
+
+  ## Blackbox Exporter resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param blackboxExporter.resources.limits The resources limits for the blackboxExporter containers
+  ## @param blackboxExporter.resources.requests The requested resources for the blackboxExporter containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param blackboxExporter.podSecurityContext.enabled Enabled Blackbox Exporter pods' Security Context
+  ## @param blackboxExporter.podSecurityContext.fsGroup Set Blackbox Exporter pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param blackboxExporter.containerSecurityContext.enabled Enabled Blackbox Exporter containers' Security Context
+  ## @param blackboxExporter.containerSecurityContext.runAsUser Set Blackbox Exporter containers' Security Context runAsUser
+  ## @param blackboxExporter.containerSecurityContext.runAsNonRoot Set Blackbox Exporter containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param blackboxExporter.lifecycleHooks for the blackboxExporter container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param blackboxExporter.hostAliases blackboxExporter pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param blackboxExporter.podLabels Extra labels for blackboxExporter pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param blackboxExporter.podAnnotations Annotations for blackboxExporter pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param blackboxExporter.podAffinityPreset Pod affinity preset. Ignored if `blackboxExporter.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param blackboxExporter.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `blackboxExporter.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node blackboxExporter.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param blackboxExporter.nodeAffinityPreset.type Node affinity preset type. Ignored if `blackboxExporter.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param blackboxExporter.nodeAffinityPreset.key Node label key to match. Ignored if `blackboxExporter.affinity` is set
+    ##
+    key: ""
+    ## @param blackboxExporter.nodeAffinityPreset.values Node label values to match. Ignored if `blackboxExporter.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param blackboxExporter.affinity Affinity for Blackbox Exporter pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `blackboxExporter.podAffinityPreset`, `blackboxExporter.podAntiAffinityPreset`, and `blackboxExporter.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param blackboxExporter.nodeSelector Node labels for Blackbox Exporter pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param blackboxExporter.tolerations Tolerations for Blackbox Exporter pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param blackboxExporter.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: {}
+  ## @param blackboxExporter.priorityClassName Blackbox Exporter pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param blackboxExporter.schedulerName Kubernetes pod scheduler registry
+  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param blackboxExporter.updateStrategy.type Blackbox Exporter statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+  ## @param blackboxExporter.extraVolumes Optionally specify extra list of additional volumes for the Blackbox Exporter pod(s)
+  ##
+  extraVolumes: []
+  ## @param blackboxExporter.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Blackbox Exporter container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param blackboxExporter.sidecars Add additional sidecar containers to the Blackbox Exporter pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param blackboxExporter.initContainers Add additional init containers to the Blackbox Exporter pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## @section Blackbox Exporter Traffic Exposure Parameters
+  ##
+
+  ## blackboxExporter service parameters
+  ##
+  service:
+    ## @param blackboxExporter.service.type Blackbox Exporter service type
+    ##
+    type: ClusterIP
+    ## @param blackboxExporter.service.ports.http Blackbox Exporter HTTP service port
+    ##
+    ports:
+      http: 19115
+    ## Node ports to expose
+    ## NOTE: choose port between <30000-32767>
+    ## @param blackboxExporter.service.nodePorts.http Node port for HTTP
+    ##
+    nodePorts:
+      http: ""
+    ## @param blackboxExporter.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param blackboxExporter.service.clusterIP Blackbox Exporter service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param blackboxExporter.service.loadBalancerIP Blackbox Exporter service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param blackboxExporter.service.loadBalancerSourceRanges Blackbox Exporter service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param blackboxExporter.service.externalTrafficPolicy Blackbox Exporter service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param blackboxExporter.service.annotations Additional custom annotations for Blackbox Exporter service
+    ##
+    annotations: {}
+    ## @param blackboxExporter.service.extraPorts Extra ports to expose in the Blackbox Exporter service
+    ##
+    extraPorts: []
+
 ## Component scraping the kube-apiserver
 ##
 kubeApiServer:
@@ -1688,6 +2044,7 @@ kubeControllerManager:
     ##
     insecureSkipVerify: ""
     ## @param kubeControllerManager.serviceMonitor.serverName Name of the server to use when validating TLS certificate
+    ##
     serverName: ""
     ## @param kubeControllerManager.serviceMonitor.metricRelabelings Metric relabeling
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
@@ -1851,6 +2208,7 @@ kubeProxy:
     relabelings: []
 
 ## @section RBAC parameters
+##
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/

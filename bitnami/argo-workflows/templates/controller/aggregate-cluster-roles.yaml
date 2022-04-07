@@ -20,8 +20,6 @@ rules:
     resources:
       - workflows
       - workflows/finalizers
-      - workflowtasksets
-      - workflowtasksets/finalizers
       - workfloweventbindings
       - workfloweventbindings/finalizers
       - workflowtemplates
@@ -56,8 +54,6 @@ rules:
     resources:
       - workflows
       - workflows/finalizers
-      - workflowtasksets
-      - workflowtasksets/finalizers
       - workfloweventbindings
       - workfloweventbindings/finalizers
       - workflowtemplates
@@ -97,8 +93,6 @@ rules:
     resources:
       - workflows
       - workflows/finalizers
-      - workflowtasksets
-      - workflowtasksets/finalizers
       - workfloweventbindings
       - workfloweventbindings/finalizers
       - workflowtemplates
@@ -107,6 +101,8 @@ rules:
       - cronworkflows/finalizers
       - clusterworkflowtemplates
       - clusterworkflowtemplates/finalizers
+      - workflowtasksets
+      - workflowtasksets/finalizers
     verbs:
       - create
       - delete

@@ -18,6 +18,7 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: wavefront-prometheus-storage-adapter
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       {{- if .Values.podAnnotations }}
@@ -50,6 +51,15 @@ spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
@@ -67,17 +77,21 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - adapter
           {{- end }}
-          {{- if .Values.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - -listen={{ .Values.containerPort }}
+            - -listen={{ coalesce .Values.containerPorts.http .Values.containerPort}}
             - -proxy={{ ternary (include "wfpsa.proxy.fullname" .) .Values.externalProxy.host .Values.wavefront.proxy.enabled }}
             - -proxy-port={{ ternary .Values.wavefront.proxy.port .Values.externalProxy.port .Values.wavefront.proxy.enabled }}
             {{- if .Values.adapterPrefix }}
@@ -107,8 +121,21 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           ports:
-            - containerPort: {{ .Values.containerPort }}
+            - containerPort: {{ coalesce .Values.containerPorts.http .Values.containerPort}}
               name: http
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -134,6 +161,7 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.extraVolumeMounts }}
           volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
