@@ -136,7 +136,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeSelector`                          | Node labels for pod assignment                                                                                           | `{}`                                  |
 | `tolerations`                           | Tolerations for pod assignment                                                                                           | `[]`                                  |
 | `podLabels`                             | Extra labels for Adapter pods                                                                                            | `{}`                                  |
-| `replicaCount`                          | Number of Adapter replicas to deploy                                                                                     | `1`                                   |
 | `priorityClassName`                     | Adapter pod priority                                                                                                     | `""`                                  |
 | `schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                                  |
 | `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                                  |

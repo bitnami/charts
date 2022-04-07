@@ -237,10 +237,6 @@ tolerations: []
 ## @param podLabels  Extra labels for Adapter pods
 ##
 podLabels: {}
-## @param replicaCount Number of Adapter replicas to deploy
-## NOTE: ReadWriteMany PVC(s) are required if replicaCount > 1
-##
-replicaCount: 1
 ## Annotations for server pods.
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ## @skip podAnnotations
