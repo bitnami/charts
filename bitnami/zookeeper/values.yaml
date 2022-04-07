@@ -775,12 +775,12 @@ tls:
     ## @param tls.client.passwordsSecretName Existing secret containing Keystore and truststore passwords
     ##
     passwordsSecretName: ""
-    ## @param tls.client.keystorePasswordSecretKey The secret key from the passwordsSecretName if 'keystorePasswordSecretKey' key different from the default (keystore-password)
+    ## @param tls.client.passwordsSecretKeystoreKey The secret key from the passwordsSecretName if 'passwordsSecretKeystoreKey' key different from the default (keystore-password)
     ##
-    keystorePasswordSecretKey: "keystore-password"
-    ## @param tls.client.truststorePasswordSecretKey The secret key from the passwordsSecretName if 'truststorePasswordSecretKey' key different from the default (truststore-password)
+    passwordsSecretKeystoreKey: "keystore-password"
+    ## @param tls.client.passwordsSecretTruststoreKey The secret key from the passwordsSecretName if 'passwordsSecretTruststoreKey' key different from the default (truststore-password)
     ##
-    truststorePasswordSecretKey: "truststore-password"
+    passwordsSecretTruststoreKey: "truststore-password"
     ## @param tls.client.keystorePassword Password to access KeyStore if needed
     ##
     keystorePassword: ""
@@ -815,12 +815,12 @@ tls:
     ## @param tls.quorum.passwordsSecretName Existing secret containing Keystore and truststore passwords
     ##
     passwordsSecretName: ""
-    ## @param tls.quorum.keystorePasswordSecretKey The secret key from the passwordsSecretName if 'keystorePasswordSecretKey' key different from the default (keystore-password)
+    ## @param tls.quorum.passwordsSecretKeystoreKey The secret key from the passwordsSecretName if 'passwordsSecretKeystoreKey' key different from the default (keystore-password)
     ##
-    keystorePasswordSecretKey: "keystore-password"
-    ## @param tls.quorum.truststorePasswordSecretKey The secret key from the passwordsSecretName if 'truststorePasswordSecretKey' key different from the default (truststore-password)
+    passwordsSecretKeystoreKey: "keystore-password"
+    ## @param tls.quorum.passwordsSecretTruststoreKey The secret key from the passwordsSecretName if 'passwordsSecretTruststoreKey' key different from the default (truststore-password)
     ##
-    truststorePasswordSecretKey: "truststore-password"
+    passwordsSecretTruststoreKey: "truststore-password"
     ## @param tls.quorum.keystorePassword Password to access KeyStore if needed
     ##
     keystorePassword: ""
