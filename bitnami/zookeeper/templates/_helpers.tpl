@@ -307,8 +307,6 @@ Compile all warnings into a single message.
 {{- $messages := append $messages (include "zookeeper.validateValues.auth" .) -}}
 {{- $messages := append $messages (include "zookeeper.validateValues.client.tls" .) -}}
 {{- $messages := append $messages (include "zookeeper.validateValues.quorum.tls" .) -}}
-{{- $messages := append $messages (include "zookeeper.validateValues.client.tls.auth" .) -}}
-{{- $messages := append $messages (include "zookeeper.validateValues.quorum.tls.auth" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -349,31 +347,5 @@ zookeeper: tls.quorum.enabled
     In order to enable Quorum TLS, you also need to provide
     an existing secret containing the Keystore and Truststore or
     enable auto-generated certificates.
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of ZooKeeper - Quorum TLS Auth
-*/}}
-{{- define "zookeeper.validateValues.quorum.tls.auth" -}}
-{{- if and .Values.tls.quorum.enabled .Values.tls.quorum.auth }}
-{{- $tlsAuths := list "none" "want" "need" -}}
-{{- if not (has .Values.tls.quorum.auth $tlsAuths) }}
-zookeeper: tls.quorum.auth
-    tls.quorum.auth must be one of these values: "none", "want" or "need".
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of ZooKeeper - Client TLS Auth
-*/}}
-{{- define "zookeeper.validateValues.client.tls.auth" -}}
-{{- if and .Values.tls.client.enabled .Values.tls.client.auth }}
-{{- $tlsAuths := list "none" "want" "need" -}}
-{{- if not (has .Values.tls.client.auth $tlsAuths) }}
-zookeeper: tls.client.auth
-    tls.client.auth must be one of these values: "none", "want" or "need".
-{{- end -}}
 {{- end -}}
 {{- end -}}
