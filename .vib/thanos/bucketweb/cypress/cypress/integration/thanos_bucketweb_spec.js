@@ -10,10 +10,10 @@ it('allows to see runtime & build information', () => {
   cy.contains('.capitalize-title', 'goVersion')
     .siblings()
     .should('not.be.empty');
-})
+});
 
 it('allows to see the Blocks page', () => {
   cy.visit('/');
   cy.get('.nav-link').contains('Blocks').click();
   cy.contains('No blocks found.');
-})
+});
