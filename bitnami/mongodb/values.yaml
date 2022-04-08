@@ -188,7 +188,6 @@ tls:
   ## @param tls.image.tag Init container TLS certs setup image tag (immutable tags are recommended)
   ## @param tls.image.pullPolicy Init container TLS certs setup image pull policy
   ## @param tls.image.pullSecrets Init container TLS certs specify docker-registry secret names as an array
-  ## @param tls.image.debug Set to true if you would like to see extra information on logs
   ## @param tls.extraDnsNames Add extra dns names to the CA, can solve x509 auth issue for pod clients
   ##
   image:
@@ -204,9 +203,6 @@ tls:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    ## Set to true if you would like to see extra information on logs
-    ##
-    debug: false
 
   ## e.g:
   ## extraDnsNames
@@ -365,13 +361,19 @@ labels: {}
 ## Ignored when mongodb.architecture=standalone
 ##
 replicaCount: 2
-## @param updateStrategy.type Deployment strategy type
-## @param updateStrategy.rollingUpdate Deployment rolling update configuration parameters
+## @param updateStrategy.type Strategy to use to replace existing MongoDB(&reg;) pods. When architecture=standalone and useStatefulSet=false, 
+## this parameter will be applied on a deployment object. In other case it will be applied on a statefulset object
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## Example:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
 ##
 updateStrategy:
   type: RollingUpdate
-  rollingUpdate: {}
 ## @param podManagementPolicy Pod management policy for MongoDB(&reg;)
 ## Should be initialized one by one when building the replicaset for the first time
 ##
@@ -425,7 +427,7 @@ topologySpreadConstraints: []
 lifecycleHooks: {}
 ## @param terminationGracePeriodSeconds MongoDB(&reg;) Termination Grace Period
 ##
-terminationGracePeriodSeconds: 30
+terminationGracePeriodSeconds: ""
 ## @param podLabels MongoDB(&reg;) pod labels
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -688,7 +690,6 @@ externalAccess:
     ## @param externalAccess.autoDiscovery.image.tag Init container auto-discovery image tag (immutable tags are recommended)
     ## @param externalAccess.autoDiscovery.image.pullPolicy Init container auto-discovery image pull policy
     ## @param externalAccess.autoDiscovery.image.pullSecrets Init container auto-discovery image pull secrets
-    ## @param externalAccess.autoDiscovery.image.debug Set to true if you would like to see extra information on logs
     ##
     image:
       registry: docker.io
@@ -706,9 +707,6 @@ externalAccess:
       ##   - myRegistryKeySecretName
       ##
       pullSecrets: []
-      ## Set to true if you would like to see extra information on logs
-      ##
-      debug: false
     ## Init Container resource requests and limits
     ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1017,8 +1015,6 @@ volumePermissions:
   ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
-  ## @param volumePermissions.image.debug Set to true if you would like to see extra information on logs
-
   ##
   image:
     registry: docker.io
@@ -1036,9 +1032,6 @@ volumePermissions:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    ## Set to true if you would like to see extra information on logs
-    ##
-    debug: false
   ## Init Container resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1134,14 +1127,17 @@ arbiter:
   lifecycleHooks: {}
   ## @param arbiter.terminationGracePeriodSeconds Arbiter Termination Grace Period
   ##
-  terminationGracePeriodSeconds: 30
-  ## @param arbiter.updateStrategy.type Deployment strategy type
-  ## @param arbiter.updateStrategy.rollingUpdate Deployment rolling update configuration parameters
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  terminationGracePeriodSeconds: ""
+  ## @param arbiter.updateStrategy.type Strategy that will be employed to update Pods in the StatefulSet
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param arbiter.podManagementPolicy Pod management policy for MongoDB(&reg;)
   ## Should be initialized one by one when building the replicaset for the first time
   ##
@@ -1448,14 +1444,17 @@ hidden:
   replicaCount: 1
   ## @param hidden.terminationGracePeriodSeconds Hidden Termination Grace Period
   ##
-  terminationGracePeriodSeconds: 30
-  ## @param hidden.updateStrategy.type  Hidden node deployment strategy type
-  ## @param hidden.updateStrategy.rollingUpdate Hidden node deployment rolling update configuration parameters
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  terminationGracePeriodSeconds: ""
+ ## @param hidden.updateStrategy.type Strategy that will be employed to update Pods in the StatefulSet
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param hidden.podManagementPolicy Pod management policy for hidden node
   ##
   podManagementPolicy: OrderedReady
@@ -1760,7 +1759,6 @@ metrics:
   ## @param metrics.image.tag MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)
   ## @param metrics.image.pullPolicy MongoDB(&reg;) Prometheus exporter image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
-  ## @param metrics.image.debug Set to true if you would like to see extra information on logs
   ##
   image:
     registry: docker.io
@@ -1775,9 +1773,6 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    ## Set to true if you would like to see extra information on logs
-    ##
-    debug: false
 
   ## @param metrics.username String with username for the metrics exporter
   ## If undefined the root user will be used for the metrics exporter
@@ -1870,6 +1865,35 @@ metrics:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
+  ## Slow starting containers can be protected through startup probes
+  ## Startup probes are available in Kubernetes version 1.16 and above
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
+  ## @param metrics.startupProbe.enabled Enable startupProbe
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metrics.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 30
+  ## @param metrics.customLivenessProbe Override default liveness probe for MongoDB(&reg;) containers
+  ## Ignored when livenessProbe.enabled=true
+  ##
+  customLivenessProbe: {}
+  ## @param metrics.customReadinessProbe Override default readiness probe for MongoDB(&reg;) containers
+  ## Ignored when readinessProbe.enabled=true
+  ##
+  customReadinessProbe: {}
+  ## @param metrics.customStartupProbe Override default startup probe for MongoDB(&reg;) containers
+  ## Ignored when startupProbe.enabled=true
+  ##
+  customStartupProbe: {}
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md

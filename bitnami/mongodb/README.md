@@ -122,7 +122,6 @@ Refer to the [chart documentation for more information on each of these architec
 | `tls.image.tag`         | Init container TLS certs setup image tag (immutable tags are recommended)                                                       | `1.21.6-debian-10-r67` |
 | `tls.image.pullPolicy`  | Init container TLS certs setup image pull policy                                                                                | `IfNotPresent`         |
 | `tls.image.pullSecrets` | Init container TLS certs specify docker-registry secret names as an array                                                       | `[]`                   |
-| `tls.image.debug`       | Set to true if you would like to see extra information on logs                                                                  | `false`                |
 | `tls.extraDnsNames`     | Add extra dns names to the CA, can solve x509 auth issue for pod clients                                                        | `[]`                   |
 | `tls.mode`              | Allows to set the tls mode which should be used when tls is enabled (options: `allowTLS`, `preferTLS`, `requireTLS`)            | `requireTLS`           |
 | `hostAliases`           | Add deployment host aliases                                                                                                     | `[]`                   |
@@ -156,66 +155,65 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### MongoDB(&reg;) statefulset parameters
 
-| Name                                    | Description                                                                                              | Value           |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------- | --------------- |
-| `annotations`                           | Additional labels to be added to the MongoDB(&reg;) statefulset. Evaluated as a template                 | `{}`            |
-| `labels`                                | Annotations to be added to the MongoDB(&reg;) statefulset. Evaluated as a template                       | `{}`            |
-| `replicaCount`                          | Number of MongoDB(&reg;) nodes (only when `architecture=replicaset`)                                     | `2`             |
-| `updateStrategy.type`                   | Deployment strategy type                                                                                 | `RollingUpdate` |
-| `updateStrategy.rollingUpdate`          | Deployment rolling update configuration parameters                                                       | `{}`            |
-| `podManagementPolicy`                   | Pod management policy for MongoDB(&reg;)                                                                 | `OrderedReady`  |
-| `podAffinityPreset`                     | MongoDB(&reg;) Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `podAntiAffinityPreset`                 | MongoDB(&reg;) Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `nodeAffinityPreset.type`               | MongoDB(&reg;) Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `nodeAffinityPreset.key`                | MongoDB(&reg;) Node label key to match Ignored if `affinity` is set.                                     | `""`            |
-| `nodeAffinityPreset.values`             | MongoDB(&reg;) Node label values to match. Ignored if `affinity` is set.                                 | `[]`            |
-| `affinity`                              | MongoDB(&reg;) Affinity for pod assignment                                                               | `{}`            |
-| `nodeSelector`                          | MongoDB(&reg;) Node labels for pod assignment                                                            | `{}`            |
-| `tolerations`                           | MongoDB(&reg;) Tolerations for pod assignment                                                            | `[]`            |
-| `topologySpreadConstraints`             | MongoDB(&reg;) Spread Constraints for Pods                                                               | `[]`            |
-| `lifecycleHooks`                        | LifecycleHook for the MongoDB(&reg;) container(s) to automate configuration before or after startup      | `{}`            |
-| `terminationGracePeriodSeconds`         | MongoDB(&reg;) Termination Grace Period                                                                  | `30`            |
-| `podLabels`                             | MongoDB(&reg;) pod labels                                                                                | `{}`            |
-| `podAnnotations`                        | MongoDB(&reg;) Pod annotations                                                                           | `{}`            |
-| `priorityClassName`                     | Name of the existing priority class to be used by MongoDB(&reg;) pod(s)                                  | `""`            |
-| `runtimeClassName`                      | Name of the runtime class to be used by MongoDB(&reg;) pod(s)                                            | `""`            |
-| `podSecurityContext.enabled`            | Enable MongoDB(&reg;) pod(s)' Security Context                                                           | `true`          |
-| `podSecurityContext.fsGroup`            | Group ID for the volumes of the MongoDB(&reg;) pod(s)                                                    | `1001`          |
-| `podSecurityContext.sysctls`            | sysctl settings of the MongoDB(&reg;) pod(s)'                                                            | `[]`            |
-| `containerSecurityContext.enabled`      | Enable MongoDB(&reg;) container(s)' Security Context                                                     | `true`          |
-| `containerSecurityContext.runAsUser`    | User ID for the MongoDB(&reg;) container                                                                 | `1001`          |
-| `containerSecurityContext.runAsNonRoot` | Set MongoDB(&reg;) container's Security Context runAsNonRoot                                             | `true`          |
-| `resources.limits`                      | The resources limits for MongoDB(&reg;) containers                                                       | `{}`            |
-| `resources.requests`                    | The requested resources for MongoDB(&reg;) containers                                                    | `{}`            |
-| `containerPorts.mongodb`                | MongoDB(&reg;) container port                                                                            | `27017`         |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                     | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                  | `30`            |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                         | `10`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                        | `5`             |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                      | `6`             |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                      | `1`             |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                                    | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                 | `5`             |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                        | `10`            |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                       | `5`             |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                     | `6`             |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                     | `1`             |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                                      | `false`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                   | `5`             |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                          | `10`            |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                         | `5`             |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                       | `30`            |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                       | `1`             |
-| `customLivenessProbe`                   | Override default liveness probe for MongoDB(&reg;) containers                                            | `{}`            |
-| `customReadinessProbe`                  | Override default readiness probe for MongoDB(&reg;) containers                                           | `{}`            |
-| `customStartupProbe`                    | Override default startup probe for MongoDB(&reg;) containers                                             | `{}`            |
-| `initContainers`                        | Add additional init containers for the hidden node pod(s)                                                | `[]`            |
-| `sidecars`                              | Add additional sidecar containers for the MongoDB(&reg;) pod(s)                                          | `[]`            |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the MongoDB(&reg;) container(s)             | `[]`            |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes to the MongoDB(&reg;) statefulset                    | `[]`            |
-| `pdb.create`                            | Enable/disable a Pod Disruption Budget creation for MongoDB(&reg;) pod(s)                                | `false`         |
-| `pdb.minAvailable`                      | Minimum number/percentage of MongoDB(&reg;) pods that must still be available after the eviction         | `1`             |
-| `pdb.maxUnavailable`                    | Maximum number/percentage of MongoDB(&reg;) pods that may be made unavailable after the eviction         | `""`            |
+| Name                                    | Description                                                                                                      | Value           |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------- |
+| `annotations`                           | Additional labels to be added to the MongoDB(&reg;) statefulset. Evaluated as a template                         | `{}`            |
+| `labels`                                | Annotations to be added to the MongoDB(&reg;) statefulset. Evaluated as a template                               | `{}`            |
+| `replicaCount`                          | Number of MongoDB(&reg;) nodes (only when `architecture=replicaset`)                                             | `2`             |
+| `updateStrategy.type`                   | Strategy to use to replace existing MongoDB(&reg;) pods. When architecture=standalone and useStatefulSet=false,  | `RollingUpdate` |
+| `podManagementPolicy`                   | Pod management policy for MongoDB(&reg;)                                                                         | `OrderedReady`  |
+| `podAffinityPreset`                     | MongoDB(&reg;) Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`            |
+| `podAntiAffinityPreset`                 | MongoDB(&reg;) Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`          | `soft`          |
+| `nodeAffinityPreset.type`               | MongoDB(&reg;) Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`         | `""`            |
+| `nodeAffinityPreset.key`                | MongoDB(&reg;) Node label key to match Ignored if `affinity` is set.                                             | `""`            |
+| `nodeAffinityPreset.values`             | MongoDB(&reg;) Node label values to match. Ignored if `affinity` is set.                                         | `[]`            |
+| `affinity`                              | MongoDB(&reg;) Affinity for pod assignment                                                                       | `{}`            |
+| `nodeSelector`                          | MongoDB(&reg;) Node labels for pod assignment                                                                    | `{}`            |
+| `tolerations`                           | MongoDB(&reg;) Tolerations for pod assignment                                                                    | `[]`            |
+| `topologySpreadConstraints`             | MongoDB(&reg;) Spread Constraints for Pods                                                                       | `[]`            |
+| `lifecycleHooks`                        | LifecycleHook for the MongoDB(&reg;) container(s) to automate configuration before or after startup              | `{}`            |
+| `terminationGracePeriodSeconds`         | MongoDB(&reg;) Termination Grace Period                                                                          | `""`            |
+| `podLabels`                             | MongoDB(&reg;) pod labels                                                                                        | `{}`            |
+| `podAnnotations`                        | MongoDB(&reg;) Pod annotations                                                                                   | `{}`            |
+| `priorityClassName`                     | Name of the existing priority class to be used by MongoDB(&reg;) pod(s)                                          | `""`            |
+| `runtimeClassName`                      | Name of the runtime class to be used by MongoDB(&reg;) pod(s)                                                    | `""`            |
+| `podSecurityContext.enabled`            | Enable MongoDB(&reg;) pod(s)' Security Context                                                                   | `true`          |
+| `podSecurityContext.fsGroup`            | Group ID for the volumes of the MongoDB(&reg;) pod(s)                                                            | `1001`          |
+| `podSecurityContext.sysctls`            | sysctl settings of the MongoDB(&reg;) pod(s)'                                                                    | `[]`            |
+| `containerSecurityContext.enabled`      | Enable MongoDB(&reg;) container(s)' Security Context                                                             | `true`          |
+| `containerSecurityContext.runAsUser`    | User ID for the MongoDB(&reg;) container                                                                         | `1001`          |
+| `containerSecurityContext.runAsNonRoot` | Set MongoDB(&reg;) container's Security Context runAsNonRoot                                                     | `true`          |
+| `resources.limits`                      | The resources limits for MongoDB(&reg;) containers                                                               | `{}`            |
+| `resources.requests`                    | The requested resources for MongoDB(&reg;) containers                                                            | `{}`            |
+| `containerPorts.mongodb`                | MongoDB(&reg;) container port                                                                                    | `27017`         |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                             | `true`          |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                          | `30`            |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                 | `10`            |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                | `5`             |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                              | `6`             |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                              | `1`             |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                                            | `true`          |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                         | `5`             |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                | `10`            |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                               | `5`             |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                             | `6`             |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                             | `1`             |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                                              | `false`         |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                           | `5`             |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                  | `10`            |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                 | `5`             |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                               | `30`            |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                               | `1`             |
+| `customLivenessProbe`                   | Override default liveness probe for MongoDB(&reg;) containers                                                    | `{}`            |
+| `customReadinessProbe`                  | Override default readiness probe for MongoDB(&reg;) containers                                                   | `{}`            |
+| `customStartupProbe`                    | Override default startup probe for MongoDB(&reg;) containers                                                     | `{}`            |
+| `initContainers`                        | Add additional init containers for the hidden node pod(s)                                                        | `[]`            |
+| `sidecars`                              | Add additional sidecar containers for the MongoDB(&reg;) pod(s)                                                  | `[]`            |
+| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the MongoDB(&reg;) container(s)                     | `[]`            |
+| `extraVolumes`                          | Optionally specify extra list of additional volumes to the MongoDB(&reg;) statefulset                            | `[]`            |
+| `pdb.create`                            | Enable/disable a Pod Disruption Budget creation for MongoDB(&reg;) pod(s)                                        | `false`         |
+| `pdb.minAvailable`                      | Minimum number/percentage of MongoDB(&reg;) pods that must still be available after the eviction                 | `1`             |
+| `pdb.maxUnavailable`                    | Maximum number/percentage of MongoDB(&reg;) pods that may be made unavailable after the eviction                 | `""`            |
 
 
 ### Traffic exposure parameters
@@ -240,7 +238,6 @@ Refer to the [chart documentation for more information on each of these architec
 | `externalAccess.autoDiscovery.image.tag`                 | Init container auto-discovery image tag (immutable tags are recommended)                                                                        | `1.23.5-debian-10-r16` |
 | `externalAccess.autoDiscovery.image.pullPolicy`          | Init container auto-discovery image pull policy                                                                                                 | `IfNotPresent`         |
 | `externalAccess.autoDiscovery.image.pullSecrets`         | Init container auto-discovery image pull secrets                                                                                                | `[]`                   |
-| `externalAccess.autoDiscovery.image.debug`               | Set to true if you would like to see extra information on logs                                                                                  | `false`                |
 | `externalAccess.autoDiscovery.resources.limits`          | Init container auto-discovery resource limits                                                                                                   | `{}`                   |
 | `externalAccess.autoDiscovery.resources.requests`        | Init container auto-discovery resource requests                                                                                                 | `{}`                   |
 | `externalAccess.service.type`                            | Kubernetes Service type for external access. Allowed values: NodePort, LoadBalancer or ClusterIP                                                | `LoadBalancer`         |
@@ -311,7 +308,6 @@ Refer to the [chart documentation for more information on each of these architec
 | `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r386`     |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                     | `[]`                    |
-| `volumePermissions.image.debug`               | Set to true if you would like to see extra information on logs                                                       | `false`                 |
 | `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                                                    | `{}`                    |
 | `volumePermissions.resources.requests`        | Init container volume-permissions resource requests                                                                  | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions container                                                                          | `0`                     |
@@ -335,9 +331,8 @@ Refer to the [chart documentation for more information on each of these architec
 | `arbiter.labels`                                | Annotations to be added to the Arbiter statefulset                                                | `{}`            |
 | `arbiter.topologySpreadConstraints`             | MongoDB(&reg;) Spread Constraints for arbiter Pods                                                | `[]`            |
 | `arbiter.lifecycleHooks`                        | LifecycleHook for the Arbiter container to automate configuration before or after startup         | `{}`            |
-| `arbiter.terminationGracePeriodSeconds`         | Arbiter Termination Grace Period                                                                  | `30`            |
-| `arbiter.updateStrategy.type`                   | Deployment strategy type                                                                          | `RollingUpdate` |
-| `arbiter.updateStrategy.rollingUpdate`          | Deployment rolling update configuration parameters                                                | `{}`            |
+| `arbiter.terminationGracePeriodSeconds`         | Arbiter Termination Grace Period                                                                  | `""`            |
+| `arbiter.updateStrategy.type`                   | Strategy that will be employed to update Pods in the StatefulSet                                  | `RollingUpdate` |
 | `arbiter.podManagementPolicy`                   | Pod management policy for MongoDB(&reg;)                                                          | `OrderedReady`  |
 | `arbiter.schedulerName`                         | Name of the scheduler (other than default) to dispatch pods                                       | `""`            |
 | `arbiter.podAffinityPreset`                     | Arbiter Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
@@ -414,9 +409,8 @@ Refer to the [chart documentation for more information on each of these architec
 | `hidden.topologySpreadConstraints`                   | MongoDB(&reg;) Spread Constraints for hidden Pods                                                    | `[]`                |
 | `hidden.lifecycleHooks`                              | LifecycleHook for the Hidden container to automate configuration before or after startup             | `{}`                |
 | `hidden.replicaCount`                                | Number of hidden nodes (only when `architecture=replicaset`)                                         | `1`                 |
-| `hidden.terminationGracePeriodSeconds`               | Hidden Termination Grace Period                                                                      | `30`                |
-| `hidden.updateStrategy.type`                         | Hidden node deployment strategy type                                                                 | `RollingUpdate`     |
-| `hidden.updateStrategy.rollingUpdate`                | Hidden node deployment rolling update configuration parameters                                       | `{}`                |
+| `hidden.terminationGracePeriodSeconds`               | Hidden Termination Grace Period                                                                      | `""`                |
+| `hidden.updateStrategy.type`                         | Strategy that will be employed to update Pods in the StatefulSet                                     | `RollingUpdate`     |
 | `hidden.podManagementPolicy`                         | Pod management policy for hidden node                                                                | `OrderedReady`      |
 | `hidden.schedulerName`                               | Name of the scheduler (other than default) to dispatch pods                                          | `""`                |
 | `hidden.podAffinityPreset`                           | Hidden node Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                |
@@ -495,7 +489,6 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                         | `0.31.1-debian-10-r4`      |
 | `metrics.image.pullPolicy`                   | MongoDB(&reg;) Prometheus exporter image pull policy                                                                  | `IfNotPresent`             |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                       |
-| `metrics.image.debug`                        | Set to true if you would like to see extra information on logs                                                        | `false`                    |
 | `metrics.username`                           | String with username for the metrics exporter                                                                         | `""`                       |
 | `metrics.password`                           | String with password for the metrics exporter                                                                         | `""`                       |
 | `metrics.extraFlags`                         | String with extra flags to the metrics exporter                                                                       | `""`                       |
@@ -519,6 +512,15 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                    | `1`                        |
 | `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                  | `3`                        |
 | `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                  | `1`                        |
+| `metrics.startupProbe.enabled`               | Enable startupProbe                                                                                                   | `false`                    |
+| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                | `5`                        |
+| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                       | `10`                       |
+| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                      | `5`                        |
+| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                    | `30`                       |
+| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                    | `1`                        |
+| `metrics.customLivenessProbe`                | Override default liveness probe for MongoDB(&reg;) containers                                                         | `{}`                       |
+| `metrics.customReadinessProbe`               | Override default readiness probe for MongoDB(&reg;) containers                                                        | `{}`                       |
+| `metrics.customStartupProbe`                 | Override default startup probe for MongoDB(&reg;) containers                                                          | `{}`                       |
 | `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                         | `false`                    |
 | `metrics.serviceMonitor.namespace`           | Namespace which Prometheus is running in                                                                              | `""`                       |
 | `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped                                                                           | `30s`                      |

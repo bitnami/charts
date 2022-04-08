@@ -34,7 +34,7 @@ data:
     else
         mongo --disableImplicitSessions $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.isMaster().ismaster || db.isMaster().secondary' | grep -q 'true'
     fi
-  liveness-probe.sh: |
+  ping-mongodb.sh: |
     #!/bin/bash
     {{- if .Values.tls.enabled }}
     TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert'

@@ -39,8 +39,8 @@ spec:
     - name: {{ .Values.service.portName | quote }}
       port: {{ .Values.service.ports.mongodb }}
       targetPort: mongodb
-      {{- if and (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) (coalesce .Values.service.nodePorts.mongodb .Values.service.nodePort) }}
-      nodePort: {{ coalesce .Values.service.nodePorts.mongodb .Values.service.nodePort }}
+      {{- if and (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort")) .Values.service.nodePorts.mongodb }}
+      nodePort: {{ .Values.service.nodePorts.mongodb }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

@@ -81,7 +81,9 @@ spec:
       {{- if .Values.arbiter.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.arbiter.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      terminationGracePeriodSeconds: {{ .Values.arbiter.terminationGracePeriodSeconds | int }}
+      {{ if .Values.arbiter.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.arbiter.terminationGracePeriodSeconds }}
+      {{- end }}
       initContainers:
         {{- if .Values.arbiter.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.initContainers "context" $) | nindent 8 }}
@@ -91,8 +93,6 @@ spec:
           image: {{ include "mongodb.tls.image" . }}
           imagePullPolicy: {{ .Values.tls.image.pullPolicy | quote }}
           env:
-            - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.tls.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: MY_POD_NAMESPACE
               valueFrom:
                 fieldRef:
@@ -153,7 +153,7 @@ spec:
             - name: MONGODB_ADVERTISED_HOSTNAME
               value: "$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             - name: MONGODB_PORT_NUMBER
-              value: {{ .Values.arbiter.containerPorts.mongodb | int | quote }}
+              value: {{ .Values.arbiter.containerPorts.mongodb | quote }}
             {{- if .Values.auth.enabled }}
             - name: MONGODB_INITIAL_PRIMARY_ROOT_USER
               value: {{ .Values.auth.rootUser | quote }}
@@ -197,7 +197,7 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - containerPort: {{ .Values.arbiter.containerPorts.mongodb | int }}
+            - containerPort: {{ .Values.arbiter.containerPorts.mongodb }}
               name: mongodb
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.arbiter.livenessProbe.enabled }}

@@ -79,7 +79,9 @@ spec:
       {{- if .Values.hidden.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.hidden.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      terminationGracePeriodSeconds: {{ .Values.hidden.terminationGracePeriodSeconds | int }}
+      {{ if .Values.hidden.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.hidden.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if or .Values.hidden.initContainers (and .Values.volumePermissions.enabled .Values.hidden.persistence.enabled) (and .Values.externalAccess.hidden.enabled .Values.externalAccess.autoDiscovery.enabled) .Values.tls.enabled }}
       initContainers:
         {{- if .Values.hidden.initContainers }}
@@ -89,9 +91,6 @@ spec:
         - name: volume-permissions
           image: {{ include "mongodb.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          env:
-            - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.volumePermissions.image.debug .Values.diagnosticMode.enabled) | quote }}
           command:
             - /bin/bash
             - -ec
@@ -118,8 +117,6 @@ spec:
           image: {{ include "mongodb.tls.image" . }}
           imagePullPolicy: {{ .Values.tls.image.pullPolicy | quote }}
           env:
-            - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.tls.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: MY_POD_NAMESPACE
               valueFrom:
                 fieldRef:
@@ -145,8 +142,6 @@ spec:
           command:
             - /scripts/auto-discovery.sh
           env:
-            - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.externalAccess.autoDiscovery.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: MY_POD_NAME
               valueFrom:
                 fieldRef:
@@ -213,7 +208,7 @@ spec:
             - name: MONGODB_REPLICA_SET_MODE
               value: "hidden"
             - name: MONGODB_INITIAL_PRIMARY_HOST
-              {{ printf "%s-0.$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.%s" (include "mongodb.fullname" .) .Values.clusterDomain }}
+              value: {{ printf "%s-0.$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.%s" (include "mongodb.fullname" .) .Values.clusterDomain }}
             - name: MONGODB_REPLICA_SET_NAME
               value: {{ .Values.replicaSetName | quote }}
             {{- if and .Values.replicaSetHostnames (not .Values.externalAccess.hidden.enabled) }}
@@ -273,7 +268,7 @@ spec:
             - name: MONGODB_ENABLE_JOURNAL
               value: {{ ternary "yes" "no" .Values.enableJournal | quote }}
             - name: MONGODB_PORT_NUMBER
-              value: {{ .Values.hidden.containerPorts.mongodb | int | quote }}
+              value: {{ .Values.hidden.containerPorts.mongodb | quote }}
             - name: MONGODB_ENABLE_IPV6
               value: {{ ternary "yes" "no" .Values.enableIPv6 | quote }}
             - name: MONGODB_ENABLE_DIRECTORY_PER_DB
@@ -305,46 +300,22 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - containerPort: {{ .Values.hidden.containerPorts.mongodb | int }}
+            - containerPort: {{ .Values.hidden.containerPorts.mongodb }}
               name: mongodb
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.hidden.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hidden.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - mongo
-              {{- if .Values.tls.enabled }}
-                - --tls
-                - --tlsCertificateKeyFile=/certs/mongodb.pem
-                - --tlsCAFile=/certs/mongodb-ca-cert
-              {{- end }}
-                - --eval
-                - "db.adminCommand('ping')"
-            initialDelaySeconds: {{ .Values.hidden.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.hidden.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.hidden.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.hidden.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.hidden.livenessProbe.failureThreshold }}
+                - /bitnami/scripts/ping-mongodb.sh
           {{- else if .Values.hidden.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.hidden.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hidden.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - mongo
-              {{- if .Values.tls.enabled }}
-                - --tls
-                - --tlsCertificateKeyFile=/certs/mongodb.pem
-                - --tlsCAFile=/certs/mongodb-ca-cert
-              {{- end }}
-                - --eval
-                - "db.adminCommand('ping')"
-            initialDelaySeconds: {{ .Values.hidden.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.hidden.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.hidden.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.hidden.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.hidden.readinessProbe.failureThreshold }}
+                - /bitnami/scripts/ping-mongodb.sh
           {{- else if .Values.hidden.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -364,6 +335,8 @@ spec:
             - name: datadir
               mountPath: {{ .Values.hidden.persistence.mountPath }}
               subPath: {{ .Values.hidden.persistence.subPath }}
+            - name: common-scripts
+              mountPath: /bitnami/scripts
             {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d
@@ -409,8 +382,6 @@ spec:
               /bin/mongodb_exporter --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
           {{- end }}
           env:
-            - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.metrics.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.auth.enabled }}
             {{- if not .Values.metrics.username }}
             - name: MONGODB_ROOT_USER
@@ -440,26 +411,27 @@ spec:
               containerPort: 9216
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: metrics
-            initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
-            successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
+          {{- else if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.metrics.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: metrics
-            initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
-            successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
+          {{- else if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.metrics.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- else if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.metrics.resources }}
