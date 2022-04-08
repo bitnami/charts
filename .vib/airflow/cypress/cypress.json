@@ -1,7 +1,7 @@
 {
     "baseUrl": "http://localhost",
-    "pageLoadTimeout": 120000,
-    "defaultCommandTimeout":50000,
+    "pageLoadTimeout": 240000,
+    "defaultCommandTimeout":80000,
     
     "env": {
       "username": "user",
