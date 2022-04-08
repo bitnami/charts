@@ -651,7 +651,7 @@ Affected values:
 - `service.port` is renamed to `service.ports.mongodb`
 - `service.nodePort` is renamed to `service.nodePorts.mongodb`
 - `externalAccess.service.port` is renamed to `externalAccess.hidden.service.ports.mongodb`
-- `rbac.rules` is renamed to `rbac.role.rules`
+- `rbac.role.rules` is renamed to `rbac.rules`
 - `externalAccess.hidden.service.port` is renamed ot `externalAccess.hidden.service.ports.mongodb`
 - `hidden.strategyType` is replaced by `hidden.updateStrategy`
 - `metrics.serviceMonitor.relabellings` is renamed to `metrics.serviceMonitor.relabelings`(typo fixed)
