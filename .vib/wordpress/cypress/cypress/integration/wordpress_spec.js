@@ -94,12 +94,6 @@ it('checks the SMTP configuration', () => {
   cy.get('#wp-mail-smtp-setting-from_name').should('have.value', `${Cypress.env('wordpressFirstName')} ${Cypress.env('wordpressLastName')}`);
 })
 
-it('checks the value of auto update status', () => {
-  cy.login();
-  cy.visit("/wp-admin/update-core.php");
-  cy.get('.auto-update-status').should('contain.text', 'This site is automatically kept up to date with maintenance and security releases of WordPress only.');
-})
-
 it('allows the upload of a file',() => {
   cy.login();
   cy.visit("wp-admin/upload.php");
