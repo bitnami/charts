@@ -90,7 +90,6 @@ it('checks if admin can create a post', () => {
   cy.login();
   cy.visit('/wp-admin/post-new.php');
   cy.get('.components-modal__header > .components-button').click();
-  cy.get('#editor').should('be.visible');
   cy.contains('button[type="button"]', 'Publish').click();
   cy.get('h1[aria-label="Add title"]')
     .clear()
