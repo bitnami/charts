@@ -1217,6 +1217,10 @@ core:
     ## Enable debug mode
     ##
     debug: false
+
+  ## @param core.sessionLifetime Explicitly set a session timeout (in seconds) overriding the backend default.
+  ##
+  sessionLifetime: ""
   ## @param core.uaaSecret If using external UAA auth which has a self signed cert, you can provide a pre-created secret containing it under the key `ca.crt`.
   ##
   uaaSecret: ""
