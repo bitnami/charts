@@ -24,4 +24,4 @@ name: pytorch
 sources:
   - https://github.com/bitnami/bitnami-docker-pytorch
   - https://pytorch.org/
-version: 2.3.38
+version: 3.0.0
