@@ -13,7 +13,7 @@ jobs:
   vib-verify-standalone: 
     runs-on: ubuntu-latest
     environment: vmware-image-builder
-    name: Redis Standalone on ${{ matrix.target-platform }}
+    name: Redis Standalone on Tanzu Kubernetes Grid
     steps:
       - uses: actions/checkout@v2
         with:
@@ -28,7 +28,7 @@ jobs:
   vib-verify-sentinel:
     runs-on: ubuntu-latest
     environment: vmware-image-builder
-    name: Redis Sentinel on ${{ matrix.target-platform }}
+    name: Redis Sentinel on Tanzu Kubernetes Grid
     steps:
       - uses: actions/checkout@v2
         with:
@@ -43,7 +43,7 @@ jobs:
   vib-verify-replica: 
     runs-on: ubuntu-latest
     environment: vmware-image-builder
-    name: Redis Replica on ${{ matrix.target-platform }}
+    name: Redis Replica on Tanzu Kubernetes Grid
     steps:
       - uses: actions/checkout@v2
         with:
