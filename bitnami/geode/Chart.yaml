@@ -22,4 +22,4 @@ name: geode
 sources:
   - https://github.com/bitnami/bitnami-docker-geode
   - https://github.com/apache/geode
-version: 0.4.15
+version: 0.4.16

@@ -5,6 +5,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ include "common.names.fullname" . }}-leader-election
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -49,6 +50,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ include "common.names.fullname" . }}-leader-election
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -246,7 +248,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 {{- else }}
 kind: RoleBinding
-{{- end }} 
+{{- end }}
 metadata:
   name: {{ include "common.names.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
@@ -262,7 +264,7 @@ roleRef:
   kind: ClusterRole
   {{- else }}
   kind: Role
-  {{- end }} 
+  {{- end }}
   apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount
