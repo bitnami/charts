@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Common Grafana Tempo Parameters
 
 | Name                                   | Description                                                    | Value                         |
-| -------------------------------------- | -------------------------------------------------------------- | ----------------------------- |
+|----------------------------------------|----------------------------------------------------------------| ----------------------------- |
 | `tempo.image.registry`                 | Grafana Tempo image registry                                   | `docker.io`                   |
 | `tempo.image.repository`               | Grafana Tempo image repository                                 | `bitnami/grafana-tempo`       |
 | `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)       | `1.2.1-debian-10-r47`         |
@@ -98,7 +98,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tempo.traces.otlp.http`               | Enable Tempo to ingest Open Telemetry HTTP traces              | `false`                       |
 | `tempo.traces.otlp.grpc`               | Enable Tempo to ingest Open Telemetry GRPC traces              | `false`                       |
 | `tempo.traces.opencensus`              | Enable Tempo to ingest Open Census traces                      | `false`                       |
-| `tempo.traces.zipkin`                  | Enable Tempo to ingest Zipkin traces                           | `false`                       |
+| `tempo.search.enabled`                 | Enable Tempo search                                            | `false`                       |
+| `tempo.configuration`                  | Tempo components configuration                                 | `""`                          |
 | `tempo.configuration`                  | Tempo components configuration                                 | `""`                          |
 | `tempo.existingConfigmap`              | Name of a ConfigMap with the Tempo configuration               | `""`                          |
 | `tempo.overridesConfiguration`         | Tempo components overrides configuration settings              | `""`                          |
