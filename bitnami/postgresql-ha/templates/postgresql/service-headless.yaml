@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "postgresql-ha.postgresql" . }}-headless
+  namespace: {{ template "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -14,7 +15,7 @@ spec:
   clusterIP: None
   ports:
     - name: {{ .Values.service.portName }} 
-      port: {{ .Values.postgresql.containerPort }}
+      port: {{ .Values.postgresql.containerPorts.postgresql }}
       targetPort: postgresql
       protocol: TCP
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

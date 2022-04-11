@@ -51,36 +51,36 @@ Fully qualified app name for LDAP
 {{/*
 Return the proper PostgreSQL image name
 */}}
-{{- define "postgresql-ha.postgresqlImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.postgresqlImage "global" .Values.global ) -}}
+{{- define "postgresql-ha.postgresql.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.postgresql.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Pgpool image name
 */}}
-{{- define "postgresql-ha.pgpoolImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.pgpoolImage "global" .Values.global ) -}}
+{{- define "postgresql-ha.pgpool.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.pgpool.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper PostgreSQL Prometheus exporter image name
 */}}
-{{- define "postgresql-ha.volumePermissionsImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissionsImage "global" .Values.global ) -}}
+{{- define "postgresql-ha.volumePermissions.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper PostgreSQL Prometheus exporter image name
 */}}
-{{- define "postgresql-ha.metricsImage" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.metricsImage "global" .Values.global ) -}}
+{{- define "postgresql-ha.metrics.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.metrics.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
-{{- define "postgresql-ha.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.postgresqlImage .Values.pgpoolImage .Values.volumePermissionsImage .Values.metricsImage) "global" .Values.global) -}}
+{{- define "postgresql-ha.image.pullSecrets" -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.postgresql.image .Values.pgpool.image .Values.volumePermissions.image .Values.metrics.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -550,10 +550,10 @@ Also, we can't use a single if because lazy evaluation is not an option
 
 {{/* Check if there are rolling tags in the images */}}
 {{- define "postgresql-ha.checkRollingTags" -}}
-{{- include "common.warnings.rollingTag" .Values.postgresqlImage -}}
-{{- include "common.warnings.rollingTag" .Values.pgpoolImage -}}
-{{- include "common.warnings.rollingTag" .Values.metricsImage -}}
-{{- include "common.warnings.rollingTag" .Values.volumePermissionsImage -}}
+{{- include "common.warnings.rollingTag" .Values.postgresql.image -}}
+{{- include "common.warnings.rollingTag" .Values.pgpool.image -}}
+{{- include "common.warnings.rollingTag" .Values.metrics.image -}}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image -}}
 {{- end -}}
 
 {{/*
