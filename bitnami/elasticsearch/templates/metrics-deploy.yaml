@@ -41,7 +41,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            {{- $protocol := (ternary "https" "http" .Values.security.tls.restEncryption) }}
+            {{- $protocol := (ternary "https" "http" (and .Values.security.enabled .Values.security.tls.restEncryption)) }}
             {{- if gt (int .Values.coordinating.replicas) 0 }}
             # Prefer coordinating only nodes to do the initial metrics query
             - --es.uri={{$protocol}}://{{ template "elasticsearch.coordinating.fullname" . }}:{{ .Values.coordinating.service.port }}
