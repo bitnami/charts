@@ -7,7 +7,7 @@ MinIO(R) is an object storage server, compatible with Amazon S3 cloud storage se
 [Overview of Bitnami Object Storage based on MinIO&reg;](https://min.io/)
 
 Disclaimer: All software products, projects and company names are trademark(TM) or registered(R) trademarks of their respective holders, and use of them does not imply any affiliation or endorsement. This software is licensed to you subject to one or more open source licenses and VMware provides the software on an AS-IS basis. MinIO(R) is a registered trademark of the MinIO Inc. in the US and other countries. Bitnami is not affiliated, associated, authorized, endorsed by, or in any way officially connected with MinIO Inc. MinIO(R) is licensed under GNU AGPL v3.0.
-                           
+
 ## TL;DR
 
 ```console
@@ -61,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                  | Value           |
@@ -73,7 +72,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 | `clusterDomain`     | Default Kubernetes cluster domain                                                            | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                            | `[]`            |
-
 
 ### MinIO&reg; parameters
 
@@ -105,7 +103,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`       | Secret with extra environment variables                                                                                                                                                                   | `""`                    |
 | `command`                  | Default container command (useful when using custom images). Use array form                                                                                                                               | `[]`                    |
 | `args`                     | Default container args (useful when using custom images). Use array form                                                                                                                                  | `[]`                    |
-
 
 ### MinIO&reg; deployment/statefulset parameters
 
@@ -180,7 +177,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                        | Add additional init containers to the MinIO&reg; pods                                                                                                                                         | `[]`            |
 | `sidecars`                              | Add additional sidecar containers to the MinIO&reg; pods                                                                                                                                      | `[]`            |
 
-
 ### Traffic exposure parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -200,7 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `minio.local`            |
-| `ingress.path`                     | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers.                      | `/`                      |
+| `ingress.path`                     | The Path to MinIO&reg;. You may need to set this to '/\*' in order to use this with ALB ingress controllers.                     | `/`                      |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.servicePort`              | Service port to be used                                                                                                          | `minio-console`          |
 | `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
@@ -214,7 +210,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `apiIngress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `apiIngress.ingressClassName`      | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `apiIngress.hostname`              | Default host for the ingress resource                                                                                            | `minio.local`            |
-| `apiIngress.path`                  | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers.                      | `/`                      |
+| `apiIngress.path`                  | The Path to MinIO&reg;. You may need to set this to '/\*' in order to use this with ALB ingress controllers.                     | `/`                      |
 | `apiIngress.pathType`              | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `apiIngress.servicePort`           | Service port to be used                                                                                                          | `minio-api`              |
 | `apiIngress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
@@ -228,7 +224,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                                                                       | `true`                   |
 | `networkPolicy.extraFromClauses`   | Allows to add extra 'from' clauses to the NetworkPolicy                                                                          | `{}`                     |
 
-
 ### Persistence parameters
 
 | Name                        | Description                                                          | Value               |
@@ -240,7 +235,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`          | PVC Storage Request for MinIO&reg; data volume                       | `8Gi`               |
 | `persistence.annotations`   | Annotations for the PVC                                              | `{}`                |
 | `persistence.existingClaim` | Name of an existing PVC to use (only in `standalone` mode)           | `""`                |
-
 
 ### Volume Permissions parameters
 
@@ -256,7 +250,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                       | `0`                     |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                 | Value  |
@@ -266,7 +259,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of the service account token   | `true` |
 | `serviceAccount.annotations`                  | Custom annotations for MinIO&reg; ServiceAccount            | `{}`   |
 
-
 ### Other parameters
 
 | Name                 | Description                                                                       | Value   |
@@ -274,7 +266,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.create`         | Enable/disable a Pod Disruption Budget creation                                   | `false` |
 | `pdb.minAvailable`   | Minimum number/percentage of pods that must still be available after the eviction | `1`     |
 | `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable after the eviction | `""`    |
-
 
 ### Metrics parameters
 
@@ -292,7 +283,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.relabelings`       | Metrics relabelings to add to the scrape endpoint, applied before scraping                  | `[]`                        |
 | `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                    | `false`                     |
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                         | `{}`                        |
-
 
 ### Gateway parameters
 
@@ -326,7 +316,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.auth.s3.accessKey`                              | Access key to use to access AWS S3                                                                 | `""`                       |
 | `gateway.auth.s3.secretKey`                              | Secret key to use to access AWS S3                                                                 | `""`                       |
 | `gateway.auth.s3.serviceEndpoint`                        | AWS S3 endpoint                                                                                    | `https://s3.amazonaws.com` |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -514,6 +503,7 @@ This version updates MinIO&reg; authentication parameters so they're aligned wit
 ### To 8.0.0
 
 This version updates MinIO&reg; after some major changes, affecting its Web UI. MinIO&reg; has replaced its MinIO&reg; Browser with the MinIO&reg; Console, and Web UI has been moved to a separated port. As a result the following variables have been affected:
+
 - `service.port` has been slit into `service.ports.api` (default: 9000) and `service.ports.console` (default: 9001).
 - `containerPort` has been slit into `containerPorts.api` (default: 9000) and `containerPort.console` (default: 9001).
 - `service.nodePort`has been slit into `service.nodePorts.api` and `service.nodePorts.console`.
@@ -541,7 +531,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 **What changes were introduced in this major version?**
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
 **Considerations when upgrading to this version**
 

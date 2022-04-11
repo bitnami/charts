@@ -29,4 +29,4 @@ jobs:
         with:
           pipeline: phpmyadmin/vib-complete-verify.json
         env:
-          TARGET_PLATFORM: ${{ matrix.target-platform-id }}
+          VIB_ENV_TARGET_PLATFORM: ${{ matrix.target-platform-id }}
