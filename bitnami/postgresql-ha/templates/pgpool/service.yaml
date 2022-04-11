@@ -39,7 +39,7 @@ spec:
   clusterIP: {{ .Values.service.clusterIP }}
   {{- end }}
   ports:
-    - name: {{ .Values.service.portName }}
+    - name: {{ .Values.service.portName | quote }}
       port: {{ .Values.service.ports.postgresql }}
       targetPort: postgresql
       protocol: TCP
