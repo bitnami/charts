@@ -139,6 +139,14 @@ spec:
               mountPath: /bitnami/scripts
           command:
             - /bitnami/scripts/generate-certs.sh
+          args:
+            - -s {{ include "mongodb.service.nameOverride" . }}
+            {{- if .Values.externalAccess.service.loadBalancerIPs }}
+            - -i {{ join "," .Values.externalAccess.service.loadBalancerIPs }}
+            {{- end }}
+            {{- if .Values.tls.extraDnsNames }}
+            - -n {{ join "," .Values.tls.extraDnsNames }}
+            {{- end }}
         {{- end }}
         {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.service.type "LoadBalancer") }}
         - name: auto-discovery

@@ -133,6 +133,14 @@ spec:
             mountPath: /bitnami/scripts
           command:
             - /bitnami/scripts/generate-certs.sh
+          args:
+            - -s {{ printf "%s-hidden-headless" (include "mongodb.fullname" .) }}
+            {{- if .Values.externalAccess.hidden.service.loadBalancerIPs }}
+            - -i {{ join "," .Values.externalAccess.hidden.service.loadBalancerIPs }}
+            {{- end }}
+            {{- if .Values.tls.extraDnsNames }}
+            - -n {{ join "," .Values.tls.extraDnsNames }}
+            {{- end }}
         {{- end }}
         {{- if and .Values.externalAccess.hidden.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.hidden.service.type "LoadBalancer") }}
         - name: auto-discovery
