@@ -43,7 +43,11 @@ jobs:
   vib-verify-replica: 
     runs-on: ubuntu-latest
     environment: vmware-image-builder
+<<<<<<< HEAD
     name: Redis Replica on Tanzu Kubernetes Grid
+=======
+    name: Redis Replica on ${{ matrix.target-platform }}
+>>>>>>> 5cc6d6ba5 (Fixing the inconsistencies)
     steps:
       - uses: actions/checkout@v2
         with:
