@@ -79,7 +79,7 @@ it('checks if smtp is configured', () => {
 it('checks if plugin page is showing plugins', () => {
   cy.login();
   cy.visit('/plugins?filterByType=datasource');
-  cy.get('[data-testid*="plugin-list"]').should('exist');
+  cy.get('[data-testid*="plugin-list"]');
 });
 
 it('checks if it is possible to create and delete a data source', () => {
