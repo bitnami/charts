@@ -403,6 +403,13 @@ contour:
     create: true
     default: true
 
+  ## @param contour.debug Enable Contour debug log level
+  ##
+  debug: false
+
+  ## @param contour.kubernetesDebug Contour kubernetes debug log level, Default 0, minimum 0, maximum 9.
+  kubernetesDebug: 0
+
 ## @section Envoy parameters
 ##
 
@@ -1075,7 +1082,7 @@ ingress:
 
   ## Either `hosts` or `rulesOverride` must be provided if Ingress is enabled.
   ## `hosts` sets up the Ingress with default rules per provided hostname.
-  ## @param ingress.hostname Hostename for the Ingress object
+  ## @param ingress.hostname Hostname for the Ingress object
   ##
   hostname: contour.local
 
