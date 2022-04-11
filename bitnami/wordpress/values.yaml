@@ -146,9 +146,6 @@ existingWordPressConfigurationSecret: ""
 ## NOTE: useful if you deploy Memcached for caching database queries or you use an external cache server
 ##
 wordpressConfigureCache: false
-## @param wordpressAutoUpdateLevel Level of auto-updates to allow. Allowed values: `major`, `minor` or `none`.
-##
-wordpressAutoUpdateLevel: none
 ## @param wordpressPlugins Array of plugins to install and activate. Can be specified as `all` or `none`.
 ## NOTE: If set to all, only plugins that are already installed will be activated, and if set to none, no plugins will be activated
 ##

@@ -109,7 +109,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `wordpressConfiguration`               | The content for your custom wp-config.php file (advanced feature)                     | `""`               |
 | `existingWordPressConfigurationSecret` | The name of an existing secret with your custom wp-config.php file (advanced feature) | `""`               |
 | `wordpressConfigureCache`              | Enable W3 Total Cache plugin and configure cache settings                             | `false`            |
-| `wordpressAutoUpdateLevel`             | Level of auto-updates to allow. Allowed values: `major`, `minor` or `none`.           | `none`             |
 | `wordpressPlugins`                     | Array of plugins to install and activate. Can be specified as `all` or `none`.        | `none`             |
 | `apacheConfiguration`                  | The content for your custom httpd.conf file (advanced feature)                        | `""`               |
 | `existingApacheConfigurationConfigMap` | The name of an existing secret with your custom httpd.conf file (advanced feature)    | `""`               |
@@ -498,6 +497,10 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Notable changes
+
+### 13.2.0
+
+- Removed support for limiting auto-updates to WordPress core via the `wordpressAutoUpdateLevel` option. To update WordPress core, we recommend to swap the container image version for your deployment instead of using the built-in update functionality.
 
 ### 11.0.0
 
