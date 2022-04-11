@@ -4,16 +4,16 @@ on: # rebuild any PRs and main branch changes
     branches:
       - master
     paths:
-      - 'bitnami/redis/*'
+      - 'bitnami/thanos/*'
 env:
   CSP_API_URL: https://console.cloud.vmware.com
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
   VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
 jobs:
-  vib-verify-standalone: 
+  vib-bucketweb:
     runs-on: ubuntu-latest
     environment: vmware-image-builder
-    name: Redis Standalone on ${{ matrix.target-platform }}
+    name: BucketWeb on Tanzu Kubernetes Grid
     steps:
       - uses: actions/checkout@v2
         with:
@@ -21,14 +21,14 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
       - uses: vmware-labs/vmware-image-builder-action@main
         with:
-          pipeline: redis/standalone/vib-complete-verify.json
+          pipeline: thanos/bucketweb/vib-complete-verify.json
         env:
           VIB_ENV_TARGET_PLATFORM: 7ddab896-2e4e-4d58-a501-f79897eba3a0
 
-  vib-verify-sentinel:
+  vib-queryfrontend: 
     runs-on: ubuntu-latest
     environment: vmware-image-builder
-    name: Redis Sentinel on ${{ matrix.target-platform }}
+    name: QueryFrontend on Tanzu Kubernetes Grid
     steps:
       - uses: actions/checkout@v2
         with:
@@ -36,21 +36,6 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
       - uses: vmware-labs/vmware-image-builder-action@main
         with:
-          pipeline: redis/sentinel/vib-complete-verify.json
+          pipeline: thanos/queryfrontend/vib-complete-verify.json
         env:
-          VIB_ENV_TARGET_PLATFORM: 7ddab896-2e4e-4d58-a501-f79897eba3a0
-
-  vib-verify-replica: 
-    runs-on: ubuntu-latest
-    environment: vmware-image-builder
-    name: Redis Replica on ${{ matrix.target-platform }}
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - uses: vmware-labs/vmware-image-builder-action@main
-        with:
-          pipeline: redis/replicas/vib-complete-verify.json
-        env:
-          VIB_ENV_TARGET_PLATFORM: 7ddab896-2e4e-4d58-a501-f79897eba3a0
+          VIB_ENV_TARGET_PLATFORM: 7ddab896-2e4e-4d58-a501-f79897eba3a0        
