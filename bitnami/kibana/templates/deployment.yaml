@@ -128,8 +128,10 @@ spec:
               value: {{ .Values.forceInitScripts | quote }}
             - name: KIBANA_SERVER_ENABLE_TLS
               value: {{ ternary "true" "false" .Values.tls.enabled | quote }}
+            {{- if or .Values.tls.usePemCerts (include "kibana.createTlsSecret" . ) }}
             - name: KIBANA_SERVER_TLS_USE_PEM
-              value: {{ ternary "true" "false" (or .Values.tls.usePemCerts (include "kibana.createTlsSecret" . )) | quote }}
+              value: "true"
+            {{- end }}
             {{- if and .Values.tls.enabled .Values.tls.usePemCerts (or .Values.tls.keyPassword .Values.tls.passwordsSecret) }}
             - name: KIBANA_SERVER_KEY_PASSWORD
               valueFrom:
