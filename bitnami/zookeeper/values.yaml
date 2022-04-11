@@ -760,12 +760,12 @@ tls:
     ## @param tls.client.existingSecret Name of the existing secret containing the TLS certificates for ZooKeeper client communications
     ##
     existingSecret: ""
-    ## @param tls.client.existingSecretKeystoreKey The secret key from the existingSecret if 'existingSecretKeystoreKey' key different from the default (zookeeper.keystore.jks)
+    ## @param tls.client.existingSecretKeystoreKey The secret key from the tls.client.existingSecret.
     ##
-    existingSecretKeystoreKey: "zookeeper.keystore.jks"
-    ## @param tls.client.existingSecretTruststoreKey The secret key from the existingSecret if 'existingSecretTruststoreKey' key different from the default (zookeeper.truststore.jks)
+    existingSecretKeystoreKey: ""
+    ## @param tls.client.existingSecretTruststoreKey The secret key from the tls.client.existingSecret.
     ##
-    existingSecretTruststoreKey: "zookeeper.truststore.jks"
+    existingSecretTruststoreKey: ""
     ## @param tls.client.keystorePath Location of the KeyStore file used for Client connections
     ##
     keystorePath: /opt/bitnami/zookeeper/config/certs/client/zookeeper.keystore.jks
@@ -775,12 +775,12 @@ tls:
     ## @param tls.client.passwordsSecretName Existing secret containing Keystore and truststore passwords
     ##
     passwordsSecretName: ""
-    ## @param tls.client.passwordsSecretKeystoreKey The secret key from the passwordsSecretName if 'passwordsSecretKeystoreKey' key different from the default (keystore-password)
+    ## @param tls.client.passwordsSecretKeystoreKey The secret key from the tls.client.passwordsSecretName.
     ##
-    passwordsSecretKeystoreKey: "keystore-password"
-    ## @param tls.client.passwordsSecretTruststoreKey The secret key from the passwordsSecretName if 'passwordsSecretTruststoreKey' key different from the default (truststore-password)
+    passwordsSecretKeystoreKey: ""
+    ## @param tls.client.passwordsSecretTruststoreKey The secret key from the tls.client.passwordsSecretName.
     ##
-    passwordsSecretTruststoreKey: "truststore-password"
+    passwordsSecretTruststoreKey: ""
     ## @param tls.client.keystorePassword Password to access KeyStore if needed
     ##
     keystorePassword: ""
@@ -800,12 +800,12 @@ tls:
     ## @param tls.quorum.existingSecret Name of the existing secret containing the TLS certificates for ZooKeeper quorum protocol
     ##
     existingSecret: ""
-    ## @param tls.quorum.existingSecretKeystoreKey The secret key from the existingSecret if 'existingSecretKeystoreKey' key different from the default (zookeeper.keystore.jks)
+    ## @param tls.quorum.existingSecretKeystoreKey The secret key from the tls.quorum.existingSecret.
     ##
-    existingSecretKeystoreKey: "zookeeper.keystore.jks"
-    ## @param tls.quorum.existingSecretTruststoreKey The secret key from the existingSecret if 'existingSecretTruststoreKey' key different from the default (zookeeper.truststore.jks)
+    existingSecretKeystoreKey: ""
+    ## @param tls.quorum.existingSecretTruststoreKey The secret key from the tls.quorum.existingSecret.
     ##
-    existingSecretTruststoreKey: "zookeeper.truststore.jks"
+    existingSecretTruststoreKey: ""
     ## @param tls.quorum.keystorePath Location of the KeyStore file used for Quorum protocol
     ##
     keystorePath: /opt/bitnami/zookeeper/config/certs/quorum/zookeeper.keystore.jks
@@ -815,12 +815,12 @@ tls:
     ## @param tls.quorum.passwordsSecretName Existing secret containing Keystore and truststore passwords
     ##
     passwordsSecretName: ""
-    ## @param tls.quorum.passwordsSecretKeystoreKey The secret key from the passwordsSecretName if 'passwordsSecretKeystoreKey' key different from the default (keystore-password)
+    ## @param tls.quorum.passwordsSecretKeystoreKey The secret key from the tls.quorum.passwordsSecretName.
     ##
-    passwordsSecretKeystoreKey: "keystore-password"
-    ## @param tls.quorum.passwordsSecretTruststoreKey The secret key from the passwordsSecretName if 'passwordsSecretTruststoreKey' key different from the default (truststore-password)
+    passwordsSecretKeystoreKey: ""
+    ## @param tls.quorum.passwordsSecretTruststoreKey The secret key from the tls.quorum.passwordsSecretName.
     ##
-    passwordsSecretTruststoreKey: "truststore-password"
+    passwordsSecretTruststoreKey: ""
     ## @param tls.quorum.keystorePassword Password to access KeyStore if needed
     ##
     keystorePassword: ""
