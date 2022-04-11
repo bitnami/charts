@@ -93,7 +93,7 @@ it('checks if it is possible to create and delete a data source', () => {
   cy.visit('/datasources');
   cy.contains('a', DATASOURCE).click({ force: true });
   cy.contains('button', 'Delete').click();
-  cy.contains('div', 'Are you sure you want to delete'); //Check how this works?
+  cy.contains('div', 'Are you sure you want to delete');
   cy.get('button[aria-label*="Confirm Modal Danger Button"]').click();
   verifySuccesOfAction();
 });
