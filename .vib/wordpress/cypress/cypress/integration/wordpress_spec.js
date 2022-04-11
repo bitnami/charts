@@ -4,7 +4,7 @@ import { random } from './utils';
 
 it('contains the sample blogpost and a comment', () => {
   cy.visit('/');
-  cy.get('.wp-block-query').should('exist');
+  cy.get('.wp-block-query');
   cy.get('.wp-block-post-title a').click();
   cy.fixture('helloworld').then((hw) => {
     cy.contains('.wp-block-post-title', hw.title);
@@ -101,7 +101,7 @@ it('checks if admin can create a post', () => {
 it('checks the SMTP configuration', () => {
   cy.login();
   cy.visit('/wp-admin/admin.php?page=wp-mail-smtp');
-  cy.get('div').contains('WP Mail SMTP').should('be.visible');
+  cy.contains('div', 'WP Mail SMTP');
   cy.get('#wp-mail-smtp-setting-smtp-host').should(
     'have.value',
     Cypress.env('smtpMailServer')
@@ -133,12 +133,12 @@ it('allows the upload of a file', () => {
   cy.login();
   cy.visit('wp-admin/upload.php');
   cy.contains("[role='button']", 'Add New').click();
-  cy.contains('[aria-labelledby]', 'Select Files').should('be.visible');
+  cy.contains('[aria-labelledby]', 'Select Files');
   cy.get('input[type=file]').selectFile(
     'cypress/fixtures/images/test_image.jpeg',
     { force: true }
   );
-  cy.get('.attachment').should('be.visible');
+  cy.get('.attachment');
 });
 
 it('allows to log out', () => {
