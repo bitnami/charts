@@ -1,7 +1,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}{{ if eq .Values.mode "distributed" }}-master{{ end }}
+  name: {{ template "pytorch.master.image" . }}
   namespace: {{ template "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: master
@@ -12,7 +12,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}

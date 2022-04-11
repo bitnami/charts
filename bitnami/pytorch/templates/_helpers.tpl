@@ -29,6 +29,16 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Return the proper name for master related resources
+*/}}
+{{- define "pytorch.master.name" -}}
+{{ if eq .Values.mode "distributed" }}
+{{ printf "%s-master" (include "common.names.fullname" .) }}
+{{- else }}
+{{ include "common.names.fullname" . }}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "pytorch.validateValues" -}}

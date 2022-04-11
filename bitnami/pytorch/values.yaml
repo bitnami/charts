@@ -79,9 +79,13 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-## @param replicaCount Number of replicas to deploy
+## @param replicaCount Number of worker replicas to deploy
 ##
 replicaCount: 1
+## @param worldSize Number of nodes that will run the code
+## WORLD_SIZE will be set to this value
+##
+worldSize: ""
 ## @param containerPorts.pytorch PyTorch master port. `MASTER_PORT` will be set to this value
 ##
 containerPorts:
@@ -201,10 +205,6 @@ podLabels: {}
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-## @param worldSize Number of nodes that will run the code
-## WORLD_SIZE will be set to this value
-##
-worldSize: ""
 ## @param existingConfigmap Config map that contains the files you want to load in PyTorch
 ##
 existingConfigmap: ""
