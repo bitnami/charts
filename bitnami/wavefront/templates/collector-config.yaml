@@ -33,10 +33,10 @@ data:
         token: {{ .Values.wavefront.token }}
       {{- end }}
         {{- if .Values.collector.tags }}
-        tags: {{- include "common.tplvalues.render" ( dict "value" .Values.collector.tags "context" . ) | nindent 8 }}
+        tags: {{- include "common.tplvalues.render" ( dict "value" .Values.collector.tags "context" . ) | nindent 10 }}
         {{- end }}
         {{- if .Values.collector.filters }}
-        filters: {{- include "common.tplvalues.render" ( dict "value" .Values.collector.filters "context" . ) | nindent 8 }}
+        filters: {{- include "common.tplvalues.render" ( dict "value" .Values.collector.filters "context" . ) | nindent 10 }}
         {{- end }}
 
     sources:
