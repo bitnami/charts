@@ -487,8 +487,9 @@ There are cases where you may want to deploy extra objects, such as KongPlugins,
 ```yaml
 ## Extra objects to deploy (value evaluated as a template)
 ##
-extraDeploy: |-
-  - apiVersion: configuration.konghq.com/v1
+extraDeploy:
+  - |
+    apiVersion: configuration.konghq.com/v1
     kind: KongPlugin
     metadata:
       name: {{ include "common.names.fullname" . }}-plugin-correlation
