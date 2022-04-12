@@ -2,7 +2,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "postgresql-ha.pgpool" . }}
-  namespace: {{ template "common.names.namespace" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{ include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: pgpool
     {{- if .Values.pgpool.labels }}
