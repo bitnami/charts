@@ -147,10 +147,6 @@ postgresql:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-  ## @param postgresql.priorityClassName Pod priority class
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
-  ##
-  priorityClassName: ""
   ## @param postgresql.podAffinityPreset PostgreSQL pod affinity preset. Ignored if `postgresql.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -1083,7 +1079,8 @@ psp:
 ## PostgreSQL Prometheus exporter parameters
 ##
 metrics:
-  ## Bitnami PostgreSQL Prometheus exporter image  ## @param metrics.enabled Enable PostgreSQL Prometheus exporter
+  ## Bitnami PostgreSQL Prometheus exporter image
+  ## @param metrics.enabled Enable PostgreSQL Prometheus exporter
   ##
   enabled: false
   ## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
