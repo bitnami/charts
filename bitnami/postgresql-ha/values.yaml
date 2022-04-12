@@ -203,10 +203,6 @@ postgresql:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
-  ## @param postgresql.podManagementPolicy Statefulset Pod Management Policy Type. Allowed values: `OrderedReady` or `Parallel`
-  ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
-  ##
-  podManagementPolicy: OrderedReady
   ## @param postgresql.updateStrategy.rollingUpdate PostgreSQL statefulset rolling update configuration parameters
   ## @param postgresql.updateStrategy.type Postgresql statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
@@ -251,8 +247,8 @@ postgresql:
   lifecycleHooks: {}
   ## @param postgresql.extraEnvVars Array containing extra environment variables
   ## For example:
-  ##  - name: BEARER_AUTH
-  ##    value: true
+  ##  - name: PG_EXPORTER_DISABLE_DEFAULT_METRICS
+  ##    value: "true"
   ##
   extraEnvVars: []
   ## @param postgresql.extraEnvVarsCM ConfigMap with extra environment variables
@@ -872,7 +868,7 @@ pgpool:
   adminUsername: admin
   adminPassword: ""
   ## Authentication method for pgpool container (PGPOOL_AUTHENTICATION_METHOD)
-  ## @param pgpool.authenticationMethod Pgpool Admin password
+  ## @param pgpool.authenticationMethod Pgpool authentication method. Use 'md5' for PSQL < 14.
   ##
   authenticationMethod: scram-sha-256
   ## @param pgpool.logConnections Log all client connections (PGPOOL_ENABLE_LOG_CONNECTIONS)
@@ -1246,14 +1242,18 @@ metrics:
   ##           description: "Size of the database in bytes"
   ##
   customMetrics: {}
-  ## @param metrics.extraEnvVars An array to add extra environment variables to configure postgres-exporter
-  ## see: https://github.com/wrouesnel/postgres_exporter#environment-variables
+  ## @param metrics.extraEnvVars Array containing extra environment variables
   ## For example:
-  ##  extraEnvVars:
-  ##  - name: PG_EXPORTER_DISABLE_DEFAULT_METRICS
-  ##    value: "true"
+  ##  - name: BEARER_AUTH
+  ##    value: true
   ##
-  extraEnvVars: {}
+  extraEnvVars: []
+  ## @param metrics.extraEnvVarsCM ConfigMap with extra environment variables
+  ##
+  extraEnvVarsCM: ""
+  ## @param metrics.extraEnvVarsSecret Secret with extra environment variables
+  ##
+  extraEnvVarsSecret: ""
   ## Metrics serviceMonitor parameters
   ## Enable this if you're using Prometheus Operator
   ##
