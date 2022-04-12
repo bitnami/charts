@@ -4,7 +4,7 @@
         "context": {
           "resources": {
             "url": "{SHA_ARCHIVE}",
-            "path": "/bitnami/grafana"
+            "path": "/bitnami/kibana"
           }
         },
         "actions": [
@@ -17,13 +17,13 @@
         "context": {
           "resources": {
             "url": "{SHA_ARCHIVE}",
-            "path": "/bitnami/grafana"
+            "path": "/bitnami/kibana"
           },
-          "runtime_parameters": "YWRtaW46CiAgdXNlcjogInRlc3RfYWRtaW4iCiAgcGFzc3dvcmQ6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBncmFmYW5hOiA4MApwbHVnaW5zOiAiZ3JhZmFuYS1rdWJlcm5ldGVzLWFwcCIKc210cDoKICBlbmFibGVkOiB0cnVlCiAgdXNlcjogc210cF91c2VyCiAgcGFzc3dvcmQ6IHNtdHBfcGFzc3dvcmQKICBob3N0OiAic210cCIKICBmcm9tQWRkcmVzczogInRlc3RAc210cC5jb20iCiAgZnJvbU5hbWU6ICJ0ZXN0X3NtdHAi",
+          "runtime_parameters": "c2VydmljZToKICBwb3J0OiA4MAogIHR5cGU6IExvYWRCYWxhbmNlcgplbGFzdGljc2VhcmNoOgogIGhvc3RzOgogICAgLSBsb2NhbGhvc3QKICBwb3J0OiA5MjAwCnNpZGVjYXJzOiAKIC0gbmFtZTogZWxhc3RpY3NlYXJjaAogICBpbWFnZTogYml0bmFtaS9lbGFzdGljc2VhcmNoOmxhdGVzdAogICBpbWFnZVB1bGxQb2xpY3k6IElmTm90UHJlc2VudAogICBwb3J0czoKICAgICAtIG5hbWU6IGh0dHAKICAgICAgIGNvbnRhaW5lclBvcnQ6IDkyMDA=",
           "target_platform": {
-            "target_platform_id": "{TARGET_PLATFORM}",
+            "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
             "size": {
-              "name": "L4"
+              "name": "M4"
             }
           }
         },
@@ -31,7 +31,7 @@
           {
             "action_id": "health-check",
             "params": {
-              "endpoint": "lb-grafana-http",
+              "endpoint": "lb-kibana-http",
               "app_protocol": "HTTP"
             }
           },
@@ -39,10 +39,10 @@
             "action_id": "goss",
             "params": {
               "resources": {
-                "path": "/.vib/grafana/goss"
+                "path": "/.vib/kibana/goss"
               },
               "remote": {
-                "workload": "deploy-grafana"
+                "workload": "deploy-kibana"
                }
             }
           },
@@ -50,9 +50,9 @@
             "action_id": "cypress",
             "params": {
               "resources": {
-                "path": "/.vib/grafana/cypress"
+                "path": "/.vib/kibana/cypress"
               },
-              "endpoint": "lb-grafana-http",
+              "endpoint": "lb-kibana-http",
               "app_protocol": "HTTP",
               "env": {
                 "username": "test_admin",
