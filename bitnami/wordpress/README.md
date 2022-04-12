@@ -500,7 +500,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### 13.2.0
 
-- Removed support for limiting auto-updates to WordPress core via the `wordpressAutoUpdateLevel` option. To update WordPress core, we recommend to swap the container image version for your deployment instead of using the built-in update functionality.
+Removed support for limiting auto-updates to WordPress core via the `wordpressAutoUpdateLevel` option. To update WordPress core, we recommend you use the `helm upgrade` command to update your deployment instead of using the built-in update functionality.
 
 ### 11.0.0
 
