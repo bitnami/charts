@@ -1,6 +1,6 @@
 {{- if .Values.provisioning.enabled }}
 {{- $fullname := printf "%s-provisioning" (include "common.names.fullname" .) }}
-{{- $releaseNamespace := .Release.Namespace }}
+{{- $releaseNamespace := .Release.Namespace | quote }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
