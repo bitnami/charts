@@ -23,7 +23,7 @@
           "target_platform": {
             "target_platform_id": "{TARGET_PLATFORM}",
             "size": {
-              "name": "S4"
+              "name": "L4"
             }
           }
         },
