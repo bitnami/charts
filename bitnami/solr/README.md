@@ -7,7 +7,7 @@ Apache Solr is an extremely powerful, open source enterprise search platform bui
 [Overview of Apache Solr](http://lucene.apache.org/solr/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -116,13 +116,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                          | Number of solr replicas                                                                                                  | `3`             |
 | `containerPorts.http`                   | Solr HTTP container port                                                                                                 | `8983`          |
 | `livenessProbe.enabled`                 | Enable livenessProbe on Solr containers                                                                                  | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                  | `30`            |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                  | `40`            |
 | `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                         | `10`            |
 | `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                        | `5`             |
 | `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                      | `6`             |
 | `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                      | `1`             |
 | `readinessProbe.enabled`                | Enable readinessProbe on Solr containers                                                                                 | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `5`             |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `30`            |
 | `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                        | `10`            |
 | `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `5`             |
 | `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                     | `6`             |
