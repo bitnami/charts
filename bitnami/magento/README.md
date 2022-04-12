@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                        | Magento image registry                                                                                               | `docker.io`            |
 | `image.repository`                      | Magento image repository                                                                                             | `bitnami/magento`      |
-| `image.tag`                             | Magento image tag (immutable tags are recommended)                                                                   | `2.4.3-debian-10-r170` |
+| `image.tag`                             | Magento image tag (immutable tags are recommended)                                                                   | `2.4.3-debian-10-r173` |
 | `image.pullPolicy`                      | Magento image pull policy                                                                                            | `IfNotPresent`         |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                     | `[]`                   |
 | `image.debug`                           | Specify if debug logs should be enabled                                                                              | `false`                |
@@ -195,7 +195,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.    | `true`                  |
 | `mariadb.image.registry`                    | MariaDB image registry                                                                   | `docker.io`             |
 | `mariadb.image.repository`                  | MariaDB image repository                                                                 | `bitnami/mariadb`       |
-| `mariadb.image.tag`                         | MariaDB image tag (immutable tags are recommended)                                       | `10.4.24-debian-10-r48` |
+| `mariadb.image.tag`                         | MariaDB image tag (immutable tags are recommended)                                       | `10.4.24-debian-10-r51` |
 | `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                      | `standalone`            |
 | `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`                    |
 | `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_magento`       |
@@ -251,7 +251,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r387`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r389`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the init container                                                                                                               | `{}`                    |
@@ -298,7 +298,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`             | Start a side-car prometheus exporter                       | `false`                   |
 | `metrics.image.registry`      | Apache exporter image registry                             | `docker.io`               |
 | `metrics.image.repository`    | Apache exporter image repository                           | `bitnami/apache-exporter` |
-| `metrics.image.tag`           | Apache exporter image tag (immutable tags are recommended) | `0.11.0-debian-10-r107`   |
+| `metrics.image.tag`           | Apache exporter image tag (immutable tags are recommended) | `0.11.0-debian-10-r109`   |
 | `metrics.image.pullPolicy`    | Image pull policy                                          | `IfNotPresent`            |
 | `metrics.image.pullSecrets`   | Specify docker-registry secret names as an array           | `[]`                      |
 | `metrics.resources.limits`    | The resources limits for the metrics container             | `{}`                      |
@@ -326,7 +326,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r387`                      |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r389`                      |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 
