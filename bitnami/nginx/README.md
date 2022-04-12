@@ -361,7 +361,7 @@ This major release no longer uses the bitnami/nginx-ldap-auth-daemon container a
 
 Bitnami’s NGINX Helm chart from version 5.6.0 to 9.9.9 includes a `ldapDaemon.enabled` option **disabled by default** that allows to configure it with the [bitnami-docker-nginx-ldap-auth-daemon](https://github.com/bitnami/bitnami-docker-nginx-ldap-auth-daemon) following [NGINX’s reference implementation](https://www.nginx.com/blog/nginx-plus-authenticate-users/).
 
-On 9 April 2022, security vulnerabilities in the [NGINX LDAP reference implementation](https://github.com/nginxinc/nginx-ldap-auth) were publicly shared. *Although the deprecation of this container from the Bitnami catalog was not related to this security issue, [here](https://docs.bitnami.com/general/security/security-2022_04_12/) you can find more information from the Bitnami security team*
+On 9 April 2022, security vulnerabilities in the [NGINX LDAP reference implementation](https://github.com/nginxinc/nginx-ldap-auth) were publicly shared. **Although the deprecation of this container from the Bitnami catalog was not related to this security issue, [here](https://docs.bitnami.com/general/security/security-2022_04_12/) you can find more information from the Bitnami security team.**
 
 ### To 8.0.0
 
