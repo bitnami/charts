@@ -52,7 +52,7 @@
             "resources": {
               "path": "/.vib/phpmyadmin/cypress"
             },
-            "endpoint": "lb-phpmyadmin-https",
+            "endpoint": "lb-phpmyadmin-http",
             "app_protocol": "HTTP",
             "env": {
               "username": "root",
