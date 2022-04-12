@@ -119,7 +119,6 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `postgresql.priorityClassName`                               | Pod priority class                                                                                                                                                                                            | `""`                        |
 | `postgresql.schedulerName`                                   | Use an alternate scheduler, e.g. "stork".                                                                                                                                                                     | `""`                        |
 | `postgresql.terminationGracePeriodSeconds`                   | Seconds PostgreSQL pod needs to terminate gracefully                                                                                                                                                          | `""`                        |
-| `postgresql.podManagementPolicy`                             | Statefulset Pod Management Policy Type. Allowed values: `OrderedReady` or `Parallel`                                                                                                                          | `OrderedReady`              |
 | `postgresql.updateStrategy.rollingUpdate`                    | PostgreSQL statefulset rolling update configuration parameters                                                                                                                                                | `{}`                        |
 | `postgresql.updateStrategy.type`                             | Postgresql statefulset strategy type                                                                                                                                                                          | `RollingUpdate`             |
 | `postgresql.podSecurityContext.enabled`                      | Enable security context for PostgreSQL with Repmgr                                                                                                                                                            | `true`                      |
@@ -300,7 +299,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `pgpool.minReadySeconds`                                 | How many seconds a pod needs to be ready before killing the next, during update                                                          | `""`                  |
 | `pgpool.adminUsername`                                   | Pgpool Admin username                                                                                                                    | `admin`               |
 | `pgpool.adminPassword`                                   | Pgpool Admin password                                                                                                                    | `""`                  |
-| `pgpool.authenticationMethod`                            | Pgpool Admin password                                                                                                                    | `scram-sha-256`       |
+| `pgpool.authenticationMethod`                            | Pgpool authentication method. Use 'md5' for PSQL < 14.                                                                                   | `scram-sha-256`       |
 | `pgpool.logConnections`                                  | Log all client connections (PGPOOL_ENABLE_LOG_CONNECTIONS)                                                                               | `false`               |
 | `pgpool.logHostname`                                     | Log the client hostname instead of IP address (PGPOOL_ENABLE_LOG_HOSTNAME)                                                               | `true`                |
 | `pgpool.logPerNodeStatement`                             | Log every SQL statement for each DB node separately (PGPOOL_ENABLE_LOG_PER_NODE_STATEMENT)                                               | `false`               |
@@ -401,7 +400,9 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.service.externalTrafficPolicy`      | PostgreSQL Prometheus exporter service external traffic policy                                                                                            | `Cluster`                   |
 | `metrics.annotations`                        | Annotations for PostgreSQL Prometheus exporter service                                                                                                    | `{}`                        |
 | `metrics.customMetrics`                      | Additional custom metrics                                                                                                                                 | `{}`                        |
-| `metrics.extraEnvVars`                       | An array to add extra environment variables to configure postgres-exporter                                                                                | `{}`                        |
+| `metrics.extraEnvVars`                       | Array containing extra environment variables                                                                                                              | `[]`                        |
+| `metrics.extraEnvVarsCM`                     | ConfigMap with extra environment variables                                                                                                                | `""`                        |
+| `metrics.extraEnvVarsSecret`                 | Secret with extra environment variables                                                                                                                   | `""`                        |
 | `metrics.serviceMonitor.enabled`             | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                    | `false`                     |
 | `metrics.serviceMonitor.namespace`           | Optional namespace which Prometheus is running in                                                                                                         | `""`                        |
 | `metrics.serviceMonitor.interval`            | How frequently to scrape metrics (use by default, falling back to Prometheus' default)                                                                    | `""`                        |
@@ -662,6 +663,27 @@ $ helm upgrade my-release bitnami/postgresql-ha \
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
 > Note: As general rule, it is always wise to do a backup before the upgrading procedures.
+
+### To 9.0.0
+
+This chart major version updates the PostgreSQL image's version to the latest major, `v14`, as well as standarizes the templates and values. These changes can be sumarised in the following:
+
+- Image parameters that used `imageNameImage` are now under `imageName.image`
+- `containerPort` parameters are now found by `containerPorts.xxxx`
+- `service.port` parameters are now found by `service.ports.xxxx`
+- `imageName.securityContext` parameters are now under `imageName.podSecurityContext`
+- `serviceAccount.enabled` parameter has being renamed to `serviceAccount.create`
+- Added the `pgpool.authenticationMethod` parameter. Use "md5" for older PSQL versions and the default value of "scram-sha-256" when using PSQL > v14.
+
+> Note: Keep in mind you will find an error such as the one below when upgrading since the new chart major version also bumps the application version. To workaround this issue you need to upgrade the database, please refer to the [official PostgreSQL documentation](https://www.postgresql.org/docs/current/upgrading.html) for more information about this.
+
+```
+postgresql-repmgr 14:41:21.00 INFO  ==> Setting up streaming replication slave...
+postgresql-repmgr 14:41:21.04 INFO  ==> Starting PostgreSQL in background...
+waiting for server to start....2022-04-12 14:41:21.069 GMT [220] FATAL:  database files are incompatible with server
+2022-04-12 14:41:21.069 GMT [220] DETAIL:  The data directory was initialized by PostgreSQL version 11, which is not compatible with this version 14.2.
+pg_ctl: could not start server
+```
 
 ### To 8.0.0
 
