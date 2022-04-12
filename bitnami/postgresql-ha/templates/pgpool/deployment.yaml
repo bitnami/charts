@@ -130,6 +130,7 @@ spec:
           {{- end }}
           {{- end }}
           env:
+
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.pgpool.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if or .Values.pgpool.customUsersSecret .Values.pgpool.customUsers }}
@@ -213,6 +214,8 @@ spec:
                   name: {{ include "postgresql-ha.pgpoolSecretName" . }}
                   key: admin-password
             {{- end }}
+            - name: PGPOOL_AUTHENTICATION_METHOD
+              value: {{ .Values.pgpool.authenticationMethod | quote }}
             - name: PGPOOL_ENABLE_LOAD_BALANCING
               value: {{ ternary "yes" "no" .Values.pgpool.useLoadBalancing | quote }}
             {{- if .Values.pgpool.useLoadBalancing }}

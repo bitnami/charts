@@ -100,7 +100,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql-repmgr
-    tag: 11.15.0-debian-10-r53
+    tag: 14.2.0-debian-10-r22
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -875,6 +875,10 @@ pgpool:
   ##
   adminUsername: admin
   adminPassword: ""
+  ## Authentication method for pgpool container (PGPOOL_AUTHENTICATION_METHOD)
+  ## @param pgpool.authenticationMethod Pgpool Admin password
+  ##
+  authenticationMethod: scram-sha-256
   ## @param pgpool.logConnections Log all client connections (PGPOOL_ENABLE_LOG_CONNECTIONS)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
