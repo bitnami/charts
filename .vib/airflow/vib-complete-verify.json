@@ -21,7 +21,7 @@
           },
           "runtime_parameters": "ImF1dGgiOgogICJwYXNzd29yZCI6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCiJsb2FkRXhhbXBsZXMiOiB0cnVlCiJzZXJ2aWNlIjoKICAicG9ydHMiOgogICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
           "target_platform": {
-            "target_platform_id": "{TARGET_PLATFORM}",
+            "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
             "size": {
               "name": "M4"
             }
