@@ -249,19 +249,34 @@ spec:
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              scheme: {{ ternary "HTTPS" "HTTP" .Values.tls.enabled }}
-              path: "/solr"
-              port: {{ .Values.containerPorts.http }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            exec:
+              command:
+              - "/bin/bash"
+              - -ec
+              - |
+                SOLR_AUTH_TYPE=basic SOLR_AUTHENTICATION_OPTS="-Dbasicauth=${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" solr assert --cloud "{{ ternary "https" "http" .Values.tls.enabled }}://localhost:${SOLR_PORT_NUMBER}/solr/"
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              scheme: {{ ternary "HTTPS" "HTTP" .Values.tls.enabled }}
-              path: "/solr"
-              port: {{ .Values.containerPorts.http }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            exec:
+              command:
+              - "/bin/bash"
+              - -ec
+              - |
+                SOLR_AUTH_TYPE=basic SOLR_AUTHENTICATION_OPTS="-Dbasicauth=${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" solr assert --cloud "{{ ternary "https" "http" .Values.tls.enabled }}://localhost:${SOLR_PORT_NUMBER}/solr/"
+
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
