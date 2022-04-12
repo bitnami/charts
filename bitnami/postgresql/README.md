@@ -98,7 +98,7 @@ kubectl delete pvc -l release=my-release
 | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `image.registry`                     | PostgreSQL image registry                                                                                            | `docker.io`                |
 | `image.repository`                   | PostgreSQL image repository                                                                                          | `bitnami/postgresql`       |
-| `image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                                | `14.1.0-debian-10-r80`     |
+| `image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                                | `14.2.0-debian-10-r57`     |
 | `image.pullPolicy`                   | PostgreSQL image pull policy                                                                                         | `IfNotPresent`             |
 | `image.pullSecrets`                  | Specify image pull secrets                                                                                           | `[]`                       |
 | `image.debug`                        | Specify if debug values should be set                                                                                | `false`                    |
@@ -205,8 +205,8 @@ kubectl delete pvc -l release=my-release
 | `primary.containerSecurityContext.enabled`   | Enable container security context                                                                                        | `true`                |
 | `primary.containerSecurityContext.runAsUser` | User ID for the container                                                                                                | `1001`                |
 | `primary.hostAliases`                        | PostgreSQL primary pods host aliases                                                                                     | `[]`                  |
-| `primary.hostNetwork`                        | Specify if host network should be enabled for PostgreSQL pod                                                             | `false`               |
-| `primary.hostIPC`                            | Specify if host IPC should be enabled for PostgreSQL pod                                                                 | `false`               |
+| `primary.hostNetwork`                        | Specify if host network should be enabled for PostgreSQL pod (postgresql primary)                                        | `false`               |
+| `primary.hostIPC`                            | Specify if host IPC should be enabled for PostgreSQL pod (postgresql primary)                                            | `false`               |
 | `primary.labels`                             | Map of labels to add to the statefulset (postgresql primary)                                                             | `{}`                  |
 | `primary.annotations`                        | Annotations for PostgreSQL primary pods                                                                                  | `{}`                  |
 | `primary.podLabels`                          | Map of labels to add to the pods (postgresql primary)                                                                    | `{}`                  |
@@ -291,8 +291,8 @@ kubectl delete pvc -l release=my-release
 | `readReplicas.containerSecurityContext.enabled`   | Enable container security context                                                                                        | `true`                |
 | `readReplicas.containerSecurityContext.runAsUser` | User ID for the container                                                                                                | `1001`                |
 | `readReplicas.hostAliases`                        | PostgreSQL read only pods host aliases                                                                                   | `[]`                  |
-| `readReplicas.hostNetwork`                        | Specify if host network should be enabled for PostgreSQL pod                                                             | `false`               |
-| `readReplicas.hostIPC`                            | Specify if host IPC should be enabled for PostgreSQL pod                                                                 | `false`               |
+| `readReplicas.hostNetwork`                        | Specify if host network should be enabled for PostgreSQL pod (PostgreSQL read only)                                      | `false`               |
+| `readReplicas.hostIPC`                            | Specify if host IPC should be enabled for PostgreSQL pod (postgresql primary)                                            | `false`               |
 | `readReplicas.labels`                             | Map of labels to add to the statefulset (PostgreSQL read only)                                                           | `{}`                  |
 | `readReplicas.annotations`                        | Annotations for PostgreSQL read only pods                                                                                | `{}`                  |
 | `readReplicas.podLabels`                          | Map of labels to add to the pods (PostgreSQL read only)                                                                  | `{}`                  |
@@ -363,7 +363,7 @@ kubectl delete pvc -l release=my-release
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r327`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r388`     |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
@@ -391,7 +391,7 @@ kubectl delete pvc -l release=my-release
 | `metrics.enabled`                               | Start a prometheus exporter                                                           | `false`                     |
 | `metrics.image.registry`                        | PostgreSQL Prometheus Exporter image registry                                         | `docker.io`                 |
 | `metrics.image.repository`                      | PostgreSQL Prometheus Exporter image repository                                       | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                             | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)             | `0.10.1-debian-10-r14`      |
+| `metrics.image.tag`                             | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)             | `0.10.1-debian-10-r75`      |
 | `metrics.image.pullPolicy`                      | PostgreSQL Prometheus Exporter image pull policy                                      | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                     | Specify image pull secrets                                                            | `[]`                        |
 | `metrics.customMetrics`                         | Define additional custom metrics                                                      | `{}`                        |

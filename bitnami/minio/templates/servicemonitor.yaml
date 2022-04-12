@@ -4,9 +4,9 @@ kind: ServiceMonitor
 metadata:
   name: {{ include "common.names.fullname" . }}
   {{- if .Values.metrics.serviceMonitor.namespace }}
-  namespace: {{ .Values.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.metrics.serviceMonitor.namespace | quote }}
   {{- else }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.metrics.serviceMonitor.labels }}
@@ -42,7 +42,7 @@ spec:
   {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ .Release.Namespace | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       {{- if .Values.metrics.serviceMonitor.selector }}

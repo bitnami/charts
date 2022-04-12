@@ -4,7 +4,7 @@
         "context": {
           "resources": {
             "url": "{SHA_ARCHIVE}",
-            "path": "/bitnami/airflow"
+            "path": "/bitnami/kibana"
           }
         },
         "actions": [
@@ -17,11 +17,11 @@
         "context": {
           "resources": {
             "url": "{SHA_ARCHIVE}",
-            "path": "/bitnami/airflow"
+            "path": "/bitnami/kibana"
           },
-          "runtime_parameters": "ImF1dGgiOgogICJwYXNzd29yZCI6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCiJsb2FkRXhhbXBsZXMiOiB0cnVlCiJzZXJ2aWNlIjoKICAicG9ydHMiOgogICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
+          "runtime_parameters": "c2VydmljZToKICBwb3J0OiA4MAogIHR5cGU6IExvYWRCYWxhbmNlcgplbGFzdGljc2VhcmNoOgogIGhvc3RzOgogICAgLSBsb2NhbGhvc3QKICBwb3J0OiA5MjAwCnNpZGVjYXJzOiAKIC0gbmFtZTogZWxhc3RpY3NlYXJjaAogICBpbWFnZTogYml0bmFtaS9lbGFzdGljc2VhcmNoOmxhdGVzdAogICBpbWFnZVB1bGxQb2xpY3k6IElmTm90UHJlc2VudAogICBwb3J0czoKICAgICAtIG5hbWU6IGh0dHAKICAgICAgIGNvbnRhaW5lclBvcnQ6IDkyMDA=",
           "target_platform": {
-            "target_platform_id": "{TARGET_PLATFORM}",
+            "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
             "size": {
               "name": "M4"
             }
@@ -31,7 +31,7 @@
           {
             "action_id": "health-check",
             "params": {
-              "endpoint": "lb-airflow-http",
+              "endpoint": "lb-kibana-http",
               "app_protocol": "HTTP"
             }
           },
@@ -39,10 +39,10 @@
             "action_id": "goss",
             "params": {
               "resources": {
-                "path": "/.vib/airflow/goss"
+                "path": "/.vib/kibana/goss"
               },
               "remote": {
-                "workload": "deploy-airflow-web"
+                "workload": "deploy-kibana"
                }
             }
           },
@@ -50,12 +50,12 @@
             "action_id": "cypress",
             "params": {
               "resources": {
-                "path": "/.vib/airflow/cypress"
+                "path": "/.vib/kibana/cypress"
               },
-              "endpoint": "lb-airflow-http",
+              "endpoint": "lb-kibana-http",
               "app_protocol": "HTTP",
               "env": {
-                "username": "user",
+                "username": "test_admin",
                 "password": "ComplicatedPassword123!4"
               }
             }
@@ -64,3 +64,4 @@
       }
     }
   }
+  
