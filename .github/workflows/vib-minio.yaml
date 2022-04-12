@@ -10,7 +10,7 @@ env:
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
   VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
 jobs:
-  vib-k8s-verify: 
+  vib-verify: 
     runs-on: ubuntu-latest
     environment: vmware-image-builder
     strategy:
