@@ -89,14 +89,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WordPress Image parameters
 
-| Name                | Description                                          | Value                 |
-| ------------------- | ---------------------------------------------------- | --------------------- |
-| `image.registry`    | WordPress image registry                             | `docker.io`           |
-| `image.repository`  | WordPress image repository                           | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.8.2-debian-10-r34` |
-| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable image debug mode                              | `false`               |
+| Name                | Description                                          | Value                     |
+| ------------------- | ---------------------------------------------------- | ------------------------- |
+| `image.registry`    | WordPress image registry                             | `docker.io`               |
+| `image.repository`  | WordPress image repository                           | `bitnami/wordpress-intel` |
+| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.9.3-debian-10-r8`      |
+| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`            |
+| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                      |
+| `image.debug`       | Enable image debug mode                              | `false`                   |
 
 
 ### WordPress Configuration parameters
@@ -237,7 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r280`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r392`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -267,7 +267,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.port`                            | NGINX Container Status Port scraped by Prometheus Exporter                   | `""`                     |
 | `metrics.image.registry`                  | NGINX Prometheus exporter image registry                                     | `docker.io`              |
 | `metrics.image.repository`                | NGINX Prometheus exporter image repository                                   | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                       | NGINX Prometheus exporter image tag (immutable tags are recommended)         | `0.9.0-debian-10-r235`   |
+| `metrics.image.tag`                       | NGINX Prometheus exporter image tag (immutable tags are recommended)         | `0.10.0-debian-10-r106`  |
 | `metrics.image.pullPolicy`                | NGINX Prometheus exporter image pull policy                                  | `IfNotPresent`           |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                             | `[]`                     |
 | `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                     |
@@ -308,7 +308,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                       | Description                                                               | Value               |
 | ------------------------------------------ | ------------------------------------------------------------------------- | ------------------- |
-| `mariadb.enabled`           :               | Deploy a MariaDB server to satisfy the applications database requirements | `true`              |
+| `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements | `true`              |
 | `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`       | `standalone`        |
 | `mariadb.auth.rootPassword`                | MariaDB root password                                                     | `""`                |
 | `mariadb.auth.database`                    | MariaDB custom database                                                   | `bitnami_wordpress` |
