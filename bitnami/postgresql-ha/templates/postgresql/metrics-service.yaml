@@ -32,10 +32,10 @@ spec:
   {{- end }}
   ports:
     - name: metrics
-      port: {{ .Values.metrics.service.ports.http }}
+      port: {{ .Values.metrics.service.ports.metrics }}
       targetPort: metrics
-      {{- if (and (or (eq .Values.metrics.service.type "NodePort") (eq .Values.metrics.service.type "LoadBalancer")) (not (empty .Values.metrics.service.nodePort))) }}
-      nodePort: {{ .Values.metrics.service.nodePort }}
+      {{- if (and (or (eq .Values.metrics.service.type "NodePort") (eq .Values.metrics.service.type "LoadBalancer")) (not (empty .Values.metrics.service.nodePorts.metrics))) }}
+      nodePort: {{ .Values.metrics.service.nodePorts.metrics }}
       {{- else if eq .Values.metrics.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

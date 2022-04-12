@@ -392,8 +392,8 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                                                        | `10`                        |
 | `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                                                        | `1`                         |
 | `metrics.service.type`                       | PostgreSQL Prometheus exporter metrics service type                                                                                                       | `ClusterIP`                 |
-| `metrics.service.ports.http`                 | PostgreSQL Prometheus exporter metrics service port                                                                                                       | `9187`                      |
-| `metrics.service.nodePort`                   | PostgreSQL Prometheus exporter Node Port                                                                                                                  | `""`                        |
+| `metrics.service.ports.metrics`              | PostgreSQL Prometheus exporter metrics service port                                                                                                       | `9187`                      |
+| `metrics.service.nodePorts.metrics`          | PostgreSQL Prometheus exporter Node Port                                                                                                                  | `""`                        |
 | `metrics.service.clusterIP`                  | PostgreSQL Prometheus exporter metrics service Cluster IP                                                                                                 | `""`                        |
 | `metrics.service.loadBalancerIP`             | PostgreSQL Prometheus exporter service Load Balancer IP                                                                                                   | `""`                        |
 | `metrics.service.loadBalancerSourceRanges`   | PostgreSQL Prometheus exporter service Load Balancer sources                                                                                              | `[]`                        |
@@ -452,7 +452,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `service.type`                                        | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                           | `ClusterIP`  |
 | `service.ports.postgresql`                            | PostgreSQL port                                                                               | `5432`       |
 | `service.portName`                                    | PostgreSQL service port name                                                                  | `postgresql` |
-| `service.nodePort`                                    | Kubernetes service nodePort                                                                   | `""`         |
+| `service.nodePorts.postgresql`                        | Kubernetes service nodePort                                                                   | `""`         |
 | `service.loadBalancerIP`                              | Load balancer IP if service type is `LoadBalancer`                                            | `""`         |
 | `service.loadBalancerSourceRanges`                    | Addresses that are allowed when service is LoadBalancer                                       | `[]`         |
 | `service.clusterIP`                                   | Set the Cluster IP to use                                                                     | `""`         |

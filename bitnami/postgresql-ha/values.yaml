@@ -1195,14 +1195,15 @@ metrics:
     ## @param metrics.service.type PostgreSQL Prometheus exporter metrics service type
     ##
     type: ClusterIP
-    ## @param metrics.service.ports.http PostgreSQL Prometheus exporter metrics service port
+    ## @param metrics.service.ports.metrics PostgreSQL Prometheus exporter metrics service port
     ##
     ports:
-      http: 9187
-    ## @param metrics.service.nodePort PostgreSQL Prometheus exporter Node Port
+      metrics: 9187
+    ## @param metrics.service.nodePorts.metrics PostgreSQL Prometheus exporter Node Port
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort: ""
+    nodePorts:
+      metrics: ""
     ## @param metrics.service.clusterIP PostgreSQL Prometheus exporter metrics service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1420,10 +1421,11 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
   ##
   portName: postgresql
-  ## @param service.nodePort Kubernetes service nodePort
+  ## @param service.nodePorts.postgresql Kubernetes service nodePort
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort: ""
+  nodePorts:
+    postgresql: ""
   ## @param service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
   ## Set the LoadBalancer service type to internal only
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
