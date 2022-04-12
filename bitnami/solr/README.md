@@ -122,13 +122,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                      | `6`             |
 | `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                      | `1`             |
 | `readinessProbe.enabled`                | Enable readinessProbe on Solr containers                                                                                 | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `30`            |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `60`            |
 | `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                        | `10`            |
 | `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `5`             |
 | `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                     | `6`             |
 | `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                     | `1`             |
 | `startupProbe.enabled`                  | Enable startupProbe on Solr containers                                                                                   | `false`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `30`            |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `40`            |
 | `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                          | `10`            |
 | `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                         | `1`             |
 | `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                       | `15`            |
