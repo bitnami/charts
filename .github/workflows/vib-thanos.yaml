@@ -10,7 +10,7 @@ env:
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
   VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
 jobs:
-  vib-bucketweb:
+  vib-verify-bucketweb:
     runs-on: ubuntu-latest
     environment: vmware-image-builder
     name: BucketWeb on Tanzu Kubernetes Grid
@@ -25,7 +25,7 @@ jobs:
         env:
           VIB_ENV_TARGET_PLATFORM: 7ddab896-2e4e-4d58-a501-f79897eba3a0
 
-  vib-queryfrontend: 
+  vib-verify-queryfrontend: 
     runs-on: ubuntu-latest
     environment: vmware-image-builder
     name: QueryFrontend on Tanzu Kubernetes Grid
