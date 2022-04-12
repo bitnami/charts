@@ -1,25 +1,14 @@
-<<<<<<< HEAD
 name: Update README metadata
 
 on:
   pull_request_target:
-=======
-name: Check README metadata
-
-on:
-  pull_request:
->>>>>>> a5fc49f1c (Adding accidentaly deleted file)
     branches:
       - master
     paths:
       - 'bitnami/*/values.yaml'
 
 jobs:
-<<<<<<< HEAD
   update-readme-metadata:
-=======
-  check-readme-metadata:
->>>>>>> a5fc49f1c (Adding accidentaly deleted file)
     runs-on: ubuntu-latest
 
     steps:
@@ -47,7 +36,6 @@ jobs:
       - name: Checkout bitnami/charts
         uses: actions/checkout@v2
         with:
-<<<<<<< HEAD
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
           path: charts
@@ -75,21 +63,3 @@ jobs:
             git config user.email "containers@bitnami.com"
             git add . && git commit -am "Update README.md with readme-generator-for-helm" --signoff && git push
           fi
-=======
-          path: charts
-
-      - name: Get list of files with changes in Pull Request
-        id: pr-file-changes
-        uses: trilom/file-changes-action@v1.2.4
-        with:
-          fileOutput: ' '
-
-      - name: Prepare readme-generator-for-helm inputs
-        run: |
-          cat $HOME/files.txt | tr " " "\n" | grep \/values\\.yaml > raw-inputs
-          cat raw-inputs | sed 's/values.yaml/README.md/' >> raw-inputs
-          cat raw-inputs | sed 's/bitnami/charts\/bitnami/' > prepared-inputs
-
-      - name: Execute readme-generator-for-helm
-        run: readme-generator-for-helm/bin/index.js --values $(cat prepared-inputs | grep values) --schema /tmp/chart-schema.json
->>>>>>> a5fc49f1c (Adding accidentaly deleted file)
