@@ -669,6 +669,10 @@ service:
   ## @param service.annotations Provide any additional annotations that may be required
   ##
   annotations: {}
+  ## @param service.externalTrafficPolicy service external traffic policy (only for standalone architecture)
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Local
 ## External Access to MongoDB(&reg;) nodes configuration
 ##
 externalAccess:
