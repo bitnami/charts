@@ -52,7 +52,7 @@ Return the Thanos Objstore configuration secret.
 Return true if a secret object should be created
 */}}
 {{- define "thanos.createObjstoreSecret" -}}
-{{- if and .Values.objstoreConfig (not .Values.existingObjstoreSecret) }}
+{{- if and (or .Values.objstoreConfig  .Values.objstore) (not .Values.existingObjstoreSecret) }}
     {{- true -}}
 {{- else -}}
 {{- end -}}
@@ -203,7 +203,7 @@ thanos: objstore configuration
     When enabling Bucket Web, Compactor, Ruler, Store or Receive Gateway component,
     you must provide a valid objstore configuration.
     There are three alternatives to provide it:
-      1) Provide it using the 'objstoreConfig' parameter
+      1) Provide it using the 'objstore' or 'objstoreConfig' parameter
       2) Provide it using an existing Secret and using the 'existingObjstoreSecret' parameter
       3) Put your objstore.yml under the 'files/conf/' directory
 {{- end -}}

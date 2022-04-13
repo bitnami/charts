@@ -114,6 +114,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.25.0-scratch-r1` |
 | `image.pullPolicy`            | Thanos image pull policy                                                                  | `IfNotPresent`      |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                |
+| `objstore`                    | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                    | `{}`                |
 | `objstoreConfig`              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                    | `""`                |
 | `indexCacheConfig`            | The [index cache configuration](https://thanos.io/tip/components/store.md/)               | `""`                |
 | `bucketCacheConfig`           | The [bucket cache configuration](https://thanos.io/tip/components/store.md/)              | `""`                |

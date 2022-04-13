@@ -66,6 +66,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+## @param objstore The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)
+##
+objstore: {}
 ## @param objstoreConfig The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)
 ## Specify content for objstore.yml
 ##
