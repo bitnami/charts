@@ -23,11 +23,11 @@ spec:
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - port: {{ coalesce .Values.service.ports.pytorch .Values.service.port }}
+    - port: {{ coalesce .Values.service.port .Values.service.ports.pytorch }}
       targetPort: pytorch
       name: pytorch
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty (coalesce .Values.service.nodePorts.pytorch .Values.service.nodePort))) }}
-      nodePort: {{ coalesce .Values.service.nodePorts.pytorch .Values.service.nodePort }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty (coalesce .Values.service.nodePort .Values.service.nodePorts.pytorch))) }}
+      nodePort: {{ coalesce .Values.service.nodePort .Values.service.nodePorts.pytorch }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

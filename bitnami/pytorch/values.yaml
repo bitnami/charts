@@ -78,13 +78,13 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-## @param replicaCount Number of worker replicas to deploy
-##
-replicaCount: 1
 ## @param worldSize Number of nodes that will run the code
 ## WORLD_SIZE will be set to this value
 ##
-worldSize: ""
+worldSize: 1
+## port PyTorch master port. DEPRECATED Use containerPorts.pytorch instead
+##
+## port: 49875
 ## @param containerPorts.pytorch PyTorch master port. `MASTER_PORT` will be set to this value
 ##
 containerPorts:
@@ -148,6 +148,13 @@ customReadinessProbe: {}
 customStartupProbe: {}
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+## securityContext.enabled DEPRECATED Use podSecurityContext.enabled instead
+## securityContext.fsGroup DEPRECATED Use podSecurityContext.fsGroup instead
+## securityContext.runAsUser DEPRECATED Use podSecurityContext.runAsUser instead
+## securityContext:
+##   enabled: true
+##   fsGroup: 1001
+##   runAsUser: 1001
 ## @param podSecurityContext.enabled Enabled Pytorch pods' Security Context
 ## @param podSecurityContext.fsGroup Set Pytorch pods' Security Context fsGroup
 ## @param podSecurityContext.runAsUser Set Pytorch pods' Security Context runAsUser
@@ -183,9 +190,12 @@ resources:
 entrypoint:
   file: ""
   args: []
-## @param mode Run PyTorch in standalone or distributed mode. Possible values: `standalone`, `distributed`
+## mode DEPRECATED. Use architecture instead
 ##
-mode: standalone
+## mode: standalone
+## @param architecture Run PyTorch in standalone or distributed mode. Possible values: `standalone`, `distributed`
+##
+architecture: standalone
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -346,11 +356,17 @@ service:
   ## @param service.type Kubernetes service type
   ##
   type: ClusterIP
+  ## service.port DEPRECATED Use service.ports.pytorch instead
+  ##
+  ## port: 49875
   ## @param service.ports.pytorch Scheduler Service port
   ##
   ports:
     pytorch: 49875
   ## Node ports to expose
+  ## service.nodePort DEPRECATED Use service.nodePorts.pytorch instead
+  ##
+  ## nodePort: ""
   ## @param service.nodePorts.pytorch Node port for Pytorch
   ## NOTE: choose port between <30000-32767>
   ##

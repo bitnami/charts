@@ -88,8 +88,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.tag`                                       | PyTorch image tag (immutable tags are recommended)                                                                       | `1.11.0-debian-10-r13` |
 | `image.pullPolicy`                                | Image pull policy                                                                                                        | `IfNotPresent`         |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                         | `[]`                   |
-| `replicaCount`                                    | Number of worker replicas to deploy                                                                                      | `1`                    |
-| `worldSize`                                       | Number of nodes that will run the code                                                                                   | `""`                   |
+| `worldSize`                                       | Number of nodes that will run the code                                                                                   | `1`                    |
 | `containerPorts.pytorch`                          | PyTorch master port. `MASTER_PORT` will be set to this value                                                             | `49875`                |
 | `livenessProbe.enabled`                           | Enable livenessProbe                                                                                                     | `true`                 |
 | `livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                                  | `5`                    |
@@ -123,7 +122,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `resources.requests`                              | The requested resources for the Pytorch containers                                                                       | `{}`                   |
 | `entrypoint.file`                                 | Main entrypoint to your application                                                                                      | `""`                   |
 | `entrypoint.args`                                 | Args required by your entrypoint                                                                                         | `[]`                   |
-| `mode`                                            | Run PyTorch in standalone or distributed mode. Possible values: `standalone`, `distributed`                              | `standalone`           |
+| `architecture`                                    | Run PyTorch in standalone or distributed mode. Possible values: `standalone`, `distributed`                              | `standalone`           |
 | `hostAliases`                                     | Deployment pod host aliases                                                                                              | `[]`                   |
 | `command`                                         | Override default container command (useful when using custom images)                                                     | `[]`                   |
 | `args`                                            | Override default container args (useful when using custom images)                                                        | `[]`                   |

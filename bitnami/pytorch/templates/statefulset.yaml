@@ -1,4 +1,5 @@
-{{- if eq .Values.mode "distributed" }}
+{{- $architecture := coalesce .Values.mode .Values.architecture }}
+{{- if eq $architecture "distributed" }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -10,14 +11,14 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: worker
   {{- if .Values.updateStrategy }}
-  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
   template:
     metadata:
@@ -57,9 +58,7 @@ spec:
       {{- if .Values.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
-      {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
-      {{- end }}
+      {{- include "pytorch.securityContext" . }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}

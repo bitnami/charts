@@ -1,7 +1,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "pytorch.master.name" . }}
+  name: {{ include "pytorch.master.name" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: master
@@ -57,9 +57,7 @@ spec:
       {{- if .Values.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
-      {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
-      {{- end }}
+      {{- include "pytorch.securityContext" . }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
@@ -123,11 +121,12 @@ spec:
               sleep infinity
           {{- end }}
           env:
-            {{- if eq .Values.mode "distributed" }}
+            {{- $architecture := coalesce .Values.mode .Values.architecture }}
+            {{- if eq $architecture "distributed" }}
             - name: MASTER_ADDR
               value: "127.0.0.1"
             - name: MASTER_PORT
-              value: {{ coalesce .Values.containerPorts.pytorch .Values.port | quote }}
+              value: {{ coalesce .Values.port .Values.containerPorts.pytorch | quote }}
             - name: WORLD_SIZE
               value: {{ .Values.worldSize | quote }}
             - name: RANK
@@ -150,7 +149,7 @@ spec:
           {{- end }}
           ports:
             - name: pytorch
-              containerPort: {{ coalesce .Values.containerPorts.pytorch .Values.port }}
+              containerPort: {{ coalesce .Values.port .Values.containerPorts.pytorch }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}

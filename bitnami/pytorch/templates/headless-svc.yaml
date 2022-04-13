@@ -1,4 +1,5 @@
-{{- if eq .Values.mode "distributed" }}
+{{- $architecture := coalesce .Values.mode .Values.architecture }}
+{{- if eq $architecture "distributed" }}
 apiVersion: v1
 kind: Service
 metadata:
