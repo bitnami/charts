@@ -1,8 +1,8 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "pytorch.master.image" . }}
-  namespace: {{ template "common.names.namespace" . }}
+  name: {{ template "pytorch.master.name" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: master
     {{- if .Values.commonLabels }}
@@ -127,7 +127,7 @@ spec:
             - name: MASTER_ADDR
               value: "127.0.0.1"
             - name: MASTER_PORT
-              value: {{ .Values.containerPorts.pytorch | quote }}
+              value: {{ coalesce .Values.containerPorts.pytorch .Values.port | quote }}
             - name: WORLD_SIZE
               value: {{ .Values.worldSize | quote }}
             - name: RANK
@@ -150,7 +150,7 @@ spec:
           {{- end }}
           ports:
             - name: pytorch
-              containerPort: {{ .Values.containerPorts.pytorch }}
+              containerPort: {{ coalesce .Values.containerPorts.pytorch .Values.port }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
@@ -210,7 +210,7 @@ spec:
         {{- else if .Files.Glob "files/*" }}
         - name: local-files
           configMap:
-            name: {{ include "common.names.fullname" . }}-files
+            name: {{ printf "%s-files" (include "common.names.fullname" .) }}
         {{- else if .Values.cloneFilesFromGit.enabled }}
         - name: git-cloned-files
           emptyDir: {}
@@ -218,7 +218,7 @@ spec:
         - name: data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ include "common.names.fullname" . }}{{ if eq .Values.mode "distributed" }}-master{{ end }}
+            claimName: {{ template "pytorch.master.name" . }}
         {{- else }}
           emptyDir: {}
         {{- end }}

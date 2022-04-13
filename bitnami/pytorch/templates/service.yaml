@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ template "common.names.namespace" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: master
     {{- if .Values.commonLabels }}
@@ -23,11 +23,11 @@ spec:
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - port: {{ .Values.service.ports.pytorch }}
+    - port: {{ coalesce .Values.service.ports.pytorch .Values.service.port }}
       targetPort: pytorch
       name: pytorch
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePort)) }}
-      nodePort: {{ .Values.service.nodePort }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty (coalesce .Values.service.nodePorts.pytorch .Values.service.nodePort))) }}
+      nodePort: {{ coalesce .Values.service.nodePorts.pytorch .Values.service.nodePort }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

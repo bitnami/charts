@@ -60,7 +60,6 @@ diagnosticMode:
 ## @param image.tag PyTorch image tag (immutable tags are recommended)
 ## @param image.pullPolicy Image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
-## @param image.debug Specify if debug logs should be enabled
 ##
 image:
   registry: docker.io
@@ -349,16 +348,14 @@ service:
   type: ClusterIP
   ## @param service.ports.pytorch Scheduler Service port
   ##
-  ports: 
+  ports:
     pytorch: 49875
   ## Node ports to expose
-  ## @param service.nodePorts.http Node port for HTTP
-  ## @param service.nodePorts.https Node port for HTTPS
+  ## @param service.nodePorts.pytorch Node port for Pytorch
   ## NOTE: choose port between <30000-32767>
   ##
   nodePorts:
-    http: ""
-    https: ""
+    pytorch: ""
   ## @param service.clusterIP Pytorch service Cluster IP
   ## e.g.:
   ## clusterIP: None

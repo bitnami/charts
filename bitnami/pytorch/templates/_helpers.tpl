@@ -33,9 +33,10 @@ Return the proper name for master related resources
 */}}
 {{- define "pytorch.master.name" -}}
 {{ if eq .Values.mode "distributed" }}
-{{ printf "%s-master" (include "common.names.fullname" .) }}
+{{- printf "%s-master" (include "common.names.fullname" .) }}
 {{- else }}
-{{ include "common.names.fullname" . }}
+{{- include "common.names.fullname" . }}
+{{- end -}}
 {{- end -}}
 
 {{/*
