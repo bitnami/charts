@@ -78,32 +78,32 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Mediawiki parameters
 
-| Name                 | Description                                                                      | Value                  |
-| -------------------- | -------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`     | MediaWiki image registry                                                         | `docker.io`            |
-| `image.repository`   | MediaWiki image repository                                                       | `bitnami/mediawiki`    |
-| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                             | `1.37.1-debian-10-r20` |
-| `image.pullPolicy`   | Image pull policy                                                                | `IfNotPresent`         |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                                 | `[]`                   |
-| `image.debug`        | Enable MediaWiki image debug mode                                                | `false`                |
-| `hostAliases`        | Deployment pod host aliases                                                      | `[]`                   |
-| `mediawikiUser`      | User of the application                                                          | `user`                 |
-| `mediawikiPassword`  | Application password                                                             | `""`                   |
-| `mediawikiEmail`     | Admin email                                                                      | `user@example.com`     |
-| `mediawikiName`      | Name for the wiki                                                                | `My Wiki`              |
-| `mediawikiHost`      | Mediawiki host to create application URLs                                        | `""`                   |
-| `allowEmptyPassword` | Allow DB blank passwords                                                         | `yes`                  |
-| `smtpHost`           | SMTP host                                                                        | `""`                   |
-| `smtpPort`           | SMTP port                                                                        | `""`                   |
-| `smtpHostID`         | SMTP host ID                                                                     | `""`                   |
-| `smtpUser`           | SMTP user                                                                        | `""`                   |
-| `smtpPassword`       | SMTP password                                                                    | `""`                   |
-| `command`            | Override default container command (useful when using custom images)             | `[]`                   |
-| `args`               | Override default container args (useful when using custom images)                | `[]`                   |
-| `lifecycleHooks`     | for the Mediawiki container(s) to automate configuration before or after startup | `{}`                   |
-| `extraEnvVars`       | Extra environment variables to be set on Mediawki container                      | `[]`                   |
-| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                             | `""`                   |
-| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                                | `""`                   |
+| Name                 | Description                                                                      | Value                 |
+| -------------------- | -------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`     | MediaWiki image registry                                                         | `docker.io`           |
+| `image.repository`   | MediaWiki image repository                                                       | `bitnami/mediawiki`   |
+| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                             | `1.37.2-debian-10-r8` |
+| `image.pullPolicy`   | Image pull policy                                                                | `IfNotPresent`        |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                                 | `[]`                  |
+| `image.debug`        | Enable MediaWiki image debug mode                                                | `false`               |
+| `hostAliases`        | Deployment pod host aliases                                                      | `[]`                  |
+| `mediawikiUser`      | User of the application                                                          | `user`                |
+| `mediawikiPassword`  | Application password                                                             | `""`                  |
+| `mediawikiEmail`     | Admin email                                                                      | `user@example.com`    |
+| `mediawikiName`      | Name for the wiki                                                                | `My Wiki`             |
+| `mediawikiHost`      | Mediawiki host to create application URLs                                        | `""`                  |
+| `allowEmptyPassword` | Allow DB blank passwords                                                         | `yes`                 |
+| `smtpHost`           | SMTP host                                                                        | `""`                  |
+| `smtpPort`           | SMTP port                                                                        | `""`                  |
+| `smtpHostID`         | SMTP host ID                                                                     | `""`                  |
+| `smtpUser`           | SMTP user                                                                        | `""`                  |
+| `smtpPassword`       | SMTP password                                                                    | `""`                  |
+| `command`            | Override default container command (useful when using custom images)             | `[]`                  |
+| `args`               | Override default container args (useful when using custom images)                | `[]`                  |
+| `lifecycleHooks`     | for the Mediawiki container(s) to automate configuration before or after startup | `{}`                  |
+| `extraEnvVars`       | Extra environment variables to be set on Mediawki container                      | `[]`                  |
+| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                             | `""`                  |
+| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                                | `""`                  |
 
 
 ### Mediawiki deployment parameters
@@ -111,8 +111,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                    | Description                                                                               | Value                                             |
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------- |
 | `updateStrategy.type`                   | StrategyType can be set to RollingUpdate or OnDelete                                      | `RollingUpdate`                                   |
-| `podServiceAccount.name    `            | Existing ServiceAccount to assign to the pod                                              | `""`                                              |
-| `podServiceAccount.automountToken`      | Whether or not to automount the Service Account Token                                     | `true`                                           |
+| `podServiceAccount.name`                | Existing ServiceAccount to assign to the pods                                             | `""`                                              |
+| `podServiceAccount.automountToken`      | Whether or not to automount the Service Account Token                                     | `true`                                            |
 | `podSecurityContext.enabled`            | Enable Mediawiki pods' Security Context                                                   | `true`                                            |
 | `podSecurityContext.fsGroup`            | Group ID for the volumes of the pod                                                       | `1001`                                            |
 | `containerSecurityContext.enabled`      | Enable Mediawiki containers' SecurityContext                                              | `true`                                            |
@@ -237,7 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                         | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                               | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                   | `0.11.0-debian-10-r18`    |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                   | `0.11.0-debian-10-r109`   |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                             | `[]`                      |
 | `metrics.resources`                        | Exporter resource requests/limit                                             | `{}`                      |
