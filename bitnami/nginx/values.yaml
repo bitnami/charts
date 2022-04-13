@@ -217,13 +217,13 @@ resources:
   ##    memory: 128Mi
   requests: {}
 
-## NGINX containers' lifecycle hooks
+## NGINX containers' lifecycleHooks
 ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
-## If you do want to specify lifecycle hooks, uncomment the following
+## If you do want to specify lifecycleHooks, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces on 'lifecycle:{}'.
-## @param lifecycle Optional lifecycle hooks for the NGINX container
-lifecycle: {}
+## @param lifecycleHooks Optional lifecycleHooks for the NGINX container
+lifecycleHooks: {}
   ## Example:
   ## postStart:
   ##   exec:
