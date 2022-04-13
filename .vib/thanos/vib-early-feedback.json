@@ -41,7 +41,7 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-thanos-query-frontend-http",
+            "endpoint": "lb-thanos-query-http",
             "app_protocol": "HTTP"
           }
         }

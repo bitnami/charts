@@ -42,7 +42,7 @@
           "action_id": "health-check",
           "params": {
             "endpoint": "lb-wavefront-hpa-adapter-https",
-            "app_protocol": "HTTPS"
+            "app_protocol": "HTTP"
           }
         }
       ]
