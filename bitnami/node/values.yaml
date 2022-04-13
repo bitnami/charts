@@ -27,6 +27,10 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override node.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride Override namespace for resources
+## Useful when including Node as a chart dependency, so it can be released into a different namespace than the parent
+##
+namespaceOverride: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -214,10 +218,6 @@ podLabels: {}
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
 ##
 extraDeploy: []
-## @param namespaceOverride Override namespace for resources
-## Useful when including Node as a chart dependency, so it can be released into a different namespace than the parent
-##
-namespaceOverride: ""
 ## Enable diagnostic mode in the deployment(s)/statefulset(s)
 ##
 diagnosticMode:

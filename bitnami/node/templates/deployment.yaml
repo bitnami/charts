@@ -1,7 +1,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -27,7 +27,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "node.serviceAccountName" . }}
+      serviceAccountName: {{ include "node.serviceAccountName" . }}
       {{- include "node.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
@@ -82,7 +82,7 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.git.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
         - name: npm-install
-          image: {{ template "node.image" . }}
+          image: {{ include "node.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           workingDir: /app
           {{- if .Values.installCommand }}
@@ -115,9 +115,9 @@ spec:
           {{- end }}
           volumeMounts:
             - name: data
-              mountPath: {{ .Values.persistence.mountPath }}
+              mountPath: {{ .Values.persistence.mountPath | quote }}
               {{- if .Values.persistence.subPath }}
-              subPath: {{ .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath | quote }}
               {{- end }}
         {{- end }}
         {{- end }}
@@ -136,7 +136,7 @@ spec:
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.mongodb.enabled }}
             - name: DATABASE_HOST
-              value: {{ template "node.mongodb.fullname" . }}
+              value: {{ include "node.mongodb.fullname" . }}
             - name: DATABASE_PORT
               value: "27017"
             - name: DATABASE_USER
@@ -144,7 +144,7 @@ spec:
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "node.mongodb.fullname" . }}
+                  name: {{ include "node.mongodb.fullname" . }}
                   key: mongodb-passwords
             - name: DATABASE_NAME
               value: {{ .Values.mongodb.auth.database | quote }}
@@ -154,13 +154,13 @@ spec:
             - name: DATABASE_HOST
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "node.secretName" . }}
+                  name: {{ include "node.secretName" . }}
                   key: host
             - name: DATABASE_NAME
               {{- if not .Values.externaldb.broker.serviceInstanceName }}
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "node.secretName" . }}
+                  name: {{ include "node.secretName" . }}
                   key: database
               {{- else }}
               value: ""
@@ -168,17 +168,17 @@ spec:
             - name: DATABASE_PORT
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "node.secretName" . }}
+                  name: {{ include "node.secretName" . }}
                   key: port
             - name: DATABASE_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "node.secretName" . }}
+                  name: {{ include "node.secretName" . }}
                   key: username
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "node.secretName" . }}
+                  name: {{ include "node.secretName" . }}
                   key: password
             - name: DATABASE_CONNECTION_OPTIONS
               {{- if .Values.externaldb.ssl }}
@@ -249,9 +249,9 @@ spec:
               mountPath: /app
             {{- end }}
             - name: data
-              mountPath: {{ .Values.persistence.mountPath }}
+              mountPath: {{ .Values.persistence.mountPath | quote }}
               {{- if .Values.persistence.subPath }}
-              subPath: {{ .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath | quote }}
               {{- end }}
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
