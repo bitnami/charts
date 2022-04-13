@@ -3,14 +3,14 @@
 {{/*
 Create the name of the controller service account to use
 */}}
-{{- define "metallb.controllerServiceAccountName" -}}
+{{- define "metallb.controller.serviceAccountName" -}}
 {{ include "common.secrets.name" (dict "existingSecret" .Values.controller.serviceAccount.name "defaultNameSuffix" "controller" "context" $) }}
 {{- end -}}
 
 {{/*
 Create the name of the speaker service account to use
 */}}
-{{- define "metallb.speakerServiceAccountName" -}}
+{{- define "metallb.speaker.serviceAccountName" -}}
 {{ include "common.secrets.name" (dict "existingSecret" .Values.speaker.serviceAccount.name "defaultNameSuffix" "speaker" "context" $) }}
 {{- end -}}
 
