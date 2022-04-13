@@ -10,6 +10,9 @@
       "actions": [
         {
           "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
         }
       ]
     },
@@ -19,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/redis"
         },
-        "runtime_parameters": "YXV0aDoKICBwYXNzd29yZDogInRlc3RfcGFzc3dvcmQiCm1hc3RlcjoKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIgCiAgcGVyc2lzdGVuY2U6CiAgICBwYXRoOiAvZGF0YS1wZXJzaXN0ZW5jZQpyZXBsaWNhOgogIHJlcGxpY2FDb3VudDogMgogIGNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIHJ1bkFzVXNlcjogMTAwMg==",
+        "runtime_parameters": "YXV0aDoKICBwYXNzd29yZDogInRlc3RfcGFzc3dvcmQiCm1hc3RlcjoKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIgCiAgcGVyc2lzdGVuY2U6CiAgICBwYXRoOiAvZGF0YS1wZXJzaXN0ZW5jZQpyZXBsaWNhOgogIHJlcGxpY2FDb3VudDogMgogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgcmVkaXM6IDgwCiAgICB0eXBlOiBMb2FkQmFsYW5jZXIKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -29,7 +32,20 @@
       },
       "actions": [
         {
-          "action_id":"resilience-tests",
+          "action_id": "trivy",
+          "params": {
+            "threshold": "CRITICAL",
+            "vuln_type": ["OS"]
+          }
+        },
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-redis-replicas-tcp-redis"
+          }
+        },
+        {
+          "action_id": "resilience-tests",
           "params": {
             "test_cases": [
               "testKubernetesPodDelete",
