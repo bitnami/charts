@@ -7,7 +7,7 @@ NGINX Open Source is a web server that can be also used as a reverse proxy, load
 [Overview of NGINX Open Source](http://nginx.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+ 
 ## TL;DR
 
 ```bash
@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------------- | ---------------------- |
 | `image.registry`     | NGINX image registry                                                 | `docker.io`            |
 | `image.repository`   | NGINX image repository                                               | `bitnami/nginx`        |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.6-debian-10-r59` |
+| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.6-debian-10-r69` |
 | `image.pullPolicy`   | NGINX image pull policy                                              | `IfNotPresent`         |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                   |
 | `image.debug`        | Set to true if you would like to see extra information on logs       | `false`                |
@@ -163,7 +163,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                               | `false`                |
 | `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                | `docker.io`            |
 | `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                              | `bitnami/git`          |
-| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.35.1-debian-10-r58` |
+| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.35.1-debian-10-r67` |
 | `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                             | `IfNotPresent`         |
 | `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                  | `[]`                   |
 | `cloneStaticSiteFromGit.repository`        | Git Repository to clone static content from                                                       | `""`                   |
@@ -179,41 +179,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `existingServerBlockConfigmap`             | ConfigMap with custom server block to be added to NGINX configuration                             | `""`                   |
 | `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static site content                                    | `""`                   |
 | `staticSitePVC`                            | Name of existing PVC with the server static site content                                          | `""`                   |
-
-
-### LDAP parameters
-
-| Name                                            | Description                                                                              | Value                            |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------- | -------------------------------- |
-| `ldapDaemon.enabled`                            | Enable LDAP Auth Daemon proxy                                                            | `false`                          |
-| `ldapDaemon.image.registry`                     | LDAP AUth Daemon Image registry                                                          | `docker.io`                      |
-| `ldapDaemon.image.repository`                   | LDAP Auth Daemon Image repository                                                        | `bitnami/nginx-ldap-auth-daemon` |
-| `ldapDaemon.image.tag`                          | LDAP Auth Daemon Image tag (immutable tags are recommended)                              | `0.20200116.0-debian-10-r626`    |
-| `ldapDaemon.image.pullPolicy`                   | LDAP Auth Daemon Image pull policy                                                       | `IfNotPresent`                   |
-| `ldapDaemon.port`                               | LDAP Auth Daemon port                                                                    | `8888`                           |
-| `ldapDaemon.ldapConfig.uri`                     | LDAP Server URI, `ldap[s]:/<hostname>:<port>`                                            | `""`                             |
-| `ldapDaemon.ldapConfig.baseDN`                  | LDAP root DN to begin the search for the user                                            | `""`                             |
-| `ldapDaemon.ldapConfig.bindDN`                  | DN of user to bind to LDAP                                                               | `""`                             |
-| `ldapDaemon.ldapConfig.bindPassword`            | Password for the user to bind to LDAP                                                    | `""`                             |
-| `ldapDaemon.ldapConfig.filter`                  | LDAP search filter for search                                                            | `""`                             |
-| `ldapDaemon.ldapConfig.httpRealm`               | LDAP HTTP auth realm                                                                     | `""`                             |
-| `ldapDaemon.ldapConfig.httpCookieName`          | HTTP cookie name to be used in LDAP Auth                                                 | `""`                             |
-| `ldapDaemon.nginxServerBlock`                   | NGINX server block that configures LDAP communication. Overrides `ldapDaemon.ldapConfig` | `""`                             |
-| `ldapDaemon.existingNginxServerBlockSecret`     | Name of existing Secret with a NGINX server block to use for LDAP communication          | `""`                             |
-| `ldapDaemon.livenessProbe.enabled`              | Enable livenessProbe                                                                     | `true`                           |
-| `ldapDaemon.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                  | `30`                             |
-| `ldapDaemon.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                         | `10`                             |
-| `ldapDaemon.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                        | `5`                              |
-| `ldapDaemon.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                      | `6`                              |
-| `ldapDaemon.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                      | `1`                              |
-| `ldapDaemon.readinessProbe.enabled`             | Enable readinessProbe                                                                    | `true`                           |
-| `ldapDaemon.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                 | `5`                              |
-| `ldapDaemon.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                        | `5`                              |
-| `ldapDaemon.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                       | `3`                              |
-| `ldapDaemon.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                     | `3`                              |
-| `ldapDaemon.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                     | `1`                              |
-| `ldapDaemon.customLivenessProbe`                | Custom Liveness probe                                                                    | `{}`                             |
-| `ldapDaemon.customReadinessProbe`               | Custom Rediness probe                                                                    | `{}`                             |
 
 
 ### Traffic Exposure parameters
@@ -257,7 +222,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                                                                | `""`                     |
 | `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                                                                  | `docker.io`              |
 | `metrics.image.repository`                 | NGINX Prometheus exporter image repository                                                                                                | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.10.0-debian-10-r92`   |
+| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.10.0-debian-10-r102`  |
 | `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                          | `[]`                     |
 | `metrics.podAnnotations`                   | Additional annotations for NGINX Prometheus exporter pod(s)                                                                               | `{}`                     |
@@ -347,89 +312,6 @@ serverBlock: |-
 
 In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the `existingServerBlockConfigmap` parameter. Note that this will override the previous option.
 
-### Enabling LDAP
-
-In some scenarios, you may require users to authenticate in order to gain access to protected resources. By enabling LDAP, NGINX will make use of an Authorization Daemon to proxy those identification requests against a given LDAP Server.
-
-```
-                   ------------               --------------              ---------------
-                  |   NGINX    |    ----->   |     NGINX    |   ----->   |     LDAP      |
-                  |   server   |    <-----   |  ldap daemon |   <-----   |     server    |
-                   ------------               --------------              ---------------
-```
-
-In order to enable LDAP authentication you can set the `ldapDaemon.enabled` property and follow these steps:
-
-1. NGINX server needs to be configured to be self-aware of the proxy. In order to do so, use the `ldapDaemon.nginxServerBlock` property to provide with an additional server block, that will instruct NGINX to use it (see `values.yaml`). Alternatively, you can specify this server block configuration using an external Secret using the property `ldapDaemon.existingNginxServerBlockSecret`.
-
-2. Supply your LDAP Server connection details either in the aforementioned server block (setting request headers) or specifying them in `ldapDaemon.ldapConfig`. e.g. The following two approaches are equivalent:
-
-_Approach A) Specify connection details using the `ldapDaemon.ldapConfig` property_
-
-```yaml
-ldapDaemon:
-  enabled: true
-  ldapConfig:
-    uri: "ldap://YOUR_LDAP_SERVER_IP:YOUR_LDAP_SERVER_PORT"
-    baseDN: "dc=example,dc=org"
-    bindDN: "cn=admin,dc=example,dc=org"
-    bindPassword: "adminpassword"
-
-  nginxServerBlock: |-
-    server {
-    listen 0.0.0.0:{{ .Values.containerPorts.http }};
-
-    # You can provide a special subPath or the root
-    location = / {
-        auth_request /auth-proxy;
-    }
-
-    location = /auth-proxy {
-        internal;
-
-        proxy_pass http://127.0.0.1:{{ .Values.ldapDaemon.port }};
-    }
-    }
-```
-
-_Approach B) Specify connection details directly in the server block_
-
-```yaml
-ldapDaemon:
-  enabled: true
-  nginxServerBlock: |-
-    server {
-    listen 0.0.0.0:{{ .Values.containerPorts.http }};
-
-    # You can provide a special subPath or the root
-    location = / {
-        auth_request /auth-proxy;
-    }
-
-    location = /auth-proxy {
-        internal;
-
-        proxy_pass http://127.0.0.1:{{ .Values.ldapDaemon.port }};
-
-        ###############################################################
-        # YOU SHOULD CHANGE THE FOLLOWING TO YOUR LDAP CONFIGURATION  #
-        ###############################################################
-
-        # URL and port for connecting to the LDAP server
-        proxy_set_header X-Ldap-URL "ldap://YOUR_LDAP_SERVER_IP:YOUR_LDAP_SERVER_PORT";
-
-        # Base DN
-        proxy_set_header X-Ldap-BaseDN "dc=example,dc=org";
-
-        # Bind DN
-        proxy_set_header X-Ldap-BindDN "cn=admin,dc=example,dc=org";
-
-        # Bind password
-        proxy_set_header X-Ldap-BindPass "adminpassword";
-    }
-    }
-```
-
 ### Adding extra environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
@@ -471,6 +353,16 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 10.0.0
+
+This major release no longer uses the bitnami/nginx-ldap-auth-daemon container as a dependency since its upstream project is not actively maintained.
+
+*2022-04-12 edit*:
+
+Bitnami’s NGINX Helm chart from version 5.6.0 to 9.9.9 includes a `ldapDaemon.enabled` option **disabled by default** that allows to configure it with the [bitnami-docker-nginx-ldap-auth-daemon](https://github.com/bitnami/bitnami-docker-nginx-ldap-auth-daemon) following [NGINX’s reference implementation](https://www.nginx.com/blog/nginx-plus-authenticate-users/).
+
+On 9 April 2022, security vulnerabilities in the [NGINX LDAP reference implementation](https://github.com/nginxinc/nginx-ldap-auth) were publicly shared. **Although the deprecation of this container from the Bitnami catalog was not related to this security issue, [here](https://docs.bitnami.com/general/security/security-2022-04-12/) you can find more information from the Bitnami security team.**
 
 ### To 8.0.0
 

@@ -5,6 +5,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -13,6 +14,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  storageClass: ""
 
 ## @section Common parameters
 
@@ -28,6 +30,12 @@ fullnameOverride: ""
 ## @param clusterDomain Default Kubernetes cluster domain
 ##
 clusterDomain: cluster.local
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
 ##
 extraDeploy: []
@@ -61,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/logstash
-  tag: 7.17.1-debian-10-r28
+  tag: 8.1.2-debian-10-r1
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -182,9 +190,15 @@ serviceAccount:
   ##
   annotations: {}
 
-## @param containerPorts [array] Array containing the ports to open in the Logstash container
+## @param containerPorts [array] Array containing the ports to open in the Logstash container (evaluated as a template)
 ##
 containerPorts:
+  - name: http
+    containerPort: 8080
+    protocol: TCP
+  - name: monitoring
+    containerPort: 9600
+    protocol: TCP
   ## - name: syslog-udp
   ##   containerPort: 1514
   ##   protocol: UDP
@@ -192,19 +206,35 @@ containerPorts:
   ##   containerPort: 1514
   ##   protocol: TCP
   ##
-  - name: http
-    containerPort: 8080
-    protocol: TCP
-  - name: monitoring
-    containerPort: 9600
-    protocol: TCP
+## @param initContainers Add additional init containers to the Logstash pod(s)
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## e.g:
+## initContainers:
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
+##    command: ['sh', '-c', 'echo "hello world"']
+##
+initContainers: []
+## @param sidecars Add additional sidecar containers to the Logstash pod(s)
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
 ## @param replicaCount Number of Logstash replicas to deploy
 ##
 replicaCount: 1
-## @param updateStrategy Update strategy (`RollingUpdate`, or `OnDelete`)
+## @param updateStrategy.type Update strategy type (`RollingUpdate`, or `OnDelete`)
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
 ##
-updateStrategy: RollingUpdate
+updateStrategy:
+  type: RollingUpdate
 ## @param podManagementPolicy Pod management policy
 ## https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
 ##
@@ -213,6 +243,10 @@ podManagementPolicy: OrderedReady
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
+## @param podLabels Extra labels for Logstash pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -257,16 +291,48 @@ tolerations: []
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
-## K8s Security Context for Logstash pods
-## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-## @param securityContext.enabled Enable security context for Logstash
-## @param securityContext.fsGroup Group ID for the Logstash filesystem
-## @param securityContext.runAsUser User ID for the Logstash container
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
-securityContext:
+schedulerName: ""
+## @param terminationGracePeriodSeconds In seconds, time the given to the Logstash pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
+
+## K8s Security Context for Logstash pods
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled Logstash pods' Security Context
+## @param podSecurityContext.fsGroup Set Logstash pod's Security Context fsGroup
+##
+podSecurityContext:
   enabled: true
   fsGroup: 1001
+## Configure Container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param containerSecurityContext.enabled Enabled Logstash containers' Security Context
+## @param containerSecurityContext.runAsUser Set Logstash containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set Logstash container's Security Context runAsNonRoot
+##
+containerSecurityContext:
+  enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param lifecycleHooks for the Logstash container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## Logstash containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -287,10 +353,23 @@ resources:
   ##    cpu: 100m
   ##    memory: 128Mi
   requests: {}
-## Logstash pods' liveness probe
+## Configure extra options for Logstash containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-## @param livenessProbe.httpGet.path Request path for livenessProbe
-## @param livenessProbe.httpGet.port Port for livenessProbe
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 6
+## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -298,18 +377,13 @@ resources:
 ## @param livenessProbe.successThreshold Success threshold for livenessProbe
 ##
 livenessProbe:
-  httpGet:
-    path: /
-    port: monitoring
+  enabled: true
   initialDelaySeconds: 60
   periodSeconds: 10
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 6
-## Logstash pods' readiness probe
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-## @param readinessProbe.httpGet.path Request path for readinessProbe
-## @param readinessProbe.httpGet.port Port for readinessProbe
+## @param readinessProbe.enabled Enable readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -317,47 +391,43 @@ livenessProbe:
 ## @param readinessProbe.successThreshold Success threshold for readinessProbe
 ##
 readinessProbe:
-  httpGet:
-    path: /
-    port: monitoring
+  enabled: true
   initialDelaySeconds: 60
   periodSeconds: 10
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 6
-## @param lifecycle Logstash pods' lifecycle hooks
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
-## e.g:
-## preStop:
-##   exec:
-##     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
-## postStart:
-##   exec:
-##     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+## @param customStartupProbe Custom startup probe for the Web component
 ##
-lifecycle: {}
+customStartupProbe: {}
+## @param customLivenessProbe Custom liveness probe for the Web component
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom readiness probe for the Web component
+##
+customReadinessProbe: {}
 ## Service parameters
 ##
 service:
   ## @param service.type Kubernetes service type (`ClusterIP`, `NodePort`, or `LoadBalancer`)
   ##
   type: ClusterIP
-  ## @param service.ports.http [object] Logstash svc ports
+  ## @param service.ports [array] Logstash service ports (evaluated as a template)
   ##
   ports:
-    ## syslog-udp:
+    - name: http
+      port: 8080
+      targetPort: http
+      protocol: TCP
+    ## - name: syslog-udp
     ##   port: 1514
     ##   targetPort: syslog-udp
     ##   protocol: UDP
-    ## syslog-tcp:
+    ## - name: syslog-tcp
     ##   port: 1514
     ##   targetPort: syslog-tcp
     ##   protocol: TCP
     ##
-    http:
-      port: 8080
-      targetPort: http
-      protocol: TCP
   ## @param service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
   ##
   loadBalancerIP: ""
@@ -434,7 +504,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r378
+    tag: 10-debian-10-r387
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -475,10 +545,9 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
-  ## certManager: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
   ##
-
+  selfSigned: false
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
@@ -524,6 +593,10 @@ ingress:
   ##     servicePort: use-annotation
   ##
   extraPaths: []
+  ## @param ingress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
+  ## Useful when looking for additional customization, such as using different backend
+  ##
+  extraRules: []
   ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
@@ -542,11 +615,17 @@ ingress:
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
   ##
-  secrets: []
-  ## - name: logstash.local-tls
-  ##   key:
-  ##   certificate:
+  ## secrets:
+  ##   - name: logstash.local-tls
+  ##     key:
+  ##     certificate:
   ##
+  secrets: []
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
 ## Prometheus metrics
 ##
 metrics:
@@ -564,7 +643,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/logstash-exporter
-    tag: 7.3.0-debian-10-r481
+    tag: 7.3.0-debian-10-r489
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -608,6 +687,9 @@ metrics:
     ## namespace: monitoring
     ##
     namespace: ""
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
@@ -620,6 +702,14 @@ metrics:
     ## scrapeTimeout: 10s
     ##
     scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    metricRelabelings: []
     ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
@@ -627,6 +717,12 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
   ## Logstash Prometheus Exporter containers' liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param metrics.livenessProbe.httpGet.path Request path for livenessProbe
@@ -699,15 +795,11 @@ metrics:
       prometheus.io/path: "/metrics"
 ## Pod disruption budget configuration
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
-## @param podDisruptionBudget.create If true, create a pod disruption budget for pods.
-## @param podDisruptionBudget.minAvailable Minimum number / percentage of pods that should remain scheduled
-## @param podDisruptionBudget.maxUnavailable Maximum number / percentage of pods that may be made unavailable
+## @param pdb.create If true, create a pod disruption budget for pods.
+## @param pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
 ##
-podDisruptionBudget:
+pdb:
   create: false
   minAvailable: 1
   maxUnavailable: ""
-## @param initContainers Extra containers to run before logstash for initialization purposes like custom plugin install.
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-##
-initContainers: []

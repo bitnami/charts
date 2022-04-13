@@ -77,11 +77,11 @@ spec:
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          {{- else if .Values.metrics.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.command "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.kafka.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.command "context" $) | nindent 12 }}
           {{- else }}
           command:
-            - kafka_exporter
+            - bash
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
@@ -89,31 +89,34 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            {{- range $i, $e := until $replicaCount }}
-            - --kafka.server={{ $fullname }}-{{ $i }}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }}
-            {{- end }}
-            {{- if (include "kafka.client.saslAuthentication" .) }}
-            - --sasl.enabled
-            - --sasl.username="$SASL_USERNAME"
-            - --sasl.password="${SASL_USER_PASSWORD%%,*}"
-            - --sasl.mechanism={{ include "kafka.metrics.kafka.saslMechanism" . }}
-            {{- end }}
-            {{- if (include "kafka.client.tlsEncryption" .) }}
-            - --tls.enabled
-            {{- if .Values.metrics.kafka.certificatesSecret }}
-            - --tls.key-file=/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsKey }}
-            - --tls.cert-file=/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsCert }}
-            {{- if .Values.metrics.kafka.tlsCaSecret }}
-            - --tls.ca-file=/opt/bitnami/kafka-exporter/cacert/{{ .Values.metrics.kafka.tlsCaCert }}
-            {{- else }}
-            - --tls.ca-file=/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsCaCert }}
-            {{- end }}
-            {{- end }}
-            {{- end }}
-            {{- range $key, $value := .Values.metrics.kafka.extraFlags }}
-            - --{{ $key }}{{ if $value }}={{ $value }}{{ end }}
-            {{- end }}
-            - --web.listen-address=:{{ .Values.metrics.kafka.containerPorts.metrics }}
+            - -ce
+            - |
+              kafka_exporter \
+              {{- range $i, $e := until $replicaCount }}
+              --kafka.server={{ $fullname }}-{{ $i }}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }} \
+              {{- end }}
+              {{- if (include "kafka.client.saslAuthentication" .) }}
+              --sasl.enabled \
+              --sasl.username=$SASL_USERNAME \
+              --sasl.password=$SASL_USER_PASSWORD \
+              --sasl.mechanism={{ include "kafka.metrics.kafka.saslMechanism" . }} \
+              {{- end }}
+              {{- if (include "kafka.client.tlsEncryption" .) }}
+              --tls.enabled \
+              {{- if .Values.metrics.kafka.certificatesSecret }}
+              --tls.key-file=/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsKey }} \
+              --tls.cert-file=/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsCert }} \
+              {{- if .Values.metrics.kafka.tlsCaSecret }}
+              --tls.ca-file=/opt/bitnami/kafka-exporter/cacert/{{ .Values.metrics.kafka.tlsCaCert }} \
+              {{- else }}
+              --tls.ca-file=/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsCaCert }} \
+              {{- end }}
+              {{- end }}
+              {{- end }}
+              {{- range $key, $value := .Values.metrics.kafka.extraFlags }}
+              --{{ $key }}{{ if $value }}={{ $value }}{{ end }} \
+              {{- end }}
+              --web.listen-address=:{{ .Values.metrics.kafka.containerPorts.metrics }}
           {{- end }}
           {{- if (include "kafka.client.saslAuthentication" .) }}
           {{- $clientUsers := .Values.auth.sasl.jaas.clientUsers }}
@@ -124,7 +127,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "kafka.jaasSecretName" . }}
-                  key: client-passwords
+                  key: system-user-password
           {{- end }}
           ports:
             - name: metrics
