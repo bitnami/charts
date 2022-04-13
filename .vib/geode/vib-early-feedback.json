@@ -24,7 +24,7 @@
         },
         "runtime_parameters": "ImF1dGgiOgogICJwYXNzd29yZCI6ICJWOTlQaHI0SHFyOU5qaDQzIgogICJ1c2VybmFtZSI6ICJhZG1pbiIKImxvY2F0b3IiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJodHRwIjogODAKICAgICJzZXNzaW9uQWZmaW5pdHkiOiAiQ2xpZW50SVAiCiAgICAidHlwZSI6ICJMb2FkQmFsYW5jZXIiCiJzZXJ2ZXIiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJodHRwIjogODA=",
         "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
             "name": "S4"
           }
