@@ -52,7 +52,7 @@ Return the Thanos Objstore configuration secret.
 Return true if a secret object should be created
 */}}
 {{- define "thanos.createObjstoreSecret" -}}
-{{- if and (or .Values.objstoreConfig  .Values.objstore) (not .Values.existingObjstoreSecret) }}
+{{- if and (or .Values.objstoreConfig .Values.objstore) (not .Values.existingObjstoreSecret) }}
     {{- true -}}
 {{- else -}}
 {{- end -}}
