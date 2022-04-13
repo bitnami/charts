@@ -73,6 +73,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                 | `""`  |
 | `nameOverride`      | String to partially override node.fullname template (will maintain the release name) | `""`  |
 | `fullnameOverride`  | String to fully override node.fullname template                                      | `""`  |
+| `namespaceOverride` | Override namespace for resources                                                     | `""`  |
 | `commonLabels`      | Add labels to all the deployed resources                                             | `{}`  |
 | `commonAnnotations` | Add annotations to all the deployed resources                                        | `{}`  |
 
@@ -125,7 +126,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                              | Additional pod annotations                                                                                               | `{}`                    |
 | `podLabels`                                   | Additional labels for Node pods                                                                                          | `{}`                    |
 | `extraDeploy`                                 | Array of extra objects to deploy with the release (evaluated as a template)                                              | `[]`                    |
-| `namespaceOverride`                           | Override namespace for resources                                                                                         | `""`                    |
 | `diagnosticMode.enabled`                      | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                  | `false`                 |
 | `diagnosticMode.command`                      | Command to override all containers in the the deployment(s)/statefulset(s)                                               | `["sleep"]`             |
 | `diagnosticMode.args`                         | Args to override all containers in the the deployment(s)/statefulset(s)                                                  | `["infinity"]`          |
