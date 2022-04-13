@@ -62,14 +62,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RabbitMQ Image parameters
 
-| Name                | Description                                                    | Value                  |
-| ------------------- | -------------------------------------------------------------- | ---------------------- |
-| `image.registry`    | RabbitMQ image registry                                        | `docker.io`            |
-| `image.repository`  | RabbitMQ image repository                                      | `bitnami/rabbitmq`     |
-| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)            | `3.9.13-debian-10-r38` |
-| `image.pullPolicy`  | RabbitMQ image pull policy                                     | `IfNotPresent`         |
-| `image.pullSecrets` | Specify docker-registry secret names as an array               | `[]`                   |
-| `image.debug`       | Set to true if you would like to see extra information on logs | `false`                |
+| Name                | Description                                                    | Value                 |
+| ------------------- | -------------------------------------------------------------- | --------------------- |
+| `image.registry`    | RabbitMQ image registry                                        | `docker.io`           |
+| `image.repository`  | RabbitMQ image repository                                      | `bitnami/rabbitmq`    |
+| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)            | `3.9.14-debian-10-r5` |
+| `image.pullPolicy`  | RabbitMQ image pull policy                                     | `IfNotPresent`        |
+| `image.pullSecrets` | Specify docker-registry secret names as an array               | `[]`                  |
+| `image.debug`       | Set to true if you would like to see extra information on logs | `false`               |
 
 
 ### Common parameters
@@ -116,6 +116,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clustering.forceBoot`             | Force boot of an unexpectedly shut down cluster (in an unexpected order).                                                                | `false`                                           |
 | `clustering.partitionHandling`     | Switch Partition Handling Strategy. Either `autoheal` or `pause-minority` or `pause-if-all-down` or `ignore`                             | `autoheal`                                        |
 | `loadDefinition.enabled`           | Enable loading a RabbitMQ definitions file to configure RabbitMQ                                                                         | `false`                                           |
+| `loadDefinition.file`              | Name of the definitions file                                                                                                             | `/app/load_definition.json`                       |
 | `loadDefinition.existingSecret`    | Existing secret with the load definitions file                                                                                           | `""`                                              |
 | `command`                          | Override default container command (useful when using custom images)                                                                     | `[]`                                              |
 | `args`                             | Override default container args (useful when using custom images)                                                                        | `[]`                                              |
@@ -296,7 +297,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r349`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r378`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                    | `{}`                    |

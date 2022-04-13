@@ -49,7 +49,7 @@ rules:
       - update
       - watch
   - apiGroups:
-      - extensions
+{{ include "nginx-ingress-controller.role.extensions.apiGroup" . | nindent 6 }}
       - networking.k8s.io
     resources:
       - ingresses
@@ -65,14 +65,14 @@ rules:
       - create
       - patch
   - apiGroups:
-      - extensions
+{{ include "nginx-ingress-controller.role.extensions.apiGroup" . | nindent 6 }}
       - networking.k8s.io
     resources:
       - ingresses/status
     verbs:
       - update
   - apiGroups:
-      - extensions
+{{ include "nginx-ingress-controller.role.extensions.apiGroup" . | nindent 6 }}
       - networking.k8s.io
     resources:
       - ingressclasses

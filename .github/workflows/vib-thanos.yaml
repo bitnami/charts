@@ -1,0 +1,41 @@
+name: 'vib'
+on: # rebuild any PRs and main branch changes
+  pull_request_target:
+    branches:
+      - master
+    paths:
+      - 'bitnami/thanos/*'
+env:
+  CSP_API_URL: https://console.cloud.vmware.com
+  CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
+  VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
+jobs:
+  vib-verify-bucketweb:
+    runs-on: ubuntu-latest
+    environment: vmware-image-builder
+    name: BucketWeb on Tanzu Kubernetes Grid
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - uses: vmware-labs/vmware-image-builder-action@main
+        with:
+          pipeline: thanos/bucketweb/vib-complete-verify.json
+        env:
+          VIB_ENV_TARGET_PLATFORM: 7ddab896-2e4e-4d58-a501-f79897eba3a0
+
+  vib-verify-queryfrontend: 
+    runs-on: ubuntu-latest
+    environment: vmware-image-builder
+    name: QueryFrontend on Tanzu Kubernetes Grid
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - uses: vmware-labs/vmware-image-builder-action@main
+        with:
+          pipeline: thanos/queryfrontend/vib-complete-verify.json
+        env:
+          VIB_ENV_TARGET_PLATFORM: 7ddab896-2e4e-4d58-a501-f79897eba3a0        
