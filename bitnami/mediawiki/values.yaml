@@ -148,6 +148,14 @@ extraEnvVarsSecret: ""
 ##
 updateStrategy:
   type: RollingUpdate
+## Mediawiki pods' Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
+## @param podServiceAccount.name Existing ServiceAccount to assign to the pods
+## @param podServiceAccount.automountToken Whether or not to automount the Service Account Token
+##
+podServiceAccount:
+  name: ''
+  automountToken: true
 ## Mediawiki pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param podSecurityContext.enabled Enable Mediawiki pods' Security Context

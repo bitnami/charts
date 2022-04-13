@@ -111,6 +111,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                    | Description                                                                               | Value                                             |
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------- |
 | `updateStrategy.type`                   | StrategyType can be set to RollingUpdate or OnDelete                                      | `RollingUpdate`                                   |
+| `podServiceAccount.name    `            | Existing ServiceAccount to assign to the pod                                              | `""`                                              |
+| `podServiceAccount.automountToken`      | Whether or not to automount the Service Account Token                                     | `true`                                           |
 | `podSecurityContext.enabled`            | Enable Mediawiki pods' Security Context                                                   | `true`                                            |
 | `podSecurityContext.fsGroup`            | Group ID for the volumes of the pod                                                       | `1001`                                            |
 | `containerSecurityContext.enabled`      | Enable Mediawiki containers' SecurityContext                                              | `true`                                            |
