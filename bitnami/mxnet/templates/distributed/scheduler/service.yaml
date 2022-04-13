@@ -1,0 +1,32 @@
+{{- if eq .Values.mode "distributed" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-scheduler
+  namespace: {{ template "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: scheduler
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.scheduler.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.scheduler.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.scheduler.service.type }}
+  ports:
+    - port: {{ .Values.scheduler.service.ports.mxnet}}
+      targetPort: mxnet
+      name: mxnet
+      {{- if and (or (eq .Values.scheduler.service.type "NodePort") (eq .Values.scheduler.service.type "LoadBalancer")) (not (empty .Values.scheduler.service.nodePorts.mxnet)) }}
+      nodePort: {{ .Values.scheduler.service.nodePorts.mxnet }}
+      {{- else if eq .Values.scheduler.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: scheduler
+{{- end }}
