@@ -1,12 +1,11 @@
 {{- if .Values.provisioning.enabled }}
 {{- $fullname := printf "%s-provisioning" (include "common.names.fullname" .) }}
-{{- $releaseNamespace := .Release.Namespace }}
 {{- $minioAlias := "provisioning" }}
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ $fullname }}
-  namespace: {{ $releaseNamespace | quote  }}
+  namespace: {{ .Release.Namespace | quote  }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: minio-provisioning
     {{- if .Values.commonLabels }}
