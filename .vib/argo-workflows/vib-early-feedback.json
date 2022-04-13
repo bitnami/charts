@@ -24,7 +24,7 @@
         },
         "runtime_parameters": "InBvc3RncmVzcWwiOgogICJwb3N0Z3Jlc3FsUGFzc3dvcmQiOiAiMmI3ZFJncUsiCiJzZXJ2ZXIiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJodHRwIjogODAKICAgICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
         "target_platform": {
-          "target_platform_id": "{VIB_ENV_DEFAULT_TARGET_PLATFORM}",
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
             "name": "S4"
           }

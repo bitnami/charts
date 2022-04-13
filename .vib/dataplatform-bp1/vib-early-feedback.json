@@ -24,7 +24,7 @@
         },
         "runtime_parameters": "ImRhdGFwbGF0Zm9ybSI6CiAgImVtaXR0ZXIiOgogICAgInNlcnZpY2UiOgogICAgICAicG9ydHMiOgogICAgICAgICJodHRwIjogODAKICAgICAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgoia2Fma2EiOgogICJyZXBsaWNhQ291bnQiOiAxCiAgInJlc291cmNlcyI6CiAgICAicmVxdWVzdHMiOgogICAgICAibWVtb3J5IjogIjEyOE1pIgoibG9nc3Rhc2giOgogICJyZXBsaWNhQ291bnQiOiAxCiAgInJlc291cmNlcyI6CiAgICAicmVxdWVzdHMiOgogICAgICAibWVtb3J5IjogIjEyOE1pIgoic3BhcmsiOgogICJtYXN0ZXIiOgogICAgInJlc291cmNlcyI6CiAgICAgICJyZXF1ZXN0cyI6CiAgICAgICAgIm1lbW9yeSI6ICIxMjhNaSIKICAid29ya2VyIjoKICAgICJyZXBsaWNhQ291bnQiOiAxCiAgICAicmVzb3VyY2VzIjoKICAgICAgInJlcXVlc3RzIjoKICAgICAgICAibWVtb3J5IjogIjEyOE1pIgoiem9va2VlcGVyIjoKICAicmVwbGljYUNvdW50IjogMQogICJyZXNvdXJjZXMiOgogICAgInJlcXVlc3RzIjoKICAgICAgIm1lbW9yeSI6ICIxMjhNaSI=",
         "target_platform": {
-          "target_platform_id": "{VIB_ENV_DEFAULT_TARGET_PLATFORM}",
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
             "name": "S4"
           }
