@@ -125,6 +125,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                              | Additional pod annotations                                                                                               | `{}`                    |
 | `podLabels`                                   | Additional labels for Node pods                                                                                          | `{}`                    |
 | `extraDeploy`                                 | Array of extra objects to deploy with the release (evaluated as a template)                                              | `[]`                    |
+| `namespaceOverride`                           | Override namespace for resources                                                                                         | `""`                    |
 | `diagnosticMode.enabled`                      | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                  | `false`                 |
 | `diagnosticMode.command`                      | Command to override all containers in the the deployment(s)/statefulset(s)                                               | `["sleep"]`             |
 | `diagnosticMode.args`                         | Args to override all containers in the the deployment(s)/statefulset(s)                                                  | `["infinity"]`          |
@@ -208,7 +209,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                         | Description                                                                                                                           | Value               |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `persistence.enabled`        | Enable persistence using PVC                                                                                                          | `false`             |
-| `persistence.path`           | Path to persisted directory                                                                                                           | `/app/data`         |
+| `persistence.mountPath`      | Path where the volume will be mount at.                                                                                               | `/app/data`         |
+| `persistence.subPath`        | Subdirectory of the volume to mount                                                                                                   | `""`                |
 | `persistence.existingClaim`  | Name of an existing PVC to use                                                                                                        | `""`                |
 | `persistence.resourcePolicy` | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                |
 | `persistence.storageClass`   | Persistent Volume Storage Class                                                                                                       | `""`                |
@@ -447,6 +449,7 @@ Affected values:
 - `service.port` is renamed to `service.ports.http`
 - `service.nodePort` is renamed to `service.nodePorts.http`
 - `accessMode` is replaced by `accessModes` (a list instead of a simple string)
+- `persistence.path` is renamed to `persistence.mountPath` (a list instead of a simple string)
 
 Also MongoDB&reg; subchart container images were updated to 5.0.x and it can affect compatibility with older versions of MongoDB&reg;.
 

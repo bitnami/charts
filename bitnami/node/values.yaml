@@ -507,9 +507,12 @@ persistence:
   ## @param persistence.enabled Enable persistence using PVC
   ##
   enabled: false
-  ## @param persistence.path Path to persisted directory
+  ## @param persistence.mountPath Path where the volume will be mount at.
   ##
-  path: /app/data
+  mountPath: /app/data
+  ## @param persistence.subPath Subdirectory of the volume to mount
+  ##
+  subPath: ""
   ## @param persistence.existingClaim Name of an existing PVC to use
   ##
   existingClaim: ""
