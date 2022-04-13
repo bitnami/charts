@@ -5,7 +5,8 @@ objstore:
   type: s3
   config:
     bucket: thanos
-    endpoint: "{{ include "thanos.minio.fullname" . }}.monitoring.svc.cluster.local:9000"
+    endpoint: |-
+      {{ include "thanos.minio.fullname" . }}.monitoring.svc.cluster.local:9000
     access_key: minio
     secret_key: minio123
     insecure: true
