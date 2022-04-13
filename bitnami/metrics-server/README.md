@@ -7,7 +7,7 @@ Metrics Server aggregates resource usage data, such as container CPU and memory 
 [Overview of Metrics Server](https://github.com/kubernetes-incubator/metrics-server)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -61,13 +61,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                                                                  | Value |
-| ------------------- | -------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
-| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`  |
-| `commonLabels`      | Add labels to all the deployed resources                                                     | `{}`  |
-| `commonAnnotations` | Add annotations to all the deployed resources                                                | `{}`  |
-| `extraDeploy`       | Array of extra objects to deploy with the release                                            | `[]`  |
+| Name                     | Description                                                                                  | Value          |
+| ------------------------ | -------------------------------------------------------------------------------------------- | -------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`           |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`           |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`           |
+| `commonLabels`           | Add labels to all the deployed resources                                                     | `{}`           |
+| `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`           |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                   | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                      | `["infinity"]` |
 
 
 ### Metrics Server parameters
@@ -76,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                  | Metrics Server image registry                                                                                                                                            | `docker.io`              |
 | `image.repository`                                | Metrics Server image repository                                                                                                                                          | `bitnami/metrics-server` |
-| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.5.2-debian-10-r49`    |
+| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.6.1-debian-10-r50`    |
 | `image.pullPolicy`                                | Metrics Server image pull policy                                                                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                               | Metrics Server image pull secrets                                                                                                                                        | `[]`                     |
 | `hostAliases`                                     | Add deployment host aliases                                                                                                                                              | `[]`                     |
@@ -86,22 +90,32 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                           | Specifies whether a ServiceAccount should be created                                                                                                                     | `true`                   |
 | `serviceAccount.name`                             | The name of the ServiceAccount to create                                                                                                                                 | `""`                     |
 | `serviceAccount.automountServiceAccountToken`     | Automount API credentials for a service account                                                                                                                          | `true`                   |
+| `serviceAccount.annotations`                      | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                               | `{}`                     |
 | `apiService.create`                               | Specifies whether the v1beta1.metrics.k8s.io API service should be created. You can check if it is needed with `kubectl get --raw "/apis/metrics.k8s.io/v1beta1/nodes"`. | `false`                  |
 | `apiService.insecureSkipTLSVerify`                | Specifies whether to skip self-verifying self-signed TLS certificates. Set to "false" if you are providing your own certificates.                                        | `true`                   |
 | `apiService.caBundle`                             | A base64-encoded string of concatenated certificates for the CA chain for the APIService.                                                                                | `""`                     |
-| `securePort`                                      | Port where metrics-server will be running                                                                                                                                | `8443`                   |
+| `containerPorts.https`                            | Port where metrics-server will be running                                                                                                                                | `8443`                   |
 | `hostNetwork`                                     | Enable hostNetwork mode                                                                                                                                                  | `false`                  |
 | `dnsPolicy`                                       | Default dnsPolicy setting                                                                                                                                                | `ClusterFirst`           |
-| `command`                                         | Override default container command (useful when using custom images)                                                                                                     | `["metrics-server"]`     |
-| `extraArgs`                                       | Extra arguments to pass to metrics-server on start up                                                                                                                    | `{}`                     |
+| `command`                                         | Override default container command (useful when using custom images)                                                                                                     | `[]`                     |
+| `args`                                            | Override default container args (useful when using custom images)                                                                                                        | `[]`                     |
+| `lifecycleHooks`                                  | for the metrics-server container(s) to automate configuration before or after startup                                                                                    | `{}`                     |
+| `extraEnvVars`                                    | Array with extra environment variables to add to metrics-server nodes                                                                                                    | `[]`                     |
+| `extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra env vars for metrics-server nodes                                                                                            | `""`                     |
+| `extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for metrics-server nodes                                                                                               | `""`                     |
+| `extraArgs`                                       | Extra arguments to pass to metrics-server on start up                                                                                                                    | `[]`                     |
+| `sidecars`                                        | Add additional sidecar containers to the metrics-server pod(s)                                                                                                           | `[]`                     |
+| `initContainers`                                  | Add additional init containers to the metrics-server pod(s)                                                                                                              | `[]`                     |
 | `podLabels`                                       | Pod labels                                                                                                                                                               | `{}`                     |
 | `podAnnotations`                                  | Pod annotations                                                                                                                                                          | `{}`                     |
 | `priorityClassName`                               | Priority class for pod scheduling                                                                                                                                        | `""`                     |
+| `schedulerName`                                   | Name of the k8s scheduler (other than default)                                                                                                                           | `""`                     |
+| `terminationGracePeriodSeconds`                   | In seconds, time the given to the metrics-server pod needs to terminate gracefully                                                                                       | `""`                     |
 | `podAffinityPreset`                               | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                      | `""`                     |
 | `podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                 | `soft`                   |
-| `podDisruptionBudget.enabled`                     | Create a PodDisruptionBudget                                                                                                                                             | `false`                  |
-| `podDisruptionBudget.minAvailable`                | Minimum available instances                                                                                                                                              | `""`                     |
-| `podDisruptionBudget.maxUnavailable`              | Maximum unavailable instances                                                                                                                                            | `""`                     |
+| `pdb.create`                                      | Create a PodDisruptionBudget                                                                                                                                             | `false`                  |
+| `pdb.minAvailable`                                | Minimum available instances                                                                                                                                              | `""`                     |
+| `pdb.maxUnavailable`                              | Maximum unavailable instances                                                                                                                                            | `""`                     |
 | `nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                | `""`                     |
 | `nodeAffinityPreset.key`                          | Node label key to match. Ignored if `affinity` is set.                                                                                                                   | `""`                     |
 | `nodeAffinityPreset.values`                       | Node label values to match. Ignored if `affinity` is set.                                                                                                                | `[]`                     |
@@ -110,34 +124,48 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeSelector`                                    | Node labels for pod assignment                                                                                                                                           | `{}`                     |
 | `tolerations`                                     | Tolerations for pod assignment                                                                                                                                           | `[]`                     |
 | `service.type`                                    | Kubernetes Service type                                                                                                                                                  | `ClusterIP`              |
-| `service.port`                                    | Kubernetes Service port                                                                                                                                                  | `443`                    |
-| `service.nodePort`                                | Kubernetes Service port                                                                                                                                                  | `""`                     |
+| `service.ports.https`                             | Kubernetes Service port                                                                                                                                                  | `443`                    |
+| `service.nodePorts.https`                         | Kubernetes Service port                                                                                                                                                  | `""`                     |
+| `service.clusterIP`                               | metrics-server service Cluster IP                                                                                                                                        | `""`                     |
 | `service.loadBalancerIP`                          | LoadBalancer IP if Service type is `LoadBalancer`                                                                                                                        | `""`                     |
+| `service.loadBalancerSourceRanges`                | metrics-server service Load Balancer sources                                                                                                                             | `[]`                     |
+| `service.externalTrafficPolicy`                   | metrics-server service external traffic policy                                                                                                                           | `Cluster`                |
+| `service.extraPorts`                              | Extra ports to expose (normally used with the `sidecar` value)                                                                                                           | `[]`                     |
 | `service.annotations`                             | Annotations for the Service                                                                                                                                              | `{}`                     |
 | `service.labels`                                  | Labels for the Service                                                                                                                                                   | `{}`                     |
+| `service.sessionAffinity`                         | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                     | `None`                   |
+| `service.sessionAffinityConfig`                   | Additional settings for the sessionAffinity                                                                                                                              | `{}`                     |
 | `resources.limits`                                | The resources limits for the container                                                                                                                                   | `{}`                     |
 | `resources.requests`                              | The requested resources for the container                                                                                                                                | `{}`                     |
+| `startupProbe.enabled`                            | Enable startupProbe                                                                                                                                                      | `false`                  |
+| `startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                                                                                   | `0`                      |
+| `startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                                                                                          | `10`                     |
+| `startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                                                                                         | `1`                      |
+| `startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                                                                                       | `3`                      |
+| `startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                                                                                       | `1`                      |
 | `livenessProbe.enabled`                           | Enable livenessProbe                                                                                                                                                     | `true`                   |
-| `livenessProbe.httpGet.path`                      | Request path for livenessProbe                                                                                                                                           | `/livez`                 |
-| `livenessProbe.httpGet.port`                      | Port for livenessProbe                                                                                                                                                   | `https`                  |
-| `livenessProbe.httpGet.scheme`                    | Scheme for livenessProbe                                                                                                                                                 | `HTTPS`                  |
+| `livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                                                                                  | `0`                      |
 | `livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                                                                                         | `10`                     |
+| `livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                                                                                                        | `1`                      |
 | `livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                                                                                                      | `3`                      |
+| `livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                                                                                                      | `1`                      |
 | `readinessProbe.enabled`                          | Enable readinessProbe                                                                                                                                                    | `true`                   |
-| `readinessProbe.httpGet.path`                     | Request path for readinessProbe                                                                                                                                          | `/readyz`                |
-| `readinessProbe.httpGet.port`                     | Port for readinessProbe                                                                                                                                                  | `https`                  |
-| `readinessProbe.httpGet.scheme`                   | Scheme for livenessProbe                                                                                                                                                 | `HTTPS`                  |
+| `readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                                                                                                 | `0`                      |
 | `readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                                                                                        | `10`                     |
+| `readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                                                                                       | `1`                      |
 | `readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                                                                     | `3`                      |
+| `readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                                                                                     | `1`                      |
+| `customStartupProbe`                              | Custom liveness probe for the Web component                                                                                                                              | `{}`                     |
 | `customLivenessProbe`                             | Custom Liveness probes for metrics-server                                                                                                                                | `{}`                     |
 | `customReadinessProbe`                            | Custom Readiness probes metrics-server                                                                                                                                   | `{}`                     |
 | `containerSecurityContext.enabled`                | Enable Container security context                                                                                                                                        | `true`                   |
 | `containerSecurityContext.readOnlyRootFilesystem` | ReadOnlyRootFilesystem for the container                                                                                                                                 | `false`                  |
 | `containerSecurityContext.runAsNonRoot`           | Run containers as non-root users                                                                                                                                         | `true`                   |
+| `containerSecurityContext.runAsUser`              | Set containers' Security Context runAsUser                                                                                                                               | `1001`                   |
 | `podSecurityContext.enabled`                      | Pod security context                                                                                                                                                     | `false`                  |
+| `podSecurityContext.fsGroup`                      | Set %%MAIN_CONTAINER_NAME%% pod's Security Context fsGroup                                                                                                               | `1001`                   |
 | `extraVolumes`                                    | Extra volumes                                                                                                                                                            | `[]`                     |
 | `extraVolumeMounts`                               | Mount extra volume(s)                                                                                                                                                    | `[]`                     |
-| `extraContainers`                                 | Extra containers to run within the pod                                                                                                                                   | `{}`                     |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -184,6 +212,15 @@ As an alternative, you can use one of the preset configurations for pod affinity
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 6.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be aligned with the rest of the assets in the Bitnami charts repository.
+
+Affected values:
+
+- `service.port` was deprecated. We recommend using `service.ports.http` instead.
+- `service.nodePort` was deprecated. We recommend using `service.nodePorts.https` instead.
 
 ### To 5.2.0
 
