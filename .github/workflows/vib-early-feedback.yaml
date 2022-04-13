@@ -42,8 +42,9 @@ jobs:
             echo "::set-output name=result::fail"
           elif [[ "$num_charts_changed" -eq "1" ]]; then
             # Changes done in only one chart -> OK
-            echo "::set-output name=chart::${charts_dirs_changed}"
-            if [[ "$charts_dirs_changed" =~ "common" ]]; then
+            chart_name=$(echo "$charts_dirs_changed" | sed "s|bitnami/||g")
+            echo "::set-output name=chart::${chart_name}"
+            if [[ "$chart_name" =~ "common" ]]; then
                 # Changes done in bitnami/common -> SKIP
                 echo "::set-output name=result::skip"
             else
@@ -83,5 +84,3 @@ jobs:
         name: 'Package, Lint and Trivy scan'
         with:
           pipeline: ${{ needs.get-chart.outputs.chart }}/vib-early-feedback.json
-        env:
-          VIB_ENV_CHART_PATH: "${{ needs.get-chart.outputs.chart }}"
