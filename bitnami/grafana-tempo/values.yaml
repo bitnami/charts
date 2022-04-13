@@ -120,10 +120,17 @@ tempo:
     ## @param tempo.traces.zipkin Enable Tempo to ingest Zipkin traces
     ##
     zipkin: false
+  ## Tempo search parameters
+  ##
+  search:
+    ## @param tempo.search.enabled Enable Tempo search
+    ##
+    enabled: false
   ## @param tempo.configuration [string] Tempo components configuration
   ##
   configuration: |
     multitenancy_enabled: false
+    search_enabled: {{ .Values.tempo.search.enabled }}
     compactor:
       compaction:
         block_retention: 48h
