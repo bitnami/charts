@@ -56,8 +56,8 @@ Allow the release namespace to be overridden for multi-namespace deployments in 
 */}}
 {{- define "common.names.namespace" -}}
 {{- if .Values.namespaceOverride -}}
-{{- .Values.namespaceOverride -}}
+{{- .Values.namespaceOverride | quote -}}
 {{- else -}}
-{{- .Release.Namespace -}}
+{{- .Release.Namespace | quote -}}
 {{- end -}}
 {{- end -}}
