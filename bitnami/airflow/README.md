@@ -97,6 +97,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`           | Add extra environment variables for all the Airflow pods                                                                                       | `[]`                    |
 | `extraEnvVarsCM`         | ConfigMap with extra environment variables for all the Airflow pods                                                                            | `""`                    |
 | `extraEnvVarsSecret`     | Secret with extra environment variables for all the Airflow pods                                                                               | `""`                    |
+| `extraEnvVarsSecrets`    | List of secret names with extra environment variables for all the Airflow pods                                                                 | `[]`                    |
 | `sidecars`               | Add additional sidecar containers to all the Airflow pods                                                                                      | `[]`                    |
 | `initContainers`         | Add additional init containers to all the Airflow pods                                                                                         | `[]`                    |
 | `extraVolumeMounts`      | Optionally specify extra list of additional volumeMounts for all the Airflow pods                                                              | `[]`                    |
@@ -120,6 +121,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.extraEnvVars`                          | Array with extra environment variables to add Airflow web pods                                                           | `[]`                  |
 | `web.extraEnvVarsCM`                        | ConfigMap containing extra environment variables for Airflow web pods                                                    | `""`                  |
 | `web.extraEnvVarsSecret`                    | Secret containing extra environment variables (in case of sensitive data) for Airflow web pods                           | `""`                  |
+| `web.extraEnvVarsSecrets`                   | List of secret names with extra environment variables for for Airflow web pods                                           | `[]`                  |
 | `web.containerPorts.http`                   | Airflow web HTTP container port                                                                                          | `8080`                |
 | `web.replicaCount`                          | Number of Airflow web replicas                                                                                           | `1`                   |
 | `web.livenessProbe.enabled`                 | Enable livenessProbe on Airflow web containers                                                                           | `true`                |
@@ -193,6 +195,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `scheduler.extraEnvVars`                          | Add extra environment variables                                                                                          | `[]`                        |
 | `scheduler.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                               | `""`                        |
 | `scheduler.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                                  | `""`                        |
+| `scheduler.extraEnvVarsSecrets`                   | List of secret names with extra environment variables for Airflow scheduler pods                                         | `[]`                        |
 | `scheduler.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                                      | `{}`                        |
 | `scheduler.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                                     | `{}`                        |
 | `scheduler.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                                       | `{}`                        |
@@ -245,6 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.extraEnvVars`                          | Array with extra environment variables to add Airflow worker pods                                                        | `[]`                     |
 | `worker.extraEnvVarsCM`                        | ConfigMap containing extra environment variables for Airflow worker pods                                                 | `""`                     |
 | `worker.extraEnvVarsSecret`                    | Secret containing extra environment variables (in case of sensitive data) for Airflow worker pods                        | `""`                     |
+| `worker.extraEnvVarsSecrets`                   | List of secret names with extra environment variables for Airflow worker pods                                            | `[]`                     |
 | `worker.containerPorts.http`                   | Airflow worker HTTP container port                                                                                       | `8793`                   |
 | `worker.replicaCount`                          | Number of Airflow worker replicas                                                                                        | `1`                      |
 | `worker.livenessProbe.enabled`                 | Enable livenessProbe on Airflow worker containers                                                                        | `true`                   |

@@ -136,6 +136,9 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret with extra environment variables for all the Airflow pods
 ##
 extraEnvVarsSecret: ""
+## @param extraEnvVarsSecrets List of secrets with extra environment variables for all the Airflow pods
+##
+extraEnvVarsSecrets: []
 ## @param sidecars Add additional sidecar containers to all the Airflow pods
 ## Example:
 ## sidecars:
@@ -217,6 +220,9 @@ web:
   ## @param web.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Airflow web pods
   ##
   extraEnvVarsSecret: ""
+  ## @param web.extraEnvVarsSecrets List of secrets with extra environment variables for all the Airflow pods
+  ##
+  extraEnvVarsSecrets: []
   ## @param web.containerPorts.http Airflow web HTTP container port
   ##
   containerPorts:
@@ -467,6 +473,9 @@ scheduler:
   ## @param scheduler.extraEnvVarsSecret Secret with extra environment variables
   ##
   extraEnvVarsSecret: ""
+  ## @param scheduler.extraEnvVarsSecrets List of secrets with extra environment variables for all the Airflow pods
+  ##
+  extraEnvVarsSecrets: []
   ## @param scheduler.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
@@ -663,6 +672,9 @@ worker:
   ## @param worker.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Airflow worker pods
   ##
   extraEnvVarsSecret: ""
+  ## @param worker.extraEnvVarsSecrets List of secrets with extra environment variables for all the Airflow pods
+  ##
+  extraEnvVarsSecrets: []
   ## @param worker.containerPorts.http Airflow worker HTTP container port
   ##
   containerPorts:

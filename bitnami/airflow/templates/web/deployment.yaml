@@ -153,7 +153,7 @@ spec:
             {{- if .Values.web.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.web.extraEnvVarsCM .Values.web.extraEnvVarsSecret .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          {{- if or .Values.web.extraEnvVarsCM .Values.web.extraEnvVarsSecret .Values.web.extraEnvVarsSecrets .Values.extraEnvVarsCM .Values.extraEnvVarsSecret .Values.extraEnvVarsSecrets }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
@@ -170,6 +170,18 @@ spec:
             {{- if .Values.web.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ .Values.web.extraEnvVarsSecret }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecrets }}
+            {{- range .Values.extraEnvVarsSecrets }}
+            - secretRef:
+                name: {{ .name }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.web.extraEnvVarsSecrets }}
+            {{- range .Values.web.extraEnvVarsSecrets }}
+            - secretRef:
+                name: {{ .name }}
+            {{- end }}
             {{- end }}
           {{- end }}
           ports:

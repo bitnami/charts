@@ -110,7 +110,7 @@ spec:
             {{- if .Values.scheduler.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.scheduler.extraEnvVarsCM .Values.scheduler.extraEnvVarsSecret .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          {{- if or .Values.scheduler.extraEnvVarsCM .Values.scheduler.extraEnvVarsSecret .Values.scheduler.extraEnvVarsSecret .Values.extraEnvVarsCM .Values.extraEnvVarsSecret .Values.extraEnvVarsSecrets }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
@@ -127,6 +127,18 @@ spec:
             {{- if .Values.scheduler.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ .Values.scheduler.extraEnvVarsSecret }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecrets }}
+            {{- range .Values.extraEnvVarsSecrets }}
+            - secretRef:
+                name: {{ .name }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.scheduler.extraEnvVarsSecrets }}
+            {{- range .Values.scheduler.extraEnvVarsSecrets }}
+            - secretRef:
+                name: {{ .name }}
+            {{- end }}
             {{- end }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
