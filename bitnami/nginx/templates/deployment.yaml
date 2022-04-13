@@ -174,7 +174,7 @@ spec:
               containerPort: {{ .Values.containerPorts.https }}
             {{- end }}
           {{- if .Values.lifecycleHooks }}
-          lifecycle: {{- toYaml .Values.lifecycleHooks | nindent 12 }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
