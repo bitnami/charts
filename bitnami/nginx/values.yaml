@@ -216,6 +216,24 @@ resources:
   ##    cpu: 100m
   ##    memory: 128Mi
   requests: {}
+
+## NGINX containers' lifecycleHooks
+## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
+## If you do want to specify lifecycleHooks, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces on 'lifecycle:{}'.
+## @param lifecycleHooks Optional lifecycleHooks for the NGINX container
+lifecycleHooks: {}
+  ## Example:
+  ## postStart:
+  ##   exec:
+  ##     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+  ## Example:
+  ## preStop:
+  ##   exec:
+  ##     command: ["/bin/sleep", "20"]
+  ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
+
 ## NGINX containers' liveness probe.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Enable livenessProbe
