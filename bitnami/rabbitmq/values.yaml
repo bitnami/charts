@@ -93,10 +93,11 @@ diagnosticMode:
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param commonAnnotations Annotations to add to all deployed objects
+## @param dnsConfig to modify resolv.conf for pod
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 dnsConfig: {}
-## @param dnsConfig to modify resolv.conf for pod
+## @param commonAnnotations Annotations to add to all deployed objects
 ## https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
 ##
 commonAnnotations: {}
