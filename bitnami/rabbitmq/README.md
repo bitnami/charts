@@ -158,7 +158,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                    | `""`            |
 | `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`            |
 | `affinity`                           | Affinity for pod assignment. Evaluated as a template                                                                     | `{}`            |
-| `dnsConfig`                          | dnsConfig for pod                                                                                                        | `{}`            |
 | `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template                                                                  | `{}`            |
 | `tolerations`                        | Tolerations for pod assignment. Evaluated as a template                                                                  | `[]`            |
 | `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
