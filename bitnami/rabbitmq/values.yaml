@@ -95,6 +95,10 @@ diagnosticMode:
 hostAliases: []
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
+dnsConfig: {}
+## @param dnsConfig to modify resolv.conf for pod
+## https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+##
 commonAnnotations: {}
 ## RabbitMQ Authentication parameters
 ##
