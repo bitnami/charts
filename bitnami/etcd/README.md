@@ -435,6 +435,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 8.0.0
+
+This version changes the default `etcd` branch to `3.5.3+` to evoid the data corruption issue.
+
 ### To 7.0.0
 
 This version changes the default `etcd` branch to `3.4` as suggested by [etcd developers](https://github.com/etcd-io/etcd/tree/main/CHANGELOG#production-recommendation). In order to migrate the data follow the official etcd instructions.
