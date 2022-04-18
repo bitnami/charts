@@ -18,5 +18,5 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "common.names.fullname" . }}
-    namespace: {{ .Release.Namespace }}
+    namespace: {{ include "common.names.namespace" . | quote }}
 {{- end -}}
