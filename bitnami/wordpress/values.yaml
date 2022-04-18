@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -56,6 +58,7 @@ diagnosticMode:
     - infinity
 
 ## @section WordPress Image parameters
+##
 
 ## Bitnami WordPress image
 ## ref: https://hub.docker.com/r/bitnami/wordpress/tags/
@@ -69,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/wordpress
-  tag: 5.9.3-debian-10-r9
+  tag: 5.9.3-debian-10-r15
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -90,6 +93,7 @@ image:
 ## @section WordPress Configuration parameters
 ## WordPress settings based on environment variables
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
+##
 
 ## @param wordpressUsername WordPress username
 ##
@@ -199,6 +203,9 @@ allowEmptyPassword: true
 ## @param allowOverrideNone Configure Apache to prohibit overriding directives with htaccess files
 ##
 allowOverrideNone: false
+## @param overrideDatabaseSettings Allow overriding the database settings persisted in wp-config.php
+##
+overrideDatabaseSettings: false
 ## @param htaccessPersistenceEnabled Persist custom changes on htaccess files
 ## If `allowOverrideNone` is `false`, it will persist `/opt/bitnami/wordpress/wordpress-htaccess.conf`
 ## If `allowOverrideNone` is `true`, it will persist `/opt/bitnami/wordpress/.htaccess`
@@ -231,6 +238,7 @@ extraEnvVarsSecret: ""
 
 ## @section WordPress Multisite Configuration parameters
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#multisite-configuration
+##
 
 ## @param multisite.enable Whether to enable WordPress Multisite configuration.
 ## @param multisite.host WordPress Multisite hostname/address. This value is mandatory when enabling Multisite mode.
@@ -244,6 +252,7 @@ multisite:
   enableNipIoRedirect: false
 
 ## @section WordPress deployment parameters
+##
 
 ## @param replicaCount Number of WordPress replicas to deploy
 ## NOTE: ReadWriteMany PVC(s) are required if replicaCount > 1
@@ -280,6 +289,7 @@ priorityClassName: ""
 ##
 hostAliases:
   ## Required for Apache exporter to work
+  ##
   - ip: "127.0.0.1"
     hostnames:
       - "status.localhost"
@@ -502,6 +512,7 @@ customStartupProbe: {}
 lifecycleHooks: {}
 
 ## @section Traffic Exposure Parameters
+##
 
 ## WordPress service parameters
 ##
@@ -652,6 +663,7 @@ ingress:
   secrets: []
 
 ## @section Persistence Parameters
+##
 
 ## Persistence Parameters
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -709,7 +721,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r393
+    tag: 10-debian-10-r399
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -736,6 +748,7 @@ volumePermissions:
     runAsUser: 0
 
 ## @section Other Parameters
+##
 
 ## WordPress Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -781,6 +794,7 @@ autoscaling:
   targetMemory: 50
 
 ## @section Metrics Parameters
+##
 
 ## Prometheus Exporter / Metrics configuration
 ##
@@ -799,7 +813,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-10-r113
+    tag: 0.11.0-debian-10-r119
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -924,6 +938,7 @@ metrics:
     jobLabel: ""
 
 ## @section NetworkPolicy parameters
+##
 
 ## Add networkpolicies
 ##
@@ -982,8 +997,10 @@ networkPolicy:
     ##       - namespaceSelector:
     ##           matchLabels:
     ##             label: example
+    ##
     customBackendSelector: {}
     ## Allow only from the indicated:
+    ##
     accessOnlyFrom:
       enabled: false
       ## e.g:
@@ -1003,6 +1020,7 @@ networkPolicy:
     ##       - namespaceSelector:
     ##           matchLabels:
     ##             label: example
+    ##
     customRules: {}
   ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
   ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
@@ -1017,9 +1035,11 @@ networkPolicy:
     ##       - namespaceSelector:
     ##           matchLabels:
     ##             label: example
+    ##
     customRules: {}
 
 ## @section Database Parameters
+##
 
 ## MariaDB chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
@@ -1040,6 +1060,7 @@ mariadb:
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
   ##      https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
   ##      https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+  ##
   auth:
     rootPassword: ""
     database: bitnami_wordpress
