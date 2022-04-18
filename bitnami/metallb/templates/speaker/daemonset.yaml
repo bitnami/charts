@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ printf "%s-speaker" (include "common.names.fullname" .) }}
-  namespace: {{ template "common.names.namespace" . | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: speaker
     {{- if .Values.commonLabels }}
@@ -38,8 +38,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.speaker.podAffinityPreset "component" "%%COMPONENT_NAME%%" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.speaker.podAntiAffinityPreset "component" "%%COMPONENT_NAME%%" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.speaker.podAffinityPreset "component" "speaker" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.speaker.podAntiAffinityPreset "component" "speaker" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.speaker.nodeAffinityPreset.type "key" .Values.speaker.nodeAffinityPreset.key "values" .Values.speaker.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       nodeSelector:
@@ -48,7 +48,7 @@ spec:
         {{- end }}
         "kubernetes.io/os": linux
       {{- if .Values.speaker.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.tolerations "context" .) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.tolerations $) | nindent 8 }}
       {{- end }}
       hostNetwork: true
       {{- if .Values.speaker.priorityClassName }}
@@ -151,9 +151,9 @@ spec:
           {{- if .Values.speaker.resources }}
           resources: {{- toYaml .Values.speaker.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- if .Values.speaker.extraVolumeMounts }}
+          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
-      {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.extraVolumes "context" $) | nindent 8 }}
+      {{- if .Values.speaker.extraVolumes }}
+      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
