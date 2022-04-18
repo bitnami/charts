@@ -4,7 +4,7 @@
       "context": {
         "resources": {
           "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/grafana"
+          "path": "/bitnami/redis"
         }
       },
       "actions": [
@@ -20,9 +20,9 @@
       "context": {
         "resources": {
           "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/grafana"
+          "path": "/bitnami/redis"
         },
-        "runtime_parameters": "ImFkbWluIjoKICAicGFzc3dvcmQiOiAibTRIVFd4NGRwSkpIIgoic2VydmljZSI6CiAgInBvcnRzIjoKICAgICJncmFmYW5hIjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
+        "runtime_parameters": "YXJjaGl0ZWN0dXJlOiBzdGFuZGFsb25lCm1hc3RlcjoKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIHJlZGlzOiA4MAogICAgdHlwZTogTG9hZEJhbGFuY2VyCg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -41,8 +41,28 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-grafana-http",
-            "app_protocol": "HTTP"
+            "endpoint": "lb-redis-master-tcp-redis"
+          }
+        },
+        {
+          "action_id": "resilience-tests",
+          "params": {
+            "test_cases": [
+              "testKubernetesPodDelete",
+              "testPodScaleUp",
+              "testPodScaleDown"
+            ]
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/redis/standalone/goss"
+            },
+            "remote": {
+              "workload": "sts-redis-master"
+            }
           }
         }
       ]

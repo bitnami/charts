@@ -1,6 +1,8 @@
 name: 'Early feedback'
 on: # rebuild any PRs and main branch changes
   pull_request_target:
+    types:
+      - labeled
     branches:
       - master
       - bitnami:master
@@ -10,6 +12,7 @@ env:
   VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
 jobs:
   get-chart:
+    if: ${{ github.event.label.name == 'verify' }}
     runs-on: ubuntu-latest
     name: 'Get modified charts'
     outputs:
@@ -69,11 +72,11 @@ jobs:
         with:
           script: |
               core.setFailed('${{ steps.get-chart.outputs.error }}')
-  vib-execution:
+  vib-verify:
     runs-on: ubuntu-latest
     needs: get-chart
     if: ${{ needs.get-chart.outputs.result == 'ok' }}
-    name: 'Package, Lint, Trivy scan & Deployment'
+    name: ${{ needs.get-chart.outputs.chart }} Verification
     steps:
       - uses: actions/checkout@v2
         name: 'Checkout Repository'
@@ -81,9 +84,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
       - uses: vmware-labs/vmware-image-builder-action@main
-        name: 'Package, Lint, Trivy scan & Deployment'
+        name: ${{ needs.get-chart.outputs.chart }} Verification
         with:
-          pipeline: ${{ needs.get-chart.outputs.chart }}/vib-early-feedback.json
+          pipeline: ${{ needs.get-chart.outputs.chart }}/vib-verify.json
         env:
           # By default, the Target Platfrom is Tanzu Kubernetes Grid
           VIB_ENV_TARGET_PLATFORM: "7ddab896-2e4e-4d58-a501-f79897eba3a0"
