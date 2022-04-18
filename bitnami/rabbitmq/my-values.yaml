@@ -1,0 +1,23 @@
+persistence:
+  enabled: true
+metrics:
+  enabled: true
+plugins: rabbitmq_management
+communityPlugins: "https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/download/3.9.0/rabbitmq_delayed_message_exchange-3.9.0.ez"
+extraPlugins: rabbitmq_delayed_message_exchange
+clustering:
+  enabled: false
+rbac:
+  create: false
+podSecurityContext:
+  enabled: false
+serviceAccount:
+  create: false
+service:
+  type: NodePort
+extraConfiguration: |-
+  default_vhost = foo
+  load_definitions = /app/load_definition.json
+loadDefinition:
+  enabled: true
+  existingSecret: rabbitmq-load-definition
