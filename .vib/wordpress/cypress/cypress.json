@@ -10,5 +10,6 @@
     "smtpUser": "test_mail_user",
     "wordpressFirstName": "TestName",
     "wordpressLastName":"TestLastName"
-  }
+  },
+  "defaultCommandTimeout":30000
 }

@@ -631,7 +631,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r387
+    tag: 10-debian-10-r394
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -675,7 +675,7 @@ nginx:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-10-r68
+    tag: 1.21.6-debian-10-r75
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -820,14 +820,12 @@ nginx:
     runAsUser: 1001
     runAsNonRoot: true
   ## @param nginx.updateStrategy.type NGINX deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## @param nginx.updateStrategy.rollingUpdate NGINX deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param nginx.lifecycleHooks LifecycleHook for the NGINX container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -940,7 +938,7 @@ portal:
   image:
     registry: docker.io
     repository: bitnami/harbor-portal
-    tag: 2.4.2-debian-10-r19
+    tag: 2.5.0-debian-10-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1069,14 +1067,12 @@ portal:
     runAsUser: 1001
     runAsNonRoot: true
   ## @param portal.updateStrategy.type Harbor Portal deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## @param portal.updateStrategy.rollingUpdate Harbor Portal deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param portal.lifecycleHooks LifecycleHook for the Harbor Portal container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1200,7 +1196,7 @@ core:
   image:
     registry: docker.io
     repository: bitnami/harbor-core
-    tag: 2.4.2-debian-10-r19
+    tag: 2.5.0-debian-10-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1217,6 +1213,10 @@ core:
     ## Enable debug mode
     ##
     debug: false
+
+  ## @param core.sessionLifetime Explicitly set a session timeout (in seconds) overriding the backend default.
+  ##
+  sessionLifetime: ""
   ## @param core.uaaSecret If using external UAA auth which has a self signed cert, you can provide a pre-created secret containing it under the key `ca.crt`.
   ##
   uaaSecret: ""
@@ -1356,14 +1356,12 @@ core:
     runAsUser: 1001
     runAsNonRoot: true
   ## @param core.updateStrategy.type Harbor Core deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## @param core.updateStrategy.rollingUpdate Harbor Core deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param core.lifecycleHooks LifecycleHook for the Harbor Core container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1489,7 +1487,7 @@ jobservice:
   image:
     registry: docker.io
     repository: bitnami/harbor-jobservice
-    tag: 2.4.2-debian-10-r19
+    tag: 2.4.2-debian-10-r26
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1634,14 +1632,12 @@ jobservice:
     runAsUser: 1001
     runAsNonRoot: true
   ## @param jobservice.updateStrategy.type Harbor Jobservice deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## @param jobservice.updateStrategy.rollingUpdate Harbor Jobservice deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param jobservice.lifecycleHooks LifecycleHook for the Harbor Jobservice container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1820,14 +1816,12 @@ registry:
     enabled: true
     fsGroup: 1001
   ## @param registry.updateStrategy.type Harbor Registry deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## @param registry.updateStrategy.rollingUpdate Harbor Registry deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param registry.hostAliases Harbor Registry pods host aliases
   ##
   hostAliases: []
@@ -1934,7 +1928,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registry
-      tag: 2.4.2-debian-10-r19
+      tag: 2.5.0-debian-10-r2
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2079,7 +2073,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registryctl
-      tag: 2.4.2-debian-10-r20
+      tag: 2.5.0-debian-10-r3
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2220,7 +2214,7 @@ chartmuseum:
   image:
     registry: docker.io
     repository: bitnami/chartmuseum
-    tag: 0.14.0-debian-10-r62
+    tag: 0.14.0-debian-10-r69
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2399,14 +2393,12 @@ chartmuseum:
     runAsUser: 1001
     runAsNonRoot: true
   ## @param chartmuseum.updateStrategy.type Chartmuseum deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## @param chartmuseum.updateStrategy.rollingUpdate Chartmuseum deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param chartmuseum.lifecycleHooks LifecycleHook for the Chartmuseum container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -2551,14 +2543,12 @@ clair:
     enabled: true
     fsGroup: 1001
   ## @param clair.updateStrategy.type Clair deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## @param clair.updateStrategy.rollingUpdate Clair deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param clair.hostAliases Clair pods host aliases
   ##
   hostAliases: []
@@ -2665,7 +2655,7 @@ clair:
     image:
       registry: docker.io
       repository: bitnami/harbor-adapter-clair
-      tag: 2.4.2-debian-10-r20
+      tag: 2.5.0-debian-10-r2
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2804,7 +2794,7 @@ clair:
     image:
       registry: docker.io
       repository: bitnami/harbor-clair
-      tag: 2.4.2-debian-10-r19
+      tag: 2.5.0-debian-10-r2
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2959,7 +2949,7 @@ notary:
     image:
       registry: docker.io
       repository: bitnami/harbor-notary-server
-      tag: 2.4.2-debian-10-r19
+      tag: 2.5.0-debian-10-r3
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3078,14 +3068,12 @@ notary:
       runAsUser: 1001
       runAsNonRoot: true
     ## @param notary.server.updateStrategy.type Harbor Notary Server deployment strategy type - only really applicable for deployments with RWO PVs attached
-    ## @param notary.server.updateStrategy.rollingUpdate Harbor Notary Server deployment rolling update configuration parameters
     ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
     ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
     ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
     ##
     updateStrategy:
       type: RollingUpdate
-      rollingUpdate: {}
     ## @param notary.server.lifecycleHooks LifecycleHook for the Harbor Notary Server container(s) to automate configuration before or after startup
     ##
     lifecycleHooks: {}
@@ -3196,7 +3184,7 @@ notary:
     image:
       registry: docker.io
       repository: bitnami/harbor-notary-signer
-      tag: 2.4.2-debian-10-r19
+      tag: 2.5.0-debian-10-r2
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3315,14 +3303,12 @@ notary:
       runAsUser: 1001
       runAsNonRoot: true
     ## @param notary.signer.updateStrategy.type Harbor Notary Signer deployment strategy type - only really applicable for deployments with RWO PVs attached
-    ## @param notary.signer.updateStrategy.rollingUpdate Harbor Notary Signer deployment rolling update configuration parameters
     ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
     ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
     ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
     ##
     updateStrategy:
       type: RollingUpdate
-      rollingUpdate: {}
     ## @param notary.signer.lifecycleHooks LifecycleHook for the Harbor Notary Signer container(s) to automate configuration before or after startup
     ##
     lifecycleHooks: {}
@@ -3446,7 +3432,7 @@ trivy:
   image:
     registry: docker.io
     repository: bitnami/harbor-adapter-trivy
-    tag: 2.4.2-debian-10-r19
+    tag: 2.5.0-debian-10-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3623,14 +3609,12 @@ trivy:
     runAsUser: 1001
     runAsNonRoot: true
   ## @param trivy.updateStrategy.type Trivy deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## @param trivy.updateStrategy.rollingUpdate Trivy deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param trivy.lifecycleHooks LifecycleHook for the Trivy container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -3754,7 +3738,7 @@ exporter:
   image:
     registry: docker.io
     repository: bitnami/harbor-exporter
-    tag: 2.4.2-debian-10-r20
+    tag: 2.5.0-debian-10-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3878,14 +3862,12 @@ exporter:
     runAsUser: 1001
     runAsNonRoot: true
   ## @param exporter.updateStrategy.type The update strategy for deployments with persistent volumes: RollingUpdate or Recreate. Set it as Recreate when RWM for volumes isn't supported
-  ## @param exporter.updateStrategy.rollingUpdate Exporter deployment rolling update configuration parameters
   ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
   ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
   ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
   ## @param exporter.lifecycleHooks LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template
   ##
   lifecycleHooks: {}
@@ -3995,7 +3977,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 11.15.0-debian-10-r56
+    tag: 11.15.0-debian-10-r62
   auth:
     enablePostgresUser: true
     postgresPassword: not-secure-database-password

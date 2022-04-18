@@ -19,9 +19,9 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/redis"
         },
-        "runtime_parameters": "c2VudGluZWw6CiAgZW5hYmxlZDogdHJ1ZQ==",
+        "runtime_parameters": "YXJjaGl0ZWN0dXJlOiBzdGFuZGFsb25l",
         "target_platform": {
-          "target_platform_id": "{TARGET_PLATFORM}",
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
             "name": "S4"
           }
@@ -42,10 +42,10 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/redis/sentinel"
+              "path": "/.vib/redis/standalone"
             },
             "remote": {
-              "workload": "sts-redis-node"
+              "workload": "sts-redis-master"
             }
           }
         }
