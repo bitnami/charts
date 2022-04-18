@@ -6,7 +6,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 Watch the RabbitMQ Cluster Operator and RabbitMQ Messaging Topology Operator Deployment status using the command:
 
-    kubectl get deploy -w --namespace {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
+    kubectl get deploy -w --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
 
 {{ include "common.warnings.rollingTag" .Values.clusterOperator.image }}
 {{ include "common.warnings.rollingTag" .Values.msgTopologyOperator.image }}
