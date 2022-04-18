@@ -16,6 +16,9 @@ data:
     appname = Harbor
     runmode = prod
     enablegzip = true
+    {{- if .Values.core.sessionLifetime }}
+    sessiongcmaxlifetime = {{ .Values.core.sessionLifetime }}
+    {{- end }}
 
     [prod]
     httpport = {{ ternary .Values.core.containerPorts.https .Values.core.containerPorts.http .Values.internalTLS.enabled | quote }}
