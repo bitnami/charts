@@ -172,8 +172,8 @@ extraEnvVarsSecret: ""
 ## ref: https://github.com/kubernetes-incubator/metrics-server/blob/master/README.md#flags
 ##
 ## extraArgs:
-##   --kubelet-insecure-tls=true
-##   --kubelet-preferred-address-types=InternalIP
+##   - --kubelet-insecure-tls=true
+##   - --kubelet-preferred-address-types=InternalIP
 ##
 extraArgs: []
 ## @param sidecars Add additional sidecar containers to the metrics-server pod(s)

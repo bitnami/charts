@@ -91,7 +91,7 @@ spec:
           args:
             - --secure-port={{ .Values.containerPorts.https }}
             {{- if .Values.extraArgs }}
-            {{- include "common.tplvalues.render" (dict "value" (omit .Values.extraArgs "enabled") "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraArgs "context" $) | nindent 12 }}
             {{- end }}
           {{- end }}
           {{- if .Values.lifecycleHooks }}

@@ -221,6 +221,7 @@ Affected values:
 
 - `service.port` was deprecated. We recommend using `service.ports.http` instead.
 - `service.nodePort` was deprecated. We recommend using `service.nodePorts.https` instead.
+- `extraArgs` is now interpreted as an array.
 
 ### To 5.2.0
 
