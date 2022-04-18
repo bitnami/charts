@@ -107,7 +107,7 @@ spec:
       {{- if and .Values.volumePermissions.enabled (or (or (not (empty .Values.postgresql.extendedConf)) (not (empty .Values.postgresql.extendedConfCM))) .Values.persistence.enabled) }}
         - name: init-chmod-data
           image: {{ include "postgresql-ha.volumePermissions.image" . }}
-          imagePullPolicy: {{ .Values.volumePermissions.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
             - sh
             - -c

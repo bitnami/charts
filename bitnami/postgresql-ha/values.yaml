@@ -125,10 +125,17 @@ postgresql:
   ## @param postgresql.replicaCount Number of replicas to deploy. Use an odd number. Having 3 replicas is the minimum to get quorum when promoting a new primary.
   ##
   replicaCount: 3
-  ## @param postgresql.updateStrategyType Update strategy for PostgreSQL statefulset
+  ## @param postgresql.updateStrategy.type Postgresql statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
   ##
-  updateStrategyType: RollingUpdate
+  updateStrategy:
+    type: RollingUpdate
   ## @param postgresql.containerPorts.postgresql PostgreSQL port
   ##
   containerPorts:
@@ -203,13 +210,6 @@ postgresql:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
-  ## @param postgresql.updateStrategy.rollingUpdate PostgreSQL statefulset rolling update configuration parameters
-  ## @param postgresql.updateStrategy.type Postgresql statefulset strategy type
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate: {}
   ## K8s Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param postgresql.podSecurityContext.enabled Enable security context for PostgreSQL with Repmgr
@@ -1188,6 +1188,15 @@ metrics:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 10
+  ## @param metrics.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param metrics.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## @param metrics.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
 
   ## Metrics service parameters
   ##
