@@ -81,14 +81,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WordPress Image parameters
 
-| Name                | Description                                          | Value                |
-| ------------------- | ---------------------------------------------------- | -------------------- |
-| `image.registry`    | WordPress image registry                             | `docker.io`          |
-| `image.repository`  | WordPress image repository                           | `bitnami/wordpress`  |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.8.3-debian-10-r2` |
-| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`       |
-| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                 |
-| `image.debug`       | Specify if debug values should be set                | `false`              |
+| Name                | Description                                          | Value                 |
+| ------------------- | ---------------------------------------------------- | --------------------- |
+| `image.registry`    | WordPress image registry                             | `docker.io`           |
+| `image.repository`  | WordPress image repository                           | `bitnami/wordpress`   |
+| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.9.3-debian-10-r11` |
+| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                  |
+| `image.debug`       | Specify if debug values should be set                | `false`               |
 
 
 ### WordPress Configuration parameters
@@ -109,7 +109,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `wordpressConfiguration`               | The content for your custom wp-config.php file (advanced feature)                     | `""`               |
 | `existingWordPressConfigurationSecret` | The name of an existing secret with your custom wp-config.php file (advanced feature) | `""`               |
 | `wordpressConfigureCache`              | Enable W3 Total Cache plugin and configure cache settings                             | `false`            |
-| `wordpressAutoUpdateLevel`             | Level of auto-updates to allow. Allowed values: `major`, `minor` or `none`.           | `none`             |
 | `wordpressPlugins`                     | Array of plugins to install and activate. Can be specified as `all` or `none`.        | `none`             |
 | `apacheConfiguration`                  | The content for your custom httpd.conf file (advanced feature)                        | `""`               |
 | `existingApacheConfigurationConfigMap` | The name of an existing secret with your custom httpd.conf file (advanced feature)    | `""`               |
@@ -122,6 +121,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `smtpExistingSecret`                   | The name of an existing secret with SMTP credentials                                  | `""`               |
 | `allowEmptyPassword`                   | Allow the container to be started with blank passwords                                | `true`             |
 | `allowOverrideNone`                    | Configure Apache to prohibit overriding directives with htaccess files                | `false`            |
+| `overrideDatabaseSettings`             | Allow overriding the database settings persisted in wp-config.php                     | `false`            |
 | `htaccessPersistenceEnabled`           | Persist custom changes on htaccess files                                              | `false`            |
 | `customHTAccessCM`                     | The name of an existing ConfigMap with custom htaccess rules                          | `""`               |
 | `command`                              | Override default container command (useful when using custom images)                  | `[]`               |
@@ -248,7 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r306`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r395`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -281,7 +281,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose metrics                                 | `false`                   |
 | `metrics.image.registry`                     | Apache exporter image registry                                                        | `docker.io`               |
 | `metrics.image.repository`                   | Apache exporter image repository                                                      | `bitnami/apache-exporter` |
-| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                            | `0.11.0-debian-10-r24`    |
+| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                            | `0.11.0-debian-10-r115`   |
 | `metrics.image.pullPolicy`                   | Apache exporter image pull policy                                                     | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Apache exporter image pull secrets                                                    | `[]`                      |
 | `metrics.containerPorts.metrics`             | Prometheus exporter container port                                                    | `9117`                    |
@@ -498,6 +498,10 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Notable changes
+
+### 13.2.0
+
+Removed support for limiting auto-updates to WordPress core via the `wordpressAutoUpdateLevel` option. To update WordPress core, we recommend you use the `helm upgrade` command to update your deployment instead of using the built-in update functionality.
 
 ### 11.0.0
 
