@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 7.17.2
+appVersion: 8.1.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
