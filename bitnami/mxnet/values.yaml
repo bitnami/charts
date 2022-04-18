@@ -1132,7 +1132,7 @@ scheduler:
       mxnet: 9092
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-    ## @param service.nodePorts.https Node port for Mxnet scheduler
+    ## @param scheduler.service.nodePorts.mxnet Node port for Mxnet scheduler
     ##
     nodePorts:
       mxnet: ""
