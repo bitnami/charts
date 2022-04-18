@@ -379,11 +379,9 @@ spec:
         {{- end }}
         {{- if .Values.pgpool.tls.enabled }}
         - name: pgpool-certificates
-          projected:
+          secret:
             defaultMode: 0600
-            sources:
-              - secret:
-                  name: {{ include "postgresql-ha.tlsSecretName" . }}
+            secretName: {{ include "postgresql-ha.tlsSecretName" . }}
         {{- end }}
       {{- if .Values.pgpool.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.extraVolumes "context" $) | nindent 8 }}
