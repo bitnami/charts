@@ -61,7 +61,7 @@ sleep infinity
 {{- else if .Files.Glob "files/*" }}
 - name: local-files
   configMap:
-    name: {{ include "common.names.fullname" . }}-files
+    name: {{ print "%s-files" (include "common.names.fullname" .) }}
 {{- else if .Values.cloneFilesFromGit.enabled }}
 - name: git-cloned-files
   emptyDir: {}

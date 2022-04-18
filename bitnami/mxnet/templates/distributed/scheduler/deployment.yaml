@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}-scheduler
+  name: {{ print "%s-scheduler" (include "common.names.fullname" .) }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: scheduler
 spec:

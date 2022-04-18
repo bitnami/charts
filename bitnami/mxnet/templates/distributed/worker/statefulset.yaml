@@ -2,8 +2,8 @@
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ include "common.names.fullname" . }}-worker
-  namespace: {{ template "common.names.namespace" . | quote }}
+  name: {{ print "%s-worker" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: worker
     {{- if .Values.commonLabels }}
@@ -18,7 +18,7 @@ spec:
   {{- if .Values.worker.updateStrategy }}
   strategy: {{- toYaml .Values.worker.updateStrategy | nindent 4 }}
   {{- end }}
-  serviceName: {{ template "common.names.fullname" . }}-headless
+  serviceName: {{ print "%s-headless" (include "common.names.fullname" .) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: worker
@@ -149,7 +149,7 @@ spec:
             - name: DMLC_NUM_SERVER
               value: {{ .Values.server.replicaCount | quote }}
             - name: DMLC_PS_ROOT_URI
-              value: {{ include "common.names.fullname" . }}-scheduler
+              value: {{ print "%s-scheduler" (include "common.names.fullname" .) }}
             - name: DMLC_PS_ROOT_PORT
               value: {{ .Values.scheduler.containerPorts.mxnet | quote }}
             {{- if .Values.extraEnvVars }}
