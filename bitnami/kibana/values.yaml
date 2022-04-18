@@ -27,9 +27,33 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template with a string
 ##
 fullnameOverride: ""
-## @param extraDeploy Array of extra objects to deploy with the release
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param extraDeploy A list of extra kubernetes resources to be deployed
 ##
 extraDeploy: []
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+
+## Enable diagnostic mode in the deployment(s)/statefulset(s)
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  args:
+    - infinity
 
 ## @section Kibana parameters
 
@@ -40,11 +64,12 @@ extraDeploy: []
 ## @param image.tag Kibana image tag (immutable tags are recommended)
 ## @param image.pullPolicy Kibana image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Enable %%MAIN_CONTAINER%% image debug mode
 ##
 image:
   registry: docker.io
   repository: bitnami/kibana
-  tag: 7.17.2-debian-10-r3
+  tag: 8.1.2-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -58,6 +83,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
 ## @param replicaCount Number of replicas of the Kibana Pod
 ##
 replicaCount: 1
@@ -77,6 +105,18 @@ updateStrategy:
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
+## @param priorityClassName %%MAIN_CONTAINER_NAME%% pods' priorityClassName
+##
+priorityClassName: ""
+## @param terminationGracePeriodSeconds In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -105,6 +145,15 @@ extraConfiguration: {}
 ## @param configurationCM ConfigMap containing a kibana.yml file that will replace the default one specified in configuration.yaml
 ##
 configurationCM: ""
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param lifecycleHooks for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## @param extraEnvVars Array containing extra env vars to configure Kibana
 ## For example:
 ## extraEnvVars:
@@ -140,7 +189,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r394
+    tag: 10-debian-10-r399
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -174,12 +223,47 @@ persistence:
   ## @param persistence.existingClaim Provide an existing `PersistentVolumeClaim`
   ##
   existingClaim: ""
-  ## @param persistence.accessMode Access mode to the PV
+  ## @param persistence.accessModes Persistent Volume access modes
   ##
-  accessMode: ReadWriteOnce
+  accessModes:
+    - ReadWriteOnce
   ## @param persistence.size Size for the PV
   ##
   size: 10Gi
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
+  ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+  ##
+  subPath: ""
+  ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
+  ## @param persistence.dataSource Custom PVC data source
+  ##
+  dataSource: {}
+
+## Configure extra options for startup probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+## @param startupProbe.enabled Enable/disable the startup probe
+## @param startupProbe.initialDelaySeconds Delay before startup probe is initiated
+## @param startupProbe.periodSeconds How often to perform the probe
+## @param startupProbe.timeoutSeconds When the probe times out
+## @param startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded.
+## @param startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed.
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ## @param livenessProbe.enabled Enable/disable the Liveness probe
@@ -212,6 +296,15 @@ readinessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+## @param customStartupProbe Custom liveness probe for the Web component
+##
+customStartupProbe: {}
+## @param customLivenessProbe Custom liveness probe for the Web component
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom readiness probe for the Web component
+##
+customReadinessProbe: {}
 ## @param forceInitScripts Force execution of init scripts
 ##
 forceInitScripts: false
@@ -224,16 +317,34 @@ initScriptsSecret: ""
 ## Service configuration
 ##
 service:
-  ## @param service.port Kubernetes Service port
+  ## @param service.ports.http Kubernetes Service port
   ##
-  port: 5601
+  ports:
+    http: 5601
   ## @param service.type Kubernetes Service type
   ##
   type: ClusterIP
-  ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
+  ## @param service.nodePorts.http Specify the nodePort value for the LoadBalancer and NodePort service types
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort: ""
+  nodePorts:
+    http: ""
+  ## @param service.clusterIP %%MAIN_CONTAINER_NAME%% service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP loadBalancerIP if Kibana service type is `LoadBalancer`
+  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges %%MAIN_CONTAINER_NAME%% service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
@@ -246,13 +357,20 @@ service:
   ## @param service.labels Extra labels for Kibana service
   ##
   labels: {}
-  ## @param service.loadBalancerIP loadBalancerIP if Kibana service type is `LoadBalancer`
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
-  ##
-  loadBalancerIP: ""
   ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
   ##
   extraPorts: []
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 ## Configure the ingress resource that allows you to access the
 ## Kibana installation. Set up the URL
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -341,27 +459,45 @@ ingress:
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
   ingressClassName: ""
+  ## @param ingress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
+  ## Useful when looking for additional customization, such as using different backend
+  ##
+  extraRules: []
 
-## @param serviceAccount.create Enable creation of ServiceAccount for Kibana
-## @param serviceAccount.name Name of serviceAccount
-## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+## @param serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+##
 serviceAccount:
   create: true
   name: ""
+  automountServiceAccountToken: true
   annotations: {}
 
-## @param containerPort Port to expose at container level
+## @param containerPorts.http Port to expose at container level
 ##
-containerPort: 5601
-## @param securityContext.enabled Enable securityContext on for Kibana deployment
-## @param securityContext.fsGroup Group to configure permissions for volumes
-## @param securityContext.runAsUser User for the security context
-## @param securityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+containerPorts:
+  http: 5601
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled %%MAIN_CONTAINER_NAME%% pods' Security Context
+## @param podSecurityContext.fsGroup Set %%MAIN_CONTAINER_NAME%% pod's Security Context fsGroup
 ##
-securityContext:
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+## Configure Container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param containerSecurityContext.enabled Enabled %%MAIN_CONTAINER_NAME%% containers' Security Context
+## @param containerSecurityContext.runAsUser Set %%MAIN_CONTAINER_NAME%% containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set %%MAIN_CONTAINER_NAME%% container's Security Context runAsNonRoot
+##
+containerSecurityContext:
   enabled: true
   runAsUser: 1001
-  fsGroup: 1001
   runAsNonRoot: true
 ## Kibana resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
@@ -479,6 +615,9 @@ metrics:
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
     namespace: ""
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
@@ -491,6 +630,14 @@ metrics:
     ##   scrapeTimeout: 10s
     ##
     scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    metricRelabelings: []
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
@@ -500,6 +647,12 @@ metrics:
     # selector:
     #   prometheus: my-prometheus
     selector: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
 
 ## @section Kibana server TLS configuration
 ##
@@ -546,15 +699,19 @@ elasticsearch:
       ## @param elasticsearch.security.auth.enabled Set to 'true' if Elasticsearch has authentication enabled
       ##
       enabled: false
-      ## @param elasticsearch.security.auth.kibanaUsername Kibana server user to authenticate with Elasticsearch
-      ##
-      kibanaUsername: "elastic"
-      ## @param elasticsearch.security.auth.kibanaPassword Kibana server password to authenticate with Elasticsearch
+      ## @param elasticsearch.security.auth.kibanaPassword Password of the 'kibana_system' user, used to authenticate Kibana connection with Elasticsearch.
       ##
       kibanaPassword: ""
-      ## @param elasticsearch.security.auth.existingSecret Name of the existing secret containing the Password for the Kibana user
+      ## @param elasticsearch.security.auth.existingSecret Name of the existing secret containing the password for the 'kibana_system' user.
       ##
       existingSecret: ""
+      ## @param elasticsearch.security.auth.createSystemUser If enabled, Kibana will use Elasticsearch API to create the 'kibana_system' user at startup.
+      ##
+      createSystemUser: false
+      ## @param elasticsearch.security.auth.elasticsearchPasswordSecret Name of the existing secret containing the password for the 'elastic' user.
+      ## Required if createSystemUser=true. The secret must containt the key 'password'.
+      ##
+      elasticsearchPasswordSecret: ""
     tls:
       ## @param elasticsearch.security.tls.enabled Set to 'true' if Elasticsearch API uses TLS/SSL (HTTPS)
       ##
