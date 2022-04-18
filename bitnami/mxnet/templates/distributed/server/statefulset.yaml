@@ -146,7 +146,7 @@ spec:
             - name: DMLC_PS_ROOT_URI
               value: {{ include "common.names.fullname" . }}-scheduler
             - name: DMLC_PS_ROOT_PORT
-              value: {{ .Values.scheduler.port | quote }}
+              value: {{ .Values.scheduler.containerPorts.mxnet | quote }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

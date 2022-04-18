@@ -304,7 +304,7 @@ standalone:
   ## @param standalone.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the %%MAIN_CONTAINER_NAME%% container(s)
   ##
   extraVolumeMounts: []
-  ## @param standalone.containerPorts.http %%MAIN_CONTAINER_NAME%% HTTP container port
+  ## @param standalone.containerPorts.mxnet Mxnet container port
   ##
   containerPorts:
     mxnet: 9092
@@ -537,10 +537,6 @@ server:
   ## @param server.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the %%MAIN_CONTAINER_NAME%% container(s)
   ##
   extraVolumeMounts: []
-  ## @param server.containerPorts.http %%MAIN_CONTAINER_NAME%% HTTP container port
-  ##
-  containerPorts:
-    mxnet: 9092
   ## @param server.sidecars Add additional sidecar containers to the %%MAIN_CONTAINER_NAME%% pod(s)
   ## e.g:
   ## sidecars:
@@ -769,10 +765,6 @@ worker:
   ## @param worker.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the %%MAIN_CONTAINER_NAME%% container(s)
   ##
   extraVolumeMounts: []
-  ## @param worker.containerPorts.http %%MAIN_CONTAINER_NAME%% HTTP container port
-  ##
-  containerPorts:
-    mxnet: 9092
   ## @param worker.sidecars Add additional sidecar containers to the %%MAIN_CONTAINER_NAME%% pod(s)
   ## e.g:
   ## sidecars:
@@ -902,11 +894,12 @@ worker:
 ## @section Mxnet Scheduler parameters (only for distributed mode)
 
 scheduler:
-  ## @param scheduler.port The port used to communicate with the scheduler
+  ## @param scheduler.containerPorts.mxnet The port used to communicate with the scheduler
   ## MASTER_PORT will be set to this value
   ##
-  port: 9092
-    ## @param scheduler.affinity Affinity for %%MAIN_CONTAINER_NAME%% pods assignment
+  containerPorts:
+    mxnet: 9092
+  ## @param scheduler.affinity Affinity for %%MAIN_CONTAINER_NAME%% pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## NOTE: `scheduler.podAffinityPreset`, `scheduler.podAntiAffinityPreset`, and `scheduler.nodeAffinityPreset` will be ignored when it's set
   ##
@@ -1002,10 +995,6 @@ scheduler:
   ## @param scheduler.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the %%MAIN_CONTAINER_NAME%% container(s)
   ##
   extraVolumeMounts: []
-  ## @param scheduler.containerPorts.http %%MAIN_CONTAINER_NAME%% HTTP container port
-  ##
-  containerPorts:
-    mxnet: 9092
   ## @param scheduler.sidecars Add additional sidecar containers to the %%MAIN_CONTAINER_NAME%% pod(s)
   ## e.g:
   ## sidecars:
@@ -1137,12 +1126,13 @@ scheduler:
     ## @param scheduler.service.type Kubernetes service type
     ##
     type: ClusterIP
-    ## @param scheduler.service.port Scheduler Service port
+    ## @param scheduler.service.ports.mxnet Scheduler Service port
     ##
     ports:
       mxnet: 9092
     ## Specify the nodePort value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## @param service.nodePorts.https Node port for Mxnet scheduler
     ##
     nodePorts:
       mxnet: ""
