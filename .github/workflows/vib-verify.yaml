@@ -47,7 +47,7 @@ jobs:
             # Changes done in only one chart -> OK
             chart_name=$(echo "$charts_dirs_changed" | sed "s|bitnami/||g")
             echo "::set-output name=chart::${chart_name}"
-            if [[ "$chart_name" =~ "common" ]]; then
+            if [[ "$chart_name" == "common" ]]; then
                 # Changes done in bitnami/common -> SKIP
                 echo "::set-output name=result::skip"
             else
