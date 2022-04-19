@@ -69,115 +69,153 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name               | Description                                                                                               | Value |
-| ------------------ | --------------------------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`      | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`  |
-| `nameOverride`     | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`  |
-| `fullnameOverride` | String to fully override common.names.fullname template with a string                                     | `""`  |
-| `extraDeploy`      | Array of extra objects to deploy with the release                                                         | `[]`  |
+| Name                     | Description                                                                                               | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname template with a string                                     | `""`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                                | `{}`            |
+| `commonLabels`           | Labels to add to all deployed objects                                                                     | `{}`            |
+| `extraDeploy`            | A list of extra kubernetes resources to be deployed                                                       | `[]`            |
+| `clusterDomain`          | Kubernetes cluster domain name                                                                            | `cluster.local` |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                                | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                                   | `["infinity"]`  |
 
 
 ### Kibana parameters
 
-| Name                                   | Description                                                                                                                                               | Value                    |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `image.registry`                       | Kibana image registry                                                                                                                                     | `docker.io`              |
-| `image.repository`                     | Kibana image repository                                                                                                                                   | `bitnami/kibana`         |
-| `image.tag`                            | Kibana image tag (immutable tags are recommended)                                                                                                         | `7.16.2-debian-10-r20`   |
-| `image.pullPolicy`                     | Kibana image pull policy                                                                                                                                  | `IfNotPresent`           |
-| `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                          | `[]`                     |
-| `replicaCount`                         | Number of replicas of the Kibana Pod                                                                                                                      | `1`                      |
-| `updateStrategy.type`                  | Set up update strategy for Kibana installation.                                                                                                           | `RollingUpdate`          |
-| `schedulerName`                        | Alternative scheduler                                                                                                                                     | `""`                     |
-| `hostAliases`                          | Add deployment host aliases                                                                                                                               | `[]`                     |
-| `plugins`                              | Array containing the Kibana plugins to be installed in deployment                                                                                         | `[]`                     |
-| `savedObjects.urls`                    | Array containing links to NDJSON files to be imported during Kibana initialization                                                                        | `[]`                     |
-| `savedObjects.configmap`               | Configmap containing NDJSON files to be imported during Kibana initialization (evaluated as a template)                                                   | `""`                     |
-| `extraConfiguration`                   | Extra settings to be added to the default kibana.yml configmap that the chart creates (unless replaced using `configurationCM`). Evaluated as a template  | `{}`                     |
-| `configurationCM`                      | ConfigMap containing a kibana.yml file that will replace the default one specified in configuration.yaml                                                  | `""`                     |
-| `extraEnvVars`                         | Array containing extra env vars to configure Kibana                                                                                                       | `[]`                     |
-| `extraEnvVarsCM`                       | ConfigMap containing extra env vars to configure Kibana                                                                                                   | `""`                     |
-| `extraEnvVarsSecret`                   | Secret containing extra env vars to configure Kibana (in case of sensitive data)                                                                          | `""`                     |
-| `extraVolumes`                         | Array to add extra volumes. Requires setting `extraVolumeMounts`                                                                                          | `[]`                     |
-| `extraVolumeMounts`                    | Array to add extra mounts. Normally used with `extraVolumes`                                                                                              | `[]`                     |
-| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                  |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`              |
-| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`  |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r305`      |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`           |
-| `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                     |
-| `volumePermissions.resources`          | Volume Permissions resources                                                                                                                              | `{}`                     |
-| `persistence.enabled`                  | Enable persistence                                                                                                                                        | `true`                   |
-| `persistence.storageClass`             | Kibana data Persistent Volume Storage Class                                                                                                               | `""`                     |
-| `persistence.existingClaim`            | Provide an existing `PersistentVolumeClaim`                                                                                                               | `""`                     |
-| `persistence.accessMode`               | Access mode to the PV                                                                                                                                     | `ReadWriteOnce`          |
-| `persistence.size`                     | Size for the PV                                                                                                                                           | `10Gi`                   |
-| `livenessProbe.enabled`                | Enable/disable the Liveness probe                                                                                                                         | `true`                   |
-| `livenessProbe.initialDelaySeconds`    | Delay before liveness probe is initiated                                                                                                                  | `120`                    |
-| `livenessProbe.periodSeconds`          | How often to perform the probe                                                                                                                            | `10`                     |
-| `livenessProbe.timeoutSeconds`         | When the probe times out                                                                                                                                  | `5`                      |
-| `livenessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | `6`                      |
-| `livenessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed.                                                              | `1`                      |
-| `readinessProbe.enabled`               | Enable/disable the Readiness probe                                                                                                                        | `true`                   |
-| `readinessProbe.initialDelaySeconds`   | Delay before readiness probe is initiated                                                                                                                 | `30`                     |
-| `readinessProbe.periodSeconds`         | How often to perform the probe                                                                                                                            | `10`                     |
-| `readinessProbe.timeoutSeconds`        | When the probe times out                                                                                                                                  | `5`                      |
-| `readinessProbe.failureThreshold`      | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | `6`                      |
-| `readinessProbe.successThreshold`      | Minimum consecutive successes for the probe to be considered successful after having failed.                                                              | `1`                      |
-| `forceInitScripts`                     | Force execution of init scripts                                                                                                                           | `false`                  |
-| `initScriptsCM`                        | Configmap with init scripts to execute                                                                                                                    | `""`                     |
-| `initScriptsSecret`                    | Secret with init scripts to execute (for sensitive data)                                                                                                  | `""`                     |
-| `service.port`                         | Kubernetes Service port                                                                                                                                   | `5601`                   |
-| `service.type`                         | Kubernetes Service type                                                                                                                                   | `ClusterIP`              |
-| `service.nodePort`                     | Specify the nodePort value for the LoadBalancer and NodePort service types                                                                                | `""`                     |
-| `service.externalTrafficPolicy`        | Enable client source IP preservation                                                                                                                      | `Cluster`                |
-| `service.annotations`                  | Annotations for Kibana service (evaluated as a template)                                                                                                  | `{}`                     |
-| `service.labels`                       | Extra labels for Kibana service                                                                                                                           | `{}`                     |
-| `service.loadBalancerIP`               | loadBalancerIP if Kibana service type is `LoadBalancer`                                                                                                   | `""`                     |
-| `service.extraPorts`                   | Extra ports to expose in the service (normally used with the `sidecar` value)                                                                             | `[]`                     |
-| `ingress.enabled`                      | Enable ingress controller resource                                                                                                                        | `false`                  |
-| `ingress.pathType`                     | Ingress Path type                                                                                                                                         | `ImplementationSpecific` |
-| `ingress.apiVersion`                   | Override API Version (automatically detected if not set)                                                                                                  | `""`                     |
-| `ingress.hostname`                     | Default host for the ingress resource. If specified as "*" no host rule is configured                                                                     | `kibana.local`           |
-| `ingress.path`                         | The Path to Kibana. You may need to set this to '/*' in order to use this with ALB ingress controllers.                                                   | `/`                      |
-| `ingress.annotations`                  | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.                          | `{}`                     |
-| `ingress.tls`                          | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                                           | `false`                  |
-| `ingress.selfSigned`                   | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                                              | `false`                  |
-| `ingress.extraHosts`                   | The list of additional hostnames to be covered with this ingress record.                                                                                  | `[]`                     |
-| `ingress.extraPaths`                   | Additional arbitrary path/backend objects                                                                                                                 | `[]`                     |
-| `ingress.extraTls`                     | The tls configuration for additional hostnames to be covered with this ingress record.                                                                    | `[]`                     |
-| `ingress.secrets`                      | If you're providing your own certificates, please use this to add the certificates as secrets                                                             | `[]`                     |
-| `ingress.ingressClassName`             | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                                             | `""`                     |
-| `serviceAccount.create`                | Enable creation of ServiceAccount for Kibana                                                                                                              | `true`                   |
-| `serviceAccount.name`                  | Name of serviceAccount                                                                                                                                    | `""`                     |
-| `serviceAccount.annotations`           | Additional custom annotations for the ServiceAccount                                                                                                      | `{}`                     |
-| `containerPort`                        | Port to expose at container level                                                                                                                         | `5601`                   |
-| `securityContext.enabled`              | Enable securityContext on for Kibana deployment                                                                                                           | `true`                   |
-| `securityContext.fsGroup`              | Group to configure permissions for volumes                                                                                                                | `1001`                   |
-| `securityContext.runAsUser`            | User for the security context                                                                                                                             | `1001`                   |
-| `securityContext.runAsNonRoot`         | Set container's Security Context runAsNonRoot                                                                                                             | `true`                   |
-| `resources.limits`                     | The resources limits for the container                                                                                                                    | `{}`                     |
-| `resources.requests`                   | The requested resources for the container                                                                                                                 | `{}`                     |
-| `podAffinityPreset`                    | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                     |
-| `podAntiAffinityPreset`                | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                   |
-| `nodeAffinityPreset.type`              | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                     |
-| `nodeAffinityPreset.key`               | Node label key to match Ignored if `affinity` is set.                                                                                                     | `""`                     |
-| `nodeAffinityPreset.values`            | Node label values to match. Ignored if `affinity` is set.                                                                                                 | `[]`                     |
-| `affinity`                             | Affinity for pod assignment                                                                                                                               | `{}`                     |
-| `nodeSelector`                         | Node labels for pod assignment                                                                                                                            | `{}`                     |
-| `tolerations`                          | Tolerations for pod assignment                                                                                                                            | `[]`                     |
-| `podAnnotations`                       | Pod annotations                                                                                                                                           | `{}`                     |
-| `podLabels`                            | Extra labels to add to Pod                                                                                                                                | `{}`                     |
-| `sidecars`                             | Attach additional containers to the pod                                                                                                                   | `[]`                     |
-| `initContainers`                       | Add additional init containers to the pod                                                                                                                 | `[]`                     |
-| `configuration`                        | Kibana configuration                                                                                                                                      | `{}`                     |
-| `metrics.enabled`                      | Start a side-car prometheus exporter                                                                                                                      | `false`                  |
-| `metrics.service.annotations`          | Prometheus annotations for the Kibana service                                                                                                             | `{}`                     |
-| `metrics.serviceMonitor.enabled`       | If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                    | `false`                  |
-| `metrics.serviceMonitor.namespace`     | Namespace in which Prometheus is running                                                                                                                  | `""`                     |
-| `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                                                                              | `""`                     |
-| `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                                                   | `""`                     |
-| `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                                                                       | `{}`                     |
+| Name                                          | Description                                                                                                                                               | Value                    |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `image.registry`                              | Kibana image registry                                                                                                                                     | `docker.io`              |
+| `image.repository`                            | Kibana image repository                                                                                                                                   | `bitnami/kibana`         |
+| `image.tag`                                   | Kibana image tag (immutable tags are recommended)                                                                                                         | `7.17.2-debian-10-r3`    |
+| `image.pullPolicy`                            | Kibana image pull policy                                                                                                                                  | `IfNotPresent`           |
+| `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                          | `[]`                     |
+| `image.debug`                                 | Enable %%MAIN_CONTAINER%% image debug mode                                                                                                                | `false`                  |
+| `replicaCount`                                | Number of replicas of the Kibana Pod                                                                                                                      | `1`                      |
+| `updateStrategy.type`                         | Set up update strategy for Kibana installation.                                                                                                           | `RollingUpdate`          |
+| `schedulerName`                               | Alternative scheduler                                                                                                                                     | `""`                     |
+| `priorityClassName`                           | %%MAIN_CONTAINER_NAME%% pods' priorityClassName                                                                                                           | `""`                     |
+| `terminationGracePeriodSeconds`               | In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully                                                               | `""`                     |
+| `topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                                                                                            | `[]`                     |
+| `hostAliases`                                 | Add deployment host aliases                                                                                                                               | `[]`                     |
+| `plugins`                                     | Array containing the Kibana plugins to be installed in deployment                                                                                         | `[]`                     |
+| `savedObjects.urls`                           | Array containing links to NDJSON files to be imported during Kibana initialization                                                                        | `[]`                     |
+| `savedObjects.configmap`                      | Configmap containing NDJSON files to be imported during Kibana initialization (evaluated as a template)                                                   | `""`                     |
+| `extraConfiguration`                          | Extra settings to be added to the default kibana.yml configmap that the chart creates (unless replaced using `configurationCM`). Evaluated as a template  | `{}`                     |
+| `configurationCM`                             | ConfigMap containing a kibana.yml file that will replace the default one specified in configuration.yaml                                                  | `""`                     |
+| `command`                                     | Override default container command (useful when using custom images)                                                                                      | `[]`                     |
+| `args`                                        | Override default container args (useful when using custom images)                                                                                         | `[]`                     |
+| `lifecycleHooks`                              | for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup                                                            | `{}`                     |
+| `extraEnvVars`                                | Array containing extra env vars to configure Kibana                                                                                                       | `[]`                     |
+| `extraEnvVarsCM`                              | ConfigMap containing extra env vars to configure Kibana                                                                                                   | `""`                     |
+| `extraEnvVarsSecret`                          | Secret containing extra env vars to configure Kibana (in case of sensitive data)                                                                          | `""`                     |
+| `extraVolumes`                                | Array to add extra volumes. Requires setting `extraVolumeMounts`                                                                                          | `[]`                     |
+| `extraVolumeMounts`                           | Array to add extra mounts. Normally used with `extraVolumes`                                                                                              | `[]`                     |
+| `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                  |
+| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                          | `docker.io`              |
+| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`  |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r394`      |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`           |
+| `volumePermissions.image.pullSecrets`         | Init container volume-permissions image pull secrets                                                                                                      | `[]`                     |
+| `volumePermissions.resources`                 | Volume Permissions resources                                                                                                                              | `{}`                     |
+| `persistence.enabled`                         | Enable persistence                                                                                                                                        | `true`                   |
+| `persistence.storageClass`                    | Kibana data Persistent Volume Storage Class                                                                                                               | `""`                     |
+| `persistence.existingClaim`                   | Provide an existing `PersistentVolumeClaim`                                                                                                               | `""`                     |
+| `persistence.accessModes`                     | Persistent Volume access modes                                                                                                                            | `["ReadWriteOnce"]`      |
+| `persistence.size`                            | Size for the PV                                                                                                                                           | `10Gi`                   |
+| `persistence.annotations`                     | Persistent Volume Claim annotations                                                                                                                       | `{}`                     |
+| `persistence.subPath`                         | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services                                                   | `""`                     |
+| `persistence.selector`                        | Selector to match an existing Persistent Volume for WordPress data PVC                                                                                    | `{}`                     |
+| `persistence.dataSource`                      | Custom PVC data source                                                                                                                                    | `{}`                     |
+| `startupProbe.enabled`                        | Enable/disable the startup probe                                                                                                                          | `false`                  |
+| `startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated                                                                                                                   | `120`                    |
+| `startupProbe.periodSeconds`                  | How often to perform the probe                                                                                                                            | `10`                     |
+| `startupProbe.timeoutSeconds`                 | When the probe times out                                                                                                                                  | `5`                      |
+| `startupProbe.failureThreshold`               | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | `6`                      |
+| `startupProbe.successThreshold`               | Minimum consecutive successes for the probe to be considered successful after having failed.                                                              | `1`                      |
+| `livenessProbe.enabled`                       | Enable/disable the Liveness probe                                                                                                                         | `true`                   |
+| `livenessProbe.initialDelaySeconds`           | Delay before liveness probe is initiated                                                                                                                  | `120`                    |
+| `livenessProbe.periodSeconds`                 | How often to perform the probe                                                                                                                            | `10`                     |
+| `livenessProbe.timeoutSeconds`                | When the probe times out                                                                                                                                  | `5`                      |
+| `livenessProbe.failureThreshold`              | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | `6`                      |
+| `livenessProbe.successThreshold`              | Minimum consecutive successes for the probe to be considered successful after having failed.                                                              | `1`                      |
+| `readinessProbe.enabled`                      | Enable/disable the Readiness probe                                                                                                                        | `true`                   |
+| `readinessProbe.initialDelaySeconds`          | Delay before readiness probe is initiated                                                                                                                 | `30`                     |
+| `readinessProbe.periodSeconds`                | How often to perform the probe                                                                                                                            | `10`                     |
+| `readinessProbe.timeoutSeconds`               | When the probe times out                                                                                                                                  | `5`                      |
+| `readinessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded.                                                                | `6`                      |
+| `readinessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed.                                                              | `1`                      |
+| `customStartupProbe`                          | Custom liveness probe for the Web component                                                                                                               | `{}`                     |
+| `customLivenessProbe`                         | Custom liveness probe for the Web component                                                                                                               | `{}`                     |
+| `customReadinessProbe`                        | Custom readiness probe for the Web component                                                                                                              | `{}`                     |
+| `forceInitScripts`                            | Force execution of init scripts                                                                                                                           | `false`                  |
+| `initScriptsCM`                               | Configmap with init scripts to execute                                                                                                                    | `""`                     |
+| `initScriptsSecret`                           | Secret with init scripts to execute (for sensitive data)                                                                                                  | `""`                     |
+| `service.ports.http`                          | Kubernetes Service port                                                                                                                                   | `5601`                   |
+| `service.type`                                | Kubernetes Service type                                                                                                                                   | `ClusterIP`              |
+| `service.nodePorts.http`                      | Specify the nodePort value for the LoadBalancer and NodePort service types                                                                                | `""`                     |
+| `service.clusterIP`                           | %%MAIN_CONTAINER_NAME%% service Cluster IP                                                                                                                | `""`                     |
+| `service.loadBalancerIP`                      | loadBalancerIP if Kibana service type is `LoadBalancer`                                                                                                   | `""`                     |
+| `service.loadBalancerSourceRanges`            | %%MAIN_CONTAINER_NAME%% service Load Balancer sources                                                                                                     | `[]`                     |
+| `service.externalTrafficPolicy`               | Enable client source IP preservation                                                                                                                      | `Cluster`                |
+| `service.annotations`                         | Annotations for Kibana service (evaluated as a template)                                                                                                  | `{}`                     |
+| `service.labels`                              | Extra labels for Kibana service                                                                                                                           | `{}`                     |
+| `service.extraPorts`                          | Extra ports to expose in the service (normally used with the `sidecar` value)                                                                             | `[]`                     |
+| `service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                      | `None`                   |
+| `service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                                               | `{}`                     |
+| `ingress.enabled`                             | Enable ingress controller resource                                                                                                                        | `false`                  |
+| `ingress.pathType`                            | Ingress Path type                                                                                                                                         | `ImplementationSpecific` |
+| `ingress.apiVersion`                          | Override API Version (automatically detected if not set)                                                                                                  | `""`                     |
+| `ingress.hostname`                            | Default host for the ingress resource. If specified as "*" no host rule is configured                                                                     | `kibana.local`           |
+| `ingress.path`                                | The Path to Kibana. You may need to set this to '/*' in order to use this with ALB ingress controllers.                                                   | `/`                      |
+| `ingress.annotations`                         | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.                          | `{}`                     |
+| `ingress.tls`                                 | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                                           | `false`                  |
+| `ingress.selfSigned`                          | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                                              | `false`                  |
+| `ingress.extraHosts`                          | The list of additional hostnames to be covered with this ingress record.                                                                                  | `[]`                     |
+| `ingress.extraPaths`                          | Additional arbitrary path/backend objects                                                                                                                 | `[]`                     |
+| `ingress.extraTls`                            | The tls configuration for additional hostnames to be covered with this ingress record.                                                                    | `[]`                     |
+| `ingress.secrets`                             | If you're providing your own certificates, please use this to add the certificates as secrets                                                             | `[]`                     |
+| `ingress.ingressClassName`                    | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                                             | `""`                     |
+| `ingress.extraRules`                          | The list of additional rules to be added to this ingress record. Evaluated as a template                                                                  | `[]`                     |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                                      | `true`                   |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                                       | `""`                     |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                                            | `true`                   |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                | `{}`                     |
+| `containerPorts.http`                         | Port to expose at container level                                                                                                                         | `5601`                   |
+| `podSecurityContext.enabled`                  | Enabled %%MAIN_CONTAINER_NAME%% pods' Security Context                                                                                                    | `true`                   |
+| `podSecurityContext.fsGroup`                  | Set %%MAIN_CONTAINER_NAME%% pod's Security Context fsGroup                                                                                                | `1001`                   |
+| `containerSecurityContext.enabled`            | Enabled %%MAIN_CONTAINER_NAME%% containers' Security Context                                                                                              | `true`                   |
+| `containerSecurityContext.runAsUser`          | Set %%MAIN_CONTAINER_NAME%% containers' Security Context runAsUser                                                                                        | `1001`                   |
+| `containerSecurityContext.runAsNonRoot`       | Set %%MAIN_CONTAINER_NAME%% container's Security Context runAsNonRoot                                                                                     | `true`                   |
+| `resources.limits`                            | The resources limits for the container                                                                                                                    | `{}`                     |
+| `resources.requests`                          | The requested resources for the container                                                                                                                 | `{}`                     |
+| `podAffinityPreset`                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                     |
+| `podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                   |
+| `nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                     |
+| `nodeAffinityPreset.key`                      | Node label key to match Ignored if `affinity` is set.                                                                                                     | `""`                     |
+| `nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set.                                                                                                 | `[]`                     |
+| `affinity`                                    | Affinity for pod assignment                                                                                                                               | `{}`                     |
+| `nodeSelector`                                | Node labels for pod assignment                                                                                                                            | `{}`                     |
+| `tolerations`                                 | Tolerations for pod assignment                                                                                                                            | `[]`                     |
+| `podAnnotations`                              | Pod annotations                                                                                                                                           | `{}`                     |
+| `podLabels`                                   | Extra labels to add to Pod                                                                                                                                | `{}`                     |
+| `sidecars`                                    | Attach additional containers to the pod                                                                                                                   | `[]`                     |
+| `initContainers`                              | Add additional init containers to the pod                                                                                                                 | `[]`                     |
+| `configuration`                               | Kibana configuration                                                                                                                                      | `{}`                     |
+| `metrics.enabled`                             | Start a side-car prometheus exporter                                                                                                                      | `false`                  |
+| `metrics.service.annotations`                 | Prometheus annotations for the Kibana service                                                                                                             | `{}`                     |
+| `metrics.serviceMonitor.enabled`              | If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                    | `false`                  |
+| `metrics.serviceMonitor.namespace`            | Namespace in which Prometheus is running                                                                                                                  | `""`                     |
+| `metrics.serviceMonitor.jobLabel`             | The name of the label on the target service to use as the job name in prometheus.                                                                         | `""`                     |
+| `metrics.serviceMonitor.interval`             | Interval at which metrics should be scraped.                                                                                                              | `""`                     |
+| `metrics.serviceMonitor.scrapeTimeout`        | Timeout after which the scrape is ended                                                                                                                   | `""`                     |
+| `metrics.serviceMonitor.relabelings`          | RelabelConfigs to apply to samples before scraping                                                                                                        | `[]`                     |
+| `metrics.serviceMonitor.metricRelabelings`    | MetricRelabelConfigs to apply to samples before ingestion                                                                                                 | `[]`                     |
+| `metrics.serviceMonitor.selector`             | Prometheus instance selector labels                                                                                                                       | `{}`                     |
+| `metrics.serviceMonitor.labels`               | Extra labels for the ServiceMonitor                                                                                                                       | `{}`                     |
+| `metrics.serviceMonitor.honorLabels`          | honorLabels chooses the metric's labels on collisions with target labels                                                                                  | `false`                  |
 
 
 ### Kibana server TLS configuration
@@ -195,20 +233,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Elasticsearch parameters
 
-| Name                                            | Description                                                                                                              | Value     |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------- |
-| `elasticsearch.hosts`                           | List of elasticsearch hosts to connect to.                                                                               | `[]`      |
-| `elasticsearch.port`                            | Elasticsearch port                                                                                                       | `""`      |
-| `elasticsearch.security.auth.enabled`           | Set to 'true' if Elasticsearch has authentication enabled                                                                | `false`   |
-| `elasticsearch.security.auth.kibanaUsername`    | Kibana server user to authenticate with Elasticsearch                                                                    | `elastic` |
-| `elasticsearch.security.auth.kibanaPassword`    | Kibana server password to authenticate with Elasticsearch                                                                | `""`      |
-| `elasticsearch.security.auth.existingSecret`    | Name of the existing secret containing the Password for the Kibana user                                                  | `""`      |
-| `elasticsearch.security.tls.enabled`            | Set to 'true' if Elasticsearch API uses TLS/SSL (HTTPS)                                                                  | `false`   |
-| `elasticsearch.security.tls.verificationMode`   | Verification mode for SSL communications.                                                                                | `full`    |
-| `elasticsearch.security.tls.existingSecret`     | Name of the existing secret containing Elasticsearch Truststore or CA certificate. Required unless verificationMode=none | `""`      |
-| `elasticsearch.security.tls.usePemCerts`        | Set to 'true' to use PEM certificates instead of PKCS12.                                                                 | `false`   |
-| `elasticsearch.security.tls.truststorePassword` | Password to access the PKCS12 trustore in case it is password-protected.                                                 | `""`      |
-| `elasticsearch.security.tls.passwordsSecret`    | Name of a existing secret containing the Truststore password                                                             | `""`      |
+| Name                                                      | Description                                                                                                              | Value   |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `elasticsearch.hosts`                                     | List of elasticsearch hosts to connect to.                                                                               | `[]`    |
+| `elasticsearch.port`                                      | Elasticsearch port                                                                                                       | `""`    |
+| `elasticsearch.security.auth.enabled`                     | Set to 'true' if Elasticsearch has authentication enabled                                                                | `false` |
+| `elasticsearch.security.auth.kibanaPassword`              | Password of the 'kibana_system' user, used to authenticate Kibana connection with Elasticsearch.                         | `""`    |
+| `elasticsearch.security.auth.existingSecret`              | Name of the existing secret containing the password for the 'kibana_system' user.                                        | `""`    |
+| `elasticsearch.security.auth.createSystemUser`            | If enabled, Kibana will use Elasticsearch API to create the 'kibana_system' user at startup.                             | `false` |
+| `elasticsearch.security.auth.elasticsearchPasswordSecret` | Name of the existing secret containing the password for the 'elastic' user.                                              | `""`    |
+| `elasticsearch.security.tls.enabled`                      | Set to 'true' if Elasticsearch API uses TLS/SSL (HTTPS)                                                                  | `false` |
+| `elasticsearch.security.tls.verificationMode`             | Verification mode for SSL communications.                                                                                | `full`  |
+| `elasticsearch.security.tls.existingSecret`               | Name of the existing secret containing Elasticsearch Truststore or CA certificate. Required unless verificationMode=none | `""`    |
+| `elasticsearch.security.tls.usePemCerts`                  | Set to 'true' to use PEM certificates instead of PKCS12.                                                                 | `false` |
+| `elasticsearch.security.tls.truststorePassword`           | Password to access the PKCS12 trustore in case it is password-protected.                                                 | `""`    |
+| `elasticsearch.security.tls.passwordsSecret`              | Name of a existing secret containing the Truststore password                                                             | `""`    |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -350,6 +389,24 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 10.0.0
+
+This major release updates Kibana its latest verstion 8.x.x.
+In addition, missing features have been added and values have been renamed, in order to get aligned with the rest of the assets in the Bitnami charts repository.
+
+Affected values:
+
+- `service.port` renamed as `service.ports.http`
+- `service.nodePort` renamed as `service.nodePorts.http`
+- `containerPort` renamed as `containerPorts.http`
+
+Changes to Security related values:
+
+- `elasticsearch.security.auth.kibanaUsername` has been removed. Kibana must be authenticates using the built-in user 'kibana_system'
+- `elasticsearch.security.auth.kibanaPassword` has to provide the password for the kibana_system user, otherwise random password will be generated.
+- `elasticsearch.security.auth.existingSecret` key kibana-password now references the password of the 'kibana_system' user.
+- Two new values have been added: `elasticsearch.security.auth.createSystemUser` and `elasticsearchPasswordSecret`. If provided, the kibana container will use the 'elastic' user to create the 'kibana_system' user, using the password provided under `elasticsearch.security.auth.kibanaPassword`.
 
 ### To 9.0.0
 
