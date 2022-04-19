@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`                                  | PyTorch image registry                                                                                                   | `docker.io`            |
 | `image.repository`                                | PyTorch image repository                                                                                                 | `bitnami/pytorch`      |
-| `image.tag`                                       | PyTorch image tag (immutable tags are recommended)                                                                       | `1.11.0-debian-10-r13` |
+| `image.tag`                                       | PyTorch image tag (immutable tags are recommended)                                                                       | `1.11.0-debian-10-r24` |
 | `image.pullPolicy`                                | Image pull policy                                                                                                        | `IfNotPresent`         |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                         | `[]`                   |
 | `worldSize`                                       | Number of nodes that will run the code                                                                                   | `1`                    |
