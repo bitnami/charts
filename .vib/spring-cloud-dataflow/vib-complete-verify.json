@@ -31,7 +31,7 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-spring-cloud-dataflow-http",
+            "endpoint": "lb-spring-cloud-dataflow-server-http",
             "app_protocol": "HTTP"
           }
         },
