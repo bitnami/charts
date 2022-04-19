@@ -452,7 +452,7 @@ $ helm upgrade my-release bitnami/mariadb --set auth.rootPassword=[ROOT_PASSWORD
 
 ### To 11.0.0
 
-This major release bumps default MariaDB branch to 10.6. Follow the [official instructions] from upgrading between 10.5 and 10.6.
+This major release bumps default MariaDB branch to 10.6. Follow the [official instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-105-to-mariadb-106/) from upgrading between 10.5 and 10.6.
 
 No major issues are expected during the upgrade.
 
