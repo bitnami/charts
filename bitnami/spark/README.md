@@ -297,13 +297,14 @@ These values can be set at the same time in a single ConfigMap or using two Conf
 
 To submit an application to the Apache Spark cluster, use the `spark-submit` script, which is available at [https://github.com/apache/spark/tree/master/bin](https://github.com/apache/spark/tree/master/bin).
 
-The command below illustrates the process of deploying one of the sample applications included with Apache Spark. Replace the `k8s-apiserver-host` and `k8s-apiserver-port` placeholders with the correct master host/IP address and port for your deployment.
+The command below illustrates the process of deploying one of the sample applications included with Apache Spark. Replace the `k8s-apiserver-host`, `k8s-apiserver-port`, `spark-master-svc`, and `spark-master-port` placeholders with the correct master host/IP address and port for your deployment.
 
 ```bash
 $ ./bin/spark-submit \
     --class org.apache.spark.examples.SparkPi \
     --conf spark.kubernetes.container.image=bitnami/spark:3 \
     --master k8s://https://k8s-apiserver-host:k8s-apiserver-port \
+    --conf spark.kubernetes.driverEnv.SPARK_MASTER_URL=spark://spark-master-svc:spark-master-port \
     --deploy-mode cluster \
     ./examples/jars/spark-examples_2.12-3.2.0.jar 1000
 ```

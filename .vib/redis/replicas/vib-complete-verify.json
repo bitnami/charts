@@ -19,9 +19,9 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/redis"
         },
-        "runtime_parameters": "YXJjaGl0ZWN0dXJlOiBzdGFuZGFsb25l",
+        "runtime_parameters": "YXV0aDoKICBwYXNzd29yZDogInRlc3RfcGFzc3dvcmQiCm1hc3RlcjoKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIgCiAgcGVyc2lzdGVuY2U6CiAgICBwYXRoOiAvZGF0YS1wZXJzaXN0ZW5jZQpyZXBsaWNhOgogIHJlcGxpY2FDb3VudDogMgogIGNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIHJ1bkFzVXNlcjogMTAwMg==",
         "target_platform": {
-          "target_platform_id": "{TARGET_PLATFORM}",
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
             "name": "S4"
           }
@@ -42,10 +42,21 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/redis/standalone"
+              "path": "/.vib/redis/replicas/goss/goss-master"
             },
             "remote": {
               "workload": "sts-redis-master"
+            }
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/redis/replicas/goss/goss-replica"
+            },
+            "remote": {
+              "workload": "sts-redis-replicas"
             }
           }
         }

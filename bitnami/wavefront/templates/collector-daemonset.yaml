@@ -2,12 +2,13 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
+  name: {{ printf "%s-collector" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: collector
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  name: {{ template "common.names.fullname" . }}-collector
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -42,6 +43,12 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.collector.podAntiAffinityPreset "component" "collector" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.collector.nodeAffinityPreset.type "key" .Values.collector.nodeAffinityPreset.key "values" .Values.collector.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if .Values.collector.schedulerName }}
+      schedulerName: {{ .Values.collector.schedulerName }}
+      {{- end }}
+      {{- if .Values.collector.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.collector.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.collector.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.collector.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
@@ -58,9 +65,11 @@ spec:
       {{- if .Values.collector.priorityClassName }}
       priorityClassName: {{ .Values.collector.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.collector.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.collector.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if .Values.collector.podSecurityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.collector.podSecurityContext.fsGroup }}
+      securityContext: {{- omit .Values.collector.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.collector.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.collector.initContainers "context" $) | nindent 8 }}
@@ -73,15 +82,18 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.collector.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.collector.containerSecurityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.collector.containerSecurityContext.runAsUser }}
-            runAsNonRoot: {{ .Values.collector.containerSecurityContext.runAsNonRoot }}
+          securityContext: {{- omit .Values.collector.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          command:
           {{- if .Values.collector.command }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.collector.command "context" $) | nindent 12 }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.collector.command "context" $) | nindent 12 }}
           {{- else }}
+          command:
             - /wavefront-collector
+          {{- end }}
+          {{- if .Values.collector.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.collector.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
             - --daemon=true
             - --config-file=/etc/collector/config.yaml
             {{- if .Values.collector.maxProcs }}
@@ -90,9 +102,6 @@ spec:
             {{- if .Values.collector.logLevel }}
             - --log-level={{ .Values.collector.logLevel }}
             {{- end }}
-          {{- end }}
-          {{- if .Values.collector.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.collector.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: HOST_PROC
@@ -130,6 +139,9 @@ spec:
           {{- end }}
           {{- if .Values.collector.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.collector.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.collector.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.collector.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: procfs

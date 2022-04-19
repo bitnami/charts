@@ -354,6 +354,12 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 This major release no longer uses the bitnami/nginx-ldap-auth-daemon container as a dependency since its upstream project is not actively maintained.
 
+*2022-04-12 edit*:
+
+Bitnami���s NGINX Intel Helm chart from version 0.0.1 to 0.1.11 includes a `ldapDaemon.enabled` option **disabled by default** that allows to configure it with the [bitnami-docker-nginx-ldap-auth-daemon](https://github.com/bitnami/bitnami-docker-nginx-ldap-auth-daemon) following [NGINX���s reference implementation](https://www.nginx.com/blog/nginx-plus-authenticate-users/).
+
+On 9 April 2022, security vulnerabilities in the [NGINX LDAP reference implementation](https://github.com/nginxinc/nginx-ldap-auth) were publicly shared. **Although the deprecation of this container from the Bitnami catalog was not related to this security issue, [here](https://docs.bitnami.com/general/security/security-2022-04-12/) you can find more information from the Bitnami security team.**
+
 ## Bitnami Kubernetes Documentation
 
 Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](https://docs.bitnami.com/). You can find there the following resources:

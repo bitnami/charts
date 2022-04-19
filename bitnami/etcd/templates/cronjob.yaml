@@ -76,6 +76,8 @@ spec:
                   value: "3"
                 - name: ETCD_ON_K8S
                   value: "yes"
+                - name: MY_STS_NAME
+                  value: {{ include "common.names.fullname" . | quote }}
                 {{- $releaseNamespace := .Release.Namespace }}
                 {{- $etcdFullname := include "common.names.fullname" . }}
                 {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
