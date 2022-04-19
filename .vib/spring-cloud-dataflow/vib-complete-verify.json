@@ -41,7 +41,7 @@
             "resources": {
               "path": "/.vib/spring-cloud-dataflow/cypress"
             },
-            "endpoint": "lb-spring-cloud-dataflow-http",
+            "endpoint": "lb-spring-cloud-dataflow-server-http",
             "app_protocol": "HTTP"
           }
         }
