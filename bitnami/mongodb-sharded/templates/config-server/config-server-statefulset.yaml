@@ -2,15 +2,22 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "common.names.fullname" . }}-configsvr
+  name: {{ printf "%s-configsvr" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: configsvr
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: configsvr
-  serviceName: {{ include "common.names.fullname" . }}-headless
-  replicas: {{ .Values.configsvr.replicas }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  replicas: {{ .Values.configsvr.replicaCount }}
   podManagementPolicy: {{ .Values.configsvr.podManagementPolicy }}
   updateStrategy: {{- toYaml .Values.configsvr.updateStrategy | nindent 4 }}
   template:
@@ -36,7 +43,7 @@ spec:
       {{- if .Values.common.schedulerName }}
       schedulerName: {{ .Values.common.schedulerName | quote }}
       {{- end }}
-      serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "value" .Values.configsvr.serviceAccount "context" $) }}
+      serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "component" "configsvr" "value" .Values.configsvr.serviceAccount "context" $) }}
       {{- if .Values.configsvr.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.configsvr.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -57,9 +64,14 @@ spec:
       {{- if .Values.configsvr.priorityClassName }}
       priorityClassName: {{ .Values.configsvr.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.securityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- if .Values.configsvr.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.configsvr.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.configsvr.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.configsvr.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.configsvr.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.configsvr.terminationGracePeriodSeconds }}
       {{- end }}
       {{- include "mongodb-sharded.imagePullSecrets" . | nindent 6 }}
       initContainers:
@@ -67,7 +79,7 @@ spec:
         - name: volume-permissions
           image: {{ include "mongodb-sharded.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "{{ .Values.configsvr.persistence.mountPath }}"]
+          command: ["chown", "-R", "{{ .Values.configsvr.containerSecurityContext.runAsUser }}:{{ .Values.configsvr.podsecurityContext.fsGroup }}", "{{ .Values.configsvr.persistence.mountPath }}"]
           securityContext:
             runAsUser: 0
           resources: {{ toYaml .Values.volumePermissions.resources | nindent 12 }}
@@ -85,13 +97,11 @@ spec:
         - name: mongodb
           image: {{ include "mongodb-sharded.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.securityContext.enabled }}
-          securityContext:
-            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
-            runAsUser: {{ .Values.securityContext.runAsUser }}
+          {{- if .Values.configsvr.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.configsvr.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           ports:
-            - containerPort: {{ .Values.common.containerPorts.mongo }}
+            - containerPort: {{ .Values.common.containerPorts.mongodb }}
               name: mongodb
           env:
             - name: MONGODB_ENABLE_NUMACTL
@@ -115,16 +125,16 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: MONGODB_PORT_NUMBER
-              value: {{ .Values.common.containerPorts.mongo | quote }}
+              value: {{ .Values.common.containerPorts.mongodb | quote }}
             - name: MONGODB_INITIAL_PRIMARY_HOST
               value: {{ include "mongodb-sharded.configServer.primaryHost" . }}
             - name: MONGODB_REPLICA_SET_NAME
               value: {{ printf "%s-configsvr" ( include "common.names.fullname" . ) }}
               {{- if .Values.common.useHostnames }}
             - name: MONGODB_ADVERTISED_HOSTNAME
-              value: "$(MONGODB_POD_NAME).{{ include "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+              value: {{ printf "$(MONGODB_POD_NAME).%s-headless.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain }}
               {{- end }}
-            {{- if .Values.usePasswordFile }}
+            {{- if .Values.auth.usePasswordFile }}
             - name: MONGODB_ROOT_PASSWORD_FILE
               value: "/bitnami/mongodb/secrets/mongodb-root-password"
             - name: MONGODB_REPLICA_SET_KEY_FILE
@@ -186,37 +196,41 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else }}
-          command:
-            - /bin/bash
-            - /entrypoint/replicaset-entrypoint.sh
+          {{- if .Values.configsvr.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.configsvr.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.livenessProbe.enabled }}
-          livenessProbe:
+          {{- if .Values.configsvr.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.configsvr.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.configsvr.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.configsvr.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - pgrep
                 - mongod
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- else if .Values.configsvr.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.configsvr.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
-          readinessProbe:
+          {{- if .Values.configsvr.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.configsvr.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - mongo
-                - --disableImplicitSessions
-                - --eval
-                - "db.adminCommand('ping')"
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+                - /bin/sh 
+                - -c 
+                - mongo --port $MONGODB_PORT_NUMBER --disableImplicitSessions --eval "db.adminCommand('ping')"
+          {{- else if .Values.configsvr.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.configsvr.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.configsvr.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.configsvr.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: mongodb
+          {{- else if .Values.configsvr.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.configsvr.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if $.Values.configsvr.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" $.Values.configsvr.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: replicaset-entrypoint-configmap
@@ -227,7 +241,7 @@ spec:
             - name: config
               mountPath: /bitnami/mongodb/conf/
             {{- end }}
-            {{- if .Values.usePasswordFile }}
+            {{- if .Values.auth.usePasswordFile }}
             - name: secrets
               mountPath: /bitnami/mongodb/secrets/
             {{- end }}
@@ -250,13 +264,11 @@ spec:
         - name: metrics
           image: {{ include "mongodb-sharded.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          {{- if .Values.securityContext.enabled }}
-          securityContext:
-            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
-            runAsUser: {{ .Values.securityContext.runAsUser }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
-          {{- if .Values.usePasswordFile }}
+          {{- if .Values.auth.usePasswordFile }}
             - name: MONGODB_ROOT_PASSWORD_FILE
               value: "/bitnami/mongodb/secrets/mongodb-root-password"
           {{- else }}
@@ -275,41 +287,42 @@ spec:
             - -ec
             - |-
               #!/bin/sh
-              {{- if .Values.usePasswordFile }}
+              {{- if .Values.auth.usePasswordFile }}
               export MONGODB_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
               {{- end }}
-              /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ .Values.service.port }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ .Values.metrics.extraArgs }}
+              /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPorts.metrics }}" --mongodb.uri mongodb://root:`echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g"`@localhost:{{ .Values.common.containerPorts.mongodb }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ .Values.metrics.extraArgs }}
           {{- end }}
-          {{- if .Values.usePasswordFile }}
+          {{- if .Values.auth.usePasswordFile }}
           volumeMounts:
             - name: secrets
               mountPath: /bitnami/mongodb/secrets/
           {{- end }}
           ports:
             - name: metrics
-              containerPort: {{ .Values.metrics.containerPort }}
+              containerPort: {{ .Values.metrics.containerPorts.metrics }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.livenessProbe "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
-            successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
+          {{- else if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.metrics.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.readinessProbe "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
-            successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
+          {{- else if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.metrics.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.startupProbe "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- else if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           resources: {{ toYaml .Values.metrics.resources | nindent 12 }}
@@ -323,8 +336,8 @@ spec:
       volumes:
         - name: replicaset-entrypoint-configmap
           configMap:
-            name: {{ include "common.names.fullname" . }}-replicaset-entrypoint
-        {{- if .Values.usePasswordFile }}
+            name: {{ printf "%s-replicaset-entrypoint" (include "common.names.fullname" .) }}
+        {{- if .Values.auth.usePasswordFile }}
         - name: secrets
           secret:
             secretName: {{ include "mongodb-sharded.secret" . }}
@@ -352,13 +365,21 @@ spec:
         {{- if .Values.configsvr.extraVolumes }}
           {{- include "common.tplvalues.render" ( dict "value" .Values.configsvr.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
-  {{- if .Values.configsvr.persistence.enabled }}
+  {{- if and .Values.configsvr.persistence.enabled (not .Values.configsvr.persistence.existingClaims) }}
   volumeClaimTemplates:
     - metadata:
         name: datadir
+        {{- if or .Values.configsvr.persistence.annotations .Values.commonAnnotations .Values.configsvr.persistence.resourcePolicy }}
         annotations:
-        {{- range $key, $value := .Values.configsvr.persistence.annotations }}
-          {{ $key }}: "{{ $value }}"
+          {{- if .Values.commonAnnotations }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.configsvr.persistence.annotations }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.configsvr.persistence.annotations "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.configsvr.persistence.resourcePolicy }}
+            helm.sh/resource-policy: {{ .Values.configsvr.persistence.resourcePolicy | quote }}
+          {{- end }}
         {{- end }}
       spec:
         accessModes:

@@ -4,38 +4,21 @@
 Returns a ServiceAccount name for specified path or falls back to `common.serviceAccount.name`
 if `common.serviceAccount.create` is set to true. Falls back to Chart's fullname otherwise.
 Usage:
-{{ include "mongodb-sharded.serviceAccountName" (dict "value" .Values.path.to.serviceAccount "context" $) }}
+{{ include "mongodb-sharded.serviceAccountName" (dict "component" "mongos" "value" .Values.path.to.serviceAccount "context" $) }}
 */}}
 {{- define "mongodb-sharded.serviceAccountName" -}}
 {{- if .value.create }}
-    {{- default (include "common.names.fullname" .context) .value.name | quote }}
+    {{- default (printf "%s-%s" (include "common.names.fullname" .context) .component) .value.name | quote }}
 {{- else if .context.Values.common.serviceAccount.create }}
-    {{- default (include "common.names.fullname" .context) .context.Values.common.serviceAccount.name | quote }}
+    {{- default (printf "%s-%s" (include "common.names.fullname" .context) .component).context.Values.common.serviceAccount.name | quote }}
 {{- else -}}
     {{- default "default" .value.name | quote }}
 {{- end }}
 {{- end }}
 
-{{/*
-Renders a ServiceAccount for specified name.
-Usage:
-{{ include "mongodb-sharded.serviceaccount" (dict "value" .Values.path.to.serviceAccount "context" $) }}
-*/}}
-{{- define "mongodb-sharded.serviceaccount" -}}
-{{- if .value.create -}}
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: {{ include "mongodb-sharded.serviceAccountName" (dict "value" .value "context" .context) }}
-  labels:
-    {{- include "common.labels.standard" .context | nindent 4 }}
----
-{{ end -}}
-{{- end -}}
-
 {{- define "mongodb-sharded.secret" -}}
-  {{- if .Values.existingSecret -}}
-    {{- .Values.existingSecret -}}
+  {{- if .Values.auth.existingSecret -}}
+    {{- .Values.auth.existingSecret -}}
   {{- else }}
     {{- include "common.names.fullname" . -}}
   {{- end }}
@@ -110,7 +93,7 @@ Create the name for the admin secret.
     {{- if .Values.auth.existingAdminSecret -}}
         {{- .Values.auth.existingAdminSecret -}}
     {{- else -}}
-        {{- include "common.names.fullname" . -}}-admin
+        {{- printf "%s-admin" (include "common.names.fullname" .) -}}
     {{- end -}}
 {{- end -}}
 
@@ -121,7 +104,7 @@ Create the name for the key secret.
   {{- if .Values.auth.existingKeySecret -}}
       {{- .Values.auth.existingKeySecret -}}
   {{- else -}}
-      {{- include "common.names.fullname" . -}}-keyfile
+      {{- printf "%s-keyfile" (include "common.names.fullname" .) -}}
   {{- end -}}
 {{- end -}}
 
@@ -172,7 +155,7 @@ Compile all warnings into a single message, and call fail.
   {{- $messages := list -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.mongodbCustomDatabase" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.externalCfgServer" .) -}}
-  {{- $messages := append $messages (include "mongodb-sharded.validateValues.replicas" .) -}}
+  {{- $messages := append $messages (include "mongodb-sharded.validateValues.replicaCount" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.config" .) -}}
   {{- $messages := without $messages "" -}}
   {{- $message := join "\n" $messages -}}
@@ -183,15 +166,15 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 
 {{/*
-Validate values of MongoDB&reg; - both mongodbUsername and mongodbDatabase are necessary
+Validate values of MongoDB&reg; - both auth.username and auth.database are necessary
 to create a custom user and database during 1st initialization
 */}}
 {{- define "mongodb-sharded.validateValues.mongodbCustomDatabase" -}}
-{{- if or (and .Values.mongodbUsername (not .Values.mongodbDatabase)) (and (not .Values.mongodbUsername) .Values.mongodbDatabase) }}
-mongodb: mongodbUsername, mongodbDatabase
-    Both mongodbUsername and mongodbDatabase must be provided to create
+{{- if or (and .Values.auth.username (not .Values.auth.database)) (and (not .Values.auth.username) .Values.auth.database) }}
+mongodb: auth.username, auth.database
+    Both auth.username and auth.database must be provided to create
     a custom user and database during 1st initialization.
-    Please set both of them (--set mongodbUsername="xxxx",mongodbDatabase="yyyy")
+    Please set both of them (--set auth.username="xxxx",auth.database="yyyy")
 {{- end -}}
 {{- end -}}
 
@@ -218,20 +201,20 @@ mongodb: invalidExternalConfigServer
 {{- end -}}
 
 {{/*
-Validate values of MongoDB&reg; - The number of shards must be positive, as well as the data node replicas
+Validate values of MongoDB&reg; - The number of shards must be positive, as well as the data node replicaCount
 */}}
-{{- define "mongodb-sharded.validateValues.replicas" -}}
-{{- if and (le (int .Values.shardsvr.dataNode.replicas) 0) (ge (int .Values.shards) 1) }}
+{{- define "mongodb-sharded.validateValues.replicaCount" -}}
+{{- if and (le (int .Values.shardsvr.dataNode.replicaCount) 0) (ge (int .Values.shards) 1) }}
 mongodb: invalidShardSvrReplicas
-    You specified an invalid number of replicas per shard. Please set shardsvr.dataNode.replicas with a positive number or set the number of shards to 0.
+    You specified an invalid number of replicas per shard. Please set shardsvr.dataNode.replicaCount with a positive number or set the number of shards to 0.
 {{- end -}}
-{{- if lt (int .Values.shardsvr.arbiter.replicas) 0 }}
+{{- if lt (int .Values.shardsvr.arbiter.replicaCount) 0 }}
 mongodb: invalidShardSvrArbiters
-    You specified an invalid number of arbiters per shard. Please set shardsvr.arbiter.replicas with a number greater or equal than 0
+    You specified an invalid number of arbiters per shard. Please set shardsvr.arbiter.replicaCount with a number greater or equal than 0
 {{- end -}}
-{{- if and (le (int .Values.configsvr.replicas) 0) (not .Values.configsvr.external.host) }}
+{{- if and (le (int .Values.configsvr.replicaCount) 0) (not .Values.configsvr.external.host) }}
 mongodb: invalidConfigSvrReplicas
-    You specified an invalid number of replicas per shard. Please set configsvr.replicas with a positive number or set the configsvr.external.host value to use
+    You specified an invalid number of replicas per shard. Please set configsvr.replicaCount with a positive number or set the configsvr.external.host value to use
     an external config server replicaset
 {{- end -}}
 {{- end -}}
