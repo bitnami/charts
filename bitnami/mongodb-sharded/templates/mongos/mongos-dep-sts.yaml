@@ -44,8 +44,8 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-      {{- if .Values.common.schedulerName }}
-      schedulerName: {{ .Values.common.schedulerName | quote }}
+      {{- if .Values.mongos.schedulerName }}
+      schedulerName: {{ .Values.mongos.schedulerName | quote }}
       {{- end }}
       serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "component" "mongos" "value" $.Values.mongos.serviceAccount "context" $) }}
       {{- if .Values.mongos.hostAliases }}

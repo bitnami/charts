@@ -44,8 +44,8 @@ spec:
       {{- end }}
     spec:
       serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "component" "shardsvr-arbiter" "value" $.Values.shardsvr.arbiter.serviceAccount "context" $) }}
-      {{- if $.Values.common.schedulerName }}
-      schedulerName: {{ $.Values.common.schedulerName | quote }}
+      {{- if $.Values.shardsvr.arbiter.schedulerName }}
+      schedulerName: {{ $.Values.shardsvr.arbiter.schedulerName | quote }}
       {{- end }}
       {{- if $.Values.shardsvr.arbiter.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.hostAliases "context" $) | nindent 8 }}

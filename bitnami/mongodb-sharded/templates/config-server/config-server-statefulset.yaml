@@ -40,8 +40,8 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-      {{- if .Values.common.schedulerName }}
-      schedulerName: {{ .Values.common.schedulerName | quote }}
+      {{- if .Values.configsvr.schedulerName }}
+      schedulerName: {{ .Values.configsvr.schedulerName | quote }}
       {{- end }}
       serviceAccountName: {{ include "mongodb-sharded.serviceAccountName" (dict "component" "configsvr" "value" .Values.configsvr.serviceAccount "context" $) }}
       {{- if .Values.configsvr.hostAliases }}
@@ -79,7 +79,7 @@ spec:
         - name: volume-permissions
           image: {{ include "mongodb-sharded.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command: ["chown", "-R", "{{ .Values.configsvr.containerSecurityContext.runAsUser }}:{{ .Values.configsvr.podsecurityContext.fsGroup }}", "{{ .Values.configsvr.persistence.mountPath }}"]
+          command: ["chown", "-R", "{{ .Values.configsvr.containerSecurityContext.runAsUser }}:{{ .Values.configsvr.podSecurityContext.fsGroup }}", "{{ .Values.configsvr.persistence.mountPath }}"]
           securityContext:
             runAsUser: 0
           resources: {{ toYaml .Values.volumePermissions.resources | nindent 12 }}
@@ -365,7 +365,7 @@ spec:
         {{- if .Values.configsvr.extraVolumes }}
           {{- include "common.tplvalues.render" ( dict "value" .Values.configsvr.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
-  {{- if and .Values.configsvr.persistence.enabled (not .Values.configsvr.persistence.existingClaims) }}
+  {{- if and .Values.configsvr.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: datadir

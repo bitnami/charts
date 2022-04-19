@@ -43,8 +43,8 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-      {{- if $.Values.common.schedulerName }}
-      schedulerName: {{ $.Values.common.schedulerName | quote }}
+      {{- if $.Values.shardsvr.dataNode.schedulerName }}
+      schedulerName: {{ $.Values.shardsvr.dataNode.schedulerName | quote }}
       {{- end }}
       {{- if $.Values.shardsvr.dataNode.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.affinity "context" (set $ "dataNodeLoopId" $i)) | nindent 8 }}
@@ -372,7 +372,7 @@ spec:
         {{- if $.Values.shardsvr.dataNode.extraVolumes }}
           {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.dataNode.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
-  {{- if and $.Values.shardsvr.persistence.enabled (not $.Values.shardsvr.persistence.existingClaims) }}
+  {{- if and $.Values.shardsvr.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: datadir
