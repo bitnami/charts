@@ -1,8 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "spark.master.service.name" . }}
+  name: {{ printf "%s-master-svc" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: master
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -19,31 +21,31 @@ spec:
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - port: {{ .Values.service.clusterPort }}
+    - port: {{ .Values.service.ports.clusterPort }}
       targetPort: cluster
       name: cluster
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.cluster)) }}
-      nodePort: {{ .Values.service.nodePorts.cluster }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.clusterPort)) }}
+      nodePort: {{ .Values.service.nodePorts.clusterPort }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     {{- if .Values.security.ssl.enabled }}
-    - port: {{ .Values.service.webPortHttps }}
+    - port: {{ .Values.service.ports.https }}
       targetPort: https
       name: https
       protocol: TCP
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.webHttps)) }}
-      nodePort: {{ .Values.service.nodePorts.webHttps }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.https)) }}
+      nodePort: {{ .Values.service.nodePorts.https }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     {{- else }}
-    - port: {{ .Values.service.webPort }}
+    - port: {{ .Values.service.ports.http }}
       targetPort: http
       name: http
       protocol: TCP
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.web)) }}
-      nodePort: {{ .Values.service.nodePorts.web }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http)) }}
+      nodePort: {{ .Values.service.nodePorts.http }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
