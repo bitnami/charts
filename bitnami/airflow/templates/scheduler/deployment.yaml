@@ -131,13 +131,13 @@ spec:
             {{- if .Values.extraEnvVarsSecrets }}
             {{- range .Values.extraEnvVarsSecrets }}
             - secretRef:
-                name: {{ .name }}
+                name: {{ . }}
             {{- end }}
             {{- end }}
             {{- if .Values.scheduler.extraEnvVarsSecrets }}
             {{- range .Values.scheduler.extraEnvVarsSecrets }}
             - secretRef:
-                name: {{ .name }}
+                name: {{ . }}
             {{- end }}
             {{- end }}
           {{- end }}

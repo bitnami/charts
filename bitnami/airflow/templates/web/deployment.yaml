@@ -174,13 +174,13 @@ spec:
             {{- if .Values.extraEnvVarsSecrets }}
             {{- range .Values.extraEnvVarsSecrets }}
             - secretRef:
-                name: {{ .name }}
+                name: {{ . }}
             {{- end }}
             {{- end }}
             {{- if .Values.web.extraEnvVarsSecrets }}
             {{- range .Values.web.extraEnvVarsSecrets }}
             - secretRef:
-                name: {{ .name }}
+                name: {{ . }}
             {{- end }}
             {{- end }}
           {{- end }}
