@@ -760,10 +760,10 @@ tls:
     ## @param tls.client.existingSecret Name of the existing secret containing the TLS certificates for ZooKeeper client communications
     ##
     existingSecret: ""
-    ## @param tls.client.existingSecretKeystoreKey The secret key from the tls.client.existingSecret.
+    ## @param tls.client.existingSecretKeystoreKey The secret key from the tls.client.existingSecret containing the Keystore.
     ##
     existingSecretKeystoreKey: ""
-    ## @param tls.client.existingSecretTruststoreKey The secret key from the tls.client.existingSecret.
+    ## @param tls.client.existingSecretTruststoreKey The secret key from the tls.client.existingSecret containing the Truststore.
     ##
     existingSecretTruststoreKey: ""
     ## @param tls.client.keystorePath Location of the KeyStore file used for Client connections
@@ -775,10 +775,10 @@ tls:
     ## @param tls.client.passwordsSecretName Existing secret containing Keystore and truststore passwords
     ##
     passwordsSecretName: ""
-    ## @param tls.client.passwordsSecretKeystoreKey The secret key from the tls.client.passwordsSecretName.
+    ## @param tls.client.passwordsSecretKeystoreKey The secret key from the tls.client.passwordsSecretName containing the password for the Keystore.
     ##
     passwordsSecretKeystoreKey: ""
-    ## @param tls.client.passwordsSecretTruststoreKey The secret key from the tls.client.passwordsSecretName.
+    ## @param tls.client.passwordsSecretTruststoreKey The secret key from the tls.client.passwordsSecretName containing the password for the Truststore.
     ##
     passwordsSecretTruststoreKey: ""
     ## @param tls.client.keystorePassword Password to access KeyStore if needed
@@ -800,10 +800,10 @@ tls:
     ## @param tls.quorum.existingSecret Name of the existing secret containing the TLS certificates for ZooKeeper quorum protocol
     ##
     existingSecret: ""
-    ## @param tls.quorum.existingSecretKeystoreKey The secret key from the tls.quorum.existingSecret.
+    ## @param tls.quorum.existingSecretKeystoreKey The secret key from the tls.quorum.existingSecret containing the Keystore.
     ##
     existingSecretKeystoreKey: ""
-    ## @param tls.quorum.existingSecretTruststoreKey The secret key from the tls.quorum.existingSecret.
+    ## @param tls.quorum.existingSecretTruststoreKey The secret key from the tls.quorum.existingSecret containing the Truststore.
     ##
     existingSecretTruststoreKey: ""
     ## @param tls.quorum.keystorePath Location of the KeyStore file used for Quorum protocol
@@ -815,10 +815,10 @@ tls:
     ## @param tls.quorum.passwordsSecretName Existing secret containing Keystore and truststore passwords
     ##
     passwordsSecretName: ""
-    ## @param tls.quorum.passwordsSecretKeystoreKey The secret key from the tls.quorum.passwordsSecretName.
+    ## @param tls.quorum.passwordsSecretKeystoreKey The secret key from the tls.quorum.passwordsSecretName containing the password for the Keystore.
     ##
     passwordsSecretKeystoreKey: ""
-    ## @param tls.quorum.passwordsSecretTruststoreKey The secret key from the tls.quorum.passwordsSecretName.
+    ## @param tls.quorum.passwordsSecretTruststoreKey The secret key from the tls.quorum.passwordsSecretName containing the password for the Truststore.
     ##
     passwordsSecretTruststoreKey: ""
     ## @param tls.quorum.keystorePassword Password to access KeyStore if needed

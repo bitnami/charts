@@ -193,7 +193,7 @@ Return the secret containing ZooKeeper client TLS certificates
 {{/*
 Get the quorum keystore key to be retrieved from tls.quorum.existingSecret.
 */}}
-{{- define "zookeeper.quorum.keystoreKey" -}}
+{{- define "zookeeper.quorum.tlsKeystoreKey" -}}
 {{- if and .Values.tls.quorum.existingSecret .Values.tls.quorum.existingSecretKeystoreKey -}}
     {{- printf "%s" .Values.tls.quorum.existingSecretKeystoreKey -}}
 {{- else -}}
@@ -204,7 +204,7 @@ Get the quorum keystore key to be retrieved from tls.quorum.existingSecret.
 {{/*
 Get the quorum truststore key to be retrieved from tls.quorum.existingSecret.
 */}}
-{{- define "zookeeper.quorum.truststoreKey" -}}
+{{- define "zookeeper.quorum.tlsTruststoreKey" -}}
 {{- if and .Values.tls.quorum.existingSecret .Values.tls.quorum.existingSecretTruststoreKey -}}
     {{- printf "%s" .Values.tls.quorum.existingSecretTruststoreKey -}}
 {{- else -}}
@@ -215,7 +215,7 @@ Get the quorum truststore key to be retrieved from tls.quorum.existingSecret.
 {{/*
 Get the client keystore key to be retrieved from tls.client.existingSecret.
 */}}
-{{- define "zookeeper.client.keystoreKey" -}}
+{{- define "zookeeper.client.tlsKeystoreKey" -}}
 {{- if and .Values.tls.client.existingSecret .Values.tls.client.existingSecretKeystoreKey -}}
     {{- printf "%s" .Values.tls.client.existingSecretKeystoreKey -}}
 {{- else -}}
@@ -226,7 +226,7 @@ Get the client keystore key to be retrieved from tls.client.existingSecret.
 {{/*
 Get the client truststore key to be retrieved from tls.client.existingSecret.
 */}}
-{{- define "zookeeper.client.truststoreKey" -}}
+{{- define "zookeeper.client.tlsTruststoreKey" -}}
 {{- if and .Values.tls.client.existingSecret .Values.tls.client.existingSecretTruststoreKey -}}
     {{- printf "%s" .Values.tls.client.existingSecretTruststoreKey -}}
 {{- else -}}
@@ -258,7 +258,7 @@ Return the name of the secret containing the Keystore and Truststore password
 {{/*
 Get the quorum keystore password key to be retrieved from tls.quorum.passwordSecretName.
 */}}
-{{- define "zookeeper.quorum.passwordKeystoreKey" -}}
+{{- define "zookeeper.quorum.tlsPasswordKeystoreKey" -}}
 {{- if and .Values.tls.quorum.passwordsSecretName .Values.tls.quorum.passwordsSecretKeystoreKey -}}
     {{- printf "%s" .Values.tls.quorum.passwordsSecretKeystoreKey -}}
 {{- else -}}
@@ -269,7 +269,7 @@ Get the quorum keystore password key to be retrieved from tls.quorum.passwordSec
 {{/*
 Get the quorum truststore password key to be retrieved from tls.quorum.passwordSecretName.
 */}}
-{{- define "zookeeper.quorum.passwordTruststoreKey" -}}
+{{- define "zookeeper.quorum.tlsPasswordTruststoreKey" -}}
 {{- if and .Values.tls.quorum.passwordsSecretName .Values.tls.quorum.passwordsSecretTruststoreKey -}}
     {{- printf "%s" .Values.tls.quorum.passwordsSecretTruststoreKey -}}
 {{- else -}}
@@ -280,7 +280,7 @@ Get the quorum truststore password key to be retrieved from tls.quorum.passwordS
 {{/*
 Get the client keystore password key to be retrieved from tls.client.passwordSecretName.
 */}}
-{{- define "zookeeper.client.passwordKeystoreKey" -}}
+{{- define "zookeeper.client.tlsPasswordKeystoreKey" -}}
 {{- if and .Values.tls.client.passwordsSecretName .Values.tls.client.passwordsSecretKeystoreKey -}}
     {{- printf "%s" .Values.tls.client.passwordsSecretKeystoreKey -}}
 {{- else -}}
@@ -291,7 +291,7 @@ Get the client keystore password key to be retrieved from tls.client.passwordSec
 {{/*
 Get the client truststore password key to be retrieved from tls.client.passwordSecretName.
 */}}
-{{- define "zookeeper.client.passwordTruststoreKey" -}}
+{{- define "zookeeper.client.tlsPasswordTruststoreKey" -}}
 {{- if and .Values.tls.client.passwordsSecretName .Values.tls.client.passwordsSecretTruststoreKey -}}
     {{- printf "%s" .Values.tls.client.passwordsSecretTruststoreKey -}}
 {{- else -}}
