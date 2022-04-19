@@ -444,6 +444,8 @@ This chart major version standarizes the chart templates and values, modifying s
 - `xxxxx.configurationConfigMap` parameter has been renamed to `xxxxx.existingConfigmap`
 - `extraPodLabels` parameter has been renamed to `podLabels`
 
+Besides the changes detailed above, no issues are expected to appear when upgrading.
+
 ### To 5.0.0
 
 This version standardizes the way of defining Ingress rules. When configuring a single hostname for the Ingress rule, set the `ingress.hostname` value. When defining more than one, set the `ingress.extraHosts` array. Apart from this case, no issues are expected to appear when upgrading.
