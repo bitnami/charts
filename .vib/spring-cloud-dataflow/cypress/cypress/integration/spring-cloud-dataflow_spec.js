@@ -67,7 +67,26 @@ it('allows importing a task application and creating a task', () => {
       `${task.newTask.name}-${random}`
     );
     cy.contains('.btn-primary', 'Create the task').click();
-    cy.contains('.modal-content', 'Creating task');
     cy.contains('.datagrid-inner-wrapper', `${task.newTask.name}-${random}`);
   });
+});
+
+it('allows importing a task from a file and destroying it ', () => {
+  cy.visit('/');
+  cy.get('[routerlink="manage/tools"]').click();
+  cy.contains('a', 'Import tasks from a JSON file').click();
+  cy.get('input[type="file"]').selectFile(
+    'cypress/fixtures/task-to-import.json',
+    { force: true }
+  );
+  cy.contains('button', 'Import').click();
+  cy.contains('.modal-body', '1 task(s) created');
+  cy.get('.close').click();
+  cy.get('[routerlink="tasks-jobs/tasks"]').click();
+  cy.contains('button', 'Group Actions').click();
+  cy.get('[aria-label="Select All"]').click({ force: true });
+  cy.contains('button', 'Destroy task').click();
+  cy.contains('.modal-content', 'Confirm Destroy Task');
+  cy.contains('button', 'Destroy the task').click();
+  cy.get('.toast-container').should('contain', 'destroyed');
 });

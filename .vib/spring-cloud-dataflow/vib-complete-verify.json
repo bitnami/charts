@@ -36,17 +36,6 @@
           }
         },
         {
-          "action_id": "goss",
-          "params": {
-            "resources": {
-              "path": "/.vib/spring-cloud-dataflow/goss"
-            },
-            "remote": {
-              "workload": "deploy-spring-cloud-dataflow"
-             }
-          }
-        },
-        {
           "action_id": "cypress",
           "params": {
             "resources": {
