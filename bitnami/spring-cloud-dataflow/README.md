@@ -6,8 +6,6 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 
 [Overview of Spring Cloud Data Flow](https://github.com/spring-cloud/spring-cloud-dataflow)
 
-
-                           
 ## TL;DR
 
 ```bash
@@ -58,7 +56,6 @@ helm uninstall my-release
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                           | Value           |
@@ -70,7 +67,6 @@ helm uninstall my-release
 | `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                  | `""`            |
 | `clusterDomain`     | Default Kubernetes cluster domain                                                     | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                     | `[]`            |
-
 
 ### Dataflow Server parameters
 
@@ -156,7 +152,7 @@ helm uninstall my-release
 | `server.service.sessionAffinity`                    | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                                               |
 | `server.service.sessionAffinityConfig`              | Additional settings for the sessionAffinity                                                                                      | `{}`                                                 |
 | `server.ingress.enabled`                            | Enable ingress controller resource                                                                                               | `false`                                              |
-| `server.ingress.path`                               | The Path to WordPress. You may need to set this to '/*' in order to use this with ALB ingress controllers.                       | `/`                                                  |
+| `server.ingress.path`                               | The Path to WordPress. You may need to set this to '/\*' in order to use this with ALB ingress controllers.                      | `/`                                                  |
 | `server.ingress.apiVersion`                         | Force Ingress API version (automatically detected if not set)                                                                    | `""`                                                 |
 | `server.ingress.pathType`                           | Ingress path type                                                                                                                | `ImplementationSpecific`                             |
 | `server.ingress.hostname`                           | Default host for the ingress resource                                                                                            | `dataflow.local`                                     |
@@ -184,7 +180,6 @@ helm uninstall my-release
 | `server.jdwp.port`                                  | Specify port for remote debugging                                                                                                | `5005`                                               |
 | `server.proxy`                                      | Add proxy configuration for SCDF server                                                                                          | `{}`                                                 |
 | `server.applicationProperties`                      | Specify common application properties added by SCDF server to streams and/or tasks                                               | `{}`                                                 |
-
 
 ### Dataflow Skipper parameters
 
@@ -277,7 +272,6 @@ helm uninstall my-release
 | `externalSkipper.host`                       | Host of a external Skipper Server                                                                         | `localhost`                    |
 | `externalSkipper.port`                       | External Skipper Server port number                                                                       | `7577`                         |
 
-
 ### Deployer parameters
 
 | Name                                          | Description                                                                                                                                     | Value          |
@@ -298,7 +292,6 @@ helm uninstall my-release
 | `deployer.entryPointStyle`                    | An entry point style affects how application properties are passed to the container to be deployed. Allowed values: exec (default), shell, boot | `exec`         |
 | `deployer.imagePullPolicy`                    | An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never  | `IfNotPresent` |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                                                                             | Value  |
@@ -308,7 +301,6 @@ helm uninstall my-release
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                          | `true` |
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                              | `{}`   |
 | `rbac.create`                                 | Whether to create and use RBAC resources or not                                                                         | `true` |
-
 
 ### Metrics parameters
 
@@ -386,7 +378,6 @@ helm uninstall my-release
 | `metrics.autoscaling.targetCPU`              | Target CPU utilization percentage                                                                                          | `""`                               |
 | `metrics.autoscaling.targetMemory`           | Target Memory utilization percentage                                                                                       | `""`                               |
 
-
 ### Init Container parameters
 
 | Name                                 | Description                                                                                       | Value                 |
@@ -399,7 +390,6 @@ helm uninstall my-release
 | `waitForBackends.image.pullSecrets`  | Specify docker-registry secret names as an array                                                  | `[]`                  |
 | `waitForBackends.resources.limits`   | Init container wait-for-backend resource limits                                                   | `{}`                  |
 | `waitForBackends.resources.requests` | Init container wait-for-backend resource requests                                                 | `{}`                  |
-
 
 ### Database parameters
 
@@ -430,7 +420,6 @@ helm uninstall my-release
 | `externalDatabase.skipper.username`       | Existing username in the external db to be used by Skipper server                                   | `skipper`    |
 | `externalDatabase.hibernateDialect`       | Hibernate Dialect used by Dataflow/Skipper servers                                                  | `""`         |
 
-
 ### RabbitMQ chart parameters
 
 | Name                                      | Description                                                                     | Value       |
@@ -445,7 +434,6 @@ helm uninstall my-release
 | `externalRabbitmq.vhost`                  | External RabbitMQ virtual host. It will be saved in a kubernetes secret         | `""`        |
 | `externalRabbitmq.existingPasswordSecret` | Existing secret with RabbitMQ password. It will be saved in a kubernetes secret | `""`        |
 
-
 ### Kafka chart parameters
 
 | Name                                  | Description                             | Value            |
@@ -457,7 +445,6 @@ helm uninstall my-release
 | `externalKafka.enabled`               | Enable/disable external Kafka           | `false`          |
 | `externalKafka.brokers`               | External Kafka brokers                  | `localhost:9092` |
 | `externalKafka.zkNodes`               | External Zookeeper nodes                | `localhost:2181` |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -626,7 +613,7 @@ This chart will facilitate the creation of TLS secrets for use with the ingress 
 - User generates/manages certificates separately.
 - Helm creates self-signed certificates and generates/manages certificate secrets.
 - An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
-In the first two cases, it's needed a certificate and a key. We would expect them to look like this:
+  In the first two cases, it's needed a certificate and a key. We would expect them to look like this:
 - certificate files should look like (and there can be more than one certificate if there is a certificate chain)
   ```console
   -----BEGIN CERTIFICATE-----
@@ -644,7 +631,7 @@ In the first two cases, it's needed a certificate and a key. We would expect the
   -----END RSA PRIVATE KEY-----
   ```
 - If you are going to use Helm to manage the certificates based on the parameters, please copy these values into the `certificate` and `key` values for a given `server.ingress.secrets` entry.
-- In case you are going to manage TLS secrets separately, please know that you must create a TLS secret with name *INGRESS_HOSTNAME-tls* (where *INGRESS_HOSTNAME* is a placeholder to be replaced with the hostname you set using the `server.ingress.hostname` parameter).
+- In case you are going to manage TLS secrets separately, please know that you must create a TLS secret with name _INGRESS_HOSTNAME-tls_ (where _INGRESS_HOSTNAME_ is a placeholder to be replaced with the hostname you set using the `server.ingress.hostname` parameter).
 - To use self-signed certificates created by Helm, set `server.ingress.tls` to `true` and `server.ingress.certManager` to `false`.
 - If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, set `server.ingress.certManager` boolean to true to enable the corresponding annotations for cert-manager.
 
@@ -670,7 +657,7 @@ This major updates the Kafka subchart to it newest major, 16.0.0. [Here](https:/
 
 This major release updates the Kafka subchart to its newest major `15.x.x`, which contain several changes in the supported values and bumps Kafka major version to `3.x` series (check the [upgrade notes](https://github.com/bitnami/charts/blob/master/bitnami/kafka/README.md#to-1500) to obtain more information).
 
-To upgrade to *6.0.0* from *5.x* using Kafka as messaging solution, it should be done maintaining the Kafka `2.x` series. To do so, follow the instructions below (the following example assumes that the release name is *scdf* and the release namespace *default*):
+To upgrade to _6.0.0_ from _5.x_ using Kafka as messaging solution, it should be done maintaining the Kafka `2.x` series. To do so, follow the instructions below (the following example assumes that the release name is _scdf_ and the release namespace _default_):
 
 1. Obtain the credentials on your current release:
 
@@ -718,9 +705,9 @@ This major updates the Kafka subchart to its newest major 13.0.0. For more infor
 **What changes were introduced in this major version?**
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
-- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
+- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
 **Considerations when upgrading to this version**
 
@@ -810,4 +797,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.
+limitations under the License
