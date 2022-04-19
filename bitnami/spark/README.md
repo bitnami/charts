@@ -238,8 +238,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.initContainers`                                  | Add initContainers to the worker pods.                                                                                   | `[]`            |
 | `worker.autoscaling.enabled`                             | Enable replica autoscaling depending on CPU                                                                              | `false`         |
 | `worker.autoscaling.minReplicas`                         | Minimum number of worker replicas                                                                                        | `""`            |
-| `worker.autoscaling.maxReplicas`                         | Maximum number of worker replicas                                                                                        | `""`            |
-| `worker.autoscaling.targetCPU`                           | Target CPU utilization percentage                                                                                        | `""`            |
+| `worker.autoscaling.maxReplicas`                         | Maximum number of worker replicas                                                                                        | `5`             |
+| `worker.autoscaling.targetCPU`                           | Target CPU utilization percentage                                                                                        | `50`            |
 | `worker.autoscaling.targetMemory`                        | Target Memory utilization percentage                                                                                     | `""`            |
 
 
@@ -431,6 +431,18 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 6.0.0
+
+This chart major version standarizes the chart templates and values, modifying some existing parameters names and adding several more. These parameter modifications can be sumarised in the following:
+
+- `worker.autoscaling.CpuTargetPercentage/.replicasMax` parameters are now found by `worker.autoscaling.targetCPU/.maxReplicas`.
+- `webport/webPortHttps/clusterPort` parameters are now found by `containerPorts.http/.https/.clusterPort`.
+- `service.webport/webPortHttps/clusterPort` parameters are now found by `service.ports.http/.https/.clusterPort`.
+- `service.nodePorts.web/webHttps/cluster` parameters are now found by `service.nodePorts.http/.https/.clusterPort`.
+- `xxxxx.securityContext` parameters are now under `xxxxx.podSecurityContext`
+- `xxxxx.configurationConfigMap` parameter has been renamed to `xxxxx.existingConfigmap`
+- `extraPodLabels` parameter has been renamed to `podLabels`
 
 ### To 5.0.0
 

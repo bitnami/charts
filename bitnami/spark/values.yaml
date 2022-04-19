@@ -628,8 +628,8 @@ worker:
   autoscaling:
     enabled: false
     minReplicas: ""
-    maxReplicas: ""
-    targetCPU: ""
+    maxReplicas: 5
+    targetCPU: 50
     targetMemory: ""
 
 ## @section Security parameters
