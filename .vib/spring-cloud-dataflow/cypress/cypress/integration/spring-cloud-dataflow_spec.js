@@ -1,9 +1,11 @@
 /// <reference types="cypress" />
 import { random } from './utils';
 
-it('allows accesing the dashboard', () => {
+it('allows getting application info', () => {
   cy.visit('/');
-  cy.get('.signpost-trigger').click();
+  cy.get('.signpost-trigger')
+    .should('have.css', 'color', 'rgb(250, 250, 250)')
+    .click();
   cy.get('.signpost-content-body').should('contain', 'Version');
 });
 
