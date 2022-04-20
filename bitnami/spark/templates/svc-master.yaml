@@ -24,11 +24,11 @@ spec:
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - port: {{ .Values.service.ports.clusterPort }}
+    - port: {{ .Values.service.ports.cluster }}
       targetPort: cluster
       name: cluster
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.clusterPort)) }}
-      nodePort: {{ .Values.service.nodePorts.clusterPort }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.cluster)) }}
+      nodePort: {{ .Values.service.nodePorts.cluster }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

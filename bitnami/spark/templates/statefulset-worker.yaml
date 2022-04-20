@@ -145,9 +145,6 @@ spec:
             mountPath: /bitnami/spark/conf/certs
         {{- end }}
       {{- end }}
-      {{- if .Values.worker.sidecars }}
-      {{- include "common.tplvalues.render" ( dict "value" .Values.worker.sidecars "context" $) | nindent 8 }}
-      {{- end }}
       containers:
         - name: spark-worker
           image: {{ include "spark.image" . }}
@@ -175,12 +172,12 @@ spec:
               containerPort: {{ .Values.worker.containerPorts.http }}
               protocol: TCP
             {{- end }}
-            {{- if .Values.worker.containerPorts.clusterPort }}
+            {{- if .Values.worker.containerPorts.cluster }}
             - name: cluster
-              containerPort: {{ .Values.worker.containerPorts.clusterPort }}
+              containerPort: {{ .Values.worker.containerPorts.cluster }}
             {{- end }}
-            {{- if .Values.worker.extraPorts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraPorts "context" $) | nindent 12 }}
+            {{- if .Values.worker.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraContainerPorts "context" $) | nindent 12 }}
             {{- end }}
           volumeMounts:
             {{- if .Values.worker.existingConfigmap }}
@@ -219,9 +216,9 @@ spec:
             - name: SPARK_WORKER_CORES
               value: {{ .Values.worker.coreLimit | quote }}
             {{- end }}
-            {{- if .Values.worker.containerPorts.clusterPort }}
+            {{- if .Values.worker.containerPorts.cluster }}
             - name: SPARK_WORKER_PORT
-              value: {{ .Values.worker.containerPorts.clusterPort | quote }}
+              value: {{ .Values.worker.containerPorts.cluster | quote }}
             {{- end }}
             {{- if .Values.worker.containerPorts.http  }}
             - name: SPARK_WORKER_WEBUI_PORT
@@ -234,7 +231,7 @@ spec:
             - name: SPARK_DAEMON_JAVA_OPTS
               value: {{ .Values.worker.javaOptions | quote }}
             - name: SPARK_MASTER_URL
-              value: spark://{{ printf "%s-master-svc" (include "common.names.fullname" .) }}:{{ .Values.service.ports.clusterPort }}
+              value: {{ printf "spark://%s-master-svc:%d" (include "common.names.fullname" .) (int .Values.service.ports.cluster) }}
             # If you use a custom properties file, it must be loaded using a ConfigMap
             - name: SPARK_WORKER_OPTS
               value: {{ .Values.worker.configOptions }}
@@ -324,6 +321,9 @@ spec:
           {{- if .Values.worker.resources }}
           resources: {{- toYaml .Values.worker.resources | nindent 12 }}
           {{- end }}
+        {{- if .Values.worker.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.worker.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if .Values.worker.existingConfigmap }}
         - name: config

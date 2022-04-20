@@ -98,7 +98,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.existingConfigmap`                               | The name of an existing ConfigMap with your custom configuration for master                                              | `""`            |
 | `master.containerPorts.http`                             | Specify the port where the web interface will listen on the master over HTTP                                             | `8080`          |
 | `master.containerPorts.https`                            | Specify the port where the web interface will listen on the master over HTTPS                                            | `8480`          |
-| `master.containerPorts.clusterPort`                      | Specify the port where the master listens to communicate with workers                                                    | `7077`          |
+| `master.containerPorts.cluster`                          | Specify the port where the master listens to communicate with workers                                                    | `7077`          |
 | `master.hostAliases`                                     | Deployment pod host aliases                                                                                              | `[]`            |
 | `master.daemonMemoryLimit`                               | Set the memory limit for the master daemon                                                                               | `""`            |
 | `master.configOptions`                                   | Use a string to set the config options for in the form "-Dx=y"                                                           | `""`            |
@@ -168,9 +168,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.existingConfigmap`                               | The name of an existing ConfigMap with your custom configuration for workers                                             | `""`            |
 | `worker.containerPorts.http`                             | Specify the port where the web interface will listen on the worker over HTTP                                             | `8080`          |
 | `worker.containerPorts.https`                            | Specify the port where the web interface will listen on the worker over HTTPS                                            | `8480`          |
-| `worker.containerPorts.clusterPort`                      | Specify the port where the worker listens to communicate with workers                                                    | `""`            |
+| `worker.containerPorts.cluster`                          | Specify the port where the worker listens to communicate with workers                                                    | `""`            |
 | `worker.hostAliases`                                     | Add deployment host aliases                                                                                              | `[]`            |
-| `worker.extraPorts`                                      | Specify the port where the running jobs inside the workers listens                                                       | `[]`            |
+| `worker.extraContainerPorts`                             | Specify the port where the running jobs inside the workers listens                                                       | `[]`            |
 | `worker.daemonMemoryLimit`                               | Set the memory limit for the worker daemon                                                                               | `""`            |
 | `worker.memoryLimit`                                     | Set the maximum memory the worker is allowed to use                                                                      | `""`            |
 | `worker.coreLimit`                                       | Se the maximum number of cores that the worker can use                                                                   | `""`            |
@@ -270,10 +270,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.type`                  | Kubernetes Service type                                                                                                          | `ClusterIP`              |
 | `service.ports.http`            | Spark client port for HTTP                                                                                                       | `80`                     |
 | `service.ports.https`           | Spark client port for HTTPS                                                                                                      | `443`                    |
-| `service.ports.clusterPort`     | Spark cluster port                                                                                                               | `7077`                   |
+| `service.ports.cluster`         | Spark cluster port                                                                                                               | `7077`                   |
 | `service.nodePorts.http`        | Kubernetes web node port for HTTP                                                                                                | `""`                     |
 | `service.nodePorts.https`       | Kubernetes web node port for HTTPS                                                                                               | `""`                     |
-| `service.nodePorts.clusterPort` | Kubernetes cluster node port                                                                                                     | `""`                     |
+| `service.nodePorts.cluster`     | Kubernetes cluster node port                                                                                                     | `""`                     |
 | `service.clusterIP`             | Spark service Cluster IP                                                                                                         | `""`                     |
 | `service.loadBalancerIP`        | Load balancer IP if spark service type is `LoadBalancer`                                                                         | `""`                     |
 | `service.externalTrafficPolicy` | Spark service external traffic policy                                                                                            | `Cluster`                |
@@ -437,9 +437,9 @@ Find more information about how to deal with common errors related to Bitnami's 
 This chart major version standarizes the chart templates and values, modifying some existing parameters names and adding several more. These parameter modifications can be sumarised in the following:
 
 - `worker.autoscaling.CpuTargetPercentage/.replicasMax` parameters are now found by `worker.autoscaling.targetCPU/.maxReplicas`.
-- `webport/webPortHttps/clusterPort` parameters are now found by `containerPorts.http/.https/.clusterPort`.
-- `service.webport/webPortHttps/clusterPort` parameters are now found by `service.ports.http/.https/.clusterPort`.
-- `service.nodePorts.web/webHttps/cluster` parameters are now found by `service.nodePorts.http/.https/.clusterPort`.
+- `webport/webPortHttps/cluster` parameters are now found by `containerPorts.http/.https/.cluster`.
+- `service.webport/webPortHttps/cluster` parameters are now found by `service.ports.http/.https/.cluster`.
+- `service.nodePorts.web/webHttps/cluster` parameters are now found by `service.nodePorts.http/.https/.cluster`.
 - `xxxxx.securityContext` parameters are now under `xxxxx.podSecurityContext`
 - `xxxxx.configurationConfigMap` parameter has been renamed to `xxxxx.existingConfigmap`
 - `extraPodLabels` parameter has been renamed to `podLabels`
