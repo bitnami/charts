@@ -6,12 +6,6 @@ import {
   createATask,
 } from './utils';
 
-before(() => {
-  importAStreamApplication();
-  importATaskApplication();
-  createATask();
-});
-
 it('allows getting Spring Cloud Dataflow info', () => {
   cy.visit('/dashboard');
   cy.get('.signpost-trigger').click();
@@ -23,6 +17,7 @@ it('allows getting Spring Cloud Dataflow info', () => {
 });
 
 it('allows a stream to be created', () => {
+  importAStreamApplication();
   cy.visit('/dashboard');
   cy.get('[routerlink="streams/list"').click();
   cy.contains('.btn-primary', 'Create stream(s)').click();
@@ -44,6 +39,8 @@ it('allows a stream to be created', () => {
 });
 
 it('checks if a task is properly created and schedule a task', () => {
+  importATaskApplication();
+  createATask();
   cy.visit('/dashboard');
   cy.get('[routerlink="tasks-jobs/tasks"]').click();
   cy.fixture('tasks').then((task) => {
