@@ -1,12 +1,14 @@
 /// <reference types="cypress" />
 import { random } from './utils';
 
-it('allows getting application info', () => {
+it('allows getting Spring Cloud Dataflow info', () => {
   cy.visit('/dashboard');
-  cy.get('.signpost-trigger')
-    .should('have.css', 'color', 'rgb(250, 250, 250)')
-    .click();
-  cy.get('.signpost-content-body').should('contain', 'Version');
+  cy.get('.signpost-trigger').click();
+  cy.contains('.signpost-content-body', 'Version');
+  cy.contains('button', 'More info').click();
+  cy.contains('.modal-content', 'Core')
+    .and('contain', 'Dashboard')
+    .and('contain', 'Shell');
 });
 
 it('can import a stream application and create a stream', () => {
@@ -87,7 +89,7 @@ it('allows importing a task from a file and destroying it ', () => {
   cy.get('[routerlink="tasks-jobs/tasks"]').click();
   cy.contains('button', 'Group Actions').click();
   cy.get('[aria-label="Select All"]').click({ force: true });
-  cy.contains('button', 'Destroy task').click();
+  cy.contains('button', 'Destroy task').click(); //since I can't play with the file name when
   cy.contains('.modal-content', 'Confirm Destroy Task');
   cy.contains('button', 'Destroy the task').click();
   cy.get('.toast-container').should('contain', 'destroyed');
