@@ -516,7 +516,7 @@ speaker:
   ## @param speaker.terminationGracePeriodSeconds In seconds, time the given to the Speaker pod needs to terminate gracefully
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
-  terminationGracePeriodSeconds: ""
+  terminationGracePeriodSeconds: 0
   ## Speaker container resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious

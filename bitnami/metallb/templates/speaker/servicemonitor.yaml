@@ -30,7 +30,7 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-    - {{ template "common.names.namespace" .| quote }}
+    - {{ include "common.names.namespace" .| quote }}
   endpoints:
     - port: metrics
       {{- if .Values.speaker.metrics.serviceMonitor.interval }}

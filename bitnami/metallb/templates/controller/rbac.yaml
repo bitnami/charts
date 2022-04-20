@@ -62,7 +62,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ include "metallb.controller.serviceAccountName" . }}
-    namespace: {{ template "common.names.namespace" . }}
+    namespace: {{ include "common.names.namespace" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

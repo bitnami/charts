@@ -12,11 +12,11 @@ The chart has been deployed in diagnostic mode. All probes have been disabled an
 
 Get the list of pods by executing:
 
-  kubectl get pods --namespace {{ template "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
+  kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
 
 Access the pod you want to debug by executing
 
-  kubectl exec --namespace {{ template "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
+  kubectl exec --namespace {{ include "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
 
 In order to replicate the container startup scripts execute these commands in their respective pods:
 
@@ -36,7 +36,7 @@ should be executed.
 
 To see the currently configured configuration for metallb run
 
-    kubectl get configmaps --namespace {{ template "common.names.namespace" . }} {{ include "metallb.configMapName" . }} -o yaml
+    kubectl get configmaps --namespace {{ include "common.names.namespace" . }} {{ include "metallb.configMapName" . }} -o yaml
 
 in your preferred shell.
 
@@ -47,18 +47,18 @@ ConfigMap to your cluster yourself.
 
 Ensure you put the configmap in place
 
-    kubectl get configmaps --namespace {{ template "common.names.namespace" . }} | grep --color=never -E "{{ include "metallb.configMapName" . }}|NAME"
+    kubectl get configmaps --namespace {{ include "common.names.namespace" . }} | grep --color=never -E "{{ include "metallb.configMapName" . }}|NAME"
 
 If it is missing create it with:
 
-    kubectl create configmap {{ include "metallb.configMapName" . }} --namespace {{ template "common.names.namespace" . }} --from-file=config
+    kubectl create configmap {{ include "metallb.configMapName" . }} --namespace {{ include "common.names.namespace" . }} --from-file=config
 {{- end }}
 
 {{- if .Values.speaker.secretName }}
 WARNING: you specified a secretName that isn't managed by
 Helm. The MetalLB speakers will not join without the secret in place.
 
-    kubectl get secrets --namespace {{ template "common.names.namespace" . }} | grep --color=never -E "{{ include "metallb.speaker.secretName" . }}|NAME"
+    kubectl get secrets --namespace {{ include "common.names.namespace" . }} | grep --color=never -E "{{ include "metallb.speaker.secretName" . }}|NAME"
 
 If it is missing create it with:
 
