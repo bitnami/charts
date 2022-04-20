@@ -92,7 +92,7 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.20.1-debian-10-r37
+    tag: 1.20.1-debian-10-r53
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -403,6 +403,13 @@ contour:
     create: true
     default: true
 
+  ## @param contour.debug Enable Contour debug log level
+  ##
+  debug: false
+
+  ## @param contour.kubernetesDebug Contour kubernetes debug log level, Default 0, minimum 0, maximum 9.
+  kubernetesDebug: 0
+
 ## @section Envoy parameters
 ##
 
@@ -421,7 +428,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.21.1-debian-10-r38
+    tag: 1.21.1-debian-10-r55
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -475,10 +482,12 @@ envoy:
   ## @param envoy.args Override default args
   ##
   args: []
+  ## @param envoy.shutdownManager.enabled Contour shutdownManager sidecar
   ## @param envoy.shutdownManager.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
   ## @param envoy.shutdownManager.resources.requests [object] Specify resource requests which the container needs to spawn.
   ##
   shutdownManager:
+    enabled: true
     resources:
       ## Example:
       ## limits:
@@ -667,6 +676,11 @@ envoy:
   ## Envoy Service properties
   ##
   service:
+    ## @param envoy.service.targetPorts [object] Map the controller service HTTP/HTTPS port
+    ##
+    targetPorts:
+      http: http
+      https: https
     ## @param envoy.service.type Type of Envoy service to create
     ##
     type: LoadBalancer
@@ -799,7 +813,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-10-r64
+    tag: 1.21.6-debian-10-r81
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1068,7 +1082,7 @@ ingress:
 
   ## Either `hosts` or `rulesOverride` must be provided if Ingress is enabled.
   ## `hosts` sets up the Ingress with default rules per provided hostname.
-  ## @param ingress.hostname Hostename for the Ingress object
+  ## @param ingress.hostname Hostname for the Ingress object
   ##
   hostname: contour.local
 
