@@ -1,4 +1,4 @@
 {
-    "baseUrl": "http://localhost/dashboard",
+    "baseUrl": "http://localhost",
     "defaultCommandTimeout":30000
 }

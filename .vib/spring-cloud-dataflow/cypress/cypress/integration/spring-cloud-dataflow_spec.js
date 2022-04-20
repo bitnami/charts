@@ -2,7 +2,7 @@
 import { random } from './utils';
 
 it('allows getting application info', () => {
-  cy.visit('/');
+  cy.visit('/dashboard');
   cy.get('.signpost-trigger')
     .should('have.css', 'color', 'rgb(250, 250, 250)')
     .click();
@@ -10,7 +10,7 @@ it('allows getting application info', () => {
 });
 
 it('can import a stream application and create a stream', () => {
-  cy.visit('/');
+  cy.visit('/dashboard');
   cy.contains('button', 'Add application(s)').click();
   cy.contains(
     '.clr-control-label',
@@ -44,7 +44,7 @@ it('can import a stream application and create a stream', () => {
 
 it('allows importing a task application and creating a task', () => {
   const TASK_TYPE = 'timestamp';
-  cy.visit('/');
+  cy.visit('/dashboard');
   cy.contains('button', 'Add application(s)').click();
   cy.contains(
     '.clr-control-label',
@@ -74,7 +74,7 @@ it('allows importing a task application and creating a task', () => {
 });
 
 it('allows importing a task from a file and destroying it ', () => {
-  cy.visit('/');
+  cy.visit('/dashboard');
   cy.get('[routerlink="manage/tools"]').click();
   cy.contains('a', 'Import tasks from a JSON file').click();
   cy.get('input[type="file"]').selectFile(
