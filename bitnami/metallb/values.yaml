@@ -168,7 +168,7 @@ controller:
   ## @param controller.terminationGracePeriodSeconds In seconds, time the given to the Metallb controller pod needs to terminate gracefully
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
-  terminationGracePeriodSeconds: ""
+  terminationGracePeriodSeconds: 0
   ## @param controller.topologySpreadConstraints Topology Spread Constraints for pod assignment
   ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   ## The value is evaluated as a template
@@ -516,7 +516,7 @@ speaker:
   ## @param speaker.terminationGracePeriodSeconds In seconds, time the given to the Speaker pod needs to terminate gracefully
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
-  terminationGracePeriodSeconds: 0
+  terminationGracePeriodSeconds: 2
   ## Speaker container resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
