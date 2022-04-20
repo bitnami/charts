@@ -4,7 +4,6 @@ import { random, getPageUrlFromTitle, getUserFromEmail } from './utils';
 it('allows to log in and out', () => {
   cy.login(Cypress.env('email'), Cypress.env('password'), false);
   cy.contains('Retry').should('not.exist');
-  // Dashboard is hidden in the UI until correctly logged in
   cy.contains('Dashboard').should('be.visible');
 
   cy.get("div[class*='avatar']").click();
@@ -12,7 +11,7 @@ it('allows to log in and out', () => {
   cy.contains('Sign in');
 });
 
-it('allows to create a new post', () => {
+it('allows to create and publish a new post', () => {
   cy.login();
   cy.visit('/ghost/#/posts');
 
@@ -38,7 +37,6 @@ it('allows to create a new post', () => {
   cy.get('div[class*=modal-content]').within(() => {
     cy.contains('Publish').click();
   });
-  // The notification exists but is hidden in the UI
   cy.contains('Published').should('be.visible');
 
   cy.visit('/');
@@ -66,7 +64,6 @@ it('allows to create a new page', () => {
   cy.get('footer[class*=publishmenu]').within(() => {
     cy.contains('Publish').click();
   });
-  // The notification exists but is hidden in the UI
   cy.contains('Published').should('be.visible');
 
   cy.fixture('pages').then(($pages) => {
@@ -80,8 +77,6 @@ it('allows to import members', () => {
   cy.login();
   cy.visit('/ghost/#/members/import');
 
-  // The element exists in the UI while loading, but we need to
-  // wait until it is visible to proceed
   cy.contains('h1', 'Import members').should('be.visible');
   cy.get('input[type="file"]').selectFile('cypress/fixtures/members.csv', {
     force: true,
