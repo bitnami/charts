@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | --------------------- |
 | `image.registry`    | Spark image registry                             | `docker.io`           |
 | `image.repository`  | Spark image repository                           | `bitnami/spark`       |
-| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.2.1-debian-10-r77` |
+| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.2.1-debian-10-r78` |
 | `image.pullPolicy`  | Spark image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                  |
 | `image.debug`       | Enable image debug mode                          | `false`               |
