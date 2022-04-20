@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/spark"
         },
-        "runtime_parameters": "InNlcnZpY2UiOgogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIKICAid2ViUG9ydCI6IDgw",
+        "runtime_parameters": "InNlcnZpY2UiOgogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIKICAgInBvcnRzIjoKICAgICAiaHR0cCI6IDgw",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
