@@ -1,7 +1,10 @@
-name: 'Early feedback'
+name: 'vib'
 on: # rebuild any PRs and main branch changes
   pull_request_target:
     types:
+      - opened
+      - reopened
+      - synchronize
       - labeled
     branches:
       - master
@@ -12,13 +15,21 @@ env:
   VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
 jobs:
   get-chart:
-    if: ${{ github.event.label.name == 'verify' }}
     runs-on: ubuntu-latest
     name: 'Get modified charts'
     outputs:
       chart: ${{ steps.get-chart.outputs.chart }}
       result: ${{ steps.get-chart.outputs.result }}
     steps:
+      # Using actions/github-scripts because using exit 1 in the script above would not provide any output
+      # Source: https://github.community/t/no-output-on-process-completed-with-exit-code-1/123821/3
+      - id: check-approval
+        name: 'Check approval'
+        if: ${{ !contains(github.event.pull_request.labels.*.name, 'verify') }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+              core.setFailed('Approval to run this job is required')
       - uses: actions/checkout@v2
         name: 'Checkout Repository'
         with:
@@ -63,8 +74,6 @@ jobs:
             echo -e "::set-output name=error::Changes detected in more than one chart directory:\n${charts_dirs_changed}\nIt is strongly advised to change only one chart in a PR. The rest of the tests will be skipped."
             echo "::set-output name=result::skip"
           fi
-      # Using actions/github-scripts because using exit 1 in the script above would not provide any output
-      # Source: https://github.community/t/no-output-on-process-completed-with-exit-code-1/123821/3
       - id: show-error
         name: 'Show error'
         if: ${{ steps.get-chart.outputs.result == 'fail' }}
@@ -76,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: get-chart
     if: ${{ needs.get-chart.outputs.result == 'ok' }}
-    name: ${{ needs.get-chart.outputs.chart }} Verification
+    name: ${{ needs.get-chart.outputs.chart }} verification
     steps:
       - uses: actions/checkout@v2
         name: 'Checkout Repository'
@@ -84,7 +93,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
       - uses: vmware-labs/vmware-image-builder-action@main
-        name: ${{ needs.get-chart.outputs.chart }} Verification
+        name: ${{ needs.get-chart.outputs.chart }} verification
         with:
           pipeline: ${{ needs.get-chart.outputs.chart }}/vib-verify.json
         env:

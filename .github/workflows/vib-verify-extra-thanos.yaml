@@ -2,6 +2,9 @@ name: 'vib'
 on: # rebuild any PRs and main branch changes
   pull_request_target:
     types:
+      - opened
+      - reopened
+      - synchronize
       - labeled
     branches:
       - master
@@ -13,9 +16,8 @@ env:
   VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
 jobs:
   vib-verify-bucketweb:
-    if: ${{ github.event.label.name == 'verify' }}
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'verify') }}
     runs-on: ubuntu-latest
-    environment: vmware-image-builder
     name: BucketWeb on Tanzu Kubernetes Grid
     steps:
       - uses: actions/checkout@v2
