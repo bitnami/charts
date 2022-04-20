@@ -66,85 +66,147 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name               | Description                                                                                  | Value |
-| ------------------ | -------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`     | String to partially override common.names.fullname template (will maintain the release name) | `""`  |
-| `fullnameOverride` | String to fully override common.names.fullname template                                      | `""`  |
-| `extraDeploy`      | Array of extra objects to deploy with the release                                            | `[]`  |
+| Name                     | Description                                                                                  | Value          |
+| ------------------------ | -------------------------------------------------------------------------------------------- | -------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                  | `""`           |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`           |
+| `commonLabels`           | Labels to add to all deployed objects                                                        | `{}`           |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                   | `{}`           |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`           |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]` |
 
 
 ### PyTorch parameters
 
+| Name                                              | Description                                                                                                              | Value                  |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
+| `image.registry`                                  | PyTorch image registry                                                                                                   | `docker.io`            |
+| `image.repository`                                | PyTorch image repository                                                                                                 | `bitnami/pytorch`      |
+| `image.tag`                                       | PyTorch image tag (immutable tags are recommended)                                                                       | `1.11.0-debian-10-r24` |
+| `image.pullPolicy`                                | Image pull policy                                                                                                        | `IfNotPresent`         |
+| `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                         | `[]`                   |
+| `worldSize`                                       | Number of nodes that will run the code                                                                                   | `1`                    |
+| `containerPorts.pytorch`                          | PyTorch master port. `MASTER_PORT` will be set to this value                                                             | `49875`                |
+| `livenessProbe.enabled`                           | Enable livenessProbe                                                                                                     | `true`                 |
+| `livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                                  | `5`                    |
+| `livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                                         | `5`                    |
+| `livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                                                        | `5`                    |
+| `livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                                                      | `5`                    |
+| `livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                                                      | `1`                    |
+| `readinessProbe.enabled`                          | Enable readinessProbe                                                                                                    | `true`                 |
+| `readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                                                 | `5`                    |
+| `readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                                        | `5`                    |
+| `readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                                       | `3`                    |
+| `readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                     | `5`                    |
+| `readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                                     | `1`                    |
+| `startupProbe.enabled`                            | Enable startupProbe                                                                                                      | `true`                 |
+| `startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                                   | `5`                    |
+| `startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                                          | `5`                    |
+| `startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                                         | `3`                    |
+| `startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                                       | `5`                    |
+| `startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                                       | `1`                    |
+| `customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                      | `{}`                   |
+| `customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`                   |
+| `customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`                   |
+| `podSecurityContext.enabled`                      | Enabled Pytorch pods' Security Context                                                                                   | `true`                 |
+| `podSecurityContext.fsGroup`                      | Set Pytorch pods' Security Context fsGroup                                                                               | `1001`                 |
+| `podSecurityContext.runAsUser`                    | Set Pytorch pods' Security Context runAsUser                                                                             | `1001`                 |
+| `containerSecurityContext.enabled`                | Enabled Pytorch containers' Security Context                                                                             | `true`                 |
+| `containerSecurityContext.runAsUser`              | Set Pytorch containers' Security Context runAsUser                                                                       | `1001`                 |
+| `containerSecurityContext.runAsNonRoot`           | Set Pytorch containers' Security Context runAsNonRoot                                                                    | `true`                 |
+| `containerSecurityContext.readOnlyRootFilesystem` | Set Pytorch containers' Security Context runAsNonRoot                                                                    | `false`                |
+| `resources.limits`                                | The resources limits for the Pytorch containers                                                                          | `{}`                   |
+| `resources.requests`                              | The requested resources for the Pytorch containers                                                                       | `{}`                   |
+| `entrypoint.file`                                 | Main entrypoint to your application                                                                                      | `""`                   |
+| `entrypoint.args`                                 | Args required by your entrypoint                                                                                         | `[]`                   |
+| `architecture`                                    | Run PyTorch in standalone or distributed mode. Possible values: `standalone`, `distributed`                              | `standalone`           |
+| `hostAliases`                                     | Deployment pod host aliases                                                                                              | `[]`                   |
+| `command`                                         | Override default container command (useful when using custom images)                                                     | `[]`                   |
+| `args`                                            | Override default container args (useful when using custom images)                                                        | `[]`                   |
+| `podLabels`                                       | Extra labels for Pytorch pods                                                                                            | `{}`                   |
+| `podAnnotations`                                  | Annotations for Pytorch pods                                                                                             | `{}`                   |
+| `existingConfigmap`                               | Config map that contains the files you want to load in PyTorch                                                           | `""`                   |
+| `cloneFilesFromGit.enabled`                       | Enable in order to download files from git repository                                                                    | `false`                |
+| `cloneFilesFromGit.repository`                    | Repository that holds the files                                                                                          | `""`                   |
+| `cloneFilesFromGit.revision`                      | Revision from the repository to checkout                                                                                 | `""`                   |
+| `cloneFilesFromGit.extraVolumeMounts`             | Add extra volume mounts for the Git container                                                                            | `[]`                   |
+| `podAffinityPreset`                               | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`                   |
+| `podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`                 |
+| `nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`                   |
+| `nodeAffinityPreset.key`                          | Node label key to match Ignored if `affinity` is set.                                                                    | `""`                   |
+| `nodeAffinityPreset.values`                       | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`                   |
+| `affinity`                                        | Affinity for pod assignment. Evaluated as a template.                                                                    | `{}`                   |
+| `nodeSelector`                                    | Node labels for pod assignment. Evaluated as a template.                                                                 | `{}`                   |
+| `tolerations`                                     | Tolerations for pod assignment. Evaluated as a template.                                                                 | `[]`                   |
+| `updateStrategy.type`                             | Pytorch statefulset strategy type                                                                                        | `RollingUpdate`        |
+| `podManagementPolicy`                             | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join                       | `OrderedReady`         |
+| `priorityClassName`                               | Pytorch pods' priorityClassName                                                                                          | `""`                   |
+| `topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                   |
+| `schedulerName`                                   | Name of the k8s scheduler (other than default) for Pytorch pods                                                          | `""`                   |
+| `terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`                   |
+| `lifecycleHooks`                                  | for the Pytorch container(s) to automate configuration before or after startup                                           | `{}`                   |
+| `extraEnvVars`                                    | Array with extra environment variables to add to Pytorch nodes                                                           | `[]`                   |
+| `extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra env vars for Pytorch nodes                                                   | `""`                   |
+| `extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for Pytorch nodes                                                      | `""`                   |
+| `extraVolumes`                                    | Optionally specify extra list of additional volumes for the Pytorch pod(s)                                               | `[]`                   |
+| `extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Pytorch container(s)                                    | `[]`                   |
+| `sidecars`                                        | Add additional sidecar containers to the Pytorch pod(s)                                                                  | `{}`                   |
+| `initContainers`                                  | Add additional init containers to the %%MAIN_CONTAINER_NAME%% pod(s)                                                     | `{}`                   |
+
+
+### Traffic Exposure Parameters
+
+| Name                               | Description                                                                        | Value       |
+| ---------------------------------- | ---------------------------------------------------------------------------------- | ----------- |
+| `service.type`                     | Kubernetes service type                                                            | `ClusterIP` |
+| `service.ports.pytorch`            | Scheduler Service port                                                             | `49875`     |
+| `service.nodePorts.pytorch`        | Node port for Pytorch                                                              | `""`        |
+| `service.clusterIP`                | Pytorch service Cluster IP                                                         | `""`        |
+| `service.loadBalancerIP`           | Pytorch service Load Balancer IP                                                   | `""`        |
+| `service.loadBalancerSourceRanges` | Pytorch service Load Balancer sources                                              | `[]`        |
+| `service.externalTrafficPolicy`    | Pytorch service external traffic policy                                            | `Cluster`   |
+| `service.annotations`              | Additional custom annotations for Pytorch service                                  | `{}`        |
+| `service.extraPorts`               | Extra ports to expose in Pytorch service (normally used with the `sidecars` value) | `[]`        |
+| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                   | `None`      |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                        | `{}`        |
+
+
+### Init Container Parameters
+
 | Name                                   | Description                                                                                                                                               | Value                   |
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `image.registry`                       | PyTorch image registry                                                                                                                                    | `docker.io`             |
-| `image.repository`                     | PyTorch image repository                                                                                                                                  | `bitnami/pytorch`       |
-| `image.tag`                            | PyTorch image tag (immutable tags are recommended)                                                                                                        | `1.10.1-debian-10-r0`   |
-| `image.pullPolicy`                     | Image pull policy                                                                                                                                         | `IfNotPresent`          |
-| `image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
-| `image.debug`                          | Specify if debug logs should be enabled                                                                                                                   | `false`                 |
 | `git.registry`                         | Git image registry                                                                                                                                        | `docker.io`             |
 | `git.repository`                       | Git image repository                                                                                                                                      | `bitnami/git`           |
-| `git.tag`                              | Git image tag (immutable tags are recommended)                                                                                                            | `2.34.1-debian-10-r33`  |
+| `git.tag`                              | Git image tag (immutable tags are recommended)                                                                                                            | `2.35.1-debian-10-r67`  |
 | `git.pullPolicy`                       | Git image pull policy                                                                                                                                     | `IfNotPresent`          |
 | `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r294`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r388`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
-| `service.type`                         | Kubernetes service type                                                                                                                                   | `ClusterIP`             |
-| `service.port`                         | Scheduler Service port                                                                                                                                    | `49875`                 |
-| `service.nodePort`                     | Specify the nodePort value for the LoadBalancer and NodePort service types.                                                                               | `""`                    |
-| `service.annotations`                  | Provide any additional annotations which may be required. This can be used to                                                                             | `{}`                    |
-| `entrypoint.file`                      | Main entrypoint to your application                                                                                                                       | `""`                    |
-| `entrypoint.args`                      | Args required by your entrypoint                                                                                                                          | `[]`                    |
-| `mode`                                 | Run PyTorch in standalone or distributed mode. Possible values: `standalone`, `distributed`                                                               | `standalone`            |
-| `hostAliases`                          | Deployment pod host aliases                                                                                                                               | `[]`                    |
-| `worldSize`                            | Number of nodes that will run the code                                                                                                                    | `""`                    |
-| `port`                                 | PyTorch master port. `MASTER_PORT` will be set to this value                                                                                              | `49875`                 |
-| `configMap`                            | Config map that contains the files you want to load in PyTorch                                                                                            | `""`                    |
-| `cloneFilesFromGit.enabled`            | Enable in order to download files from git repository                                                                                                     | `false`                 |
-| `cloneFilesFromGit.repository`         | Repository that holds the files                                                                                                                           | `""`                    |
-| `cloneFilesFromGit.revision`           | Revision from the repository to checkout                                                                                                                  | `""`                    |
-| `cloneFilesFromGit.extraVolumeMounts`  | Add extra volume mounts for the Git container                                                                                                             | `[]`                    |
-| `extraEnvVars`                         | Additional environment variables                                                                                                                          | `[]`                    |
-| `podAffinityPreset`                    | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                    |
-| `podAntiAffinityPreset`                | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                  |
-| `nodeAffinityPreset.type`              | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                    |
-| `nodeAffinityPreset.key`               | Node label key to match Ignored if `affinity` is set.                                                                                                     | `""`                    |
-| `nodeAffinityPreset.values`            | Node label values to match. Ignored if `affinity` is set.                                                                                                 | `[]`                    |
-| `affinity`                             | Affinity for pod assignment. Evaluated as a template.                                                                                                     | `{}`                    |
-| `nodeSelector`                         | Node labels for pod assignment. Evaluated as a template.                                                                                                  | `{}`                    |
-| `tolerations`                          | Tolerations for pod assignment. Evaluated as a template.                                                                                                  | `[]`                    |
-| `securityContext.enabled`              | Enable security context                                                                                                                                   | `true`                  |
-| `securityContext.fsGroup`              | Group ID for the container                                                                                                                                | `1001`                  |
-| `securityContext.runAsUser`            | User ID for the container                                                                                                                                 | `1001`                  |
-| `resources.limits`                     | The resources limits for the container                                                                                                                    | `{}`                    |
-| `resources.requests`                   | The requested resources for the container                                                                                                                 | `{}`                    |
-| `livenessProbe.enabled`                | Enable livenessProbe                                                                                                                                      | `true`                  |
-| `livenessProbe.initialDelaySeconds`    | Initial delay seconds for livenessProbe                                                                                                                   | `5`                     |
-| `livenessProbe.periodSeconds`          | Period seconds for livenessProbe                                                                                                                          | `5`                     |
-| `livenessProbe.timeoutSeconds`         | Timeout seconds for livenessProbe                                                                                                                         | `5`                     |
-| `livenessProbe.failureThreshold`       | Failure threshold for livenessProbe                                                                                                                       | `5`                     |
-| `livenessProbe.successThreshold`       | Success threshold for livenessProbe                                                                                                                       | `1`                     |
-| `readinessProbe.enabled`               | Enable readinessProbe                                                                                                                                     | `true`                  |
-| `readinessProbe.initialDelaySeconds`   | Initial delay seconds for readinessProbe                                                                                                                  | `5`                     |
-| `readinessProbe.periodSeconds`         | Period seconds for readinessProbe                                                                                                                         | `5`                     |
-| `readinessProbe.timeoutSeconds`        | Timeout seconds for readinessProbe                                                                                                                        | `1`                     |
-| `readinessProbe.failureThreshold`      | Failure threshold for readinessProbe                                                                                                                      | `5`                     |
-| `readinessProbe.successThreshold`      | Success threshold for readinessProbe                                                                                                                      | `1`                     |
-| `persistence.enabled`                  | Use a Persistent Volume Claim to persist data                                                                                                             | `true`                  |
-| `persistence.mountPath`                | Data volume mount path                                                                                                                                    | `/bitnami/pytorch`      |
-| `persistence.accessModes`              | Persistent Volume Access Mode                                                                                                                             | `["ReadWriteOnce"]`     |
-| `persistence.size`                     | Size of data volume                                                                                                                                       | `8Gi`                   |
-| `persistence.storageClass`             | Persistent Volume Storage Class                                                                                                                           | `""`                    |
-| `persistence.annotations`              | Persistent Volume Claim annotations                                                                                                                       | `{}`                    |
-| `extraVolumes`                         | Array to add extra volumes (evaluated as a template)                                                                                                      | `[]`                    |
-| `extraVolumeMounts`                    | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)                                                                      | `[]`                    |
+
+
+### Persistence Parameters
+
+| Name                        | Description                                                                                             | Value               |
+| --------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`       | Enable persistence using Persistent Volume Claims                                                       | `true`              |
+| `persistence.mountPath`     | Path to mount the volume at.                                                                            | `/bitnami/pytorch`  |
+| `persistence.subPath`       | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services | `""`                |
+| `persistence.storageClass`  | Storage class of backing PVC                                                                            | `""`                |
+| `persistence.annotations`   | Persistent Volume Claim annotations                                                                     | `{}`                |
+| `persistence.accessModes`   | Persistent Volume Access Modes                                                                          | `["ReadWriteOnce"]` |
+| `persistence.size`          | Size of data volume                                                                                     | `8Gi`               |
+| `persistence.existingClaim` | The name of an existing PVC to use for persistence                                                      | `""`                |
+| `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                  | `{}`                |
+| `persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

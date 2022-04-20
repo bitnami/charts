@@ -23,4 +23,4 @@ name: kube-state-metrics
 sources:
   - https://github.com/bitnami/bitnami-docker-kube-state-metrics
   - https://github.com/kubernetes/kube-state-metrics
-version: 2.2.18
+version: 2.2.19
