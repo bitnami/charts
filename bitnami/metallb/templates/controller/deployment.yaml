@@ -12,7 +12,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.controller.replicaCount }}
+  replicas: 1
   {{- if .Values.controller.updateStrategy }}
   strategy: {{- toYaml .Values.controller.updateStrategy | nindent 4 }}
   {{- end }}
@@ -118,7 +118,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.controller.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
-              port: metrics          {{- else if .Values.controller.customLivenessProbe }}
+              port: metrics
+          {{- else if .Values.controller.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.controller.readinessProbe.enabled }}

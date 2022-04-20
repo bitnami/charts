@@ -127,9 +127,6 @@ controller:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param controller.replicaCount Number of Metallb controller replicas
-  ##
-  replicaCount: 1
   ## @param controller.updateStrategy.type Metallb controller deployment strategy type.
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ## e.g:

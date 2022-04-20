@@ -84,6 +84,9 @@ spec:
             - --port={{ .Values.speaker.containerPorts.metrics }}
             - --config={{ include "metallb.configMapName" . }}
           {{- end }}
+          {{- if .Values.speaker.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: METALLB_NODE_NAME
               valueFrom:
@@ -154,6 +157,9 @@ spec:
           {{- if .Values.speaker.extraVolumeMounts }}
           volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
+        {{- if .Values.speaker.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       {{- if .Values.speaker.extraVolumes }}
       volumes: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
