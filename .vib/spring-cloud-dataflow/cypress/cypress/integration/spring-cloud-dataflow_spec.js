@@ -22,7 +22,7 @@ it('can import a stream application and create a stream', () => {
     .should('contain', 'processor')
     .and('contain', 'sink')
     .and('contain', 'source');
-  cy.visit('/');
+  cy.visit('/dashboard');
   cy.get('[routerlink="streams/list"').click();
   cy.contains('.btn-primary', 'Create stream(s)').click();
   cy.get('.CodeMirror-line').type('mongodb | cassandra');
@@ -57,7 +57,7 @@ it('allows importing a task application and creating a task', () => {
   cy.get('.content-area')
     .should('contain', 'timestamp')
     .and('contain', 'timestamp-batch');
-  cy.visit('/');
+  cy.visit('/dashboard');
   cy.get('[routerlink="tasks-jobs/tasks"]').click();
   cy.contains('.btn-primary', 'Create task').click();
   cy.get('.CodeMirror-line').type(TASK_TYPE);
