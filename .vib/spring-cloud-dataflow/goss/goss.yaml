@@ -1,18 +1,18 @@
 file:
   /opt/bitnami/spring-cloud-dataflow/application.yml:
     exists: true
-    filetype: file
+    filetype: symlink
     mode: "0644"
     owner: root
 # Checks if volume folder is present   
   /bitnami/spring-cloud-dataflow:
     exists: true
-    filetype: folder
-    mode: "0644"
+    filetype: directory
+    mode: "0775"
     owner: root  
   /.m2/repository/org/springframework/cloud/stream/app:
     exists: true
-    filetype: folder
+    filetype: directory
     mode: "0644"
     owner: root 
 command:
@@ -28,5 +28,5 @@ command:
     exit-status: 0
     stdout:
       - "OpenJDK Runtime Environment"
-      - "OpenJDK 64-But Server VM"
+#      - "OpenJDK 64-But Server VM"
     stderr: []  
