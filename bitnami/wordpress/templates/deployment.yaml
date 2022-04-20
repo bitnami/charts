@@ -173,6 +173,10 @@ spec:
               value: {{ .Values.containerPorts.http | quote }}
             - name: APACHE_HTTPS_PORT_NUMBER
               value: {{ .Values.containerPorts.https | quote }}
+            {{- if .Values.overrideDatabaseSettings }}
+            - name: WORDPRESS_OVERRIDE_DATABASE_SETTINGS
+              value: "yes"
+            {{- end }}
             {{- if .Values.multisite.enable }}
             - name: WORDPRESS_ENABLE_MULTISITE
               value: "yes"
