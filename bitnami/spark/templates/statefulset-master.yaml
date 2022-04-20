@@ -143,9 +143,6 @@ spec:
             mountPath: /opt/bitnami/spark/conf/certs
         {{- end }}
       {{- end }}
-      {{- if .Values.master.sidecars }}
-      {{- include "common.tplvalues.render" ( dict "value" .Values.master.sidecars "context" $) | nindent 8 }}
-      {{- end }}
       containers:
         - name: spark-master
           image: {{ include "spark.image" . }}
@@ -174,7 +171,7 @@ spec:
               protocol: TCP
             {{- end }}
             - name: cluster
-              containerPort: {{ .Values.master.containerPorts.clusterPort }}
+              containerPort: {{ .Values.master.containerPorts.cluster }}
             {{- if .Values.master.extraPorts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.master.extraPorts "context" $) | nindent 12 }}
             {{- end }}
@@ -202,9 +199,9 @@ spec:
             {{- end }}
             - name: SPARK_DAEMON_MEMORY
               value: {{ .Values.master.daemonMemoryLimit | quote }}
-            {{- if .Values.master.containerPorts.clusterPort }}
+            {{- if .Values.master.containerPorts.cluster }}
             - name: SPARK_MASTER_PORT
-              value: {{ .Values.master.containerPorts.clusterPort | quote }}
+              value: {{ .Values.master.containerPorts.cluster | quote }}
             {{- end }}
             {{- if .Values.master.containerPorts.http }}
             - name: SPARK_MASTER_WEBUI_PORT
@@ -300,6 +297,9 @@ spec:
           {{- if .Values.master.resources }}
           resources: {{- toYaml .Values.master.resources | nindent 12 }}
           {{- end }}
+        {{- if .Values.master.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.master.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- if .Values.master.existingConfigmap }}
         - name: config

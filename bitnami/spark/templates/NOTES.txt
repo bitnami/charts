@@ -80,14 +80,14 @@ In order to replicate the container startup scripts execute this command:
 
   kubectl run --namespace {{ .Release.Namespace }} {{ printf "%s-client" (include "common.names.fullname" .) }} --rm --tty -i --restart='Never' \
     --image {{ template "spark.image" . }} \
-    -- spark-submit --master spark://$SUBMIT_IP:{{ .Values.service.ports.clusterPort }} \
+    -- spark-submit --master spark://$SUBMIT_IP:{{ .Values.service.ports.cluster }} \
     --deploy-mode cluster \
     --class org.apache.spark.examples.SparkPi \
     $EXAMPLE_JAR 1000
 
 {{- else }}
 
-  kubectl exec -ti --namespace {{ .Release.Namespace }} {{ printf "%s-worker-0" (include "common.names.fullname" .) }} -- spark-submit --master spark://{{ printf "%s-master-svc" (include "common.names.fullname" .) }}:{{ .Values.service.ports.clusterPort }} \
+  kubectl exec -ti --namespace {{ .Release.Namespace }} {{ printf "%s-worker-0" (include "common.names.fullname" .) }} -- spark-submit --master spark://{{ printf "%s-master-svc" (include "common.names.fullname" .) }}:{{ .Values.service.ports.cluster }} \
     --class org.apache.spark.examples.SparkPi \
     $EXAMPLE_JAR 5
 
