@@ -647,9 +647,24 @@ $ helm upgrade my-release bitnami/mongodb-sharded --set auth.rootPassword=[PASSW
 
 ### To 5.0.0
 
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+
 - Authentication parameters are reorganized under the `auth.*` parameter:
   - `usePassword` is renamed to `auth.enabled`.
   - `mongodbRootPassword`, `mongodbUsername`, `mongodbPassword`, `mongodbDatabase`, and `replicaSetKey` are now `auth.rootPassword`, `auth.username`, `auth.password`, `auth.database`, and `auth.replicaSetKey` respectively.
+- `common.containerPorts.mongo` is renamed to `common.containerPorts.mongodb`
+- `pdb.enabled` is renamed to `pdb.create`
+- `XXX.replicas` is renamed to `XXX.replicaCount`
+- `service.port` is renamed to `service.ports.mongodb`
+- `metrics.containerPort` is renamed to `metrics.containerPorts.metrics`
+- `service.nodePort` is renamed to `service.nodePorts.mongodb`
+- `securityContext` is splitted into `podSecurityContext` and `containerSecurityContext` and moved into the different sections (`mongos`, `shardsvr.dataNode`, `shardsvr.arbiter`and `configsvr`):
+  - `securityContext.fsGroup` is renamed to `XXX.podSecurityContext.fsGroup`
+  - `securityContext.runAsUser` is renamed to `XXX.containerSecurityContext.runAsUser`
+  - `securityContext.runAsNonRoot` is renamed to `XXX.containerSecurityContext.runAsNonRoot`
+- `redinessProbe`, `livenessProbe` and `startupProbe` are moved to the different sections (`mongos`, `shardsvr.dataNode`, `shardsvr.arbiter`and `configsvr`)
 
 ### To 4.0.0
 
