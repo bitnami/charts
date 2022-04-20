@@ -28,7 +28,7 @@ The MongoDB&reg; Sharded cluster can be accessed via the Mongos instances in por
 
     {{ include "mongodb-sharded.serviceName" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
-To get the root password run:
+To get the {{ .Values.auth.rootUser }} password run:
 
     export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.mongodb-root-password}" | base64 --decode)
 
@@ -44,7 +44,7 @@ To get the password for "{{ .Values.auth.username }}" run:
 
 To connect to your database run the following command:
 
-    kubectl run --namespace {{ .Release.Namespace }} {{ printf "%s-client" (include "common.names.fullname" .) }} --rm --tty -i --restart='Never' --image {{ template "mongodb-sharded.image" . }} --command -- mongo admin --host {{ include "mongodb-sharded.serviceName" . }} {{- if .Values.usePassword }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
+    kubectl run --namespace {{ .Release.Namespace }} {{ printf "%s-client" (include "common.names.fullname" .) }} --rm --tty -i --restart='Never' --image {{ template "mongodb-sharded.image" . }} --command -- mongo admin --host {{ include "mongodb-sharded.serviceName" . }} {{- if .Values.auth.enabled }} --authenticationDatabase admin -u {{ .Values.auth.rootUser }} -p $MONGODB_ROOT_PASSWORD{{- end }}
 
 To connect to your database from outside the cluster execute the following commands:
 
