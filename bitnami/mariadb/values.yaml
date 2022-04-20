@@ -184,7 +184,7 @@ primary:
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
     tmpdir=/opt/bitnami/mariadb/tmp
     max_allowed_packet=16M
-    bind-address=::
+    bind-address=*
     pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
     log-error=/opt/bitnami/mariadb/logs/mysqld.log
     character-set-server=UTF8
