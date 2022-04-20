@@ -488,7 +488,7 @@ spec:
             {{- $sslmode := ternary "require" "disable" .Values.tls.enabled }}
             {{- if and .Values.tls.enabled .Values.tls.certCAFilename }}
             - name: DATA_SOURCE_NAME
-              value: {{ printf "host=127.0.0.1 port=%d user=%s sslmode=%s sslcert=%s sslkey=%s" (int (include "postgresql.service.port" .)) (default "postgres" $customUser  | quote) $sslmode (include "postgresql.tlsCert" .) (include "postgresql.tlsCertKey" .) }}
+              value: {{ printf "host=127.0.0.1 port=%d user=%s sslmode=%s sslcert=%s sslkey=%s" (int (include "postgresql.service.port" .)) (default "postgres" $customUser) $sslmode (include "postgresql.tlsCert" .) (include "postgresql.tlsCertKey" .) }}
             {{- else }}
             - name: DATA_SOURCE_URI
               value: {{ printf "127.0.0.1:%d/%s?sslmode=%s" (int (include "postgresql.service.port" .)) $database $sslmode }}
