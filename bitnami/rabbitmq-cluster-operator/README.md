@@ -142,18 +142,16 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 
 ### Common parameters
 
-| Name                     | Description                                                                             | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
-| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
-| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
-| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
-| `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)              | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                 | `["infinity"]`  |
+| Name                     | Description                                          | Value           |
+| ------------------------ | ---------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                          | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname   | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname       | `""`            |
+| `commonLabels`           | Labels to add to all deployed objects                | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects           | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain name                       | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release    | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled) | `false`         |
 
 
 ### RabbitMQ Cluster Operator Parameters
