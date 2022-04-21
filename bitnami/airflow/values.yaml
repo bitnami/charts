@@ -117,7 +117,7 @@ dags:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r388
+    tag: 10-debian-10-r400
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -136,6 +136,9 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret with extra environment variables for all the Airflow pods
 ##
 extraEnvVarsSecret: ""
+## @param extraEnvVarsSecrets List of secrets with extra environment variables for all the Airflow pods
+##
+extraEnvVarsSecrets: []
 ## @param sidecars Add additional sidecar containers to all the Airflow pods
 ## Example:
 ## sidecars:
@@ -179,7 +182,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.2.5-debian-10-r2
+    tag: 2.2.5-debian-10-r14
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -217,6 +220,9 @@ web:
   ## @param web.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Airflow web pods
   ##
   extraEnvVarsSecret: ""
+  ## @param web.extraEnvVarsSecrets List of secrets with extra environment variables for Airflow web pods
+  ##
+  extraEnvVarsSecrets: []
   ## @param web.containerPorts.http Airflow web HTTP container port
   ##
   containerPorts:
@@ -432,7 +438,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.2.5-debian-10-r1
+    tag: 2.2.5-debian-10-r14
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -467,6 +473,9 @@ scheduler:
   ## @param scheduler.extraEnvVarsSecret Secret with extra environment variables
   ##
   extraEnvVarsSecret: ""
+  ## @param scheduler.extraEnvVarsSecrets List of secrets with extra environment variables for Airflow scheduler pods
+  ##
+  extraEnvVarsSecrets: []
   ## @param scheduler.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
@@ -631,7 +640,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.2.5-debian-10-r1
+    tag: 2.2.5-debian-10-r14
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -663,6 +672,9 @@ worker:
   ## @param worker.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Airflow worker pods
   ##
   extraEnvVarsSecret: ""
+  ## @param worker.extraEnvVarsSecrets List of secrets with extra environment variables for Airflow worker pods
+  ##
+  extraEnvVarsSecrets: []
   ## @param worker.containerPorts.http Airflow worker HTTP container port
   ##
   containerPorts:
@@ -899,7 +911,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.35.1-debian-10-r68
+    tag: 2.36.0-debian-10-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1240,7 +1252,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20220314.0-debian-10-r25
+    tag: 0.20220314.0-debian-10-r37
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

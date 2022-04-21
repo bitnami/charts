@@ -6,8 +6,6 @@ WordPress is the world's most popular blogging and content management platform. 
 
 [Overview of WordPress](http://www.wordpress.org)
 
-
-                           
 ## TL;DR
 
 ```console
@@ -62,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                                  | Value           |
@@ -78,18 +75,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
 
-
 ### WordPress Image parameters
 
-| Name                | Description                                          | Value                |
-| ------------------- | ---------------------------------------------------- | -------------------- |
-| `image.registry`    | WordPress image registry                             | `docker.io`          |
-| `image.repository`  | WordPress image repository                           | `bitnami/wordpress`  |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.9.3-debian-10-r8` |
-| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`       |
-| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                 |
-| `image.debug`       | Specify if debug values should be set                | `false`              |
-
+| Name                | Description                                          | Value                 |
+| ------------------- | ---------------------------------------------------- | --------------------- |
+| `image.registry`    | WordPress image registry                             | `docker.io`           |
+| `image.repository`  | WordPress image repository                           | `bitnami/wordpress`   |
+| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.9.3-debian-10-r11` |
+| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                  |
+| `image.debug`       | Specify if debug values should be set                | `false`               |
 
 ### WordPress Configuration parameters
 
@@ -121,6 +116,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `smtpExistingSecret`                   | The name of an existing secret with SMTP credentials                                  | `""`               |
 | `allowEmptyPassword`                   | Allow the container to be started with blank passwords                                | `true`             |
 | `allowOverrideNone`                    | Configure Apache to prohibit overriding directives with htaccess files                | `false`            |
+| `overrideDatabaseSettings`             | Allow overriding the database settings persisted in wp-config.php                     | `false`            |
 | `htaccessPersistenceEnabled`           | Persist custom changes on htaccess files                                              | `false`            |
 | `customHTAccessCM`                     | The name of an existing ConfigMap with custom htaccess rules                          | `""`               |
 | `command`                              | Override default container command (useful when using custom images)                  | `[]`               |
@@ -128,7 +124,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`                         | Array with extra environment variables to add to the WordPress container              | `[]`               |
 | `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                  | `""`               |
 | `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                     | `""`               |
-
 
 ### WordPress Multisite Configuration parameters
 
@@ -138,7 +133,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `multisite.host`                | WordPress Multisite hostname/address. This value is mandatory when enabling Multisite mode.                                        | `""`        |
 | `multisite.networkType`         | WordPress Multisite network type to enable. Allowed values: `subfolder`, `subdirectory` or `subdomain`.                            | `subdomain` |
 | `multisite.enableNipIoRedirect` | Whether to enable IP address redirection to nip.io wildcard DNS. Useful when running on an IP address with subdomain network type. | `false`     |
-
 
 ### WordPress deployment parameters
 
@@ -199,7 +193,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customStartupProbe`                    | Custom startupProbe that overrides the default one                                                                       | `{}`            |
 | `lifecycleHooks`                        | for the WordPress container(s) to automate configuration before or after startup                                         | `{}`            |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -231,7 +224,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                                                   | Description                                                                                     | Value                   |
@@ -247,13 +239,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r392`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r395`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                  | `0`                     |
-
 
 ### Other Parameters
 
@@ -272,7 +263,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetCPU`                       | Target CPU utilization percentage                                      | `50`    |
 | `autoscaling.targetMemory`                    | Target Memory utilization percentage                                   | `50`    |
 
-
 ### Metrics Parameters
 
 | Name                                         | Description                                                                           | Value                     |
@@ -280,7 +270,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose metrics                                 | `false`                   |
 | `metrics.image.registry`                     | Apache exporter image registry                                                        | `docker.io`               |
 | `metrics.image.repository`                   | Apache exporter image repository                                                      | `bitnami/apache-exporter` |
-| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                            | `0.11.0-debian-10-r112`   |
+| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                            | `0.11.0-debian-10-r115`   |
 | `metrics.image.pullPolicy`                   | Apache exporter image pull policy                                                     | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Apache exporter image pull secrets                                                    | `[]`                      |
 | `metrics.containerPorts.metrics`             | Prometheus exporter container port                                                    | `9117`                    |
@@ -320,7 +310,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                              | `false`                   |
 | `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.     | `""`                      |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                  | Value   |
@@ -340,7 +329,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                           | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                               | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                   | `{}`    |
-
 
 ### Database Parameters
 
@@ -369,7 +357,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcached.service.port`                   | Memcached service port                                                            | `11211`             |
 | `externalCache.host`                       | External cache server host                                                        | `localhost`         |
 | `externalCache.port`                       | External cache server port                                                        | `11211`             |
-
 
 The above parameters map to the env variables defined in [bitnami/wordpress](https://github.com/bitnami/bitnami-docker-wordpress). For more information please refer to the [bitnami/wordpress](https://github.com/bitnami/bitnami-docker-wordpress) image documentation.
 
@@ -516,7 +503,11 @@ To enable the new features, it is not possible to do it by upgrading an existing
 
 ## Upgrading
 
-### To 5.0.0
+### To 14.0.0
+
+This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-105-to-mariadb-106/) for upgrading from MariaDB 10.5 to 10.6. No major issues are expected during the upgrade.
+
+### To 13.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
 

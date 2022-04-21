@@ -30,9 +30,9 @@ spec:
         {{- end }}
         app.kubernetes.io/component: jobservice
       annotations:
-        checksum/configmap: {{ include (print $.Template.BasePath "/jobservice/jobservice-cm.yaml") . | sha256sum }}
         checksum/configmap-env: {{ include (print $.Template.BasePath "/jobservice/jobservice-cm-envvars.yaml") . | sha256sum }}
         checksum/secret-env: {{ include (print $.Template.BasePath "/jobservice/jobservice-secret-envvars.yaml") . | sha256sum }}
+        checksum/secret-config: {{ include (print $.Template.BasePath "/jobservice/jobservice-config-secret.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/jobservice/jobservice-secrets.yaml") . | sha256sum }}
         checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
         {{- if and .Values.internalTLS.enabled (not .Values.core.tls.existingSecret) }}
@@ -217,8 +217,8 @@ spec:
         {{- end }}
       volumes:
         - name: jobservice-config
-          configMap:
-            name: {{ include "harbor.jobservice" . }}
+          secret:
+            secretName: {{ include "harbor.jobservice" . }}-config
         - name: job-logs
           {{- if and .Values.persistence.enabled (eq .Values.jobservice.jobLogger "file") }}
           persistentVolumeClaim:

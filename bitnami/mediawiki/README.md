@@ -7,7 +7,7 @@ MediaWiki is the free and open source wiki software that powers Wikipedia. Used 
 [Overview of MediaWiki](http://www.mediawiki.org/wiki/MediaWiki)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                  | Value           |
@@ -74,7 +73,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonAnnotations` | Annotations to add to all deployed objects                                                   | `{}`            |
 | `clusterDomain`     | Default Kubernetes cluster domain                                                            | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                            | `[]`            |
-
 
 ### Mediawiki parameters
 
@@ -104,7 +102,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`       | Extra environment variables to be set on Mediawki container                      | `[]`                   |
 | `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                             | `""`                   |
 | `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                                | `""`                   |
-
 
 ### Mediawiki deployment parameters
 
@@ -172,7 +169,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                      | PVC Storage Request for MediaWiki volume                                                  | `8Gi`                                             |
 | `persistence.annotations`               | Persistent Volume Claim annotations                                                       | `{}`                                              |
 
-
 ### Traffic Exposure parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -203,7 +199,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 
-
 ### Database parameters
 
 | Name                                        | Description                                                                           | Value               |
@@ -226,7 +221,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.user`                     | Existing username in the external db                                                  | `bn_mediawiki`      |
 | `externalDatabase.password`                 | Password for the above username                                                       | `""`                |
 | `externalDatabase.database`                 | Name of the existing database                                                         | `bitnami_mediawiki` |
-
 
 ### Metrics parameters
 
@@ -251,7 +245,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                          | `{}`                      |
 | `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels     | `false`                   |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                   | Value   |
@@ -271,7 +264,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                            | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                    | `{}`    |
-
 
 The above parameters map to the env variables defined in [bitnami/mediawiki](https://github.com/bitnami/bitnami-docker-mediawiki). For more information please refer to the [bitnami/mediawiki](https://github.com/bitnami/bitnami-docker-mediawiki) image documentation.
 
@@ -367,6 +359,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 14.0.0
+
+This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-105-to-mariadb-106/) for upgrading from MariaDB 10.5 to 10.6. No major issues are expected during the upgrade.
 
 ### To 13.0.0
 
