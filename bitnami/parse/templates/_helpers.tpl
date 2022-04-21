@@ -29,6 +29,17 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Create the name of the service account to use
+*/}}
+{{- define "parse.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (printf "%s-server" (include "common.names.fullname" .)) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -73,7 +84,7 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
 
 {{/*
 Gets the port to access Parse outside the cluster.
-When using ingress, we should use the port 80/443 instead of service.port
+When using ingress, we should use the port 80/443 instead of service.ports.http
 */}}
 {{- define "parse.external-port" -}}
 {{/*
@@ -89,7 +100,7 @@ but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else 
 {{- $ingressHttpPort -}}
 {{- end -}}
 {{- else -}}
-{{ .Values.server.port }}
+{{ .Values.server.containerPorts.http }}
 {{- end -}}
 {{- end -}}
 
