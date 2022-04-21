@@ -1,11 +1,11 @@
-{{- if .Values.data.autoscaling.enabled }}
+{{- if and (include "elasticsearch.master.enabled" .) .Values.master.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "elasticsearch.data.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "elasticsearch.master.fullname" . }}
+  namespace: {{ include "common.names.namespace" | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: data
+    app.kubernetes.io/component: master
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
@@ -16,20 +16,20 @@ spec:
   scaleTargetRef:
     apiVersion: {{ template "common.capabilities.statefulset.apiVersion" . }}
     kind: StatefulSet
-    name: {{ include "elasticsearch.data.fullname" . }}
-  minReplicas: {{ .Values.data.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.data.autoscaling.maxReplicas }}
+    name: {{ include "elasticsearch.master.fullname" . }}
+  minReplicas: {{ .Values.master.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.master.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.data.autoscaling.targetCPU }}
+    {{- if .Values.master.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.data.autoscaling.targetCPU }}
+        targetAverageUtilization: {{ .Values.master.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.data.autoscaling.targetMemory }}
+    {{- if .Values.master.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.data.autoscaling.targetMemory }}
+        targetAverageUtilization: {{ .Values.master.autoscaling.targetMemory }}
     {{- end }}
 {{- end }}
