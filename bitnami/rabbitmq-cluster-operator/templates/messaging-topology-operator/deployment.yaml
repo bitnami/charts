@@ -77,17 +77,13 @@ spec:
           {{- if .Values.msgTopologyOperator.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.msgTopologyOperator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          {{- else if .Values.msgTopologyOperator.command }}
+          {{- if .Values.msgTopologyOperator.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /manager
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else if .Values.msgTopologyOperator.args }}
+          {{- if .Values.msgTopologyOperator.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.args "context" $) | nindent 12 }}
           {{- else }}
           args:

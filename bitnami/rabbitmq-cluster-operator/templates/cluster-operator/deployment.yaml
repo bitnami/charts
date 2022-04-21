@@ -77,17 +77,13 @@ spec:
           {{- if .Values.clusterOperator.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.clusterOperator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          {{- else if .Values.clusterOperator.command }}
+          {{- if .Values.clusterOperator.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /manager
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else if .Values.clusterOperator.args }}
+          {{- if .Values.clusterOperator.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.args "context" $) | nindent 12 }}
           {{- else }}
           args:

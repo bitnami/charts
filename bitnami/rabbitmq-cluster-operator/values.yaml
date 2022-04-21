@@ -44,17 +44,9 @@ extraDeploy: []
 ## Enable diagnostic mode in the deployment(s)/statefulset(s)
 ##
 diagnosticMode:
-  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled)
   ##
   enabled: false
-  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
-  ##
-  command:
-    - sleep
-  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
-  ##
-  args:
-    - infinity
 
 ## @section RabbitMQ Cluster Operator Parameters
 ##
