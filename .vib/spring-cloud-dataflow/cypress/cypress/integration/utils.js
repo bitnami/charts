@@ -18,6 +18,7 @@ export const importAStreamApplication = () => {
 };
 
 export const importATaskApplication = () => {
+  cy.visit('/dashboard');
   cy.contains('button', 'Add application(s)').click();
   cy.contains(
     '.clr-control-label',

@@ -17,12 +17,14 @@ it('allows getting Spring Cloud Dataflow info', () => {
 });
 
 it('allows a stream to be created', () => {
+  const STREAM = 'mongodb | cassandra';
+
   importAStreamApplication();
   cy.visit('/dashboard');
   cy.get('[routerlink="streams/list"').click();
   cy.contains('.btn-primary', 'Create stream(s)').click();
-  cy.get('.CodeMirror-line').type('mongodb | cassandra');
-  cy.get('#v-2').should('contain', 'mongodb').and('contain', 'cassandra');
+  cy.get('.CodeMirror-line').type(STREAM);
+  cy.contains('#v-2', 'mongodb').and('contain', 'cassandra');
   cy.contains('button', 'Create stream(s)').click();
   cy.get('.modal-content').should('contain', 'Create Stream');
   cy.fixture('streams').then((stream) => {
@@ -30,12 +32,12 @@ it('allows a stream to be created', () => {
       `${stream.newStream.name}-${random}`
     );
     cy.contains('.btn-primary', 'Create the stream').click();
-    cy.contains('.modal-content', 'Creating Stream');
     cy.contains(
       '.datagrid-inner-wrapper',
       `${stream.newStream.name}-${random}`
     );
   });
+  cy.contains('.toast-container', 'successfully');
 });
 
 it('allows a stream to be deployed', () => {
@@ -54,7 +56,6 @@ it('allows a stream to be deployed', () => {
 it('checks if a task is properly created and schedule a task', () => {
   const CRON_EXPRESSION = '*/5 * * * *';
 
-  cy.visit('/dashboard');
   importATaskApplication();
   createATask();
   cy.get('[routerlink="tasks-jobs/tasks"]').click();
@@ -68,7 +69,7 @@ it('checks if a task is properly created and schedule a task', () => {
       .first()
       .type(`${schedule.newSchedule.name}-${random}`);
   });
-  cy.get('#clr-form-control-8').type(CRON_EXPRESSION);
+  cy.get('input[name="example"]').last().type(CRON_EXPRESSION);
   cy.contains('button', 'Create schedule(s)').click();
   cy.contains('.toast-container', 'Successfully');
 });
