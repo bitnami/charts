@@ -7,7 +7,7 @@ WordPress for Intel is the most popular blogging application combined with crypt
 [Overview of WordPress for Intel](http://www.wordpress.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -70,7 +70,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -86,7 +85,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
-
 ### WordPress Image parameters
 
 | Name                | Description                                          | Value                     |
@@ -97,7 +95,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`            |
 | `image.pullSecrets` | WordPress image pull secrets                         | `[]`                      |
 | `image.debug`       | Enable image debug mode                              | `false`                   |
-
 
 ### WordPress Configuration parameters
 
@@ -132,7 +129,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                  | `""`               |
 | `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                     | `""`               |
 
-
 ### WordPress Multisite Configuration parameters
 
 | Name                            | Description                                                                                                                        | Value       |
@@ -141,7 +137,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `multisite.host`                | WordPress Multisite hostname/address. This value is mandatory when enabling Multisite mode.                                        | `""`        |
 | `multisite.networkType`         | WordPress Multisite network type to enable. Allowed values: `subfolder`, `subdirectory` or `subdomain`.                            | `subdomain` |
 | `multisite.enableNipIoRedirect` | Whether to enable IP address redirection to nip.io wildcard DNS. Useful when running on an IP address with subdomain network type. | `false`     |
-
 
 ### WordPress deployment parameters
 
@@ -192,7 +187,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
 | `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -222,7 +216,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                                          | Description                                                                                     | Value                   |
@@ -244,7 +237,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
 
-
 ### Other Parameters
 
 | Name                       | Description                                                    | Value   |
@@ -257,7 +249,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.maxReplicas`  | Maximum number of WordPress replicas                           | `11`    |
 | `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `50`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage                           | `50`    |
-
 
 ### Metrics Parameters
 
@@ -282,7 +273,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                  |
 | `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                     |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                  | Value   |
@@ -302,7 +292,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                           | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                               | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                   | `{}`    |
-
 
 ### Database Parameters
 
@@ -328,7 +317,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcached.service.port`                   | Memcached service port                                                    | `11211`             |
 | `externalCache.host`                       | External cache server host                                                | `localhost`         |
 | `externalCache.port`                       | External cache server port                                                | `11211`             |
-
 
 The above parameters map to the env variables defined in [bitnami/wordpress-intel](https://github.com/bitnami/bitnami-docker-wordpress-intel). For more information please refer to the [bitnami/wordpress-intel](https://github.com/bitnami/bitnami-docker-wordpress-intel) image documentation.
 
@@ -448,6 +436,10 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Notable changes
+
+### 1.0.0
+
+This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-105-to-mariadb-106/) for upgrading from MariaDB 10.5 to 10.6. No major issues are expected during the upgrade.
 
 ### 0.2.0
 
