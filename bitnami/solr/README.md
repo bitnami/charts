@@ -118,19 +118,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `livenessProbe.enabled`                 | Enable livenessProbe on Solr containers                                                                                  | `true`          |
 | `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                  | `40`            |
 | `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                         | `10`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                        | `5`             |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                        | `15`            |
 | `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                      | `6`             |
 | `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                      | `1`             |
 | `readinessProbe.enabled`                | Enable readinessProbe on Solr containers                                                                                 | `true`          |
 | `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `60`            |
 | `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                        | `10`            |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `5`             |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `15`            |
 | `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                     | `6`             |
 | `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                     | `1`             |
 | `startupProbe.enabled`                  | Enable startupProbe on Solr containers                                                                                   | `false`         |
 | `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `40`            |
 | `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                          | `10`            |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                         | `1`             |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                         | `15`            |
 | `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                       | `15`            |
 | `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                       | `1`             |
 | `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                                      | `{}`            |

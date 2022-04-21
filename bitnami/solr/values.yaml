@@ -173,7 +173,7 @@ livenessProbe:
   enabled: true
   initialDelaySeconds: 40
   periodSeconds: 10
-  timeoutSeconds: 5
+  timeoutSeconds: 15
   failureThreshold: 6
   successThreshold: 1
 ## @param readinessProbe.enabled Enable readinessProbe on Solr containers
@@ -187,7 +187,7 @@ readinessProbe:
   enabled: true
   initialDelaySeconds: 60
   periodSeconds: 10
-  timeoutSeconds: 5
+  timeoutSeconds: 15
   failureThreshold: 6
   successThreshold: 1
 ## @param startupProbe.enabled Enable startupProbe on Solr containers
@@ -201,7 +201,7 @@ startupProbe:
   enabled: false
   initialDelaySeconds: 40
   periodSeconds: 10
-  timeoutSeconds: 1
+  timeoutSeconds: 15
   failureThreshold: 15
   successThreshold: 1
 ## @param customLivenessProbe Custom livenessProbe that overrides the default one
