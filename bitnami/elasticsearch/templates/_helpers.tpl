@@ -50,14 +50,14 @@ Required for the Kibana subchart to find Elasticsearch service.
 */}}
 {{- define "elasticsearch.service.name" -}}
 {{- if .Values.global.kibanaEnabled -}}
-{{- $name := .Values.global.elasticsearch.service.name -}}
-{{- if contains $name .Release.Name -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+    {{- $name := .Values.global.elasticsearch.service.name -}}
+    {{- if contains $name .Release.Name -}}
+    {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+    {{- else -}}
+    {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+    {{- end -}}
 {{- else -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- else -}}
-{{- printf "%s" ( include "common.names.fullname" . )  | trunc 63 | trimSuffix "-" -}}
+    {{- printf "%s" ( include "common.names.fullname" . )  | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -66,11 +66,11 @@ Port number for the Elasticsearch service REST API port
 Required for the Kibana subchart to find Elasticsearch service.
 */}}
 {{- define "elasticsearch.service.ports.restAPI" -}}
-{{- $port := int .Values.service.ports.restAPI -}}
 {{- if .Values.global.kibanaEnabled -}}
-{{- $port := int .Values.global.elasticsearch.service.ports.restAPI -}}
+{{- printf "%d" (int .Values.global.elasticsearch.service.ports.restAPI) -}}
+{{- else -}}
+{{- printf "%d" (int .Values.service.ports.restAPI) -}}
 {{- end -}}
-{{- printf "%d" $port -}}
 {{- end -}}
 
 {{/*
