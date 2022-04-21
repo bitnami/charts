@@ -8,7 +8,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - ejbca-database
-    version: 10.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -30,4 +30,4 @@ name: ejbca
 sources:
   - https://github.com/bitnami/bitnami-docker-ejbca
   - https://www.ejbca.org/
-version: 5.1.13
+version: 6.0.0
