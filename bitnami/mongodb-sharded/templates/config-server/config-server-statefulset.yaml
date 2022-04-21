@@ -27,6 +27,9 @@ spec:
         {{- if .Values.configsvr.podLabels }}
           {{- include "common.tplvalues.render" ( dict "value" .Values.configsvr.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
+        {{- if .Values.common.podLabels }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.common.podLabels "context" $ ) | nindent 8 }}
+        {{- end }}
       {{- if or .Values.common.podAnnotations .Values.configsvr.podAnnotations .Values.metrics.enabled }}
       annotations:
         {{- if .Values.common.podAnnotations }}
@@ -79,13 +82,23 @@ spec:
         - name: volume-permissions
           image: {{ include "mongodb-sharded.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command: ["chown", "-R", "{{ .Values.configsvr.containerSecurityContext.runAsUser }}:{{ .Values.configsvr.podSecurityContext.fsGroup }}", "{{ .Values.configsvr.persistence.mountPath }}"]
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              mkdir -p {{ .Values.configsvr.persistence.mountPath }}{{- if .Values.configsvr.persistence.subPath }}/{{ .Values.configsvr.persistence.subPath }}{{- end }}
+              chmod 700 {{ .Values.configsvr.persistence.mountPath }}
+              find {{ .Values.configsvr.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.configsvr.containerSecurityContext.runAsUser }}:{{ .Values.configsvr.podSecurityContext.fsGroup }}
           securityContext:
             runAsUser: 0
           resources: {{ toYaml .Values.volumePermissions.resources | nindent 12 }}
           volumeMounts:
             - name: datadir
               mountPath: {{ .Values.configsvr.persistence.mountPath }}
+              {{- if .Values.configsvr.persistence.subPath }}
+              subPath: {{ .Values.configsvr.persistence.subPath }}
+              {{- end }}
         {{- end }}
         {{- with .Values.configsvr.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
@@ -111,7 +124,7 @@ spec:
             - name: MONGODB_SYSTEM_LOG_VERBOSITY
               value: {{ .Values.common.mongodbSystemLogVerbosity | quote }}
             - name: MONGODB_DISABLE_SYSTEM_LOG
-              {{- if .Values.mongodbDisableSystemLog }}
+              {{- if .Values.common.mongodbDisableSystemLog }}
               value: "yes"
               {{- else }}
               value: "no"
@@ -241,6 +254,9 @@ spec:
               mountPath: /entrypoint
             - name: datadir
               mountPath: {{ .Values.configsvr.persistence.mountPath }}
+              {{- if .Values.configsvr.persistence.subPath }}
+              subPath: {{ .Values.configsvr.persistence.subPath }}
+              {{- end }}
             {{- if or .Values.configsvr.config .Values.configsvr.configCM }}
             - name: config
               mountPath: /bitnami/mongodb/conf/

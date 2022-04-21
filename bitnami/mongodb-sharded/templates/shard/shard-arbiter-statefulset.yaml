@@ -26,6 +26,9 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" $ | nindent 8 }}
         app.kubernetes.io/component: shardsvr-arbiter
+        {{- if $.Values.common.podLabels }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.common.podLabels "context" $ ) | nindent 8 }}
+        {{- end }}
         {{- if $.Values.shardsvr.arbiter.podLabels }}
           {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.podLabels "context" $ ) | nindent 8 }}
         {{- end }}

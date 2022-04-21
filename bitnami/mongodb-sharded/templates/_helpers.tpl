@@ -87,17 +87,6 @@ Get the initialization scripts configmap name.
 {{- end -}}
 
 {{/*
-Create the name for the admin secret.
-*/}}
-{{- define "mongodb-sharded.adminSecret" -}}
-    {{- if .Values.auth.existingAdminSecret -}}
-        {{- .Values.auth.existingAdminSecret -}}
-    {{- else -}}
-        {{- printf "%s-admin" (include "common.names.fullname" .) -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
 Create the name for the key secret.
 */}}
 {{- define "mongodb-sharded.keySecret" -}}

@@ -28,6 +28,9 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: mongos
+        {{- if .Values.common.podLabels }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.common.podLabels "context" $ ) | nindent 8 }}
+        {{- end }}
         {{- if .Values.mongos.podLabels }}
           {{- include "common.tplvalues.render" ( dict "value" .Values.mongos.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
@@ -141,7 +144,7 @@ spec:
             - name: MONGODB_SYSTEM_LOG_VERBOSITY
               value: {{ .Values.common.mongodbSystemLogVerbosity | quote }}
             - name: MONGODB_DISABLE_SYSTEM_LOG
-              {{- if .Values.mongodbDisableSystemLog }}
+              {{- if .Values.common.mongodbDisableSystemLog }}
               value: "yes"
               {{- else }}
               value: "no"

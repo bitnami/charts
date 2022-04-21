@@ -26,6 +26,9 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" $ | nindent 8 }}
         app.kubernetes.io/component: shardsvr
+        {{- if $.Values.common.podLabels }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.common.podLabels "context" $ ) | nindent 8 }}
+        {{- end }}
         {{- if $.Values.shardsvr.dataNode.podLabels }}
           {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.dataNode.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
@@ -82,13 +85,23 @@ spec:
         - name: volume-permissions
           image: {{ include "mongodb-sharded.volumePermissions.image" $ }}
           imagePullPolicy: {{ $.Values.volumePermissions.image.pullPolicy | quote }}
-          command: ["chown", "-R", "{{ $.Values.shardsvr.dataNode.containerSecurityContext.runAsUser }}:{{ $.Values.shardsvr.dataNode.podSecurityContext.fsGroup }}", "{{ $.Values.shardsvr.persistence.mountPath }}"]
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              mkdir -p {{ $.Values.shardsvr.persistence.mountPath }}{{- if $.Values.shardsvr.persistence.subPath }}/{{ $.Values.shardsvr.persistence.subPath }}{{- end }}
+              chmod 700 {{ $.Values.shardsvr.persistence.mountPath }}
+              find {{ $.Values.shardsvr.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ $.Values.shardsvr.dataNode.containerSecurityContext.runAsUser }}:{{ $.Values.shardsvr.dataNode.podSecurityContext.fsGroup }}
           securityContext:
             runAsUser: 0
           resources: {{ toYaml $.Values.volumePermissions.resources | nindent 12 }}
           volumeMounts:
             - name: datadir
               mountPath: {{ $.Values.shardsvr.persistence.mountPath }}
+              {{- if $.Values.shardsvr.persistence.subPath }}
+              subPath: {{ $.Values.shardsvr.persistence.subPath }}
+              {{- end }}
         {{- end }}
         {{- with $.Values.shardsvr.dataNode.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
@@ -116,7 +129,7 @@ spec:
             - name: MONGODB_MAX_TIMEOUT
               value: {{ $.Values.common.mongodbMaxWaitTimeout | quote }}
             - name: MONGODB_DISABLE_SYSTEM_LOG
-              {{- if $.Values.mongodbDisableSystemLog }}
+              {{- if $.Values.common.mongodbDisableSystemLog }}
               value: "yes"
               {{- else }}
               value: "no"
@@ -248,6 +261,9 @@ spec:
               mountPath: /entrypoint
             - name: datadir
               mountPath: {{ $.Values.shardsvr.persistence.mountPath }}
+              {{- if $.Values.shardsvr.persistence.subPath }}
+              subPath: {{ $.Values.shardsvr.persistence.subPath }}
+              {{- end }}
             {{- if or $.Values.shardsvr.dataNode.config $.Values.shardsvr.dataNode.configCM }}
             - name: config
               mountPath: /bitnami/mongodb/conf/
