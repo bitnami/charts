@@ -1,8 +1,8 @@
-{{- if (include "postgresql.readReplicas.createExtendedConfigmap" .) }}
+{{- if (include "postgresql.readReplica.createExtendedConfigmap" .) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ printf "%s-extended-configuration" (include "postgresql.readReplicas.fullname" .) }}
+  name: {{ printf "%s-extended-configuration" (include "postgresql.readReplica.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: read

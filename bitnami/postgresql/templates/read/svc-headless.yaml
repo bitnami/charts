@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "postgresql.readReplicas.svc.headless" . }}
+  name: {{ include "postgresql.readReplica.svc.headless" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -26,7 +26,7 @@ spec:
   publishNotReadyAddresses: true
   ports:
     - name: tcp-postgresql
-      port: {{ include "postgresql.readReplicas.service.port" . }}
+      port: {{ include "postgresql.readReplica.service.port" . }}
       targetPort: tcp-postgresql
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: read

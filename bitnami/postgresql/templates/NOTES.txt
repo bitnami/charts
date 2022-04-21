@@ -30,7 +30,7 @@ PostgreSQL can be accessed via port {{ include "postgresql.service.port" . }} on
 
 {{- if eq .Values.architecture "replication" }}
 
-    {{ include "postgresql.readReplicas.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local - Read only connection
+    {{ include "postgresql.readReplica.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local - Read only connection
 
 {{- end }}
 
