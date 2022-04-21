@@ -3,7 +3,7 @@
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ include "postgresql.readReplica.fullname" . }}
+  name: {{ include "postgresql.readReplicas.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: read
@@ -14,6 +14,9 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.labels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
+    {{ - if (include "postgresql.readReplicas.createExtendedConfigmap" .) }}
+    checksum/extended-configuration: {{ include (print $.Template.BasePath "/read/extended-configmap.yaml") . | sha256sum }}
+    {{ - end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
@@ -22,7 +25,7 @@ metadata:
     {{- end }}
 spec:
   replicas: {{ .Values.readReplicas.replicaCount }}
-  serviceName: {{ include "postgresql.readReplica.svc.headless" . }}
+  serviceName: {{ include "postgresql.readReplicas.svc.headless" . }}
   {{- if .Values.readReplicas.updateStrategy }}
   updateStrategy: {{- toYaml .Values.readReplicas.updateStrategy | nindent 4 }}
   {{- end }}
@@ -31,7 +34,7 @@ spec:
       app.kubernetes.io/component: read
   template:
     metadata:
-      name: {{ include "postgresql.readReplica.fullname" . }}
+      name: {{ include "postgresql.readReplicas.fullname" . }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: read
         {{- if .Values.commonLabels }}
@@ -354,6 +357,10 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{ - if or .Values.readReplicas.extendedConfiguration .Values.readReplicas.existingExtendedConfigmap }}
+            - name: postgresql-extended-config
+              mountPath: /bitnami/postgresql/conf/conf.d/
+            {{ - end }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
@@ -381,6 +388,11 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
+        {{ - if or .Values.readReplicas.extendedConfiguration .Values.readReplicas.existingExtendedConfigmap }}
+        - name: postgresql-extended-config
+          configMap:
+            name: {{ include "postgresql.readReplicas.extendedConfigmapName" . }}
+        {{ - end }}
         {{- if .Values.auth.usePasswordFiles }}
         - name: postgresql-password
           secret:

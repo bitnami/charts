@@ -659,6 +659,14 @@ readReplicas:
   ## @param readReplicas.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param readReplicas.extendedConfiguration Extended PostgreSQL Read configuration (appended to main or default configuration)
+  ## ref: https://github.com/bitnami/bitnami-docker-postgresql#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
+  ##
+  extendedConfiguration: ""
+  ## @param primary.existingExtendedConfigmap Name of an existing ConfigMap with PostgreSQL Read extended configuration
+  ## NOTE: `readReplicas.extendedConfiguration` will be ignored
+  ##
+  existingExtendedConfigmap: ""
   ## Configure extra options for PostgreSQL read only containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param readReplicas.livenessProbe.enabled Enable livenessProbe on PostgreSQL read only containers
