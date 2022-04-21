@@ -6,7 +6,7 @@ metadata:
   {{- if .Values.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.metrics.serviceMonitor.namespace | quote }}
   {{- else }}
-  namespace: {{ include "common.names.namespace" | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: metrics
@@ -46,5 +46,5 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ include "common.names.namespace" | quote }}
+      - {{ include "common.names.namespace" . | quote }}
 {{- end }}

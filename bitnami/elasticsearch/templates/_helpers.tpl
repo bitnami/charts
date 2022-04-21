@@ -193,7 +193,7 @@ Return the hostname of every ElasticSearch seed node
 */}}
 {{- define "elasticsearch.hosts" -}}
 {{- $clusterDomain := .Values.clusterDomain }}
-{{- $releaseNamespace := include "common.names.namespace" }}
+{{- $releaseNamespace := include "common.names.namespace" . }}
 {{- if (include "elasticsearch.master.enabled" .) -}}
 {{- $masterFullname := (printf "%s-hl" (include "elasticsearch.master.fullname" .) | trunc 63 | trimSuffix "-") }}
 {{- $masterFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},

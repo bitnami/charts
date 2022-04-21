@@ -20,7 +20,7 @@ data:
   config.yml: |-
     client:
       hosts:
-        - {{ template "elasticsearch.service.name" . }}.{{ include "common.names.namespace" }}.svc.{{ .Values.clusterDomain }}
+        - {{ template "elasticsearch.service.name" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
       port: {{ include "elasticsearch.service.ports.restAPI" . }}
   {{- end }}
 {{- end }}

@@ -13,5 +13,5 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "elasticsearch.curator.serviceAccountName" . }}
-    namespace: {{ include "common.names.namespace" | quote }}
+    namespace: {{ include "common.names.namespace" . | quote }}
 {{- end }}
