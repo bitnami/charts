@@ -8,7 +8,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - osclass-database
-    version: 10.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -31,4 +31,4 @@ name: osclass
 sources:
   - https://github.com/bitnami/bitnami-docker-osclass
   - https://osclass.org/
-version: 13.0.24
+version: 14.0.0
