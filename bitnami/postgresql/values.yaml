@@ -663,7 +663,7 @@ readReplicas:
   ## ref: https://github.com/bitnami/bitnami-docker-postgresql#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
   ##
   extendedConfiguration: ""
-  ## @param primary.existingExtendedConfigmap Name of an existing ConfigMap with PostgreSQL Read extended configuration
+  ## @param readReplicas.existingExtendedConfigmap Name of an existing ConfigMap with PostgreSQL Read extended configuration
   ## NOTE: `readReplicas.extendedConfiguration` will be ignored
   ##
   existingExtendedConfigmap: ""
