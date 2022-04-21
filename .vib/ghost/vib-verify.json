@@ -44,6 +44,31 @@
             "endpoint": "lb-ghost-http",
             "app_protocol": "HTTP"
           }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/ghost/goss"
+            },
+            "remote": {
+              "workload": "deploy-ghost"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/ghost/cypress"
+            },
+            "endpoint": "lb-ghost-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "email": "user@example.com",
+              "password": "Complicated123!4"
+            }
+          }
         }
       ]
     }
