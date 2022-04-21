@@ -32,12 +32,10 @@
       },
       "actions":[
         {
-          "action_id":"trivy",
-          "params":{
-            "threshold":"CRITICAL",
-            "vuln_type":[
-              "OS"
-            ]
+          "action_id": "trivy",
+          "params": {
+            "threshold": "CRITICAL",
+            "vuln_type": ["OS"]
           }
         },
         {
