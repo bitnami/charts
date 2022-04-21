@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker Image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
@@ -60,6 +62,7 @@ diagnosticMode:
     - infinity
 
 ## @section MariaDB common parameters
+##
 
 ## Bitnami MariaDB image
 ## ref: https://hub.docker.com/r/bitnami/mariadb/tags/
@@ -73,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 10.5.15-debian-10-r62
+  tag: 10.6.7-debian-10-r62
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -150,6 +153,7 @@ initdbScripts: {}
 initdbScriptsConfigMap: ""
 
 ## @section MariaDB Primary parameters
+##
 
 ## Mariadb Primary parameters
 ##
@@ -180,7 +184,7 @@ primary:
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
     tmpdir=/opt/bitnami/mariadb/tmp
     max_allowed_packet=16M
-    bind-address=::
+    bind-address=*
     pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
     log-error=/opt/bitnami/mariadb/logs/mysqld.log
     character-set-server=UTF8
@@ -316,11 +320,13 @@ primary:
     ## limits:
     ##    cpu: 100m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Configure extra options for MariaDB primary containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
@@ -505,6 +511,7 @@ primary:
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
+    ##
     sessionAffinityConfig: {}
   ## MariaDB primary Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -524,6 +531,7 @@ primary:
   revisionHistoryLimit: 10
 
 ## @section MariaDB Secondary parameters
+##
 
 ## Mariadb Secondary parameters
 ##
@@ -688,11 +696,13 @@ secondary:
     ## limits:
     ##    cpu: 100m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Configure extra options for MariaDB Secondary containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
@@ -875,6 +885,7 @@ secondary:
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
+    ##
     sessionAffinityConfig: {}
   ## MariaDB secondary Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -894,6 +905,7 @@ secondary:
   revisionHistoryLimit: 10
 
 ## @section RBAC parameters
+##
 
 ## MariaDB pods ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -921,6 +933,7 @@ rbac:
   create: false
 
 ## @section Volume Permissions parameters
+##
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -938,7 +951,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r399
+    tag: 10-debian-10-r401
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -955,6 +968,7 @@ volumePermissions:
     requests: {}
 
 ## @section Metrics parameters
+##
 
 ## Mysqld Prometheus exporter parameters
 ##
@@ -971,7 +985,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.14.0-debian-10-r44
+    tag: 0.14.0-debian-10-r46
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1052,11 +1066,13 @@ metrics:
     ## limits:
     ##    cpu: 100m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -1158,6 +1174,7 @@ metrics:
     rules: []
 
 ## @section NetworkPolicy parameters
+##
 
 ## Add networkpolicies
 ##
@@ -1192,6 +1209,7 @@ networkPolicy:
   ##
   ingressRules:
     ## Allow access to the primary node only from the indicated:
+    ##
     primaryAccessOnlyFrom:
       enabled: false
       ## e.g:
@@ -1211,9 +1229,11 @@ networkPolicy:
       ##       - namespaceSelector:
       ##           matchLabels:
       ##             label: example
+      ##
       customRules: {}
 
     ## Allow access to the secondary node only from the indicated:
+    ##
     secondaryAccessOnlyFrom:
       enabled: false
       ## e.g:
@@ -1233,6 +1253,7 @@ networkPolicy:
       ##       - namespaceSelector:
       ##           matchLabels:
       ##             label: example
+      ##
       customRules: {}
 
   ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
@@ -1248,4 +1269,5 @@ networkPolicy:
     ##       - namespaceSelector:
     ##           matchLabels:
     ##             label: example
+    ##
     customRules: {}
