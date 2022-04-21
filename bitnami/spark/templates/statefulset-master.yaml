@@ -172,8 +172,8 @@ spec:
             {{- end }}
             - name: cluster
               containerPort: {{ .Values.master.containerPorts.cluster }}
-            {{- if .Values.master.extraPorts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.master.extraPorts "context" $) | nindent 12 }}
+            {{- if .Values.master.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.master.extraContainerPorts "context" $) | nindent 12 }}
             {{- end }}
           volumeMounts:
             {{- if .Values.master.existingConfigmap }}
