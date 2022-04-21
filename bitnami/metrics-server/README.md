@@ -66,6 +66,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`           |
 | `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`           |
 | `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`           |
+| `namespaceOverride`      | String to fully override common.names.namespace                                              | `""`           |
 | `commonLabels`           | Add labels to all the deployed resources                                                     | `{}`           |
 | `commonAnnotations`      | Add annotations to all the deployed resources                                                | `{}`           |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`           |
