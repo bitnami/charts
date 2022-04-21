@@ -70,6 +70,12 @@ spec:
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.dnsPolicy }}
+      dnsPolicy: {{ .Values.dnsPolicy }}
+      {{- end }}
+      {{- if .Values.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dnsConfig "context" .) | nindent 8 }}
+      {{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- if or (.Values.initContainers) (and .Values.volumePermissions.enabled .Values.persistence.enabled .Values.podSecurityContext) }}
       initContainers:

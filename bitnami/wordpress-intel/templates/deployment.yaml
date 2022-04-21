@@ -155,8 +155,6 @@ spec:
               value: {{ .Values.wordpressScheme | quote }}
             - name: WORDPRESS_EXTRA_WP_CONFIG_CONTENT
               value: {{ .Values.wordpressExtraConfigContent | quote }}
-            - name: WORDPRESS_AUTO_UPDATE_LEVEL
-              value: {{ .Values.wordpressAutoUpdateLevel | quote }}
             - name: WORDPRESS_PLUGINS
               value: {{ join "," .Values.wordpressPlugins | quote }}
             - name: NGINX_HTTP_PORT_NUMBER

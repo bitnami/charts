@@ -284,9 +284,7 @@ Refer to the [chart documentation for more information on customizing the Logsta
 
 The chart supports the use of [multiple pipelines](https://www.elastic.co/guide/en/logstash/master/multiple-pipelines.html) by setting the *enableMultiplePipelines* parameter to *true*.
 
-To do this, place the *pipelines.yml* file in the *files/conf* directory, together with the rest of the desired configuration files. If the *enableMultiplePipelines* parameter is set to *true* but the *pipelines.yml* file does not exist in the mounted volume, a dummy file is created using the default configuration (a single pipeline).
-
-The chart also supports setting an external ConfigMap with all the configuration files via the *existingConfiguration* parameter.
+The chart supports setting an external ConfigMap with all the configuration files via the *existingConfiguration* parameter.
 
 For more information and an example, refer to the chart documentation on [using multiple pipelines](https://docs.bitnami.com/kubernetes/apps/logstash/configuration/use-multiple-pipelines/).
 

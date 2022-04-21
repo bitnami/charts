@@ -8,7 +8,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - mediawiki-database
-    version: 10.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -32,4 +32,4 @@ name: mediawiki
 sources:
   - https://github.com/bitnami/bitnami-docker-mediawiki
   - https://www.mediawiki.org/
-version: 13.0.20
+version: 14.0.0

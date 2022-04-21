@@ -6,7 +6,7 @@ dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     version: 1.x.x
@@ -25,4 +25,4 @@ name: moodle
 sources:
   - https://github.com/bitnami/bitnami-docker-moodle
   - https://www.moodle.org/
-version: 12.1.23
+version: 13.0.0

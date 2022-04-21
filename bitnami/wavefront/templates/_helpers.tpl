@@ -34,7 +34,7 @@ Create the name of the service account to use
 Return true if the proxy configmap object should be created
 */}}
 {{- define "wavefront.proxy.createConfigmap" -}}
-{{- if and .Values.proxy.preprocessor (not .Values.proxy.ExistingConfigmap) }}
+{{- if and .Values.proxy.preprocessor (not .Values.proxy.existingConfigmap) }}
     {{- true -}}
 {{- else -}}
 {{- end -}}
