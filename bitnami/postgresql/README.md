@@ -262,6 +262,7 @@ kubectl delete pvc -l release=my-release
 | `readReplicas.command`                            | Override default container command (useful when using custom images)                                                     | `[]`                  |
 | `readReplicas.args`                               | Override default container args (useful when using custom images)                                                        | `[]`                  |
 | `readReplicas.extendedConfiguration`              | Extended PostgreSQL Read configuration (appended to main or default configuration)                                       | `""`                  |
+| `readReplicas.existingExtendedConfigmap`          | Name of an existing ConfigMap with PostgreSQL Read extended configuration                                                | `""`                  |
 | `readReplicas.livenessProbe.enabled`              | Enable livenessProbe on PostgreSQL read only containers                                                                  | `true`                |
 | `readReplicas.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                  | `30`                  |
 | `readReplicas.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                         | `10`                  |
