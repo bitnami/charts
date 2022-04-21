@@ -7,7 +7,7 @@ JasperReports Server is a stand-alone and embeddable reporting server. It is a c
 [Overview of JasperReports](http://community.jaspersoft.com/project/jasperreports-server)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                          | Value           |
@@ -74,7 +73,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonAnnotations` | Annotations to add to all deployed objects                           | `{}`            |
 | `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]`            |
-
 
 ### JasperReports parameters
 
@@ -101,7 +99,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `""`                    |
 | `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `""`                    |
 | `updateStrategy.type`   | StrategyType                                                           | `RollingUpdate`         |
-
 
 ### Jasperreports deployment parameters
 
@@ -165,7 +162,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.existingClaim`             | An Existing PVC name for Jasperreports volume                                             | `""`                       |
 | `persistence.annotations`               | Persistent Volume Claim annotations                                                       | `{}`                       |
 
-
 ### Exposure parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -194,7 +190,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 
-
 ### Database parameters
 
 | Name                                        | Description                                          | Value                   |
@@ -218,7 +213,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.password`                 | Password for the above username                      | `""`                    |
 | `externalDatabase.database`                 | Name of the existing database                        | `bitnami_jasperreports` |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                       | Value   |
@@ -235,7 +229,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                                | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                    | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                        | `{}`    |
-
 
 The above parameters map to the env variables defined in [bitnami/jasperreports](https://github.com/bitnami/bitnami-docker-jasperreports). For more information please refer to the [bitnami/jasperreports](https://github.com/bitnami/bitnami-docker-jasperreports) image documentation.
 
@@ -323,6 +316,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 14.0.0
+
+This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-105-to-mariadb-106/) for upgrading from MariaDB 10.5 to 10.6. No major issues are expected during the upgrade.
 
 ### To 12.0.0
 

@@ -12,7 +12,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - dataflow-database
-    version: 10.x.x
+    version: 11.x.x
   - condition: kafka.enabled
     name: kafka
     repository: https://charts.bitnami.com/bitnami
@@ -39,4 +39,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-spring-cloud-dataflow
   - https://github.com/bitnami/bitnami-docker-spring-cloud-skipper
   - https://dataflow.spring.io/
-version: 7.0.6
+version: 8.0.0
