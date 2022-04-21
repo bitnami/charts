@@ -39,14 +39,14 @@ it('allows a stream to be created', () => {
 });
 
 it('checks if a task is properly created and schedule a task', () => {
+  cy.visit('/dashboard');
   importATaskApplication();
   createATask();
-  cy.visit('/dashboard');
   cy.get('[routerlink="tasks-jobs/tasks"]').click();
   cy.fixture('tasks').then((task) => {
     cy.contains('.datagrid-inner-wrapper', `${task.newTask.name}-${random}`);
   });
-  cy.contains('button', 'Schedule').click();
+  ß;
 });
 
 it('allows importing a task from a file and destroying it ', () => {
