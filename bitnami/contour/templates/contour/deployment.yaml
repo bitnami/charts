@@ -96,6 +96,10 @@ spec:
             - --contour-cert-file=/certs/tls.crt
             - --contour-key-file=/certs/tls.key
             - --config-path=/config/contour.yaml
+            {{- if .Values.contour.debug }}
+            - --debug
+            {{- end }}
+            - --kubernetes-debug={{ .Values.contour.kubernetesDebug }}
             {{- if (include "contour.isIngressClassNameDefined" .) }}
             - --ingress-class-name={{ include "contour.ingressClassName" . }}
             {{- end }}

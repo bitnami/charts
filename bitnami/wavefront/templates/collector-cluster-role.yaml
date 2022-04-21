@@ -2,6 +2,8 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
+  name: {{ printf "%s-collector" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: collector
     kubernetes.io/bootstrapping: rbac-defaults
@@ -13,7 +15,6 @@ metadata:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
-  name: {{ template "common.names.fullname" . }}-collector
 rules:
   - apiGroups:
       - ""
@@ -41,8 +42,11 @@ rules:
       - create
       - list
       - watch
-{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
-{{- if and $pspAvailable .Values.podSecurityPolicy.create }}
+  - nonResourceURLs: ["/metrics"]
+    verbs:
+      - get
+  {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+  {{- if and $pspAvailable .Values.podSecurityPolicy.create }}
   - apiGroups:
       - policy
     resourceNames:
@@ -57,8 +61,8 @@ rules:
       - pods
     verbs:
       - create
-{{- end }}
-{{- if .Values.collector.kubernetesState }}
+  {{- end }}
+  {{- if .Values.collector.kubernetesState }}
   - apiGroups:
       - apps
     resources:
@@ -87,18 +91,18 @@ rules:
       - get
       - list
       - watch
-{{- end }}
-  - nonResourceURLs: ["/metrics"]
+  {{- end }}
+  {{- if .Values.tkgi.enabled }}
+  - apiGroups:
+      - policy
+    resources:
+      - podsecuritypolicies
     verbs:
-      - get
-{{- if .Values.tkgi.enabled }}
-- apiGroups:
-  - policy
-  resources:
-  - podsecuritypolicies
-  verbs:
-  - use
-  resourceNames:
-  - pks-privileged
-{{- end }}
+      - use
+    resourceNames:
+      - pks-privileged
+  {{- end }}
+  {{- if .Values.rbac.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
+  {{- end }}
 {{- end }}

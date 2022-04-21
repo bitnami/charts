@@ -8,8 +8,6 @@ spec:
     kind: WorkflowTaskSet
     listKind: WorkflowTaskSetList
     plural: workflowtasksets
-    shortNames:
-    - wfts
     singular: workflowtaskset
   scope: Namespaced
   versions:
@@ -37,3 +35,5 @@ spec:
         type: object
     served: true
     storage: true
+    subresources:
+      status: {}

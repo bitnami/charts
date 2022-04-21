@@ -4,6 +4,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 {{- $servicePort := or (.Values.service.portEnabled) (not .Values.auth.tls.enabled) | ternary .Values.service.port .Values.service.tlsPort -}}
 {{- $serviceNodePort := or (.Values.service.portEnabled) (not .Values.auth.tls.enabled) | ternary .Values.service.nodePort .Values.service.tlsNodePort -}}
+
 ** Please be patient while the chart is being deployed **
 
 {{- if .Values.diagnosticMode.enabled }}
@@ -50,7 +51,7 @@ To Access the RabbitMQ AMQP port:
 1. Obtain the NodePort IP and ports:
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT_AMQP=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[1].nodePort}" services {{ include "rabbitmq.fullname" . }})
+    export NODE_PORT_AMQP=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[?(@.name=='amqp')].nodePort}" services {{ include "rabbitmq.fullname" . }})
     echo "URL : amqp://$NODE_IP:$NODE_PORT_AMQP/"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
@@ -94,8 +95,8 @@ To Access the RabbitMQ Management interface:
 Obtain the NodePort IP and ports:
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT_AMQP=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[1].nodePort}" services {{ include "rabbitmq.fullname" . }})
-    export NODE_PORT_STATS=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[3].nodePort}" services {{ include "rabbitmq.fullname" . }})
+    export NODE_PORT_AMQP=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[?(@.name=='amqp')].nodePort}" services {{ include "rabbitmq.fullname" . }})
+    export NODE_PORT_STATS=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[?(@.name=='http-stats')].nodePort}" services {{ include "rabbitmq.fullname" . }})
 
 To Access the RabbitMQ AMQP port:
 

@@ -4,9 +4,9 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "common.names.fullname" . }}
   {{- if .Values.serviceMonitor.namespace }}
-  namespace: {{ .Values.serviceMonitor.namespace }}
+  namespace: {{ .Values.serviceMonitor.namespace | quote }}
   {{- else }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}

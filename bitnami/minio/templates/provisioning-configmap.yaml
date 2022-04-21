@@ -1,11 +1,10 @@
 {{- if .Values.provisioning.enabled }}
 {{- $fullname := printf "%s-provisioning" (include "common.names.fullname" .) }}
-{{- $releaseNamespace := .Release.Namespace }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ $fullname }}
-  namespace: {{ $releaseNamespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: minio-provisioning
     {{- if .Values.commonLabels }}

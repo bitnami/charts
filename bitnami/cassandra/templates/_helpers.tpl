@@ -235,7 +235,7 @@ otherwise it generates a new one.
     {{- if $tlsCert }}
         {{- $ca = (get $tlsCert "ca.crt" | b64dec) -}}
         {{- $crt = (get $tlsCert "tls.crt" | b64dec) -}}
-        {{- $key = (get $tlsCert "tls.keye" | b64dec) -}}
+        {{- $key = (get $tlsCert "tls.key" | b64dec) -}}
     {{- else -}}
         {{- $caFull := genCA "cassandra-ca" 365 }}
         {{- $fullname := include "common.names.fullname" . }}

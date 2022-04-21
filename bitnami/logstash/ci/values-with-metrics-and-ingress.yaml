@@ -4,9 +4,7 @@
 ingress:
   enabled: true
   tls: []
-
-podDisruptionBudget:
+pdb:
   create: true
-
 metrics:
   enabled: true

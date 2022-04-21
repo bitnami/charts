@@ -75,6 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 | `global.labels`           | Additional labels to apply to all resources     | `{}`  |
 
+
 ### Common parameters
 
 | Name               | Description                                                                                                | Value |
@@ -83,6 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `fullnameOverride` | String to fully override `kube-prometheus.fullname` template with a string                                 | `""`  |
 | `extraDeploy`      | Array of extra objects to deploy with the release                                                          | `[]`  |
 
+
 ### Prometheus Operator Parameters
 
 | Name                                                                                  | Description                                                                                                            | Value                         |
@@ -90,7 +92,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.enabled`                                                                    | Deploy Prometheus Operator to the cluster                                                                              | `true`                        |
 | `operator.image.registry`                                                             | Prometheus Operator image registry                                                                                     | `docker.io`                   |
 | `operator.image.repository`                                                           | Prometheus Operator image repository                                                                                   | `bitnami/prometheus-operator` |
-| `operator.image.tag`                                                                  | Prometheus Operator Image tag (immutable tags are recommended)                                                         | `0.53.1-debian-10-r27`        |
+| `operator.image.tag`                                                                  | Prometheus Operator Image tag (immutable tags are recommended)                                                         | `0.55.1-debian-10-r7`         |
 | `operator.image.pullPolicy`                                                           | Prometheus Operator image pull policy                                                                                  | `IfNotPresent`                |
 | `operator.image.pullSecrets`                                                          | Specify docker-registry secret names as an array                                                                       | `[]`                          |
 | `operator.extraArgs`                                                                  | Additional arguments passed to Prometheus Operator                                                                     | `[]`                          |
@@ -167,6 +169,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.prometheusConfigReloader.readinessProbe.failureThreshold`                   | Minimum consecutive failures for the probe                                                                             | `6`                           |
 | `operator.prometheusConfigReloader.readinessProbe.successThreshold`                   | Minimum consecutive successes for the probe                                                                            | `1`                           |
 
+
 ### Prometheus Parameters
 
 | Name                                                                  | Description                                                                                                                      | Value                    |
@@ -174,7 +177,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.enabled`                                                  | Deploy Prometheus to the cluster                                                                                                 | `true`                   |
 | `prometheus.image.registry`                                           | Prometheus image registry                                                                                                        | `docker.io`              |
 | `prometheus.image.repository`                                         | Prometheus image repository                                                                                                      | `bitnami/prometheus`     |
-| `prometheus.image.tag`                                                | Prometheus Image tag (immutable tags are recommended)                                                                            | `2.32.1-debian-10-r28`   |
+| `prometheus.image.tag`                                                | Prometheus Image tag (immutable tags are recommended)                                                                            | `2.33.5-debian-10-r24`   |
 | `prometheus.image.pullSecrets`                                        | Specify docker-registry secret names as an array                                                                                 | `[]`                     |
 | `prometheus.serviceAccount.create`                                    | Specify whether to create a ServiceAccount for Prometheus                                                                        | `true`                   |
 | `prometheus.serviceAccount.name`                                      | The name of the ServiceAccount to create                                                                                         | `""`                     |
@@ -199,7 +202,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.service.externalTrafficPolicy`                            | Enable client source IP preservation                                                                                             | `Cluster`                |
 | `prometheus.service.healthCheckNodePort`                              | Specifies the health check node port                                                                                             | `""`                     |
 | `prometheus.service.stickySessions`                                   | Set stickySessions to `true` to enable Session Affinity                                                                          | `""`                     |
-| `prometheus.service.annotations`                                      | Additional annotations for Prometheus service (this value is evaluated as a template)                                            | `{}`                     |
+| `prometheus.service.annotations`                                      | Additional annotations for Prometheus service  (this value is evaluated as a template)                                           | `{}`                     |
 | `prometheus.serviceMonitor.enabled`                                   | Creates a ServiceMonitor to monitor Prometheus itself                                                                            | `true`                   |
 | `prometheus.serviceMonitor.interval`                                  | Scrape interval (use by default, falling back to Prometheus' default)                                                            | `""`                     |
 | `prometheus.serviceMonitor.metricRelabelings`                         | Metric relabeling                                                                                                                | `[]`                     |
@@ -208,7 +211,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.ingress.pathType`                                         | Ingress Path type                                                                                                                | `ImplementationSpecific` |
 | `prometheus.ingress.apiVersion`                                       | Override API Version (automatically detected if not set)                                                                         | `""`                     |
 | `prometheus.ingress.hostname`                                         | Default host for the ingress resource                                                                                            | `prometheus.local`       |
-| `prometheus.ingress.path`                                             | The Path to Prometheus. You may need to set this to '/\*' in order to use this with ALB ingress controllers                      | `/`                      |
+| `prometheus.ingress.path`                                             | The Path to Prometheus. You may need to set this to '/*' in order to use this with ALB ingress controllers                       | `/`                      |
 | `prometheus.ingress.annotations`                                      | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `prometheus.ingress.ingressClassName`                                 | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `prometheus.ingress.tls`                                              | Enable TLS configuration for the hostname defined at prometheus.ingress.hostname parameter                                       | `false`                  |
@@ -243,9 +246,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.readinessProbe.timeoutSeconds`                            | When the probe times out                                                                                                         | `3`                      |
 | `prometheus.readinessProbe.failureThreshold`                          | Minimum consecutive failures for the probe                                                                                       | `10`                     |
 | `prometheus.readinessProbe.successThreshold`                          | Minimum consecutive successes for the probe                                                                                      | `1`                      |
-| `prometheus.startupProbe.enabled`                                     | Turn on and off startup probe                                                                                                  | `true`                   |
+| `prometheus.startupProbe.enabled`                                     | Turn on and off readiness probe                                                                                                  | `true`                   |
 | `prometheus.startupProbe.path`                                        | Path of the HTTP service for checking the ready state                                                                            | `/-/ready`               |
-| `prometheus.startupProbe.initialDelaySeconds`                         | Delay before startup probe is initiated                                                                                        | `0`                      |
+| `prometheus.startupProbe.initialDelaySeconds`                         | Delay before readiness probe is initiated                                                                                        | `0`                      |
 | `prometheus.startupProbe.periodSeconds`                               | How often to perform the probe                                                                                                   | `15`                     |
 | `prometheus.startupProbe.timeoutSeconds`                              | When the probe times out                                                                                                         | `3`                      |
 | `prometheus.startupProbe.failureThreshold`                            | Minimum consecutive failures for the probe                                                                                       | `60`                     |
@@ -306,7 +309,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.create`                                            | Create a Thanos sidecar container                                                                                                | `false`                  |
 | `prometheus.thanos.image.registry`                                    | Thanos image registry                                                                                                            | `docker.io`              |
 | `prometheus.thanos.image.repository`                                  | Thanos image name                                                                                                                | `bitnami/thanos`         |
-| `prometheus.thanos.image.tag`                                         | Thanos image tag                                                                                                                 | `0.24.0-scratch-r2`      |
+| `prometheus.thanos.image.tag`                                         | Thanos image tag                                                                                                                 | `0.25.2-scratch-r1`      |
 | `prometheus.thanos.image.pullPolicy`                                  | Thanos image pull policy                                                                                                         | `IfNotPresent`           |
 | `prometheus.thanos.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                 | `[]`                     |
 | `prometheus.thanos.containerSecurityContext.enabled`                  | Enable container security context                                                                                                | `true`                   |
@@ -349,6 +352,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.ingress.tls`                                       | The tls configuration for the ingress                                                                                            | `{}`                     |
 | `prometheus.portName`                                                 | Port name used for the pods and governing service. This defaults to web                                                          | `web`                    |
 
+
 ### Alertmanager Parameters
 
 | Name                                                             | Description                                                                                                                                                                                                                                                                                                | Value                    |
@@ -356,7 +360,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.enabled`                                           | Deploy Alertmanager to the cluster                                                                                                                                                                                                                                                                         | `true`                   |
 | `alertmanager.image.registry`                                    | Prometheus image registry                                                                                                                                                                                                                                                                                  | `docker.io`              |
 | `alertmanager.image.repository`                                  | Prometheus Image repository                                                                                                                                                                                                                                                                                | `bitnami/alertmanager`   |
-| `alertmanager.image.tag`                                         | Prometheus Image tag (immutable tags are recommended)                                                                                                                                                                                                                                                      | `0.23.0-debian-10-r140`  |
+| `alertmanager.image.tag`                                         | Prometheus Image tag (immutable tags are recommended)                                                                                                                                                                                                                                                      | `0.24.0-debian-10-r8`    |
 | `alertmanager.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                                                                                                                                                                                           | `[]`                     |
 | `alertmanager.serviceAccount.create`                             | Specify whether to create a ServiceAccount for Alertmanager                                                                                                                                                                                                                                                | `true`                   |
 | `alertmanager.serviceAccount.name`                               | The name of the ServiceAccount to create                                                                                                                                                                                                                                                                   | `""`                     |
@@ -389,7 +393,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.ingress.pathType`                                  | Ingress Path type                                                                                                                                                                                                                                                                                          | `ImplementationSpecific` |
 | `alertmanager.ingress.apiVersion`                                | Override API Version (automatically detected if not set)                                                                                                                                                                                                                                                   | `""`                     |
 | `alertmanager.ingress.hostname`                                  | Default host for the ingress resource                                                                                                                                                                                                                                                                      | `alertmanager.local`     |
-| `alertmanager.ingress.path`                                      | The Path to Alert Manager. You may need to set this to '/\*' in order to use this with ALB ingress controllers.                                                                                                                                                                                            | `/`                      |
+| `alertmanager.ingress.path`                                      | The Path to Alert Manager. You may need to set this to '/*' in order to use this with ALB ingress controllers.                                                                                                                                                                                             | `/`                      |
 | `alertmanager.ingress.annotations`                               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.                                                                                                                                                                           | `{}`                     |
 | `alertmanager.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                                                                                                                                                                                              | `""`                     |
 | `alertmanager.ingress.tls`                                       | Enable TLS configuration for the hostname defined at alertmanager.ingress.hostname parameter                                                                                                                                                                                                               | `false`                  |
@@ -448,22 +452,112 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.configSelector`                                    | Namespaces to be selected for AlertmanagerConfig discovery. If nil, only check own namespace. This defaults to {}                                                                                                                                                                                          | `{}`                     |
 | `alertmanager.configuration`                                     | EXPERIMENTAL: alertmanagerConfiguration specifies the global Alertmanager configuration. If defined, it takes precedence over the `configSecret` field. This field may change in future releases. The specified global alertmanager config will not force add a namespace label in routes and inhibitRules | `{}`                     |
 
+
 ### Exporters
+
+| Name                                               | Description                                                                                            | Value         |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------- |
+| `exporters.node-exporter.enabled`                  | Enable node-exporter                                                                                   | `true`        |
+| `exporters.kube-state-metrics.enabled`             | Enable kube-state-metrics                                                                              | `true`        |
+| `node-exporter`                                    | Node Exporter deployment configuration                                                                 | `{}`          |
+| `kube-state-metrics`                               | Kube State Metrics deployment configuration                                                            | `{}`          |
+| `kubelet.enabled`                                  | Create a ServiceMonitor to scrape kubelet service                                                      | `true`        |
+| `kubelet.namespace`                                | Namespace where kubelet service is deployed. Related configuration `operator.kubeletService.namespace` | `kube-system` |
+| `kubelet.serviceMonitor.https`                     | Enable scraping of the kubelet over HTTPS                                                              | `true`        |
+| `kubelet.serviceMonitor.interval`                  | Scrape interval (use by default, falling back to Prometheus' default)                                  | `""`          |
+| `kubelet.serviceMonitor.metricRelabelings`         | Metric relabeling                                                                                      | `[]`          |
+| `kubelet.serviceMonitor.relabelings`               | Relabel configs                                                                                        | `[]`          |
+| `kubelet.serviceMonitor.cAdvisorMetricRelabelings` | Metric relabeling for scraping cAdvisor                                                                | `[]`          |
+| `kubelet.serviceMonitor.cAdvisorRelabelings`       | Relabel configs for scraping cAdvisor                                                                  | `[]`          |
+
+
+### Blackbox Exporter Deployment Parameters
+
+| Name                                                           | Description                                                                                                | Value                       |
+| -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `blackboxExporter.enabled`                                     | Enable Blackbox Exporter deployment                                                                        | `true`                      |
+| `blackboxExporter.image.registry`                              | Blackbox Exporter image registry                                                                           | `docker.io`                 |
+| `blackboxExporter.image.repository`                            | Blackbox Exporter Image repository                                                                         | `bitnami/blackbox-exporter` |
+| `blackboxExporter.image.pullPolicy`                            | Blackbox Exporter Image pull policy                                                                        | `IfNotPresent`              |
+| `blackboxExporter.image.tag`                                   | Blackbox Exporter Image tag (immutable tags are recommended)                                               | `0.20.0-debian-10-r19`      |
+| `blackboxExporter.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                           | `[]`                        |
+| `blackboxExporter.extraEnvVars`                                | Array with extra environment variables to add to blackboxExporter nodes                                    | `[]`                        |
+| `blackboxExporter.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for blackboxExporter nodes                            | `""`                        |
+| `blackboxExporter.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for blackboxExporter nodes                               | `""`                        |
+| `blackboxExporter.command`                                     | Override default container command (useful when using custom images)                                       | `[]`                        |
+| `blackboxExporter.args`                                        | Override default container args (useful when using custom images)                                          | `[]`                        |
+| `blackboxExporter.replicaCount`                                | Number of Blackbox Exporter replicas to deploy                                                             | `1`                         |
+| `blackboxExporter.livenessProbe.enabled`                       | Enable livenessProbe on Blackbox Exporter nodes                                                            | `true`                      |
+| `blackboxExporter.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                    | `30`                        |
+| `blackboxExporter.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                           | `10`                        |
+| `blackboxExporter.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                          | `1`                         |
+| `blackboxExporter.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                        | `3`                         |
+| `blackboxExporter.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                        | `1`                         |
+| `blackboxExporter.readinessProbe.enabled`                      | Enable readinessProbe on Blackbox Exporter nodes                                                           | `true`                      |
+| `blackboxExporter.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                                   | `60`                        |
+| `blackboxExporter.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                          | `10`                        |
+| `blackboxExporter.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                         | `1`                         |
+| `blackboxExporter.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                       | `3`                         |
+| `blackboxExporter.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                       | `1`                         |
+| `blackboxExporter.startupProbe.enabled`                        | Enable startupProbe on Blackbox Exporter containers                                                        | `false`                     |
+| `blackboxExporter.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                                     | `30`                        |
+| `blackboxExporter.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                            | `10`                        |
+| `blackboxExporter.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                           | `1`                         |
+| `blackboxExporter.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                         | `15`                        |
+| `blackboxExporter.startupProbe.successThreshold`               | Success threshold for startupProbe                                                                         | `1`                         |
+| `blackboxExporter.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                        | `{}`                        |
+| `blackboxExporter.customReadinessProbe`                        | Custom readinessProbe that overrides the default one                                                       | `{}`                        |
+| `blackboxExporter.customStartupProbe`                          | Custom startupProbe that overrides the default one                                                         | `{}`                        |
+| `blackboxExporter.configuration`                               | Blackbox Exporter configuration                                                                            | `{}`                        |
+| `blackboxExporter.existingConfigMap`                           | ConfigMap pointing to the Blackbox Exporter configuration                                                  | `""`                        |
+| `blackboxExporter.containerPorts.http`                         | Blackbox Exporter HTTP container port                                                                      | `19115`                     |
+| `blackboxExporter.serviceAccount.create`                       | Enable creation of ServiceAccount for WordPress pod                                                        | `true`                      |
+| `blackboxExporter.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                     | `""`                        |
+| `blackboxExporter.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                     | `true`                      |
+| `blackboxExporter.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                       | `{}`                        |
+| `blackboxExporter.resources.limits`                            | The resources limits for the blackboxExporter containers                                                   | `{}`                        |
+| `blackboxExporter.resources.requests`                          | The requested resources for the blackboxExporter containers                                                | `{}`                        |
+| `blackboxExporter.podSecurityContext.enabled`                  | Enabled Blackbox Exporter pods' Security Context                                                           | `true`                      |
+| `blackboxExporter.podSecurityContext.fsGroup`                  | Set Blackbox Exporter pod's Security Context fsGroup                                                       | `1001`                      |
+| `blackboxExporter.containerSecurityContext.enabled`            | Enabled Blackbox Exporter containers' Security Context                                                     | `true`                      |
+| `blackboxExporter.containerSecurityContext.runAsUser`          | Set Blackbox Exporter containers' Security Context runAsUser                                               | `1001`                      |
+| `blackboxExporter.containerSecurityContext.runAsNonRoot`       | Set Blackbox Exporter containers' Security Context runAsNonRoot                                            | `true`                      |
+| `blackboxExporter.lifecycleHooks`                              | for the blackboxExporter container(s) to automate configuration before or after startup                    | `{}`                        |
+| `blackboxExporter.hostAliases`                                 | blackboxExporter pods host aliases                                                                         | `[]`                        |
+| `blackboxExporter.podLabels`                                   | Extra labels for blackboxExporter pods                                                                     | `{}`                        |
+| `blackboxExporter.podAnnotations`                              | Annotations for blackboxExporter pods                                                                      | `{}`                        |
+| `blackboxExporter.podAffinityPreset`                           | Pod affinity preset. Ignored if `blackboxExporter.affinity` is set. Allowed values: `soft` or `hard`       | `""`                        |
+| `blackboxExporter.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `blackboxExporter.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                      |
+| `blackboxExporter.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `blackboxExporter.affinity` is set. Allowed values: `soft` or `hard` | `""`                        |
+| `blackboxExporter.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `blackboxExporter.affinity` is set                                     | `""`                        |
+| `blackboxExporter.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `blackboxExporter.affinity` is set                                  | `[]`                        |
+| `blackboxExporter.affinity`                                    | Affinity for Blackbox Exporter pods assignment                                                             | `{}`                        |
+| `blackboxExporter.nodeSelector`                                | Node labels for Blackbox Exporter pods assignment                                                          | `{}`                        |
+| `blackboxExporter.tolerations`                                 | Tolerations for Blackbox Exporter pods assignment                                                          | `[]`                        |
+| `blackboxExporter.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains            | `{}`                        |
+| `blackboxExporter.priorityClassName`                           | Blackbox Exporter pods' priorityClassName                                                                  | `""`                        |
+| `blackboxExporter.schedulerName`                               | Kubernetes pod scheduler registry                                                                          | `""`                        |
+| `blackboxExporter.updateStrategy.type`                         | Blackbox Exporter statefulset strategy type                                                                | `RollingUpdate`             |
+| `blackboxExporter.extraVolumes`                                | Optionally specify extra list of additional volumes for the Blackbox Exporter pod(s)                       | `[]`                        |
+| `blackboxExporter.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the Blackbox Exporter container(s)            | `[]`                        |
+| `blackboxExporter.sidecars`                                    | Add additional sidecar containers to the Blackbox Exporter pod(s)                                          | `[]`                        |
+| `blackboxExporter.initContainers`                              | Add additional init containers to the Blackbox Exporter pod(s)                                             | `[]`                        |
+
+
+### Blackbox Exporter Traffic Exposure Parameters
 
 | Name                                                      | Description                                                                                                                     | Value         |
 | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| `exporters.node-exporter.enabled`                         | Enable node-exporter                                                                                                            | `true`        |
-| `exporters.kube-state-metrics.enabled`                    | Enable kube-state-metrics                                                                                                       | `true`        |
-| `node-exporter`                                           | Node Exporter deployment configuration                                                                                          | `{}`          |
-| `kube-state-metrics`                                      | Kube State Metrics deployment configuration                                                                                     | `{}`          |
-| `kubelet.enabled`                                         | Create a ServiceMonitor to scrape kubelet service                                                                               | `true`        |
-| `kubelet.namespace`                                       | Namespace where kubelet service is deployed. Related configuration `operator.kubeletService.namespace`                          | `kube-system` |
-| `kubelet.serviceMonitor.https`                            | Enable scraping of the kubelet over HTTPS                                                                                       | `true`        |
-| `kubelet.serviceMonitor.interval`                         | Scrape interval (use by default, falling back to Prometheus' default)                                                           | `""`          |
-| `kubelet.serviceMonitor.metricRelabelings`                | Metric relabeling                                                                                                               | `[]`          |
-| `kubelet.serviceMonitor.relabelings`                      | Relabel configs                                                                                                                 | `[]`          |
-| `kubelet.serviceMonitor.cAdvisorMetricRelabelings`        | Metric relabeling for scraping cAdvisor                                                                                         | `[]`          |
-| `kubelet.serviceMonitor.cAdvisorRelabelings`              | Relabel configs for scraping cAdvisor                                                                                           | `[]`          |
+| `blackboxExporter.service.type`                           | Blackbox Exporter service type                                                                                                  | `ClusterIP`   |
+| `blackboxExporter.service.ports.http`                     | Blackbox Exporter HTTP service port                                                                                             | `19115`       |
+| `blackboxExporter.service.nodePorts.http`                 | Node port for HTTP                                                                                                              | `""`          |
+| `blackboxExporter.service.sessionAffinity`                | Control where client requests go, to the same pod or round-robin                                                                | `None`        |
+| `blackboxExporter.service.clusterIP`                      | Blackbox Exporter service Cluster IP                                                                                            | `""`          |
+| `blackboxExporter.service.loadBalancerIP`                 | Blackbox Exporter service Load Balancer IP                                                                                      | `""`          |
+| `blackboxExporter.service.loadBalancerSourceRanges`       | Blackbox Exporter service Load Balancer sources                                                                                 | `[]`          |
+| `blackboxExporter.service.externalTrafficPolicy`          | Blackbox Exporter service external traffic policy                                                                               | `Cluster`     |
+| `blackboxExporter.service.annotations`                    | Additional custom annotations for Blackbox Exporter service                                                                     | `{}`          |
+| `blackboxExporter.service.extraPorts`                     | Extra ports to expose in the Blackbox Exporter service                                                                          | `[]`          |
 | `kubeApiServer.enabled`                                   | Create a ServiceMonitor to scrape kube-apiserver service                                                                        | `true`        |
 | `kubeApiServer.serviceMonitor.interval`                   | Scrape interval. If not set, the Prometheus default scrape interval is used.                                                    | `""`          |
 | `kubeApiServer.serviceMonitor.metricRelabelings`          | Metric relabeling                                                                                                               | `[]`          |
@@ -516,6 +610,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeProxy.serviceMonitor.metricRelabelings`              | Metric relabeling                                                                                                               | `[]`          |
 | `kubeProxy.serviceMonitor.relabelings`                    | Relabel configs                                                                                                                 | `[]`          |
 
+
 ### RBAC parameters
 
 | Name              | Description                                                                                                                                                        | Value     |
@@ -523,6 +618,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`     | Whether to create and use RBAC resources or not                                                                                                                    | `true`    |
 | `rbac.apiVersion` | Version of the RBAC API                                                                                                                                            | `v1beta1` |
 | `rbac.pspEnabled` | Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true`    |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

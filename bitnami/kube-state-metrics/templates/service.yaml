@@ -6,6 +6,7 @@ metadata:
   annotations:
     {{- if not .Values.serviceMonitor.enabled }}
     prometheus.io/scrape: "true"
+    prometheus.io/port: {{ .Values.service.port | quote }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}

@@ -3,7 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "postgresql.primary.fullname" . }}
-  namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace }}
+  namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: metrics
     {{- if .Values.metrics.serviceMonitor.labels }}
@@ -44,5 +44,5 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ .Release.Namespace | quote }}
 {{- end }}

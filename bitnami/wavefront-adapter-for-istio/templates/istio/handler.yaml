@@ -15,7 +15,7 @@ metadata:
 spec:
   adapter: {{ include "common.names.fullname" . }}-wavefront
   connection:
-    address: {{ printf "%s.%s.svc.%s:%d" (include "common.names.fullname" .) .Release.Namespace .Values.clusterDomain (int .Values.service.port) }}
+    address: {{ printf "%s.%s.svc.%s:%d" (include "common.names.fullname" .) .Release.Namespace .Values.clusterDomain (coalesce .Values.service.ports.grpc .Values.service.port | int) }}
   params:
     {{- if  .Values.wavefront.proxy.enabled }}
     proxy:

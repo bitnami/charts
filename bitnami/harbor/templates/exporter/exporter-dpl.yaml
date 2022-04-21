@@ -113,6 +113,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: "{{ include "harbor.exporter" . }}-envvars"
+            - secretRef:
+                name: "{{ include "harbor.exporter" . }}-envvars"
           ports:
             - containerPort: {{ .Values.exporter.containerPorts.metrics }}
               name: metrics
