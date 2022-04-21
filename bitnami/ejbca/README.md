@@ -7,7 +7,7 @@ EJBCA is an enterprise class PKI Certificate Authority software, built using Jav
 [Overview of EJBCA](http://www.ejbca.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -61,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value          |
@@ -75,7 +74,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
-
 
 ### EJBCA parameters
 
@@ -156,7 +154,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customReadinessProbe`                  | Custom readiness probe to execute (when the main one is disabled)                         | `{}`                    |
 | `containerPorts`                        | EJBCA Container ports to open                                                             | `{}`                    |
 
-
 ### Service parameters
 
 | Name                               | Description                                                                   | Value          |
@@ -176,7 +173,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"          | `None`         |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                   | `{}`           |
 
-
 ### Ingress parameters
 
 | Name                       | Description                                                                                                                      | Value                    |
@@ -193,7 +189,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`         | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`          | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName` | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-
 
 ### Database parameters
 
@@ -218,7 +213,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                 | Name of the existing database                                                              | `bitnami_ejbca` |
 | `externalDatabase.port`                     | Database port number                                                                       | `3306`          |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                               | Value   |
@@ -235,7 +229,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                        | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                            | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                | `{}`    |
-
 
 The above parameters map to the env variables defined in [bitnami/ejbca](https://github.com/bitnami/bitnami-docker-ejbca). For more information please refer to the [bitnami/ejbca](https://github.com/bitnami/bitnami-docker-ejbca) image documentation.
 
@@ -312,6 +305,10 @@ Persistent Volume Claims are used to keep the data across deployments. This is k
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 6.0.0
+
+The MariaDB subchart has been updated to the latest version (now it uses 10.6). No major issues are expected during the upgrade.
 
 ### To 5.0.0
 
