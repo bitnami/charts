@@ -3,7 +3,6 @@ import { random, getPageUrlFromTitle, getUserFromEmail } from './utils';
 
 it('allows to log in and out', () => {
   cy.login();
-
   cy.get("div[class*='avatar']").click();
   cy.contains('Sign out').click();
   cy.contains('Sign in');
@@ -12,7 +11,6 @@ it('allows to log in and out', () => {
 it('allows to create and publish a new post', () => {
   cy.login();
   cy.visit('/ghost/#/posts');
-
   cy.contains('New post').click();
   cy.get('input[type="file"]').selectFile(
     'cypress/fixtures/images/post_image.png',
@@ -36,7 +34,6 @@ it('allows to create and publish a new post', () => {
     cy.contains('Publish').click();
   });
   cy.contains('Published').should('be.visible');
-
   cy.visit('/');
   cy.fixture('posts').then(($posts) => {
     cy.contains(`${$posts.newPost.title}-${random}`);
@@ -47,7 +44,6 @@ it('allows to create and publish a new post', () => {
 it('allows to create a new page', () => {
   cy.login();
   cy.visit('/ghost/#/pages');
-
   cy.contains('New page').click();
   cy.fixture('pages').then(($pages) => {
     cy.get('textarea[placeholder="Page title"]').type(
@@ -63,7 +59,6 @@ it('allows to create a new page', () => {
     cy.contains('Publish').click();
   });
   cy.contains('Published').should('be.visible');
-
   cy.fixture('pages').then(($pages) => {
     cy.visit(getPageUrlFromTitle(`${$pages.newPage.title}-${random}`));
     cy.contains(`${$pages.newPage.title}-${random}`);
@@ -74,14 +69,12 @@ it('allows to create a new page', () => {
 it('allows to import members', () => {
   cy.login();
   cy.visit('/ghost/#/members/import');
-
   cy.contains('h1', 'Import members').should('be.visible');
   cy.get('input[type="file"]').selectFile('cypress/fixtures/members.csv', {
     force: true,
   });
   cy.contains('button', 'Import').click();
   cy.contains('Import complete');
-
   cy.visit('/ghost/#/members/');
   cy.fixture('members')
     .then(($rawMembers) => {
@@ -99,7 +92,6 @@ it('allows to import members', () => {
 it('allows to change users settings', () => {
   cy.login();
   cy.visit(`/ghost/#/settings/staff/${getUserFromEmail()}`);
-
   cy.fixture('user-settings').then(($us) => {
     cy.get('input#user-name')
       .clear()
