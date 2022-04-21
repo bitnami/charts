@@ -2,9 +2,7 @@
 import { random, getPageUrlFromTitle, getUserFromEmail } from './utils';
 
 it('allows to log in and out', () => {
-  cy.login(Cypress.env('email'), Cypress.env('password'), false);
-  cy.contains('Retry').should('not.exist');
-  cy.contains('Dashboard').should('be.visible');
+  cy.login();
 
   cy.get("div[class*='avatar']").click();
   cy.contains('Sign out').click();

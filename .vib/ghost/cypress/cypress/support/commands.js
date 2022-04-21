@@ -24,28 +24,25 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
 
 Cypress.Commands.add(
   'login',
-  (
-    email = Cypress.env('email'),
-    password = Cypress.env('password'),
-    waitForDashboard = true
-  ) => {
+  (email = Cypress.env('email'), password = Cypress.env('password')) => {
     cy.visit('/ghost/');
     cy.get('input[type="email"]').should('be.enabled').type(email);
     cy.get('input[type="password"]').should('be.enabled').type(password);
     cy.contains('button', 'Sign in').click();
-    if (waitForDashboard) {
-      // In Ghost, logging is not considered as completed until the Dashboard view
-      // is visible. Navigating to any other site before that will lead to an error
-      // 500
-      cy.contains('Dashboard').should('be.visible');
-    }
+    // In Ghost, logging is not considered as completed until the Dashboard view
+    // is visible. Navigating to any other site before that will lead to an error
+    // 500
+    cy.contains('Dashboard').should('be.visible');
   }
 );
 
 Cypress.on('uncaught:exception', (err, runnable) => {
   // we expect a 3rd party library error with message 'ember-concurrency'
   // and don't want to fail the test so we return false
-  if (err.message.includes('ember-concurrency') || err.message.includes('Cannot read properties')) {
+  if (
+    err.message.includes('ember-concurrency') ||
+    err.message.includes('Cannot read properties')
+  ) {
     return false;
   }
   // we still want to ensure there are no other unexpected
