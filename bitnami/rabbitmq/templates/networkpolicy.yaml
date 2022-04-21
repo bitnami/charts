@@ -17,7 +17,7 @@ spec:
   ingress:
     # Allow inbound connections
     - ports:
-        - port: {{ .Values.service.ports.epmd }}4369  # EPMD
+        - port: {{ .Values.service.ports.epmd }}  # EPMD
         - port: {{ .Values.service.ports.amqp }}
         - port: {{ .Values.service.ports.amqpTls }}
         - port: {{ .Values.service.ports.dist }}
