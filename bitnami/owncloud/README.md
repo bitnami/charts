@@ -7,7 +7,7 @@ ownCloud is an open source content collaboration platform used to store and shar
 [Overview of ownCloud](http://owncloud.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name               | Description                                                                              | Value |
@@ -71,7 +70,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nameOverride`     | String to partially override owncloud.fullname template (will maintain the release name) | `""`  |
 | `fullnameOverride` | String to fully override owncloud.fullname template                                      | `""`  |
 | `extraDeploy`      | Array of extra objects to deploy with the release (evaluated as a template)              | `[]`  |
-
 
 ### ownCloud parameters
 
@@ -157,7 +155,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                        | Pod annotations                                                                                              | `{}`                  |
 | `podLabels`                             | Pod extra labels                                                                                             | `{}`                  |
 
-
 ### Database parameters
 
 | Name                                        | Description                                                                              | Value               |
@@ -181,7 +178,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_owncloud`  |
 | `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                           | `""`                |
 
-
 ### Persistence parameters
 
 | Name                        | Description                                                                | Value               |
@@ -193,7 +189,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.existingClaim` | An Existing PVC name for ownCloud volume                                   | `""`                |
 | `persistence.hostPath`      | If defined, the owncloud-data volume will mount to the specified hostPath. | `""`                |
 | `persistence.annotations`   | Persistent Volume Claim annotations                                        | `{}`                |
-
 
 ### Volume Permissions parameters
 
@@ -207,7 +202,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
-
 
 ### Traffic Exposure Parameters
 
@@ -239,7 +233,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 
-
 ### Metrics parameters
 
 | Name                                       | Description                                                          | Value                     |
@@ -260,7 +253,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.externalTrafficPolicy`    | Metrics service external traffic policy                              | `Cluster`                 |
 | `metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP" | `None`                    |
 | `metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                          | `{}`                      |
-
 
 ### Certificate injection parameters
 
@@ -284,7 +276,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                  | Value   |
@@ -304,7 +295,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                           | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                               | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                   | `{}`    |
-
 
 The above parameters map to the env variables defined in [bitnami/owncloud](https://github.com/bitnami/bitnami-docker-owncloud). For more information please refer to the [bitnami/owncloud](https://github.com/bitnami/bitnami-docker-owncloud) image documentation.
 
@@ -431,6 +421,10 @@ kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 12.0.0
+
+This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-105-to-mariadb-106/) for upgrading from MariaDB 10.5 to 10.6. No major issues are expected during the upgrade.
 
 ### To 11.0.0
 
