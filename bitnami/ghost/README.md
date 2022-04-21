@@ -7,7 +7,7 @@ Ghost is an open source publishing platform designed to create blogs, magazines,
 [Overview of Ghost](https://ghost.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                        | Value           |
@@ -75,7 +74,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
 
-
 ### Ghost Image parameters
 
 | Name                | Description                                      | Value                 |
@@ -86,7 +84,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`  | Ghost image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Ghost image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                          | `false`               |
-
 
 ### Ghost Configuration parameters
 
@@ -114,7 +111,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`       | Array with extra environment variables to add to the Ghost container | `[]`               |
 | `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                 | `""`               |
 | `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                    | `""`               |
-
 
 ### Ghost deployment parameters
 
@@ -171,7 +167,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
 | `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -203,7 +198,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 
-
 ### Persistence Parameters
 
 | Name                                          | Description                                                                                     | Value                   |
@@ -224,7 +218,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
-
 
 ### Database Parameters
 
@@ -250,7 +243,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.ssl`                     | External Database ssl                                                     | `false`         |
 | `externalDatabase.sslCaFile`               | External Database ssl CA filepath                                         | `""`            |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                               | Value   |
@@ -268,7 +260,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                            | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                | `{}`    |
 | `serviceAccount.name`                                         | Service Account Name                                                                                                      | `""`    |
-
 
 The above parameters map to the env variables defined in [bitnami/ghost](https://github.com/bitnami/bitnami-docker-ghost). For more information please refer to the [bitnami/ghost](https://github.com/bitnami/bitnami-docker-ghost) image documentation.
 
@@ -379,6 +370,10 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 17.0.0
+
+This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-105-to-mariadb-106/) for upgrading from MariaDB 10.5 to 10.6. No major issues are expected during the upgrade.
 
 ### To 16.0.0
 
