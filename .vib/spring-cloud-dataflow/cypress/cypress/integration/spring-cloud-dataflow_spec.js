@@ -38,15 +38,39 @@ it('allows a stream to be created', () => {
   });
 });
 
+it('allows a stream to be deployed', () => {
+  importAStreamApplication();
+  cy.visit('dashboard/#/streams/list');
+  cy.contains('clr-dg-cell', 'UNDEPLOYED')
+    .siblings('clr-dg-cell', 'test-stream')
+    .first()
+    .click();
+  cy.contains('button#btn-deploy', 'Deploy stream').click();
+  cy.contains('button', 'Deploy stream').click();
+  cy.contains('.modal-content', 'Deploy stream');
+  cy.get('.toast-container').should('contain', 'Deploy success');
+});
+
 it('checks if a task is properly created and schedule a task', () => {
+  const CRON_EXPRESSION = '*/5 * * * *';
+
   cy.visit('/dashboard');
   importATaskApplication();
   createATask();
   cy.get('[routerlink="tasks-jobs/tasks"]').click();
-  cy.fixture('tasks').then((task) => {
-    cy.contains('.datagrid-inner-wrapper', `${task.newTask.name}-${random}`);
+  cy.contains('clr-dg-cell', 'UNKNOWN')
+    .siblings('clr-dg-cell', 'test-task')
+    .first()
+    .click();
+  cy.contains('button', 'Schedule').click();
+  cy.fixture('schedules').then((schedule) => {
+    cy.get('input[name="example"]')
+      .first()
+      .type(`${schedule.newSchedule.name}-${random}`);
   });
-  ß;
+  cy.get('#clr-form-control-8').type(CRON_EXPRESSION);
+  cy.contains('button', 'Create schedule(s)').click();
+  cy.contains('.toast-container', 'Successfully');
 });
 
 it('allows importing a task from a file and destroying it ', () => {
@@ -63,7 +87,7 @@ it('allows importing a task from a file and destroying it ', () => {
   cy.get('[routerlink="tasks-jobs/tasks"]').click();
   cy.contains('button', 'Group Actions').click();
   cy.get('[aria-label="Select All"]').click({ force: true });
-  cy.contains('button', 'Destroy task').click(); //remove comments
+  cy.contains('button', 'Destroy task').click();
   cy.contains('.modal-content', 'Confirm Destroy Task');
   cy.contains('button', 'Destroy the task').click();
   cy.get('.toast-container').should('contain', 'destroyed');

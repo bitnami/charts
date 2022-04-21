@@ -9,7 +9,7 @@ export const importAStreamApplication = () => {
     '.clr-control-label',
     'Stream application starters for Kafka/Maven'
   ).click();
-  cy.contains('.btn-primary', 'Import').click(); //until here it's fine. Here it fails, although I can clearly see the container
+  cy.contains('.btn-primary', 'Import').click();
   cy.get('.toast-container').should('contain', 'Application(s) Imported');
   cy.get('.content-area')
     .should('contain', 'processor')
