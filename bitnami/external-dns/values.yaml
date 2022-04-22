@@ -429,6 +429,9 @@ linode:
 ##
 ns1:
   minTTL: 10
+  ## @param ns1.apiKey When using the ns1 provider, specify the API key to use
+  ##
+  apiKey: ""
 
 ## oci configuration to be set via arguments/env. variables
 ##
