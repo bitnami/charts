@@ -37,9 +37,9 @@ data:
         exit 1
     fi
     {{- else }}
-    elif [[ -f "/certs/client/zookeeper.truststore.jks" ]] && [[ -f "/certs/client/zookeeper.keystore.jks" ]]; then
-        cp "/certs/client/zookeeper.truststore.jks" "/opt/bitnami/zookeeper/config/certs/client/zookeeper.truststore.jks"
-        cp "/certs/client/zookeeper.keystore.jks" "/opt/bitnami/zookeeper/config/certs/client/zookeeper.keystore.jks"
+    elif [[ -f {{ printf "/certs/client/%s" (include "zookeeper.client.tlsTruststoreKey" .) | quote }} ]] && [[ -f {{ printf "/certs/client/%s" (include "zookeeper.client.tlsKeystoreKey" .) | quote }} ]]; then
+        cp {{ printf "/certs/client/%s" (include "zookeeper.client.tlsTruststoreKey" .) | quote }} "/opt/bitnami/zookeeper/config/certs/client/zookeeper.truststore.jks"
+        cp {{ printf "/certs/client/%s" (include "zookeeper.client.tlsKeystoreKey" .) | quote }} "/opt/bitnami/zookeeper/config/certs/client/zookeeper.keystore.jks"
     else
         echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when Client encryption via TLS is enabled."
         exit 1
@@ -68,9 +68,9 @@ data:
         exit 1
     fi
     {{- else }}
-    elif [[ -f "/certs/quorum/zookeeper.truststore.jks" ]] && [[ -f "/certs/quorum/zookeeper.keystore.jks" ]]; then
-        cp "/certs/quorum/zookeeper.truststore.jks" "/opt/bitnami/zookeeper/config/certs/quorum/zookeeper.truststore.jks"
-        cp "/certs/quorum/zookeeper.keystore.jks" "/opt/bitnami/zookeeper/config/certs/quorum/zookeeper.keystore.jks"
+    elif [[ -f {{ printf "/certs/quorum/%s" (include "zookeeper.quorum.tlsTruststoreKey" .) | quote }} ]] && [[ -f {{ printf "/certs/quorum/%s" (include "zookeeper.quorum.tlsKeystoreKey" .) | quote }} ]]; then
+        cp {{ printf "/certs/quorum/%s" (include "zookeeper.quorum.tlsTruststoreKey" .) | quote }} "/opt/bitnami/zookeeper/config/certs/quorum/zookeeper.truststore.jks"
+        cp {{ printf "/certs/quorum/%s" (include "zookeeper.quorum.tlsKeystoreKey" .) | quote }} "/opt/bitnami/zookeeper/config/certs/quorum/zookeeper.keystore.jks"
     else
         echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when Quorum encryption via TLS is enabled."
         exit 1
