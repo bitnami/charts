@@ -99,7 +99,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 4.4.13-debian-10-r50
+  tag: 4.4.13-debian-10-r51
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -658,7 +658,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.23.6-debian-10-r0
+      tag: 1.23.6-debian-10-r1
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1689,14 +1689,13 @@ metrics:
     ##      https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
     ##
     ## This is an example of a rule, you should add the below code block under the "rules" param, removing the brackets
-    ## - name: example
-    ##   rules:
-    ##   - alert: HighRequestLatency
-    ##     expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
-    ##     for: 10m
-    ##     labels:
-    ##       severity: page
-    ##     annotations:
-    ##       summary: High request latency
+    ## rules:
+    ## - alert: HighRequestLatency
+    ##   expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
+    ##   for: 10m
+    ##   labels:
+    ##     severity: page
+    ##   annotations:
+    ##     summary: High request latency
     ##
-    rules: {}
+    rules: []
