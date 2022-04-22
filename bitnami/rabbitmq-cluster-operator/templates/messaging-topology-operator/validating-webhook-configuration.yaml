@@ -2,14 +2,14 @@
     If the user does not have cert-manager and is not providing a secret with the certificates, the chart needs to generate the secret
   */}}
 {{- $ca := genCA "rmq-msg-topology-ca" 365 }}
-{{- $cert := genSignedCert (include "rmqco.msgTopologyOperator.fullname" .) nil (list (printf "%s.%s.svc" (include "rmqco.msgTopologyOperator.webhook.fullname" .) .Release.Namespace) (printf "%s.%s.svc.%s" (include "rmqco.msgTopologyOperator.webhook.fullname" .) .Release.Namespace .Values.clusterDomain)) 365 $ca }}
+{{- $cert := genSignedCert (include "rmqco.msgTopologyOperator.fullname" .) nil (list (printf "%s.%s.svc" (include "rmqco.msgTopologyOperator.webhook.fullname" .) (include "common.names.namespace" .)) (printf "%s.%s.svc.%s" (include "rmqco.msgTopologyOperator.webhook.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain)) 365 $ca }}
 
 {{- if and (not .Values.useCertManager) (not .Values.msgTopologyOperator.existingWebhookCertSecret) }}
 apiVersion: v1
 kind: Secret
 metadata:
   name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -35,7 +35,7 @@ metadata:
     {{- end }}
   annotations:
     {{- if .Values.useCertManager }}
-    cert-manager.io/inject-ca-from: {{ printf "%s/%s" .Release.Namespace ( include "rmqco.msgTopologyOperator.webhook.secretName" . ) }}
+    cert-manager.io/inject-ca-from: {{ printf "%s/%s" (include "common.names.namespace" .) ( include "rmqco.msgTopologyOperator.webhook.secretName" . ) }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -50,7 +50,7 @@ webhooks:
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
-        namespace: {{ .Release.Namespace | quote }}
+        namespace: {{ include "common.names.namespace" . | quote }}
         path: /validate-rabbitmq-com-v1beta1-binding
     failurePolicy: Fail
     name: vbinding.kb.io
@@ -73,7 +73,7 @@ webhooks:
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
-        namespace: {{ .Release.Namespace | quote }}
+        namespace: {{ include "common.names.namespace" . | quote }}
         path: /validate-rabbitmq-com-v1beta1-exchange
     failurePolicy: Fail
     name: vexchange.kb.io
@@ -96,7 +96,7 @@ webhooks:
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
-        namespace: {{ .Release.Namespace | quote }}
+        namespace: {{ include "common.names.namespace" . | quote }}
         path: /validate-rabbitmq-com-v1beta1-federation
     failurePolicy: Fail
     name: vfederation.kb.io
@@ -119,7 +119,7 @@ webhooks:
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
-        namespace: {{ .Release.Namespace | quote }}
+        namespace: {{ include "common.names.namespace" . | quote }}
         path: /validate-rabbitmq-com-v1alpha1-superstream
     failurePolicy: Fail
     name: vsuperstream.kb.io
@@ -142,7 +142,7 @@ webhooks:
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
-        namespace: {{ .Release.Namespace | quote }}
+        namespace: {{ include "common.names.namespace" . | quote }}
         path: /validate-rabbitmq-com-v1beta1-permission
     failurePolicy: Fail
     name: vpermission.kb.io
@@ -165,7 +165,7 @@ webhooks:
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
-        namespace: {{ .Release.Namespace | quote }}
+        namespace: {{ include "common.names.namespace" . | quote }}
         path: /validate-rabbitmq-com-v1beta1-policy
     failurePolicy: Fail
     name: vpolicy.kb.io
@@ -188,7 +188,7 @@ webhooks:
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
-        namespace: {{ .Release.Namespace | quote }}
+        namespace: {{ include "common.names.namespace" . | quote }}
         path: /validate-rabbitmq-com-v1beta1-queue
     failurePolicy: Fail
     name: vqueue.kb.io
@@ -211,7 +211,7 @@ webhooks:
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
-        namespace: {{ .Release.Namespace | quote }}
+        namespace: {{ include "common.names.namespace" . | quote }}
         path: /validate-rabbitmq-com-v1beta1-schemareplication
     failurePolicy: Fail
     name: vschemareplication.kb.io
@@ -234,7 +234,7 @@ webhooks:
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
-        namespace: {{ .Release.Namespace | quote }}
+        namespace: {{ include "common.names.namespace" . | quote }}
         path: /validate-rabbitmq-com-v1beta1-shovel
     failurePolicy: Fail
     name: vshovel.kb.io
@@ -257,7 +257,7 @@ webhooks:
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
-        namespace: {{ .Release.Namespace | quote }}
+        namespace: {{ include "common.names.namespace" . | quote }}
         path: /validate-rabbitmq-com-v1beta1-user
     failurePolicy: Fail
     name: vuser.kb.io
@@ -280,7 +280,7 @@ webhooks:
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
-        namespace: {{ .Release.Namespace | quote }}
+        namespace: {{ include "common.names.namespace" . | quote }}
         path: /validate-rabbitmq-com-v1beta1-vhost
     failurePolicy: Fail
     name: vvhost.kb.io

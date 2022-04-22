@@ -16,6 +16,9 @@ global:
 
 ## @section Common parameters
 
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
 ## @param nameOverride String to partially override metallb.fullname include (will maintain the release name)
 ##
 nameOverride: ""
@@ -32,6 +35,20 @@ commonAnnotations: {}
 ##
 extraDeploy: []
 
+## Enable diagnostic mode in the deployment(s)/statefulset(s)
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  args:
+    - infinity
 ## @section MetalLB parameters
 
 ## To configure MetalLB, you must specify ONE of the following two
@@ -96,7 +113,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.12.1-debian-10-r59
+    tag: 0.12.1-debian-10-r61
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -110,6 +127,17 @@ controller:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param controller.updateStrategy.type Metallb controller deployment strategy type.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
+  ##
+  updateStrategy:
+    type: RollingUpdate
   ## @param controller.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -130,9 +158,22 @@ controller:
     ## @param controller.psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
     ##
     create: true
-  ## @param controller.priorityClassName Set pod priorityClassName
+  ## @param controller.priorityClassName Metallb controller pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param controller.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param controller.terminationGracePeriodSeconds In seconds, time the given to the Metallb controller pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: 0
+  ## @param controller.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## Controller container resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -201,44 +242,100 @@ controller:
     ##   - e2e-az2
     ##
     values: []
-  serviceAccount:
-    ## @param controller.serviceAccount.create Specifies whether a ServiceAccount should be created
-    ##
-    create: true
-    ## @param controller.serviceAccount.name The name of the ServiceAccount to use. If not set and create is true, a name is generated using the fullname template
-    ##
-    name: ""
-  ## Pod securityContext
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param controller.securityContext.enabled Enable pods' security context
-  ## @param controller.securityContext.runAsNonRoot MetalLB Controller must runs as nonRoot.
-  ## @param controller.securityContext.runAsUser User ID for the pods.
-  ## @param controller.securityContext.fsGroup Group ID for the pods.
-  ## @param controller.securityContext.allowPrivilegeEscalation This defines if privilegeEscalation is allowed on that container
-  ## @param controller.securityContext.readOnlyRootFilesystem This defines if the container can read the root fs on the host
-  ## @param controller.securityContext.capabilities.drop [array] Drop capabilities for the securityContext
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param controller.podSecurityContext.enabled Enabled Metallb Controller pods' Security Context
+  ## @param controller.podSecurityContext.fsGroup Set Metallb Controller pod's Security Context fsGroup
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
     fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param controller.containerSecurityContext.enabled Enabled Metallb Controller containers' Security Context
+  ## @param controller.containerSecurityContext.runAsUser Set Metallb Controller containers' Security Context runAsUser
+  ## @param controller.containerSecurityContext.runAsNonRoot Set Metallb Controller container's Security Context runAsNonRoot
+  ## @param controller.containerSecurityContext.allowPrivilegeEscalation Enables privilege Escalation context for the pod.
+  ## @param controller.containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly
+  ## @param controller.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
     capabilities:
       drop:
         - ALL
+  ## @param controller.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param controller.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param controller.lifecycleHooks for the Metallb Controller container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param controller.extraEnvVars Extra environment variable to pass to the running container.
+  ## For example:
+  ## extraEnvVars:
+  ##  - name: MY_ENV_VAR
+  ##    value: env_var_value
+  ##
+  extraEnvVars: []
+  ## @param controller.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Metallb controller nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param controller.extraEnvVarsSecret Name of existing Secret containing extra env vars for Metallb controller nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param controller.extraVolumes Optionally specify extra list of additional volumes for the Metallb controller pod(s)
+  ##
+  extraVolumes: []
+  ## @param controller.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Metallb controller container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param controller.sidecars Add additional sidecar containers to the Metallb Controller pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param controller.initContainers Add additional init containers to the Metallb Controller pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param controller.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param controller.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param controller.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
+  serviceAccount:
+    create: true
+    name: ""
+    automountServiceAccountToken: true
+    annotations: {}
   ## @param controller.revisionHistoryLimit Configure the revisionHistoryLimit of the Controller deployment
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit
   ##
   revisionHistoryLimit: 3
-  ## @param controller.terminationGracePeriodSeconds Configure the grace time period for sig term
-  ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
+  ## @param controller.containerPorts.metrics Configures the ports the MetalLB Controller listens on for metrics
   ##
-  terminationGracePeriodSeconds: 0
-  ## @param controller.containerPort.metrics Configures the ports the MetalLB Controller listens on for metrics
-  ##
-  containerPort:
+  containerPorts:
     metrics: 7472
   ## Liveness probe values
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -272,25 +369,89 @@ controller:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  prometheus:
-    ## Prometheus Operator service monitors
+  ## Startup probe values
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param controller.startupProbe.enabled Enable startupProbe
+  ## @param controller.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param controller.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param controller.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param controller.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param controller.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param controller.customStartupProbe Custom liveness probe for the Web component
+  ##
+  customStartupProbe: {}
+  ## @param controller.customLivenessProbe Custom liveness probe for the Web component
+  ##
+  customLivenessProbe: {}
+  ## @param controller.customReadinessProbe Custom readiness probe for the Web component
+  ##
+  customReadinessProbe: {}
+
+  ## @section Metallb controller Prometheus metrics export
+  ##
+  metrics:
+    ## @param controller.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: false
+    ## Prometheus Exporter service parameters
+    ##
+    service:
+      ## @param controller.metrics.service.port Prometheus metrics service port
+      ##
+      port: 7472
+      ## @param controller.metrics.service.annotations [object] Annotations for the Prometheus Exporter service service
+      ##
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "7472"
+        prometheus.io/path: "/metrics"    ## Prometheus Operator service monitors
     ##
     serviceMonitor:
-      ## @param controller.prometheus.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator
+      ## @param controller.metrics.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator
       ##
       enabled: false
-      ## @param controller.prometheus.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
+      ## @param controller.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param controller.metrics.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
       ##
       jobLabel: "app.kubernetes.io/name"
-      ## @param controller.prometheus.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used
+      ## @param controller.metrics.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used
       ##
       interval: ""
-      ## @param controller.prometheus.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ## @param controller.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: ""
+      ## @param controller.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
       ##
       metricRelabelings: []
-      ## @param controller.prometheus.serviceMonitor.relabelings Specify general relabeling
+      ## @param controller.metrics.serviceMonitor.relabelings Specify general relabeling
       ##
       relabelings: []
+      ## @param controller.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param controller.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param controller.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
 
 ## @section Speaker parameters
 
@@ -307,7 +468,7 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.12.1-debian-10-r59
+    tag: 0.12.1-debian-10-r62
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -321,6 +482,14 @@ speaker:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param speaker.updateStrategy.type Speaker daemonset strategy type
+  ## ref: https://kubernetes.io/docs/tasks/manage-daemon/update-daemon-set/
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
   ## If global .Values.rbac.create is disabled no rbac is created.
   ## This value is then meaningless
   ## Defines if the speaker rbac should be created.
@@ -341,9 +510,13 @@ speaker:
     ## @param speaker.psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
     ##
     create: true
-  ## @param speaker.priorityClassName Set pod priorityClassName.
+  ## @param speaker.priorityClassName Speaker pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param speaker.terminationGracePeriodSeconds In seconds, time the given to the Speaker pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: 2
   ## Speaker container resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -376,6 +549,31 @@ speaker:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ##
   affinity: {}
+  ## Node speaker.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param speaker.nodeAffinityPreset.type Node affinity preset type. Ignored if `speaker.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param speaker.nodeAffinityPreset.key Node label key to match. Ignored if `speaker.affinity` is set
+    ##
+    key: ""
+    ## @param speaker.nodeAffinityPreset.values Node label values to match. Ignored if `speaker.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param speaker.podAffinityPreset Pod affinity preset. Ignored if `speaker.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param speaker.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `speaker.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
   ## @param speaker.podAnnotations Speaker Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -384,24 +582,78 @@ speaker:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  serviceAccount:
-    ## @param speaker.serviceAccount.create Specifies whether a ServiceAccount should be created
-    ##
-    create: true
-    ## @param speaker.serviceAccount.name The name of the ServiceAccount to use.  If not set and create is true, a name is generated using the fullname template
-    ##
-    name: ""
-  ## Daemonset configuration
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param speaker.podSecurityContext.enabled Enabled Speaker pods' Security Context
+  ## @param speaker.podSecurityContext.fsGroup Set Speaker pod's Security Context fsGroup
   ##
-  daemonset:
-    ## @param speaker.daemonset.terminationGracePeriodSeconds Configure the grace time period for sig term
-    ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
-    ##
-    terminationGracePeriodSeconds: 2
-    ## @param speaker.daemonset.hostPorts.metrics HTTP Metrics Endpoint
-    ##
-    hostPorts:
-      metrics: 7472
+  podSecurityContext:
+    enabled: true
+    fsGroup: 0
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param speaker.containerSecurityContext.enabled Enabled Speaker containers' Security Context
+  ## @param speaker.containerSecurityContext.runAsUser Set Speaker containers' Security Context runAsUser
+  ## @param speaker.containerSecurityContext.allowPrivilegeEscalation Enables privilege Escalation context for the pod.
+  ## @param speaker.containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly
+  ## @param speaker.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
+  ## @param speaker.containerSecurityContext.capabilities.add [array] Add capabilities for the securityContext
+  ##
+
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 0
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
+      add:
+        - NET_ADMIN
+        - NET_RAW
+        - SYS_ADMIN
+  ## @param speaker.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param speaker.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param speaker.lifecycleHooks for the Speaker container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param speaker.sidecars Add additional sidecar containers to the Speaker pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param speaker.initContainers Add additional init containers to the Speaker pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param speaker.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param speaker.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param speaker.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param speaker.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
+  serviceAccount:
+    create: true
+    name: ""
+    automountServiceAccountToken: true
+    annotations: {}
   ## Defines a secret to use outside of the auto generate
   ## @param speaker.secretName References a Secret name for the member secret outside of the helm chart
   ## @param speaker.secretKey References a Secret key the member secret outside of the helm chart
@@ -415,30 +667,6 @@ speaker:
   secretName: ""
   secretKey: ""
   secretValue: ""
-  ## @param speaker.initContainers Extra initContainers to add to the daemonset
-  ##
-  initContainers: []
-  ## Pod securityContext
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param speaker.securityContext.enabled Enable pods' security context
-  ## @param speaker.securityContext.runAsUser User ID for the pods.
-  ## @param speaker.securityContext.allowPrivilegeEscalation Enables privilege Escalation context for the pod.
-  ## @param speaker.securityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly
-  ## @param speaker.securityContext.capabilities.drop [array] Drop capabilities for the securityContext
-  ## @param speaker.securityContext.capabilities.add [array] Add capabilities for the securityContext
-  ##
-  securityContext:
-    enabled: true
-    runAsUser: 0
-    allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: true
-    capabilities:
-      drop:
-        - ALL
-      add:
-        - NET_ADMIN
-        - NET_RAW
-        - SYS_ADMIN
   ## @param speaker.extraEnvVars Extra environment variable to pass to the running container.
   ## For example:
   ## extraEnvVars:
@@ -446,6 +674,22 @@ speaker:
   ##    value: env_var_value
   ##
   extraEnvVars: []
+  ## @param speaker.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Speaker nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param speaker.extraEnvVarsSecret Name of existing Secret containing extra env vars for Speaker nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param speaker.extraVolumes Optionally specify extra list of additional volumes for the Speaker pod(s)
+  ##
+  extraVolumes: []
+  ## @param speaker.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Speaker container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param speaker.containerPorts.metrics HTTP Metrics Endpoint
+  ##
+  containerPorts:
+    metrics: 7472
   ## Liveness probe values
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param speaker.livenessProbe.enabled Enable livenessProbe
@@ -478,22 +722,86 @@ speaker:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
-  prometheus:
+  ## Startup probe values
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param speaker.startupProbe.enabled Enable startupProbe
+  ## @param speaker.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param speaker.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param speaker.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param speaker.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param speaker.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param speaker.customStartupProbe Custom liveness probe for the Web component
+  ##
+  customStartupProbe: {}
+  ## @param speaker.customLivenessProbe Custom liveness probe for the Web component
+  ##
+  customLivenessProbe: {}
+  ## @param speaker.customReadinessProbe Custom readiness probe for the Web component
+  ##
+  customReadinessProbe: {}
+
+  ## @section Speaker Prometheus metrics export
+  metrics:
+    ## @param speaker.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: false
+    ## Prometheus Exporter service parameters
+    ##
+    service:
+      ## @param speaker.metrics.service.port Prometheus metrics service port
+      ##
+      port: 7472
+      ## @param speaker.metrics.service.annotations [object] Annotations for the Prometheus Exporter service service
+      ##
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "7472"
+        prometheus.io/path: "/metrics"
     ## Prometheus Operator service monitors
     ##
     serviceMonitor:
-      ## @param speaker.prometheus.serviceMonitor.enabled Enable support for Prometheus Operator
+      ## @param speaker.metrics.serviceMonitor.enabled Enable support for Prometheus Operator
       ##
       enabled: false
-      ## @param speaker.prometheus.serviceMonitor.jobLabel Job label for scrape target
+      ## @param speaker.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
+      ## @param speaker.metrics.serviceMonitor.jobLabel Job label for scrape target
       ##
       jobLabel: "app.kubernetes.io/name"
-      ## @param speaker.prometheus.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used
+      ## @param speaker.metrics.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used
       ##
       interval: ""
-      ## @param speaker.prometheus.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ## @param speaker.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: ""
+      ## @param speaker.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
       ##
       metricRelabelings: []
-      ## @param speaker.prometheus.serviceMonitor.relabelings Specify general relabeling
+      ## @param speaker.metrics.serviceMonitor.relabelings Specify general relabeling
       ##
       relabelings: []
+      ## @param speaker.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param speaker.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param speaker.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
