@@ -379,8 +379,8 @@ spec:
             {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
-          image: { { include "postgresql.metrics.image" . }}
-          imagePullPolicy: { { .Values.metrics.image.pullPolicy | quote }}
+          image: {{ include "postgresql.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -395,29 +395,29 @@ spec:
               {{- $sslmode := ternary "require" "disable" .Values.tls.enabled }}
               {{- if and .Values.tls.enabled .Values.tls.certCAFilename }}
               - name: DATA_SOURCE_NAME
-                value: { { printf "host=127.0.0.1 port=%d user=%s sslmode=%s sslcert=%s sslkey=%s" (int (include "postgresql.service.port" .)) (default "postgres" $customUser  | quote) $sslmode (include "postgresql.tlsCert" .) (include "postgresql.tlsCertKey" .) }}
+                value: {{ printf "host=127.0.0.1 port=%d user=%s sslmode=%s sslcert=%s sslkey=%s" (int (include "postgresql.service.port" .)) (default "postgres" $customUser  | quote) $sslmode (include "postgresql.tlsCert" .) (include "postgresql.tlsCertKey" .) }}
               {{- else }}
               - name: DATA_SOURCE_URI
-                value: { { printf "127.0.0.1:%d/%s?sslmode=%s" (int (include "postgresql.service.port" .)) $database $sslmode }}
+                value: {{ printf "127.0.0.1:%d/%s?sslmode=%s" (int (include "postgresql.service.port" .)) $database $sslmode }}
               {{- end }}
               {{- if .Values.auth.usePasswordFiles }}
               - name: DATA_SOURCE_PASS_FILE
-                value: { { printf "/opt/bitnami/postgresql/secrets/%s" (ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres"))) }}
+                value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres"))) }}
               {{- else }}
               - name: DATA_SOURCE_PASS
                 valueFrom:
                   secretKeyRef:
-                    name: { { include "postgresql.secretName" . }}
-                    key: { { ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres")) }}
+                    name: {{ include "postgresql.secretName" . }}
+                    key: {{ ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres")) }}
               {{- end }}
               - name: DATA_SOURCE_USER
-                value: { { default "postgres" $customUser | quote }}
+                value: {{ default "postgres" $customUser | quote }}
               {{- if .Values.metrics.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
               {{- end }}
           ports:
             - name: http-metrics
-              containerPort: { { .Values.metrics.containerPorts.metrics }}
+              containerPort: {{ .Values.metrics.containerPorts.metrics }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
@@ -477,6 +477,11 @@ spec:
             secretName: {{ include "postgresql.tlsSecretName" . }}
         - name: postgresql-certificates
           emptyDir: {}
+        {{- end }}
+        {{- if and .Values.metrics.enabled .Values.metrics.customMetrics }}
+        - name: custom-metrics
+          configMap:
+            name: {{ printf "%s-metrics" (include "common.names.fullname" .) }}
         {{- end }}
         {{- if .Values.shmVolume.enabled }}
         - name: dshm
