@@ -85,7 +85,7 @@ $ helm uninstall my-release
 ### Contour parameters
 
 | Name                                            | Description                                                                                                                        | Value                  |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+|-------------------------------------------------| ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `existingConfigMap`                             | Specifies the name of an externally-defined ConfigMap to use as the configuration (this is mutually exclusive with `configInline`) | `""`                   |
 | `configInline`                                  | Specifies Contour's configuration directly in YAML format                                                                          | `{}`                   |
 | `contour.enabled`                               | Contour Deployment creation.                                                                                                       | `true`                 |
@@ -172,6 +172,7 @@ $ helm uninstall my-release
 | `contour.ingressClass.default`                  | Mark IngressClass resource as default for cluster                                                                                  | `true`                 |
 | `contour.debug`                                 | Enable Contour debug log level                                                                                                     | `false`                |
 | `contour.kubernetesDebug`                       | Contour kubernetes debug log level, Default 0, minimum 0, maximum 9.                                                               | `0`                    |
+| `contour.rootNamespaces`                        | Restrict Contour to searching these namespaces for root ingress routes.                                                              | `""`                    |
 
 
 ### Envoy parameters
