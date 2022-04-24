@@ -1,25 +1,40 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Return the proper grafana-operator grafana baseImage name
+Return the proper image name
 */}}
-{{- define "grafana-operator.grafana.baseImage" -}}
-{{- $registryName := .Values.grafana.image.registry -}}
-{{- $repositoryName := .Values.grafana.image.repository -}}
+{{- define "grafana-operator.getBaseImage" -}}
+{{- $registryName := .image.registry -}}
+{{- $repositoryName := .image.repository -}}
 {{/*
 Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
 but Helm 2.9 and 2.10 doesn't support it, so we need to implement this if-else logic.
 Also, we can't use a single if because lazy evaluation is not an option
 */}}
-{{- if .Values.global }}
-    {{- if .Values.global.imageRegistry }}
-        {{- printf "%s/%s" .Values.global.imageRegistry $repositoryName -}}
+{{- if .context.Values.global }}
+    {{- if .context.Values.global.imageRegistry }}
+        {{- printf "%s/%s" .context.Values.global.imageRegistry $repositoryName -}}
     {{- else -}}
         {{- printf "%s/%s" $registryName $repositoryName -}}
     {{- end -}}
 {{- else -}}
     {{- printf "%s/%s" $registryName $repositoryName -}}
 {{- end -}}
+{{- end -}}
+
+
+{{/*
+Return the proper grafana-operator grafana baseImage name
+*/}}
+{{- define "grafana-operator.grafana.baseImage" -}}
+{{- include "grafana-operator.getBaseImage" (dict "image" .Values.grafana.image "context" $) }}
+{{- end -}}
+
+{{/*
+Return the proper grafana-operator grafana plugins init container name
+*/}}
+{{- define "grafana-operator.grafana.pluginsInitContainerImage" -}}
+{{- include "grafana-operator.getBaseImage" (dict "image" .Values.grafana.pluginsInitContainerImage "context" $) }}
 {{- end -}}
 
 {{/*
