@@ -40,6 +40,12 @@ spec:
   {{- if (or (eq $root.Values.externalAccess.service.type "LoadBalancer") (eq $root.Values.externalAccess.service.type "NodePort")) }}
   externalTrafficPolicy: {{ $root.Values.externalAccess.service.externalTrafficPolicy | quote }}
   {{- end }}
+  {{- if $root.Values.externalAccess.service.sessionAffinity }}
+  sessionAffinity: {{ $root.Values.externalAccess.service.sessionAffinity }}
+  {{- end }}
+  {{- if $root.Values.externalAccess.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" $root.Values.externalAccess.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
   publishNotReadyAddresses: true
   ports:
     - name: {{ $root.Values.externalAccess.service.portName | quote }}
