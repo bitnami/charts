@@ -148,6 +148,8 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "vinyldns") (or .Values.vinyldns.secretKey .Values.vinyldns.accessKey) -}}
     {{- true -}}
+{{- else if and (eq .Values.provider "ns1") .Values.ns1.apiKey -}}
+    {{- true -}}
 {{- else -}}
 {{- end -}}
 {{- end -}}
