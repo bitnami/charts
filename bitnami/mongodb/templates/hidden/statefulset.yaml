@@ -336,7 +336,7 @@ spec:
           livenessProbe:
             exec:
               command:
-                - mongo
+                - mongosh
               {{- if .Values.tls.enabled }}
                 - --tls
                 - --tlsCertificateKeyFile=/certs/mongodb.pem
@@ -356,7 +356,7 @@ spec:
           readinessProbe:
             exec:
               command:
-                - mongo
+                - mongosh
               {{- if .Values.tls.enabled }}
                 - --tls
                 - --tlsCertificateKeyFile=/certs/mongodb.pem
