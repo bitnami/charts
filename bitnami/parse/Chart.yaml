@@ -30,4 +30,8 @@ sources:
   - https://github.com/bitnami/bitnami-docker-parse
   - https://github.com/bitnami/bitnami-docker-parse-dashboard
   - https://parse.com/
+<<<<<<< HEAD
 version: 18.0.0
+=======
+version: 17.0.11
+>>>>>>> upstream/master
