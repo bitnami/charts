@@ -5,7 +5,7 @@ it('allows login/logout and user manipulation', () => {
   cy.login();
   cy.get('#input-error').should('not.exist');
   cy.contains('.dropdown-toggle.ng-binding', 'User').click();
-  cy.contains('.dropdown-menu li', 'Manage account').click();
+  cy.contains('.dropdown-menu li', 'Manage account').click({ force: true });
   cy.contains('p', 'Account console loading').should('not.exist');
   cy.contains('a#landing-personal-info', 'Personal').click();
   cy.get('#email-address').clear().type('test@email.com');
