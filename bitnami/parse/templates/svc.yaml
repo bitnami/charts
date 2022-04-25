@@ -40,9 +40,9 @@ spec:
     - name: http-server
       port: {{ .Values.server.containerPorts.http }}
       targetPort: http-server
-    - name: http-dahsboard
+    - name: http-dashboard
       port: {{ .Values.service.ports.http }}
-      targetPort: http-dahsboard
+      targetPort: http-dashboard
       {{- if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePorts.http))) }}
       nodePort: {{ .Values.service.nodePorts.http }}
       {{- end }}
