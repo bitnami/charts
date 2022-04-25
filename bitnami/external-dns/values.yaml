@@ -445,7 +445,7 @@ oci:
   ## @param oci.compartmentOCID When using the OCI provider, specify your Compartment OCID where your DNS Zone is located in.
   ##
   compartmentOCID: ""
-  ## @param oci.privateKey When using the OCI provider, paste in your RSA private key file for the Oracle API
+  ## @param oci.privateKey [string] When using the OCI provider, paste in your RSA private key file for the Oracle API
   ##
   privateKey: |
     -----BEGIN RSA PRIVATE KEY-----
