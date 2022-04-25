@@ -425,10 +425,18 @@ linode:
   secretName: ""
 
 ## NS1 configuration to be set via arguments/env. variables
-## @param ns1.minTTL When using the ns1 provider, specify minimal TTL, as an integer, for records
 ##
 ns1:
+  ## @param ns1.minTTL When using the ns1 provider, specify minimal TTL, as an integer, for records
+  ##
   minTTL: 10
+  ## @param ns1.apiKey When using the ns1 provider, specify the API key to use
+  ##
+  apiKey: ""
+  ## @param ns1.secretName Use an existing secret with key "ns1-api-key" defined.
+  ## This ignores ns1.apiToken
+  ##
+  secretName: ""
 
 ## oci configuration to be set via arguments/env. variables
 ##
