@@ -535,7 +535,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.prometheusRule.enabled`             | Set this to true to create prometheusRules for Prometheus operator                                                    | `false`                    |
 | `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                | `{}`                       |
 | `metrics.prometheusRule.namespace`           | Namespace where prometheusRules resource should be created                                                            | `""`                       |
-| `metrics.prometheusRule.rules`               | Rules to be created, check values for an example                                                                      | `{}`                       |
+| `metrics.prometheusRule.rules`               | Rules to be created, check values for an example                                                                      | `[]`                       |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

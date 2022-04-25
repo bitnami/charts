@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ include "common.names.fullname" . }}-speaker
+  name: {{ printf "%s-speaker" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: speaker
     {{- if .Values.commonLabels }}
@@ -11,6 +12,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if .Values.speaker.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.speaker.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: speaker
@@ -26,26 +30,63 @@ spec:
       {{- end }}
     spec:
       {{- include "common.images.pullSecrets" (dict "images" (list .Values.speaker.image .Values.controller.image) "global" .Values.global) | nindent 6 }}
-      {{- if .Values.hostAliases }}
-      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- if .Values.speaker.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.hostAliases "context" $) | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "metallb.speakerServiceAccountName" . }}
-      terminationGracePeriodSeconds: {{ .Values.speaker.daemonset.terminationGracePeriodSeconds }}
+      serviceAccountName: {{ include "metallb.speaker.serviceAccountName" . }}
+      {{- if .Values.speaker.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.speaker.podAffinityPreset "component" "speaker" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.speaker.podAntiAffinityPreset "component" "speaker" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.speaker.nodeAffinityPreset.type "key" .Values.speaker.nodeAffinityPreset.key "values" .Values.speaker.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      nodeSelector:
+        {{- if .Values.speaker.nodeSelector }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.speaker.nodeSelector "context" $) | nindent 8 }}
+        {{- end }}
+        "kubernetes.io/os": linux
+      {{- if .Values.speaker.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.tolerations $) | nindent 8 }}
+      {{- end }}
       hostNetwork: true
-      {{- if .Values.speaker.initContainers }}
-      initContainers:
-      {{- include "common.tplvalues.render" (dict "value" .Values.speaker.initContainers "context" $) | nindent 8 }}
-      {{- end }}
       {{- if .Values.speaker.priorityClassName }}
       priorityClassName: {{ .Values.speaker.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.speaker.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.speaker.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.speaker.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.speaker.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.speaker.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: metallb-speaker
           image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.speaker.image.pullPolicy }}
+          {{- if .Values.speaker.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.speaker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.speaker.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.speaker.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.args "context" $) | nindent 12 }}
+          {{- else }}
           args:
-            - --port={{ .Values.speaker.daemonset.hostPorts.metrics }}
+            - --port={{ .Values.speaker.containerPorts.metrics }}
             - --config={{ include "metallb.configMapName" . }}
+          {{- end }}
+          {{- if .Values.speaker.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: METALLB_NODE_NAME
               valueFrom:
@@ -73,56 +114,52 @@ spec:
             {{- if .Values.speaker.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
-            {{- if .Values.extraEnvVarsSecret }}
-            envFrom:
-              - secretRef:
-                  name: {{ include "common.tplvalues.render" ( dict "value" .Values.speaker.extraEnvVarsSecret "context" $ ) }}
+          envFrom:
+            {{- if .Values.speaker.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.speaker.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.speaker.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.speaker.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
             - name: metrics
-              containerPort: {{ .Values.speaker.daemonset.hostPorts.metrics }}
+              containerPort: {{ .Values.speaker.containerPorts.metrics }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.speaker.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: {{ .Values.speaker.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.speaker.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.speaker.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.speaker.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.speaker.livenessProbe.failureThreshold }}
+          {{- else if .Values.speaker.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.speaker.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: {{ .Values.speaker.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.speaker.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.speaker.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.speaker.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.speaker.readinessProbe.failureThreshold }}
+          {{- else if .Values.speaker.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.speaker.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- else if .Values.speaker.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.speaker.resources }}
           resources: {{- toYaml .Values.speaker.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.speaker.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.speaker.securityContext.runAsUser }}
-            allowPrivilegeEscalation: {{ .Values.speaker.securityContext.allowPrivilegeEscalation }}
-            readOnlyRootFilesystem: {{ .Values.speaker.securityContext.readOnlyRootFilesystem }}
-            capabilities:
-              drop: {{- toYaml .Values.speaker.securityContext.capabilities.drop | nindent 16 }}
-              add: {{- toYaml .Values.speaker.securityContext.capabilities.add | nindent 16 }}
+          {{- if .Values.speaker.extraVolumeMounts }}
+          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
-      nodeSelector:
-      {{- if .Values.speaker.nodeSelector }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.speaker.nodeSelector "context" $) | nindent 8 }}
-      {{- end }}
-        "kubernetes.io/os": linux
-      {{- if .Values.speaker.affinity }}
-      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.affinity "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if .Values.speaker.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.tolerations "context" $) | nindent 8 }}
+        {{- if .Values.speaker.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if .Values.speaker.extraVolumes }}
+      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumes "context" $) | nindent 8 }}
       {{- end }}

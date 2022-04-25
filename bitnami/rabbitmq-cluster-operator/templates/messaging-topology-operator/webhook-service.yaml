@@ -8,7 +8,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- if or .Values.commonAnnotations .Values.msgTopologyOperator.service.annotations }}
   annotations:
     {{- if .Values.msgTopologyOperator.service.annotations }}
@@ -23,14 +23,20 @@ spec:
   {{- if (or (eq .Values.msgTopologyOperator.service.type "LoadBalancer") (eq .Values.msgTopologyOperator.service.type "NodePort")) }}
   externalTrafficPolicy: {{ .Values.msgTopologyOperator.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{ if .Values.msgTopologyOperator.service.clusterIP }}
+  {{- if .Values.msgTopologyOperator.service.clusterIP }}
   clusterIP: {{ .Values.msgTopologyOperator.service.clusterIP }}
-  {{ end }}
-  {{ if eq .Values.msgTopologyOperator.service.type "LoadBalancer" }}
+  {{- end }}
+  {{- if eq .Values.msgTopologyOperator.service.type "LoadBalancer" }}
   loadBalancerSourceRanges: {{ .Values.msgTopologyOperator.service.loadBalancerSourceRanges }}
-  {{ end }}
+  {{- end }}
   {{- if (and (eq .Values.msgTopologyOperator.service.type "LoadBalancer") (not (empty .Values.msgTopologyOperator.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.msgTopologyOperator.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.msgTopologyOperator.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.msgTopologyOperator.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.msgTopologyOperator.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
     - name: http
@@ -42,5 +48,8 @@ spec:
       {{- else if eq .Values.msgTopologyOperator.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.msgTopologyOperator.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: messaging-topology-operator

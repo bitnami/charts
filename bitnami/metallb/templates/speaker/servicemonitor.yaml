@@ -1,33 +1,51 @@
-{{- if .Values.speaker.prometheus.serviceMonitor.enabled }}
+{{- if and .Values.speaker.metrics.enabled .Values.speaker.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "common.names.fullname" . }}-speaker
+  name: {{ printf "%s-speaker" (include "common.names.fullname" .) }}
+  {{- if .Values.speaker.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.speaker.metrics.serviceMonitor.namespace | quote }}
+  {{- else }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: speaker
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
+    {{- if .Values.speaker.metrics.serviceMonitor.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.metrics.serviceMonitor.labels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
-  jobLabel: {{ .Values.speaker.prometheus.serviceMonitor.jobLabel | quote }}
+  jobLabel: {{ .Values.speaker.metrics.serviceMonitor.jobLabel | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: speaker
+      {{- if .Values.speaker.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.speaker.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
   namespaceSelector:
     matchNames:
-    - {{ .Release.Namespace }}
+    - {{ include "common.names.namespace" .| quote }}
   endpoints:
-  - port: metrics
-    {{- if .Values.speaker.prometheus.serviceMonitor.interval }}
-    interval: {{ .Values.speaker.prometheus.serviceMonitor.interval }}
-    {{- end }}
-    {{- if .Values.speaker.prometheus.serviceMonitor.metricRelabelings }}
-    metricRelabelings: {{ toYaml .Values.speaker.prometheus.serviceMonitor.metricRelabelings | nindent 4 }}
-    {{- end }}
-    {{- if .Values.speaker.prometheus.serviceMonitor.relabelings }}
-    relabelings: {{ toYaml .Values.speaker.prometheus.serviceMonitor.relabelings | nindent 4 }}
-    {{- end }}
-{{- end }}
+    - port: metrics
+      {{- if .Values.speaker.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.speaker.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.speaker.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.speaker.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.speaker.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.speaker.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.speaker.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.speaker.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+{{- end -}}
