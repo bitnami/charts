@@ -134,14 +134,12 @@ spec:
           {{- end }}
           {{- if .Values.server.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.server.command "context" $) | nindent 12 }}
-          {{- else }}
-          command:
-            - argocd-server
           {{- end }}
           {{- if .Values.server.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.server.args "context" $) | nindent 12 }}
           {{- else }}
           args:
+            - argocd-server
             - --staticassets
             - /opt/bitnami/argo-cd/app
             - --repo-server
