@@ -3,7 +3,8 @@
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller
+  name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -13,36 +14,36 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  allowPrivilegeEscalation: {{ .Values.controller.securityContext.allowPrivilegeEscalation }}
+  allowPrivilegeEscalation: {{ .Values.controller.containerSecurityContext.allowPrivilegeEscalation }}
   allowedCapabilities: []
   allowedHostPaths: []
   defaultAddCapabilities: []
-  defaultAllowPrivilegeEscalation: {{ .Values.controller.securityContext.allowPrivilegeEscalation }}
+  defaultAllowPrivilegeEscalation: {{ .Values.controller.containerSecurityContext.allowPrivilegeEscalation }}
   fsGroup:
     ranges:
-    - max: {{ .Values.controller.securityContext.fsGroup }}
-      min: {{ .Values.controller.securityContext.fsGroup }}
+      - max: {{ .Values.controller.podSecurityContext.fsGroup }}
+        min: {{ .Values.controller.podSecurityContext.fsGroup }}
     rule: MustRunAs
   hostIPC: false
   hostNetwork: false
   hostPID: false
   privileged: false
-  readOnlyRootFilesystem: {{ .Values.controller.securityContext.readOnlyRootFilesystem }}
-  requiredDropCapabilities: {{- toYaml .Values.controller.securityContext.capabilities.drop | nindent 2 }}
+  readOnlyRootFilesystem: {{ .Values.controller.containerSecurityContext.readOnlyRootFilesystem }}
+  requiredDropCapabilities: {{- toYaml .Values.controller.containerSecurityContext.capabilities.drop | nindent 2 }}
   runAsUser:
     ranges:
-    - max: {{ .Values.controller.securityContext.runAsUser }}
-      min: {{ .Values.controller.securityContext.runAsUser }}
+      - max: {{ .Values.controller.containerSecurityContext.runAsUser }}
+        min: {{ .Values.controller.containerSecurityContext.runAsUser }}
     rule: MustRunAs
   seLinux:
     rule: RunAsAny
   supplementalGroups:
     ranges:
-    - max: {{ .Values.controller.securityContext.runAsUser }}
-      min: {{ .Values.controller.securityContext.runAsUser }}
+      - max: {{ .Values.controller.containerSecurityContext.runAsUser }}
+        min: {{ .Values.controller.containerSecurityContext.runAsUser }}
     rule: MustRunAs
   volumes:
-  - configMap
-  - secret
-  - emptyDir
+    - configMap
+    - secret
+    - emptyDir
 {{- end -}}

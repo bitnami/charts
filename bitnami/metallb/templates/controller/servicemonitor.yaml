@@ -1,33 +1,51 @@
-{{- if .Values.controller.prometheus.serviceMonitor.enabled }}
+{{- if and .Values.controller.metrics.enabled .Values.controller.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller
+  name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+  {{- if .Values.controller.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.controller.metrics.serviceMonitor.namespace | quote }}
+  {{- else }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
+    {{- if .Values.controller.metrics.serviceMonitor.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.controller.metrics.serviceMonitor.labels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
-  jobLabel: {{ .Values.controller.prometheus.serviceMonitor.jobLabel | quote }}
+  jobLabel: {{ .Values.controller.metrics.serviceMonitor.jobLabel | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: controller
+      {{- if .Values.controller.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.controller.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
   namespaceSelector:
     matchNames:
-    - {{ .Release.Namespace }}
+      - {{ include "common.names.namespace" .| quote }}
   endpoints:
-  - port: metrics
-    {{- if .Values.controller.prometheus.serviceMonitor.interval }}
-    interval: {{ .Values.controller.prometheus.serviceMonitor.interval }}
-    {{- end }}
-    {{- if .Values.controller.prometheus.serviceMonitor.metricRelabelings }}
-    metricRelabelings: {{ toYaml .Values.controller.prometheus.serviceMonitor.metricRelabelings | nindent 4 }}
-    {{- end }}
-    {{- if .Values.controller.prometheus.serviceMonitor.relabelings }}
-    relabelings: {{ toYaml .Values.controller.prometheus.serviceMonitor.relabelings | nindent 4 }}
-    {{- end }}
+    - port: metrics
+      {{- if .Values.controller.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.controller.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.controller.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.controller.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.controller.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.controller.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.controller.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.controller.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.controller.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.controller.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
 {{- end -}}
