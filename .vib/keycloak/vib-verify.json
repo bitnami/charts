@@ -46,6 +46,17 @@
           }
         },
         {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/keycloak/goss"
+            },
+            "remote": {
+              "workload": "sts-keycloak"
+            }
+          }
+        },
+        {
           "action_id": "cypress",
           "params": {
             "resources": {
