@@ -9,10 +9,13 @@ metadata:
     {{- if .Values.msgTopologyOperator.metrics.serviceMonitor.additionalLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.metrics.serviceMonitor.additionalLabels "context" $) | nindent 4 }}
     {{- end }}
+    {{- if .Values.msgTopologyOperator.metrics.serviceMonitor.labels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.metrics.serviceMonitor.labels "context" $) | nindent 4 }}
+    {{- end }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.msgTopologyOperator.metrics.serviceMonitor.namespace | quote }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -28,7 +31,7 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ include "common.names.namespace" . | quote }}
   endpoints:
     - port: http
       {{- if .Values.msgTopologyOperator.metrics.serviceMonitor.interval }}

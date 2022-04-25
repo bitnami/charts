@@ -410,6 +410,9 @@ contour:
   ## @param contour.kubernetesDebug Contour kubernetes debug log level, Default 0, minimum 0, maximum 9.
   kubernetesDebug: 0
 
+  ## @param contour.rootNamespaces Restrict Contour to searching these namespaces for root ingress routes.
+  rootNamespaces: ""
+
 ## @section Envoy parameters
 ##
 
