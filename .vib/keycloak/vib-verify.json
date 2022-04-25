@@ -55,7 +55,7 @@
             "app_protocol": "HTTP",
             "env": {
               "username": "user",
-              "password": "ComplicatedPassword123!4"
+              "password": "ComplicatedPassword1234!"
             }
           }
         }
