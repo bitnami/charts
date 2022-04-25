@@ -1,24 +1,29 @@
-{{- if .Values.controller.prometheus.serviceMonitor.enabled }}
+{{- if .Values.controller.metrics.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.names.fullname" . }}-controller-metrics
+  name: {{ printf "%s-controller-metrics" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.controller.metrics.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.controller.metrics.service.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   type: ClusterIP
   clusterIP: "None"
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: controller
   ports:
-  - name: metrics
-    port: {{ .Values.controller.containerPort.metrics }}
-    protocol: TCP
-    targetPort: {{ .Values.controller.containerPort.metrics }}
+    - name: metrics
+      port: {{ .Values.controller.metrics.service.port }}
+      protocol: TCP
+      targetPort: {{ .Values.controller.containerPorts.metrics }}
 {{- end }}
