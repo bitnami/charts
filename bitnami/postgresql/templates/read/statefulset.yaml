@@ -3,7 +3,7 @@
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ include "postgresql.readReplica.fullname" . }}
+  name: {{ include "postgresql.readReplicas.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: read
@@ -22,7 +22,7 @@ metadata:
     {{- end }}
 spec:
   replicas: {{ .Values.readReplicas.replicaCount }}
-  serviceName: {{ include "postgresql.readReplica.svc.headless" . }}
+  serviceName: {{ include "postgresql.readReplicas.svc.headless" . }}
   {{- if .Values.readReplicas.updateStrategy }}
   updateStrategy: {{- toYaml .Values.readReplicas.updateStrategy | nindent 4 }}
   {{- end }}
@@ -31,7 +31,7 @@ spec:
       app.kubernetes.io/component: read
   template:
     metadata:
-      name: {{ include "postgresql.readReplica.fullname" . }}
+      name: {{ include "postgresql.readReplicas.fullname" . }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: read
         {{- if .Values.commonLabels }}
@@ -41,7 +41,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
       annotations:
-        {{- if (include "postgresql.readReplica.createExtendedConfigmap" .) }}
+        {{- if (include "postgresql.readReplicas.createExtendedConfigmap" .) }}
         checksum/extended-configuration: {{ include (print $.Template.BasePath "/read/extended-configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.readReplicas.podAnnotations }}
@@ -391,7 +391,7 @@ spec:
         {{- if or .Values.readReplicas.extendedConfiguration .Values.readReplicas.existingExtendedConfigmap }}
         - name: postgresql-extended-config
           configMap:
-            name: {{ include "postgresql.readReplica.extendedConfigmapName" . }}
+            name: {{ include "postgresql.readReplicas.extendedConfigmapName" . }}
         {{- end }}
         {{- if .Values.auth.usePasswordFiles }}
         - name: postgresql-password
