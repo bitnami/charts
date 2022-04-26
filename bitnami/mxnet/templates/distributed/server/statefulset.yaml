@@ -2,16 +2,19 @@
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ print "%s-server" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-server" (include "common.names.fullname" .) }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: server
 spec:
   replicas: {{ .Values.server.replicaCount }}
+  {{- if .Values.server.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.server.updateStrategy | nindent 4 }}
+  {{- end }}
   podManagementPolicy: {{ .Values.server.podManagementPolicy }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: server
-  serviceName: {{ print "%s-headless" (include "common.names.fullname" .) }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
   template:
     metadata:
       {{- if .Values.server.podAnnotations }}
@@ -144,7 +147,7 @@ spec:
             - name: DMLC_NUM_SERVER
               value: {{ .Values.server.replicaCount | quote }}
             - name: DMLC_PS_ROOT_URI
-              value: {{ print "%s-scheduler" (include "common.names.fullname" .) }}
+              value: {{ printf "%s-scheduler" (include "common.names.fullname" .) }}
             - name: DMLC_PS_ROOT_PORT
               value: {{ .Values.scheduler.containerPorts.mxnet | quote }}
             {{- if .Values.extraEnvVars }}

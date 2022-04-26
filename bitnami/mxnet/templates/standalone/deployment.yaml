@@ -25,6 +25,9 @@ spec:
       {{- if .Values.standalone.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.standalone.hostAliases "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.standalone.updateStrategy }}
+      updateStrategy: {{- toYaml .Values.standalone.updateStrategy | nindent 4 }}
+      {{- end }}
       {{- if .Values.standalone.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.standalone.affinity "context" $) | nindent 8 }}
       {{- else }}

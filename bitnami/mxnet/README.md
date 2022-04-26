@@ -7,7 +7,7 @@ Apache MXNet (Incubating) is a flexible and efficient library for deep learning 
 [Overview of Apache MXNet (Incubating)](https://mxnet.incubator.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -543,6 +543,31 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be aligned with the rest of the assets in the Bitnami charts repository.
+
+In addition, the chart structure has been refactored for a clearer distribution and configuration.
+
+The following values have been affected:
+
+- `service.*` has been renamed as `scheduler.service.*`. In addition, values `service.port` and `service.nodePort` have been renamed as `scheduler.service.ports.mxnet` and `scheduler.service.nodePorts.mxnet` respectively.
+- `hostAliases` has been renamed as `{standalone/server/worker/scheduler}.hostAliases`.
+- `commonExtraEnvVars` has been renamed as `extraEnvVars`.
+- `podManagementPolicy` has been renamed as `worker.podManagementPolicy`.
+- The following have been moved under `standalone`,`server`,`worker`, and `scheduler` sections:
+  - `podAffinityPreset`.
+  - `podAntiAffinityPreset`.
+  - `nodeAffinityPreset`.
+  - `affinity`.
+  - `nodeSelector`.
+  - `tolerations`.
+  - `resources`.
+  - `livenessProbe`.
+  - `readinessProbe`.
+  - `securityContext` (now renamed as `podSecurityContext` and `containerSecurityContext`).
+- `scheduler.port`, previously used for both containerPort and service port configuration, is now configured using `scheduler.containerPorts.mxnet` and `scheduler.service.ports.mxnet` values.
 
 ### To 2.1.0
 
