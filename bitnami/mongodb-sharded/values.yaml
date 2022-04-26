@@ -613,16 +613,16 @@ configsvr:
 
   ## Configure extra options for startup probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param configsvr.startupProbe.enabled Enable readinessProbe
-  ## @param configsvr.startupProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param configsvr.startupProbe.periodSeconds Period seconds for readinessProbe
-  ## @param configsvr.startupProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param configsvr.startupProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param configsvr.startupProbe.successThreshold Success threshold for readinessProbe
+  ## @param configsvr.startupProbe.enabled Enable startupProbe
+  ## @param configsvr.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param configsvr.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param configsvr.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param configsvr.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param configsvr.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
     enabled: true
-    initialDelaySeconds: 10
+    initialDelaySeconds: 0
     periodSeconds: 5
     timeoutSeconds: 2
     failureThreshold: 15
@@ -935,16 +935,16 @@ mongos:
 
   ## Configure extra options for startup probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param mongos.startupProbe.enabled Enable readinessProbe
-  ## @param mongos.startupProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param mongos.startupProbe.periodSeconds Period seconds for readinessProbe
-  ## @param mongos.startupProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param mongos.startupProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param mongos.startupProbe.successThreshold Success threshold for readinessProbe
+  ## @param mongos.startupProbe.enabled Enable startupProbe
+  ## @param mongos.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param mongos.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param mongos.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param mongos.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param mongos.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
-    enabled: true
-    initialDelaySeconds: 10
+    enabled: false
+    initialDelaySeconds: 0
     periodSeconds: 5
     timeoutSeconds: 2
     failureThreshold: 15
@@ -1213,16 +1213,16 @@ shardsvr:
 
     ## Configure extra options for startup probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-    ## @param shardsvr.dataNode.startupProbe.enabled Enable readinessProbe
-    ## @param shardsvr.dataNode.startupProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-    ## @param shardsvr.dataNode.startupProbe.periodSeconds Period seconds for readinessProbe
-    ## @param shardsvr.dataNode.startupProbe.timeoutSeconds Timeout seconds for readinessProbe
-    ## @param shardsvr.dataNode.startupProbe.failureThreshold Failure threshold for readinessProbe
-    ## @param shardsvr.dataNode.startupProbe.successThreshold Success threshold for readinessProbe
+    ## @param shardsvr.dataNode.startupProbe.enabled Enable startupProbe
+    ## @param shardsvr.dataNode.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+    ## @param shardsvr.dataNode.startupProbe.periodSeconds Period seconds for startupProbe
+    ## @param shardsvr.dataNode.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+    ## @param shardsvr.dataNode.startupProbe.failureThreshold Failure threshold for startupProbe
+    ## @param shardsvr.dataNode.startupProbe.successThreshold Success threshold for startupProbe
     ##
     startupProbe:
-      enabled: true
-      initialDelaySeconds: 10
+      enabled: false
+      initialDelaySeconds: 0
       periodSeconds: 5
       timeoutSeconds: 2
       failureThreshold: 15
@@ -1506,16 +1506,16 @@ shardsvr:
 
     ## Configure extra options for startup probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-    ## @param shardsvr.arbiter.startupProbe.enabled Enable readinessProbe
-    ## @param shardsvr.arbiter.startupProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-    ## @param shardsvr.arbiter.startupProbe.periodSeconds Period seconds for readinessProbe
-    ## @param shardsvr.arbiter.startupProbe.timeoutSeconds Timeout seconds for readinessProbe
-    ## @param shardsvr.arbiter.startupProbe.failureThreshold Failure threshold for readinessProbe
-    ## @param shardsvr.arbiter.startupProbe.successThreshold Success threshold for readinessProbe
+    ## @param shardsvr.arbiter.startupProbe.enabled Enable startupProbe
+    ## @param shardsvr.arbiter.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+    ## @param shardsvr.arbiter.startupProbe.periodSeconds Period seconds for startupProbe
+    ## @param shardsvr.arbiter.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+    ## @param shardsvr.arbiter.startupProbe.failureThreshold Failure threshold for startupProbe
+    ## @param shardsvr.arbiter.startupProbe.successThreshold Success threshold for startupProbe
     ##
     startupProbe:
-      enabled: true
-      initialDelaySeconds: 10
+      enabled: false
+      initialDelaySeconds: 0
       periodSeconds: 5
       timeoutSeconds: 2
       failureThreshold: 15
@@ -1620,16 +1620,16 @@ metrics:
     successThreshold: 1
   ## Configure extra options for startup probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param metrics.startupProbe.enabled Enable readinessProbe
-  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param metrics.startupProbe.periodSeconds Period seconds for readinessProbe
-  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param metrics.startupProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param metrics.startupProbe.successThreshold Success threshold for readinessProbe
+  ## @param metrics.startupProbe.enabled Enable startupProbe
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metrics.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
     enabled: false
-    initialDelaySeconds: 10
+    initialDelaySeconds: 0
     periodSeconds: 5
     timeoutSeconds: 2
     failureThreshold: 15
