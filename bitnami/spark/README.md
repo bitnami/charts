@@ -69,6 +69,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 | `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
+| `namespaceOverride`      | String to fully override common.names.namespace                                              | `""`            |
 | `commonLabels`           | Labels to add to all deployed objects                                                        | `{}`            |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                                   | `{}`            |
 | `clusterDomain`          | Kubernetes cluster domain name                                                               | `cluster.local` |
@@ -100,6 +101,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.containerPorts.https`                            | Specify the port where the web interface will listen on the master over HTTPS                                            | `8480`          |
 | `master.containerPorts.cluster`                          | Specify the port where the master listens to communicate with workers                                                    | `7077`          |
 | `master.hostAliases`                                     | Deployment pod host aliases                                                                                              | `[]`            |
+| `master.extraContainerPorts`                             | Specify the port where the running jobs inside the masters listens                                                       | `[]`            |
 | `master.daemonMemoryLimit`                               | Set the memory limit for the master daemon                                                                               | `""`            |
 | `master.configOptions`                                   | Use a string to set the config options for in the form "-Dx=y"                                                           | `""`            |
 | `master.extraEnvVars`                                    | Extra environment variables to pass to the master container                                                              | `[]`            |

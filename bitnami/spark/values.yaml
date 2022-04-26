@@ -27,6 +27,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -111,6 +114,14 @@ master:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param master.extraContainerPorts Specify the port where the running jobs inside the masters listens
+  ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#containerport-v1-core
+  ## e.g:
+  ## - name: myapp
+  ##   containerPort: 8000
+  ##   protocol: TCP
+  ##
+  extraContainerPorts: []
   ## @param master.daemonMemoryLimit Set the memory limit for the master daemon
   ##
   daemonMemoryLimit: ""
