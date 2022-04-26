@@ -81,7 +81,7 @@ jobs:
         with:
           script: |
               core.setFailed('${{ steps.get-chart.outputs.error }}')
-  vib-verify:
+  vib-verify-tkg:
     runs-on: ubuntu-latest
     needs: get-chart
     if: ${{ needs.get-chart.outputs.result == 'ok' }}
@@ -121,4 +121,25 @@ jobs:
           # By default, the Target Platfrom is Tanzu Kubernetes Grid
           VIB_ENV_TARGET_PLATFORM: "91d398a2-25c4-4cda-8732-75a3cfc179a1"
           # If the asset is not compatible with TKG, use GKE instead
-          VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: "91d398a2-25c4-4cda-8732-75a3cfc179a1"        
+          VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: "91d398a2-25c4-4cda-8732-75a3cfc179a1" 
+
+  vib-verify-aks:
+    runs-on: ubuntu-latest
+    needs: get-chart
+    if: ${{ needs.get-chart.outputs.result == 'ok' }}
+    name: ${{ needs.get-chart.outputs.chart }} verification
+    steps:
+      - uses: actions/checkout@v2
+        name: 'Checkout Repository'
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - uses: vmware-labs/vmware-image-builder-action@main
+        name: ${{ needs.get-chart.outputs.chart }} verification
+        with:
+          pipeline: ${{ needs.get-chart.outputs.chart }}/vib-verify.json
+        env:
+          # By default, the Target Platfrom is Tanzu Kubernetes Grid
+          VIB_ENV_TARGET_PLATFORM: "c8098141-a34b-4487-a0d3-ac33dd1d8bdc"
+          # If the asset is not compatible with TKG, use GKE instead
+          VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: "91d398a2-25c4-4cda-8732-75a3cfc179a1"              
