@@ -78,6 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
 | `nameOverride`                     | String to partially override rabbitmq.fullname template (will maintain the release name)                                                 | `""`                                              |
 | `fullnameOverride`                 | String to fully override rabbitmq.fullname template                                                                                      | `""`                                              |
+| `namespaceOverride`                | String to fully override common.names.namespace                                                                                          | `""`                                              |
 | `kubeVersion`                      | Force target Kubernetes version (using Helm capabilities if not set)                                                                     | `""`                                              |
 | `clusterDomain`                    | Kubernetes Cluster Domain                                                                                                                | `cluster.local`                                   |
 | `extraDeploy`                      | Array of extra objects to deploy with the release                                                                                        | `[]`                                              |
@@ -302,7 +303,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping.                                    | `[]`                  |
 | `metrics.serviceMonitor.metricRelabelings` | MetricsRelabelConfigs to apply to samples before ingestion.                            | `[]`                  |
 | `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels               | `false`               |
-| `metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the installed Prometheus Operator             | `{}`                  |
 | `metrics.serviceMonitor.targetLabels`      | Used to keep given service's labels in target                                          | `{}`                  |
 | `metrics.serviceMonitor.podTargetLabels`   | Used to keep given pod's labels in target                                              | `{}`                  |
 | `metrics.serviceMonitor.path`              | Define the path used by ServiceMonitor to scrap metrics                                | `""`                  |
