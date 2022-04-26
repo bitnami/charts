@@ -11,7 +11,7 @@ it('allows login/logout and user manipulation', () => {
   cy.fixture('user').then((user) => {
     cy.get('#first-name').clear().type(`${user.newUser.firstName}.${random}`);
     cy.get('#last-name').clear().type(`${user.newUser.lastName}.${random}`);
-    cy.get('#email-address').clear().type(`${user.newUser.email}.${random}`);
+    cy.get('#email-address').clear().type(`${user.newUser.email}`);
     cy.get('#save-btn').click();
     cy.contains('.pf-c-alert__title', 'has been updated');
     cy.get('#signOutButton').click();
