@@ -545,26 +545,32 @@ $ helm upgrade my-release bitnami/rabbitmq --set auth.password=[PASSWORD] --set 
 
 This major release renames several values in this chart and adds missing features, in order to be aligned with the rest of the assets in the Bitnami charts repository.
 
-- `service.port` has been renamed as ``.
-- `service.portName` has been renamed as ``.
-- `service.nodePort`has been renamed as ``.
-- `service.tlsPort` has been renamed as ``.
-- `service.tlsPortName` has been renamed as ``.
-- `service.tlsNodePort` has been renamed as ``.
-- `service.epmdPortName` has been renamed as ``.
-- `service.epmdNodePort` has been renamed as ``.
-- `service.distPort` has been renamed as ``.
-- `service.distPortName` has been renamed as ``.
-- `service.distNodePort` has been renamed as ``.
-- `service.managerPort` has been renamed as ``.
-- `service.managerPortName` has been renamed as ``.
-- `service.managerNodePort` has been renamed as ``.
-- `service.metricsPort` has been renamed as ``.
-- `service.metricsPortName` has been renamed as ``.
-- `service.metricsNodePort` has been renamed as ``.
+  .dist
+  .manager
+  .metrics
+  .epmd
+
+- `service.port` has been renamed as `service.ports.amqp`.
+- `service.portName` has been renamed as `service.portNames.amqp`.
+- `service.nodePort`has been renamed as `service.nodePorts.amqp`.
+- `service.tlsPort` has been renamed as `service.ports.amqpTls`.
+- `service.tlsPortName` has been renamed as `service.portNames.amqpTls`.
+- `service.tlsNodePort` has been renamed as `service.nodePorts.amqpTls`.
+- `service.epmdPortName` has been renamed as `service.portNames.epmd`.
+- `service.epmdNodePort` has been renamed as `service.nodePorts.epmd`.
+- `service.distPort` has been renamed as `service.ports.dist`.
+- `service.distPortName` has been renamed as `service.portNames.dist`.
+- `service.distNodePort` has been renamed as `service.nodePorts.dist`.
+- `service.managerPort` has been renamed as `service.ports.manager`.
+- `service.managerPortName` has been renamed as `service.portNames.manager`.
+- `service.managerNodePort` has been renamed as `service.nodePorts.manager`.
+- `service.metricsPort` has been renamed as `service.ports.metrics`.
+- `service.metricsPortName` has been renamed as `service.portNames.metrics`.
+- `service.metricsNodePort` has been renamed as `service.nodePorts.metrics`.
 - `persistence.volumes` has been removed, as it duplicates the parameter `extraVolumes`.
 - `ingress.certManager` has been removed.
 - `metrics.serviceMonitor.relabellings` has been replaced with `metrics.serviceMonitor.relabelings`, and it sets the field `relabelings` instead of `metricRelabelings`.
+- `metrics.serviceMonitor.additionalLabels` has been renamed as `metrics.serviceMonitor.labels`
 - `updateStrategyType` has been removed, use the field `updateStrategy` instead, which is interpreted as a template.
 - The content of `podSecurityContext` and `containerSecurityContext` have been modified.
 - The behavior of VolumePermissions has been modified to not change ownership of '.snapshot' and 'lost+found'

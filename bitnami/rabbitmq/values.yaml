@@ -58,6 +58,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override rabbitmq.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
@@ -1045,10 +1048,6 @@ metrics:
     ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
-    ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are required by the installed Prometheus Operator
-    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
-    ##
-    additionalLabels: {}
     ## @param metrics.serviceMonitor.targetLabels Used to keep given service's labels in target
     ## e.g:
     ## - app.kubernetes.io/name
@@ -1096,7 +1095,7 @@ metrics:
     ## These are just examples rules inspired from https://awesome-prometheus-alerts.grep.to/rules.html
     ## rules:
     ##   - alert: RabbitmqDown
-    ##     expr: rabbitmq_up{service="{{ template "rabbitmq.fullname" . }}"} == 0
+    ##     expr: rabbitmq_up{service="{{ template "common.names.fullname" . }}"} == 0
     ##     for: 5m
     ##     labels:
     ##       severity: error
@@ -1105,7 +1104,7 @@ metrics:
     ##       description: RabbitMQ node down
     ##   - alert: ClusterDown
     ##     expr: |
-    ##       sum(rabbitmq_running{service="{{ template "rabbitmq.fullname" . }}"})
+    ##       sum(rabbitmq_running{service="{{ template "common.names.fullname" . }}"})
     ##       < {{ .Values.replicaCount }}
     ##     for: 5m
     ##     labels:
@@ -1116,7 +1115,7 @@ metrics:
     ##           Less than {{ .Values.replicaCount }} nodes running in RabbitMQ cluster
     ##           VALUE = {{ "{{ $value }}" }}
     ##   - alert: ClusterPartition
-    ##     expr: rabbitmq_partitions{service="{{ template "rabbitmq.fullname" . }}"} > 0
+    ##     expr: rabbitmq_partitions{service="{{ template "common.names.fullname" . }}"} > 0
     ##     for: 5m
     ##     labels:
     ##       severity: error
@@ -1127,8 +1126,8 @@ metrics:
     ##           VALUE = {{ "{{ $value }}" }}
     ##   - alert: OutOfMemory
     ##     expr: |
-    ##       rabbitmq_node_mem_used{service="{{ template "rabbitmq.fullname" . }}"}
-    ##       / rabbitmq_node_mem_limit{service="{{ template "rabbitmq.fullname" . }}"}
+    ##       rabbitmq_node_mem_used{service="{{ template "common.names.fullname" . }}"}
+    ##       / rabbitmq_node_mem_limit{service="{{ template "common.names.fullname" . }}"}
     ##       * 100 > 90
     ##     for: 5m
     ##     labels:
@@ -1139,7 +1138,7 @@ metrics:
     ##           Memory available for RabbmitMQ is low (< 10%)\n  VALUE = {{ "{{ $value }}" }}
     ##           LABELS: {{ "{{ $labels }}" }}
     ##   - alert: TooManyConnections
-    ##     expr: rabbitmq_connectionsTotal{service="{{ template "rabbitmq.fullname" . }}"} > 1000
+    ##     expr: rabbitmq_connectionsTotal{service="{{ template "common.names.fullname" . }}"} > 1000
     ##     for: 5m
     ##     labels:
     ##       severity: warning

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "rabbitmq.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.statefulsetLabels }}
@@ -14,7 +14,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  serviceName: {{ printf "%s-headless" (include "rabbitmq.fullname" .) }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
   {{- if .Values.updateStrategy }}
@@ -36,8 +36,11 @@ spec:
         {{- if or (not .Values.auth.existingErlangSecret) (not .Values.auth.existingPasswordSecret) .Values.extraSecrets }}
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
-        {{- if or .Values.podAnnotations .Values.metrics.enabled }}
-        {{- include "rabbitmq.podAnnotations" . | nindent 8 }}
+        {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "rabbitmq.imagePullSecrets" . | nindent 6 }}
@@ -155,7 +158,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: K8S_SERVICE_NAME
-              value: {{ printf "%s-headless" (include "rabbitmq.fullname" .) }}
+              value: {{ printf "%s-headless" (include "common.names.fullname" .) }}
             - name: K8S_ADDRESS_TYPE
               value: {{ .Values.clustering.addressType }}
             - name: RABBITMQ_FORCE_BOOT
@@ -323,7 +326,7 @@ spec:
         {{- end }}
         - name: configuration
           configMap:
-            name: {{ printf "%s-config" (include "rabbitmq.fullname" .) }}
+            name: {{ printf "%s-config" (include "common.names.fullname" .) }}
             items:
               - key: rabbitmq.conf
                 path: rabbitmq.conf

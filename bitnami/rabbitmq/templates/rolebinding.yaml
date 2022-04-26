@@ -2,7 +2,7 @@
 kind: RoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
-  name: {{ printf "%s-endpoint-reader" (include "rabbitmq.fullname" .) }}
+  name: {{ printf "%s-endpoint-reader" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -17,5 +17,5 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ printf "%s-endpoint-reader" (include "rabbitmq.fullname" .) }}
+  name: {{ printf "%s-endpoint-reader" (include "common.names.fullname" .) }}
 {{- end }}

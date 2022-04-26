@@ -2,7 +2,7 @@
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: {{ include "rabbitmq.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -26,7 +26,7 @@ spec:
       from:
         - podSelector:
             matchLabels:
-              {{ printf "%s-client" (include "rabbitmq.fullname" .) }}: "true"
+              {{ printf "%s-client" (include "common.names.fullname" .) }}: "true"
         - podSelector:
             matchLabels:
               {{- include "common.labels.matchLabels" . | nindent 14 }}
