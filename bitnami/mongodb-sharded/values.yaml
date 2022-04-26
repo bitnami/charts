@@ -1628,7 +1628,7 @@ metrics:
   ## @param metrics.startupProbe.successThreshold Success threshold for readinessProbe
   ##
   startupProbe:
-    enabled: true
+    enabled: false
     initialDelaySeconds: 10
     periodSeconds: 5
     timeoutSeconds: 2
