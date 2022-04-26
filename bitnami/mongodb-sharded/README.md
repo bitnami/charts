@@ -503,7 +503,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                 | `1`                        |
 | `metrics.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                               | `3`                        |
 | `metrics.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                               | `1`                        |
-| `metrics.startupProbe.enabled`                            | Enable readinessProbe                                                              | `true`                     |
+| `metrics.startupProbe.enabled`                            | Enable readinessProbe                                                              | `false`                    |
 | `metrics.startupProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                           | `10`                       |
 | `metrics.startupProbe.periodSeconds`                      | Period seconds for readinessProbe                                                  | `5`                        |
 | `metrics.startupProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                 | `2`                        |
