@@ -56,7 +56,7 @@ kubeVersion: ""
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.11.0-debian-10-r10
+  tag: 0.11.0-debian-10-r27
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -445,7 +445,7 @@ oci:
   ## @param oci.compartmentOCID When using the OCI provider, specify your Compartment OCID where your DNS Zone is located in.
   ##
   compartmentOCID: ""
-  ## @param oci.privateKey When using the OCI provider, paste in your RSA private key file for the Oracle API
+  ## @param oci.privateKey [string] When using the OCI provider, paste in your RSA private key file for the Oracle API
   ##
   privateKey: |
     -----BEGIN RSA PRIVATE KEY-----

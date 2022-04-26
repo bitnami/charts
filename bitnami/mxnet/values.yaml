@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mxnet
-  tag: 1.9.0-debian-10-r93
+  tag: 1.9.0-debian-10-r110
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -87,6 +87,7 @@ image:
   ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
+
 ## @param entrypoint [object] The main entrypoint of your app, this will be executed as:
 ##   python [file] [args]
 ##
