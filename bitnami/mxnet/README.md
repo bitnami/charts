@@ -80,37 +80,37 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common Mxnet parameters
 
-| Name                                  | Description                                                                                           | Value                 |
-| ------------------------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`                      | Apache MXNet (Incubating) image registry                                                              | `docker.io`           |
-| `image.repository`                    | Apache MXNet (Incubating) image repository                                                            | `bitnami/mxnet`       |
-| `image.tag`                           | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                  | `1.9.0-debian-10-r93` |
-| `image.pullPolicy`                    | Image pull policy                                                                                     | `IfNotPresent`        |
-| `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                      | `[]`                  |
-| `image.debug`                         | Specify if debug logs should be enabled                                                               | `false`               |
-| `entrypoint`                          | The main entrypoint of your app, this will be executed as:                                            | `{}`                  |
-| `mode`                                | Apache MXNet (Incubating) deployment mode. Can be `standalone` or `distributed`                       | `standalone`          |
-| `existingSecret`                      | Name of a secret with sensitive data to mount in the pods                                             | `""`                  |
-| `configMap`                           | Name of an existing config map containing all the files you want to load in Apache MXNet (Incubating) | `""`                  |
-| `hostAliases`                         | Deployment pod host aliases                                                                           | `[]`                  |
-| `cloneFilesFromGit.enabled`           | Enable in order to download files from git repository                                                 | `false`               |
-| `cloneFilesFromGit.repository`        | Repository to clone                                                                                   | `""`                  |
-| `cloneFilesFromGit.revision`          | Branch name to clone                                                                                  | `master`              |
-| `cloneFilesFromGit.extraVolumeMounts` | Add extra volume mounts for the GIT container                                                         | `[]`                  |
-| `persistence.enabled`                 | Use a PVC to persist data                                                                             | `false`               |
-| `persistence.storageClass`            | discourse & sidekiq data Persistent Volume Storage Class                                              | `""`                  |
-| `persistence.existingClaim`           | Use a existing PVC which must be created manually before bound                                        | `""`                  |
-| `persistence.mountPath`               | Path to mount the volume at                                                                           | `/bitnami/mxnet`      |
-| `persistence.accessModes`             | Persistent Volume Access Mode                                                                         | `["ReadWriteOnce"]`   |
-| `persistence.size`                    | Size of data volume                                                                                   | `8Gi`                 |
-| `persistence.annotations`             | Persistent Volume annotations                                                                         | `{}`                  |
-| `extraEnvVars`                        | Array with extra environment variables to add to all the pods                                         | `[]`                  |
-| `extraEnvVarsCM`                      | Name of existing ConfigMap containing extra env vars for all the pods                                 | `""`                  |
-| `extraEnvVarsSecret`                  | Name of existing Secret containing extra env vars for all the pods                                    | `""`                  |
-| `extraVolumes`                        | Array to add extra volumes (evaluated as a template)                                                  | `[]`                  |
-| `extraVolumeMounts`                   | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)                  | `[]`                  |
-| `sidecars`                            | Attach additional containers to the pods (scheduler, worker and server nodes)                         | `[]`                  |
-| `initContainers`                      | Attach additional init containers to the pods (scheduler, worker and server nodes)                    | `[]`                  |
+| Name                                  | Description                                                                                           | Value                  |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`                      | Apache MXNet (Incubating) image registry                                                              | `docker.io`            |
+| `image.repository`                    | Apache MXNet (Incubating) image repository                                                            | `bitnami/mxnet`        |
+| `image.tag`                           | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                  | `1.9.0-debian-10-r110` |
+| `image.pullPolicy`                    | Image pull policy                                                                                     | `IfNotPresent`         |
+| `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                      | `[]`                   |
+| `image.debug`                         | Specify if debug logs should be enabled                                                               | `false`                |
+| `entrypoint`                          | The main entrypoint of your app, this will be executed as:                                            | `{}`                   |
+| `mode`                                | Apache MXNet (Incubating) deployment mode. Can be `standalone` or `distributed`                       | `standalone`           |
+| `existingSecret`                      | Name of a secret with sensitive data to mount in the pods                                             | `""`                   |
+| `configMap`                           | Name of an existing config map containing all the files you want to load in Apache MXNet (Incubating) | `""`                   |
+| `hostAliases`                         | Deployment pod host aliases                                                                           | `[]`                   |
+| `cloneFilesFromGit.enabled`           | Enable in order to download files from git repository                                                 | `false`                |
+| `cloneFilesFromGit.repository`        | Repository to clone                                                                                   | `""`                   |
+| `cloneFilesFromGit.revision`          | Branch name to clone                                                                                  | `master`               |
+| `cloneFilesFromGit.extraVolumeMounts` | Add extra volume mounts for the GIT container                                                         | `[]`                   |
+| `persistence.enabled`                 | Use a PVC to persist data                                                                             | `false`                |
+| `persistence.storageClass`            | discourse & sidekiq data Persistent Volume Storage Class                                              | `""`                   |
+| `persistence.existingClaim`           | Use a existing PVC which must be created manually before bound                                        | `""`                   |
+| `persistence.mountPath`               | Path to mount the volume at                                                                           | `/bitnami/mxnet`       |
+| `persistence.accessModes`             | Persistent Volume Access Mode                                                                         | `["ReadWriteOnce"]`    |
+| `persistence.size`                    | Size of data volume                                                                                   | `8Gi`                  |
+| `persistence.annotations`             | Persistent Volume annotations                                                                         | `{}`                   |
+| `extraEnvVars`                        | Array with extra environment variables to add to all the pods                                         | `[]`                   |
+| `extraEnvVarsCM`                      | Name of existing ConfigMap containing extra env vars for all the pods                                 | `""`                   |
+| `extraEnvVarsSecret`                  | Name of existing Secret containing extra env vars for all the pods                                    | `""`                   |
+| `extraVolumes`                        | Array to add extra volumes (evaluated as a template)                                                  | `[]`                   |
+| `extraVolumeMounts`                   | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)                  | `[]`                   |
+| `sidecars`                            | Attach additional containers to the pods (scheduler, worker and server nodes)                         | `[]`                   |
+| `initContainers`                      | Attach additional init containers to the pods (scheduler, worker and server nodes)                    | `[]`                   |
 
 
 ### Mxnet Standalone parameters (only for standalone mode)
