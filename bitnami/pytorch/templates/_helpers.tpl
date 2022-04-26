@@ -29,11 +29,38 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Return the proper name for master related resources
+*/}}
+{{- define "pytorch.master.name" -}}
+{{- $architecture := coalesce .Values.mode .Values.architecture }}
+{{- if eq .Values.architecture "distributed" }}
+{{- printf "%s-master" (include "common.names.fullname" .) }}
+{{- else }}
+{{- include "common.names.fullname" . }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper securityContext when enabled by the deprecated or new params
+*/}}
+{{- define "pytorch.securityContext" -}}
+{{- if .Values.securityContext }}
+{{- if .Values.securityContext.enabled }}
+      securityContext: {{- omit .Values.securityContext "enabled" | toYaml | nindent 8 }}
+{{- end }}
+{{- else }}
+{{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "pytorch.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "pytorch.validateValues.mode" .) -}}
+{{- $messages := append $messages (include "pytorch.validateValues.architecture" .) -}}
 {{- $messages := append $messages (include "pytorch.validateValues.worldSize" .) -}}
 {{- $messages := append $messages (include "pytorch.validateValues.extraVolumes" .) -}}
 {{- $messages := without $messages "" -}}
@@ -44,19 +71,28 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of PyTorch - must provide a valid mode ("distributed" or "standalone") */}}
-{{- define "pytorch.validateValues.mode" -}}
+{{/* Validate values of PyTorch - must provide a valid architecture ("distributed" or "standalone") */}}
+{{- define "pytorch.validateValues.architecture" -}}
+{{- if .Values.mode -}}
 {{- if and (ne .Values.mode "distributed") (ne .Values.mode "standalone") -}}
 pytorch: mode
     Invalid mode selected. Valid values are "distributed" and
     "standalone". Please set a valid mode (--set mode="xxxx")
+{{- end -}}
+{{- else -}}
+{{- if and (ne .Values.architecture "distributed") (ne .Values.architecture "standalone") -}}
+pytorch: architecture
+    Invalid architecture selected. Valid values are "distributed" and
+    "standalone". Please set a valid architecture (--set architecture="xxxx")
+{{- end -}}
 {{- end -}}
 {{- end -}}
 
 {{/* Validate values of PyTorch - number of replicas must be even, greater than 4 and lower than 32 */}}
 {{- define "pytorch.validateValues.worldSize" -}}
 {{- $replicaCount := int .Values.worldSize }}
-{{- if and (eq .Values.mode "distributed") (or (lt $replicaCount 1) (gt $replicaCount 32)) -}}
+{{- $architecture := coalesce .Values.mode .Values.architecture }}
+{{- if and (eq $architecture "distributed") (or (lt $replicaCount 1) (gt $replicaCount 32)) -}}
 pytorch: worldSize
     World size must be greater than 1 and lower than 32 in distributed mode!!
     Please set a valid world size (--set worldSize=X)

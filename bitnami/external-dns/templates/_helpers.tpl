@@ -164,7 +164,6 @@ Return true if a configmap object should be created
 {{- end -}}
 {{- end -}}
 
-
 {{/*
 Return the name of the Secret used to store the passwords
 */}}
@@ -233,8 +232,12 @@ region = {{ .Values.aws.region }}
   {{- if .Values.azure.cloud }}
   "cloud": "{{ .Values.azure.cloud }}",
   {{- end }}
+  {{- if .Values.azure.tenantId }}
   "tenantId": "{{ .Values.azure.tenantId }}",
+  {{- end }}
+  {{- if .Values.azure.subscriptionId }}
   "subscriptionId": "{{ .Values.azure.subscriptionId }}",
+  {{- end }}
   "resourceGroup": "{{ .Values.azure.resourceGroup }}",
   {{- if not .Values.azure.useManagedIdentityExtension }}
   "aadClientId": "{{ .Values.azure.aadClientId }}",
@@ -276,9 +279,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "external-dns.validateValues.pdns.apiKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.resourceGroupWithoutTenantId" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.resourceGroupWithoutSubscriptionId" .) -}}
-{{- $messages := append $messages (include "external-dns.validateValues.azure.tenantIdWithoutResourceGroup" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.tenantIdWithoutSubscriptionId" .) -}}
-{{- $messages := append $messages (include "external-dns.validateValues.azure.subscriptionIdWithoutResourceGroup" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.subscriptionIdWithoutTenantId" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.useManagedIdentityExtensionAadClientId" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.useManagedIdentityExtensionAadClientSecret" .) -}}
@@ -434,18 +435,6 @@ external-dns: azure.resourceGroup
 
 {{/*
 Validate values of Azure DNS:
-- must provide the Azure Tenant ID when provider is "azure" and secretName is not set and resourceGroup is set
-*/}}
-{{- define "external-dns.validateValues.azure.tenantIdWithoutResourceGroup" -}}
-{{- if and (eq .Values.provider "azure") (not .Values.azure.tenantId) (not .Values.azure.secretName) .Values.azure.resourceGroup -}}
-external-dns: azure.tenantId
-    You must provide the Azure Tenant ID when provider="azure" and resourceGroup is set.
-    Please set the tenantId parameter (--set azure.tenantId="xxxx")
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of Azure DNS:
 - must provide the Azure Tenant ID when provider is "azure" and secretName is not set and subscriptionId is set
 */}}
 {{- define "external-dns.validateValues.azure.tenantIdWithoutSubscriptionId" -}}
@@ -453,18 +442,6 @@ Validate values of Azure DNS:
 external-dns: azure.tenantId
     You must provide the Azure Tenant ID when provider="azure" and subscriptionId is set.
     Please set the tenantId parameter (--set azure.tenantId="xxxx")
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of Azure DNS:
-- must provide the Azure Subscription ID when provider is "azure" and secretName is not set and resourceGroup is set
-*/}}
-{{- define "external-dns.validateValues.azure.subscriptionIdWithoutResourceGroup" -}}
-{{- if and (eq .Values.provider "azure") (not .Values.azure.subscriptionId) (not .Values.azure.secretName) .Values.azure.resourceGroup -}}
-external-dns: azure.subscriptionId
-    You must provide the Azure Subscription ID when provider="azure" and resourceGroup is set.
-    Please set the subscriptionId parameter (--set azure.subscriptionId="xxxx")
 {{- end -}}
 {{- end -}}
 

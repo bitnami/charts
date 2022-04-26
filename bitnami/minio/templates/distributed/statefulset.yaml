@@ -1,7 +1,7 @@
 {{- if and (eq .Values.mode "distributed") (not .Values.gateway.enabled) }}
 {{- $fullname := include "common.names.fullname" . }}
 {{- $headlessService := printf "%s-headless" (include "common.names.fullname" .) | trunc 63 }}
-{{- $releaseNamespace := .Release.Namespace | quote }}
+{{- $releaseNamespace := .Release.Namespace }}
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $apiPort := toString .Values.containerPorts.api }}
 {{- $replicaCount := int .Values.statefulset.replicaCount }}
@@ -12,7 +12,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ $fullname }}
-  namespace: {{ $releaseNamespace  }}
+  namespace: {{ $releaseNamespace | quote  }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}

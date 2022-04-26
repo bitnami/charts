@@ -1,8 +1,10 @@
-{{- if eq .Values.mode "distributed" }}
+{{- $architecture := coalesce .Values.mode .Values.architecture }}
+{{- if eq $architecture "distributed" }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.names.fullname" . }}-headless
+  name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: worker
 spec:

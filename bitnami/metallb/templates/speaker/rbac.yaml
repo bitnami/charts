@@ -3,7 +3,8 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}-speaker
+  name: {{ printf "%s-speaker" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: speaker
     {{- if .Values.commonLabels }}
@@ -33,7 +34,7 @@ rules:
   - apiGroups:
       - policy
     resourceNames:
-      - {{ include "common.names.fullname" . }}-speaker
+      - {{ printf "%s-speaker" (include "common.names.fullname" .) }}
     resources:
       - podsecuritypolicies
     verbs:
@@ -42,7 +43,8 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
-  name: {{ include "common.names.fullname" . }}-pod-lister
+  name: {{ printf "%s-pod-lister" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: speaker
     {{- if .Values.commonLabels }}
@@ -62,7 +64,8 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "common.names.fullname" . }}-speaker
+  name: {{ printf "%s-speaker" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: speaker
     {{- if .Values.commonLabels }}
@@ -73,17 +76,18 @@ metadata:
   {{- end }}
 subjects:
   - kind: ServiceAccount
-    name: {{ include "metallb.speakerServiceAccountName" . }}
-    namespace: {{ .Release.Namespace }}
+    name: {{ include "metallb.speaker.serviceAccountName" . }}
+    namespace: {{ include "common.names.namespace" . | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "common.names.fullname" . }}-speaker
+  name: {{ printf "%s-speaker" (include "common.names.fullname" .) }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ include "common.names.fullname" . }}-pod-lister
+  name: {{ printf "%s-pod-lister" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: speaker
     {{- if .Values.commonLabels }}
@@ -95,8 +99,8 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ include "common.names.fullname" . }}-pod-lister
+  name: {{ printf "%s-pod-lister" (include "common.names.fullname" .) }}
 subjects:
   - kind: ServiceAccount
-    name: {{ include "metallb.speakerServiceAccountName" . }}
+    name: {{ include "metallb.speaker.serviceAccountName" . }}
 {{- end -}}

@@ -101,7 +101,11 @@ Return true if a configmap object should be created
 Return the Database hostname
 */}}
 {{- define "keycloak.databaseHost" -}}
+{{- if eq .Values.postgresql.architecture "replication" }}
+{{- ternary (include "keycloak.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled -}}-primary
+{{- else -}}
 {{- ternary (include "keycloak.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
