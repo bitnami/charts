@@ -48,9 +48,10 @@ it('allows a stream to be created and deployed', () => {
   cy.get('.toast-container').should('contain', 'Deploy success');
 });
 
-it('checks if a task is properly created and schedule a task', () => {
+it('allows a task to be scheduled and destroyed', () => {
   const CRON_EXPRESSION = '*/5 * * * *';
 
+  cy.visit('/dashboard');
   importATaskApplication();
   createATask();
   cy.get('[routerlink="tasks-jobs/tasks"]').click();
@@ -67,19 +68,14 @@ it('checks if a task is properly created and schedule a task', () => {
   cy.get('input[name="example"]').last().type(CRON_EXPRESSION);
   cy.contains('button', 'Create schedule(s)').click();
   cy.contains('.toast-container', 'Successfully');
-});
-
-it('launch a task previosly created', () => {
-  createATask();
-  cy.visit('dashboard/#/tasks-jobs/tasks');
-
+  cy.contains('a', 'Tasks').click();
   cy.contains('clr-dg-cell', 'UNKNOWN')
     .siblings('clr-dg-cell', 'test-task-')
     .first()
     .click();
-  cy.contains('button', 'Launch task').click();
-  cy.get('#btn-deploy-builder').click();
-  cy.contains('.toast-container', 'Successfully');
+  cy.contains('button', 'Destroy task').click();
+  cy.contains('.btn-danger', 'Destroy the task').click();
+  cy.contains('.toast-container', '1 task definition(s) destroyed.');
 });
 
 it('allows importing a task from a file and destroying it ', () => {
@@ -100,4 +96,12 @@ it('allows importing a task from a file and destroying it ', () => {
   cy.contains('.modal-content', 'Confirm Destroy Task');
   cy.contains('button', 'Destroy the task').click();
   cy.get('.toast-container').should('contain', 'destroyed');
+});
+
+it('allows unregistering of an application', () => {
+  importAStreamApplication();
+  cy.get('clr-dg-cell').siblings('clr-dg-cell', 'PROCESSOR').first().click();
+  cy.contains('button', 'Unregister Application').click();
+  cy.contains('button', 'Unregister the application').click();
+  cy.get('.toast-container').should('contain', 'Successfully removed app');
 });

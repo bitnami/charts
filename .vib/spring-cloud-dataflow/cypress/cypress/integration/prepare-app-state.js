@@ -46,6 +46,7 @@ export const createATask = () => {
     cy.get('input[placeholder="Task Name"]').type(
       `${task.newTask.name}-${random}`
     );
+    cy.get('input#desc').type('This is a task');
     cy.contains('.btn-primary', 'Create the task').click();
   });
 };
