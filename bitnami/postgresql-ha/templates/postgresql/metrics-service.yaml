@@ -9,6 +9,9 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+    {{- if .Values.metrics.serviceMonitor.selector }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 4 }}
+    {{- end }}
   annotations:
   {{- if .Values.metrics.annotations }}
   {{- include "common.tplvalues.render" (dict "value" .Values.metrics.annotations "context" $) | nindent 4 }}
