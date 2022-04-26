@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
+import { random } from './utils';
 import {
-  random,
   importAStreamApplication,
   importATaskApplication,
   createATask,
-} from './utils';
+} from './prepare-app-state';
 
 it('allows getting Spring Cloud Dataflow info', () => {
   cy.visit('/dashboard');
@@ -15,7 +15,6 @@ it('allows getting Spring Cloud Dataflow info', () => {
     .and('contain', 'Dashboard')
     .and('contain', 'Shell');
 });
-
 it('allows a stream to be created', () => {
   const STREAM = 'mongodb | cassandra';
 
