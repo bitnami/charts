@@ -207,10 +207,9 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.mongos.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - mongo
-                - --disableImplicitSessions
-                - --eval
-                - "db.adminCommand('ping')"
+                - /bin/sh 
+                - -c 
+                - mongosh --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
           {{- else if .Value.mongos.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -218,10 +217,9 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.mongos.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - mongo
-                - --disableImplicitSessions
-                - --eval
-                - "db.adminCommand('ping')"
+                - /bin/sh 
+                - -c 
+                - mongosh --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
           {{- else if .Value.mongos.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}

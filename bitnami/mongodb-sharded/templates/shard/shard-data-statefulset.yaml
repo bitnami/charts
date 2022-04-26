@@ -241,7 +241,7 @@ spec:
               command:
                 - /bin/sh 
                 - -c 
-                - mongo --port $MONGODB_PORT_NUMBER --disableImplicitSessions --eval "db.adminCommand('ping')"
+                - mongosh --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
           {{- else if $.Value.shardsvr.dataNode.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}

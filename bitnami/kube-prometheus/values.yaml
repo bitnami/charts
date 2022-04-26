@@ -50,7 +50,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.55.1-debian-10-r22
+    tag: 0.56.0-debian-10-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -362,7 +362,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.34.0-debian-10-r13
+    tag: 2.35.0-debian-10-r3
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -945,7 +945,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.25.2-scratch-r3
+      tag: 0.25.2-scratch-r5
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
@@ -1163,7 +1163,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.24.0-debian-10-r24
+    tag: 0.24.0-debian-10-r30
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1655,7 +1655,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.20.0-debian-10-r33
+    tag: 0.20.0-debian-10-r38
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
