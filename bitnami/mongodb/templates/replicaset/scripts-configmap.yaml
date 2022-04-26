@@ -114,7 +114,7 @@ data:
       {{- range $e, $i := until $replicaCount }}
       {{- $mongoList = append $mongoList (printf "%s-%d.%s-headless.%s.svc.%s:%d" $fullname $i $fullname $releaseNamespace $clusterDomain $portNumber) }}
       {{- end }}
-      current_primary=$(mongo admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}{{- if .Values.tls.enabled}} --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert{{- end }} --eval 'db.runCommand("ismaster")' | awk -F\" '/primary/ {print $4}')
+      current_primary=$(mongosh admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}{{- if .Values.tls.enabled}} --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert{{- end }} --eval 'db.runCommand("ismaster")' | awk -F\' '/primary/ {print $2}')
 
       if ! is_empty_value "$current_primary"; then
         info "Detected existing primary: ${current_primary}"
@@ -235,7 +235,7 @@ data:
       sleep ${SLEEP_PERIOD}
 
       counter=0
-      while ! mongo ${usernameAndPassword} --eval 'rs.conf()'; do
+      while ! mongosh ${usernameAndPassword} --eval 'rs.conf()'; do
         counter=$((${counter} +1))
         logger "not yet able to read rs.conf settings from the currently running rs (after ${counter} attempts)"
         sleep ${SLEEP_PERIOD}
@@ -244,13 +244,13 @@ data:
       logger "rs.conf settings have been read from the currently running rs (after ${counter} attempts)"
 
       # read rs.conf again and store it. settings format is '"<key>" : <value>,'
-      currentRsConf=$(mongo ${usernameAndPassword} --eval 'rs.conf()')
+      currentRsConf=$(mongosh ${usernameAndPassword} --eval 'rs.conf()')
 
       desiredEqualsactual=unknown
       settingsToConfigure=""
       for key in ${!desiredRsConf[@]}; do
         value=${desiredRsConf[$key]}
-        if ! $(echo "\"${currentRsConf}"\" | grep -q -e "\"${key}\" : ${value},"); then
+        if ! $(echo "\"${currentRsConf}"\" | grep -q -e "${key}: ${value},"); then
            logger "rs conf setting: ${key} value will be set to: ${value}"
            settingsToConfigure="${settingsToConfigure}cfg.settings.${key} = ${value}; "
            desiredEqualsactual=false
@@ -270,7 +270,7 @@ data:
       # apply the settings only if this member is currently the mongo replicaset PRIMARY
       # it might take a little time before any pod is PRIMARY
       isMaster=unknown
-      if ! mongo ${usernameAndPassword} --eval 'rs.isMaster()' | grep -q "ismaster\" : true"; then
+      if ! mongosh ${usernameAndPassword} --eval 'rs.isMaster()' | grep -q "ismaster: true"; then
         isMaster=false
         logger "This node is not yet PRIMARY - replicaSetConfigurationSettings will only be set on the member that is currently PRIMARY"
       else
@@ -286,7 +286,7 @@ data:
         rsreconf="rs.reconfig(cfg);"
         rsCommand="${rsconf} ${settingsToConfigure} ${rsreconf}"
 
-        mongo ${usernameAndPassword} --eval "${rsCommand}"
+        mongosh ${usernameAndPassword} --eval "${rsCommand}"
         if [ $? -ne 0 ]; then
           logger "Failed to apply mongodb cfg.settings configuration"
         else
