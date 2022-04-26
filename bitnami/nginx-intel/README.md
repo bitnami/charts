@@ -7,7 +7,7 @@ NGINX Open Source for Intel is a lightweight server, combined with cryptography 
 [Overview of NGINX Open Source for Intel](https://github.com/intel/asynch_mode_nginx)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```bash
@@ -356,7 +356,7 @@ This major release no longer uses the bitnami/nginx-ldap-auth-daemon container a
 
 *2022-04-12 edit*:
 
-Bitnami’s NGINX Intel Helm chart from version 0.0.1 to 0.1.11 includes a `ldapDaemon.enabled` option **disabled by default** that allows to configure it with the [bitnami-docker-nginx-ldap-auth-daemon](https://github.com/bitnami/bitnami-docker-nginx-ldap-auth-daemon) following [NGINX’s reference implementation](https://www.nginx.com/blog/nginx-plus-authenticate-users/).
+Bitnami���������s NGINX Intel Helm chart from version 0.0.1 to 0.1.11 includes a `ldapDaemon.enabled` option **disabled by default** that allows to configure it with the [bitnami-docker-nginx-ldap-auth-daemon](https://github.com/bitnami/bitnami-docker-nginx-ldap-auth-daemon) following [NGINX���������s reference implementation](https://www.nginx.com/blog/nginx-plus-authenticate-users/).
 
 On 9 April 2022, security vulnerabilities in the [NGINX LDAP reference implementation](https://github.com/nginxinc/nginx-ldap-auth) were publicly shared. **Although the deprecation of this container from the Bitnami catalog was not related to this security issue, [here](https://docs.bitnami.com/general/security/security-2022-04-12/) you can find more information from the Bitnami security team.**
 

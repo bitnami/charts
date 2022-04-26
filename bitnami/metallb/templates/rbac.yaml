@@ -3,7 +3,8 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
-  name: {{ include "common.names.fullname" . }}-config-watcher
+  name: {{ printf "%s-config-watcher" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -24,7 +25,8 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ include "common.names.fullname" . }}-config-watcher
+  name: {{ printf "%s-config-watcher" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -35,14 +37,14 @@ metadata:
 subjects:
 {{- if .Values.controller.rbac.create }}
   - kind: ServiceAccount
-    name: {{ include "metallb.controllerServiceAccountName" . }}
+    name: {{ include "metallb.controller.serviceAccountName" . }}
 {{- end }}
 {{- if .Values.speaker.rbac.create }}
   - kind: ServiceAccount
-    name: {{ include "metallb.speakerServiceAccountName" . }}
+    name: {{ include "metallb.speaker.serviceAccountName" . }}
 {{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ include "common.names.fullname" . }}-config-watcher
+  name: {{ printf "%s-config-watcher" (include "common.names.fullname" .) }}
 {{- end -}}

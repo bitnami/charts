@@ -16,12 +16,12 @@ metadata:
 spec:
   endpoints:
   {{- if .Values.controller.metrics.enabled }}
-    - port: metrics
+    - port: tcp-metrics
       path: {{ .Values.controller.metrics.path }}
       interval: 30s
   {{- end }}
   {{- if .Values.controller.telemetry.enabled }}
-    - port: telemetry
+    - port: tcp-telemetry
       path: {{ .Values.controller.telemetry.path }}
       interval: 30s
   {{- end }}
