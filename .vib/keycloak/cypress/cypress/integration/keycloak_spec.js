@@ -6,15 +6,17 @@ it('allows login/logout and user manipulation', () => {
   cy.get('#input-error').should('not.exist');
   cy.get('.dropdown-toggle').click({ force: true });
   cy.contains('a', 'Manage account').click({ force: true });
-  cy.contains('p', 'Account console loading').should('not.exist'); //OK until here
+  cy.contains('p', 'Account console loading').should('not.exist'); //Wait until the loading is finished to continue with actions
   cy.contains('a', 'Personal').click({ force: true });
-  cy.get('#email-address').clear().type('test@email.com');
-  cy.get('#first-name').clear().type('User');
-  cy.get('#last-name').clear().type('Last');
-  cy.get('#save-btn').click();
-  cy.contains('.pf-c-alert__title', 'has been updated');
-  cy.get('#signOutButton').click();
-  cy.contains('button#landingSignInButton', 'Sign In');
+  cy.fixture('user').then((user) => {
+    cy.get('#first-name').clear().type(`${user.newUser.firstName}.${random}`);
+    cy.get('#last-name').clear().type(`${user.newUser.lastName}.${random}`);
+    cy.get('#email-address').clear().type(`${user.newUser.email}.${random}`);
+    cy.get('#save-btn').click();
+    cy.contains('.pf-c-alert__title', 'has been updated');
+    cy.get('#signOutButton').click();
+    cy.contains('button#landingSignInButton', 'Sign In');
+  });
 });
 
 it('allows creating a new user', () => {
@@ -50,9 +52,11 @@ it('allows the upload and delete of a client ', () => {
 });
 
 it('allows adding and removing an identity provider', () => {
+  const IDENTITY_PROVIDER = 'instagram';
+
   cy.login();
   cy.contains('a', 'Identity Providers').click();
-  cy.get('.form-group > .form-control').select('instagram');
+  cy.get('.form-group > .form-control').select(IDENTITY_PROVIDER);
   cy.fixture('identity-provider').then((identity) => {
     cy.get('#clientId').type(`${identity.identityProvider.clientId}.${random}`);
     cy.get('#clientSecret').type(
@@ -62,7 +66,7 @@ it('allows adding and removing an identity provider', () => {
   cy.contains('button', 'Save').scrollIntoView().click();
   cy.contains('.alert', 'Success');
   cy.contains('a', 'Identity Providers').click();
-  cy.contains('td', 'instagram').siblings('td', 'Delete').last().click();
+  cy.contains('td', IDENTITY_PROVIDER).siblings('td', 'Delete').last().click();
   cy.contains('button', 'Delete').click();
 });
 
