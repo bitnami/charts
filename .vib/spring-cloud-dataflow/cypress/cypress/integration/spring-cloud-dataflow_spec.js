@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
-import { random } from './utils';
+import { random } from './utils.js';
 import {
   importAStreamApplication,
   importATaskApplication,
   createATask,
-} from './prepare-app-state';
+} from './prepare-app-state.js';
 
 it('allows getting Spring Cloud Dataflow info', () => {
   cy.visit('/dashboard');
@@ -15,7 +15,8 @@ it('allows getting Spring Cloud Dataflow info', () => {
     .and('contain', 'Dashboard')
     .and('contain', 'Shell');
 });
-it('allows a stream to be created', () => {
+
+it('allows a stream to be created and deployed', () => {
   const STREAM = 'mongodb | cassandra';
 
   importAStreamApplication();
@@ -30,6 +31,7 @@ it('allows a stream to be created', () => {
     cy.get('input[placeholder="Stream Name"]').type(
       `${stream.newStream.name}-${random}`
     );
+    console.log(random);
     cy.contains('.btn-primary', 'Create the stream').click();
     cy.contains(
       '.datagrid-inner-wrapper',
@@ -37,18 +39,12 @@ it('allows a stream to be created', () => {
     );
   });
   cy.contains('.toast-container', 'successfully');
-});
-
-it('allows a stream to be deployed', () => {
-  importAStreamApplication();
-  cy.visit('dashboard/#/streams/list');
   cy.contains('clr-dg-cell', 'UNDEPLOYED')
     .siblings('clr-dg-cell', 'test-stream')
     .first()
     .click();
   cy.contains('button#btn-deploy', 'Deploy stream').click();
   cy.contains('button', 'Deploy stream').click();
-  cy.contains('.modal-content', 'Deploy stream');
   cy.get('.toast-container').should('contain', 'Deploy success');
 });
 
@@ -70,6 +66,19 @@ it('checks if a task is properly created and schedule a task', () => {
   });
   cy.get('input[name="example"]').last().type(CRON_EXPRESSION);
   cy.contains('button', 'Create schedule(s)').click();
+  cy.contains('.toast-container', 'Successfully');
+});
+
+it('launch a task previosly created', () => {
+  createATask();
+  cy.visit('dashboard/#/tasks-jobs/tasks');
+
+  cy.contains('clr-dg-cell', 'UNKNOWN')
+    .siblings('clr-dg-cell', 'test-task-')
+    .first()
+    .click();
+  cy.contains('button', 'Launch task').click();
+  cy.get('#btn-deploy-builder').click();
   cy.contains('.toast-container', 'Successfully');
 });
 

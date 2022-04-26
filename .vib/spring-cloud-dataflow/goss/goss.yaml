@@ -8,12 +8,7 @@ file:
     exists: true
     filetype: directory
     mode: "0775"
-    owner: root  
-  /.m2/repository/org/springframework/cloud/stream/app:
-    exists: true
-    filetype: directory
-    mode: "0644"
-    owner: root 
+    owner: root
 command:
   user-id-test:
     exec: id -u
