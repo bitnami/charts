@@ -185,8 +185,7 @@ spec:
           livenessProbe:
             exec:
               command:
-                - mongo
-                - --disableImplicitSessions
+                - mongosh
                 - --eval
                 - "db.adminCommand('ping')"
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
@@ -199,8 +198,7 @@ spec:
           readinessProbe:
             exec:
               command:
-                - mongo
-                - --disableImplicitSessions
+                - mongosh
                 - --eval
                 - "db.adminCommand('ping')"
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
