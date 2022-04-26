@@ -451,10 +451,6 @@ Affected values:
 - `accessMode` is replaced by `accessModes` (a list instead of a simple string)
 - `persistence.path` is renamed to `persistence.mountPath` (a list instead of a simple string)
 
-Also MongoDB&reg; subchart container images were updated to 5.0.x and it can affect compatibility with older versions of MongoDB&reg;.
-
-- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1200
-
 ### To 13.0.0
 
 MongoDB&reg; subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB&reg;.
