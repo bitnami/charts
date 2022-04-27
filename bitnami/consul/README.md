@@ -86,7 +86,7 @@ $ helm delete --purge my-release
 | --------------------------- | -------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`            | HashiCorp Consul image registry                                                              | `docker.io`           |
 | `image.repository`          | HashiCorp Consul image repository                                                            | `bitnami/consul`      |
-| `image.tag`                 | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.12.0-debian-10-r0` |
+| `image.tag`                 | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.12.0-debian-10-r1` |
 | `image.pullPolicy`          | HashiCorp Consul image pull policy                                                           | `IfNotPresent`        |
 | `image.pullSecrets`         | HashiCorp Consul image pull secrets                                                          | `[]`                  |
 | `image.debug`               | Enable image debug mode                                                                      | `false`               |
