@@ -4,10 +4,7 @@ import { random } from './utils';
 export const importAStreamApplication = () => {
   cy.visit('/dashboard');
   cy.contains('button', 'Add application(s)').click();
-  cy.contains(
-    '.clr-control-label',
-    'Stream application starters for Kafka/Maven'
-  ).click();
+  cy.contains('label', 'Stream application starters for Kafka/Maven').click();
   cy.contains('.btn-primary', 'Import').click();
   cy.get('.toast-container').should('contain', 'Application(s) Imported');
   cy.get('.content-area')
