@@ -327,7 +327,7 @@ readinessProbe:
   initialDelaySeconds: 60
   periodSeconds: 10
   timeoutSeconds: 5
-  failureThreshold: 12
+  failureThreshold: 18
   successThreshold: 1
 
 ## @section Config Server parameters
