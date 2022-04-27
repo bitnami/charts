@@ -58,7 +58,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: get-chart
     if: ${{ needs.get-chart.outputs.result == 'ok' }}
-    environment: vmware-image-builder
     name: Publish
     steps:
       - uses: actions/checkout@v2
