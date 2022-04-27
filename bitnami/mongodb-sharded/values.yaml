@@ -592,7 +592,7 @@ configsvr:
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 6
+    failureThreshold: 12
     successThreshold: 1
   ## Configure extra options for readiness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
@@ -608,7 +608,7 @@ configsvr:
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 6
+    failureThreshold: 12
     successThreshold: 1
 
   ## Configure extra options for startup probe
@@ -625,7 +625,7 @@ configsvr:
     initialDelaySeconds: 0
     periodSeconds: 5
     timeoutSeconds: 2
-    failureThreshold: 15
+    failureThreshold: 30
     successThreshold: 1
 
   ## @param configsvr.customLivenessProbe Custom livenessProbe that overrides the default one
@@ -914,7 +914,7 @@ mongos:
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 6
+    failureThreshold: 12
     successThreshold: 1
   ## Configure extra options for readiness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
@@ -930,7 +930,7 @@ mongos:
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 6
+    failureThreshold: 12
     successThreshold: 1
 
   ## Configure extra options for startup probe
@@ -947,7 +947,7 @@ mongos:
     initialDelaySeconds: 0
     periodSeconds: 5
     timeoutSeconds: 2
-    failureThreshold: 15
+    failureThreshold: 30
     successThreshold: 1
 
   ## @param mongos.customLivenessProbe Custom livenessProbe that overrides the default one
@@ -1192,7 +1192,7 @@ shardsvr:
       initialDelaySeconds: 10
       periodSeconds: 10
       timeoutSeconds: 5
-      failureThreshold: 6
+      failureThreshold: 12
       successThreshold: 1
     ## Configure extra options for readiness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
@@ -1208,7 +1208,7 @@ shardsvr:
       initialDelaySeconds: 10
       periodSeconds: 10
       timeoutSeconds: 5
-      failureThreshold: 6
+      failureThreshold: 12
       successThreshold: 1
 
     ## Configure extra options for startup probe
@@ -1225,7 +1225,7 @@ shardsvr:
       initialDelaySeconds: 0
       periodSeconds: 5
       timeoutSeconds: 2
-      failureThreshold: 15
+      failureThreshold: 30
       successThreshold: 1
 
     ## @param shardsvr.dataNode.customLivenessProbe Custom livenessProbe that overrides the default one
@@ -1485,7 +1485,7 @@ shardsvr:
       initialDelaySeconds: 10
       periodSeconds: 10
       timeoutSeconds: 5
-      failureThreshold: 6
+      failureThreshold: 12
       successThreshold: 1
     ## Configure extra options for readiness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
@@ -1501,7 +1501,7 @@ shardsvr:
       initialDelaySeconds: 10
       periodSeconds: 10
       timeoutSeconds: 5
-      failureThreshold: 6
+      failureThreshold: 12
       successThreshold: 1
 
     ## Configure extra options for startup probe
@@ -1518,7 +1518,7 @@ shardsvr:
       initialDelaySeconds: 0
       periodSeconds: 5
       timeoutSeconds: 2
-      failureThreshold: 15
+      failureThreshold: 30
       successThreshold: 1
 
     ## @param shardsvr.arbiter.customLivenessProbe Custom livenessProbe that overrides the default one
@@ -1557,6 +1557,7 @@ metrics:
     ##
     pullSecrets: []
   ## @param metrics.useTLS Whether to connect to MongoDB&reg; with TLS
+  ##
   useTLS: false
   ## @param metrics.extraArgs String with extra arguments to the metrics exporter
   ## ref: https://github.com/dcu/mongodb_exporter/blob/master/mongodb_exporter.go
