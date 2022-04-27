@@ -285,8 +285,7 @@ spec:
           livenessProbe:
             exec:
               command:
-                - mongo
-                - --disableImplicitSessions
+                - mongosh
               {{- if .Values.tls.enabled }}
                 - --tls
                 - --tlsCertificateKeyFile=/certs/mongodb.pem
@@ -315,15 +314,15 @@ spec:
                   TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert'
                   {{- end }}
                   # Run the proper check depending on the version
-                  [[ $(mongo --version | grep "MongoDB shell") =~ ([0-9]+\.[0-9]+\.[0-9]+) ]] && VERSION=${BASH_REMATCH[1]}
+                  [[ $(mongosh --version) =~ ([0-9]+\.[0-9]+\.[0-9]+) ]] && VERSION=${BASH_REMATCH[1]}
                   . /opt/bitnami/scripts/libversion.sh
                   VERSION_MAJOR="$(get_sematic_version "$VERSION" 1)"
                   VERSION_MINOR="$(get_sematic_version "$VERSION" 2)"
                   VERSION_PATCH="$(get_sematic_version "$VERSION" 3)"
                   if [[ "$VERSION_MAJOR" -ge 4 ]] && [[ "$VERSION_MINOR" -ge 4 ]] && [[ "$VERSION_PATCH" -ge 2 ]]; then
-                      mongo --disableImplicitSessions $TLS_OPTIONS --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
+                      mongosh  $TLS_OPTIONS --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
                   else
-                      mongo --disableImplicitSessions $TLS_OPTIONS --eval 'db.isMaster().ismaster || db.isMaster().secondary' | grep -q 'true'
+                      mongosh  $TLS_OPTIONS --eval 'db.isMaster().ismaster || db.isMaster().secondary' | grep -q 'true'
                   fi
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
@@ -345,7 +344,7 @@ spec:
                   {{- if .Values.tls.enabled }}
                   TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert'
                   {{- end }}
-                  mongo --disableImplicitSessions $TLS_OPTIONS --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
+                  mongosh --disableImplicitSessions $TLS_OPTIONS --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
