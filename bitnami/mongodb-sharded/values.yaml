@@ -804,22 +804,22 @@ mongos:
     ## @param mongos.servicePerReplica.port MongoDB&reg; service port
     ##
     port: 27017
-    ## @param mongos.servicePerReplica.clusterIP Static clusterIP or None for headless services
+    ## @param mongos.servicePerReplica.clusterIPs Array of static clusterIPs for each MongoDB@reg; replica. Length must be the same as mongos.replicaCount
     ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/#servicespec-v1-core
     ##
-    clusterIP: ""
-    ## @param mongos.servicePerReplica.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
+    clusterIPs: []
+    ## @param mongos.servicePerReplica.nodePorts Array of node ports used for each MongoDB@reg; replica. Length must be the same as mongos.replicaCount
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort: ""
+    nodePorts: []
     ## @param mongos.servicePerReplica.externalIPs External IP list to use with ClusterIP service type
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
     ##
     externalIPs: []
-    ## @param mongos.servicePerReplica.loadBalancerIP Static IP Address to use for LoadBalancer service type
+    ## @param mongos.servicePerReplica.loadBalancerIPs Array of static IP Address to use for each replica LoadBalancer service type. Length must be the same as mongos.replicaCount
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
     ##
-    loadBalancerIP: ""
+    loadBalancerIPs: []
     ## @param mongos.servicePerReplica.loadBalancerSourceRanges List of IP ranges allowed access to load balancer (if supported)
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ##
@@ -1566,14 +1566,6 @@ metrics:
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param metrics.podSecurityContext.enabled Enable security context
-  ## @param metrics.podSecurityContext.fsGroup Group ID for the container
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context

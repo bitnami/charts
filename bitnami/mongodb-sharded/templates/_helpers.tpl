@@ -87,17 +87,6 @@ Get the initialization scripts configmap name.
 {{- end -}}
 
 {{/*
-Create the name for the key secret.
-*/}}
-{{- define "mongodb-sharded.keySecret" -}}
-  {{- if .Values.auth.existingKeySecret -}}
-      {{- .Values.auth.existingKeySecret -}}
-  {{- else -}}
-      {{- printf "%s-keyfile" (include "common.names.fullname" .) -}}
-  {{- end -}}
-{{- end -}}
-
-{{/*
 Returns the proper Service name depending if an explicit service name is set
 in the values file. If the name is not explicitly set it will take the "common.names.fullname"
 */}}
@@ -145,6 +134,9 @@ Compile all warnings into a single message, and call fail.
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.mongodbCustomDatabase" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.externalCfgServer" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.replicaCount" .) -}}
+  {{- $messages := append $messages (include "mongodb-sharded.validateValues.clusterIPListLength" .) -}}
+  {{- $messages := append $messages (include "mongodb-sharded.validateValues.nodePortListLength" .) -}}
+  {{- $messages := append $messages (include "mongodb-sharded.validateValues.loadBalancerIPListLength" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.config" .) -}}
   {{- $messages := without $messages "" -}}
   {{- $message := join "\n" $messages -}}
@@ -227,6 +219,36 @@ mongodb: mongosNodeConflictingConfig
 {{- if and .Values.configsvr.configCM .Values.configsvr.config }}
 mongodb: configSvrNodeConflictingConfig
     You specified both configsvr.configCM and configsvr.config. You can only set one
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of MongoDB&reg; - number of replicas must be the same as NodePort list */}}
+{{- define "mongodb-sharded.validateValues.nodePortListLength" -}}
+{{- $replicaCount := int .Values.mongos.replicaCount }}
+{{- $nodePortListLength := len .Values.mongos.servicePerReplica.nodePorts }}
+{{- if and .Values.mongos.useStatefulSet .Values.mongos.servicePerReplica.enabled (not (eq $replicaCount $nodePortListLength )) (eq .Values.mongos.servicePerReplica.type "NodePort") -}}
+mongodb: .Values.mongos.servicePerReplica.nodePorts
+    Number of mongos.replicaCount and mongos.servicePerReplica.nodePorts array length must be the same. Currently: replicaCount = {{ $replicaCount }} and nodePorts = {{ $nodePortListLength }}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of MongoDB&reg; - number of replicas must be the same as clusterIP list */}}
+{{- define "mongodb-sharded.validateValues.clusterIPListLength" -}}
+{{- $replicaCount := int .Values.mongos.replicaCount }}
+{{- $clusterIPListLength := len .Values.mongos.servicePerReplica.clusterIPs }}
+{{- if and (gt $clusterIPListLength 0) .Values.mongos.useStatefulSet .Values.mongos.servicePerReplica.enabled (not (eq $replicaCount $clusterIPListLength )) (eq .Values.mongos.servicePerReplica.type "ClusterIP") -}}
+mongodb: .Values.mongos.servicePerReplica.clusterIPs
+    Number of mongos.replicaCount and mongos.servicePerReplica.clusterIPs array length must be the same. Currently: replicaCount = {{ $replicaCount }} and clusterIPs = {{ $clusterIPListLength }}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of MongoDB&reg; - number of replicas must be the same as loadBalancerIP list */}}
+{{- define "mongodb-sharded.validateValues.loadBalancerIPListLength" -}}
+{{- $replicaCount := int .Values.mongos.replicaCount }}
+{{- $loadBalancerIPListLength := len .Values.mongos.servicePerReplica.loadBalancerIPs }}
+{{- if and (gt $loadBalancerIPListLength 0) .Values.mongos.useStatefulSet .Values.mongos.servicePerReplica.enabled (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.mongos.servicePerReplica.type "LoadBalancer") -}}
+mongodb: .Values.mongos.servicePerReplica.loadBalancerIPs
+    Number of mongos.replicaCount and mongos.servicePerReplica.loadBalancerIPs array length must be the same. Currently: replicaCount = {{ $replicaCount }} and loadBalancerIPs = {{ $loadBalancerIPListLength }}
 {{- end -}}
 {{- end -}}
 

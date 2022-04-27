@@ -233,88 +233,88 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Mongos parameters
 
-| Name                                                     | Description                                                                                                              | Value           |
-| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `mongos.replicaCount`                                    | Number of replicas                                                                                                       | `1`             |
-| `mongos.resources`                                       | Configure pod resources                                                                                                  | `{}`            |
-| `mongos.hostAliases`                                     | Deployment pod host aliases                                                                                              | `[]`            |
-| `mongos.mongodbExtraFlags`                               | MongoDB&reg; additional command line flags                                                                               | `[]`            |
-| `mongos.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
-| `mongos.priorityClassName`                               | Pod priority class name                                                                                                  | `""`            |
-| `mongos.podAffinityPreset`                               | Mongos Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                               | `""`            |
-| `mongos.podAntiAffinityPreset`                           | Mongos Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                          | `soft`          |
-| `mongos.nodeAffinityPreset.type`                         | Mongos Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                         | `""`            |
-| `mongos.nodeAffinityPreset.key`                          | Mongos Node label key to match Ignored if `affinity` is set.                                                             | `""`            |
-| `mongos.nodeAffinityPreset.values`                       | Mongos Node label values to match. Ignored if `affinity` is set.                                                         | `[]`            |
-| `mongos.affinity`                                        | Mongos Affinity for pod assignment                                                                                       | `{}`            |
-| `mongos.nodeSelector`                                    | Mongos Node labels for pod assignment                                                                                    | `{}`            |
-| `mongos.tolerations`                                     | Mongos Tolerations for pod assignment                                                                                    | `[]`            |
-| `mongos.podManagementPolicy`                             | Statefulsets pod management policy, allows parallel startup of pods                                                      | `OrderedReady`  |
-| `mongos.updateStrategy.type`                             | updateStrategy for MongoDB&reg; Primary, Secondary and Arbiter statefulsets                                              | `RollingUpdate` |
-| `mongos.config`                                          | MongoDB&reg; configuration file                                                                                          | `""`            |
-| `mongos.configCM`                                        | ConfigMap name with MongoDB&reg; configuration file (cannot be used with mongos.config)                                  | `""`            |
-| `mongos.extraEnvVars`                                    | An array to add extra env vars                                                                                           | `[]`            |
-| `mongos.extraEnvVarsCM`                                  | Name of a ConfigMap containing extra env vars                                                                            | `""`            |
-| `mongos.extraEnvVarsSecret`                              | Name of a Secret containing extra env vars                                                                               | `""`            |
-| `mongos.sidecars`                                        | Add sidecars to the pod                                                                                                  | `[]`            |
-| `mongos.initContainers`                                  | Add init containers to the pod                                                                                           | `[]`            |
-| `mongos.podAnnotations`                                  | Additional pod annotations                                                                                               | `{}`            |
-| `mongos.podLabels`                                       | Additional pod labels                                                                                                    | `{}`            |
-| `mongos.extraVolumes`                                    | Array to add extra volumes. Requires setting `extraVolumeMounts`                                                         | `[]`            |
-| `mongos.extraVolumeMounts`                               | Array to add extra volume mounts. Normally used with `extraVolumes`.                                                     | `[]`            |
-| `mongos.schedulerName`                                   | Use an alternate scheduler, e.g. "stork".                                                                                | `""`            |
-| `mongos.useStatefulSet`                                  | Use StatefulSet instead of Deployment                                                                                    | `false`         |
-| `mongos.servicePerReplica.enabled`                       | Create one service per mongos replica (must be used with statefulset)                                                    | `false`         |
-| `mongos.servicePerReplica.annotations`                   | Additional service annotations (evaluate as a template)                                                                  | `{}`            |
-| `mongos.servicePerReplica.type`                          | Service type                                                                                                             | `ClusterIP`     |
-| `mongos.servicePerReplica.externalTrafficPolicy`         | External traffic policy                                                                                                  | `Cluster`       |
-| `mongos.servicePerReplica.port`                          | MongoDB&reg; service port                                                                                                | `27017`         |
-| `mongos.servicePerReplica.clusterIP`                     | Static clusterIP or None for headless services                                                                           | `""`            |
-| `mongos.servicePerReplica.nodePort`                      | Specify the nodePort value for the LoadBalancer and NodePort service types                                               | `""`            |
-| `mongos.servicePerReplica.externalIPs`                   | External IP list to use with ClusterIP service type                                                                      | `[]`            |
-| `mongos.servicePerReplica.loadBalancerIP`                | Static IP Address to use for LoadBalancer service type                                                                   | `""`            |
-| `mongos.servicePerReplica.loadBalancerSourceRanges`      | List of IP ranges allowed access to load balancer (if supported)                                                         | `[]`            |
-| `mongos.servicePerReplica.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                           | `[]`            |
-| `mongos.servicePerReplica.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                     | `None`          |
-| `mongos.servicePerReplica.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                              | `{}`            |
-| `mongos.pdb.create`                                      | Enable pod disruption budget                                                                                             | `false`         |
-| `mongos.pdb.minAvailable`                                | Minimum number of available mongo pods allowed (`0` to disable)                                                          | `0`             |
-| `mongos.pdb.maxUnavailable`                              | Maximum number of unavailable mongo pods allowed (`0` to disable)                                                        | `1`             |
-| `mongos.serviceAccount.create`                           | Whether to create a Service Account for mongos automatically                                                             | `false`         |
-| `mongos.serviceAccount.name`                             | Name of a Service Account to be used by mongos                                                                           | `""`            |
-| `mongos.serviceAccount.annotations`                      | Additional Service Account annotations (evaluated as a template)                                                         | `{}`            |
-| `mongos.serviceAccount.automountServiceAccountToken`     | Automount service account token for the server service account                                                           | `true`          |
-| `mongos.podSecurityContext.enabled`                      | Enable security context                                                                                                  | `true`          |
-| `mongos.podSecurityContext.fsGroup`                      | Group ID for the container                                                                                               | `1001`          |
-| `mongos.containerSecurityContext.enabled`                | Enabled containers' Security Context                                                                                     | `true`          |
-| `mongos.containerSecurityContext.runAsUser`              | Set containers' Security Context runAsUser                                                                               | `1001`          |
-| `mongos.containerSecurityContext.runAsNonRoot`           | Set containers' Security Context runAsNonRoot                                                                            | `true`          |
-| `mongos.containerSecurityContext.readOnlyRootFilesystem` | Set containers' Security Context runAsNonRoot                                                                            | `false`         |
-| `mongos.command`                                         | Override default container command (useful when using custom images)                                                     | `[]`            |
-| `mongos.args`                                            | Override default container args (useful when using custom images)                                                        | `[]`            |
-| `mongos.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`            |
-| `mongos.lifecycleHooks`                                  | for the Mongo container(s) to automate configuration before or after startup                                             | `{}`            |
-| `mongos.livenessProbe.enabled`                           | Enable livenessProbe                                                                                                     | `true`          |
-| `mongos.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                                  | `10`            |
-| `mongos.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                                         | `10`            |
-| `mongos.livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                                                        | `5`             |
-| `mongos.livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                                                      | `6`             |
-| `mongos.livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                                                      | `1`             |
-| `mongos.readinessProbe.enabled`                          | Enable readinessProbe                                                                                                    | `true`          |
-| `mongos.readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                                                 | `10`            |
-| `mongos.readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                                        | `10`            |
-| `mongos.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                                       | `5`             |
-| `mongos.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                     | `6`             |
-| `mongos.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                                     | `1`             |
-| `mongos.startupProbe.enabled`                            | Enable startupProbe                                                                                                      | `false`         |
-| `mongos.startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                                   | `0`             |
-| `mongos.startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                                          | `5`             |
-| `mongos.startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                                         | `2`             |
-| `mongos.startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                                       | `15`            |
-| `mongos.startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                                       | `1`             |
-| `mongos.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
-| `mongos.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
-| `mongos.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`            |
+| Name                                                     | Description                                                                                                                  | Value           |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `mongos.replicaCount`                                    | Number of replicas                                                                                                           | `1`             |
+| `mongos.resources`                                       | Configure pod resources                                                                                                      | `{}`            |
+| `mongos.hostAliases`                                     | Deployment pod host aliases                                                                                                  | `[]`            |
+| `mongos.mongodbExtraFlags`                               | MongoDB&reg; additional command line flags                                                                                   | `[]`            |
+| `mongos.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template     | `{}`            |
+| `mongos.priorityClassName`                               | Pod priority class name                                                                                                      | `""`            |
+| `mongos.podAffinityPreset`                               | Mongos Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`            |
+| `mongos.podAntiAffinityPreset`                           | Mongos Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`          |
+| `mongos.nodeAffinityPreset.type`                         | Mongos Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`            |
+| `mongos.nodeAffinityPreset.key`                          | Mongos Node label key to match Ignored if `affinity` is set.                                                                 | `""`            |
+| `mongos.nodeAffinityPreset.values`                       | Mongos Node label values to match. Ignored if `affinity` is set.                                                             | `[]`            |
+| `mongos.affinity`                                        | Mongos Affinity for pod assignment                                                                                           | `{}`            |
+| `mongos.nodeSelector`                                    | Mongos Node labels for pod assignment                                                                                        | `{}`            |
+| `mongos.tolerations`                                     | Mongos Tolerations for pod assignment                                                                                        | `[]`            |
+| `mongos.podManagementPolicy`                             | Statefulsets pod management policy, allows parallel startup of pods                                                          | `OrderedReady`  |
+| `mongos.updateStrategy.type`                             | updateStrategy for MongoDB&reg; Primary, Secondary and Arbiter statefulsets                                                  | `RollingUpdate` |
+| `mongos.config`                                          | MongoDB&reg; configuration file                                                                                              | `""`            |
+| `mongos.configCM`                                        | ConfigMap name with MongoDB&reg; configuration file (cannot be used with mongos.config)                                      | `""`            |
+| `mongos.extraEnvVars`                                    | An array to add extra env vars                                                                                               | `[]`            |
+| `mongos.extraEnvVarsCM`                                  | Name of a ConfigMap containing extra env vars                                                                                | `""`            |
+| `mongos.extraEnvVarsSecret`                              | Name of a Secret containing extra env vars                                                                                   | `""`            |
+| `mongos.sidecars`                                        | Add sidecars to the pod                                                                                                      | `[]`            |
+| `mongos.initContainers`                                  | Add init containers to the pod                                                                                               | `[]`            |
+| `mongos.podAnnotations`                                  | Additional pod annotations                                                                                                   | `{}`            |
+| `mongos.podLabels`                                       | Additional pod labels                                                                                                        | `{}`            |
+| `mongos.extraVolumes`                                    | Array to add extra volumes. Requires setting `extraVolumeMounts`                                                             | `[]`            |
+| `mongos.extraVolumeMounts`                               | Array to add extra volume mounts. Normally used with `extraVolumes`.                                                         | `[]`            |
+| `mongos.schedulerName`                                   | Use an alternate scheduler, e.g. "stork".                                                                                    | `""`            |
+| `mongos.useStatefulSet`                                  | Use StatefulSet instead of Deployment                                                                                        | `false`         |
+| `mongos.servicePerReplica.enabled`                       | Create one service per mongos replica (must be used with statefulset)                                                        | `false`         |
+| `mongos.servicePerReplica.annotations`                   | Additional service annotations (evaluate as a template)                                                                      | `{}`            |
+| `mongos.servicePerReplica.type`                          | Service type                                                                                                                 | `ClusterIP`     |
+| `mongos.servicePerReplica.externalTrafficPolicy`         | External traffic policy                                                                                                      | `Cluster`       |
+| `mongos.servicePerReplica.port`                          | MongoDB&reg; service port                                                                                                    | `27017`         |
+| `mongos.servicePerReplica.clusterIPs`                    | Array of static clusterIPs for each MongoDB@reg; replica. Length must be the same as mongos.replicaCount                     | `[]`            |
+| `mongos.servicePerReplica.nodePorts`                     | Array of node ports used for each MongoDB@reg; replica. Length must be the same as mongos.replicaCount                       | `[]`            |
+| `mongos.servicePerReplica.externalIPs`                   | External IP list to use with ClusterIP service type                                                                          | `[]`            |
+| `mongos.servicePerReplica.loadBalancerIPs`               | Array of static IP Address to use for each replica LoadBalancer service type. Length must be the same as mongos.replicaCount | `[]`            |
+| `mongos.servicePerReplica.loadBalancerSourceRanges`      | List of IP ranges allowed access to load balancer (if supported)                                                             | `[]`            |
+| `mongos.servicePerReplica.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                               | `[]`            |
+| `mongos.servicePerReplica.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                         | `None`          |
+| `mongos.servicePerReplica.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                  | `{}`            |
+| `mongos.pdb.create`                                      | Enable pod disruption budget                                                                                                 | `false`         |
+| `mongos.pdb.minAvailable`                                | Minimum number of available mongo pods allowed (`0` to disable)                                                              | `0`             |
+| `mongos.pdb.maxUnavailable`                              | Maximum number of unavailable mongo pods allowed (`0` to disable)                                                            | `1`             |
+| `mongos.serviceAccount.create`                           | Whether to create a Service Account for mongos automatically                                                                 | `false`         |
+| `mongos.serviceAccount.name`                             | Name of a Service Account to be used by mongos                                                                               | `""`            |
+| `mongos.serviceAccount.annotations`                      | Additional Service Account annotations (evaluated as a template)                                                             | `{}`            |
+| `mongos.serviceAccount.automountServiceAccountToken`     | Automount service account token for the server service account                                                               | `true`          |
+| `mongos.podSecurityContext.enabled`                      | Enable security context                                                                                                      | `true`          |
+| `mongos.podSecurityContext.fsGroup`                      | Group ID for the container                                                                                                   | `1001`          |
+| `mongos.containerSecurityContext.enabled`                | Enabled containers' Security Context                                                                                         | `true`          |
+| `mongos.containerSecurityContext.runAsUser`              | Set containers' Security Context runAsUser                                                                                   | `1001`          |
+| `mongos.containerSecurityContext.runAsNonRoot`           | Set containers' Security Context runAsNonRoot                                                                                | `true`          |
+| `mongos.containerSecurityContext.readOnlyRootFilesystem` | Set containers' Security Context runAsNonRoot                                                                                | `false`         |
+| `mongos.command`                                         | Override default container command (useful when using custom images)                                                         | `[]`            |
+| `mongos.args`                                            | Override default container args (useful when using custom images)                                                            | `[]`            |
+| `mongos.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                            | `""`            |
+| `mongos.lifecycleHooks`                                  | for the Mongo container(s) to automate configuration before or after startup                                                 | `{}`            |
+| `mongos.livenessProbe.enabled`                           | Enable livenessProbe                                                                                                         | `true`          |
+| `mongos.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                                      | `10`            |
+| `mongos.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                                             | `10`            |
+| `mongos.livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                                                            | `5`             |
+| `mongos.livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                                                          | `6`             |
+| `mongos.livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                                                          | `1`             |
+| `mongos.readinessProbe.enabled`                          | Enable readinessProbe                                                                                                        | `true`          |
+| `mongos.readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                                                     | `10`            |
+| `mongos.readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                                            | `10`            |
+| `mongos.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                                           | `5`             |
+| `mongos.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                         | `6`             |
+| `mongos.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                                         | `1`             |
+| `mongos.startupProbe.enabled`                            | Enable startupProbe                                                                                                          | `false`         |
+| `mongos.startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                                       | `0`             |
+| `mongos.startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                                              | `5`             |
+| `mongos.startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                                             | `2`             |
+| `mongos.startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                                           | `15`            |
+| `mongos.startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                                           | `1`             |
+| `mongos.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                          | `{}`            |
+| `mongos.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                         | `{}`            |
+| `mongos.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                           | `{}`            |
 
 
 ### Shard configuration: Data node parameters
@@ -485,8 +485,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.useTLS`                                          | Whether to connect to MongoDB&reg; with TLS                                        | `false`                    |
 | `metrics.extraArgs`                                       | String with extra arguments to the metrics exporter                                | `""`                       |
 | `metrics.resources`                                       | Metrics exporter resource requests and limits                                      | `{}`                       |
-| `metrics.podSecurityContext.enabled`                      | Enable security context                                                            | `true`                     |
-| `metrics.podSecurityContext.fsGroup`                      | Group ID for the container                                                         | `1001`                     |
 | `metrics.containerSecurityContext.enabled`                | Enabled containers' Security Context                                               | `true`                     |
 | `metrics.containerSecurityContext.runAsUser`              | Set containers' Security Context runAsUser                                         | `1001`                     |
 | `metrics.containerSecurityContext.runAsNonRoot`           | Set containers' Security Context runAsNonRoot                                      | `true`                     |
@@ -653,7 +651,7 @@ Affected values:
 
 - Authentication parameters are reorganized under the `auth.*` parameter:
   - `usePassword` is renamed to `auth.enabled`.
-  - `mongodbRootPassword`, `mongodbUsername`, `mongodbPassword`, `mongodbDatabase`, and `replicaSetKey` are now `auth.rootPassword`, `auth.username`, `auth.password`, `auth.database`, and `auth.replicaSetKey` respectively.
+  - `mongodbRootPassword`, `mongodbUsername`, `mongodbPassword`, `mongodbDatabase`, `replicaSetKey`, `existingSecret` and `usePasswordFile` are now `auth.rootPassword`, `auth.username`, `auth.password`, `auth.database`, `auth.replicaSetKey`, `auth.existingSecret` and `auth.usePasswordFile` respectively.
 - `common.containerPorts.mongo` is renamed to `common.containerPorts.mongodb`
 - `pdb.enabled` is renamed to `pdb.create`
 - `XXX.replicas` is renamed to `XXX.replicaCount`
