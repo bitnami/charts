@@ -44,7 +44,7 @@ To get the password for "{{ .Values.mongodbUsername }}" run:
 
 To connect to your database run the following command:
 
-    kubectl run --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --image {{ template "mongodb-sharded.image" . }} --command -- mongo admin --host {{ include "mongodb-sharded.serviceName" . }} {{- if .Values.usePassword }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
+    kubectl run --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --image {{ template "mongodb-sharded.image" . }} --command -- mongosh admin --host {{ include "mongodb-sharded.serviceName" . }} {{- if .Values.usePassword }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
 
 To connect to your database from outside the cluster execute the following commands:
 
@@ -52,7 +52,7 @@ To connect to your database from outside the cluster execute the following comma
 
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "mongodb-sharded.serviceName" . }})
-    mongo --host $NODE_IP --port $NODE_PORT --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD
+    mongosh --host $NODE_IP --port $NODE_PORT --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
@@ -60,12 +60,12 @@ To connect to your database from outside the cluster execute the following comma
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "mongodb-sharded.serviceName" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "mongodb-sharded.serviceName" . }} --include "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-    mongo --host $SERVICE_IP --port {{ .Values.service.port }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD
+    mongosh --host $SERVICE_IP --port {{ .Values.service.port }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
     kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "mongodb-sharded.serviceName" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
-    mongo --host 127.0.0.1 --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD
+    mongosh --host 127.0.0.1 --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD
 
 {{- end }}
 {{- end }}

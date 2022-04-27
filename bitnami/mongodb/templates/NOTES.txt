@@ -117,9 +117,9 @@ To connect to your database, create a MongoDB&reg; client container:
 Then, run the following command:
 
     {{- if eq .Values.architecture "replicaset" }}
-    mongo admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
+    mongosh admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
     {{- else }}
-    mongo admin --host "{{ template "mongodb.fullname" . }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
+    mongosh admin --host "{{ template "mongodb.fullname" . }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
     {{- end }}
 
 {{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled }}
@@ -172,12 +172,12 @@ To connect to your database from outside the cluster execute the following comma
         Watch the status with: 'kubectl get svc --namespace {{ template "mongodb.namespace" . }} -w {{ template "mongodb.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ template "mongodb.namespace" . }} {{ template "mongodb.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-    mongo --host $SERVICE_IP --port {{ $portNumber }} {{- if .Values.auth.enabled }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD{{- end }}
+    mongosh --host $SERVICE_IP --port {{ $portNumber }} {{- if .Values.auth.enabled }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD{{- end }}
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
     kubectl port-forward --namespace {{ template "mongodb.namespace" . }} svc/{{ template "mongodb.fullname" . }} {{ $portNumber }}:{{ $portNumber }} &
-    mongo --host 127.0.0.1 {{- if .Values.auth.enabled }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD{{- end }}
+    mongosh --host 127.0.0.1 {{- if .Values.auth.enabled }} --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD{{- end }}
 
 {{- end }}
 {{- end }}
