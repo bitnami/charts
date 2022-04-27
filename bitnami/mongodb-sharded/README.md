@@ -82,10 +82,10 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                  | Description                                                                                                                                               | Value                     |
 | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `image.registry`                      | MongoDB(&reg;) Sharded image registry                                                                                                                       | `docker.io`               |
-| `image.repository`                    | MongoDB(&reg;) Sharded Image name                                                                                                                           | `bitnami/mongodb-sharded` |
-| `image.tag`                           | MongoDB(&reg;) Sharded image tag (immutable tags are recommended)                                                                                           | `4.4.11-debian-10-r6`     |
-| `image.pullPolicy`                    | MongoDB(&reg;) Sharded image pull policy                                                                                                                    | `IfNotPresent`            |
+| `image.registry`                      | MongoDB(&reg;) Sharded image registry                                                                                                                     | `docker.io`               |
+| `image.repository`                    | MongoDB(&reg;) Sharded Image name                                                                                                                         | `bitnami/mongodb-sharded` |
+| `image.tag`                           | MongoDB(&reg;) Sharded image tag (immutable tags are recommended)                                                                                         | `4.4.13-debian-10-r50`    |
+| `image.pullPolicy`                    | MongoDB(&reg;) Sharded image pull policy                                                                                                                  | `IfNotPresent`            |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                          | `[]`                      |
 | `image.debug`                         | Specify if debug logs should be enabled                                                                                                                   | `false`                   |
 | `mongodbRootPassword`                 | MongoDB&reg; root password                                                                                                                                | `""`                      |
@@ -117,7 +117,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`           | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                   |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                                          | `docker.io`               |
 | `volumePermissions.image.repository`  | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`   |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r308`       |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r404`       |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`            |
 | `volumePermissions.image.pullSecrets` | Init container volume-permissions image pull secrets                                                                                                      | `[]`                      |
 | `volumePermissions.resources`         | Init container resource requests/limit                                                                                                                    | `{}`                      |
@@ -140,14 +140,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `livenessProbe.enabled`               | Enable livenessProbe                                                                                                                                      | `true`                    |
 | `livenessProbe.initialDelaySeconds`   | Initial delay seconds for livenessProbe                                                                                                                   | `60`                      |
 | `livenessProbe.periodSeconds`         | Period seconds for livenessProbe                                                                                                                          | `10`                      |
-| `livenessProbe.timeoutSeconds`        | Timeout seconds for livenessProbe                                                                                                                         | `5`                       |
-| `livenessProbe.failureThreshold`      | Failure threshold for livenessProbe                                                                                                                       | `6`                       |
+| `livenessProbe.timeoutSeconds`        | Timeout seconds for livenessProbe                                                                                                                         | `30`                      |
+| `livenessProbe.failureThreshold`      | Failure threshold for livenessProbe                                                                                                                       | `15`                      |
 | `livenessProbe.successThreshold`      | Success threshold for livenessProbe                                                                                                                       | `1`                       |
 | `readinessProbe.enabled`              | Enable readinessProbe                                                                                                                                     | `true`                    |
 | `readinessProbe.initialDelaySeconds`  | Initial delay seconds for readinessProbe                                                                                                                  | `60`                      |
 | `readinessProbe.periodSeconds`        | Period seconds for readinessProbe                                                                                                                         | `10`                      |
-| `readinessProbe.timeoutSeconds`       | Timeout seconds for readinessProbe                                                                                                                        | `5`                       |
-| `readinessProbe.failureThreshold`     | Failure threshold for readinessProbe                                                                                                                      | `6`                       |
+| `readinessProbe.timeoutSeconds`       | Timeout seconds for readinessProbe                                                                                                                        | `30`                      |
+| `readinessProbe.failureThreshold`     | Failure threshold for readinessProbe                                                                                                                      | `15`                      |
 | `readinessProbe.successThreshold`     | Success threshold for readinessProbe                                                                                                                      | `1`                       |
 
 
@@ -344,7 +344,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                               | `false`                    |
 | `metrics.image.registry`                     | MongoDB&reg; exporter image registry                                               | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB&reg; exporter image name                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB&reg; exporter image tag                                                    | `0.30.0-debian-10-r53`     |
+| `metrics.image.tag`                          | MongoDB&reg; exporter image tag                                                    | `0.31.2-debian-10-r14`     |
 | `metrics.image.pullPolicy`                   | MongoDB&reg; exporter image pull policy                                            | `Always`                   |
 | `metrics.image.pullSecrets`                  | MongoDB&reg; exporter image pull secrets                                           | `[]`                       |
 | `metrics.useTLS`                             | Whether to connect to MongoDB&reg; with TLS                                        | `false`                    |
