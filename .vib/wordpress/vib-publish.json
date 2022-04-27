@@ -101,8 +101,7 @@
               "kind": "S3",
               "url": "{VIB_ENV_S3_URL}",
               "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}",
-              "role": "{VIB_ENV_S3_ROLE}"
+              "password": "{VIB_ENV_S3_PASSWORD}"
             }
           }
         }
