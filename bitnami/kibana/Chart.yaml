@@ -25,4 +25,4 @@ name: kibana
 sources:
   - https://github.com/bitnami/bitnami-docker-kibana
   - https://www.elastic.co/products/kibana
-version: 10.0.3
+version: 10.0.4
