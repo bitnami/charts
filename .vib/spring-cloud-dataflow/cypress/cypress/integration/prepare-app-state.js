@@ -17,6 +17,7 @@ export const importAStreamApplication = () => {
 
 export const importATaskApplication = () => {
   const TASK_APPLICATION = 'Task application starters for Maven';
+
   importAnApplication(TASK_APPLICATION);
 };
 

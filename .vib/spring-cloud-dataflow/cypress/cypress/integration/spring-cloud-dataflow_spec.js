@@ -9,7 +9,9 @@ import {
 it('allows getting Spring Cloud Dataflow info', () => {
   cy.visit('/dashboard');
   cy.get('.signpost-trigger').click();
-  cy.contains('.signpost-content-body', 'Version');
+  cy.get('.signpost-content-body')
+    .invoke('text')
+    .should('match', /.*[0-9].*/);
   cy.contains('button', 'More info').click();
   cy.contains('.modal-content', 'Core')
     .and('contain', 'Dashboard')
