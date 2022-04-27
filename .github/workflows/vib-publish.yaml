@@ -1,4 +1,4 @@
-name: 'VIB Publish'
+name: 'VIB - Publish'
 on: # rebuild any PRs and main branch changes
   push:
     branches:
