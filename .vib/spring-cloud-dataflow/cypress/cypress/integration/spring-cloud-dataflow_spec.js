@@ -1,10 +1,6 @@
 /// <reference types="cypress" />
 import { random } from './utils.js';
-import {
-  importAStreamApplication,
-  importATaskApplication,
-  createATask,
-} from './prepare-app-state.js';
+import { importAnApplication, createATask } from './prepare-app-state.js';
 
 it('allows getting Spring Cloud Dataflow info', () => {
   cy.visit('/dashboard');
@@ -20,8 +16,9 @@ it('allows getting Spring Cloud Dataflow info', () => {
 
 it('allows a stream to be created and deployed', () => {
   const STREAM = 'mongodb | cassandra';
+  const STREAM_APPLICATION = 'Stream application starters for Kafka/Maven';
 
-  importAStreamApplication();
+  importAnApplication(STREAM_APPLICATION);
   cy.visit('/dashboard');
   cy.get('[routerlink="streams/list"').click();
   cy.contains('.btn-primary', 'Create stream(s)').click();
@@ -51,9 +48,11 @@ it('allows a stream to be created and deployed', () => {
 
 it('allows a task to be scheduled and destroyed', () => {
   const CRON_EXPRESSION = '*/5 * * * *';
+  const TASK_APPLICATION = 'Task application starters for Maven';
+  const TASK_TYPE = 'timestamp';
 
-  importATaskApplication();
-  createATask();
+  importAnApplication(TASK_APPLICATION);
+  createATask(TASK_TYPE);
   cy.get('[routerlink="tasks-jobs/tasks"]').click();
   cy.contains('clr-dg-cell', 'UNKNOWN')
     .siblings('clr-dg-cell', 'test-task')
@@ -99,7 +98,9 @@ it('allows importing a task from a file and destroying it ', () => {
 });
 
 it('allows unregistering of an application', () => {
-  importAStreamApplication();
+  const STREAM_APPLICATION = 'Stream application starters for Kafka/Maven';
+
+  importAnApplication(STREAM_APPLICATION);
   cy.get('clr-dg-cell').siblings('clr-dg-cell', 'PROCESSOR').first().click();
   cy.contains('button', 'Unregister Application').click();
   cy.contains('button', 'Unregister the application').click();

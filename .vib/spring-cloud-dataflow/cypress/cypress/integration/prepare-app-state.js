@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import { random } from './utils';
 
-const importAnApplication = (application) => {
+export const importAnApplication = (application) => {
   cy.visit('/dashboard');
   cy.contains('button', 'Add application(s)').click();
   cy.contains('label', application).click();
@@ -9,26 +9,12 @@ const importAnApplication = (application) => {
   cy.get('.toast-container').should('contain', 'Application(s) Imported');
 };
 
-export const importAStreamApplication = () => {
-  const STREAM_APPLICATION = 'Stream application starters for Kafka/Maven';
-
-  importAnApplication(STREAM_APPLICATION);
-};
-
-export const importATaskApplication = () => {
-  const TASK_APPLICATION = 'Task application starters for Maven';
-
-  importAnApplication(TASK_APPLICATION);
-};
-
-export const createATask = () => {
-  const TASK_TYPE = 'timestamp';
-
+export const createATask = (task) => {
   cy.visit('/dashboard');
   cy.get('[routerlink="tasks-jobs/tasks"]').click();
   cy.contains('.btn-primary', 'Create task').click();
-  cy.get('.CodeMirror-line').type(TASK_TYPE);
-  cy.contains('#v-2', TASK_TYPE);
+  cy.get('.CodeMirror-line').type(task);
+  cy.contains('#v-2', task);
   cy.contains('button', 'Create task').click();
   cy.contains('.modal-content', 'Create task');
   cy.fixture('tasks').then((task) => {
