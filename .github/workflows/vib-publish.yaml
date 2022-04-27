@@ -76,7 +76,6 @@ jobs:
           VIB_ENV_S3_URL: s3://${{ secrets.AWS_S3_BUCKET }}/bitnami
           VIB_ENV_S3_USERNAME: ${{ secrets.AWS_ACCESS_KEY_ID }}
           VIB_ENV_S3_PASSWORD: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          VIB_ENV_S3_ROLE: ${{ secrets.AWS_ROLE }}
       # If we perform a checkout of the master branch, we will find conflicts with the submodules
       - uses: actions/checkout@v2
         with:
@@ -90,7 +89,6 @@ jobs:
           aws configure set region us-east-1
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set role_arn ${{ secrets.AWS_ROLE }}
           aws configure set source_profile default
             # helm
           HELM_TARBALL="helm-v3.8.1-linux-amd64.tar.gz"
