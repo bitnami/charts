@@ -188,9 +188,9 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.image.repository`                                  | Grafana image name                                                                            | `bitnami/grafana`        |
 | `grafana.image.tag`                                         | Grafana image tag                                                                             | `8.4.6-debian-10-r6`     |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                    | `[]`                     |
-| `grafana.pluginsInitContainerImage.registry`                | Grafana Plugins image registry                                                                | `docker.io`              |
-| `grafana.pluginsInitContainerImage.repository`              | Grafana Plugins image name                                                                    | `bitnami/grafana`        |
-| `grafana.pluginsInitContainerImage.tag`                     | Grafana Plugins image tag                                                                     | `8.4.6-debian-10-r6`     |
+| `grafana.pluginsInitContainerImage.registry`                | Grafana Plugins image registry                                                                | `""`                     |
+| `grafana.pluginsInitContainerImage.repository`              | Grafana Plugins image name                                                                    | `""`                     |
+| `grafana.pluginsInitContainerImage.tag`                     | Grafana Plugins image tag                                                                     | `""`                     |
 | `grafana.pluginsInitContainerImage.pullSecrets`             | Grafana Plugins image pull secrets                                                            | `[]`                     |
 | `grafana.serviceAccount`                                    | Additional service account configuration                                                      | `{}`                     |
 | `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                  | `true`                   |
