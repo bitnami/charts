@@ -86,7 +86,7 @@ spec:
             - --grafana-image={{ include "grafana-operator.grafana.baseImage" . }}
             - --grafana-image-tag={{ .Values.grafana.image.tag | trim }}
             - --grafana-plugins-init-container-image={{ include "grafana-operator.grafana.pluginsInitContainerImage" . }}
-            - --grafana-plugins-init-container-tag={{ .Values.grafana.pluginsInitContainerImage.tag | trim }}
+            - --grafana-plugins-init-container-tag={{ default .Values.grafana.image.tag .Values.grafana.pluginsInitContainerImage.tag | trim }}
             {{- if .Values.operator.leaderElect }}
             - --leader-elect=True
             {{- end }}
