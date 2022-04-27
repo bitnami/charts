@@ -402,6 +402,22 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 18.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+
+- `applicationPort` is replaced by `containerPorts.http`
+- `service.port` is renamed to `service.ports.http`
+- `service.nodePort` is renamed to `service.nodePorts.http`
+- `accessMode` is replaced by `accessModes` (a list instead of a simple string)
+- `persistence.path` is renamed to `persistence.mountPath` (a list instead of a simple string)
+
+Also MongoDB&reg; subchart container images were updated to 5.0.x and it can affect compatibility with older versions of MongoDB&reg;.
+
+- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1200
+
 ### To 17.0.0
 
 In this version, the mongodb-exporter bundled as part of the bitnami/mongodb dependency was updated to a new version which, even it is not a major change, can contain breaking changes (from `0.11.X` to `0.30.X`).
@@ -438,18 +454,6 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
-
-### To 18.0.0
-
-This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
-
-Affected values:
-
-- `applicationPort` is replaced by `containerPorts.http`
-- `service.port` is renamed to `service.ports.http`
-- `service.nodePort` is renamed to `service.nodePorts.http`
-- `accessMode` is replaced by `accessModes` (a list instead of a simple string)
-- `persistence.path` is renamed to `persistence.mountPath` (a list instead of a simple string)
 
 ### To 13.0.0
 
