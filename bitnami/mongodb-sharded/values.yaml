@@ -309,8 +309,8 @@ livenessProbe:
   enabled: true
   initialDelaySeconds: 60
   periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 12
+  timeoutSeconds: 30
+  failureThreshold: 15
   successThreshold: 1
 ## Configure extra options for readiness probe
 ## This applies to all the MongoDB&reg; in the sharded cluster
@@ -326,8 +326,8 @@ readinessProbe:
   enabled: true
   initialDelaySeconds: 60
   periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 18
+  timeoutSeconds: 30
+  failureThreshold: 15
   successThreshold: 1
 
 ## @section Config Server parameters
