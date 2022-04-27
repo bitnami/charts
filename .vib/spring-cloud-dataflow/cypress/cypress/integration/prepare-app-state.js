@@ -1,32 +1,23 @@
 /// <reference types="cypress" />
 import { random } from './utils';
 
-export const importAStreamApplication = () => {
+const importAnApplication = (application) => {
   cy.visit('/dashboard');
   cy.contains('button', 'Add application(s)').click();
-  cy.contains('label', 'Stream application starters for Kafka/Maven').click();
+  cy.contains('label', application).click();
   cy.contains('.btn-primary', 'Import').click();
   cy.get('.toast-container').should('contain', 'Application(s) Imported');
-  cy.get('.content-area')
-    .should('contain', 'processor')
-    .and('contain', 'sink')
-    .and('contain', 'source');
+};
+
+export const importAStreamApplication = () => {
+  const STREAM_APPLICATION = 'Stream application starters for Kafka/Maven';
+
+  importAnApplication(STREAM_APPLICATION);
 };
 
 export const importATaskApplication = () => {
-  cy.visit('/dashboard');
-  cy.contains('button', 'Add application(s)').click();
-  cy.contains(
-    '.clr-control-label',
-    'Task application starters for Maven'
-  ).click();
-  cy.contains('.btn-primary', 'Import').click();
-  cy.get('.toast-container').should('contain', 'Application(s) Imported');
-  cy.get('[routerlink="tasks-jobs/tasks"]').click();
-  cy.contains('button', 'Create task').click();
-  cy.get('.content-area')
-    .should('contain', 'timestamp')
-    .and('contain', 'timestamp-batch');
+  const TASK_APPLICATION = 'Task application starters for Maven';
+  importAnApplication(TASK_APPLICATION);
 };
 
 export const createATask = () => {

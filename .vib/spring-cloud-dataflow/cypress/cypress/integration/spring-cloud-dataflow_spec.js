@@ -50,7 +50,6 @@ it('allows a stream to be created and deployed', () => {
 it('allows a task to be scheduled and destroyed', () => {
   const CRON_EXPRESSION = '*/5 * * * *';
 
-  cy.visit('/dashboard');
   importATaskApplication();
   createATask();
   cy.get('[routerlink="tasks-jobs/tasks"]').click();
