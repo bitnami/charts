@@ -31,7 +31,6 @@ it('allows a stream to be created and deployed', () => {
     cy.get('input[placeholder="Stream Name"]').type(
       `${stream.newStream.name}-${random}`
     );
-    console.log(random);
     cy.contains('.btn-primary', 'Create the stream').click();
     cy.contains(
       '.datagrid-inner-wrapper',
