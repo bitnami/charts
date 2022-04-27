@@ -78,6 +78,7 @@ Refer to the [chart documentation for more information on each of these architec
 | ------------------------ | --------------------------------------------------------------------------------------------------------- | --------------- |
 | `nameOverride`           | String to partially override mongodb.fullname template (will maintain the release name)                   | `""`            |
 | `fullnameOverride`       | String to fully override mongodb.fullname template                                                        | `""`            |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                           | `""`            |
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
 | `clusterDomain`          | Default Kubernetes cluster domain                                                                         | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                                         | `[]`            |
@@ -266,6 +267,8 @@ Refer to the [chart documentation for more information on each of these architec
 | `externalAccess.hidden.service.domain`                   | Domain or external IP used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                        | `""`                  |
 | `externalAccess.hidden.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                  |
 | `externalAccess.hidden.service.annotations`              | Service annotations for external access                                                                                                         | `{}`                  |
+| `externalAccess.hidden.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                                | `None`                |
+| `externalAccess.hidden.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                                     | `{}`                  |
 
 
 ### Persistence parameters
@@ -497,7 +500,6 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.username`                           | String with username for the metrics exporter                                                                         | `""`                       |
 | `metrics.password`                           | String with password for the metrics exporter                                                                         | `""`                       |
 | `metrics.extraFlags`                         | String with extra flags to the metrics exporter                                                                       | `""`                       |
-| `metrics.extraUri`                           | Additional URI options of the metrics service                                                                         | `""`                       |
 | `metrics.resources.limits`                   | The resources limits for Prometheus exporter containers                                                               | `{}`                       |
 | `metrics.resources.requests`                 | The requested resources for Prometheus exporter containers                                                            | `{}`                       |
 | `metrics.containerPort`                      | Port of the Prometheus metrics container                                                                              | `9216`                     |

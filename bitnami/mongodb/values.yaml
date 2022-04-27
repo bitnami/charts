@@ -28,6 +28,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override mongodb.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
@@ -863,6 +866,17 @@ externalAccess:
       ## @param externalAccess.hidden.service.annotations Service annotations for external access
       ##
       annotations: {}
+      ## @param externalAccess.hidden.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ##
+      sessionAffinity: None
+      ## @param externalAccess.hidden.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
 
 ## @section Persistence parameters
 ##
@@ -1810,10 +1824,6 @@ metrics:
   ## ref: https://github.com/percona/mongodb_exporter/blob/master/mongodb_exporter.go
   ##
   extraFlags: ""
-  ## @param metrics.extraUri Additional URI options of the metrics service
-  ## ref: https://docs.mongodb.com/manual/reference/connection-string
-  ##
-  extraUri: ""
   ## Metrics exporter container resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
