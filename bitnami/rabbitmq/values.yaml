@@ -30,13 +30,11 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.9.16-debian-10-r0
-
+  tag: 3.9.16-debian-10-r1
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
-
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -57,23 +55,27 @@ image:
 ## @param nameOverride String to partially override rabbitmq.fullname template (will maintain the release name)
 ##
 nameOverride: ""
-
 ## @param fullnameOverride String to fully override rabbitmq.fullname template
 ##
 fullnameOverride: ""
-
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
-
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
-
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -93,9 +95,6 @@ diagnosticMode:
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param commonAnnotations Annotations to add to all deployed objects
-##
-commonAnnotations: {}
 ## @param dnsPolicy DNS Policy for pod
 ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
 ## E.g.
@@ -116,7 +115,6 @@ auth:
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
   username: user
-
   ## @param auth.password RabbitMQ application password
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
@@ -126,7 +124,6 @@ auth:
   ## existingPasswordSecret: name-of-existing-secret
   ##
   existingPasswordSecret: ""
-
   ## @param auth.erlangCookie Erlang cookie to determine whether different nodes are allowed to communicate with each other
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
@@ -164,13 +161,11 @@ auth:
 ## ref: https://www.rabbitmq.com/logging.html#log-file-location
 ##
 logs: "-"
-
 ## @param ulimitNofiles RabbitMQ Max File Descriptors
 ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
 ## ref: https://www.rabbitmq.com/install-debian.html#kernel-resource-limits
 ##
 ulimitNofiles: "65536"
-
 ## RabbitMQ maximum available scheduler threads and online scheduler threads. By default it will create a thread per CPU detected, with the following parameters you can tune it manually.
 ## ref: https://hamidreza-s.github.io/erlang/scheduling/real-time/preemptive/migration/2016/02/09/erlang-scheduler-details.html#scheduler-threads
 ## ref: https://github.com/bitnami/charts/issues/2189
@@ -202,12 +197,10 @@ memoryHighWatermark:
 ## @param plugins List of default plugins to enable (should only be altered to remove defaults; for additional plugins use `extraPlugins`)
 ##
 plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
-
 ## @param communityPlugins List of Community plugins (URLs) to be downloaded during container initialization
 ## Combine it with extraPlugins to also enable them.
 ##
 communityPlugins: ""
-
 ## @param extraPlugins Extra plugins to enable (single string containing a space-separated list)
 ## Use this instead of `plugins` to add new plugins
 ##
@@ -226,13 +219,11 @@ clustering:
   ## ref: https://www.rabbitmq.com/rabbitmq-queues.8.html#rebalance
   ##
   rebalance: false
-
   ## @param clustering.forceBoot Force boot of an unexpectedly shut down cluster (in an unexpected order).
   ## forceBoot executes 'rabbitmqctl force_boot' to force boot cluster shut down unexpectedly in an unknown order
   ## ref: https://www.rabbitmq.com/rabbitmqctl.8.html#force_boot
   ##
   forceBoot: false
-
   ## @param clustering.partitionHandling Switch Partition Handling Strategy. Either `autoheal` or `pause-minority` or `pause-if-all-down` or `ignore`
   ## ref: https://www.rabbitmq.com/partitions.html#automatic-handling
   ##
@@ -259,12 +250,13 @@ command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
-
+## @param lifecycleHooks Overwrite livecycle for the RabbitMQ container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## @param terminationGracePeriodSeconds Default duration in seconds k8s waits for container to exit before sending kill signal.
 ## Any time in excess of 10 seconds will be spent waiting for any synchronization necessary for cluster not to lose data.
 ##
 terminationGracePeriodSeconds: 120
-
 ## @param extraEnvVars Extra environment variables to add to RabbitMQ pods
 ## E.g:
 ## extraEnvVars:
@@ -272,14 +264,27 @@ terminationGracePeriodSeconds: 120
 ##     value: BAR
 ##
 extraEnvVars: []
-
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra environment variables
 ##
 extraEnvVarsCM: ""
-
 ## @param extraEnvVarsSecret Name of existing Secret containing extra environment variables (in case of sensitive data)
 ##
 extraEnvVarsSecret: ""
+
+## Container Ports
+## @param containerPorts.amqp
+## @param containerPorts.amqpTls
+## @param containerPorts.dist
+## @param containerPorts.manager
+## @param containerPorts.epmd
+## @param containerPorts.metrics
+containerPorts:
+  amqp: 5672
+  amqpTls: 5671
+  dist: 25672
+  manager: 15672
+  epmd: 4369
+  metrics: 9419
 
 ## @param extraContainerPorts Extra ports to be included in container spec, primarily informational
 ## E.g:
@@ -288,7 +293,6 @@ extraEnvVarsSecret: ""
 ##   containerPort: 1234
 ##
 extraContainerPorts: []
-
 ## @param configuration [string] RabbitMQ Configuration file content: required cluster configuration
 ## Do not override unless you know what you are doing.
 ## To add more configuration, use `extraConfiguration` of `advancedConfiguration` instead
@@ -317,7 +321,7 @@ configuration: |-
   {{ tpl .Values.extraConfiguration . }}
   {{- if .Values.auth.tls.enabled }}
   ssl_options.verify = {{ .Values.auth.tls.sslOptionsVerify }}
-  listeners.ssl.default = {{ .Values.service.tlsPort }}
+  listeners.ssl.default = {{ .Values.service.ports.amqpTls }}
   ssl_options.fail_if_no_peer_cert = {{ .Values.auth.tls.failIfNoPeerCert }}
   ssl_options.cacertfile = /opt/bitnami/rabbitmq/certs/ca_certificate.pem
   ssl_options.certfile = /opt/bitnami/rabbitmq/certs/server_certificate.pem
@@ -411,7 +415,6 @@ extraVolumeMounts: []
 ##     emptyDir: {}
 ##
 extraVolumes: []
-
 ## @param extraSecrets Optionally specify extra secrets to be created by the chart.
 ## This can be useful when combined with load_definitions to automatically create the secret containing the definitions to be loaded.
 ## Example:
@@ -433,12 +436,10 @@ extraSecretsPrependReleaseName: false
 ## @param replicaCount Number of RabbitMQ replicas to deploy
 ##
 replicaCount: 1
-
 ## @param schedulerName Use an alternate scheduler, e.g. "stork".
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
-
 ## RabbitMQ should be initialized one by one when building cluster for the first time.
 ## Therefore, the default value of podManagementPolicy is 'OrderedReady'
 ## Once the RabbitMQ participates in the cluster, it waits for a response from another
@@ -451,37 +452,34 @@ schedulerName: ""
 ## @param podManagementPolicy Pod management policy
 ##
 podManagementPolicy: OrderedReady
-
 ## @param podLabels RabbitMQ Pod labels. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
 ## @param podAnnotations RabbitMQ Pod annotations. Evaluated as a template
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
-
-## @param updateStrategyType Update strategy type for RabbitMQ statefulset
+## @param updateStrategy.type Update strategy type for RabbitMQ statefulset
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
-updateStrategyType: RollingUpdate
-
+updateStrategy:
+  ## StrategyType
+  ## Can be set to RollingUpdate or OnDelete
+  ##
+  type: RollingUpdate
 ## @param statefulsetLabels RabbitMQ statefulset labels. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 statefulsetLabels: {}
-
 ## @param priorityClassName Name of the priority class to be used by RabbitMQ pods, priority class needs to be created beforehand
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAffinityPreset: ""
-
 ## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -512,17 +510,14 @@ nodeAffinityPreset:
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
 ##
 affinity: {}
-
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 nodeSelector: {}
-
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
@@ -531,15 +526,15 @@ topologySpreadConstraints: []
 ## RabbitMQ pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable RabbitMQ pods' Security Context
-## @param podSecurityContext.fsGroup Group ID for the filesystem used by the containers
-## @param podSecurityContext.runAsUser User ID for the service user running the pod
+## @param podSecurityContext.fsGroup Set RabbitMQ pod's Security Context fsGroup
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-  runAsUser: 1001
 
-## @param containerSecurityContext RabbitMQ containers' Security Context
+## @param containerSecurityContext.enabled Enabled RabbitMQ containers' Security Context
+## @param containerSecurityContext.runAsUser Set RabbitMQ containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set RabbitMQ container's Security Context runAsNonRoot
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## Example:
 ##   containerSecurityContext:
@@ -547,7 +542,10 @@ podSecurityContext:
 ##       drop: ["NET_RAW"]
 ##     readOnlyRootFilesystem: true
 ##
-containerSecurityContext: {}
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
 
 ## RabbitMQ containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
@@ -605,19 +603,33 @@ readinessProbe:
   failureThreshold: 3
   successThreshold: 1
 
+## Configure RabbitMQ containers' extra options for startup probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 10
+  timeoutSeconds: 20
+  periodSeconds: 30
+  failureThreshold: 3
+  successThreshold: 1
+
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
-
 ## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
-
 ## @param customStartupProbe Define a custom startup probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
 ##
 customStartupProbe: {}
-
 ## @param initContainers Add init containers to the RabbitMQ pod
 ## Example:
 ## initContainers:
@@ -629,7 +641,6 @@ customStartupProbe: {}
 ##         containerPort: 1234
 ##
 initContainers: []
-
 ## @param sidecars Add sidecar containers to the RabbitMQ pod
 ## Example:
 ## sidecars:
@@ -673,6 +684,9 @@ serviceAccount:
   ## @param serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod
   ##
   automountServiceAccountToken: true
+  ## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
+  annotations: {}
 
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
@@ -691,7 +705,6 @@ persistence:
   ## @param persistence.enabled Enable RabbitMQ data persistence using PVC
   ##
   enabled: true
-
   ## @param persistence.storageClass PVC Storage Class for RabbitMQ data volume
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -706,10 +719,10 @@ persistence:
   ##     app: my-app
   ##
   selector: {}
-  ## @param persistence.accessMode PVC Access Mode for RabbitMQ data volume
+  ## @param persistence.accessModes PVC Access Modes for RabbitMQ data volume
   ##
-  accessMode: ReadWriteOnce
-
+  accessModes:
+    - ReadWriteOnce
   ## @param persistence.existingClaim Provide an existing PersistentVolumeClaims
   ## The value is evaluated as a template
   ## So, for example, the name can depend on .Release or .Chart
@@ -727,12 +740,6 @@ persistence:
   ## If you change this value, you might have to adjust `rabbitmq.diskFreeLimit` as well
   ##
   size: 8Gi
-
-  ## @param persistence.volumes Additional volumes without creating PVC
-  ##  - name: volume_name
-  ##    emptyDir: {}
-  ##
-  volumes: []
   ## @param persistence.annotations Persistence annotations. Evaluated as a template
   ## Example:
   ## annotations:
@@ -753,103 +760,62 @@ service:
   ## @param service.portEnabled Amqp port. Cannot be disabled when `auth.tls.enabled` is `false`. Listener can be disabled with `listeners.tcp = none`.
   ##
   portEnabled: true
-
-  ## @param service.port Amqp port
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
-  ##
-  port: 5672
-
-  ## @param service.portName Amqp service port name
-  ##
-  portName: amqp
-
-  ## @param service.tlsPort Amqp TLS port
-  ##
-  tlsPort: 5671
-
-  ## @param service.tlsPortName Amqp TLS service port name
-  ##
-  tlsPortName: amqp-ssl
-
-  ## @param service.nodePort Node port override for `amqp` port, if serviceType is `NodePort` or `LoadBalancer`
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
-  ## e.g:
-  ## nodePort: 30672
-  ##
-  nodePort: ""
-
-  ## @param service.tlsNodePort Node port override for `amqp-ssl` port, if serviceType is `NodePort` or `LoadBalancer`
-  ## e.g:
-  ## tlsNodePort: 30671
-  ##
-  tlsNodePort: ""
-
   ## @param service.distPortEnabled Erlang distribution server port
   ##
   distPortEnabled: true
-
-  ## @param service.distPort Erlang distribution server port
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
-  ##
-  distPort: 25672
-
-  ## @param service.distPortName Erlang distribution service port name
-  ##
-  distPortName: dist
-
-  ## @param service.distNodePort Node port override for `dist` port, if serviceType is `NodePort`
-  ## e.g:
-  ## distNodePort: 30676
-  ##
-  distNodePort: ""
-
   ## @param service.managerPortEnabled RabbitMQ Manager port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
   managerPortEnabled: true
-
-  ## @param service.managerPort RabbitMQ Manager port
-  ##
-  managerPort: 15672
-
-  ## @param service.managerPortName RabbitMQ Manager service port name
-  ##
-  managerPortName: http-stats
-
-  ## @param service.managerNodePort Node port override for `http-stats` port, if serviceType `NodePort`
-  ## e.g:
-  ## managerNodePort: 30673
-  ##
-  managerNodePort: ""
-
-  ## @param service.metricsPort RabbitMQ Prometheues metrics port
-  ##
-  metricsPort: 9419
-
-  ## @param service.metricsPortName RabbitMQ Prometheues metrics service port name
-  ##
-  metricsPortName: metrics
-
-  ## @param service.metricsNodePort Node port override for `metrics` port, if serviceType is `NodePort`
-  ## e.g:
-  ## metricsNodePort: 30674
-  ##
-  metricsNodePort: ""
-
   ## @param service.epmdPortEnabled RabbitMQ EPMD Discovery service port
   ##
   epmdPortEnabled: true
-
-  ## @param service.epmdNodePort Node port override for `epmd` port, if serviceType is `NodePort`
-  ## e.g:
-  ## epmdNodePort: 30675
+  ## Service ports
+  ## @param service.ports.amqp Amqp service port
+  ## @param service.ports.amqpTls Amqp TLS service port
+  ## @param service.ports.dist Erlang distribution service port
+  ## @param service.ports.manager RabbitMQ Manager service port
+  ## @param service.ports.metrics RabbitMQ Prometheues metrics service port
+  ## @param service.ports.epmd EPMD Discovery service port
   ##
-  epmdNodePort: ""
-
-  ## @param service.epmdPortName EPMD Discovery service port name
+  ports:
+    amqp: 5672
+    amqpTls: 5671
+    dist: 25672
+    manager: 15672
+    metrics: 9419
+    epmd: 4369
+  ## Service ports name
+  ## @param service.portNames.amqp Amqp service port name
+  ## @param service.portNames.amqpTls Amqp TLS service port name
+  ## @param service.portNames.dist Erlang distribution service port name
+  ## @param service.portNames.manager RabbitMQ Manager service port name
+  ## @param service.portNames.metrics RabbitMQ Prometheues metrics service port name
+  ## @param service.portNames.epmd EPMD Discovery service port name
   ##
-  epmdPortName: epmd
+  portNames:
+    amqp: "amqp"
+    amqpTls: "amqp-ssl"
+    dist: "dist"
+    manager: "http-stats"
+    metrics: "metrics"
+    epmd: "epmd"
 
+  ## Node ports to expose
+  ## @param service.nodePorts.amqp Node port for Ampq
+  ## @param service.nodePorts.amqpTls Node port for Ampq TLS
+  ## @param service.nodePorts.dist Node port for Erlang distribution
+  ## @param service.nodePorts.manager Node port for RabbitMQ Manager
+  ## @param service.nodePorts.epmd Node port for EPMD Discovery
+  ## @param service.nodePorts.metrics Node port for RabbitMQ Prometheues metrics
+  ##
+  nodePorts:
+    amqp: ""
+    amqpTls: ""
+    dist: ""
+    manager: ""
+    epmd: ""
+    metrics: ""
   ## @param service.extraPorts Extra ports to expose in the service
   ## E.g.:
   ## extraPorts:
@@ -858,7 +824,6 @@ service:
   ##   targetPort: 1234
   ##
   extraPorts: []
-
   ## @param service.loadBalancerSourceRanges Address(es) that are allowed when service is `LoadBalancer`
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
@@ -866,24 +831,24 @@ service:
   ## - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
-
   ## @param service.externalIPs Set the ExternalIPs
   ##
   externalIPs: []
-
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-
   ## @param service.loadBalancerIP Set the LoadBalancerIP
   ##
   loadBalancerIP: ""
-
+  ## @param service.clusterIP Kubernetes service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
   ## @param service.labels Service labels. Evaluated as a template
   ##
   labels: {}
-
   ## @param service.annotations Service annotations. Evaluated as a template
   ## Example:
   ## annotations:
@@ -896,6 +861,17 @@ service:
   ##   external-dns.alpha.kubernetes.io/internal-hostname: rabbitmq.example.com
   ##
   annotationsHeadless: {}
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 
 ## Configure the ingress resource that allows you to access the
 ## RabbitMQ installation. Set up the URL
@@ -913,11 +889,9 @@ ingress:
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: rabbitmq.local
-
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -930,7 +904,6 @@ ingress:
   ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
-
   ## @param ingress.tls Enable TLS configuration for the hostname defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can:
@@ -939,16 +912,10 @@ ingress:
   ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
   ##
   tls: false
-
-  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
-  ## certManager: false
-  ##
-
   ## @param ingress.selfSigned Set this to true in order to create a TLS secret for this ingress record
   ## using self-signed certificates generated by Helm
   ##
   selfSigned: false
-
   ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## e.g:
@@ -957,12 +924,19 @@ ingress:
   ##     path: /
   ##
   extraHosts: []
-
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
   ## @param ingress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
   ## Useful when looking for additional customization, such as using different backend
   ##
   extraRules: []
-
   ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## e.g:
@@ -972,7 +946,6 @@ ingress:
   ##     secretName: rabbitmq.local-tls
   ##
   extraTls: []
-
   ## @param ingress.secrets Custom TLS certificates as secrets
   ## NOTE: 'key' and 'certificate' are expected in PEM format
   ## NOTE: 'name' should line up with a 'secretName' set further up
@@ -993,7 +966,6 @@ ingress:
   ##       -----END CERTIFICATE-----
   ##
   secrets: []
-
   ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
   ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
@@ -1036,7 +1008,6 @@ metrics:
   ## @param metrics.enabled Enable exposing RabbitMQ metrics to be gathered by Prometheus
   ##
   enabled: false
-
   ## @param metrics.plugins Plugins to enable Prometheus metrics in RabbitMQ
   ##
   plugins: "rabbitmq_prometheus"
@@ -1046,8 +1017,7 @@ metrics:
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "{{ .Values.service.metricsPort }}"
-
+    prometheus.io/port: "{{ .Values.service.ports.metrics }}"
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##
@@ -1066,9 +1036,9 @@ metrics:
     ## scrapeTimeout: 30s
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.relabellings MetricsRelabelConfigs to apply to samples before ingestion. DEPRECATED: Will be removed in next major.
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
-    relabellings: []
+    jobLabel: ""
     ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping.
     ##
     relabelings: []
@@ -1078,10 +1048,6 @@ metrics:
     ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
-    ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are required by the installed Prometheus Operator
-    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
-    ##
-    additionalLabels: {}
     ## @param metrics.serviceMonitor.targetLabels Used to keep given service's labels in target
     ## e.g:
     ## - app.kubernetes.io/name
@@ -1096,6 +1062,19 @@ metrics:
     ## Could be /metrics for aggregated metrics or /metrics/per-object for more details
     ##
     path: ""
+    ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.annotations Extra annotations for the ServiceMonitor
+    ##
+    annotations: {}
 
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
@@ -1116,7 +1095,7 @@ metrics:
     ## These are just examples rules inspired from https://awesome-prometheus-alerts.grep.to/rules.html
     ## rules:
     ##   - alert: RabbitmqDown
-    ##     expr: rabbitmq_up{service="{{ template "rabbitmq.fullname" . }}"} == 0
+    ##     expr: rabbitmq_up{service="{{ template "common.names.fullname" . }}"} == 0
     ##     for: 5m
     ##     labels:
     ##       severity: error
@@ -1125,7 +1104,7 @@ metrics:
     ##       description: RabbitMQ node down
     ##   - alert: ClusterDown
     ##     expr: |
-    ##       sum(rabbitmq_running{service="{{ template "rabbitmq.fullname" . }}"})
+    ##       sum(rabbitmq_running{service="{{ template "common.names.fullname" . }}"})
     ##       < {{ .Values.replicaCount }}
     ##     for: 5m
     ##     labels:
@@ -1136,7 +1115,7 @@ metrics:
     ##           Less than {{ .Values.replicaCount }} nodes running in RabbitMQ cluster
     ##           VALUE = {{ "{{ $value }}" }}
     ##   - alert: ClusterPartition
-    ##     expr: rabbitmq_partitions{service="{{ template "rabbitmq.fullname" . }}"} > 0
+    ##     expr: rabbitmq_partitions{service="{{ template "common.names.fullname" . }}"} > 0
     ##     for: 5m
     ##     labels:
     ##       severity: error
@@ -1147,8 +1126,8 @@ metrics:
     ##           VALUE = {{ "{{ $value }}" }}
     ##   - alert: OutOfMemory
     ##     expr: |
-    ##       rabbitmq_node_mem_used{service="{{ template "rabbitmq.fullname" . }}"}
-    ##       / rabbitmq_node_mem_limit{service="{{ template "rabbitmq.fullname" . }}"}
+    ##       rabbitmq_node_mem_used{service="{{ template "common.names.fullname" . }}"}
+    ##       / rabbitmq_node_mem_limit{service="{{ template "common.names.fullname" . }}"}
     ##       * 100 > 90
     ##     for: 5m
     ##     labels:
@@ -1159,7 +1138,7 @@ metrics:
     ##           Memory available for RabbmitMQ is low (< 10%)\n  VALUE = {{ "{{ $value }}" }}
     ##           LABELS: {{ "{{ $labels }}" }}
     ##   - alert: TooManyConnections
-    ##     expr: rabbitmq_connectionsTotal{service="{{ template "rabbitmq.fullname" . }}"} > 1000
+    ##     expr: rabbitmq_connectionsTotal{service="{{ template "common.names.fullname" . }}"} > 1000
     ##     for: 5m
     ##     labels:
     ##       severity: warning
@@ -1191,7 +1170,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r408
+    tag: 10-debian-10-r409
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
