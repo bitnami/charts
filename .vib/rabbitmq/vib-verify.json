@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/rabbitmq"
         },
-        "runtime_parameters": "ImF1dGgiOgogICJlcmxhbmdDb29raWUiOiAiUmpzcENDM25tNGtMdjRMaldGTmZGSFczeEx4Yjd6VEMiCiAgInBhc3N3b3JkIjogIlBIVkhkcXpyTWI5cyIKICAidXNlcm5hbWUiOiAidXNlciIKInNlcnZpY2UiOgogICJtYW5hZ2VyUG9ydCI6IDgwCiAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIg==",
+        "runtime_parameters": "ImF1dGgiOgogICJlcmxhbmdDb29raWUiOiAiUmpzcENDM25tNGtMdjRMaldGTmZGSFczeEx4Yjd6VEMiCiAgInBhc3N3b3JkIjogIlBIVkhkcXpyTWI5cyIKICAidXNlcm5hbWUiOiAidXNlciIKInNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAibWFuYWdlciI6IDgwCiAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
