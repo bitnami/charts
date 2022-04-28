@@ -10,7 +10,7 @@ The chart has been deployed in diagnostic mode. All probes have been disabled an
   command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
   args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
 
-Get the list of pods by executing:
+Get the list of pods by executing the command below:
 
   kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
 
