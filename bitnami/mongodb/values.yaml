@@ -510,8 +510,8 @@ containerPorts:
 livenessProbe:
   enabled: true
   initialDelaySeconds: 30
-  periodSeconds: 10
-  timeoutSeconds: 5
+  periodSeconds: 20
+  timeoutSeconds: 10
   failureThreshold: 6
   successThreshold: 1
 ## MongoDB(&reg;) pods' readiness probe. Evaluated as a template.
@@ -543,8 +543,8 @@ readinessProbe:
 startupProbe:
   enabled: false
   initialDelaySeconds: 5
-  periodSeconds: 10
-  timeoutSeconds: 5
+  periodSeconds: 20
+  timeoutSeconds: 10
   successThreshold: 1
   failureThreshold: 30
 ## @param customLivenessProbe Override default liveness probe for MongoDB(&reg;) containers
@@ -1306,8 +1306,8 @@ arbiter:
   livenessProbe:
     enabled: true
     initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
+    periodSeconds: 20
+    timeoutSeconds: 10
     failureThreshold: 6
     successThreshold: 1
   ## MongoDB(&reg;) Arbiter pods' readiness probe. Evaluated as a template.
@@ -1322,8 +1322,8 @@ arbiter:
   readinessProbe:
     enabled: true
     initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
+    periodSeconds: 20
+    timeoutSeconds: 10
     failureThreshold: 6
     successThreshold: 1
   ## MongoDB(&reg;) Arbiter pods' startup probe. Evaluated as a template.
@@ -1622,8 +1622,8 @@ hidden:
   livenessProbe:
     enabled: true
     initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
+    periodSeconds: 20
+    timeoutSeconds: 10
     failureThreshold: 6
     successThreshold: 1
   ## MongoDB(&reg;) Hidden pods' readiness probe. Evaluated as a template.
@@ -1638,8 +1638,8 @@ hidden:
   readinessProbe:
     enabled: true
     initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
+    periodSeconds: 20
+    timeoutSeconds: 10
     failureThreshold: 6
     successThreshold: 1
   ## Slow starting containers can be protected through startup probes

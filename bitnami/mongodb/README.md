@@ -189,8 +189,8 @@ Refer to the [chart documentation for more information on each of these architec
 | `containerPorts.mongodb`                | MongoDB(&reg;) container port                                                                                    | `27017`         |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                                             | `true`          |
 | `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                          | `30`            |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                 | `10`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                | `5`             |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                 | `20`            |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                | `10`            |
 | `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                              | `6`             |
 | `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                              | `1`             |
 | `readinessProbe.enabled`                | Enable readinessProbe                                                                                            | `true`          |
@@ -201,8 +201,8 @@ Refer to the [chart documentation for more information on each of these architec
 | `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                             | `1`             |
 | `startupProbe.enabled`                  | Enable startupProbe                                                                                              | `false`         |
 | `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                           | `5`             |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                  | `10`            |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                 | `5`             |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                  | `20`            |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                 | `10`            |
 | `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                               | `30`            |
 | `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                               | `1`             |
 | `customLivenessProbe`                   | Override default liveness probe for MongoDB(&reg;) containers                                                    | `{}`            |
@@ -366,14 +366,14 @@ Refer to the [chart documentation for more information on each of these architec
 | `arbiter.containerPorts.mongodb`                | MongoDB(&reg;) arbiter container port                                                             | `27017`         |
 | `arbiter.livenessProbe.enabled`                 | Enable livenessProbe                                                                              | `true`          |
 | `arbiter.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                           | `30`            |
-| `arbiter.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                  | `10`            |
-| `arbiter.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                 | `5`             |
+| `arbiter.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                  | `20`            |
+| `arbiter.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                 | `10`            |
 | `arbiter.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                               | `6`             |
 | `arbiter.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                               | `1`             |
 | `arbiter.readinessProbe.enabled`                | Enable readinessProbe                                                                             | `true`          |
 | `arbiter.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                          | `5`             |
-| `arbiter.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                 | `10`            |
-| `arbiter.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                | `5`             |
+| `arbiter.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                 | `20`            |
+| `arbiter.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                | `10`            |
 | `arbiter.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                              | `6`             |
 | `arbiter.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                              | `1`             |
 | `arbiter.startupProbe.enabled`                  | Enable startupProbe                                                                               | `false`         |
@@ -444,14 +444,14 @@ Refer to the [chart documentation for more information on each of these architec
 | `hidden.containerPorts.mongodb`                      | MongoDB(&reg;) hidden container port                                                                 | `27017`             |
 | `hidden.livenessProbe.enabled`                       | Enable livenessProbe                                                                                 | `true`              |
 | `hidden.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                              | `30`                |
-| `hidden.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                     | `10`                |
-| `hidden.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                    | `5`                 |
+| `hidden.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                     | `20`                |
+| `hidden.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                    | `10`                |
 | `hidden.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                  | `6`                 |
 | `hidden.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                  | `1`                 |
 | `hidden.readinessProbe.enabled`                      | Enable readinessProbe                                                                                | `true`              |
 | `hidden.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                             | `5`                 |
-| `hidden.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                    | `10`                |
-| `hidden.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                   | `5`                 |
+| `hidden.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                    | `20`                |
+| `hidden.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                   | `10`                |
 | `hidden.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                 | `6`                 |
 | `hidden.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                 | `1`                 |
 | `hidden.startupProbe.enabled`                        | Enable startupProbe                                                                                  | `false`             |
