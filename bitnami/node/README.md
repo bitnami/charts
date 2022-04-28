@@ -137,8 +137,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                        | `3`                    |
 | `readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                      | `3`                    |
 | `readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                      | `1`                    |
+| `startupProbe.enabled`                        | Enable startupProbe                                                                       | `false`                |
+| `startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                    | `10`                   |
+| `startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                           | `20`                   |
+| `startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                          | `1`                    |
+| `startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                        | `6`                    |
+| `startupProbe.successThreshold`               | Success threshold for startupProbe                                                        | `1`                    |
 | `customLivenessProbe`                         | Override default liveness probe                                                           | `{}`                   |
 | `customReadinessProbe`                        | Override default readiness probe                                                          | `{}`                   |
+| `customStartupProbe`                          | Custom startupProbe that overrides the default one                                        | `{}`                   |
 | `priorityClassName`                           | Node priorityClassName                                                                    | `""`                   |
 | `lifecycleHooks`                              | lifecycleHooks for the Node container to automate configuration before or after startup.  | `{}`                   |
 | `sidecars`                                    | Add sidecars to the Node pods                                                             | `[]`                   |
