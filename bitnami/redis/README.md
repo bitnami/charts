@@ -7,7 +7,7 @@ Redis(TM) is an open source, advanced key-value store. It is often referred to a
 [Overview of Redis&trade;](http://redis.io)
 
 Disclaimer: Redis is a registered trademark of Redis Labs Ltd. Any rights therein are reserved to Redis Labs Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Labs Ltd.
-                           
+
 ## TL;DR
 
 ```bash
@@ -687,17 +687,17 @@ A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
 
 Affected values:
-  - `master.service.port` renamed as `master.service.ports.redis`.
-  - `master.service.nodePort` renamed as `master.service.nodePorts.redis`.
-  - `replica.service.port` renamed as `replica.service.ports.redis`.
-  - `replica.service.nodePort` renamed as `replica.service.nodePorts.redis`.
-  - `sentinel.service.port` renamed as `sentinel.service.ports.redis`.
-  - `sentinel.service.sentinelPort` renamed as `sentinel.service.ports.sentinel`.
-  - `master.containerPort` renamed as `master.containerPorts.redis`.
-  - `replica.containerPort` renamed as `replica.containerPorts.redis`.
-  - `sentinel.containerPort` renamed as `sentinel.containerPorts.sentinel`.
-  - `master.spreadConstraints` renamed as `master.topologySpreadConstraints`
-  - `replica.spreadConstraints` renamed as `replica.topologySpreadConstraints`
+- `master.service.port` renamed as `master.service.ports.redis`.
+- `master.service.nodePort` renamed as `master.service.nodePorts.redis`.
+- `replica.service.port` renamed as `replica.service.ports.redis`.
+- `replica.service.nodePort` renamed as `replica.service.nodePorts.redis`.
+- `sentinel.service.port` renamed as `sentinel.service.ports.redis`.
+- `sentinel.service.sentinelPort` renamed as `sentinel.service.ports.sentinel`.
+- `master.containerPort` renamed as `master.containerPorts.redis`.
+- `replica.containerPort` renamed as `replica.containerPorts.redis`.
+- `sentinel.containerPort` renamed as `sentinel.containerPorts.sentinel`.
+- `master.spreadConstraints` renamed as `master.topologySpreadConstraints`
+- `replica.spreadConstraints` renamed as `replica.topologySpreadConstraints`
 
 ### To 15.0.0
 
@@ -710,11 +710,11 @@ The Redis&trade; sentinel exporter was removed in this version because the upstr
 ### To 14.0.0
 
 - Several parameters were renamed or disappeared in favor of new ones on this major version:
-  - The term *slave* has been replaced by the term *replica*. Therefore, parameters prefixed with `slave` are now prefixed with `replicas`.
-  - Credentials parameter are reorganized under the `auth` parameter.
-  - `cluster.enabled` parameter is deprecated in favor of `architecture` parameter that accepts two values: `standalone` and `replication`.
-  - `securityContext.*` is deprecated in favor of `XXX.podSecurityContext` and `XXX.containerSecurityContext`.
-  - `sentinel.metrics.*` parameters are deprecated in favor of `metrics.sentinel.*` ones.
+    - The term *slave* has been replaced by the term *replica*. Therefore, parameters prefixed with `slave` are now prefixed with `replicas`.
+    - Credentials parameter are reorganized under the `auth` parameter.
+    - `cluster.enabled` parameter is deprecated in favor of `architecture` parameter that accepts two values: `standalone` and `replication`.
+    - `securityContext.*` is deprecated in favor of `XXX.podSecurityContext` and `XXX.containerSecurityContext`.
+    - `sentinel.metrics.*` parameters are deprecated in favor of `metrics.sentinel.*` ones.
 - New parameters to add custom command, environment variables, sidecars, init containers, etc. were added.
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
 - values.yaml metadata was adapted to follow the format supported by [Readme Generator for Helm](https://github.com/bitnami-labs/readme-generator-for-helm).
