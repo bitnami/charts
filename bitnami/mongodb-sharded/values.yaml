@@ -589,10 +589,10 @@ configsvr:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 10
-    periodSeconds: 20
-    timeoutSeconds: 10
-    failureThreshold: 12
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 20
+    failureThreshold: 2
     successThreshold: 1
   ## Configure extra options for readiness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
@@ -606,9 +606,9 @@ configsvr:
   readinessProbe:
     enabled: true
     initialDelaySeconds: 10
-    periodSeconds: 20
-    timeoutSeconds: 10
-    failureThreshold: 12
+    periodSeconds: 30
+    timeoutSeconds: 20
+    failureThreshold: 6
     successThreshold: 1
 
   ## Configure extra options for startup probe
@@ -911,10 +911,10 @@ mongos:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 10
-    periodSeconds: 20
-    timeoutSeconds: 10
-    failureThreshold: 12
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 20
+    failureThreshold: 2
     successThreshold: 1
   ## Configure extra options for readiness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
@@ -928,9 +928,9 @@ mongos:
   readinessProbe:
     enabled: true
     initialDelaySeconds: 10
-    periodSeconds: 20
-    timeoutSeconds: 10
-    failureThreshold: 12
+    periodSeconds: 30
+    timeoutSeconds: 20
+    failureThreshold: 6
     successThreshold: 1
 
   ## Configure extra options for startup probe
@@ -1189,10 +1189,10 @@ shardsvr:
     ##
     livenessProbe:
       enabled: true
-      initialDelaySeconds: 10
-      periodSeconds: 20
-      timeoutSeconds: 10
-      failureThreshold: 12
+      initialDelaySeconds: 60
+      periodSeconds: 30
+      timeoutSeconds: 20
+      failureThreshold: 2
       successThreshold: 1
     ## Configure extra options for readiness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
@@ -1206,9 +1206,9 @@ shardsvr:
     readinessProbe:
       enabled: true
       initialDelaySeconds: 10
-      periodSeconds: 10
-      timeoutSeconds: 5
-      failureThreshold: 12
+      periodSeconds: 30
+      timeoutSeconds: 20
+      failureThreshold: 6
       successThreshold: 1
 
     ## Configure extra options for startup probe
@@ -1482,10 +1482,10 @@ shardsvr:
     ##
     livenessProbe:
       enabled: true
-      initialDelaySeconds: 10
-      periodSeconds: 20
-      timeoutSeconds: 10
-      failureThreshold: 12
+      initialDelaySeconds: 60
+      periodSeconds: 30
+      timeoutSeconds: 20
+      failureThreshold: 2
       successThreshold: 1
     ## Configure extra options for readiness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
@@ -1499,9 +1499,9 @@ shardsvr:
     readinessProbe:
       enabled: true
       initialDelaySeconds: 10
-      periodSeconds: 20
-      timeoutSeconds: 10
-      failureThreshold: 12
+      periodSeconds: 30
+      timeoutSeconds: 20
+      failureThreshold: 6
       successThreshold: 1
 
     ## Configure extra options for startup probe
