@@ -145,7 +145,7 @@ otherwise it generates a random value.
     {{- if not (empty .Values.auth.rootPassword) }}
         {{- .Values.auth.rootPassword }}
     {{- else if (not .Values.auth.forcePassword) }}
-        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "mysql-root-password") }}
+        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (include "common.names.fullname" .) "Length" 10 "Key" "mysql-root-password") }}
     {{- else }}
         {{- required "A MySQL Root Password is required!" .Values.auth.rootPassword }}
     {{- end }}
@@ -155,7 +155,7 @@ otherwise it generates a random value.
     {{- if and (not (empty .Values.auth.username)) (not (empty .Values.auth.password)) }}
         {{- .Values.auth.password }}
     {{- else if (not .Values.auth.forcePassword) }}
-        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "mysql-password") }}
+        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (include "common.names.fullname" .) "Length" 10 "Key" "mysql-password") }}
     {{- else }}
         {{- required "A MySQL Database Password is required!" .Values.auth.password }}
     {{- end }}
@@ -165,7 +165,7 @@ otherwise it generates a random value.
     {{- if not (empty .Values.auth.replicationPassword) }}
         {{- .Values.auth.replicationPassword }}
     {{- else if (not .Values.auth.forcePassword) }}
-        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "mysql-replication-password") }}
+        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (include "common.names.fullname" .) "Length" 10 "Key" "mysql-replication-password") }}
     {{- else }}
         {{- required "A MySQL Replication Password is required!" .Values.auth.replicationPassword }}
     {{- end }}

@@ -2,14 +2,11 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "mysql.primary.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: primary
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.primary.podLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.primary.podLabels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -20,14 +17,9 @@ spec:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: primary
   serviceName: {{ include "mysql.primary.fullname" . }}
-  updateStrategy:
-    type: {{ .Values.primary.updateStrategy }}
-    {{- if (eq "Recreate" .Values.primary.updateStrategy) }}
-    rollingUpdate: null
-    {{- else if .Values.primary.rollingUpdatePartition }}
-    rollingUpdate:
-      partition: {{ .Values.primary.rollingUpdatePartition }}
-    {{- end }}
+  {{- if .Values.%%MAIN_OBJECT_BLOCK%%.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.%%MAIN_OBJECT_BLOCK%%.updateStrategy | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       annotations:
@@ -39,9 +31,6 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: primary
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
         {{- if .Values.primary.podLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.primary.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
@@ -68,11 +57,20 @@ spec:
       {{- if .Values.primary.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.primary.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.priorityClassName }}
-      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- if .Values.%%MAIN_OBJECT_BLOCK%%.priorityClassName }}
+      priorityClassName: {{ .Values.%%MAIN_OBJECT_BLOCK%%.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.primary.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.primary.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- if .Values.%%MAIN_OBJECT_BLOCK%%.schedulerName }}
+      schedulerName: {{ .Values.%%MAIN_OBJECT_BLOCK%%.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.%%MAIN_OBJECT_BLOCK%%.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.%%MAIN_OBJECT_BLOCK%%.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.%%MAIN_OBJECT_BLOCK%%.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.%%MAIN_OBJECT_BLOCK%%.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if or .Values.primary.initContainers (and .Values.primary.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.primary.persistence.enabled) }}
       initContainers:
