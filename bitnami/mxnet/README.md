@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                      | Apache MXNet (Incubating) image registry                                                              | `docker.io`            |
 | `image.repository`                    | Apache MXNet (Incubating) image repository                                                            | `bitnami/mxnet`        |
-| `image.tag`                           | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                  | `1.9.0-debian-10-r110` |
+| `image.tag`                           | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                  | `1.9.0-debian-10-r117` |
 | `image.pullPolicy`                    | Image pull policy                                                                                     | `IfNotPresent`         |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                      | `[]`                   |
 | `image.debug`                         | Specify if debug logs should be enabled                                                               | `false`                |
