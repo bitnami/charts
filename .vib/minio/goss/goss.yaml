@@ -3,36 +3,36 @@ command:
     exec: mc --version
     exit-status: 0
     stdout:
-      - "DEVELOPMENT"
-    stderr: [ ]
-    timeout: 20000 
+      - DEVELOPMENT
+    stderr: []
+    timeout: 20000
   mc-make-bucket:
     exec: mc mb test
     exit-status: 0
     stdout:
-      - "Bucket created successfully `test`."
-    stderr: [ ]
-    timeout: 20000    
+      - Bucket created successfully `test`.
+    stderr: []
+    timeout: 20000
   mc-list-buckets:
     exec: mc ls
     exit-status: 0
     stdout:
-      - "bin"
-      - "licenses"
-    stderr: [ ]
-    timeout: 20000 
+      - bin
+      - licenses
+    stderr: []
+    timeout: 20000
   mc-ls-play:
     exec: mc ls play
     exit-status: 0
-    stderr: [ ]
-    timeout: 20000  
+    stderr: []
+    timeout: 20000
   which-minio:
     exec: which minio
     exit-status: 0
     stdout:
-      - "/opt/bitnami/minio/bin/minio"
-    stderr: [ ]
-    timeout: 20000                
+      - /opt/bitnami/minio/bin/minio
+    stderr: []
+    timeout: 20000
 file:
   /data:
     filetype: directory
@@ -40,4 +40,4 @@ file:
   /opt/bitnami/minio-client/bin/mc:
     filetype: file
     exists: true
-    group: root    
+    group: root

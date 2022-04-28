@@ -39,38 +39,6 @@
               "OS"
             ]
           }
-        },
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-discourse-http",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
-          "action_id": "goss",
-          "params": {
-            "resources": {
-              "path": "/.vib/discourse/goss"
-            },
-            "remote": {
-              "workload": "deploy-discourse"
-            }
-          }
-        },
-        {
-          "action_id": "cypress",
-          "params": {
-            "resources": {
-              "path": "/.vib/discourse/cypress"
-            },
-            "endpoint": "lb-discourse-http",
-            "app_protocol": "HTTP",
-            "env": {
-              "username": "user",
-              "password": "ComplicatedPassword123!4"
-            }
-          }
         }
       ]
     }

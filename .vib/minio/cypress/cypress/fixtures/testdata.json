@@ -2,5 +2,5 @@
   "bucketTitle": "testbucket",
   "testAccessKey": "test_access_key",
   "testSecretKey": "test_secret_key",
-  "testGroupName":"test_group"
+  "testGroupName": "test_group"
 }

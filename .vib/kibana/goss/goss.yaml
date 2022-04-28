@@ -2,16 +2,16 @@ command:
   kibana-version-ok:
     exec: kibana --version
     exit-status: 0
-    stdout:
-    stderr: [ ]
+    stdout: null
+    stderr: []
     timeout: 20000
   which-kibana:
     exec: which kibana
     exit-status: 0
     stdout:
-    - "/opt/bitnami/kibana/bin/kibana"
+      - /opt/bitnami/kibana/bin/kibana
     stderr: []
-    timeout: 0  
+    timeout: 0
 file:
   /opt/bitnami/kibana/config/kibana.yml:
     mode: "0664"
@@ -27,4 +27,4 @@ file:
     mode: "0664"
     filetype: file
     exists: true
-    group: root  
+    group: root

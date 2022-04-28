@@ -2,51 +2,51 @@ command:
   redis-standalone-auth:
     exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli -h 127.0.0.1 -p 6379
     exit-status: 0
-    stderr: [ ]
+    stderr: []
     timeout: 20000
   redis-standalone-ping:
     exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli PING
     exit-status: 0
-    stderr: [ ]
+    stderr: []
     stdout:
-    - "PONG"
+      - PONG
     timeout: 20000
   redis-standalone-ping-no-password:
     exec: redis-cli PING
     exit-status: 0
     stdout:
-    - "NOAUTH Authentication required."
-    stderr: [ ]
+      - NOAUTH Authentication required.
+    stderr: []
     timeout: 20000
   redis-standalone-whoami:
     exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ACL WHOAMI
     exit-status: 0
     stdout:
-      - "default"
-    stderr: [ ]
+      - default
+    stderr: []
     timeout: 20000
   redis-standalone-setuser:
     exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ACL SETUSER virginia on +GET allkeys
     exit-status: 0
     stdout:
-      - "OK"
-    stderr: [ ]
+      - OK
+    stderr: []
     timeout: 20000
   redis-standalone-role:
     exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ROLE
     exit-status: 0
     stdout:
-      - "master"
-    stderr: [ ]
+      - master
+    stderr: []
     timeout: 20000
   redis-standalone-info:
     exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli INFO
     exit-status: 0
     stdout:
-      - "redis_mode:standalone"
-      - "connected_slaves:0"
-      - "role:master"
-    stderr: [ ]
+      - redis_mode:standalone
+      - connected_slaves:0
+      - role:master
+    stderr: []
     timeout: 20000
 file:
   /bitnami/redis/data:

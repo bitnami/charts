@@ -2,15 +2,15 @@ command:
   grafanacli:
     exec: grafana-cli -h
     exit-status: 0
-    stderr: [ ]
+    stderr: []
     timeout: 20000
   grafana-cli-data-migration:
     exec: grafana-cli admin data-migration encrypt-datasource-passwords
     exit-status: 0
     stdout:
-      - "All datasources secrets are already encrypted"
-    stderr: [ ]
-    timeout: 20000    
+      - All datasources secrets are already encrypted
+    stderr: []
+    timeout: 20000
 file:
   /opt/bitnami/grafana/conf/ldap.toml:
     mode: "0644"

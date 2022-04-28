@@ -39,13 +39,6 @@
               "OS"
             ]
           }
-        },
-        {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-wordpress-intel-http",
-            "app_protocol": "HTTP"
-          }
         }
       ]
     }
