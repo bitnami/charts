@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/mongodb"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,22 +8,15 @@
         {
           "action_id": "helm-lint"
         }
-      ]
-    },
-    "verify": {
+      ],
       "context": {
         "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/mongodb"
-        },
-        "runtime_parameters": "YXV0aDoKICByb290UGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNAogIHJvb3RVc2VyOiB1c2VyCiAgdXNlcm5hbWVzOgogICAgLSBrYXlsZQogIGRhdGFiYXNlczoKICAgIC0gYXdlc29tZV9kYgpzZXJ2aWNlOgogIHBvcnRzOgogICAgbW9uZ29kYjogODAKICB0eXBlOiBMb2FkQmFsYW5jZXIK",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
+          "path": "/bitnami/mongodb",
+          "url": "{SHA_ARCHIVE}"
         }
-      },
+      }
+    },
+    "verify": {
       "actions": [
         {
           "action_id": "trivy",
@@ -57,7 +44,20 @@
             }
           }
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/mongodb",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "ImF1dGgiOgogICJyb290UGFzc3dvcmQiOiAiN2RNeExmY3F4TiIKICAicm9vdFVzZXIiOiAicm9vdCIKInNlcnZpY2UiOgogICJwb3J0IjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
+        }
+      }
     }
   }
 }

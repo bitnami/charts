@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/redis"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,22 +8,15 @@
         {
           "action_id": "helm-lint"
         }
-      ]
-    },
-    "verify": {
+      ],
       "context": {
         "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/redis"
-        },
-        "runtime_parameters": "c2VudGluZWw6CiAgZW5hYmxlZDogdHJ1ZQogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgc2VudGluZWw6IDgwCiAgICB0eXBlOiBMb2FkQmFsYW5jZXIK",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
+          "path": "/bitnami/redis",
+          "url": "{SHA_ARCHIVE}"
         }
-      },
+      }
+    },
+    "verify": {
       "actions": [
         {
           "action_id": "trivy",
@@ -59,15 +46,28 @@
         {
           "action_id": "goss",
           "params": {
-            "resources": {
-              "path": "/.vib/redis/sentinel/goss"
-            },
             "remote": {
               "workload": "sts-redis-node"
+            },
+            "resources": {
+              "path": "/.vib/redis/sentinel/goss"
             }
           }
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/redis",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "c2VudGluZWw6CiAgZW5hYmxlZDogdHJ1ZQogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgc2VudGluZWw6IDgwCiAgICB0eXBlOiBMb2FkQmFsYW5jZXIK",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
+        }
+      }
     }
   }
 }

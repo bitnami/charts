@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/contour"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,22 +8,15 @@
         {
           "action_id": "helm-lint"
         }
-      ]
-    },
-    "verify": {
+      ],
       "context": {
         "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/contour"
-        },
-        "runtime_parameters": "ImNvbnRvdXIiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJ4ZHMiOiA4MAogICAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgoiZW52b3kiOgogICJzZXJ2aWNlIjoKICAgICJ0eXBlIjogIk5vZGVQb3J0Ig==",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
+          "path": "/bitnami/contour",
+          "url": "{SHA_ARCHIVE}"
         }
-      },
+      }
+    },
+    "verify": {
       "actions": [
         {
           "action_id": "trivy",
@@ -46,7 +33,20 @@
             "endpoint": "lb-contour-tcp-xds"
           }
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/contour",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "ImNvbnRvdXIiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJ4ZHMiOiA4MAogICAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgoiZW52b3kiOgogICJzZXJ2aWNlIjoKICAgICJ0eXBlIjogIk5vZGVQb3J0Ig==",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}"
+        }
+      }
     }
   }
 }

@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/kubernetes-event-exporter"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,7 +8,13 @@
         {
           "action_id": "helm-lint"
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/kubernetes-event-exporter",
+          "url": "{SHA_ARCHIVE}"
+        }
+      }
     },
     "verify": {
       "actions": [

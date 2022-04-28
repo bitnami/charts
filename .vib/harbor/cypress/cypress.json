@@ -1,8 +1,8 @@
 {
   "baseUrl": "https://localhost/",
+  "defaultCommandTimeout": 30000,
   "env": {
-    "username": "admin",
-    "password": "ComplicatedPassword123!4"
-  },
-  "defaultCommandTimeout": 30000
+    "password": "ComplicatedPassword123!4",
+    "username": "admin"
+  }
 }

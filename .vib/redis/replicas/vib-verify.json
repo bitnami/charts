@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/redis"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,22 +8,15 @@
         {
           "action_id": "helm-lint"
         }
-      ]
-    },
-    "verify": {
+      ],
       "context": {
         "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/redis"
-        },
-        "runtime_parameters": "YXV0aDoKICBwYXNzd29yZDogInRlc3RfcGFzc3dvcmQiCm1hc3RlcjoKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIgCiAgcGVyc2lzdGVuY2U6CiAgICBwYXRoOiAvZGF0YS1wZXJzaXN0ZW5jZQpyZXBsaWNhOgogIHJlcGxpY2FDb3VudDogMgogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgcmVkaXM6IDgwCiAgICB0eXBlOiBMb2FkQmFsYW5jZXIKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIK",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
+          "path": "/bitnami/redis",
+          "url": "{SHA_ARCHIVE}"
         }
-      },
+      }
+    },
+    "verify": {
       "actions": [
         {
           "action_id": "trivy",
@@ -59,26 +46,39 @@
         {
           "action_id": "goss",
           "params": {
-            "resources": {
-              "path": "/.vib/redis/replicas/goss/goss-master"
-            },
             "remote": {
               "workload": "sts-redis-master"
+            },
+            "resources": {
+              "path": "/.vib/redis/replicas/goss/goss-master"
             }
           }
         },
         {
           "action_id": "goss",
           "params": {
-            "resources": {
-              "path": "/.vib/redis/replicas/goss/goss-replica"
-            },
             "remote": {
               "workload": "sts-redis-replicas"
+            },
+            "resources": {
+              "path": "/.vib/redis/replicas/goss/goss-replica"
             }
           }
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/redis",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "YXV0aDoKICBwYXNzd29yZDogInRlc3RfcGFzc3dvcmQiCm1hc3RlcjoKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIgCiAgcGVyc2lzdGVuY2U6CiAgICBwYXRoOiAvZGF0YS1wZXJzaXN0ZW5jZQpyZXBsaWNhOgogIHJlcGxpY2FDb3VudDogMgogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgcmVkaXM6IDgwCiAgICB0eXBlOiBMb2FkQmFsYW5jZXIKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIK",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
+        }
+      }
     }
   }
 }

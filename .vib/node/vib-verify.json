@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/node"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,22 +8,15 @@
         {
           "action_id": "helm-lint"
         }
-      ]
-    },
-    "verify": {
+      ],
       "context": {
         "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/node"
-        },
-        "runtime_parameters": "Im1vbmdvZGIiOgogICJhdXRoIjoKICAgICJyb290UGFzc3dvcmQiOiAiQU9pWTlOZjEiCiJzZXJ2aWNlIjoKICAicG9ydHMiOgogICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIK",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
+          "path": "/bitnami/node",
+          "url": "{SHA_ARCHIVE}"
         }
-      },
+      }
+    },
+    "verify": {
       "actions": [
         {
           "action_id": "trivy",
@@ -43,11 +30,24 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-node-http",
-            "app_protocol": "HTTP"
+            "app_protocol": "HTTP",
+            "endpoint": "lb-node-http"
           }
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/node",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "Im1vbmdvZGIiOgogICJhdXRoIjoKICAgICJyb290UGFzc3dvcmQiOiAiQU9pWTlOZjEiCiJzZXJ2aWNlIjoKICAicG9ydCI6IDgwCiAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIg==",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}"
+        }
+      }
     }
   }
 }

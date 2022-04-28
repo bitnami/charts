@@ -1,19 +1,21 @@
 {
-  "id": 12345,
-  "uid": "cLV5GDCkz",
-  "title": "New test dashboard",
-  "tags": [],
-  "style": "dark",
-  "timezone": "browser",
   "editable": true,
-  "hideControls": false,
   "graphTooltip": 1,
+  "hideControls": false,
+  "id": 12345,
   "panels": [],
+  "style": "dark",
+  "tags": [],
   "time": {
     "from": "now-6h",
     "to": "now"
   },
   "timepicker": {
+    "annotations": {
+      "list": []
+    },
+    "links": [],
+    "refresh": "5s",
     "refresh_intervals": [
       "5m",
       "15m",
@@ -22,15 +24,13 @@
       "2h",
       "1d"
     ],
+    "schemaVersion": 17,
     "templating": {
       "list": []
     },
-    "annotations": {
-      "list": []
-    },
-    "refresh": "5s",
-    "schemaVersion": 17,
-    "version": 0,
-    "links": []
-  }
+    "version": 0
+  },
+  "timezone": "browser",
+  "title": "New test dashboard",
+  "uid": "cLV5GDCkz"
 }

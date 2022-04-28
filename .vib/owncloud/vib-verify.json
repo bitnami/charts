@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/owncloud"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,7 +8,13 @@
         {
           "action_id": "helm-lint"
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/owncloud",
+          "url": "{SHA_ARCHIVE}"
+        }
+      }
     },
     "verify": {
       "context": {

@@ -1,44 +1,44 @@
 [
   {
-    "id": "955-0123456789",
+    "author": "John Doe",
+    "available": true,
     "genre": [
       "fiction",
       "fantasy"
     ],
-    "title": "The Great Story never told",
-    "author": "John Doe",
-    "available": true,
-    "price": 9.9
+    "id": "955-0123456789",
+    "price": 9.9,
+    "title": "The Great Story never told"
   },
   {
-    "id": "955-9876543210",
+    "author": "Jane Jessica Doe",
+    "available": false,
     "genre": [
       "poetry"
     ],
-    "title": "As the shine reflects",
-    "author": "Jane Jessica Doe",
-    "available": false,
-    "price": 13.05
+    "id": "955-9876543210",
+    "price": 13.05,
+    "title": "As the shine reflects"
   },
   {
-    "id": "955-0123498765",
+    "author": "Lars Larsson",
+    "available": true,
     "genre": [
       "novel",
       "history"
     ],
-    "title": "Det tredje misslyckandet",
-    "author": "Lars Larsson",
-    "available": true,
-    "price": 25.99
+    "id": "955-0123498765",
+    "price": 25.99,
+    "title": "Det tredje misslyckandet"
   },
   {
-    "id": "955-9876501234",
+    "author": "Dario Garcia",
+    "available": true,
     "genre": [
       "cookbook"
     ],
-    "title": "Descubriendo la cocina andaluza",
-    "author": "Dario Garcia",
-    "available": true,
-    "price": 14.5
+    "id": "955-9876501234",
+    "price": 14.5,
+    "title": "Descubriendo la cocina andaluza"
   }
 ]

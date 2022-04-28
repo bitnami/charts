@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/wavefront-adapter-for-istio"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,7 +8,13 @@
         {
           "action_id": "helm-lint"
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/wavefront-adapter-for-istio",
+          "url": "{SHA_ARCHIVE}"
+        }
+      }
     },
     "verify": {
       "actions": [

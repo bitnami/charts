@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/airflow"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,22 +8,15 @@
         {
           "action_id": "helm-lint"
         }
-      ]
-    },
-    "verify": {
+      ],
       "context": {
         "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/airflow"
-        },
-        "runtime_parameters": "ImF1dGgiOgogICJwYXNzd29yZCI6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCiJsb2FkRXhhbXBsZXMiOiB0cnVlCiJzZXJ2aWNlIjoKICAicG9ydHMiOgogICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
-          "size": {
-            "name": "M4"
-          }
+          "path": "/bitnami/airflow",
+          "url": "{SHA_ARCHIVE}"
         }
-      },
+      }
+    },
+    "verify": {
       "actions": [
         {
           "action_id": "trivy",
@@ -43,36 +30,49 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-airflow-http",
-            "app_protocol": "HTTP"
+            "app_protocol": "HTTP",
+            "endpoint": "lb-airflow-http"
           }
         },
         {
           "action_id": "goss",
           "params": {
-            "resources": {
-              "path": "/.vib/airflow/goss"
-            },
             "remote": {
               "workload": "deploy-airflow-web"
+            },
+            "resources": {
+              "path": "/.vib/airflow/goss"
             }
           }
         },
         {
           "action_id": "cypress",
           "params": {
+            "app_protocol": "HTTP",
+            "endpoint": "lb-airflow-http",
+            "env": {
+              "password": "ComplicatedPassword123!4",
+              "username": "user"
+            },
             "resources": {
               "path": "/.vib/airflow/cypress"
-            },
-            "endpoint": "lb-airflow-http",
-            "app_protocol": "HTTP",
-            "env": {
-              "username": "user",
-              "password": "ComplicatedPassword123!4"
             }
           }
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/airflow",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "ImF1dGgiOgogICJwYXNzd29yZCI6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCiJsb2FkRXhhbXBsZXMiOiB0cnVlCiJzZXJ2aWNlIjoKICAicG9ydHMiOgogICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
+        "target_platform": {
+          "size": {
+            "name": "M4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
+        }
+      }
     }
   }
 }

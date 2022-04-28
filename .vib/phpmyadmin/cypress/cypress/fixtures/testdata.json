@@ -1,9 +1,9 @@
 {
-  "databaseName": "testDatabaseName",
-  "tableName": "testTableName",
-  "columnNumber": "1",
   "columnName": "columnName",
-  "username": "test_user",
+  "columnNumber": "1",
+  "databaseName": "testDatabaseName",
+  "importedDatabaseName": "authors",
   "password": "test_password",
-  "importedDatabaseName": "authors"
+  "tableName": "testTableName",
+  "username": "test_user"
 }

@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/postgresql-ha"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,22 +8,15 @@
         {
           "action_id": "helm-lint"
         }
-      ]
-    },
-    "verify": {
+      ],
       "context": {
         "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/postgresql-ha"
-        },
-        "runtime_parameters": "Im5hbWVPdmVycmlkZSI6ICJwc3FsLWhhIgoicGdvb2wiOgogICJhZG1pblBhc3N3b3JkIjogIlVqUko5Z3k1R1EiCiJwb3N0Z3Jlc3FsIjoKICAicGFzc3dvcmQiOiAiN2RNeExmY3F4TiIKICAicmVwbWdyUGFzc3dvcmQiOiAiS21NWEhDOXJDVCIKICAicmVwbWdyVXNlcm5hbWUiOiAicmVwbWdyIgogICJ1c2VybmFtZSI6ICJwb3N0Z3JlcyIKInNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAicG9zdGdyZXNxbCI6IDgwCiAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIg==",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
+          "path": "/bitnami/postgresql-ha",
+          "url": "{SHA_ARCHIVE}"
         }
-      },
+      }
+    },
+    "verify": {
       "actions": [
         {
           "action_id": "trivy",
@@ -46,7 +33,20 @@
             "endpoint": "lb-postgresql-ha-psql-ha-pgpool-postgresql"
           }
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/postgresql-ha",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "Im5hbWVPdmVycmlkZSI6ICJwc3FsLWhhIgoicGdvb2wiOgogICJhZG1pblBhc3N3b3JkIjogIlVqUko5Z3k1R1EiCiJwb3N0Z3Jlc3FsIjoKICAicGFzc3dvcmQiOiAiN2RNeExmY3F4TiIKICAicmVwbWdyUGFzc3dvcmQiOiAiS21NWEhDOXJDVCIKICAicmVwbWdyVXNlcm5hbWUiOiAicmVwbWdyIgogICJ1c2VybmFtZSI6ICJwb3N0Z3JlcyIKInNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAicG9zdGdyZXNxbCI6IDgwCiAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIg==",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
+        }
+      }
     }
   }
 }
