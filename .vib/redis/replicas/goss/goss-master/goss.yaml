@@ -1,28 +1,7 @@
 command:
-  redis-auth:
-    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli -h 127.0.0.1 -p 6379
+  redis-add-hash:
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli HSET test test test
     exit-status: 0
-    stderr: []
-    timeout: 20000
-  redis-flushall-not-possible:
-    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli FLUSHALL
-    exit-status: 0
-    stdout:
-      - ERR unknown command
-    stderr: []
-    timeout: 20000
-  redis-set-key-value-pairs:
-    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli SET key value
-    exit-status: 0
-    stdout:
-      - OK
-    stderr: []
-    timeout: 20000
-  redis-set-ex:
-    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli SETEX name 10 kyle
-    exit-status: 0
-    stdout:
-      - OK
     stderr: []
     timeout: 20000
   redis-add-to-group:
@@ -35,38 +14,24 @@ command:
     exit-status: 0
     stderr: []
     timeout: 20000
-  redis-no-password:
-    exec: redis-cli SADD testmember "test set"
-    exit-status: 0
-    stdout:
-      - NOAUTH Authentication required
-    stderr: []
-    timeout: 20000
-  redis-add-hash:
-    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli HSET test test test
+  redis-auth:
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli -h 127.0.0.1 -p 6379
     exit-status: 0
     stderr: []
     timeout: 20000
-  redis-whoami:
-    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ACL WHOAMI
+  redis-bgwriteoff:
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli BGREWRITEAOF
     exit-status: 0
-    stdout:
-      - default
     stderr: []
+    stdout:
+      - Background append only file rewriting started
     timeout: 20000
-  redis-setuser:
-    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ACL SETUSER virginia on +GET allkeys
+  redis-flushall-not-possible:
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli FLUSHALL
     exit-status: 0
-    stdout:
-      - OK
     stderr: []
-    timeout: 20000
-  redis-role:
-    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ROLE
-    exit-status: 0
     stdout:
-      - master
-    stderr: []
+      - ERR unknown command
     timeout: 20000
   redis-generate-password:
     exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ACL GENPASS
@@ -76,48 +41,83 @@ command:
   redis-get-users:
     exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ACL LIST
     exit-status: 0
+    stderr: []
     stdout:
       - user default
+    timeout: 20000
+  redis-info:
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli INFO
+    exit-status: 0
     stderr: []
+    stdout:
+      - role:master
+      - connected_slaves:2
     timeout: 20000
   redis-module-ist:
     exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli MODULE LIST
     exit-status: 0
     stderr: []
     timeout: 20000
-  redis-bgwriteoff:
-    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli BGREWRITEAOF
+  redis-no-password:
+    exec: redis-cli SADD testmember "test set"
     exit-status: 0
-    stdout:
-      - Background append only file rewriting started
     stderr: []
+    stdout:
+      - NOAUTH Authentication required
     timeout: 20000
   redis-resetstat:
     exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli CONFIG RESETSTAT
     exit-status: 0
+    stderr: []
     stdout:
       - OK
-    stderr: []
     timeout: 20000
-  redis-info:
-    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli INFO
+  redis-role:
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ROLE
     exit-status: 0
-    stdout:
-      - role:master
-      - connected_slaves:2
     stderr: []
+    stdout:
+      - master
+    timeout: 20000
+  redis-set-ex:
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli SETEX name 10 kyle
+    exit-status: 0
+    stderr: []
+    stdout:
+      - OK
+    timeout: 20000
+  redis-set-key-value-pairs:
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli SET key value
+    exit-status: 0
+    stderr: []
+    stdout:
+      - OK
+    timeout: 20000
+  redis-setuser:
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ACL SETUSER virginia on +GET allkeys
+    exit-status: 0
+    stderr: []
+    stdout:
+      - OK
+    timeout: 20000
+  redis-whoami:
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ACL WHOAMI
+    exit-status: 0
+    stderr: []
+    stdout:
+      - default
     timeout: 20000
   user-id-test:
     exec: id -u
     exit-status: 0
+    stderr: []
     stdout:
       - 1002
-    stderr: []
     timeout: 20000
 file:
   /opt/bitnami/redis/mounted-etc/master.conf:
-    exists: true
-    mode: "0777"
-    filetype: symlink
     contains:
       - rename-command FLUSHALL ""
+    exists: true
+    filetype: symlink
+    mode: "0777"

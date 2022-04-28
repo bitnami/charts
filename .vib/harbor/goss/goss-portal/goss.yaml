@@ -1,31 +1,31 @@
+command:
+  user-id-test:
+    exec: id -u
+    exit-status: 0
+    stderr: []
+    stdout:
+      - 1001
 file:
   /opt/bitnami/harbor/index.html:
     exists: true
     filetype: file
-    mode: "0644"
-    owner: root
     group: root
-  /opt/bitnami/nginx/conf/nginx.conf:
-    exists: true
-    filetype: file
     mode: "0644"
     owner: root
   /opt/bitnami/harbor/swagger.json:
     exists: true
     filetype: file
+    group: root
     mode: "0644"
     owner: root
-    group: root
+  /opt/bitnami/nginx/conf/nginx.conf:
+    exists: true
+    filetype: file
+    mode: "0644"
+    owner: root
 http:
   http://localhost:8080/api/v2.0/health:
-    method: GET
-    status: 200
     body:
       - '!unhealthy'
-command:
-  user-id-test:
-    exec: id -u
-    exit-status: 0
-    stdout:
-      - 1001
-    stderr: []
+    method: GET
+    status: 200

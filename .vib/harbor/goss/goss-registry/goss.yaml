@@ -1,25 +1,25 @@
+command:
+  user-id-test:
+    exec: id -u
+    exit-status: 0
+    stderr: []
+    stdout:
+      - 1001
 file:
-  /var/lib/registry:
+  /opt/bitnami/harbor-registry/bin/registry:
     exists: true
-    filetype: directory
-    mode: "0775"
-    owner: root
+    filetype: file
     group: root
+    mode: "0755"
+    owner: root
   /storage:
     exists: true
     filetype: directory
     mode: "2775"
     owner: root
-  /opt/bitnami/harbor-registry/bin/registry:
+  /var/lib/registry:
     exists: true
-    filetype: file
-    mode: "0755"
-    owner: root
+    filetype: directory
     group: root
-command:
-  user-id-test:
-    exec: id -u
-    exit-status: 0
-    stdout:
-      - 1001
-    stderr: []
+    mode: "0775"
+    owner: root

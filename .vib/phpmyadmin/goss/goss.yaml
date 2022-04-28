@@ -1,40 +1,40 @@
 command:
-  which-myswl:
-    exec: which mysql
-    exit-status: 0
-    stdout:
-      - /opt/bitnami/mysql/bin/mysql
-    stderr: []
-    timeout: 0
   user-id:
     exec: id -a
     exit-status: 0
+    stderr: []
     stdout:
       - uid=1001
+    timeout: 0
+  which-myswl:
+    exec: which mysql
+    exit-status: 0
     stderr: []
+    stdout:
+      - /opt/bitnami/mysql/bin/mysql
     timeout: 0
 file:
   /opt/bitnami/apache/conf:
-    mode: "0775"
-    filetype: directory
     exists: true
-    group: root
-  /opt/bitnami/phpmyadmin:
-    mode: "0775"
     filetype: directory
-    exists: true
     group: root
+    mode: "0775"
   /opt/bitnami/php/etc/php.ini:
-    mode: "0664"
-    filetype: file
     contains:
       - ;xdebug.client_port = 9000
     exists: true
-    group: root
-  /opt/bitnami/phpmyadmin/config.inc.php:
-    mode: "0664"
     filetype: file
+    group: root
+    mode: "0664"
+  /opt/bitnami/phpmyadmin:
+    exists: true
+    filetype: directory
+    group: root
+    mode: "0775"
+  /opt/bitnami/phpmyadmin/config.inc.php:
     contains:
       - phpmyadmin-mariadb
     exists: true
+    filetype: file
     group: root
+    mode: "0664"

@@ -1,26 +1,26 @@
 command:
-  which-ghost:
-    exec: which ghost
-    exit-status: 0
-    stdout:
-      - /opt/bitnami/ghost/bin/ghost
-    stderr: []
-    timeout: 40000
   ghost-version-ok:
     exec: ghost version | grep --quiet "$APP_VERSION"
     exit-status: 0
-    stdout: []
     stderr: []
+    stdout: []
+    timeout: 40000
+  which-ghost:
+    exec: which ghost
+    exit-status: 0
+    stderr: []
+    stdout:
+      - /opt/bitnami/ghost/bin/ghost
     timeout: 40000
 file:
+  /bitnami/ghost/config.production.json:
+    exists: true
+    filetype: file
+    mode: "0644"
   /opt/bitnami/ghost/content:
+    exists: true
     filetype: symlink
     linked-to: /bitnami/ghost/content
-    exists: true
-  /bitnami/ghost/config.production.json:
-    mode: "0644"
-    filetype: file
-    exists: true
 user:
   ghost:
     exists: true
