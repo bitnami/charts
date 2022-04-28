@@ -150,7 +150,9 @@ spec:
     {{- if and .Values.grafana.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
     ingressClassName: {{ .Values.grafana.ingress.ingressClassName | quote }}
     {{- end }}
+    {{- if .Values.grafana.ingress.hostname }}
     hostname: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.hostname "context" $) }}
+    {{- end }}
     tlsEnabled: {{ .Values.grafana.ingress.tls }}
     tlsSecretName: {{ .Values.grafana.ingress.tlsSecret }}
     {{- if or .Values.commonLabels .Values.grafana.ingress.labels }}

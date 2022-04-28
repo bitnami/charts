@@ -68,7 +68,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/solr
-  tag: 8.11.1-debian-10-r121
+  tag: 8.11.1-debian-10-r125
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -171,9 +171,9 @@ containerPorts:
 ##
 livenessProbe:
   enabled: true
-  initialDelaySeconds: 30
+  initialDelaySeconds: 40
   periodSeconds: 10
-  timeoutSeconds: 5
+  timeoutSeconds: 15
   failureThreshold: 6
   successThreshold: 1
 ## @param readinessProbe.enabled Enable readinessProbe on Solr containers
@@ -185,9 +185,9 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  initialDelaySeconds: 5
+  initialDelaySeconds: 60
   periodSeconds: 10
-  timeoutSeconds: 5
+  timeoutSeconds: 15
   failureThreshold: 6
   successThreshold: 1
 ## @param startupProbe.enabled Enable startupProbe on Solr containers
@@ -199,9 +199,9 @@ readinessProbe:
 ##
 startupProbe:
   enabled: false
-  initialDelaySeconds: 30
+  initialDelaySeconds: 40
   periodSeconds: 10
-  timeoutSeconds: 1
+  timeoutSeconds: 15
   failureThreshold: 15
   successThreshold: 1
 ## @param customLivenessProbe Custom livenessProbe that overrides the default one
@@ -531,7 +531,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r402
+    tag: 10-debian-10-r406
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
