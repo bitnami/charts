@@ -6,7 +6,7 @@ it('allows login/logout', () => {
   cy.get('#input-error').should('not.exist');
   cy.get('.dropdown-toggle').click({ force: true });
   cy.contains('Sign Out').click();
-  cy.contains('button#landingSignInButton', 'Sign In');
+  cy.contains('#kc-login', 'Sign In');
 });
 
 it('allows changing user data', () => {
