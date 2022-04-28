@@ -95,7 +95,7 @@ Refer to the [chart documentation for more information on each of these architec
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`        | MongoDB(&reg;) image registry                                                                                                   | `docker.io`            |
 | `image.repository`      | MongoDB(&reg;) image registry                                                                                                   | `bitnami/mongodb`      |
-| `image.tag`             | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                       | `4.4.13-debian-10-r52` |
+| `image.tag`             | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                       | `5.0.8-debian-10-r3`   |
 | `image.pullPolicy`      | MongoDB(&reg;) image pull policy                                                                                                | `IfNotPresent`         |
 | `image.pullSecrets`     | Specify docker-registry secret names as an array                                                                                | `[]`                   |
 | `image.debug`           | Set to true if you would like to see extra information on logs                                                                  | `false`                |
