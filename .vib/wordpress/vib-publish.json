@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/wordpress"
         },
-        "runtime_parameters": "d29yZHByZXNzVXNlcm5hbWU6IHRlc3RfdXNlcgp3b3JkcHJlc3NQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CndvcmRwcmVzc0VtYWlsOiB0ZXN0X3VzZXJfZW1haWxAZW1haWwuY29tCndvcmRwcmVzc0ZpcnN0TmFtZTogVGVzdE5hbWUKd29yZHByZXNzTGFzdE5hbWU6IFRlc3RMYXN0TmFtZQp3b3JkcHJlc3NCbG9nTmFtZTogVGVzdF9Vc2VycydzIEJsb2chCnNtdHBIb3N0OiBtYWlsLnNlcnZlci5jb20Kc210cFBvcnQ6IDEyMApzbXRwVXNlcjogdGVzdF9tYWlsX3VzZXIKc210cFBhc3N3b3JkOiB0ZXN0X21haWxfcGFzc3dvcmQKbWFyaWFkYjoKICBhdXRoOgogICAgZGF0YWJhc2U6IHRlc3Rfd29yZHByZXNzX2RhdGFiYXNlCiAgICB1c2VybmFtZTogdGVzdF93b3JkcHJlc3NfdXNlcm5hbWUKICAgIHBhc3N3b3JkOiB0ZXN0X3dvcmRwcmVzc19wYXNzd29yZAp3b3JkcHJlc3NQbHVnaW5zOiBhbGwKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKICBydW5Bc05vblJvb3Q6IHRydWUKd29yZHByZXNzVGFibGVQcmVmaXg6IHdvcmRwcmVzc18K",
+        "runtime_parameters": "d29yZHByZXNzVXNlcm5hbWU6IHRlc3RfdXNlcgp3b3JkcHJlc3NQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CndvcmRwcmVzc0VtYWlsOiB0ZXN0X3VzZXJfZW1haWxAZW1haWwuY29tCndvcmRwcmVzc0ZpcnN0TmFtZTogVGVzdE5hbWUKd29yZHByZXNzTGFzdE5hbWU6IFRlc3RMYXN0TmFtZQp3b3JkcHJlc3NCbG9nTmFtZTogVGVzdF9Vc2VycydzIEJsb2chCnNtdHBIb3N0OiBtYWlsLnNlcnZlci5jb20Kc210cFBvcnQ6IDEyMApzbXRwVXNlcjogdGVzdF9tYWlsX3VzZXIKc210cFBhc3N3b3JkOiB0ZXN0X21haWxfcGFzc3dvcmQKbWFyaWFkYjoKICBhdXRoOgogICAgZGF0YWJhc2U6IHRlc3Rfd29yZHByZXNzX2RhdGFiYXNlCiAgICB1c2VybmFtZTogdGVzdF93b3JkcHJlc3NfdXNlcm5hbWUKICAgIHBhc3N3b3JkOiB0ZXN0X3dvcmRwcmVzc19wYXNzd29yZApjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgogIHJ1bkFzTm9uUm9vdDogdHJ1ZQp3b3JkcHJlc3NUYWJsZVByZWZpeDogd29yZHByZXNzXw==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -35,9 +35,7 @@
           "action_id": "trivy",
           "params": {
             "threshold": "CRITICAL",
-            "vuln_type": [
-              "OS"
-            ]
+            "vuln_type": ["OS"]
           }
         },
         {
