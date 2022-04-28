@@ -56,7 +56,7 @@ kubeVersion: ""
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.11.0-debian-10-r27
+  tag: 0.11.1-debian-10-r1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -425,10 +425,18 @@ linode:
   secretName: ""
 
 ## NS1 configuration to be set via arguments/env. variables
-## @param ns1.minTTL When using the ns1 provider, specify minimal TTL, as an integer, for records
 ##
 ns1:
+  ## @param ns1.minTTL When using the ns1 provider, specify minimal TTL, as an integer, for records
+  ##
   minTTL: 10
+  ## @param ns1.apiKey When using the ns1 provider, specify the API key to use
+  ##
+  apiKey: ""
+  ## @param ns1.secretName Use an existing secret with key "ns1-api-key" defined.
+  ## This ignores ns1.apiToken
+  ##
+  secretName: ""
 
 ## oci configuration to be set via arguments/env. variables
 ##
