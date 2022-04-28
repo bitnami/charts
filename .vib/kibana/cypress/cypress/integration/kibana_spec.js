@@ -21,11 +21,12 @@ it('allows uploading a file', () => {
     );
   });
   cy.get('[data-test-subj="dataVisualizerFileImportButton"]').click();
-  cy.get('[title*="Index created"]').scrollIntoView().should('be.visible');
-  cy.get('[title*="Data uploaded"').scrollIntoView().should('be.visible');
-  cy.get('[title*="Index created"]').should('be.visible');
-  cy.get('[data-test-subj="dataVisualizerFileImportSuccessCallout"]').should(
-    'exist'
+  cy.contains('span', 'Index created').scrollIntoView();
+  cy.contains('span', 'Data uploaded').scrollIntoView();
+  cy.contains('span', 'Data view created');
+  cy.contains(
+    '[data-test-subj="dataVisualizerFileImportSuccessCallout"]',
+    'Import complete'
   );
 });
 
@@ -127,6 +128,6 @@ it('allows adding of a canvas', () => {
   cy.contains('span', 'Text').forceClick();
   cy.visit('app/canvas#/');
   cy.fixture('testdata').then((td) => {
-    cy.contains(`${td.workpadName}${random}`).should('be.visible');
+    cy.contains(`${td.workpadName}${random}`);
   });
 });
