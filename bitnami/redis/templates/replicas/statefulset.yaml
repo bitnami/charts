@@ -406,9 +406,11 @@ spec:
         {{- end }}
         - name: redis-tmp-conf
           {{- if .Values.replica.persistence.medium }}
-          emptyDir: {
+          emptyDir:
             medium: {{ .Values.replica.persistence.medium | quote }}
-          }
+            {{- if .Values.replica.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.replica.persistence.sizeLimit | quote }}
+            {{- end }}
           {{- else }}
           emptyDir: {}
           {{- end }}

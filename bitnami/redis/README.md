@@ -281,6 +281,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.initContainers`                     | Add additional init containers to the Redis&trade; replicas pod(s)                                        | `[]`                     |
 | `replica.persistence.enabled`                | Enable persistence on Redis&trade; replicas nodes using Persistent Volume Claims                          | `true`                   |
 | `replica.persistence.medium`                 | Provide a medium for `emptyDir` volumes.                                                                  | `""`                     |
+| `replica.persistence.sizeLimit`              | Set this to enable a size limit for `emptyDir` volumes.                                                   | `""`                     |
 | `replica.persistence.path`                   | The path the volume will be mounted at on Redis&trade; replicas containers                                | `/data`                  |
 | `replica.persistence.subPath`                | The subdirectory of the volume to mount on Redis&trade; replicas containers                               | `""`                     |
 | `replica.persistence.storageClass`           | Persistent Volume storage class                                                                           | `""`                     |
