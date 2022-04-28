@@ -78,7 +78,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 6.2.6-debian-10-r192
+  tag: 6.2.7-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -465,6 +465,10 @@ master:
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
+    ## @param master.service.internalTrafficPolicy Redis&trade; master service internal traffic policy (requires Kubernetes v1.22 or greater to be usable)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/
+    ##
+    internalTrafficPolicy: Cluster
     ## @param master.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
     ##
     extraPorts: []
@@ -825,6 +829,10 @@ replica:
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
+    ## @param replica.service.internalTrafficPolicy Redis&trade; replicas service internal traffic policy (requires Kubernetes v1.22 or greater to be usable)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/
+    ##
+    internalTrafficPolicy: Cluster
     ## @param replica.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
     ##
     extraPorts: []
@@ -888,7 +896,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 6.2.6-debian-10-r189
+    tag: 6.2.7-debian-10-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1289,7 +1297,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.37.0-debian-10-r31
+    tag: 1.37.0-debian-10-r39
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1482,7 +1490,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r400
+    tag: 10-debian-10-r408
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1528,7 +1536,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r400
+    tag: 10-debian-10-r408
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
