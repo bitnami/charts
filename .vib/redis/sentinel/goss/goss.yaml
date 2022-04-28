@@ -1,6 +1,6 @@
 command:
   redis-sentinel-auth:
-    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli -h redis -p 80
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli -h localhost -p 26379
     exit-status: 0
     stderr: [ ]
     timeout: 20000
@@ -19,19 +19,19 @@ command:
     stderr: [ ]
     timeout: 20000
   redis-sentinel-whoami:
-    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli -h redis -p 80 SENTINEL MYID
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli -h localhost -p 26379 SENTINEL MYID
     exit-status: 0
     stderr: [ ]
     timeout: 20000
   redis-sentinel-failover:
-    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli -h redis -p 80 SENTINEL FAILOVER mymaster
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli -h localhost -p 26379 SENTINEL FAILOVER mymaster
     exit-status: 0
     stdout:
       - "OK"
     stderr: [ ]
     timeout: 20000
   redis-sentinel-checkquorum:
-    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli -h redis -p 80 SENTINEL CKQUORUM mymaster
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli -h localhost -p 26379 SENTINEL CKQUORUM mymaster
     exit-status: 0
     stdout:
       - "OK 3 usable Sentinels. Quorum and failover authorization can be reached"
