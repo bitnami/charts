@@ -590,8 +590,8 @@ configsvr:
   livenessProbe:
     enabled: true
     initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 5
+    periodSeconds: 20
+    timeoutSeconds: 10
     failureThreshold: 12
     successThreshold: 1
   ## Configure extra options for readiness probe
@@ -606,8 +606,8 @@ configsvr:
   readinessProbe:
     enabled: true
     initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 5
+    periodSeconds: 20
+    timeoutSeconds: 10
     failureThreshold: 12
     successThreshold: 1
 
@@ -623,8 +623,8 @@ configsvr:
   startupProbe:
     enabled: true
     initialDelaySeconds: 0
-    periodSeconds: 5
-    timeoutSeconds: 2
+    periodSeconds: 10
+    timeoutSeconds: 5
     failureThreshold: 30
     successThreshold: 1
 
@@ -912,8 +912,8 @@ mongos:
   livenessProbe:
     enabled: true
     initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 5
+    periodSeconds: 20
+    timeoutSeconds: 10
     failureThreshold: 12
     successThreshold: 1
   ## Configure extra options for readiness probe
@@ -928,8 +928,8 @@ mongos:
   readinessProbe:
     enabled: true
     initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 5
+    periodSeconds: 20
+    timeoutSeconds: 10
     failureThreshold: 12
     successThreshold: 1
 
@@ -945,8 +945,8 @@ mongos:
   startupProbe:
     enabled: false
     initialDelaySeconds: 0
-    periodSeconds: 5
-    timeoutSeconds: 2
+    periodSeconds: 10
+    timeoutSeconds: 5
     failureThreshold: 30
     successThreshold: 1
 
@@ -1190,8 +1190,8 @@ shardsvr:
     livenessProbe:
       enabled: true
       initialDelaySeconds: 10
-      periodSeconds: 10
-      timeoutSeconds: 5
+      periodSeconds: 20
+      timeoutSeconds: 10
       failureThreshold: 12
       successThreshold: 1
     ## Configure extra options for readiness probe
@@ -1223,8 +1223,8 @@ shardsvr:
     startupProbe:
       enabled: false
       initialDelaySeconds: 0
-      periodSeconds: 5
-      timeoutSeconds: 2
+      periodSeconds: 10
+      timeoutSeconds: 5
       failureThreshold: 30
       successThreshold: 1
 
@@ -1483,8 +1483,8 @@ shardsvr:
     livenessProbe:
       enabled: true
       initialDelaySeconds: 10
-      periodSeconds: 10
-      timeoutSeconds: 5
+      periodSeconds: 20
+      timeoutSeconds: 10
       failureThreshold: 12
       successThreshold: 1
     ## Configure extra options for readiness probe
@@ -1499,8 +1499,8 @@ shardsvr:
     readinessProbe:
       enabled: true
       initialDelaySeconds: 10
-      periodSeconds: 10
-      timeoutSeconds: 5
+      periodSeconds: 20
+      timeoutSeconds: 10
       failureThreshold: 12
       successThreshold: 1
 
@@ -1516,8 +1516,8 @@ shardsvr:
     startupProbe:
       enabled: false
       initialDelaySeconds: 0
-      periodSeconds: 5
-      timeoutSeconds: 2
+      periodSeconds: 10
+      timeoutSeconds: 5
       failureThreshold: 30
       successThreshold: 1
 
