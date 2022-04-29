@@ -426,7 +426,7 @@ This major release renames several values in this chart and adds missing feature
 Affected values:
 
 - `server.port` is renamed to `server.containerPorts.http`
-- `service.port` is renamed to `service.ports.mongodb`
+- `service.port` is renamed to `service.ports.http`
 - `metrics.containerPort` is renamed to `metrics.containerPorts.metrics`
 - `service.nodePort` is renamed to `service.nodePorts.http`
 - `persistence.accessMode` is renamed to `persistence.accessModes` as list
