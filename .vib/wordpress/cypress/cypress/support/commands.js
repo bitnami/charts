@@ -1,7 +1,6 @@
 // Added to slow down Cypress test execution without using hardcoded waits. If removed, there will be false positives.
 
 const COMMAND_DELAY = 1000;
-const TYPE_DELAY = 100;
 
 for (const command of ['click']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
@@ -14,6 +13,8 @@ for (const command of ['click']) {
     });
   });
 }
+
+const TYPE_DELAY = 100;
 
 for (const command of ['type']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
