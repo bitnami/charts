@@ -140,7 +140,7 @@ jobs:
           pipeline: ${{ needs.get-chart.outputs.chart }}/vib-verify.json
         env:
           # By default, the Target Platfrom is Tanzu Kubernetes Grid
-          VIB_ENV_TARGET_PLATFORM: "c8098141-a34b-4487-a0d3-ac33dd1d8bdc"
+          VIB_ENV_TARGET_PLATFORM: "7b13a7bb-011c-474f-ad71-8152fc321b9e"
           # If the asset is not compatible with TKG, use GKE instead
           VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: "91d398a2-25c4-4cda-8732-75a3cfc179a1"
 
