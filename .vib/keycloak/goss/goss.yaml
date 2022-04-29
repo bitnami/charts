@@ -4,7 +4,13 @@ file:
    filetype: directory
    mode: "0775"
    owner: root
- /opt/bitnami/scripts/keycloak-env.sh:
+/opt/bitnami/keycloak/domain/configuration/application-users.properties:
+   exists: true
+   filetype: file
+   mode: "0775"
+   contains:
+   - admin
+/opt/bitnami/scripts/keycloak-env.sh:
    exists: true
    filetype: file
    mode: "0664"
