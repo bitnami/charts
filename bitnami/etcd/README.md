@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                       | etcd image registry                                                                             | `docker.io`          |
 | `image.repository`                     | etcd image name                                                                                 | `bitnami/etcd`       |
-| `image.tag`                            | etcd image tag                                                                                  | `3.5.3-debian-10-r4` |
+| `image.tag`                            | etcd image tag                                                                                  | `3.5.4-debian-10-r0` |
 | `image.pullPolicy`                     | etcd image pull policy                                                                          | `IfNotPresent`       |
 | `image.pullSecrets`                    | etcd image pull secrets                                                                         | `[]`                 |
 | `image.debug`                          | Enable image debug mode                                                                         | `false`              |
@@ -226,7 +226,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r400`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r405`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                    |
@@ -295,11 +295,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other parameters
 
-| Name                 | Description                                                    | Value   |
-| -------------------- | -------------------------------------------------------------- | ------- |
-| `pdb.create`         | Enable/disable a Pod Disruption Budget creation                | `false` |
-| `pdb.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `1`     |
-| `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `""`    |
+| Name                 | Description                                                    | Value  |
+| -------------------- | -------------------------------------------------------------- | ------ |
+| `pdb.create`         | Enable/disable a Pod Disruption Budget creation                | `true` |
+| `pdb.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `51%`  |
+| `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `""`   |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
