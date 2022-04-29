@@ -1,0 +1,5 @@
+{
+  "smtpMailServer": "mail.server.com",
+  "smtpPort": "120",
+  "smtpUser": "test_mail_user"
+}
