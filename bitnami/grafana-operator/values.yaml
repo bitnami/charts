@@ -398,6 +398,23 @@ grafana:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## Grafana Plugins init container image attributes. If omitted values from `grafana.image` will be used
+  ## @param grafana.pluginsInitContainerImage.registry Grafana Plugins image registry
+  ## @param grafana.pluginsInitContainerImage.repository Grafana Plugins image name
+  ## @param grafana.pluginsInitContainerImage.tag Grafana Plugins image tag
+  ## @param grafana.pluginsInitContainerImage.pullSecrets Grafana Plugins image pull secrets
+  pluginsInitContainerImage:
+    registry: ""
+    repository: ""
+    tag: ""
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
   ## @param grafana.serviceAccount Additional service account configuration
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-serviceaccount
   ## e.g:

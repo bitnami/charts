@@ -2,9 +2,12 @@
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: {{ include "rabbitmq.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -14,16 +17,16 @@ spec:
   ingress:
     # Allow inbound connections
     - ports:
-        - port: 4369  # EPMD
-        - port: {{ .Values.service.port }}
-        - port: {{ .Values.service.tlsPort }}
-        - port: {{ .Values.service.distPort }}
-        - port: {{ .Values.service.managerPort }}
+        - port: {{ .Values.service.ports.epmd }}  # EPMD
+        - port: {{ .Values.service.ports.amqp }}
+        - port: {{ .Values.service.ports.amqpTls }}
+        - port: {{ .Values.service.ports.dist }}
+        - port: {{ .Values.service.ports.manager }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
             matchLabels:
-              {{ template "rabbitmq.fullname" . }}-client: "true"
+              {{ printf "%s-client" (include "common.names.fullname" .) }}: "true"
         - podSelector:
             matchLabels:
               {{- include "common.labels.matchLabels" . | nindent 14 }}
@@ -33,5 +36,5 @@ spec:
       {{- end }}
     # Allow prometheus scrapes
     - ports:
-        - port: {{ .Values.service.metricsPort }}
+        - port: {{ .Values.service.ports.metrics }}
 {{- end }}

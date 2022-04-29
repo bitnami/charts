@@ -66,7 +66,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------------------- | --------------------- |
 | `image.registry`    | RabbitMQ image registry                                        | `docker.io`           |
 | `image.repository`  | RabbitMQ image repository                                      | `bitnami/rabbitmq`    |
-| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)            | `3.9.15-debian-10-r6` |
+| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)            | `3.9.16-debian-10-r0` |
 | `image.pullPolicy`  | RabbitMQ image pull policy                                     | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array               | `[]`                  |
 | `image.debug`       | Set to true if you would like to see extra information on logs | `false`               |
@@ -78,14 +78,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
 | `nameOverride`                     | String to partially override rabbitmq.fullname template (will maintain the release name)                                                 | `""`                                              |
 | `fullnameOverride`                 | String to fully override rabbitmq.fullname template                                                                                      | `""`                                              |
+| `namespaceOverride`                | String to fully override common.names.namespace                                                                                          | `""`                                              |
 | `kubeVersion`                      | Force target Kubernetes version (using Helm capabilities if not set)                                                                     | `""`                                              |
 | `clusterDomain`                    | Kubernetes Cluster Domain                                                                                                                | `cluster.local`                                   |
 | `extraDeploy`                      | Array of extra objects to deploy with the release                                                                                        | `[]`                                              |
+| `commonAnnotations`                | Annotations to add to all deployed objects                                                                                               | `{}`                                              |
+| `commonLabels`                     | Labels to add to all deployed objects                                                                                                    | `{}`                                              |
 | `diagnosticMode.enabled`           | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                  | `false`                                           |
 | `diagnosticMode.command`           | Command to override all containers in the deployment                                                                                     | `["sleep"]`                                       |
 | `diagnosticMode.args`              | Args to override all containers in the deployment                                                                                        | `["infinity"]`                                    |
 | `hostAliases`                      | Deployment pod host aliases                                                                                                              | `[]`                                              |
-| `commonAnnotations`                | Annotations to add to all deployed objects                                                                                               | `{}`                                              |
 | `dnsPolicy`                        | DNS Policy for pod                                                                                                                       | `""`                                              |
 | `dnsConfig`                        | DNS Configuration pod                                                                                                                    | `{}`                                              |
 | `auth.username`                    | RabbitMQ application username                                                                                                            | `user`                                            |
@@ -122,10 +124,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `loadDefinition.existingSecret`    | Existing secret with the load definitions file                                                                                           | `""`                                              |
 | `command`                          | Override default container command (useful when using custom images)                                                                     | `[]`                                              |
 | `args`                             | Override default container args (useful when using custom images)                                                                        | `[]`                                              |
+| `lifecycleHooks`                   | Overwrite livecycle for the RabbitMQ container(s) to automate configuration before or after startup                                      | `{}`                                              |
 | `terminationGracePeriodSeconds`    | Default duration in seconds k8s waits for container to exit before sending kill signal.                                                  | `120`                                             |
 | `extraEnvVars`                     | Extra environment variables to add to RabbitMQ pods                                                                                      | `[]`                                              |
 | `extraEnvVarsCM`                   | Name of existing ConfigMap containing extra environment variables                                                                        | `""`                                              |
 | `extraEnvVarsSecret`               | Name of existing Secret containing extra environment variables (in case of sensitive data)                                               | `""`                                              |
+| `containerPorts.amqp`              |                                                                                                                                          | `5672`                                            |
+| `containerPorts.amqpTls`           |                                                                                                                                          | `5671`                                            |
+| `containerPorts.dist`              |                                                                                                                                          | `25672`                                           |
+| `containerPorts.manager`           |                                                                                                                                          | `15672`                                           |
+| `containerPorts.epmd`              |                                                                                                                                          | `4369`                                            |
+| `containerPorts.metrics`           |                                                                                                                                          | `9419`                                            |
 | `extraContainerPorts`              | Extra ports to be included in container spec, primarily informational                                                                    | `[]`                                              |
 | `configuration`                    | RabbitMQ Configuration file content: required cluster configuration                                                                      | `""`                                              |
 | `extraConfiguration`               | Configuration file content: extra configuration to be appended to RabbitMQ configuration                                                 | `""`                                              |
@@ -143,61 +152,69 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Statefulset parameters
 
-| Name                                 | Description                                                                                                              | Value           |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `replicaCount`                       | Number of RabbitMQ replicas to deploy                                                                                    | `1`             |
-| `schedulerName`                      | Use an alternate scheduler, e.g. "stork".                                                                                | `""`            |
-| `podManagementPolicy`                | Pod management policy                                                                                                    | `OrderedReady`  |
-| `podLabels`                          | RabbitMQ Pod labels. Evaluated as a template                                                                             | `{}`            |
-| `podAnnotations`                     | RabbitMQ Pod annotations. Evaluated as a template                                                                        | `{}`            |
-| `updateStrategyType`                 | Update strategy type for RabbitMQ statefulset                                                                            | `RollingUpdate` |
-| `statefulsetLabels`                  | RabbitMQ statefulset labels. Evaluated as a template                                                                     | `{}`            |
-| `priorityClassName`                  | Name of the priority class to be used by RabbitMQ pods, priority class needs to be created beforehand                    | `""`            |
-| `podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`            |
-| `podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`          |
-| `nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`            |
-| `nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                                    | `""`            |
-| `nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`            |
-| `affinity`                           | Affinity for pod assignment. Evaluated as a template                                                                     | `{}`            |
-| `nodeSelector`                       | Node labels for pod assignment. Evaluated as a template                                                                  | `{}`            |
-| `tolerations`                        | Tolerations for pod assignment. Evaluated as a template                                                                  | `[]`            |
-| `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
-| `podSecurityContext.enabled`         | Enable RabbitMQ pods' Security Context                                                                                   | `true`          |
-| `podSecurityContext.fsGroup`         | Group ID for the filesystem used by the containers                                                                       | `1001`          |
-| `podSecurityContext.runAsUser`       | User ID for the service user running the pod                                                                             | `1001`          |
-| `containerSecurityContext`           | RabbitMQ containers' Security Context                                                                                    | `{}`            |
-| `resources.limits`                   | The resources limits for RabbitMQ containers                                                                             | `{}`            |
-| `resources.requests`                 | The requested resources for RabbitMQ containers                                                                          | `{}`            |
-| `livenessProbe.enabled`              | Enable livenessProbe                                                                                                     | `true`          |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                  | `120`           |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                         | `30`            |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                        | `20`            |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                      | `6`             |
-| `livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                      | `1`             |
-| `readinessProbe.enabled`             | Enable readinessProbe                                                                                                    | `true`          |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                 | `10`            |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                        | `30`            |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                       | `20`            |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                     | `3`             |
-| `readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                     | `1`             |
-| `customLivenessProbe`                | Override default liveness probe                                                                                          | `{}`            |
-| `customReadinessProbe`               | Override default readiness probe                                                                                         | `{}`            |
-| `customStartupProbe`                 | Define a custom startup probe                                                                                            | `{}`            |
-| `initContainers`                     | Add init containers to the RabbitMQ pod                                                                                  | `[]`            |
-| `sidecars`                           | Add sidecar containers to the RabbitMQ pod                                                                               | `[]`            |
-| `pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                                                          | `false`         |
-| `pdb.minAvailable`                   | Minimum number/percentage of pods that should remain scheduled                                                           | `1`             |
-| `pdb.maxUnavailable`                 | Maximum number/percentage of pods that may be made unavailable                                                           | `""`            |
+| Name                                    | Description                                                                                                              | Value           |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
+| `replicaCount`                          | Number of RabbitMQ replicas to deploy                                                                                    | `1`             |
+| `schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`            |
+| `podManagementPolicy`                   | Pod management policy                                                                                                    | `OrderedReady`  |
+| `podLabels`                             | RabbitMQ Pod labels. Evaluated as a template                                                                             | `{}`            |
+| `podAnnotations`                        | RabbitMQ Pod annotations. Evaluated as a template                                                                        | `{}`            |
+| `updateStrategy.type`                   | Update strategy type for RabbitMQ statefulset                                                                            | `RollingUpdate` |
+| `statefulsetLabels`                     | RabbitMQ statefulset labels. Evaluated as a template                                                                     | `{}`            |
+| `priorityClassName`                     | Name of the priority class to be used by RabbitMQ pods, priority class needs to be created beforehand                    | `""`            |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`            |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`          |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`            |
+| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                    | `""`            |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                                | `[]`            |
+| `affinity`                              | Affinity for pod assignment. Evaluated as a template                                                                     | `{}`            |
+| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template                                                                  | `{}`            |
+| `tolerations`                           | Tolerations for pod assignment. Evaluated as a template                                                                  | `[]`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
+| `podSecurityContext.enabled`            | Enable RabbitMQ pods' Security Context                                                                                   | `true`          |
+| `podSecurityContext.fsGroup`            | Set RabbitMQ pod's Security Context fsGroup                                                                              | `1001`          |
+| `containerSecurityContext.enabled`      | Enabled RabbitMQ containers' Security Context                                                                            | `true`          |
+| `containerSecurityContext.runAsUser`    | Set RabbitMQ containers' Security Context runAsUser                                                                      | `1001`          |
+| `containerSecurityContext.runAsNonRoot` | Set RabbitMQ container's Security Context runAsNonRoot                                                                   | `true`          |
+| `resources.limits`                      | The resources limits for RabbitMQ containers                                                                             | `{}`            |
+| `resources.requests`                    | The requested resources for RabbitMQ containers                                                                          | `{}`            |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                     | `true`          |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                  | `120`           |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                         | `30`            |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                        | `20`            |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                      | `6`             |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                      | `1`             |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                                                    | `true`          |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `10`            |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                        | `30`            |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `20`            |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                     | `3`             |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                     | `1`             |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                                                      | `false`         |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `10`            |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                          | `30`            |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                         | `20`            |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                       | `3`             |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                       | `1`             |
+| `customLivenessProbe`                   | Override default liveness probe                                                                                          | `{}`            |
+| `customReadinessProbe`                  | Override default readiness probe                                                                                         | `{}`            |
+| `customStartupProbe`                    | Define a custom startup probe                                                                                            | `{}`            |
+| `initContainers`                        | Add init containers to the RabbitMQ pod                                                                                  | `[]`            |
+| `sidecars`                              | Add sidecar containers to the RabbitMQ pod                                                                               | `[]`            |
+| `pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                          | `false`         |
+| `pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                           | `1`             |
+| `pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                           | `""`            |
 
 
 ### RBAC parameters
 
-| Name                                          | Description                                         | Value  |
-| --------------------------------------------- | --------------------------------------------------- | ------ |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for RabbitMQ pods | `true` |
-| `serviceAccount.name`                         | Name of the created serviceAccount                  | `""`   |
-| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod     | `true` |
-| `rbac.create`                                 | Whether RBAC rules should be created                | `true` |
+| Name                                          | Description                                                                                | Value  |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------ | ------ |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for RabbitMQ pods                                        | `true` |
+| `serviceAccount.name`                         | Name of the created serviceAccount                                                         | `""`   |
+| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                                            | `true` |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`   |
+| `rbac.create`                                 | Whether RBAC rules should be created                                                       | `true` |
 
 
 ### Persistence parameters
@@ -207,12 +224,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.enabled`       | Enable RabbitMQ data persistence using PVC       | `true`                     |
 | `persistence.storageClass`  | PVC Storage Class for RabbitMQ data volume       | `""`                       |
 | `persistence.selector`      | Selector to match an existing Persistent Volume  | `{}`                       |
-| `persistence.accessMode`    | PVC Access Mode for RabbitMQ data volume         | `ReadWriteOnce`            |
+| `persistence.accessModes`   | PVC Access Modes for RabbitMQ data volume        | `["ReadWriteOnce"]`        |
 | `persistence.existingClaim` | Provide an existing PersistentVolumeClaims       | `""`                       |
 | `persistence.mountPath`     | The path the volume will be mounted at           | `/bitnami/rabbitmq/mnesia` |
 | `persistence.subPath`       | The subdirectory of the volume to mount to       | `""`                       |
 | `persistence.size`          | PVC Storage Request for RabbitMQ data volume     | `8Gi`                      |
-| `persistence.volumes`       | Additional volumes without creating PVC          | `[]`                       |
 | `persistence.annotations`   | Persistence annotations. Evaluated as a template | `{}`                       |
 
 
@@ -222,34 +238,38 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Kubernetes Service type                                                                                                          | `ClusterIP`              |
 | `service.portEnabled`              | Amqp port. Cannot be disabled when `auth.tls.enabled` is `false`. Listener can be disabled with `listeners.tcp = none`.          | `true`                   |
-| `service.port`                     | Amqp port                                                                                                                        | `5672`                   |
-| `service.portName`                 | Amqp service port name                                                                                                           | `amqp`                   |
-| `service.tlsPort`                  | Amqp TLS port                                                                                                                    | `5671`                   |
-| `service.tlsPortName`              | Amqp TLS service port name                                                                                                       | `amqp-ssl`               |
-| `service.nodePort`                 | Node port override for `amqp` port, if serviceType is `NodePort` or `LoadBalancer`                                               | `""`                     |
-| `service.tlsNodePort`              | Node port override for `amqp-ssl` port, if serviceType is `NodePort` or `LoadBalancer`                                           | `""`                     |
 | `service.distPortEnabled`          | Erlang distribution server port                                                                                                  | `true`                   |
-| `service.distPort`                 | Erlang distribution server port                                                                                                  | `25672`                  |
-| `service.distPortName`             | Erlang distribution service port name                                                                                            | `dist`                   |
-| `service.distNodePort`             | Node port override for `dist` port, if serviceType is `NodePort`                                                                 | `""`                     |
 | `service.managerPortEnabled`       | RabbitMQ Manager port                                                                                                            | `true`                   |
-| `service.managerPort`              | RabbitMQ Manager port                                                                                                            | `15672`                  |
-| `service.managerPortName`          | RabbitMQ Manager service port name                                                                                               | `http-stats`             |
-| `service.managerNodePort`          | Node port override for `http-stats` port, if serviceType `NodePort`                                                              | `""`                     |
-| `service.metricsPort`              | RabbitMQ Prometheues metrics port                                                                                                | `9419`                   |
-| `service.metricsPortName`          | RabbitMQ Prometheues metrics service port name                                                                                   | `metrics`                |
-| `service.metricsNodePort`          | Node port override for `metrics` port, if serviceType is `NodePort`                                                              | `""`                     |
 | `service.epmdPortEnabled`          | RabbitMQ EPMD Discovery service port                                                                                             | `true`                   |
-| `service.epmdNodePort`             | Node port override for `epmd` port, if serviceType is `NodePort`                                                                 | `""`                     |
-| `service.epmdPortName`             | EPMD Discovery service port name                                                                                                 | `epmd`                   |
+| `service.ports.amqp`               | Amqp service port                                                                                                                | `5672`                   |
+| `service.ports.amqpTls`            | Amqp TLS service port                                                                                                            | `5671`                   |
+| `service.ports.dist`               | Erlang distribution service port                                                                                                 | `25672`                  |
+| `service.ports.manager`            | RabbitMQ Manager service port                                                                                                    | `15672`                  |
+| `service.ports.metrics`            | RabbitMQ Prometheues metrics service port                                                                                        | `9419`                   |
+| `service.ports.epmd`               | EPMD Discovery service port                                                                                                      | `4369`                   |
+| `service.portNames.amqp`           | Amqp service port name                                                                                                           | `amqp`                   |
+| `service.portNames.amqpTls`        | Amqp TLS service port name                                                                                                       | `amqp-ssl`               |
+| `service.portNames.dist`           | Erlang distribution service port name                                                                                            | `dist`                   |
+| `service.portNames.manager`        | RabbitMQ Manager service port name                                                                                               | `http-stats`             |
+| `service.portNames.metrics`        | RabbitMQ Prometheues metrics service port name                                                                                   | `metrics`                |
+| `service.portNames.epmd`           | EPMD Discovery service port name                                                                                                 | `epmd`                   |
+| `service.nodePorts.amqp`           | Node port for Ampq                                                                                                               | `""`                     |
+| `service.nodePorts.amqpTls`        | Node port for Ampq TLS                                                                                                           | `""`                     |
+| `service.nodePorts.dist`           | Node port for Erlang distribution                                                                                                | `""`                     |
+| `service.nodePorts.manager`        | Node port for RabbitMQ Manager                                                                                                   | `""`                     |
+| `service.nodePorts.epmd`           | Node port for EPMD Discovery                                                                                                     | `""`                     |
+| `service.nodePorts.metrics`        | Node port for RabbitMQ Prometheues metrics                                                                                       | `""`                     |
 | `service.extraPorts`               | Extra ports to expose in the service                                                                                             | `[]`                     |
 | `service.loadBalancerSourceRanges` | Address(es) that are allowed when service is `LoadBalancer`                                                                      | `[]`                     |
 | `service.externalIPs`              | Set the ExternalIPs                                                                                                              | `[]`                     |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
 | `service.loadBalancerIP`           | Set the LoadBalancerIP                                                                                                           | `""`                     |
+| `service.clusterIP`                | Kubernetes service Cluster IP                                                                                                    | `""`                     |
 | `service.labels`                   | Service labels. Evaluated as a template                                                                                          | `{}`                     |
 | `service.annotations`              | Service annotations. Evaluated as a template                                                                                     | `{}`                     |
 | `service.annotationsHeadless`      | Headless Service annotations. Evaluated as a template                                                                            | `{}`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ingress.enabled`                  | Enable ingress resource for Management console                                                                                   | `false`                  |
 | `ingress.path`                     | Path for the default host. You may need to set this to '/*' in order to use this with ALB ingress controllers.                   | `/`                      |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
@@ -258,6 +278,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                                | `false`                  |
 | `ingress.selfSigned`               | Set this to true in order to create a TLS secret for this ingress record                                                         | `false`                  |
 | `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `ingress.extraRules`               | The list of additional rules to be added to this ingress record. Evaluated as a template                                         | `[]`                     |
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
@@ -269,27 +290,29 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                       | Description                                                                                            | Value                 |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | --------------------- |
-| `metrics.enabled`                          | Enable exposing RabbitMQ metrics to be gathered by Prometheus                                          | `false`               |
-| `metrics.plugins`                          | Plugins to enable Prometheus metrics in RabbitMQ                                                       | `rabbitmq_prometheus` |
-| `metrics.podAnnotations`                   | Annotations for enabling prometheus to access the metrics endpoint                                     | `{}`                  |
-| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                           | `false`               |
-| `metrics.serviceMonitor.namespace`         | Specify the namespace in which the serviceMonitor resource will be created                             | `""`                  |
-| `metrics.serviceMonitor.interval`          | Specify the interval at which metrics should be scraped                                                | `30s`                 |
-| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                                    | `""`                  |
-| `metrics.serviceMonitor.relabellings`      | MetricsRelabelConfigs to apply to samples before ingestion. DEPRECATED: Will be removed in next major. | `[]`                  |
-| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping.                                                    | `[]`                  |
-| `metrics.serviceMonitor.metricRelabelings` | MetricsRelabelConfigs to apply to samples before ingestion.                                            | `[]`                  |
-| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                               | `false`               |
-| `metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the installed Prometheus Operator                             | `{}`                  |
-| `metrics.serviceMonitor.targetLabels`      | Used to keep given service's labels in target                                                          | `{}`                  |
-| `metrics.serviceMonitor.podTargetLabels`   | Used to keep given pod's labels in target                                                              | `{}`                  |
-| `metrics.serviceMonitor.path`              | Define the path used by ServiceMonitor to scrap metrics                                                | `""`                  |
-| `metrics.prometheusRule.enabled`           | Set this to true to create prometheusRules for Prometheus operator                                     | `false`               |
-| `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so prometheusRules will be discovered by Prometheus                 | `{}`                  |
-| `metrics.prometheusRule.namespace`         | namespace where prometheusRules resource should be created                                             | `""`                  |
-| `metrics.prometheusRule.rules`             | List of rules, used as template by Helm.                                                               | `[]`                  |
+| Name                                       | Description                                                                            | Value                 |
+| ------------------------------------------ | -------------------------------------------------------------------------------------- | --------------------- |
+| `metrics.enabled`                          | Enable exposing RabbitMQ metrics to be gathered by Prometheus                          | `false`               |
+| `metrics.plugins`                          | Plugins to enable Prometheus metrics in RabbitMQ                                       | `rabbitmq_prometheus` |
+| `metrics.podAnnotations`                   | Annotations for enabling prometheus to access the metrics endpoint                     | `{}`                  |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator           | `false`               |
+| `metrics.serviceMonitor.namespace`         | Specify the namespace in which the serviceMonitor resource will be created             | `""`                  |
+| `metrics.serviceMonitor.interval`          | Specify the interval at which metrics should be scraped                                | `30s`                 |
+| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                    | `""`                  |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.      | `""`                  |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping.                                    | `[]`                  |
+| `metrics.serviceMonitor.metricRelabelings` | MetricsRelabelConfigs to apply to samples before ingestion.                            | `[]`                  |
+| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels               | `false`               |
+| `metrics.serviceMonitor.targetLabels`      | Used to keep given service's labels in target                                          | `{}`                  |
+| `metrics.serviceMonitor.podTargetLabels`   | Used to keep given pod's labels in target                                              | `{}`                  |
+| `metrics.serviceMonitor.path`              | Define the path used by ServiceMonitor to scrap metrics                                | `""`                  |
+| `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                         | `{}`                  |
+| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                    | `{}`                  |
+| `metrics.serviceMonitor.annotations`       | Extra annotations for the ServiceMonitor                                               | `{}`                  |
+| `metrics.prometheusRule.enabled`           | Set this to true to create prometheusRules for Prometheus operator                     | `false`               |
+| `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so prometheusRules will be discovered by Prometheus | `{}`                  |
+| `metrics.prometheusRule.namespace`         | namespace where prometheusRules resource should be created                             | `""`                  |
+| `metrics.prometheusRule.rules`             | List of rules, used as template by Helm.                                               | `[]`                  |
 
 
 ### Init Container Parameters
@@ -299,7 +322,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r400`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r408`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                    | `{}`                    |
@@ -517,6 +540,41 @@ $ helm upgrade my-release bitnami/rabbitmq --set auth.password=[PASSWORD] --set 
 ```
 
 | Note: you need to substitute the placeholders [PASSWORD] and [RABBITMQ_ERLANG_COOKIE] with the values obtained in the installation notes.
+
+### To 9.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be aligned with the rest of the assets in the Bitnami charts repository.
+
+  .dist
+  .manager
+  .metrics
+  .epmd
+
+- `service.port` has been renamed as `service.ports.amqp`.
+- `service.portName` has been renamed as `service.portNames.amqp`.
+- `service.nodePort`has been renamed as `service.nodePorts.amqp`.
+- `service.tlsPort` has been renamed as `service.ports.amqpTls`.
+- `service.tlsPortName` has been renamed as `service.portNames.amqpTls`.
+- `service.tlsNodePort` has been renamed as `service.nodePorts.amqpTls`.
+- `service.epmdPortName` has been renamed as `service.portNames.epmd`.
+- `service.epmdNodePort` has been renamed as `service.nodePorts.epmd`.
+- `service.distPort` has been renamed as `service.ports.dist`.
+- `service.distPortName` has been renamed as `service.portNames.dist`.
+- `service.distNodePort` has been renamed as `service.nodePorts.dist`.
+- `service.managerPort` has been renamed as `service.ports.manager`.
+- `service.managerPortName` has been renamed as `service.portNames.manager`.
+- `service.managerNodePort` has been renamed as `service.nodePorts.manager`.
+- `service.metricsPort` has been renamed as `service.ports.metrics`.
+- `service.metricsPortName` has been renamed as `service.portNames.metrics`.
+- `service.metricsNodePort` has been renamed as `service.nodePorts.metrics`.
+- `persistence.volumes` has been removed, as it duplicates the parameter `extraVolumes`.
+- `ingress.certManager` has been removed.
+- `metrics.serviceMonitor.relabellings` has been replaced with `metrics.serviceMonitor.relabelings`, and it sets the field `relabelings` instead of `metricRelabelings`.
+- `metrics.serviceMonitor.additionalLabels` has been renamed as `metrics.serviceMonitor.labels`
+- `updateStrategyType` has been removed, use the field `updateStrategy` instead, which is interpreted as a template.
+- The content of `podSecurityContext` and `containerSecurityContext` have been modified.
+- The behavior of VolumePermissions has been modified to not change ownership of '.snapshot' and 'lost+found'
+- Introduced the values `ContainerPorts.*`, separating the service and container ports configuration.
 
 ### To 8.21.0
 
