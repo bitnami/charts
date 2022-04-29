@@ -20,14 +20,25 @@ global:
 ## @section Common parameters
 ##
 
-## @param nameOverride String to partially override mongodb.fullname template (will maintain the release name)
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.name
 ##
 nameOverride: ""
-## @param fullnameOverride String to fully override mongodb.fullname template
+## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride: ""
-## @param clusterDomain Kubernetes Cluster Domain
-## ref: https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/#introduction
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
 ##
 clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
@@ -64,7 +75,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 4.4.13-debian-10-r50
+  tag: 5.0.8-debian-10-r5
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -81,27 +92,42 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-## MongoDB&reg; credentials
-## @param mongodbRootPassword MongoDB&reg; root password
-## If set to null it will be randomly generated
-## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
-## e.g:
-## mongodbRootPassword: password
+
+## MongoDB(&reg;) Authentication parameters
 ##
-mongodbRootPassword: ""
-## @param replicaSetKey Replica Set key (shared for shards and config servers)
-## e.g:
-## replicaSetKey: testkey123
-##
-replicaSetKey: ""
-## @param existingSecret Existing secret with MongoDB&reg; credentials
-## e.g:
-## existingSecret: name-of-existing-secret
-##
-existingSecret: ""
-## @param usePasswordFile Mount credentials as files instead of using environment variables
-##
-usePasswordFile: false
+auth:
+  ## @param auth.enabled Enable authentication
+  ## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
+  ##
+  enabled: true
+  ## @param auth.rootUser MongoDB(&reg;) root user
+  ##
+  rootUser: root
+  ## @param auth.rootPassword MongoDB(&reg;) root password
+  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  rootPassword: ""
+  ## MongoDB(&reg;) custom user and database
+  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-users-and-databases-on-first-run
+  ## @param auth.username Custom user to be created during the initialization
+  ## @param auth.password Password for the custom user set at `auth.username`
+  ## @param auth.database Database to be created during the initialization
+  ##
+  username: ""
+  password: ""
+  database: ""
+  ## @param auth.replicaSetKey Key used for authentication in the replicaset (only when `architecture=replicaset`)
+  ##
+  replicaSetKey: ""
+  ## @param auth.existingSecret Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-password`, `mongodb-root-password`, ` mongodb-replica-set-key`)
+  ## NOTE: When it's set the previous parameters are ignored.
+  ##
+  existingSecret: ""
+  ## @param auth.usePasswordFile Mount credentials as files instead of using environment variables
+  ##
+  usePasswordFile: false
+
+
 ## @param shards Number of shards to be created
 ## ref: https://docs.mongodb.com/manual/core/sharded-cluster-shards/
 ##
@@ -187,10 +213,10 @@ common:
   ## @param common.extraVolumeMounts Array to add extra mounts (normally used with extraVolumes)
   ##
   extraVolumeMounts: []
-  ## @param common.containerPorts.mongo MongoDB container port
+  ## @param common.containerPorts.mongodb MongoDB container port
   ##
   containerPorts:
-    mongo: 27017
+    mongodb: 27017
   ## K8s Service Account.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
@@ -202,6 +228,12 @@ common:
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
     name: ""
+    ## @param common.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param common.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -219,7 +251,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r404
+    tag: 10-debian-10-r410
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -232,18 +264,6 @@ volumePermissions:
   ## @param volumePermissions.resources Init container resource requests/limit
   ##
   resources: {}
-## Pod Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-## @param securityContext.enabled Enable security context
-## @param securityContext.fsGroup Group ID for the container
-## @param securityContext.runAsUser User ID for the container
-## @param securityContext.runAsNonRoot Run containers as non-root users
-##
-securityContext:
-  enabled: true
-  fsGroup: 1001
-  runAsUser: 1001
-  runAsNonRoot: true
 ## Kubernetes service type
 ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
 ##
@@ -264,17 +284,19 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   ##
   externalTrafficPolicy: Cluster
-  ## @param service.port MongoDB&reg; service port
+  ## @param service.ports.mongodb MongoDB&reg; service port
   ##
-  port: 27017
+  ports:
+    mongodb: 27017
   ## @param service.clusterIP Static clusterIP or None for headless services
   ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/#servicespec-v1-core
   ##
   clusterIP: ""
-  ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## @param service.nodePorts.mongodb Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort: ""
+  nodePorts:
+    mongodb: ""
   ## @param service.externalIPs External IP list to use with ClusterIP service type
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
   ##
@@ -295,40 +317,12 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
   ##
   sessionAffinity: None
-## Configure extra options for liveness probes
-## This applies to all the MongoDB&reg; in the sharded cluster
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
-## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-## @param livenessProbe.periodSeconds Period seconds for livenessProbe
-## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
-## @param livenessProbe.successThreshold Success threshold for livenessProbe
-##
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 60
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 12
-  successThreshold: 1
-## Configure extra options for readiness probe
-## This applies to all the MongoDB&reg; in the sharded cluster
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
-## @param readinessProbe.enabled Enable readinessProbe
-## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-## @param readinessProbe.periodSeconds Period seconds for readinessProbe
-## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
-## @param readinessProbe.successThreshold Success threshold for readinessProbe
-##
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 60
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 12
-  successThreshold: 1
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 
 ## @section Config Server parameters
 ##
@@ -337,9 +331,9 @@ readinessProbe:
 ## ref: https://docs.mongodb.com/manual/core/sharded-cluster-config-servers/
 ##
 configsvr:
-  ## @param configsvr.replicas Number of nodes in the replica set (the first node will be primary)
+  ## @param configsvr.replicaCount Number of nodes in the replica set (the first node will be primary)
   ##
-  replicas: 1
+  replicaCount: 1
   ## @param configsvr.resources Configure pod resources
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -354,6 +348,10 @@ configsvr:
   ##  - "--wiredTigerCacheSizeGB=2"
   ##
   mongodbExtraFlags: []
+  ## @param configsvr.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: {}
   ## @param configsvr.priorityClassName Pod priority class name
   ## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
@@ -468,9 +466,9 @@ configsvr:
   ## Pod disruption budget
   ##
   pdb:
-    ## @param configsvr.pdb.enabled Enable pod disruption budget
+    ## @param configsvr.pdb.create Enable pod disruption budget
     ##
-    enabled: false
+    create: false
     ## @param configsvr.pdb.minAvailable Minimum number of available config pods allowed (`0` to disable)
     ##
     minAvailable: 0
@@ -511,6 +509,8 @@ configsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
+    ## @param configsvr.persistence.resourcePolicy Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
+    resourcePolicy: ""
   ## K8s Service Account.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
@@ -522,6 +522,12 @@ configsvr:
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
     name: ""
+    ## @param configsvr.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param configsvr.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
   ## Use a external config server instead of deploying one
   ##
   external:
@@ -537,6 +543,100 @@ configsvr:
     ## @param configsvr.external.replicasetKey Replicaset key of an external Config Server
     ##
     replicasetKey: ""
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param configsvr.podSecurityContext.enabled Enable security context
+  ## @param configsvr.podSecurityContext.fsGroup Group ID for the container
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param configsvr.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param configsvr.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param configsvr.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
+  ## @param configsvr.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+  ## @param configsvr.command Override default container command (useful when using custom images)
+  ##
+  command:
+    - /bin/bash
+    - /entrypoint/replicaset-entrypoint.sh
+  ## @param configsvr.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param configsvr.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param configsvr.lifecycleHooks for the Config Server container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## Configure extra options for liveness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param configsvr.livenessProbe.enabled Enable livenessProbe
+  ## @param configsvr.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param configsvr.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param configsvr.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param configsvr.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param configsvr.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 20
+    failureThreshold: 2
+    successThreshold: 1
+  ## Configure extra options for readiness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param configsvr.readinessProbe.enabled Enable readinessProbe
+  ## @param configsvr.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param configsvr.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param configsvr.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param configsvr.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param configsvr.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    timeoutSeconds: 20
+    failureThreshold: 6
+    successThreshold: 1
+
+  ## Configure extra options for startup probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param configsvr.startupProbe.enabled Enable startupProbe
+  ## @param configsvr.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param configsvr.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param configsvr.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param configsvr.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param configsvr.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30
+    successThreshold: 1
+
+  ## @param configsvr.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param configsvr.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param configsvr.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
 
 ## @section Mongos parameters
 ##
@@ -545,9 +645,9 @@ configsvr:
 ## ref: https://docs.mongodb.com/manual/reference/program/mongos/#bin.mongos
 ##
 mongos:
-  ## @param mongos.replicas Number of replicas
+  ## @param mongos.replicaCount Number of replicas
   ##
-  replicas: 1
+  replicaCount: 1
   ## @param mongos.resources Configure pod resources
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -562,6 +662,10 @@ mongos:
   ##  - "--wiredTigerCacheSizeGB=2"
   ##
   mongodbExtraFlags: []
+  ## @param mongos.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: {}
   ## @param mongos.priorityClassName Pod priority class name
   ## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
@@ -700,22 +804,22 @@ mongos:
     ## @param mongos.servicePerReplica.port MongoDB&reg; service port
     ##
     port: 27017
-    ## @param mongos.servicePerReplica.clusterIP Static clusterIP or None for headless services
+    ## @param mongos.servicePerReplica.clusterIPs Array of static clusterIPs for each MongoDB@reg; replica. Length must be the same as mongos.replicaCount
     ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/#servicespec-v1-core
     ##
-    clusterIP: ""
-    ## @param mongos.servicePerReplica.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
+    clusterIPs: []
+    ## @param mongos.servicePerReplica.nodePorts Array of node ports used for each MongoDB@reg; replica. Length must be the same as mongos.replicaCount
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
-    nodePort: ""
+    nodePorts: []
     ## @param mongos.servicePerReplica.externalIPs External IP list to use with ClusterIP service type
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
     ##
     externalIPs: []
-    ## @param mongos.servicePerReplica.loadBalancerIP Static IP Address to use for LoadBalancer service type
+    ## @param mongos.servicePerReplica.loadBalancerIPs Array of static IP Address to use for each replica LoadBalancer service type. Length must be the same as mongos.replicaCount
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
     ##
-    loadBalancerIP: ""
+    loadBalancerIPs: []
     ## @param mongos.servicePerReplica.loadBalancerSourceRanges List of IP ranges allowed access to load balancer (if supported)
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ##
@@ -728,12 +832,18 @@ mongos:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
     ##
     sessionAffinity: None
+    ## @param mongos.servicePerReplica.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
   ## Pod disruption budget
   ##
   pdb:
-    ## @param mongos.pdb.enabled Enable pod disruption budget
+    ## @param mongos.pdb.create Enable pod disruption budget
     ##
-    enabled: false
+    create: false
     ## @param mongos.pdb.minAvailable Minimum number of available mongo pods allowed (`0` to disable)
     ##
     minAvailable: 0
@@ -751,7 +861,104 @@ mongos:
     ## If not set and create is true, a name is generated using the XXX.fullname template
     ##
     name: ""
+    ## @param mongos.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param mongos.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param mongos.podSecurityContext.enabled Enable security context
+  ## @param mongos.podSecurityContext.fsGroup Group ID for the container
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param mongos.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param mongos.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param mongos.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
+  ## @param mongos.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+  ## @param mongos.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param mongos.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param mongos.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param mongos.lifecycleHooks for the Mongo container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## Configure extra options for liveness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param mongos.livenessProbe.enabled Enable livenessProbe
+  ## @param mongos.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param mongos.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param mongos.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param mongos.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param mongos.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 20
+    failureThreshold: 2
+    successThreshold: 1
+  ## Configure extra options for readiness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param mongos.readinessProbe.enabled Enable readinessProbe
+  ## @param mongos.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param mongos.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param mongos.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param mongos.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param mongos.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    timeoutSeconds: 20
+    failureThreshold: 6
+    successThreshold: 1
 
+  ## Configure extra options for startup probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param mongos.startupProbe.enabled Enable startupProbe
+  ## @param mongos.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param mongos.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param mongos.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param mongos.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param mongos.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30
+    successThreshold: 1
+
+  ## @param mongos.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param mongos.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param mongos.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
 ## @section Shard configuration: Data node parameters
 ##
 
@@ -762,9 +969,9 @@ shardsvr:
   ## Properties for data nodes (primary and secondary)
   ##
   dataNode:
-    ## @param shardsvr.dataNode.replicas Number of nodes in each shard replica set (the first node will be primary)
+    ## @param shardsvr.dataNode.replicaCount Number of nodes in each shard replica set (the first node will be primary)
     ##
-    replicas: 1
+    replicaCount: 1
     ## @param shardsvr.dataNode.resources Configure pod resources
     ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ##
@@ -775,6 +982,10 @@ shardsvr:
     ##  - "--wiredTigerCacheSizeGB=2"
     ##
     mongodbExtraFlags: []
+    ## @param shardsvr.dataNode.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+    ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+    ##
+    topologySpreadConstraints: {}
     ## @param shardsvr.dataNode.priorityClassName Pod priority class name
     ## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
     ##
@@ -906,9 +1117,9 @@ shardsvr:
     ## Pod disruption budget
     ##
     pdb:
-      ## @param shardsvr.dataNode.pdb.enabled Enable pod disruption budget
+      ## @param shardsvr.dataNode.pdb.create Enable pod disruption budget
       ##
-      enabled: false
+      create: false
       ## @param shardsvr.dataNode.pdb.minAvailable Minimum number of available data pods allowed (`0` to disable)
       ##
       minAvailable: 0
@@ -926,6 +1137,106 @@ shardsvr:
       ## If not set and create is true, a name is generated using the XXX.fullname template
       ##
       name: ""
+      ## @param shardsvr.dataNode.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+      ##
+      annotations: {}
+      ## @param shardsvr.dataNode.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+      ##
+      automountServiceAccountToken: true
+    ## Configure Pods Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+    ## @param shardsvr.dataNode.podSecurityContext.enabled Enable security context
+    ## @param shardsvr.dataNode.podSecurityContext.fsGroup Group ID for the container
+    ##
+    podSecurityContext:
+      enabled: true
+      fsGroup: 1001
+    ## Configure Container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param shardsvr.dataNode.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param shardsvr.dataNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param shardsvr.dataNode.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
+    ## @param shardsvr.dataNode.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+    ##
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: false
+    ## @param shardsvr.dataNode.command Override default container command (useful when using custom images)
+    ##
+    command:
+      - /bin/bash
+      - /entrypoint/replicaset-entrypoint.sh
+    ## @param shardsvr.dataNode.args Override default container args (useful when using custom images)
+    ##
+    args: []
+    ## @param shardsvr.dataNode.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+    ##
+    terminationGracePeriodSeconds: ""
+    ## @param shardsvr.dataNode.lifecycleHooks for the Data container(s) to automate configuration before or after startup
+    ##
+    lifecycleHooks: {}
+    ## Configure extra options for liveness probes
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+    ## @param shardsvr.dataNode.livenessProbe.enabled Enable livenessProbe
+    ## @param shardsvr.dataNode.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param shardsvr.dataNode.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param shardsvr.dataNode.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param shardsvr.dataNode.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param shardsvr.dataNode.livenessProbe.successThreshold Success threshold for livenessProbe
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 60
+      periodSeconds: 30
+      timeoutSeconds: 20
+      failureThreshold: 2
+      successThreshold: 1
+    ## Configure extra options for readiness probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+    ## @param shardsvr.dataNode.readinessProbe.enabled Enable readinessProbe
+    ## @param shardsvr.dataNode.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param shardsvr.dataNode.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param shardsvr.dataNode.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param shardsvr.dataNode.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param shardsvr.dataNode.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 30
+      timeoutSeconds: 20
+      failureThreshold: 6
+      successThreshold: 1
+
+    ## Configure extra options for startup probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+    ## @param shardsvr.dataNode.startupProbe.enabled Enable startupProbe
+    ## @param shardsvr.dataNode.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+    ## @param shardsvr.dataNode.startupProbe.periodSeconds Period seconds for startupProbe
+    ## @param shardsvr.dataNode.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+    ## @param shardsvr.dataNode.startupProbe.failureThreshold Failure threshold for startupProbe
+    ## @param shardsvr.dataNode.startupProbe.successThreshold Success threshold for startupProbe
+    ##
+    startupProbe:
+      enabled: false
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 30
+      successThreshold: 1
+
+    ## @param shardsvr.dataNode.customLivenessProbe Custom livenessProbe that overrides the default one
+    ##
+    customLivenessProbe: {}
+    ## @param shardsvr.dataNode.customReadinessProbe Custom readinessProbe that overrides the default one
+    ##
+    customReadinessProbe: {}
+    ## @param shardsvr.dataNode.customStartupProbe Custom startupProbe that overrides the default one
+    ##
+    customStartupProbe: {}
 
   ## @section Shard configuration: Persistence parameters
   ##
@@ -963,6 +1274,8 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
+    ## @param shardsvr.persistence.resourcePolicy Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
+    resourcePolicy: ""
 
   ## @section Shard configuration: Arbiter parameters
   ##
@@ -971,9 +1284,9 @@ shardsvr:
   ## ref: https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
   ##
   arbiter:
-    ## @param shardsvr.arbiter.replicas Number of arbiters in each shard replica set (the first node will be primary)
+    ## @param shardsvr.arbiter.replicaCount Number of arbiters in each shard replica set (the first node will be primary)
     ##
-    replicas: 0
+    replicaCount: 0
     ## @param shardsvr.arbiter.hostAliases Deployment pod host aliases
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
@@ -988,6 +1301,10 @@ shardsvr:
     ##  - "--wiredTigerCacheSizeGB=2"
     ##
     mongodbExtraFlags: []
+    ## @param shardsvr.arbiter.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+    ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+    ##
+    topologySpreadConstraints: {}
     ## @param shardsvr.arbiter.priorityClassName Pod priority class name
     ## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
     ##
@@ -1115,7 +1432,104 @@ shardsvr:
       ## If not set and create is true, a name is generated using the XXX.fullname template
       ##
       name: ""
+      ## @param shardsvr.arbiter.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+      ##
+      annotations: {}
+      ## @param shardsvr.arbiter.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+      ##
+      automountServiceAccountToken: true
+    ## Configure Pods Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+    ## @param shardsvr.arbiter.podSecurityContext.enabled Enable security context
+    ## @param shardsvr.arbiter.podSecurityContext.fsGroup Group ID for the container
+    ##
+    podSecurityContext:
+      enabled: true
+      fsGroup: 1001
+    ## Configure Container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param shardsvr.arbiter.containerSecurityContext.enabled Enabled containers' Security Context
+    ## @param shardsvr.arbiter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param shardsvr.arbiter.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
+    ## @param shardsvr.arbiter.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+    ##
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: false
+    ## @param shardsvr.arbiter.command Override default container command (useful when using custom images)
+    ##
+    command: []
+    ## @param shardsvr.arbiter.args Override default container args (useful when using custom images)
+    ##
+    args: []
+    ## @param shardsvr.arbiter.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+    ##
+    terminationGracePeriodSeconds: ""
+    ## @param shardsvr.arbiter.lifecycleHooks for the arbiter container(s) to automate configuration before or after startup
+    ##
+    lifecycleHooks: {}
+    ## Configure extra options for liveness probes
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+    ## @param shardsvr.arbiter.livenessProbe.enabled Enable livenessProbe
+    ## @param shardsvr.arbiter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param shardsvr.arbiter.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param shardsvr.arbiter.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param shardsvr.arbiter.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param shardsvr.arbiter.livenessProbe.successThreshold Success threshold for livenessProbe
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 60
+      periodSeconds: 30
+      timeoutSeconds: 20
+      failureThreshold: 2
+      successThreshold: 1
+    ## Configure extra options for readiness probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+    ## @param shardsvr.arbiter.readinessProbe.enabled Enable readinessProbe
+    ## @param shardsvr.arbiter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param shardsvr.arbiter.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param shardsvr.arbiter.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param shardsvr.arbiter.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param shardsvr.arbiter.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 30
+      timeoutSeconds: 20
+      failureThreshold: 6
+      successThreshold: 1
 
+    ## Configure extra options for startup probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+    ## @param shardsvr.arbiter.startupProbe.enabled Enable startupProbe
+    ## @param shardsvr.arbiter.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+    ## @param shardsvr.arbiter.startupProbe.periodSeconds Period seconds for startupProbe
+    ## @param shardsvr.arbiter.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+    ## @param shardsvr.arbiter.startupProbe.failureThreshold Failure threshold for startupProbe
+    ## @param shardsvr.arbiter.startupProbe.successThreshold Success threshold for startupProbe
+    ##
+    startupProbe:
+      enabled: false
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 30
+      successThreshold: 1
+
+    ## @param shardsvr.arbiter.customLivenessProbe Custom livenessProbe that overrides the default one
+    ##
+    customLivenessProbe: {}
+    ## @param shardsvr.arbiter.customReadinessProbe Custom readinessProbe that overrides the default one
+    ##
+    customReadinessProbe: {}
+    ## @param shardsvr.arbiter.customStartupProbe Custom startupProbe that overrides the default one
+    ##
+    customStartupProbe: {}
 ## @section Metrics parameters
 ##
 
@@ -1132,7 +1546,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.31.2-debian-10-r14
+    tag: 0.32.0-debian-10-r3
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1153,6 +1567,18 @@ metrics:
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
   ## Metrics exporter liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ## @param metrics.livenessProbe.enabled Enable livenessProbe
@@ -1185,9 +1611,36 @@ metrics:
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
-  ## @param metrics.containerPort Port of the Prometheus metrics container
+  ## Configure extra options for startup probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param metrics.startupProbe.enabled Enable startupProbe
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metrics.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
   ##
-  containerPort: 9216
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 0
+    periodSeconds: 5
+    timeoutSeconds: 2
+    failureThreshold: 15
+    successThreshold: 1
+
+  ## @param metrics.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param metrics.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param metrics.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param metrics.containerPorts.metrics Port of the Prometheus metrics container
+  ##
+  containerPorts:
+    metrics: 9216
   ## @param metrics.podAnnotations [object] Metrics exporter pod Annotation
   ##
   podAnnotations:
