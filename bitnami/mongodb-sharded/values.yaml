@@ -310,7 +310,7 @@ livenessProbe:
   initialDelaySeconds: 60
   periodSeconds: 10
   timeoutSeconds: 5
-  failureThreshold: 6
+  failureThreshold: 12
   successThreshold: 1
 ## Configure extra options for readiness probe
 ## This applies to all the MongoDB&reg; in the sharded cluster
@@ -327,7 +327,7 @@ readinessProbe:
   initialDelaySeconds: 60
   periodSeconds: 10
   timeoutSeconds: 5
-  failureThreshold: 6
+  failureThreshold: 12
   successThreshold: 1
 
 ## @section Config Server parameters
@@ -1143,6 +1143,7 @@ metrics:
     ##
     pullSecrets: []
   ## @param metrics.useTLS Whether to connect to MongoDB&reg; with TLS
+  ##
   useTLS: false
   ## @param metrics.extraArgs String with extra arguments to the metrics exporter
   ## ref: https://github.com/dcu/mongodb_exporter/blob/master/mongodb_exporter.go

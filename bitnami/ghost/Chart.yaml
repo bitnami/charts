@@ -1,7 +1,7 @@
 annotations:
   category: CMS
 apiVersion: v2
-appVersion: 4.45.0
+appVersion: 4.46.0
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -33,4 +33,4 @@ name: ghost
 sources:
   - https://github.com/bitnami/bitnami-docker-ghost
   - https://www.ghost.org/
-version: 17.0.2
+version: 17.0.3

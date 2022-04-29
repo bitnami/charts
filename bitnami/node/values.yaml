@@ -128,7 +128,7 @@ externaldb:
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 16.14.2-debian-10-r36
+  tag: 16.15.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -234,12 +234,33 @@ readinessProbe:
   timeoutSeconds: 3
   failureThreshold: 3
   successThreshold: 1
+## Configure extra options for startup probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-startup-readiness-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.path Request path for startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  path: '/'
+  initialDelaySeconds: 10
+  timeoutSeconds: 1
+  periodSeconds: 20
+  failureThreshold: 6
+  successThreshold: 1
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
 ## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
+## @param customStartupProbe Custom startupProbe that overrides the default one
+##
+customStartupProbe: {}
 ## @param priorityClassName Node priorityClassName
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
@@ -347,7 +368,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.36.0-debian-10-r2
+    tag: 2.36.0-debian-10-r8
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -398,7 +419,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r402
+    tag: 10-debian-10-r408
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

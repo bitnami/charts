@@ -79,26 +79,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Node parameters
 
-| Name                                    | Description                                                                                                          | Value                             |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| Name                                    | Description                                                                                                          | Value                               |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `installCommand`                        | Override default container install command (useful when using custom images or repositories)                         | `["/bin/bash","-ec","npm install"]` |
-| `command`                               | Override default container command (useful when using custom images)                                                 | `["/bin/bash","-ec","npm start"]` |
-| `args`                                  | Override default container args (useful when using custom images)                                                    | `[]`                              |
-| `hostAliases`                           | Deployment pod host aliases                                                                                          | `[]`                              |
-| `extraEnvVars`                          | Extra environment variables to be set on Node container                                                              | `[]`                              |
-| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra environment variables                                                    | `""`                              |
-| `extraEnvVarsSecret`                    | Name of existing Secret containing extra environment variables                                                       | `""`                              |
-| `mongodb.enabled`                       | Whether to install or not the MongoDB&reg; chart                                                                     | `true`                            |
-| `mongodb.auth.enabled`                  | Whether to enable auth or not for the MongoDB&reg; chart                                                             | `true`                            |
-| `mongodb.auth.rootPassword`             | MongoDB&reg; admin password                                                                                          | `""`                              |
-| `mongodb.auth.username`                 | MongoDB&reg; custom user                                                                                             | `user`                            |
-| `mongodb.auth.database`                 | MongoDB&reg; custom database                                                                                         | `test_db`                         |
-| `mongodb.auth.password`                 | MongoDB&reg; custom password                                                                                         | `secret_password`                 |
-| `externaldb.enabled`                    | Enables or disables external database (ignored if `mongodb.enabled=true`)                                            | `false`                           |
-| `externaldb.ssl`                        | Set to true if your external database has ssl enabled                                                                | `false`                           |
-| `externaldb.secretName`                 | Secret containing existing database credentials                                                                      | `""`                              |
-| `externaldb.type`                       | Only if using Kubernetes Service Catalog you can specify the kind of broker used. Available options are osba|gce|aws | `osba`                            |
-| `externaldb.broker.serviceInstanceName` | If you provide the serviceInstanceName, the chart will create a ServiceBinding for that ServiceInstance              | `""`                              |
+| `command`                               | Override default container command (useful when using custom images)                                                 | `["/bin/bash","-ec","npm start"]`   |
+| `args`                                  | Override default container args (useful when using custom images)                                                    | `[]`                                |
+| `hostAliases`                           | Deployment pod host aliases                                                                                          | `[]`                                |
+| `extraEnvVars`                          | Extra environment variables to be set on Node container                                                              | `[]`                                |
+| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra environment variables                                                    | `""`                                |
+| `extraEnvVarsSecret`                    | Name of existing Secret containing extra environment variables                                                       | `""`                                |
+| `mongodb.enabled`                       | Whether to install or not the MongoDB&reg; chart                                                                     | `true`                              |
+| `mongodb.auth.enabled`                  | Whether to enable auth or not for the MongoDB&reg; chart                                                             | `true`                              |
+| `mongodb.auth.rootPassword`             | MongoDB&reg; admin password                                                                                          | `""`                                |
+| `mongodb.auth.username`                 | MongoDB&reg; custom user                                                                                             | `user`                              |
+| `mongodb.auth.database`                 | MongoDB&reg; custom database                                                                                         | `test_db`                           |
+| `mongodb.auth.password`                 | MongoDB&reg; custom password                                                                                         | `secret_password`                   |
+| `externaldb.enabled`                    | Enables or disables external database (ignored if `mongodb.enabled=true`)                                            | `false`                             |
+| `externaldb.ssl`                        | Set to true if your external database has ssl enabled                                                                | `false`                             |
+| `externaldb.secretName`                 | Secret containing existing database credentials                                                                      | `""`                                |
+| `externaldb.type`                       | Only if using Kubernetes Service Catalog you can specify the kind of broker used. Available options are osba|gce|aws | `osba`                              |
+| `externaldb.broker.serviceInstanceName` | If you provide the serviceInstanceName, the chart will create a ServiceBinding for that ServiceInstance              | `""`                                |
 
 
 ### Node deployment parameters
@@ -107,7 +107,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                              | NodeJS image registry                                                                     | `docker.io`            |
 | `image.repository`                            | NodeJS image repository                                                                   | `bitnami/node`         |
-| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                         | `16.13.2-debian-10-r7` |
+| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                         | `16.15.0-debian-10-r0` |
 | `image.pullPolicy`                            | NodeJS image pull policy                                                                  | `IfNotPresent`         |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                          | `[]`                   |
 | `replicaCount`                                | Specify the number of replicas for the application                                        | `1`                    |
@@ -137,8 +137,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                        | `3`                    |
 | `readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                      | `3`                    |
 | `readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                      | `1`                    |
+| `startupProbe.enabled`                        | Enable startupProbe                                                                       | `false`                |
+| `startupProbe.path`                           | Request path for startupProbe                                                             | `/`                    |
+| `startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                    | `10`                   |
+| `startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                           | `20`                   |
+| `startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                          | `1`                    |
+| `startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                        | `6`                    |
+| `startupProbe.successThreshold`               | Success threshold for startupProbe                                                        | `1`                    |
 | `customLivenessProbe`                         | Override default liveness probe                                                           | `{}`                   |
 | `customReadinessProbe`                        | Override default readiness probe                                                          | `{}`                   |
+| `customStartupProbe`                          | Custom startupProbe that overrides the default one                                        | `{}`                   |
 | `priorityClassName`                           | Node priorityClassName                                                                    | `""`                   |
 | `lifecycleHooks`                              | lifecycleHooks for the Node container to automate configuration before or after startup.  | `{}`                   |
 | `sidecars`                                    | Add sidecars to the Node pods                                                             | `[]`                   |
@@ -164,7 +172,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | --------------------------------------------------- | -------------------------------------------- |
 | `git.image.registry`           | Git image registry                                  | `docker.io`                                  |
 | `git.image.repository`         | Git image repository                                | `bitnami/git`                                |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)      | `2.34.1-debian-10-r50`                       |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)      | `2.36.0-debian-10-r8`                        |
 | `git.image.pullPolicy`         | Git image pull policy                               | `IfNotPresent`                               |
 | `git.image.pullSecrets`        | Specify docker-registry secret names as an array    | `[]`                                         |
 | `git.extraVolumeMounts`        | Add extra volume mounts for the Git container       | `[]`                                         |
@@ -180,7 +188,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory  | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                             | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r312`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r408`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                          | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                             | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                       | `{}`                    |

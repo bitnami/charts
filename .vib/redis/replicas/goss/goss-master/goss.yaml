@@ -10,14 +10,14 @@ command:
     stdout:
       - "ERR unknown command"
     stderr: [ ]
-    timeout: 20000 
+    timeout: 20000
   redis-set-key-value-pairs:
     exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli SET key value
     exit-status: 0
     stdout:
       - 'OK'
     stderr: [ ]
-    timeout: 20000  
+    timeout: 20000
   redis-set-ex:
     exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli SETEX name 10 kyle
     exit-status: 0
@@ -41,9 +41,9 @@ command:
     stdout:
       - 'NOAUTH Authentication required'
     stderr: [ ]
-    timeout: 20000 
+    timeout: 20000
   redis-add-hash:
-    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli HSET test test test 
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli HSET test test test
     exit-status: 0
     stderr: [ ]
     timeout: 20000
@@ -84,21 +84,21 @@ command:
     exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli MODULE LIST
     exit-status: 0
     stderr: [ ]
-    timeout: 20000 
+    timeout: 20000
   redis-bgwriteoff:
     exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli BGREWRITEAOF
     exit-status: 0
     stdout:
       - "Background append only file rewriting started"
     stderr: [ ]
-    timeout: 20000 
+    timeout: 20000
   redis-resetstat:
     exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli CONFIG RESETSTAT
     exit-status: 0
     stdout:
       - "OK"
     stderr: [ ]
-    timeout: 20000   
+    timeout: 20000
   redis-info:
     exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli INFO
     exit-status: 0
@@ -113,7 +113,7 @@ command:
     stdout:
       - 1002
     stderr: [ ]
-    timeout: 20000                                                         
+    timeout: 20000
 file:
   /bitnami/redis/data:
     filetype: directory
