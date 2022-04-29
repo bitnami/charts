@@ -1,0 +1,7 @@
+auth:
+  adminPassword: ComplicatedPassword1234!
+  managementPassword: ComplicatedManagementPassword1244!
+service:
+  ports:
+    http: 80
+  type: LoadBalancer

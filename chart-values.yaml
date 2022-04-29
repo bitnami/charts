@@ -1,0 +1,19 @@
+wordpressUsername: test_user
+wordpressPassword: ComplicatedPassword123!4
+wordpressEmail: test_user_email@email.com
+wordpressFirstName: TestName
+wordpressLastName: TestLastName
+smtpHost: mail.server.com
+smtpPort: 120
+smtpUser: test_mail_user
+smtpPassword: test_mail_password
+mariadb:
+  auth:
+    database: test_wordpress_database
+    username: test_wordpress_username
+    password: test_wordpress_password
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+  runAsNonRoot: true
+wordpressTablePrefix: wordpress_
