@@ -1329,9 +1329,9 @@ repoServer:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param repoServer.containerSecurityContext.enabled Enabled Argo CD repo server containers' Security Context
   ## @param repoServer.containerSecurityContext.runAsUser Set Argo CD repo server containers' Security Context runAsUser
-  ## @param reposerver.containerSecurityContext.allowPrivilegeEscalation Set Argo CD repo server containers' Security Context allowPrivilegeEscalation
-  ## @param reposerver.containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
-  ## @param reposerver.containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' repo server Security Context readOnlyRootFilesystem
+  ## @param repoServer.containerSecurityContext.allowPrivilegeEscalation Set Argo CD repo server containers' Security Context allowPrivilegeEscalation
+  ## @param repoServer.containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
+  ## @param repoServer.containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' repo server Security Context readOnlyRootFilesystem
   ## @param repoServer.containerSecurityContext.runAsNonRoot Set Argo CD repo server containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
