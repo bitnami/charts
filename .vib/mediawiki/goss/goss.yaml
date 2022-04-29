@@ -1,0 +1,23 @@
+file:
+  /opt/bitnami/mediawiki/cache:
+    exists: true
+    filetype: directory
+    mode: "0775"
+    owner: daemon
+    group: root
+  /opt/bitnami/mediawiki/images:
+    filetype: symlink
+    linked-to: /bitnami/mediawiki/images
+    exists: true
+  /bitnami/mediawiki/LocalSettings.php:
+    mode: "0644"
+    filetype: file
+    exists: true
+command:
+  # Checks the user running the container is non-root
+  user-id-test:
+    exec: id -u
+    exit-status: 0
+    stdout:
+      - 1001
+    stderr: []
