@@ -39,21 +39,20 @@ it('allows creating a new user', () => {
   cy.contains('.alert', 'Success');
 });
 
-it('allows the upload and delete of a client ', () => {
+it('allows the upload and delete of a locale ', () => {
   cy.login();
-  cy.contains('Import').click();
+  cy.contains('Localization').click();
+  cy.contains('Upload localization').click();
   cy.get('input#import-file').selectFile(
-    'cypress/fixtures/import-clients.json',
+    'cypress/fixtures/empty-localization-file.json',
     {
       force: true,
     }
   );
+  cy.fixture('locales').then((locale) => {
+    cy.get('#locale').type(`${locale.German}.${random}`);
+  });
   cy.contains('button', 'Import').click();
-  cy.contains('.alert', 'Success');
-  cy.contains('span', 'ADDED');
-  cy.get('[data-ng-show="access.queryClients"').click();
-  cy.contains('td', 'test-client').siblings('td', 'Delete').last().click();
-  cy.contains('button', 'Delete').click();
   cy.contains('.alert', 'Success');
 });
 
