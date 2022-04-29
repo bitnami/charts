@@ -419,6 +419,26 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 18.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+Affected values:
+
+- `server.port` is renamed to `server.containerPorts.http`
+- `service.port` is renamed to `service.ports.mongodb`
+- `metrics.containerPort` is renamed to `metrics.containerPorts.metrics`
+- `service.nodePort` is renamed to `service.nodePorts.http`
+- `persistence.accessMode` is renamed to `persistence.accessModes` as list
+- `securityContext` is splitted into `podSecurityContext` and `containerSecurityContext` and moved into the different sections (`mongos`, `shardsvr.dataNode`, `shardsvr.arbiter`and `configsvr`):
+  - `securityContext.fsGroup` is renamed to `XXX.podSecurityContext.fsGroup`
+  - `securityContext.runAsUser` is renamed to `XXX.containerSecurityContext.runAsUser`
+  - `securityContext.runAsNonRoot` is renamed to `XXX.containerSecurityContext.runAsNonRoot`
+
+Also MongoDB&reg; subchart container images were updated to 5.0.x and it can affect compatibility with older versions of MongoDB&reg;.
+
+- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1200
+
 ### To 16.0.0
 
 In this version, the mongodb-exporter bundled as part of the bitnami/mongodb dependency was updated to a new version which, even it is not a major change, can contain breaking changes (from `0.11.X` to `0.30.X`).
@@ -458,21 +478,6 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
 
-### To 18.0.0
-
-This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
-
-Affected values:
-
-- `server.port` is renamed to `server.containerPorts.http`
-- `service.port` is renamed to `service.ports.mongodb`
-- `metrics.containerPort` is renamed to `metrics.containerPorts.metrics`
-- `service.nodePort` is renamed to `service.nodePorts.http`
-- `persistence.accessMode` is renamed to `persistence.accessModes` as list
-- `securityContext` is splitted into `podSecurityContext` and `containerSecurityContext` and moved into the different sections (`mongos`, `shardsvr.dataNode`, `shardsvr.arbiter`and `configsvr`):
-  - `securityContext.fsGroup` is renamed to `XXX.podSecurityContext.fsGroup`
-  - `securityContext.runAsUser` is renamed to `XXX.containerSecurityContext.runAsUser`
-  - `securityContext.runAsNonRoot` is renamed to `XXX.containerSecurityContext.runAsNonRoot`
 
 ### To 12.0.0
 
