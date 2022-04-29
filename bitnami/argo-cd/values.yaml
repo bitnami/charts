@@ -158,6 +158,11 @@ controller:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - all
+    readOnlyRootFilesystem: true
     runAsNonRoot: true
 
   ## ServiceAccount configuration for the Argo CD application controller
@@ -619,6 +624,11 @@ server:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - all
+    readOnlyRootFilesystem: true
     runAsNonRoot: true
 
   ## Argo CD server deployment autoscaling
@@ -1317,7 +1327,12 @@ repoServer:
   ##
   containerSecurityContext:
     enabled: true
-    runAsUser: 1001
+    runAsUser: 65534
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - all
+    readOnlyRootFilesystem: true
     runAsNonRoot: true
 
   ## Repo server service parameters
@@ -1759,6 +1774,8 @@ dex:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
     runAsNonRoot: true
 
   ## Dex service parameters
