@@ -269,8 +269,9 @@ readinessProbe:
   failureThreshold: 3
   successThreshold: 1
 ## Configure extra options for startup probe
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-startup-readiness-probes/#configure-probes
 ## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.path Request path for startupProbe
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
 ## @param startupProbe.periodSeconds Period seconds for startupProbe
 ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -278,7 +279,8 @@ readinessProbe:
 ## @param startupProbe.successThreshold Success threshold for startupProbe
 ##
 startupProbe:
-  enabled: true
+  enabled: false
+  path: '/'
   initialDelaySeconds: 5
   periodSeconds: 3
   timeoutSeconds: 1

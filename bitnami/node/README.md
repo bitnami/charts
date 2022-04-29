@@ -143,7 +143,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                                       | `3`                    |
 | `readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                                     | `3`                    |
 | `readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                                     | `1`                    |
-| `startupProbe.enabled`                        | Enable startupProbe                                                                                                      | `true`                 |
+| `startupProbe.enabled`                        | Enable startupProbe                                                                                                      | `false`                |
+| `startupProbe.path`                           | Request path for startupProbe                                                                                            | `/`                    |
 | `startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                                                   | `5`                    |
 | `startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                                          | `3`                    |
 | `startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                                         | `1`                    |

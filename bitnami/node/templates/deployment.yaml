@@ -233,8 +233,9 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.startupProbe.enabled }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit (omit .Values.startupProbe "enabled") "path") "context" $) | nindent 12 }}
+            httpGet:
+              path: {{ .Values.startupProbe.path }}
               port: http
           {{- else if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
