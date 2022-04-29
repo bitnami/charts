@@ -4,23 +4,24 @@ import { random } from './utils';
 it('allows login/logout', () => {
   cy.login();
   cy.get('#input-error').should('not.exist');
+  cy.reload();
   cy.get('.dropdown-toggle').click({ force: true });
   cy.contains('Sign Out').click();
   cy.contains('#kc-login', 'Sign In');
 });
 
-it('allows changing user data', () => {
+it('allows changing admin data', () => {
   cy.login();
   cy.get('.dropdown-toggle').click({ force: true });
   cy.contains('a', 'Manage account').click({ force: true });
-  cy.contains('p', 'Account console loading').should('not.exist'); //Wait until the loading is finished to continue with actions
+  cy.contains('Account console loading').should('not.exist');
   cy.contains('a', 'Personal').click({ force: true });
-  cy.fixture('users').then((user) => {
-    cy.get('#first-name').clear().type(`${user.newUser.firstName}.${random}`);
-    cy.get('#last-name').clear().type(`${user.newUser.lastName}.${random}`);
-    cy.get('#email-address').clear().type(`${user.newUser.email}`);
+  cy.fixture('admins').then((user) => {
+    cy.get('#first-name').clear().type(`${user.newAdmin.firstName}.${random}`);
+    cy.get('#last-name').clear().type(`${user.newAdmin.lastName}.${random}`);
+    cy.get('#email-address').clear().type(`${user.newAdmin.email}`);
     cy.get('#save-btn').click();
-    cy.contains('.pf-c-alert__title', 'has been updated');
+    cy.contains('Your account has been updated');
   });
 });
 
