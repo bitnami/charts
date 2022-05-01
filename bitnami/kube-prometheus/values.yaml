@@ -840,6 +840,16 @@ prometheus:
   ## @param prometheus.containers Containers allows injecting additional containers
   ##
   containers: []
+  ## @param prometheus.initContainers Add additional init containers to the prometheus pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
   ## @param prometheus.volumes Volumes allows configuration of additional volumes
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
   ##
