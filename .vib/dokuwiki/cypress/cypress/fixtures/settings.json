@@ -1,0 +1,6 @@
+{
+  "newSetting": {
+    "saveFolder": "./data",
+    "directoryCreationMode": "0755"
+  }
+}

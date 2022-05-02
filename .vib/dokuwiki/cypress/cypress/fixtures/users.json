@@ -1,0 +1,8 @@
+{
+  "newUser": {
+    "userName": "Doe",
+    "password": "user@email.com",
+    "realName": "Joan Of Arc",
+    "email": "joanofarc@email.com"
+  }
+}
