@@ -36,12 +36,13 @@ it('allows a stream to be created and deployed', () => {
       '.datagrid-inner-wrapper',
       `${stream.newStream.name}-${random}`
     );
+    cy.contains('.toast-container', 'successfully');
+    cy.contains('clr-dg-cell', 'UNDEPLOYED')
+      .siblings('clr-dg-cell', stream.newStream.name)
+      .first()
+      .click();
   });
-  cy.contains('.toast-container', 'successfully');
-  cy.contains('clr-dg-cell', 'UNDEPLOYED')
-    .siblings('clr-dg-cell', 'test-stream')
-    .first()
-    .click();
+
   cy.contains('button#btn-deploy', 'Deploy stream').click();
   cy.contains('button', 'Deploy stream').click();
   cy.get('.toast-container').should('contain', 'Deploy success');
