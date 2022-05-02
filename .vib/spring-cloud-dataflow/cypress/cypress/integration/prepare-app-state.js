@@ -10,9 +10,8 @@ export const importAnApplication = (application) => {
 };
 
 export const createATask = (task) => {
-  cy.visit('/dashboard');
-  cy.get('[routerlink="tasks-jobs/tasks"]').click();
-  cy.contains('.btn-primary', 'Create task').click();
+  cy.visit('/dashboard/#/tasks-jobs/tasks');
+  cy.contains('button', 'Create task').click();
   cy.get('.CodeMirror-line').type(task);
   cy.contains('#v-2', task);
   cy.contains('button', 'Create task').click();
@@ -22,6 +21,6 @@ export const createATask = (task) => {
       `${task.newTask.name}-${random}`
     );
     cy.get('input#desc').type('This is a task');
-    cy.contains('.btn-primary', 'Create the task').click();
+    cy.contains('button', 'Create the task').click();
   });
 };

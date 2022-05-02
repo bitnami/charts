@@ -1,5 +1,6 @@
 {
   "newSchedule": {
-    "name": "test-schedule"
+    "name": "test-schedule",
+    "cronExpression": "*/5 * * * *"
   }
 }

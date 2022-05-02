@@ -15,14 +15,15 @@ it('allows getting Spring Cloud Dataflow info', () => {
 });
 
 it('allows a stream to be created and deployed', () => {
-  const STREAM = 'mongodb | cassandra';
   const STREAM_APPLICATION = 'Stream application starters for Kafka/Maven';
 
   importAnApplication(STREAM_APPLICATION);
-  cy.visit('/dashboard');
-  cy.get('[routerlink="streams/list"').click();
+  cy.visit('dashboard/#/streams/list');
   cy.contains('.btn-primary', 'Create stream(s)').click();
-  cy.get('.CodeMirror-line').type(STREAM);
+  cy.fixture('streams').then((stream) => {
+    cy.get('.CodeMirror-line').type(stream.newStream.type);
+  });
+
   cy.contains('#v-2', 'mongodb').and('contain', 'cassandra');
   cy.contains('button', 'Create stream(s)').click();
   cy.get('.modal-content').should('contain', 'Create Stream');
@@ -63,8 +64,12 @@ it('allows a task to be scheduled and destroyed', () => {
     cy.get('input[name="example"]')
       .first()
       .type(`${schedule.newSchedule.name}-${random}`);
+
+    cy.get('input[name="example"]')
+      .last()
+      .type(`${schedule.newSchedule.cronExpression}`);
   });
-  cy.get('input[name="example"]').last().type(CRON_EXPRESSION);
+
   cy.contains('button', 'Create schedule(s)').click();
   cy.contains('.toast-container', 'Successfully');
   cy.contains('a', 'Tasks').click();
