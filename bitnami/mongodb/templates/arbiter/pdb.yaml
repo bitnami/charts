@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "mongodb.fullname" . }}-arbiter
+  name: {{ printf "%s-arbiter" (include "mongodb.fullname" .) }}
   namespace: {{ include "mongodb.namespace" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: arbiter

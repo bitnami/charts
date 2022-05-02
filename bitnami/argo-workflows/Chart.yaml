@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 3.3.3
+appVersion: 3.3.4
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -35,4 +35,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-argo-workflow-controller
   - https://github.com/bitnami/bitnami-docker-argo-workflow-exec
   - https://argoproj.github.io/workflows/
-version: 1.1.10
+version: 1.1.12
