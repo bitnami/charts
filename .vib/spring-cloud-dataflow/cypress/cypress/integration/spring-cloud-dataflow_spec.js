@@ -19,7 +19,7 @@ it('allows a stream to be created and deployed', () => {
 
   importAnApplication(STREAM_APPLICATION);
   cy.visit('dashboard/#/streams/list');
-  cy.contains('.btn-primary', 'Create stream(s)').click();
+  cy.contains('button', 'Create stream(s)').click();
   cy.fixture('streams').then((stream) => {
     cy.get('.CodeMirror-line').type(stream.newStream.type);
   });
