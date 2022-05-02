@@ -62,7 +62,7 @@ data:
         "Statement": [
           {{- range $i, $statement := $policy.statements }}
           {
-            "Effect": "{{ default "Allow" $statement.effect }}"{{ if $statement.actions }},
+            "Effect": "{{ default "Deny" $statement.effect }}"{{ if $statement.actions }},
             "Action": {{ toJson $statement.actions }}{{end}}{{ if $statement.resources }},
             "Resource": {{ toJson $statement.resources }}{{end}}
           }{{ if lt $i $statementsLength }},{{end }}

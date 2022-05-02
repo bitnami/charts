@@ -255,7 +255,7 @@ provisioning:
   ##       - resources:
   ##           - "arn:aws:s3:::my-bucket/*"
   ##         # Allowed values: "Allow" | "Deny"
-  ##         # Defaults to "Allow" if not specified
+  ##         # Defaults to "Deny" if not specified
   ##         effect: "Allow"
   ##         actions:
   ##           - "s3:AbortMultipartUpload"
