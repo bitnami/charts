@@ -48,13 +48,13 @@ it('allows a stream to be created and deployed', () => {
 });
 
 it('allows a task to be scheduled and destroyed', () => {
-  const CRON_EXPRESSION = '*/5 * * * *';
   const TASK_APPLICATION = 'Task application starters for Maven';
-  const TASK_TYPE = 'timestamp';
 
   importAnApplication(TASK_APPLICATION);
-  createATask(TASK_TYPE);
-  cy.get('[routerlink="tasks-jobs/tasks"]').click();
+  cy.fixture('schedules').then((schedule) => {
+    createATask(schedule.newSchedule.taskType);
+  });
+  cy.visit('dashboard/#/tasks-jobs/tasks');
   cy.contains('clr-dg-cell', 'UNKNOWN')
     .siblings('clr-dg-cell', 'test-task')
     .first()
@@ -83,8 +83,7 @@ it('allows a task to be scheduled and destroyed', () => {
 });
 
 it('allows importing a task from a file and destroying it ', () => {
-  cy.visit('/dashboard');
-  cy.get('[routerlink="manage/tools"]').click();
+  cy.visit('/dashboard/#/manage/tools');
   cy.contains('a', 'Import tasks from a JSON file').click();
   cy.get('input[type="file"]').selectFile(
     'cypress/fixtures/task-to-import.json',
