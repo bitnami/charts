@@ -1,0 +1,6 @@
+{
+  "newApplication": {
+    "streamApplicationType": "Stream application starters for Kafka/Maven",
+    "taskApplicationType": "Task application starters for Maven"
+  }
+}

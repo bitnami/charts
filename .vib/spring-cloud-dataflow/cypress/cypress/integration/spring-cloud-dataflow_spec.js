@@ -49,9 +49,9 @@ it('allows a stream to be created and deployed', () => {
 });
 
 it('allows a task to be scheduled and destroyed', () => {
-  const TASK_APPLICATION = 'Task application starters for Maven';
-
-  importAnApplication(TASK_APPLICATION);
+  cy.fixture('applications').then((application) => {
+    importAnApplication(application.newApplication.taskApplicationType);
+  });
   cy.fixture('schedules').then((schedule) => {
     createATask(schedule.newSchedule.taskType);
   });
@@ -105,11 +105,11 @@ it('allows importing a task from a file and destroying it ', () => {
 });
 
 it('allows unregistering of an application', () => {
-  const STREAM_APPLICATION = 'Stream application starters for Kafka/Maven';
-
-  importAnApplication(STREAM_APPLICATION);
+  cy.fixture('applications').then((application) => {
+    importAnApplication(application.newApplication.streamApplicationType);
+  });
   cy.get('clr-dg-cell').siblings('clr-dg-cell', 'PROCESSOR').first().click();
   cy.contains('button', 'Unregister Application').click();
   cy.contains('button', 'Unregister the application').click();
-  cy.get('.toast-container').should('contain', 'Successfully removed app');
+  cy.contains('Successfully removed app');
 });
