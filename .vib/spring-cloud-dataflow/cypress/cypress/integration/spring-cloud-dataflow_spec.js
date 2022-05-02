@@ -79,8 +79,8 @@ it('allows a task to be scheduled and destroyed', () => {
     .first()
     .click();
   cy.contains('button', 'Destroy task').click();
-  cy.contains('.btn-danger', 'Destroy the task').click();
-  cy.contains('.toast-container', '1 task definition(s) destroyed.');
+  cy.contains('button', 'Destroy the task').click();
+  cy.contains('1 task definition(s) destroyed.');
 });
 
 it('allows importing a task from a file and destroying it ', () => {
