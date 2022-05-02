@@ -56,10 +56,12 @@ it('allows a task to be scheduled and destroyed', () => {
     createATask(schedule.newSchedule.taskType);
   });
   cy.visit('dashboard/#/tasks-jobs/tasks');
-  cy.contains('clr-dg-cell', 'UNKNOWN')
-    .siblings('clr-dg-cell', 'test-task')
-    .first()
-    .click();
+  cy.fixture('tasks').then((task) => {
+    cy.contains('clr-dg-cell', 'UNKNOWN')
+      .siblings('clr-dg-cell', task.newTask.name)
+      .first()
+      .click();
+  });
   cy.contains('button', 'Schedule').click();
   cy.fixture('schedules').then((schedule) => {
     cy.get('input[name="example"]')
@@ -91,9 +93,9 @@ it('allows importing a task from a file and destroying it ', () => {
     { force: true }
   );
   cy.contains('button', 'Import').click();
-  cy.contains('.modal-body', '1 task(s) created');
+  cy.contains('1 task(s) created');
   cy.get('.close').click();
-  cy.get('[routerlink="tasks-jobs/tasks"]').click();
+  cy.visit('dashboard/#/tasks-jobs/tasks');
   cy.contains('button', 'Group Actions').click();
   cy.get('[aria-label="Select All"]').click({ force: true });
   cy.contains('button', 'Destroy task').click();
