@@ -148,6 +148,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.schedulerName`                                   | Name of the k8s scheduler (other than default) for Parse pods                                                            | `""`                 |
 | `server.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`                 |
 | `server.lifecycleHooks`                                  | for the Parse container(s) to automate configuration before or after startup                                             | `{}`                 |
+| `server.service.type`                                    | Kubernetes Service type                                                                                                  | `LoadBalancer`       |
+| `server.service.ports.http`                              | Service HTTP port (Dashboard)                                                                                            | `80`                 |
+| `server.service.nodePorts.http`                          | Kubernetes HTTP node port                                                                                                | `""`                 |
+| `server.service.clusterIP`                               | Service Cluster IP                                                                                                       | `""`                 |
+| `server.service.loadBalancerIP`                          | Service Load Balancer IP                                                                                                 | `""`                 |
+| `server.service.loadBalancerSourceRanges`                | Service Load Balancer sources                                                                                            | `[]`                 |
+| `server.service.externalTrafficPolicy`                   | Service external traffic policy                                                                                          | `Cluster`            |
+| `server.service.annotations`                             | Additional custom annotations for Service                                                                                | `{}`                 |
+| `server.service.extraPorts`                              | Extra ports to expose in Service (normally used with the `sidecars` value)                                               | `[]`                 |
+| `server.service.sessionAffinity`                         | Control where client requests go, to the same pod or round-robin                                                         | `None`               |
+| `server.service.sessionAffinityConfig`                   | Additional settings for the sessionAffinity                                                                              | `{}`                 |
 
 
 ### Dashboard Parameters
@@ -221,40 +232,40 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Parse container(s)                                      | `[]`                      |
 | `dashboard.sidecars`                                        | Add additional sidecar containers to the Parse pod(s)                                                                    | `{}`                      |
 | `dashboard.initContainers`                                  | Add additional init containers to the Parse pod(s)                                                                       | `{}`                      |
+| `dashboard.service.type`                                    | Kubernetes Service type                                                                                                  | `LoadBalancer`            |
+| `dashboard.service.ports.http`                              | Service HTTP port (Dashboard)                                                                                            | `80`                      |
+| `dashboard.service.nodePorts.http`                          | Kubernetes HTTP node port                                                                                                | `""`                      |
+| `dashboard.service.clusterIP`                               | Service Cluster IP                                                                                                       | `""`                      |
+| `dashboard.service.loadBalancerIP`                          | Service Load Balancer IP                                                                                                 | `""`                      |
+| `dashboard.service.loadBalancerSourceRanges`                | Service Load Balancer sources                                                                                            | `[]`                      |
+| `dashboard.service.externalTrafficPolicy`                   | Service external traffic policy                                                                                          | `Cluster`                 |
+| `dashboard.service.annotations`                             | Additional custom annotations for Service                                                                                | `{}`                      |
+| `dashboard.service.extraPorts`                              | Extra ports to expose in Service (normally used with the `sidecars` value)                                               | `[]`                      |
+| `dashboard.service.sessionAffinity`                         | Control where client requests go, to the same pod or round-robin                                                         | `None`                    |
+| `dashboard.service.sessionAffinityConfig`                   | Additional settings for the sessionAffinity                                                                              | `{}`                      |
 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                                                      | Value                    |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
-| `service.ports.http`               | Service HTTP port (Dashboard)                                                                                                    | `80`                     |
-| `service.nodePorts.http`           | Kubernetes HTTP node port                                                                                                        | `""`                     |
-| `service.clusterIP`                | Service Cluster IP                                                                                                               | `""`                     |
-| `service.loadBalancerIP`           | Service Load Balancer IP                                                                                                         | `""`                     |
-| `service.loadBalancerSourceRanges` | Service Load Balancer sources                                                                                                    | `[]`                     |
-| `service.externalTrafficPolicy`    | Service external traffic policy                                                                                                  | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for Service                                                                                        | `{}`                     |
-| `service.extraPorts`               | Extra ports to expose in Service (normally used with the `sidecars` value)                                                       | `[]`                     |
-| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.dashboard.hostname`       | Default host for the ingress resource                                                                                            | `parse-dashboard.local`  |
-| `ingress.dashboard.path`           | The Path to WordPress. You may need to set this to '/*' in order to use this with ALB ingress controllers.                       | `/`                      |
-| `ingress.dashboard.pathType`       | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.dashboard.extraHosts`     | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
-| `ingress.dashboard.extraPaths`     | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
-| `ingress.server.hostname`          | Default host for the ingress resource                                                                                            | `parse-server.local`     |
-| `ingress.server.path`              | Default path for the ingress resource*' in order to use this with ALB ingress controllers.                                       | `/`                      |
-| `ingress.server.pathType`          | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.server.extraHosts`        | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
-| `ingress.server.extraPaths`        | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| Name                           | Description                                                                                                                      | Value                    |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `ingress.enabled`              | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.ingressClassName`     | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.tls`                  | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.selfSigned`           | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.annotations`          | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.dashboard.hostname`   | Default host for the ingress resource                                                                                            | `parse-dashboard.local`  |
+| `ingress.dashboard.path`       | The Path to WordPress. You may need to set this to '/*' in order to use this with ALB ingress controllers.                       | `/`                      |
+| `ingress.dashboard.pathType`   | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.dashboard.extraHosts` | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.dashboard.extraPaths` | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.server.hostname`      | Default host for the ingress resource                                                                                            | `parse-server.local`     |
+| `ingress.server.path`          | Default path for the ingress resource*' in order to use this with ALB ingress controllers.                                       | `/`                      |
+| `ingress.server.pathType`      | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.server.extraHosts`    | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.server.extraPaths`    | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`             | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`              | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
 
 ### Persistence Parameters
