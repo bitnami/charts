@@ -153,6 +153,9 @@ spec:
             {{- if .Values.tls.extraDnsNames }}
             - -n {{ join "," .Values.tls.extraDnsNames }}
             {{- end }}
+          {{- if .Values.tls.resources }}
+          resources: {{- toYaml .Values.tls.resources | nindent 12 }}
+          {{- end }}
         {{- end }}
       {{- end }}
       containers:
