@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/parse"
         },
-        "runtime_parameters": "InNlcnZlciI6CiAgInNlcnZpY2UiCiAgICAicG9ydHMiOgogICAgICAiaHR0cCI6IDgwCiAgICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
+        "runtime_parameters": "InNlcnZlciI6CiAgInNlcnZpY2UiOgogICAgInBvcnRzIjoKICAgICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {

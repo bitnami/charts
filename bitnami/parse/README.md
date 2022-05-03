@@ -437,9 +437,9 @@ This major release renames several values in this chart and adds missing feature
 Affected values:
 
 - `server.port` is renamed to `server.containerPorts.http`
-- `service.port` is renamed to `service.ports.http`
+- `service.port` is renamed to `service.dashboard.ports.http`
 - `metrics.containerPort` is renamed to `metrics.containerPorts.metrics`
-- `service.nodePort` is renamed to `service.nodePorts.http`
+- `service.nodePort` is renamed to `service.dashboard.nodePorts.http`
 - `persistence.accessMode` is renamed to `persistence.accessModes` as list
 - `securityContext` is splitted into `podSecurityContext` and `containerSecurityContext` and moved into the different sections (`mongos`, `shardsvr.dataNode`, `shardsvr.arbiter`and `configsvr`):
   - `securityContext.fsGroup` is renamed to `XXX.podSecurityContext.fsGroup`

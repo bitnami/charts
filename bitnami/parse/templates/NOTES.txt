@@ -49,7 +49,7 @@ Parse Server
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
 
-  export SERVICE_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}"):{{ .Values.service.server.ports.http }}
+  export SERVICE_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}"):{{ .Values.server.service.ports.http }}
 
 {{- else if contains "ClusterIP"  .Values.server.service.type }}
 
