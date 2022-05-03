@@ -92,7 +92,7 @@ Refer to the [chart documentation for more information on each of these architec
 ### MongoDB(&reg;) parameters
 
 | Name                    | Description                                                                                                                     | Value                  |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| ----------------------- |---------------------------------------------------------------------------------------------------------------------------------| ---------------------- |
 | `image.registry`        | MongoDB(&reg;) image registry                                                                                                   | `docker.io`            |
 | `image.repository`      | MongoDB(&reg;) image registry                                                                                                   | `bitnami/mongodb`      |
 | `image.tag`             | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                       | `5.0.8-debian-10-r3`   |
@@ -125,6 +125,8 @@ Refer to the [chart documentation for more information on each of these architec
 | `tls.image.pullSecrets` | Init container TLS certs specify docker-registry secret names as an array                                                       | `[]`                   |
 | `tls.extraDnsNames`     | Add extra dns names to the CA, can solve x509 auth issue for pod clients                                                        | `[]`                   |
 | `tls.mode`              | Allows to set the tls mode which should be used when tls is enabled (options: `allowTLS`, `preferTLS`, `requireTLS`)            | `requireTLS`           |
+| `tls.resources.limits`  | Init container generate-tls-certs resource limits                                                                               | `{}`                   |
+| `tls.resources.requests`| Init container generate-tls-certs resource requests                                                                             | `{}`                   |
 | `hostAliases`           | Add deployment host aliases                                                                                                     | `[]`                   |
 | `replicaSetName`        | Name of the replica set (only when `architecture=replicaset`)                                                                   | `rs0`                  |
 | `replicaSetHostnames`   | Enable DNS hostnames in the replicaset config (only when `architecture=replicaset`)                                             | `true`                 |
