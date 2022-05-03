@@ -147,6 +147,7 @@ spec:
             {{- if .Values.tls.extraDnsNames }}
             - -n {{ join "," .Values.tls.extraDnsNames }}
             {{- end }}
+          resources: {{- toYaml .Values.tls.resources | nindent 12 }}
         {{- end }}
         {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.service.type "LoadBalancer") }}
         - name: auto-discovery
