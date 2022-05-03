@@ -3,7 +3,6 @@ file:
     mode: "0664"
     filetype: file
     exists: true
-    group: root
   /opt/bitnami/apache2/conf/bitnami/php.conf:
     mode: "0644"
     filetype: file
