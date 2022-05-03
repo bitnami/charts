@@ -58,6 +58,17 @@
               "password": "bitnami1"
             }
           }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/dokuwiki/goss"
+            },
+            "remote": {
+              "workload": "deploy-dokuwiki"
+            }
+          }
         }
       ]
     }
