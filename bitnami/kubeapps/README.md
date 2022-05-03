@@ -7,7 +7,7 @@ Kubeapps is a web-based UI for launching and managing applications on Kubernetes
 [Overview of Kubeapps](https://github.com/vmware-tanzu/kubeapps)
 
 
-                           
+
 ## TL;DR
 
 ```bash
@@ -891,7 +891,7 @@ helm install kubeapps bitnami/kubeapps \
   # ... other OIDC and ingress flags
   --set authProxy.oauthLoginURI="/subpath/oauth2/login" \
   --set authProxy.oauthLogoutURI="/subpath/oauth2/logout" \
-  --set authProxy.additionalFlags="{<other flags>,--proxy-prefix=/subpath/oauth2}"
+  --set authProxy.extraFlags="{<other flags>,--proxy-prefix=/subpath/oauth2}"
 ```
 
 ### Can Kubeapps install apps into more than one cluster?
