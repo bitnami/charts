@@ -1,7 +1,7 @@
 annotations:
   category: DeveloperTools
 apiVersion: v2
-appVersion: 5.2.0
+appVersion: 5.2.1
 dependencies:
   - name: mongodb
     repository: https://charts.bitnami.com/bitnami
