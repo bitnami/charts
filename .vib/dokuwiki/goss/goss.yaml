@@ -1,6 +1,6 @@
 file:
   /opt/bitnami/dokuwiki/data/dont-panic-if-you-see-this-in-your-logs-it-means-your-directory-permissions-are-correct.png:
-    mode: "0644"
+    mode: "0664"
     filetype: file
     exists: true
     group: root
@@ -15,4 +15,16 @@ command:
     exit-status: 0
     stdout:
       - 1001
+    stderr: []
+  php-test:
+    exec: php -version
+    exit-status: 0
+    stdout:
+      - "The PHP Group"
+    stderr: []
+  apache-test:
+    exec: /opt/bitnami/apache/bin/httpd -v
+    exit-status: 0
+    stdout:
+      - "Server version: Apache"
     stderr: []
