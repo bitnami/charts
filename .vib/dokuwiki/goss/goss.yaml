@@ -9,3 +9,10 @@ file:
     filetype: file
     exists: true
     group: root
+command:
+  user-id-test:
+    exec: id -u
+    exit-status: 0
+    stdout:
+      - 1001
+    stderr: []
