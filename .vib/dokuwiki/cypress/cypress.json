@@ -4,7 +4,6 @@
   "defaultCommandTimeout": 80000,
   "env": {
     "username": "superuser",
-    "password": "bitnami1",
-    "dokuwikiFullName": "Test Username"
+    "password": "bitnami1"
   }
 }
