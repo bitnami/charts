@@ -27,6 +27,10 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override node.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride Override namespace for resources
+## Useful when including Node as a chart dependency, so it can be released into a different namespace than the parent
+##
+namespaceOverride: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -124,11 +128,12 @@ externaldb:
 ## @param image.tag NodeJS image tag (immutable tags are recommended)
 ## @param image.pullPolicy NodeJS image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Set to true if you would like to see extra information on logs
 ##
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 16.15.0-debian-10-r0
+  tag: 16.15.0-debian-10-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -142,12 +147,27 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ##
+  debug: false
 ## @param replicaCount Specify the number of replicas for the application
 ##
 replicaCount: 1
-## @param applicationPort Specify the port where your application will be running
+## @param updateStrategy.type Strategy to use to replace existing pods.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## Example:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
 ##
-applicationPort: 3000
+updateStrategy:
+  type: RollingUpdate
+## @param containerPorts.http Specify the port where your application will be running
+##
+containerPorts:
+  http: 3000
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -198,8 +218,22 @@ podLabels: {}
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
 ##
 extraDeploy: []
+## Enable diagnostic mode in the deployment(s)/statefulset(s)
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  args:
+    - infinity
 ## Configure extra options for liveness probe
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.path Request path for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -217,7 +251,7 @@ livenessProbe:
   failureThreshold: 6
   successThreshold: 1
 ## Configure extra options for readiness probe
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ## @param readinessProbe.enabled Enable readinessProbe
 ## @param readinessProbe.path Request path for readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -247,10 +281,10 @@ readinessProbe:
 startupProbe:
   enabled: false
   path: '/'
-  initialDelaySeconds: 10
+  initialDelaySeconds: 5
+  periodSeconds: 3
   timeoutSeconds: 1
-  periodSeconds: 20
-  failureThreshold: 6
+  failureThreshold: 15
   successThreshold: 1
 ## @param customLivenessProbe Override default liveness probe
 ##
@@ -258,13 +292,25 @@ customLivenessProbe: {}
 ## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
-## @param customStartupProbe Custom startupProbe that overrides the default one
+## @param customStartupProbe Override default startup probe
 ##
 customStartupProbe: {}
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: {}
 ## @param priorityClassName Node priorityClassName
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
+## @param schedulerName Use an alternate scheduler, e.g. "stork".
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param terminationGracePeriodSeconds Seconds Airflow web pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
 ## @param lifecycleHooks lifecycleHooks for the Node container to automate configuration before or after startup.
 ##
 lifecycleHooks: {}
@@ -364,11 +410,12 @@ git:
   ## @param git.image.tag Git image tag (immutable tags are recommended)
   ## @param git.image.pullPolicy Git image pull policy
   ## @param git.image.pullSecrets Specify docker-registry secret names as an array
+  ## @param git.image.debug Set to true if you would like to see extra information on logs
   ##
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.36.0-debian-10-r8
+    tag: 2.36.0-debian-10-r14
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -382,6 +429,9 @@ git:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+    ## Set to true if you would like to see extra information on logs
+    ##
+    debug: false
   ## @param git.extraVolumeMounts Add extra volume mounts for the Git container
   ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
   ## E.g:
@@ -419,7 +469,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r408
+    tag: 10-debian-10-r414
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -459,9 +509,17 @@ persistence:
   ## @param persistence.enabled Enable persistence using PVC
   ##
   enabled: false
-  ## @param persistence.path Path to persisted directory
+  ## @param persistence.mountPath Path where the volume will be mount at.
   ##
-  path: /app/data
+  mountPath: /app/data
+  ## @param persistence.subPath Subdirectory of the volume to mount
+  ##
+  subPath: ""
+  ## @param persistence.existingClaim Name of an existing PVC to use
+  ##
+  existingClaim: ""
+  ## @param persistence.resourcePolicy Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
+  resourcePolicy: ""
   ## @param persistence.storageClass Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -470,12 +528,16 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
-  ## @param persistence.accessMode PVC Access Mode
+  ## @param persistence.accessModes PVC Access Modes
   ##
-  accessMode: ReadWriteOnce
+  accessModes:
+    - ReadWriteOnce
   ## @param persistence.size PVC Storage Request
   ##
   size: 1Gi
+  ## @param persistence.annotations Annotations for the PVC
+  ##
+  annotations: {}
 
 ## @section Traffic exposure parameters
 
@@ -485,9 +547,10 @@ service:
   ## @param service.type Kubernetes Service type
   ##
   type: ClusterIP
-  ## @param service.port Kubernetes Service port
+  ## @param service.ports.http Kubernetes Service port
   ##
-  port: 80
+  ports:
+    http: 80
   ## @param service.clusterIP Service Cluster IP
   ##
   clusterIP: ""
@@ -496,10 +559,20 @@ service:
   ## ref: https://kubernetes.io/docs/user-guide/services/
   ##
   sessionAffinity: 'None'
-  ## @param service.nodePort NodePort if Service type is `LoadBalancer` or `NodePort`
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+  ## @param service.nodePorts.http NodePort if Service type is `LoadBalancer` or `NodePort`
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
-  nodePort: ""
+  nodePorts:
+    http: ""
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
   ## @param service.loadBalancerIP LoadBalancer IP if Service type is `LoadBalancer`
   ## Set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -509,6 +582,10 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#aws-nlb-support
   ##
   loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy Enable client source IP preservation
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
   ## @param service.annotations Annotations for the Service
   ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -522,10 +599,12 @@ ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
-  ## certManager: false
-  ##
 
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
@@ -555,6 +634,9 @@ ingress:
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
   ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:

@@ -55,13 +55,6 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
-Return the proper Storage Class
-*/}}
-{{- define "node.storageClass" -}}
-{{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "node.validateValues" -}}
