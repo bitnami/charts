@@ -44,6 +44,20 @@
             "endpoint": "lb-dokuwiki-http",
             "app_protocol": "HTTP"
           }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/dokuwiki/cypress"
+            },
+            "endpoint": "lb-dokuwiki-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "superuser",
+              "password": "bitnami1"
+            }
+          }
         }
       ]
     }
