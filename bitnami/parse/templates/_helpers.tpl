@@ -56,10 +56,10 @@ Get the user defined LoadBalancerIP for this release.
 Note, returns 127.0.0.1 if using ClusterIP.
 */}}
 {{- define "parse.serviceIP" -}}
-{{- if eq .Values.service.type "ClusterIP" -}}
+{{- if eq .Values.dashboard.service.type "ClusterIP" -}}
 127.0.0.1
 {{- else -}}
-{{- default "" .Values.service.loadBalancerIP -}}
+{{- default "" .Values.dashboard.service.loadBalancerIP -}}
 {{- end -}}
 {{- end -}}
 
