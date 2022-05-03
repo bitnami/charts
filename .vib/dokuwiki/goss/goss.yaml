@@ -1,7 +1,7 @@
 file:
   /opt/bitnami/dokuwiki/data/:
-    mode: "0664"
-    filetype: directory
+    mode: "0777"
+    filetype: symlink
     exists: true
     group: root
   /opt/bitnami/apache2/conf/bitnami/php.conf:
