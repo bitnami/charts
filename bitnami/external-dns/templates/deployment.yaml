@@ -182,6 +182,9 @@ spec:
             - --aws-batch-change-size={{ .Values.aws.batchChangeSize }}
             {{- end }}
             {{- end }}
+            {{- if .Values.aws.zonesCacheDuration }}
+             - --aws-zones-cache-duration={{ .Values.aws.zonesCacheDuration }}
+            {{- end }}
             {{- range .Values.aws.zoneTags }}
             - --aws-zone-tags={{ . }}
             {{- end }}
