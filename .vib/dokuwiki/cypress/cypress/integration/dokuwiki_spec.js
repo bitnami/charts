@@ -40,8 +40,8 @@ it('allows the user to validate and modify configuration settings', () => {
     );
   });
 
-  cy.get('#config___allowdebug').click();
-  cy.contains('button[accesskey="s"]', 'Save').click();
+  cy.get('#config___allowdebug').scrollIntoView().click();
+  cy.contains('button', 'Save').click();
   cy.contains('Settings updated successfully.');
 });
 
