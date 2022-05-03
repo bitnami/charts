@@ -270,6 +270,11 @@ provisioning:
   ## users:
   ##   - username: test-username
   ##     password: test-password
+  ##     ## Instead of setting the plaintext password, a reference to an existing secret can be referenced
+  ##     ## from where the password is retrieved. If used, both keys `existingSecret` and `existingSecretKey`
+  ##     ## must be configured. Otherwise, `password` will be used as fallback.
+  ##     # existingSecret: centralized-minio-user-secrets
+  ##     # existingSecretKey: test-username
   ##     disabled: false
   ##     policies:
   ##       - readwrite
