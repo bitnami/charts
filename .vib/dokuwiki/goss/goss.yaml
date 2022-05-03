@@ -1,8 +1,9 @@
 file:
-  /opt/bitnami/dokuwiki/data/dont-panic-if-you-see-this-in-your-logs-it-means-your-directory-permissions-are-correct.png:
+  /opt/bitnami/dokuwiki/data/:
     mode: "0664"
-    filetype: file
+    filetype: directory
     exists: true
+    group: root
   /opt/bitnami/apache2/conf/bitnami/php.conf:
     mode: "0644"
     filetype: file
