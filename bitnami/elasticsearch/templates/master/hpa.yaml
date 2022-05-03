@@ -1,9 +1,9 @@
-{{- if .Values.master.autoscaling.enabled }}
+{{- if and (include "elasticsearch.master.enabled" .) .Values.master.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "elasticsearch.master.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: master
     {{- if .Values.commonLabels }}

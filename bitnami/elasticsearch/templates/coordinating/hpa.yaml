@@ -1,9 +1,9 @@
-{{- if .Values.coordinating.autoscaling.enabled }}
+{{- if and (include "elasticsearch.coordinating.enabled" .) .Values.coordinating.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "elasticsearch.coordinating.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: coordinating-only
     {{- if .Values.commonLabels }}
