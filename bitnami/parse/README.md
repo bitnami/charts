@@ -279,6 +279,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.existingClaim` | The name of an existing PVC to use for persistence                     | `""`                |
 | `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC | `{}`                |
 | `persistence.dataSource`    | Custom PVC data source                                                 | `{}`                |
+| `persistence.annotations`   | Persistent Volume Claim annotations                                    | `{}`                |
 
 
 ### Volume Permissions parameters
@@ -437,9 +438,9 @@ This major release renames several values in this chart and adds missing feature
 Affected values:
 
 - `server.port` is renamed to `server.containerPorts.http`
-- `service.port` is renamed to `service.dashboard.ports.http`
+- `service.port` is renamed to `dashboard.service.ports.http`
 - `metrics.containerPort` is renamed to `metrics.containerPorts.metrics`
-- `service.nodePort` is renamed to `service.dashboard.nodePorts.http`
+- `service.nodePort` is renamed to `dashboard.service.nodePorts.http`
 - `persistence.accessMode` is renamed to `persistence.accessModes` as list
 - `securityContext` is splitted into `podSecurityContext` and `containerSecurityContext` and moved into the different sections (`mongos`, `shardsvr.dataNode`, `shardsvr.arbiter`and `configsvr`):
   - `securityContext.fsGroup` is renamed to `XXX.podSecurityContext.fsGroup`

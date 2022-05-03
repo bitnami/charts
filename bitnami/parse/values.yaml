@@ -853,6 +853,9 @@ persistence:
   ## @param persistence.dataSource Custom PVC data source
   ##
   dataSource: {}
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
 
 ## @section Volume Permissions parameters
 
