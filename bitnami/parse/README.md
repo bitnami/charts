@@ -149,7 +149,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`                 |
 | `server.lifecycleHooks`                                  | for the Parse container(s) to automate configuration before or after startup                                             | `{}`                 |
 | `server.service.type`                                    | Kubernetes Service type                                                                                                  | `LoadBalancer`       |
-| `server.service.ports.http`                              | Service HTTP port (Dashboard)                                                                                            | `80`                 |
+| `server.service.ports.http`                              | Service HTTP port (Dashboard)                                                                                            | `1337`               |
 | `server.service.nodePorts.http`                          | Kubernetes HTTP node port                                                                                                | `""`                 |
 | `server.service.clusterIP`                               | Service Cluster IP                                                                                                       | `""`                 |
 | `server.service.loadBalancerIP`                          | Service Load Balancer IP                                                                                                 | `""`                 |

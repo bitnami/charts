@@ -341,7 +341,7 @@ server:
     ## @param server.service.ports.http Service HTTP port (Dashboard)
     ##
     ports:
-      http: 80
+      http: 1337
     ## @param server.service.nodePorts.http Kubernetes HTTP node port
     ## nodePorts:
     ##   http: <to set explicitly, choose port between 30000-32767>
