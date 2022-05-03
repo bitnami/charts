@@ -3,10 +3,10 @@ import { random } from './utils';
 
 it('allows login and logout', () => {
   cy.visit('/');
-  cy.contains(Cypress.env('dokuwikiFullName'));
   cy.login();
   cy.get('.error').should('not.exist');
-  cy.contains('Log Out');
+  cy.contains('Log Out').click();
+  cy.get('#login');
 });
 
 it('allows the user to update profile', () => {
@@ -25,10 +25,6 @@ it('allows the user to update profile', () => {
 it('allows the user to validate and modify configuration settings', () => {
   cy.login();
   cy.visit('start?do=admin&page=config');
-  cy.get('#config___title').should(
-    'contain.value',
-    Cypress.env('dokuwikiFullName')
-  );
   cy.fixture('settings').then((setting) => {
     cy.get('#config___savedir').should(
       'contain.value',
@@ -39,10 +35,18 @@ it('allows the user to validate and modify configuration settings', () => {
       setting.newSetting.directoryCreationMode
     );
   });
-
-  cy.get('#config___allowdebug').scrollIntoView().click();
-  cy.contains('button', 'Save').click();
-  cy.contains('Settings updated successfully.');
+  cy.fixture('settings').then((setting) => {
+    cy.get('#config___title')
+      .scrollIntoView()
+      .clear()
+      .type(setting.newSetting.newDokuWikiFullName);
+    cy.contains('button', 'Save').click();
+    cy.contains('Settings updated successfully.');
+    cy.get('.headings').should(
+      'contain',
+      setting.newSetting.newDokuWikiFullName
+    );
+  });
 });
 
 it('allows adding users', () => {
