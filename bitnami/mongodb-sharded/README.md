@@ -7,7 +7,7 @@ MongoDB(R) is an open source NoSQL database that uses JSON for data storage. Mon
 [Overview of MongoDB&reg; Sharded](http://www.mongodb.org)
 
 Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB(R) is run and maintained by MongoDB, which is a completely separate project from Bitnami.
-                           
+
 ## TL;DR
 
 ```bash
@@ -651,7 +651,7 @@ Affected values:
 
 - Authentication parameters are reorganized under the `auth.*` parameter:
   - `usePassword` is renamed to `auth.enabled`.
-  - `mongodbRootPassword`, `mongodbUsername`, `mongodbPassword`, `mongodbDatabase`, `replicaSetKey`, `existingSecret` and `usePasswordFile` are now `auth.rootPassword`, `auth.username`, `auth.password`, `auth.database`, `auth.replicaSetKey`, `auth.existingSecret` and `auth.usePasswordFile` respectively.
+  - `mongodbRootPassword`, `replicaSetKey`, `existingSecret` and `usePasswordFile` are now `auth.rootPassword`, `auth.replicaSetKey`, `auth.existingSecret` and `auth.usePasswordFile` respectively.
 - `common.containerPorts.mongo` is renamed to `common.containerPorts.mongodb`
 - `pdb.enabled` is renamed to `pdb.create`
 - `XXX.replicas` is renamed to `XXX.replicaCount`

@@ -147,19 +147,6 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 
 {{/*
-Validate values of MongoDB&reg; - both auth.username and auth.database are necessary
-to create a custom user and database during 1st initialization
-*/}}
-{{- define "mongodb-sharded.validateValues.mongodbCustomDatabase" -}}
-{{- if or (and .Values.auth.username (not .Values.auth.database)) (and (not .Values.auth.username) .Values.auth.database) }}
-mongodb: auth.username, auth.database
-    Both auth.username and auth.database must be provided to create
-    a custom user and database during 1st initialization.
-    Please set both of them (--set auth.username="xxxx",auth.database="yyyy")
-{{- end -}}
-{{- end -}}
-
-{{/*
 Validate values of MongoDB&reg; - If using an external config server, then both the host and the replicaset name should be set.
 */}}
 {{- define "mongodb-sharded.validateValues.externalCfgServer" -}}
