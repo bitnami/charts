@@ -2,7 +2,8 @@
 apiVersion: servicecatalog.k8s.io/v1beta1
 kind: ServiceBinding
 metadata:
-  name: {{ template "common.names.fullname" . }}-binding
+  name: {{ printf "%s-binding" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -13,5 +14,5 @@ metadata:
 spec:
   instanceRef:
     name: {{ .Values.externaldb.broker.serviceInstanceName }}
-  secretName: {{ template "node.secretName" . }}
+  secretName: {{ include "node.secretName" . }}
 {{- end }}

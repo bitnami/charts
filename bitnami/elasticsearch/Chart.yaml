@@ -1,12 +1,12 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 7.17.3
+appVersion: 8.2.0
 dependencies:
   - condition: global.kibanaEnabled
     name: kibana
     repository: https://charts.bitnami.com/bitnami
-    version: 9.x.x
+    version: 10.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -25,4 +25,4 @@ name: elasticsearch
 sources:
   - https://github.com/bitnami/bitnami-docker-elasticsearch
   - https://www.elastic.co/products/elasticsearch
-version: 17.9.29
+version: 18.0.0
