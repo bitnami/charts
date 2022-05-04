@@ -131,7 +131,6 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "mongodb-sharded.validateValues" -}}
   {{- $messages := list -}}
-  {{- $messages := append $messages (include "mongodb-sharded.validateValues.mongodbCustomDatabase" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.externalCfgServer" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.replicaCount" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.clusterIPListLength" .) -}}
