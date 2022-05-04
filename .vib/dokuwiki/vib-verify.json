@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/dokuwiki"
         },
-        "runtime_parameters": "ZG9rdXdpa2lVc2VybmFtZTogc3VwZXJ1c2VyCmRva3V3aWtpUGFzc3dvcmQ6IGJpdG5hbWkxCmRva3V3aWtpRW1haWw6IHRlc3RAZW1haWwuY29tIApkb2t1d2lraUZ1bGxOYW1lOiBUZXN0IFVzZXJuYW1lCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MA==",
+        "runtime_parameters": "ZG9rdXdpa2lVc2VybmFtZTogc3VwZXJ1c2VyCmRva3V3aWtpUGFzc3dvcmQ6IGJpdG5hbWkxCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MA==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
