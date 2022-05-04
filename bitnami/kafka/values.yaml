@@ -1616,6 +1616,6 @@ zookeeper:
 ## All of these values are only used if `zookeeper.enabled=false`
 ##
 externalZookeeper:
-  ## @param externalZookeeper.servers List of external zookeeper servers to use
+  ## @param externalZookeeper.servers List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'.
   ##
   servers: []
