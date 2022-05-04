@@ -2,7 +2,6 @@
 import { random } from './utils';
 
 it('allows login and logout', () => {
-  cy.visit('/');
   cy.login();
   cy.get('.error').should('not.exist');
   cy.contains('Log Out').click();
