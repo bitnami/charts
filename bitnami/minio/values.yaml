@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2022.4.30-debian-10-r0
+  tag: 2022.5.3-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -80,7 +80,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2022.4.26-debian-10-r4
+  tag: 2022.4.26-debian-10-r7
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
@@ -240,6 +240,30 @@ provisioning:
     ##    cpu: 200m
     ##    memory: 128Mi
     requests: {}
+  ## @param provisioning.policies MinIO&reg; policies provisioning
+  ## https://docs.min.io/docs/minio-admin-complete-guide.html#policy
+  ## e.g.
+  ## policies:
+  ##   - name: custom-bucket-specific-policy
+  ##     statements:
+  ##       - resources:
+  ##           - "arn:aws:s3:::my-bucket"
+  ##         actions:
+  ##           - "s3:GetBucketLocation"
+  ##           - "s3:ListBucket"
+  ##           - "s3:ListBucketMultipartUploads"
+  ##       - resources:
+  ##           - "arn:aws:s3:::my-bucket/*"
+  ##         # Allowed values: "Allow" | "Deny"
+  ##         # Defaults to "Deny" if not specified
+  ##         effect: "Allow"
+  ##         actions:
+  ##           - "s3:AbortMultipartUpload"
+  ##           - "s3:DeleteObject"
+  ##           - "s3:GetObject"
+  ##           - "s3:ListMultipartUploadParts"
+  ##           - "s3:PutObject"
+  policies: []
   ## @param provisioning.users MinIO&reg; users provisioning
   ## https://docs.min.io/docs/minio-admin-complete-guide.html#user
   ## e.g.
@@ -816,7 +840,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r412
+    tag: 10-debian-10-r415
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -2,12 +2,12 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
-{{- if contains .Values.coordinating.service.type "LoadBalancer" }}
+{{- if contains .Values.service.type "LoadBalancer" }}
 
 -------------------------------------------------------------------------------
  WARNING
 
-    By specifying "coordinating.service.type=LoadBalancer" you have most likely
+    By specifying "service.type=LoadBalancer" you have most likely
     exposed the Elasticsearch service externally.
 
     Please note that Elasticsearch does not implement a authentication
@@ -27,7 +27,7 @@ APP VERSION: {{ .Chart.AppVersion }}
     To check whether the host machine meets the requirements, run the command
     below:
 
-      kubectl logs --namespace {{ .Release.Namespace }} $(kubectl get --namespace {{ .Release.Namespace }} \
+      kubectl logs --namespace {{ include "common.names.namespace" . }} $(kubectl get --namespace {{ include "common.names.namespace" . }} \
         pods -l app={{ template "common.names.name" . }},role=master -o jsonpath='{.items[0].metadata.name}') \
 	elasticsearch
 
@@ -39,7 +39,7 @@ APP VERSION: {{ .Chart.AppVersion }}
     As an alternative, you can specify "sysctlImage.enabled=true" to use a
     privileged initContainer to change those settings in the Kernel:
 
-      helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/elasticsearch --set sysctlImage.enabled=true
+      helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} bitnami/elasticsearch --set sysctlImage.enabled=true
 
     Note that this requires the ability to run privileged containers, which is likely not
     the case on many secure clusters. To cover this use case, you can also set some parameters
@@ -79,11 +79,11 @@ The chart has been deployed in diagnostic mode. All probes have been disabled an
 
 Get the list of pods by executing:
 
-  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+  kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
 
 Access the pod you want to debug by executing
 
-  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+  kubectl exec --namespace {{ include "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
 
 In order to replicate the container startup scripts execute this command:
 
@@ -98,29 +98,29 @@ In order to replicate the container startup scripts execute this command:
   The Jobs will not be removed automagically when deleting this Helm chart.
   To remove these jobs, run the following:
 
-    kubectl --namespace {{ .Release.Namespace }} delete job -l app={{ template "common.names.name" . }},role=curator
+    kubectl --namespace {{ include "common.names.namespace" . }} delete job -l app={{ template "common.names.name" . }},role=curator
 
 {{- end }}
 
-  Elasticsearch can be accessed within the cluster on port {{ .Values.coordinating.service.port }} at {{ template "elasticsearch.coordinating.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+  Elasticsearch can be accessed within the cluster on port {{ include "elasticsearch.service.ports.restAPI" . }} at {{ template "elasticsearch.service.name" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
 
   To access from outside the cluster execute the following commands:
 
-{{- if contains "NodePort" .Values.coordinating.service.type }}
+{{- if contains "NodePort" .Values.service.type }}
 
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "elasticsearch.coordinating.fullname" . }})
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "elasticsearch.service.name" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
     curl http://$NODE_IP:$NODE_PORT/
-{{- else if contains "LoadBalancer" .Values.coordinating.service.type }}
+{{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "elasticsearch.coordinating.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ template "elasticsearch.service.name" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "elasticsearch.coordinating.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-    curl http://$SERVICE_IP:{{ .Values.coordinating.service.port }}/
-{{- else if contains "ClusterIP"  .Values.coordinating.service.type }}
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ template "elasticsearch.service.name" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    curl http://$SERVICE_IP:{{ include "elasticsearch.service.ports.restAPI" . }}/
+{{- else if contains "ClusterIP"  .Values.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "elasticsearch.coordinating.fullname" . }} {{ .Values.coordinating.service.port }}:9200 &
+    kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ template "elasticsearch.service.name" . }} {{ include "elasticsearch.service.ports.restAPI" . }}:9200 &
     curl http://127.0.0.1:9200/
 {{- end }}
 
