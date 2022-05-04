@@ -2,7 +2,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "rmqco.msgTopologyOperator.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: messaging-topology-operator
     app.kubernetes.io/part-of: rabbitmq
@@ -63,9 +63,12 @@ spec:
       {{- if .Values.msgTopologyOperator.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.msgTopologyOperator.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.msgTopologyOperator.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.msgTopologyOperator.terminationGracePeriodSeconds }}
+      {{- end }}
       initContainers:
         {{- if .Values.msgTopologyOperator.initContainers }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.initContainers "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: rabbitmq-cluster-operator
@@ -106,44 +109,38 @@ spec:
           {{- if .Values.msgTopologyOperator.resources }}
           resources: {{- toYaml .Values.msgTopologyOperator.resources | nindent 12 }}
           {{- end }}
+          ports:
+            - name: http-webhook
+              containerPort: 9443
+              protocol: TCP
+            - name: http-metrics
+              containerPort: {{ .Values.msgTopologyOperator.containerPorts.metrics }}
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.msgTopologyOperator.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.msgTopologyOperator.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: http-metrics
-            initialDelaySeconds: {{ .Values.msgTopologyOperator.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.msgTopologyOperator.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.msgTopologyOperator.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.msgTopologyOperator.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.msgTopologyOperator.livenessProbe.failureThreshold }}
           {{- else if .Values.msgTopologyOperator.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.msgTopologyOperator.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.msgTopologyOperator.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: http-metrics
-            initialDelaySeconds: {{ .Values.msgTopologyOperator.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.msgTopologyOperator.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.msgTopologyOperator.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.msgTopologyOperator.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.msgTopologyOperator.readinessProbe.failureThreshold }}
           {{- else if .Values.msgTopologyOperator.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.msgTopologyOperator.startupProbe.enabled }}
-          startupProbe:
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.msgTopologyOperator.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: http-metrics
-            initialDelaySeconds: {{ .Values.msgTopologyOperator.startupProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.msgTopologyOperator.startupProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.msgTopologyOperator.startupProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.msgTopologyOperator.startupProbe.successThreshold }}
-            failureThreshold: {{ .Values.msgTopologyOperator.startupProbe.failureThreshold }}
           {{- else if .Values.msgTopologyOperator.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.msgTopologyOperator.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.lifecycleHooks "context" $) | nindent 12 }}
@@ -155,13 +152,6 @@ spec:
             {{- if .Values.msgTopologyOperator.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-          ports:
-            - name: http-webhook
-              containerPort: 9443
-              protocol: TCP
-            - name: http-metrics
-              containerPort: {{ .Values.msgTopologyOperator.containerPorts.metrics }}
-              protocol: TCP
         {{- if .Values.msgTopologyOperator.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.msgTopologyOperator.sidecars "context" $) | nindent 8 }}
         {{- end }}

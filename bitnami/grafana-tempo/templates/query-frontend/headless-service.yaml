@@ -25,5 +25,8 @@ spec:
       port: {{ .Values.queryFrontend.service.ports.grpc }}
       targetPort: grpc
       protocol: TCP
+    {{- if .Values.queryFrontend.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: query-frontend

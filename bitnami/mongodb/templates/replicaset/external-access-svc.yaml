@@ -10,7 +10,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $fullName }}-{{ $i }}-external
+  name: {{ printf "%s-%d-external" $fullName $i }}
   namespace: {{ include "mongodb.namespace" $ }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     app.kubernetes.io/component: mongodb
@@ -18,8 +18,14 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" $root.Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     pod: {{ $targetPod }}
-  {{- if $root.Values.externalAccess.service.annotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $root.Values.externalAccess.service.annotations "context" $) | nindent 4 }}
+  {{- if or $root.Values.externalAccess.service.annotations $root.Values.commonAnnotations }}
+  annotations:
+    {{- if $root.Values.externalAccess.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $root.Values.externalAccess.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   type: {{ $root.Values.externalAccess.service.type }}
@@ -31,14 +37,29 @@ spec:
   loadBalancerSourceRanges: {{- toYaml $root.Values.externalAccess.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   {{- end }}
+  {{- if (or (eq $root.Values.externalAccess.service.type "LoadBalancer") (eq $root.Values.externalAccess.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ $root.Values.externalAccess.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if $root.Values.externalAccess.service.sessionAffinity }}
+  sessionAffinity: {{ $root.Values.externalAccess.service.sessionAffinity }}
+  {{- end }}
+  {{- if $root.Values.externalAccess.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" $root.Values.externalAccess.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
   publishNotReadyAddresses: true
   ports:
-    - name: {{ $root.Values.service.portName }}
-      port: {{ $root.Values.externalAccess.service.port }}
+    - name: {{ $root.Values.externalAccess.service.portName | quote }}
+      port: {{ $root.Values.externalAccess.service.ports.mongodb }}
       {{- if not (empty $root.Values.externalAccess.service.nodePorts) }}
-      nodePort: {{ index $root.Values.externalAccess.service.nodePorts $i }}
+      {{- $nodePort := index $root.Values.externalAccess.service.nodePorts $i -}}
+      nodePort: {{ ternary (get $nodePort "mongodb") $nodePort (typeIs "dict" $nodePort)}}
+      {{- else }}
+      nodePort: null
       {{- end }}
       targetPort: mongodb
+    {{- if $root.Values.externalAccess.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" $root.Values.externalAccess.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" $ | nindent 4 }}
     app.kubernetes.io/component: mongodb
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}

@@ -1,12 +1,11 @@
 {{- if .Values.provisioning.enabled }}
 {{- $fullname := printf "%s-provisioning" (include "common.names.fullname" .) }}
-{{- $releaseNamespace := .Release.Namespace }}
 {{- $minioAlias := "provisioning" }}
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ $fullname }}
-  namespace: {{ $releaseNamespace  }}
+  namespace: {{ .Release.Namespace | quote  }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: minio-provisioning
     {{- if .Values.commonLabels }}
@@ -93,6 +92,10 @@ spec:
 
               mc admin service restart {{ $minioAlias }};
 
+              {{- range $policy := .Values.provisioning.policies }}
+              mc admin policy add {{ $minioAlias }} {{ $policy.name }} /etc/ilm/policy-{{ $policy.name }}.json;
+              {{- end }}
+
               {{- range $user := .Values.provisioning.users }}
               mc admin user add {{ $minioAlias }} {{ $user.username }} {{ $user.password }};
               {{- if $user.setPolicies }}
@@ -127,7 +130,7 @@ spec:
               mc mb {{ $target }} --ignore-existing {{ $region }} {{ $withLock }};
 
               {{- if $bucket.lifecycle }}
-              mc ilm import {{ $minioAlias }}/{{ $bucket.name }} < /etc/ilm/{{ $bucket.name }}.json;
+              mc ilm import {{ $minioAlias }}/{{ $bucket.name }} < /etc/ilm/bucket-{{ $bucket.name }}.json;
               {{- end }}
 
               {{- with $bucket.quota }}
@@ -214,7 +217,7 @@ spec:
             {{- end }}
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
-      {{- end }}            
+      {{- end }}
       volumes:
         {{- if .Values.provisioning.enabled }}
         - name: minio-provisioning

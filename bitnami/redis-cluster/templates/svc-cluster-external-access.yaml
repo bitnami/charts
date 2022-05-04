@@ -30,6 +30,9 @@ spec:
   {{- if $root.Values.cluster.externalAccess.service.loadBalancerIP }}
   loadBalancerIP: {{ index $root.Values.cluster.externalAccess.service.loadBalancerIP $i }}
   {{- end }}
+  {{- if and (eq $root.Values.cluster.externalAccess.service.type "LoadBalancer") $root.Values.cluster.externalAccess.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml $root.Values.cluster.externalAccess.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
   ports:
     - name: tcp-redis
       port: {{ $root.Values.cluster.externalAccess.service.port }}

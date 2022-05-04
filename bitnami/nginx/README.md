@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------------- | ---------------------- |
 | `image.registry`     | NGINX image registry                                                 | `docker.io`            |
 | `image.repository`   | NGINX image repository                                               | `bitnami/nginx`        |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.6-debian-10-r65` |
+| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.6-debian-10-r91` |
 | `image.pullPolicy`   | NGINX image pull policy                                              | `IfNotPresent`         |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                   |
 | `image.debug`        | Set to true if you would like to see extra information on logs       | `false`                |
@@ -122,6 +122,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.https`                  | Sets https port inside NGINX container                                                    | `""`            |
 | `resources.limits`                      | The resources limits for the NGINX container                                              | `{}`            |
 | `resources.requests`                    | The requested resources for the NGINX container                                           | `{}`            |
+| `lifecycleHooks`                        | Optional lifecycleHooks for the NGINX container                                           | `{}`            |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`          |
 | `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `30`            |
 | `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`            |
@@ -157,27 +158,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Custom NGINX application parameters
 
-| Name                                       | Description                                                                                       | Value                  |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------- | ---------------------- |
-| `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                               | `false`                |
-| `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                | `docker.io`            |
-| `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                              | `bitnami/git`          |
-| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.35.1-debian-10-r64` |
-| `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                             | `IfNotPresent`         |
-| `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                  | `[]`                   |
-| `cloneStaticSiteFromGit.repository`        | Git Repository to clone static content from                                                       | `""`                   |
-| `cloneStaticSiteFromGit.branch`            | Git branch to checkout                                                                            | `""`                   |
-| `cloneStaticSiteFromGit.interval`          | Interval for sidecar container pull from the Git repository                                       | `60`                   |
-| `cloneStaticSiteFromGit.gitClone.command`  | Override default container command for git-clone-repository                                       | `[]`                   |
-| `cloneStaticSiteFromGit.gitClone.args`     | Override default container args for git-clone-repository                                          | `[]`                   |
-| `cloneStaticSiteFromGit.gitSync.command`   | Override default container command for git-repo-syncer                                            | `[]`                   |
-| `cloneStaticSiteFromGit.gitSync.args`      | Override default container args for git-repo-syncer                                               | `[]`                   |
-| `cloneStaticSiteFromGit.extraEnvVars`      | Additional environment variables to set for the in the containers that clone static site from git | `[]`                   |
-| `cloneStaticSiteFromGit.extraVolumeMounts` | Add extra volume mounts for the Git containers                                                    | `[]`                   |
-| `serverBlock`                              | Custom server block to be added to NGINX configuration                                            | `""`                   |
-| `existingServerBlockConfigmap`             | ConfigMap with custom server block to be added to NGINX configuration                             | `""`                   |
-| `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static site content                                    | `""`                   |
-| `staticSitePVC`                            | Name of existing PVC with the server static site content                                          | `""`                   |
+| Name                                       | Description                                                                                       | Value                 |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------- | --------------------- |
+| `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                               | `false`               |
+| `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                | `docker.io`           |
+| `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                              | `bitnami/git`         |
+| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                    | `2.36.0-debian-10-r9` |
+| `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                             | `IfNotPresent`        |
+| `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                  | `[]`                  |
+| `cloneStaticSiteFromGit.repository`        | Git Repository to clone static content from                                                       | `""`                  |
+| `cloneStaticSiteFromGit.branch`            | Git branch to checkout                                                                            | `""`                  |
+| `cloneStaticSiteFromGit.interval`          | Interval for sidecar container pull from the Git repository                                       | `60`                  |
+| `cloneStaticSiteFromGit.gitClone.command`  | Override default container command for git-clone-repository                                       | `[]`                  |
+| `cloneStaticSiteFromGit.gitClone.args`     | Override default container args for git-clone-repository                                          | `[]`                  |
+| `cloneStaticSiteFromGit.gitSync.command`   | Override default container command for git-repo-syncer                                            | `[]`                  |
+| `cloneStaticSiteFromGit.gitSync.args`      | Override default container args for git-repo-syncer                                               | `[]`                  |
+| `cloneStaticSiteFromGit.extraEnvVars`      | Additional environment variables to set for the in the containers that clone static site from git | `[]`                  |
+| `cloneStaticSiteFromGit.extraVolumeMounts` | Add extra volume mounts for the Git containers                                                    | `[]`                  |
+| `serverBlock`                              | Custom server block to be added to NGINX configuration                                            | `""`                  |
+| `existingServerBlockConfigmap`             | ConfigMap with custom server block to be added to NGINX configuration                             | `""`                  |
+| `staticSiteConfigmap`                      | Name of existing ConfigMap with the server static site content                                    | `""`                  |
+| `staticSitePVC`                            | Name of existing PVC with the server static site content                                          | `""`                  |
 
 
 ### Traffic Exposure parameters
@@ -198,6 +199,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.hostname`              | Default host for the ingress resource                                                                                            | `nginx.local`            |
 | `ingress.path`                  | The Path to Nginx. You may need to set this to '/*' in order to use this with ALB ingress controllers.                           | `/`                      |
 | `ingress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.ingressClassName`      | Set the ingerssClassName on the ingress record for k8s 1.18+                                                                     | `""`                     |
 | `ingress.tls`                   | Create TLS Secret                                                                                                                | `false`                  |
 | `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
 | `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
@@ -221,7 +223,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                                                                | `""`                     |
 | `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                                                                  | `docker.io`              |
 | `metrics.image.repository`                 | NGINX Prometheus exporter image repository                                                                                                | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.10.0-debian-10-r98`   |
+| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.10.0-debian-10-r123`  |
 | `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                          | `[]`                     |
 | `metrics.podAnnotations`                   | Additional annotations for NGINX Prometheus exporter pod(s)                                                                               | `{}`                     |
@@ -356,6 +358,12 @@ Find more information about how to deal with common errors related to Bitnami's 
 ### To 10.0.0
 
 This major release no longer uses the bitnami/nginx-ldap-auth-daemon container as a dependency since its upstream project is not actively maintained.
+
+*2022-04-12 edit*:
+
+Bitnami���������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������s NGINX Helm chart from version 5.6.0 to 9.9.9 includes a `ldapDaemon.enabled` option **disabled by default** that allows to configure it with the [bitnami-docker-nginx-ldap-auth-daemon](https://github.com/bitnami/bitnami-docker-nginx-ldap-auth-daemon) following [NGINX���������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������������s reference implementation](https://www.nginx.com/blog/nginx-plus-authenticate-users/).
+
+On 9 April 2022, security vulnerabilities in the [NGINX LDAP reference implementation](https://github.com/nginxinc/nginx-ldap-auth) were publicly shared. **Although the deprecation of this container from the Bitnami catalog was not related to this security issue, [here](https://docs.bitnami.com/general/security/security-2022-04-12/) you can find more information from the Bitnami security team.**
 
 ### To 8.0.0
 

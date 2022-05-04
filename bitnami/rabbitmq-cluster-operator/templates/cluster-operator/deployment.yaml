@@ -2,7 +2,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "rmqco.clusterOperator.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: rabbitmq-operator
     app.kubernetes.io/part-of: rabbitmq
@@ -63,9 +63,12 @@ spec:
       {{- if .Values.clusterOperator.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.clusterOperator.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.clusterOperator.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.clusterOperator.terminationGracePeriodSeconds }}
+      {{- end }}
       initContainers:
         {{- if .Values.clusterOperator.initContainers }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.initContainers "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: rabbitmq-cluster-operator
@@ -114,44 +117,31 @@ spec:
           {{- if .Values.clusterOperator.resources }}
           resources: {{- toYaml .Values.clusterOperator.resources | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.clusterOperator.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.clusterOperator.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: http
-            initialDelaySeconds: {{ .Values.clusterOperator.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.clusterOperator.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.clusterOperator.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.clusterOperator.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.clusterOperator.livenessProbe.failureThreshold }}
           {{- else if .Values.clusterOperator.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.clusterOperator.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.clusterOperator.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: http
-            initialDelaySeconds: {{ .Values.clusterOperator.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.clusterOperator.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.clusterOperator.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.clusterOperator.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.clusterOperator.readinessProbe.failureThreshold }}
           {{- else if .Values.clusterOperator.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.clusterOperator.startupProbe.enabled }}
-          startupProbe:
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.clusterOperator.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: http
-            initialDelaySeconds: {{ .Values.clusterOperator.startupProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.clusterOperator.startupProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.clusterOperator.startupProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.clusterOperator.startupProbe.successThreshold }}
-            failureThreshold: {{ .Values.clusterOperator.startupProbe.failureThreshold }}
           {{- else if .Values.clusterOperator.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.clusterOperator.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.lifecycleHooks "context" $) | nindent 12 }}

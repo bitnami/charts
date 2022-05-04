@@ -2,6 +2,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "postgresql-ha.postgresql" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: postgresql
     {{- if .Values.postgresql.labels }}
@@ -14,14 +15,10 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  serviceName: {{ include "postgresql-ha.postgresql" . }}-headless
   replicas: {{ .Values.postgresql.replicaCount }}
-  updateStrategy:
-    type: {{ .Values.postgresql.updateStrategyType }}
-    {{- if (eq "Recreate" .Values.postgresql.updateStrategyType) }}
-    rollingUpdate: null
-    {{- end }}
   podManagementPolicy: Parallel
+  serviceName: {{ printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
+  updateStrategy: {{- toYaml .Values.postgresql.updateStrategy | nindent 4 }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: postgresql
@@ -42,7 +39,7 @@ spec:
       {{- end }}
       {{- end }}
     spec:
-      {{- include "postgresql-ha.imagePullSecrets" . | nindent 6 }}
+      {{- include "postgresql-ha.image.pullSecrets" . | nindent 6 }}
       {{- if .Values.postgresql.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -60,40 +57,46 @@ spec:
       {{- if .Values.postgresql.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.tolerations "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.postgresql.priorityClassName }}
-      priorityClassName: {{ .Values.postgresql.priorityClassName }}
+      {{- if .Values.postgresql.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
-      {{- if .Values.postgresql.securityContext.enabled }}
-      securityContext: {{- omit .Values.postgresql.securityContext "enabled" | toYaml | nindent 8 }}
+      {{- if .Values.postgresql.priorityClassName }}
+      priorityClassName: {{ .Values.postgresql.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.postgresql.schedulerName }}
+      schedulerName: {{ .Values.postgresql.schedulerName }}
+      {{- end }}
+      {{- if .Values.postgresql.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.postgresql.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.postgresql.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.postgresql.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.serviceAccount.enabled }}
       serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name }}
-      {{- end }}
-      {{- if .Values.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       hostNetwork: {{ .Values.postgresql.hostNetwork }}
       hostIPC: {{ .Values.postgresql.hostIPC }}
       initContainers:
       {{- if .Values.postgresql.tls.enabled }}
         - name: init-chmod-tls
-          image: {{ template "postgresql-ha.volumePermissionsImage" . }}
-          imagePullPolicy: {{ .Values.volumePermissionsImage.pullPolicy | quote }}
+          image: {{ template "postgresql-ha.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
             - /bin/sh
             - -cx
             - |
               cp /tmp/certs/* /opt/bitnami/postgresql/certs/
-              {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+              {{- if eq ( toString ( .Values.volumePermissions.podSecurityContext.runAsUser )) "auto" }}
               chown -R `id -u`:`id -G | cut -d " " -f2` /opt/bitnami/postgresql/certs/
               {{- else }}
-              chown -R {{ .Values.postgresql.containerSecurityContext.runAsUser }}:{{ .Values.postgresql.securityContext.fsGroup }} /opt/bitnami/postgresql/certs/
+              chown -R {{ .Values.postgresql.containerSecurityContext.runAsUser }}:{{ .Values.postgresql.podSecurityContext.fsGroup }} /opt/bitnami/postgresql/certs/
               {{- end }}
               chmod 600 {{ template "postgresql-ha.postgresql.tlsCertKey" . }}
-          {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-          securityContext: {{- omit .Values.volumePermissions.securityContext "runAsUser" | toYaml | nindent 12 }}
+          {{- if eq ( toString ( .Values.volumePermissions.podSecurityContext.runAsUser )) "auto" }}
+          securityContext: {{- omit .Values.volumePermissions.podSecurityContext "runAsUser" | toYaml | nindent 12 }}
           {{- else }}
-          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
+          securityContext: {{- .Values.volumePermissions.podSecurityContext | toYaml | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: raw-certificates
@@ -103,18 +106,18 @@ spec:
       {{- end }}
       {{- if and .Values.volumePermissions.enabled (or (or (not (empty .Values.postgresql.extendedConf)) (not (empty .Values.postgresql.extendedConfCM))) .Values.persistence.enabled) }}
         - name: init-chmod-data
-          image: {{ include "postgresql-ha.volumePermissionsImage" . }}
-          imagePullPolicy: {{ .Values.volumePermissionsImage.pullPolicy | quote }}
+          image: {{ include "postgresql-ha.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command:
             - sh
             - -c
             - |
               mkdir -p {{ .Values.persistence.mountPath }}/conf {{ .Values.persistence.mountPath }}/data {{ .Values.persistence.mountPath }}/lock
               chmod 700 {{ .Values.persistence.mountPath }}/conf {{ .Values.persistence.mountPath }}/data {{ .Values.persistence.mountPath }}/lock
-              chown {{ .Values.postgresql.containerSecurityContext.runAsUser }}:{{ .Values.postgresql.securityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+              chown {{ .Values.postgresql.containerSecurityContext.runAsUser }}:{{ .Values.postgresql.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
               find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
-                xargs -r chown -R {{ .Values.postgresql.containerSecurityContext.runAsUser }}:{{ .Values.postgresql.securityContext.fsGroup }}
-          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
+                xargs -r chown -R {{ .Values.postgresql.containerSecurityContext.runAsUser }}:{{ .Values.postgresql.podSecurityContext.fsGroup }}
+          securityContext: {{- .Values.volumePermissions.podSecurityContext | toYaml | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
@@ -127,6 +130,11 @@ spec:
       {{- end }}
       containers:
         - name: postgresql
+          image: {{ include "postgresql-ha.postgresql.image" . }}
+          imagePullPolicy: {{ .Values.postgresql.image.pullPolicy | quote }}
+          {{- if .Values.postgresql.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.postgresql.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.postgresql.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.lifecycleHooks "context" $) | nindent 12 }}
@@ -148,11 +156,6 @@ spec:
           {{- else if .Values.postgresql.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.args "context" $) | nindent 12 }}
           {{- end }}
-          image: {{ include "postgresql-ha.postgresqlImage" . }}
-          imagePullPolicy: {{ .Values.postgresqlImage.pullPolicy | quote }}
-          {{- if .Values.postgresql.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.postgresql.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
           # Auxiliary vars to populate environment variables
           {{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
           {{- $postgresqlFullname := include "postgresql-ha.postgresql" . }}
@@ -160,7 +163,7 @@ spec:
           {{- $clusterDomain:= .Values.clusterDomain }}
           env:
             - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.postgresqlImage.debug .Values.diagnosticMode.enabled) | quote }}
+              value: {{ ternary "true" "false" (or .Values.postgresql.image.debug .Values.diagnosticMode.enabled) | quote }}
             # PostgreSQL configuration
             - name: POSTGRESQL_VOLUME_DIR
               value: {{ .Values.persistence.mountPath | quote }}
@@ -269,12 +272,12 @@ spec:
             {{- end }}
             {{- end }}
             - name: POSTGRESQL_PORT_NUMBER
-              value: {{ .Values.postgresql.containerPort | quote }}
+              value: {{ .Values.postgresql.containerPorts.postgresql | quote }}
             # Repmgr configuration
             - name: REPMGR_PORT_NUMBER
-              value: {{ .Values.postgresql.containerPort | quote }}
+              value: {{ .Values.postgresql.containerPorts.postgresql | quote }}
             - name: REPMGR_PRIMARY_PORT
-              value: {{ .Values.postgresql.containerPort | quote }}
+              value: {{ .Values.postgresql.containerPorts.postgresql | quote }}
             - name: MY_POD_NAME
               valueFrom:
                 fieldRef:
@@ -359,55 +362,36 @@ spec:
             {{- end }}
           ports:
             - name: postgresql
-              containerPort: {{ .Values.postgresql.containerPort }}
+              containerPort: {{ .Values.postgresql.containerPorts.postgresql }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.postgresql.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.postgresql.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - bash
                 - -ec
-                - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} -h 127.0.0.1 -p {{ .Values.postgresql.containerPort }} -c "SELECT 1"'
-            initialDelaySeconds: {{ .Values.postgresql.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.postgresql.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.postgresql.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.postgresql.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.postgresql.livenessProbe.failureThreshold }}
+                - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} -h 127.0.0.1 -p {{ .Values.postgresql.containerPorts.postgresql }} -c "SELECT 1"'
           {{- else if .Values.postgresql.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- end }}
-          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.postgresql.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.postgresql.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - bash
                 - -ec
-                - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} -h 127.0.0.1 -p {{ .Values.postgresql.containerPort }} -c "SELECT 1"'
-            initialDelaySeconds: {{ .Values.postgresql.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.postgresql.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.postgresql.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.postgresql.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.postgresql.readinessProbe.failureThreshold }}
+                - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} -h 127.0.0.1 -p {{ .Values.postgresql.containerPorts.postgresql }} -c "SELECT 1"'
           {{- else if .Values.postgresql.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- end }}
-          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.postgresql.startupProbe.enabled }}
-          startupProbe:
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.postgresql.startupProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - bash
                 - -ec
-                - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} -h 127.0.0.1 -p {{ .Values.postgresql.containerPort }} -c "SELECT 1"'
-            initialDelaySeconds: {{ .Values.postgresql.startupProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.postgresql.startupProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.postgresql.startupProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.postgresql.startupProbe.successThreshold }}
-            failureThreshold: {{ .Values.postgresql.startupProbe.failureThreshold }}
+                - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} -h 127.0.0.1 -p {{ .Values.postgresql.containerPorts.postgresql }} -c "SELECT 1"'
           {{- else if .Values.postgresql.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -450,16 +434,16 @@ spec:
             {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
-          image: {{ include "postgresql-ha.metricsImage" . }}
-          imagePullPolicy: {{ .Values.metricsImage.pullPolicy | quote }}
-          {{- if .Values.metrics.securityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.securityContext "enabled" | toYaml | nindent 12 }}
+          image: {{ include "postgresql-ha.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.metrics.podSecurityContext.enabled }}
+          securityContext: {{- omit .Values.metrics.podSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
             - name: PG_EXPORTER_WEB_LISTEN_ADDRESS
-              value: :{{ .Values.metrics.containerPort }}
+              value: :{{ .Values.metrics.containerPorts.http }}
             - name: DATA_SOURCE_URI
-              value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (.Values.postgresql.containerPort | int64) (include "postgresql-ha.postgresqlDatabase" .) | quote }}
+              value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (.Values.postgresql.containerPorts.postgresql | int64) (include "postgresql-ha.postgresqlDatabase" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: DATA_SOURCE_PASS_FILE
               value: "/opt/bitnami/postgresql/secrets/postgresql-password"
@@ -475,47 +459,43 @@ spec:
             {{- if .Values.metrics.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          envFrom:
+            {{- if .Values.metrics.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.metrics.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.metrics.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.metrics.extraEnvVarsSecret }}
+            {{- end }}
           ports:
             - name: metrics
-              containerPort: {{ .Values.metrics.containerPort }}
+              containerPort: {{ .Values.metrics.containerPorts.http }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: metrics
-            initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
+          {{- else if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- end }}
-          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: metrics
-            initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
+          {{- else if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- end }}
-          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.startupProbe.enabled }}
-          startupProbe:
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: metrics
-            initialDelaySeconds: {{ .Values.metrics.startupProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.metrics.startupProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.metrics.startupProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.metrics.startupProbe.successThreshold }}
-            failureThreshold: {{ .Values.metrics.startupProbe.failureThreshold }}
+          {{- else if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.metrics.resources }}
@@ -533,7 +513,6 @@ spec:
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- end }}
-
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else }}
