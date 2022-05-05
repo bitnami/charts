@@ -1015,7 +1015,7 @@ spark:
   worker:
     ## @param spark.worker.replicaCount Set the number of workers
     ##
-    replicaCount: 1
+    replicaCount: 2
     ## @param spark.worker.webPort Specify the port where the web interface will listen on the worker
     ##
     containerPorts:
