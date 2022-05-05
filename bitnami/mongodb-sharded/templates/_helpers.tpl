@@ -4,38 +4,21 @@
 Returns a ServiceAccount name for specified path or falls back to `common.serviceAccount.name`
 if `common.serviceAccount.create` is set to true. Falls back to Chart's fullname otherwise.
 Usage:
-{{ include "mongodb-sharded.serviceAccountName" (dict "value" .Values.path.to.serviceAccount "context" $) }}
+{{ include "mongodb-sharded.serviceAccountName" (dict "component" "mongos" "value" .Values.path.to.serviceAccount "context" $) }}
 */}}
 {{- define "mongodb-sharded.serviceAccountName" -}}
 {{- if .value.create }}
-    {{- default (include "common.names.fullname" .context) .value.name | quote }}
+    {{- default (printf "%s-%s" (include "common.names.fullname" .context) .component) .value.name | quote }}
 {{- else if .context.Values.common.serviceAccount.create }}
-    {{- default (include "common.names.fullname" .context) .context.Values.common.serviceAccount.name | quote }}
+    {{- default (printf "%s-%s" (include "common.names.fullname" .context) .component).context.Values.common.serviceAccount.name | quote }}
 {{- else -}}
     {{- default "default" .value.name | quote }}
 {{- end }}
 {{- end }}
 
-{{/*
-Renders a ServiceAccount for specified name.
-Usage:
-{{ include "mongodb-sharded.serviceaccount" (dict "value" .Values.path.to.serviceAccount "context" $) }}
-*/}}
-{{- define "mongodb-sharded.serviceaccount" -}}
-{{- if .value.create -}}
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: {{ include "mongodb-sharded.serviceAccountName" (dict "value" .value "context" .context) }}
-  labels:
-    {{- include "common.labels.standard" .context | nindent 4 }}
----
-{{ end -}}
-{{- end -}}
-
 {{- define "mongodb-sharded.secret" -}}
-  {{- if .Values.existingSecret -}}
-    {{- .Values.existingSecret -}}
+  {{- if .Values.auth.existingSecret -}}
+    {{- .Values.auth.existingSecret -}}
   {{- else }}
     {{- include "common.names.fullname" . -}}
   {{- end }}
@@ -104,28 +87,6 @@ Get the initialization scripts configmap name.
 {{- end -}}
 
 {{/*
-Create the name for the admin secret.
-*/}}
-{{- define "mongodb-sharded.adminSecret" -}}
-    {{- if .Values.auth.existingAdminSecret -}}
-        {{- .Values.auth.existingAdminSecret -}}
-    {{- else -}}
-        {{- include "common.names.fullname" . -}}-admin
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Create the name for the key secret.
-*/}}
-{{- define "mongodb-sharded.keySecret" -}}
-  {{- if .Values.auth.existingKeySecret -}}
-      {{- .Values.auth.existingKeySecret -}}
-  {{- else -}}
-      {{- include "common.names.fullname" . -}}-keyfile
-  {{- end -}}
-{{- end -}}
-
-{{/*
 Returns the proper Service name depending if an explicit service name is set
 in the values file. If the name is not explicitly set it will take the "common.names.fullname"
 */}}
@@ -170,9 +131,11 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "mongodb-sharded.validateValues" -}}
   {{- $messages := list -}}
-  {{- $messages := append $messages (include "mongodb-sharded.validateValues.mongodbCustomDatabase" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.externalCfgServer" .) -}}
-  {{- $messages := append $messages (include "mongodb-sharded.validateValues.replicas" .) -}}
+  {{- $messages := append $messages (include "mongodb-sharded.validateValues.replicaCount" .) -}}
+  {{- $messages := append $messages (include "mongodb-sharded.validateValues.clusterIPListLength" .) -}}
+  {{- $messages := append $messages (include "mongodb-sharded.validateValues.nodePortListLength" .) -}}
+  {{- $messages := append $messages (include "mongodb-sharded.validateValues.loadBalancerIPListLength" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.config" .) -}}
   {{- $messages := without $messages "" -}}
   {{- $message := join "\n" $messages -}}
@@ -180,19 +143,6 @@ Compile all warnings into a single message, and call fail.
   {{- if $message -}}
     {{- printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
   {{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of MongoDB&reg; - both mongodbUsername and mongodbDatabase are necessary
-to create a custom user and database during 1st initialization
-*/}}
-{{- define "mongodb-sharded.validateValues.mongodbCustomDatabase" -}}
-{{- if or (and .Values.mongodbUsername (not .Values.mongodbDatabase)) (and (not .Values.mongodbUsername) .Values.mongodbDatabase) }}
-mongodb: mongodbUsername, mongodbDatabase
-    Both mongodbUsername and mongodbDatabase must be provided to create
-    a custom user and database during 1st initialization.
-    Please set both of them (--set mongodbUsername="xxxx",mongodbDatabase="yyyy")
-{{- end -}}
 {{- end -}}
 
 {{/*
@@ -218,20 +168,20 @@ mongodb: invalidExternalConfigServer
 {{- end -}}
 
 {{/*
-Validate values of MongoDB&reg; - The number of shards must be positive, as well as the data node replicas
+Validate values of MongoDB&reg; - The number of shards must be positive, as well as the data node replicaCount
 */}}
-{{- define "mongodb-sharded.validateValues.replicas" -}}
-{{- if and (le (int .Values.shardsvr.dataNode.replicas) 0) (ge (int .Values.shards) 1) }}
+{{- define "mongodb-sharded.validateValues.replicaCount" -}}
+{{- if and (le (int .Values.shardsvr.dataNode.replicaCount) 0) (ge (int .Values.shards) 1) }}
 mongodb: invalidShardSvrReplicas
-    You specified an invalid number of replicas per shard. Please set shardsvr.dataNode.replicas with a positive number or set the number of shards to 0.
+    You specified an invalid number of replicas per shard. Please set shardsvr.dataNode.replicaCount with a positive number or set the number of shards to 0.
 {{- end -}}
-{{- if lt (int .Values.shardsvr.arbiter.replicas) 0 }}
+{{- if lt (int .Values.shardsvr.arbiter.replicaCount) 0 }}
 mongodb: invalidShardSvrArbiters
-    You specified an invalid number of arbiters per shard. Please set shardsvr.arbiter.replicas with a number greater or equal than 0
+    You specified an invalid number of arbiters per shard. Please set shardsvr.arbiter.replicaCount with a number greater or equal than 0
 {{- end -}}
-{{- if and (le (int .Values.configsvr.replicas) 0) (not .Values.configsvr.external.host) }}
+{{- if and (le (int .Values.configsvr.replicaCount) 0) (not .Values.configsvr.external.host) }}
 mongodb: invalidConfigSvrReplicas
-    You specified an invalid number of replicas per shard. Please set configsvr.replicas with a positive number or set the configsvr.external.host value to use
+    You specified an invalid number of replicas per shard. Please set configsvr.replicaCount with a positive number or set the configsvr.external.host value to use
     an external config server replicaset
 {{- end -}}
 {{- end -}}
@@ -255,6 +205,36 @@ mongodb: mongosNodeConflictingConfig
 {{- if and .Values.configsvr.configCM .Values.configsvr.config }}
 mongodb: configSvrNodeConflictingConfig
     You specified both configsvr.configCM and configsvr.config. You can only set one
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of MongoDB&reg; - number of replicas must be the same as NodePort list */}}
+{{- define "mongodb-sharded.validateValues.nodePortListLength" -}}
+{{- $replicaCount := int .Values.mongos.replicaCount }}
+{{- $nodePortListLength := len .Values.mongos.servicePerReplica.nodePorts }}
+{{- if and .Values.mongos.useStatefulSet .Values.mongos.servicePerReplica.enabled (not (eq $replicaCount $nodePortListLength )) (eq .Values.mongos.servicePerReplica.type "NodePort") -}}
+mongodb: .Values.mongos.servicePerReplica.nodePorts
+    Number of mongos.replicaCount and mongos.servicePerReplica.nodePorts array length must be the same. Currently: replicaCount = {{ $replicaCount }} and nodePorts = {{ $nodePortListLength }}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of MongoDB&reg; - number of replicas must be the same as clusterIP list */}}
+{{- define "mongodb-sharded.validateValues.clusterIPListLength" -}}
+{{- $replicaCount := int .Values.mongos.replicaCount }}
+{{- $clusterIPListLength := len .Values.mongos.servicePerReplica.clusterIPs }}
+{{- if and (gt $clusterIPListLength 0) .Values.mongos.useStatefulSet .Values.mongos.servicePerReplica.enabled (not (eq $replicaCount $clusterIPListLength )) (eq .Values.mongos.servicePerReplica.type "ClusterIP") -}}
+mongodb: .Values.mongos.servicePerReplica.clusterIPs
+    Number of mongos.replicaCount and mongos.servicePerReplica.clusterIPs array length must be the same. Currently: replicaCount = {{ $replicaCount }} and clusterIPs = {{ $clusterIPListLength }}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of MongoDB&reg; - number of replicas must be the same as loadBalancerIP list */}}
+{{- define "mongodb-sharded.validateValues.loadBalancerIPListLength" -}}
+{{- $replicaCount := int .Values.mongos.replicaCount }}
+{{- $loadBalancerIPListLength := len .Values.mongos.servicePerReplica.loadBalancerIPs }}
+{{- if and (gt $loadBalancerIPListLength 0) .Values.mongos.useStatefulSet .Values.mongos.servicePerReplica.enabled (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.mongos.servicePerReplica.type "LoadBalancer") -}}
+mongodb: .Values.mongos.servicePerReplica.loadBalancerIPs
+    Number of mongos.replicaCount and mongos.servicePerReplica.loadBalancerIPs array length must be the same. Currently: replicaCount = {{ $replicaCount }} and loadBalancerIPs = {{ $loadBalancerIPListLength }}
 {{- end -}}
 {{- end -}}
 

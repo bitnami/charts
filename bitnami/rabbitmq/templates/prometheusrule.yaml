@@ -2,13 +2,12 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ include "rabbitmq.fullname" . }}
-  {{- if .Values.metrics.prometheusRule.namespace }}
-  namespace: {{ .Values.metrics.prometheusRule.namespace }}
-  {{- else }}
-  namespace: {{ .Release.Namespace | quote }}
-  {{- end }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.metrics.prometheusRule.namespace | quote}}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
     {{- if .Values.metrics.prometheusRule.additionalLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $) | nindent 4 }}
     {{- end }}
@@ -18,7 +17,7 @@ metadata:
 spec:
   groups:
   {{- with .Values.metrics.prometheusRule.rules }}
-    - name: {{ template "rabbitmq.name" $ }}
+    - name: {{ template "common.names.name" $ }}
       rules: {{- include "common.tplvalues.render" (dict "value" . "context" $) | nindent 8 }}
   {{- end }}
 {{- end }}
