@@ -28,7 +28,7 @@ spec:
       {{- if .Values.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
-      app.kubernetes.io/component: kafka
+      app.kubernetes.io/component: metrics
   endpoints:
     - port: http-metrics
       path: "/"

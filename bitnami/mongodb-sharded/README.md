@@ -7,7 +7,7 @@ MongoDB(R) is an open source NoSQL database that uses JSON for data storage. Mon
 [Overview of MongoDB&reg; Sharded](http://www.mongodb.org)
 
 Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB(R) is run and maintained by MongoDB, which is a completely separate project from Bitnami.
-                           
+
 ## TL;DR
 
 ```bash
@@ -88,16 +88,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                     | MongoDB(&reg;) Sharded image registry                                                                                                                     | `docker.io`               |
 | `image.repository`                                   | MongoDB(&reg;) Sharded Image name                                                                                                                         | `bitnami/mongodb-sharded` |
-| `image.tag`                                          | MongoDB(&reg;) Sharded image tag (immutable tags are recommended)                                                                                         | `5.0.8-debian-10-r3`      |
+| `image.tag`                                          | MongoDB(&reg;) Sharded image tag (immutable tags are recommended)                                                                                         | `5.0.8-debian-10-r5`      |
 | `image.pullPolicy`                                   | MongoDB(&reg;) Sharded image pull policy                                                                                                                  | `IfNotPresent`            |
 | `image.pullSecrets`                                  | Specify docker-registry secret names as an array                                                                                                          | `[]`                      |
 | `image.debug`                                        | Specify if debug logs should be enabled                                                                                                                   | `false`                   |
 | `auth.enabled`                                       | Enable authentication                                                                                                                                     | `true`                    |
 | `auth.rootUser`                                      | MongoDB(&reg;) root user                                                                                                                                  | `root`                    |
 | `auth.rootPassword`                                  | MongoDB(&reg;) root password                                                                                                                              | `""`                      |
-| `auth.username`                                      | Custom user to be created during the initialization                                                                                                       | `""`                      |
-| `auth.password`                                      | Password for the custom user set at `auth.username`                                                                                                       | `""`                      |
-| `auth.database`                                      | Database to be created during the initialization                                                                                                          | `""`                      |
 | `auth.replicaSetKey`                                 | Key used for authentication in the replicaset (only when `architecture=replicaset`)                                                                       | `""`                      |
 | `auth.existingSecret`                                | Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-password`, `mongodb-root-password`, ` mongodb-replica-set-key`)                           | `""`                      |
 | `auth.usePasswordFile`                               | Mount credentials as files instead of using environment variables                                                                                         | `false`                   |
@@ -128,7 +125,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                   |
 | `volumePermissions.image.registry`                   | Init container volume-permissions image registry                                                                                                          | `docker.io`               |
 | `volumePermissions.image.repository`                 | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`   |
-| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r404`       |
+| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r410`       |
 | `volumePermissions.image.pullPolicy`                 | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`            |
 | `volumePermissions.image.pullSecrets`                | Init container volume-permissions image pull secrets                                                                                                      | `[]`                      |
 | `volumePermissions.resources`                        | Init container resource requests/limit                                                                                                                    | `{}`                      |
@@ -479,7 +476,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                         | Start a side-car prometheus exporter                                               | `false`                    |
 | `metrics.image.registry`                                  | MongoDB&reg; exporter image registry                                               | `docker.io`                |
 | `metrics.image.repository`                                | MongoDB&reg; exporter image name                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                                       | MongoDB&reg; exporter image tag                                                    | `0.31.2-debian-10-r14`     |
+| `metrics.image.tag`                                       | MongoDB&reg; exporter image tag                                                    | `0.32.0-debian-10-r3`      |
 | `metrics.image.pullPolicy`                                | MongoDB&reg; exporter image pull policy                                            | `Always`                   |
 | `metrics.image.pullSecrets`                               | MongoDB&reg; exporter image pull secrets                                           | `[]`                       |
 | `metrics.useTLS`                                          | Whether to connect to MongoDB&reg; with TLS                                        | `false`                    |
@@ -651,7 +648,7 @@ Affected values:
 
 - Authentication parameters are reorganized under the `auth.*` parameter:
   - `usePassword` is renamed to `auth.enabled`.
-  - `mongodbRootPassword`, `mongodbUsername`, `mongodbPassword`, `mongodbDatabase`, `replicaSetKey`, `existingSecret` and `usePasswordFile` are now `auth.rootPassword`, `auth.username`, `auth.password`, `auth.database`, `auth.replicaSetKey`, `auth.existingSecret` and `auth.usePasswordFile` respectively.
+  - `mongodbRootPassword`, `replicaSetKey`, `existingSecret` and `usePasswordFile` are now `auth.rootPassword`, `auth.replicaSetKey`, `auth.existingSecret` and `auth.usePasswordFile` respectively.
 - `common.containerPorts.mongo` is renamed to `common.containerPorts.mongodb`
 - `pdb.enabled` is renamed to `pdb.create`
 - `XXX.replicas` is renamed to `XXX.replicaCount`
