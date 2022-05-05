@@ -44,6 +44,20 @@
             "endpoint": "lb-redmine-http",
             "app_protocol": "HTTP"
           }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/redmine/cypress"
+            },
+            "endpoint": "lb-redmine-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "user",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
         }
       ]
     }
