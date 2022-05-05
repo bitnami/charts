@@ -46,6 +46,17 @@
           }
         },
         {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/redmine/goss"
+            },
+            "remote": {
+              "workload": "deploy-redmine"
+            }
+          }
+        },
+        {
           "action_id": "cypress",
           "params": {
             "resources": {
