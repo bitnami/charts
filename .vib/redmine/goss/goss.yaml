@@ -1,11 +1,4 @@
 command:
-  user-id-test:
-    exec: id -u
-    exit-status: 0
-    stdout:
-      - 1001
-    stderr: [ ]
-    timeout: 20000
   ruby-version-test:
     exec: ruby -v
     exit-status: 0
@@ -21,8 +14,7 @@ file:
     group: root
     contains:
       - "smtp_settings"
-      - "mysql"
-      - "mariadb"
+      - "attachments_storage_path"
   /bitnami/redmine/config/database.yml:
     mode: "0664"
     filetype: file
