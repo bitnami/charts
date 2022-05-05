@@ -978,7 +978,7 @@ spark:
   ## Spark master specific configuration
   ##
   master:
-    ## @param spark.master.webPort Specify the port where the web interface will listen on the master
+    ## @param spark.master.containerPorts.http Specify the port where the web interface will listen on the master
     ##
     containerPorts:
       http: 8080
@@ -1016,7 +1016,7 @@ spark:
     ## @param spark.worker.replicaCount Set the number of workers
     ##
     replicaCount: 2
-    ## @param spark.worker.webPort Specify the port where the web interface will listen on the worker
+    ## @param spark.worker.containerPorts.http Specify the port where the web interface will listen on the worker
     ##
     containerPorts:
       http: 8081
