@@ -9,7 +9,7 @@ it('allows admin to login/logout', () => {
 });
 
 it('allows user to register', () => {
-  cy.contains('Register').click();
+  cy.visit('account/register');
   cy.fixture('users').then((user) => {
     cy.get('#user_login').type(`${user.newUser.userName}.${random}`);
     cy.get('#user_password').type(`${user.newUser.password}.${random}`);
@@ -26,7 +26,7 @@ it('allows user to register', () => {
 
 it('allows admin to create a project and an issue with file uploaded', () => {
   cy.login();
-  cy.contains('Projects').click();
+  cy.visit('projects');
   cy.contains('New project').click();
   cy.fixture('projects').then((project) => {
     cy.get('#project_name').type(`${project.newProject.name}.${random}`);
@@ -48,16 +48,23 @@ it('allows admin to create a project and an issue with file uploaded', () => {
   cy.contains('issues.json');
 });
 
-it('allows admin to create a new role', () => {
+it('allows admin to check smtp configuration', () => {
   cy.login();
-  cy.visit('/admin');
-  cy.contains('Roles and permissions').click();
-  cy.get('.icon-add').click();
-  cy.fixture('roles').then((role) => {
-    cy.get('#role_name').type(`${role.QA.name}.${random}`);
+  cy.visit('/settings?tab=notifications');
+  cy.fixture('smtps').then((smtp) => {
+    cy.get('#settings_mail_from')
+      .clear()
+      .type(`${smtp.newSMTP.smtpEmailAddress}.${random}`);
+    cy.get('#settings_emails_header')
+      .scrollIntoView()
+      .clear()
+      .type(`${smtp.newSMTP.header}.${random}`);
+    cy.get('#settings_emails_footer')
+      .clear()
+      .type(`${smtp.newSMTP.footer}.${random}`);
   });
-  cy.get('[type="submit"]').scrollIntoView().click();
-  cy.contains('#flash_notice', 'Successful creation.');
+  cy.contains('[type="submit"]', 'Save').click({ force: true });
+  cy.contains('Successful update.');
 });
 
 it('allows admin to verify and change application configuration', () => {
