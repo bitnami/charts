@@ -42,10 +42,6 @@ commonLabels: {}
 ## @param extraDeploy Array with extra yaml to deploy with the chart. Evaluated as a template
 ##
 extraDeploy: []
-## @param schedulerName Use an alternate scheduler, e.g. "stork".
-## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-##
-schedulerName: ""
 
 ## Enable diagnostic mode in the deployment
 ##
@@ -125,9 +121,6 @@ auth:
   ## NOTE: When it's set the auth.rootPassword, auth.password, auth.replicationPassword are ignored.
   ##
   existingSecret: ""
-  ## @param auth.forcePassword Force users to specify required passwords
-  ##
-  forcePassword: false
   ## @param auth.usePasswordFiles Mount credentials as files instead of using an environment variable
   ##
   usePasswordFiles: false
@@ -255,14 +248,14 @@ primary:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param primary.priorityClassName %%MAIN_CONTAINER_NAME%% pods' priorityClassName
+  ## @param primary.priorityClassName MySQL primary pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param primary.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param primary.terminationGracePeriodSeconds In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully
+  ## @param primary.terminationGracePeriodSeconds In seconds, time the given to the MySQL primary pod needs to terminate gracefully
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
@@ -271,7 +264,7 @@ primary:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
-  ## @param primary.podManagementPolicy podManagementPolicy to manage scaling operation of %%MAIN_CONTAINER_NAME%% pods
+  ## @param primary.podManagementPolicy podManagementPolicy to manage scaling operation of MySQL primary pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: ""
@@ -472,18 +465,18 @@ primary:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ## @param primary.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
     ##
     extraPorts: []
-    ## @param service.annotations Additional custom annotations for %%MAIN_CONTAINER_NAME%% service
+    ## @param primary.service.annotations Additional custom annotations for MySQL primary service
     ##
     annotations: {}
-    ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## @param primary.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
     ## If "ClientIP", consecutive client requests will be directed to the same Pod
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
     ##
     sessionAffinity: None
-    ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param primary.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -611,14 +604,14 @@ secondary:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param secondary.priorityClassName %%MAIN_CONTAINER_NAME%% pods' priorityClassName
+  ## @param secondary.priorityClassName MySQL secondary pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param secondary.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param secondary.terminationGracePeriodSeconds In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully
+  ## @param secondary.terminationGracePeriodSeconds In seconds, time the given to the MySQL secondary pod needs to terminate gracefully
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
@@ -627,7 +620,7 @@ secondary:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
-  ## @param secondary.podManagementPolicy podManagementPolicy to manage scaling operation of %%MAIN_CONTAINER_NAME%% pods
+  ## @param secondary.podManagementPolicy podManagementPolicy to manage scaling operation of MySQL secondary pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: ""
@@ -824,18 +817,18 @@ secondary:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ## @param secondary.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
     ##
     extraPorts: []
-    ## @param service.annotations Additional custom annotations for %%MAIN_CONTAINER_NAME%% service
+    ## @param secondary.service.annotations Additional custom annotations for MySQL secondary service
     ##
     annotations: {}
-    ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## @param secondary.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
     ## If "ClientIP", consecutive client requests will be directed to the same Pod
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
     ##
     sessionAffinity: None
-    ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param secondary.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -1137,3 +1130,6 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
     labels: {}
+    ## @param metrics.serviceMonitor.annotations ServiceMonitor annotations
+    ##
+    annotations: {}

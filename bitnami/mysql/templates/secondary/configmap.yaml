@@ -14,5 +14,5 @@ metadata:
   {{- end }}
 data:
   my.cnf: |-
-    {{ .Values.secondary.configuration | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.secondary.configuration "context" $ ) | nindent 4 }}
 {{- end -}}

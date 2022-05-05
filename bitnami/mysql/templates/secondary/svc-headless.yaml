@@ -19,7 +19,7 @@ spec:
   publishNotReadyAddresses: true
   ports:
     - name: mysql
-      port: {{ .Values.secondary.service.port }}
+      port: {{ .Values.secondary.service.ports.mysql }}
       targetPort: mysql
   selector: {{ include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: secondary

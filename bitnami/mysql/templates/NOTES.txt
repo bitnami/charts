@@ -30,9 +30,9 @@ Tip:
 
 Services:
 
-  echo Primary: {{ include "mysql.primary.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.primary.service.port }}
+  echo Primary: {{ include "mysql.primary.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.primary.service.ports.mysql }}
 {{- if eq .Values.architecture "replication" }}
-  echo Secondary: {{ include "mysql.secondary.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.secondary.service.port }}
+  echo Secondary: {{ include "mysql.secondary.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.secondary.service.ports.mysql }}
 {{- end }}
 
 Execute the following to get the administrator credentials:
