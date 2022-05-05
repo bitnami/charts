@@ -3,7 +3,7 @@ command:
     exec: id -u
     exit-status: 0
     stdout:
-      - 1002
+      - 1001
     stderr: [ ]
     timeout: 20000
   ruby-version-test:
@@ -15,37 +15,37 @@ command:
     timeout: 20000  
 file:
   /bitnami/redmine/config/configuration.yml:
-    mode: "0644"
+    mode: "0664"
     filetype: file
     exists: true
     group: root
     contains:
-      - smtp_settings
-      - mysql
-      - mariadb
+      - "smtp_settings"
+      - "mysql"
+      - "mariadb"
   /bitnami/redmine/config/database.yml:
-    mode: "0644"
+    mode: "0664"
     filetype: file
     exists: true
     group: root
     contains:
-      - postgresql
-      - redmine
+      - "postgresql"
+      - "redmine"
   /bitnami/redmine/files:
     mode: "0775"
     filetype: directory
     exists: true
     group: root
     contains:
-      - postgresql
-      - redmine
+      - "postgresql"
+      - "redmine"
   /opt/bitnami/mysql:
     mode: "0755"
     filetype: directory
     exists: true
     group: root
   /opt/bitnami/postgresql:
-    mode: "0644"
+    mode: "0755"
     filetype: directory
     exists: true
     group: root
