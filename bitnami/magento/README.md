@@ -665,6 +665,7 @@ The following values have been renamed:
 - `service.port` renamed as `service.ports.http`.
 - `service.httpsPort` renamed as `service.ports.https`.
 - `persistence.accessMode` renamed as `persistence.accessModes` and has array type now.
+- `sessionAffinity` renamed as `service.sessionAffinity`.
 
 ### To 17.0.0
 
