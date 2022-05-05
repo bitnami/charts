@@ -70,6 +70,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`           |
 | `nameOverride`           | String to partially override magento.fullname template                                  | `""`           |
 | `fullnameOverride`       | String to fully override magento.fullname template                                      | `""`           |
+| `namespaceOverride`      | String to fully override common.names.namespace                                         | `""`           |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`           |
 | `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`           |
 | `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template).            | `[]`           |
@@ -123,7 +124,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                       | `[]`                   |
 | `existingSecret`                        | Name of a secret with the application password                                                                       | `""`                   |
 | `containerPorts`                        | Container ports                                                                                                      | `{}`                   |
-| `sessionAffinity`                       | Control where client requests go, to the same pod or round-robin                                                     | `None`                 |
 | `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                   |
 | `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `soft`                 |
 | `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `""`                   |
