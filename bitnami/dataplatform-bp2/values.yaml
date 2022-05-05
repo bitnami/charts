@@ -895,7 +895,8 @@ spark:
   master:
     ## Spark container ports
     ##
-    webPort: 8080
+    containerPorts:
+      http: 8080
     resources:
       ## Recommended values for cpu and memory requests
       ##
@@ -930,7 +931,8 @@ spark:
     replicaCount: 2
     ## Spark container ports
     ##
-    webPort: 8081
+    containerPorts:
+      http: 8081
     resources:
       ## Recommended values for cpu and memory requests
       ##

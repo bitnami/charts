@@ -558,6 +558,10 @@ helm upgrade dataplatform bitnami/dataplatform-bp2 \
   --set kafka.image.tag=$CURRENT_KAFKA_VERSION
 ```
 
+### To 13.0.0
+
+This major updates the Spark subchart to its newest major, 6.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/spark#to-600) you can find more information about the changes introduced in that version.
+
 ### To 9.0.0
 
 This major adds annotation based discovery feature in wavefront and updates to newest versions of the exporter/emitter to the chart.
