@@ -7,7 +7,7 @@ Redmine is an open source management application. It includes a tracking issue s
 [Overview of Redmine](http://www.redmine.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -70,7 +70,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -85,7 +84,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the the deployment                                | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment                                   | `["infinity"]`  |
-
 
 ### Redmine Configuration parameters
 
@@ -115,7 +113,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `extraEnvVars`          | Array with extra environment variables to add to the Redmine container | `[]`                 |
 | `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `""`                 |
 | `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `""`                 |
-
 
 ### Redmine deployment parameters
 
@@ -176,7 +173,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `initContainers`                     | Add additional init containers to the Redmine pods                                                                       | `[]`            |
 | `sidecars`                           | Add additional sidecar containers to the Redmine pod                                                                     | `[]`            |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -205,7 +201,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                                                   | Description                                                                                     | Value   |
@@ -224,7 +219,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `volumePermissions.containerSecurityContext.enabled`   | Enable init container's Security Context                                                        | `true`  |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`     |
 
-
 ### RBAC Parameters
 
 | Name                                          | Description                                                                                              | Value   |
@@ -233,7 +227,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `serviceAccount.name`                         | The name of the ServiceAccount to create (name generated using common.names.fullname template otherwise) | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                                                          | `false` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                     | `{}`    |
-
 
 ### Other Parameters
 
@@ -247,7 +240,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `autoscaling.maxReplicas`  | Maximum number of Redmine replicas                             | `11`    |
 | `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `50`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage                           | `50`    |
-
 
 ### Database Parameters
 
@@ -273,7 +265,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `externalDatabase.database`                  | Redmine database name                                                   | `bitnami_redmine` |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`              |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`              |
-
 
 ### Mail Receiver/Cron Job Parameters
 
@@ -330,7 +321,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `mailReceiver.extraVolumes`                          | Optionally specify extra list of additional volumes for mailReceiver container                                                                | `[]`          |
 | `mailReceiver.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for mailReceiver container                                                           | `[]`          |
 
-
 ### Custom Certificates parameters
 
 | Name                                                 | Description                                                        | Value                                    |
@@ -349,7 +339,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                         | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables (e.g. proxy)         | `[]`                                     |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                 | Value   |
@@ -366,7 +355,6 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                          | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                              | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                  | `{}`    |
-
 
 The above parameters map to the env variables defined in [bitnami/redmine](https://github.com/bitnami/bitnami-docker-redmine). For more information please refer to the [bitnami/redmine](https://github.com/bitnami/bitnami-docker-redmine) image documentation.
 
@@ -462,8 +450,8 @@ extraVolumes:
 ## Extra volume mounts to add to the container
 ##
 extraVolumeMounts:
-  - name: "redmine-init-volume"
-    mountPath: "/post-init.sh"
+  - name: 'redmine-init-volume'
+    mountPath: '/post-init.sh'
     subPath: post-init.sh
 ```
 
@@ -587,4 +575,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.
+limitations under the License
