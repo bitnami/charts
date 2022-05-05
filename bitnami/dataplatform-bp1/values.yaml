@@ -980,7 +980,8 @@ spark:
   master:
     ## @param spark.master.webPort Specify the port where the web interface will listen on the master
     ##
-    webPort: 8080
+    containerPorts:
+      http: 8080
     ## @param spark.master.resources.limits The resources limits for the container
     ## @param spark.master.resources.requests [object] The resources limits for the container
     ##
@@ -1014,10 +1015,11 @@ spark:
   worker:
     ## @param spark.worker.replicaCount Set the number of workers
     ##
-    replicaCount: 2
+    replicaCount: 1
     ## @param spark.worker.webPort Specify the port where the web interface will listen on the worker
     ##
-    webPort: 8081
+    containerPorts:
+      http: 8081
     ## Anti affinity rules set for resiliency
     ## @param spark.worker.affinity.podAntiAffinity [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
     ## @skip spark.worker.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
