@@ -659,7 +659,7 @@ You can disable the initContainer using the `elasticsearch.sysctlImage.enabled=f
 This major release renames several values in this chart and adds missing features, in order to get aligned with the rest of the assets in the Bitnami charts repository.
 
 Additionally, it updates both the [Elasticsearch](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch) and the [MariaDB](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) subcharts to their latest major versions, 18.0.0 and 10.0.0 respectively, where similar changes have been also performed.
-Check [Elasticsearch Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1800) and [Redis Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
+Check [Elasticsearch Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1800) and [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
 
 The following values have been renamed:
 
