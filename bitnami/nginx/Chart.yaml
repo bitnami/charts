@@ -25,4 +25,4 @@ name: nginx
 sources:
   - https://github.com/bitnami/bitnami-docker-nginx
   - https://www.nginx.org
-version: 10.2.1
+version: 11.0.0

@@ -7,7 +7,7 @@ NGINX Open Source is a web server that can be also used as a reverse proxy, load
 [Overview of NGINX Open Source](http://nginx.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -354,6 +354,17 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 11.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be aligned with the rest of the assets in the Bitnami charts repository.
+
+Affected values:
+
+- `service.port` was renamed as `service.ports.http`.
+- `service.httpsPort` was deprecated. We recommend using `service.ports.https`.
+- `serviceAccount.autoMount` was renamed as `serviceAccount.automountServiceAccountToken`
+- `metrics.serviceMonitor.additionalLabels` was renamed as `metrics.serviceMonitor.labels`
 
 ### To 10.0.0
 
