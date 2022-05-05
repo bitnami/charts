@@ -885,7 +885,7 @@ spark:
   ##
   enabled: true
   ## Spark master specific configuration
-  ## @param spark.master.webPort Web port for spark master
+  ## @param spark.master.containerPorts.http Web port for spark master
   ## @param spark.master.resources.limits Spark master resource limits
   ## @param spark.master.resources.requests.cpu Spark master CPUs
   ## @param spark.master.resources.requests.memory Spark master requested memory
@@ -920,7 +920,7 @@ spark:
             topologyKey: "kubernetes.io/hostname"
   ## Spark worker specific configuration
   ## @param spark.worker.replicaCount Number of spark workers
-  ## @param spark.worker.webPort Web port for spark master
+  ## @param spark.worker.containerPorts.http Web port for spark master
   ## @param spark.worker.resources.limits Spark master resource limits
   ## @param spark.worker.resources.requests.cpu Spark master CPUs
   ## @param spark.worker.resources.requests.memory Spark master requested memory
