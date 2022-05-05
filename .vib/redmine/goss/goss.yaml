@@ -28,9 +28,6 @@ file:
     filetype: directory
     exists: true
     group: root
-    contains:
-      - "postgresql"
-      - "redmine"
   /opt/bitnami/mysql:
     mode: "0755"
     filetype: directory
