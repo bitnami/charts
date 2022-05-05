@@ -59,14 +59,6 @@ command:
       - '1002'
     stderr: [ ]
     timeout: 20000
-  wordpress-plugin-list:
-    exec: wp plugin list
-    exit-status: 0
-    stdout:
-      - "advanced-cache.php"
-      - "google-analytics-for-wordpress"
-    stderr: [ ]
-    timeout: 20000
 addr:
   tcp://wordpress-mariadb:3306:
     reachable: true

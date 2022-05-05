@@ -16,7 +16,7 @@ metadata:
 data:
   {{- range $bucket := .Values.provisioning.buckets }}
   {{- if $bucket.lifecycle }}
-  {{ $bucket.name }}.json: |
+  bucket-{{ $bucket.name }}.json: |
     {
       "Rules": [
         {{- range $idx, $lifecycle := $bucket.lifecycle }}
@@ -53,5 +53,21 @@ data:
       ]
     }
   {{- end }}
+  {{- end }}
+  {{- range $policy := .Values.provisioning.policies }}
+  policy-{{ $policy.name }}.json: |
+      {{- $statementsLength := sub (len $policy.statements) 1 }}
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {{- range $i, $statement := $policy.statements }}
+          {
+            "Effect": "{{ default "Deny" $statement.effect }}"{{ if $statement.actions }},
+            "Action": {{ toJson $statement.actions }}{{end}}{{ if $statement.resources }},
+            "Resource": {{ toJson $statement.resources }}{{end}}
+          }{{ if lt $i $statementsLength }},{{end }}
+          {{- end }}
+        ]
+      }
   {{- end }}
 {{- end }}

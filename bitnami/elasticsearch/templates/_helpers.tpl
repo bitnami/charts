@@ -7,28 +7,82 @@ Return the proper ES image name
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "elasticsearch.imagePullSecrets" -}}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.curator.image .Values.sysctlImage .Values.volumePermissions.image) "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper ES exporter image name
+*/}}
+{{- define "elasticsearch.metrics.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper ES curator image name
+*/}}
+{{- define "elasticsearch.curator.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.curator.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper sysctl image name
+*/}}
+{{- define "elasticsearch.sysctl.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.sysctlImage "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper image name (for the init container volume-permissions image)
+*/}}
+{{- define "elasticsearch.volumePermissions.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
+{{- end -}}
+
+
+{{/*
+Name for the Elasticsearch service
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+Required for the Kibana subchart to find Elasticsearch service.
+*/}}
+{{- define "elasticsearch.service.name" -}}
+{{- if .Values.global.kibanaEnabled -}}
+    {{- $name := .Values.global.elasticsearch.service.name -}}
+    {{- if contains $name .Release.Name -}}
+    {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+    {{- else -}}
+    {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s" ( include "common.names.fullname" . )  | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Port number for the Elasticsearch service REST API port
+Required for the Kibana subchart to find Elasticsearch service.
+*/}}
+{{- define "elasticsearch.service.ports.restAPI" -}}
+{{- if .Values.global.kibanaEnabled -}}
+{{- printf "%d" (int .Values.global.elasticsearch.service.ports.restAPI) -}}
+{{- else -}}
+{{- printf "%d" (int .Values.service.ports.restAPI) -}}
+{{- end -}}
+{{- end -}}
 
 {{/*
 Create a default fully qualified master name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "elasticsearch.master.fullname" -}}
+{{- $name := default "master" .Values.master.nameOverride -}}
 {{- if .Values.master.fullnameOverride -}}
 {{- .Values.master.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) .Values.master.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified ingest name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "elasticsearch.ingest.fullname" -}}
-{{- if .Values.ingest.fullnameOverride -}}
-{{- .Values.ingest.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) .Values.ingest.name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -37,40 +91,11 @@ Create a default fully qualified coordinating name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "elasticsearch.coordinating.fullname" -}}
-{{- if .Values.global.kibanaEnabled -}}
-{{- printf "%s-%s" .Release.Name .Values.global.coordinating.name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- if .Values.coordinating -}}
+{{- $name := default "coordinating" .Values.coordinating.nameOverride -}}
 {{- if .Values.coordinating.fullnameOverride -}}
 {{- .Values.coordinating.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) .Values.global.coordinating.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the hostname of every ElasticSearch seed node
-*/}}
-{{- define "elasticsearch.hosts" -}}
-{{- $clusterDomain := .Values.clusterDomain }}
-{{- $releaseNamespace := .Release.Namespace }}
-{{- if gt (.Values.master.replicas | int) 0 }}
-{{- $masterFullname := include "elasticsearch.master.fullname" . }}
-{{- $masterFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
-{{- end -}}
-{{- if gt (.Values.coordinating.replicas | int) 0 }}
-{{- $coordinatingFullname := include "elasticsearch.coordinating.fullname" . }}
-{{- $coordinatingFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
-{{- end -}}
-{{- if gt (.Values.data.replicas | int) 0 }}
-{{- $dataFullname := include "elasticsearch.data.fullname" . }}
-{{- $dataFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
-{{- end -}}
-{{- if and (eq .Values.ingest.enabled true) (gt (.Values.ingest.replicas | int) 0) }}
-{{- $ingestFullname := include "elasticsearch.ingest.fullname" . }}
-{{- $ingestFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -79,14 +104,114 @@ Create a default fully qualified data name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "elasticsearch.data.fullname" -}}
+{{- $name := default "data" .Values.data.nameOverride -}}
 {{- if .Values.data.fullnameOverride -}}
 {{- .Values.data.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) .Values.data.name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
-{{ template "elasticsearch.initScriptsSecret" . }}
+{{/*
+Create a default fully qualified ingest name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "elasticsearch.ingest.fullname" -}}
+{{- $name := default "ingest" .Values.ingest.nameOverride -}}
+{{- if .Values.ingest.fullnameOverride -}}
+{{- .Values.ingest.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified metrics name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "elasticsearch.metrics.fullname" -}}
+{{- $name := default "metrics" .Values.metrics.nameOverride -}}
+{{- if .Values.metrics.fullnameOverride -}}
+{{- .Values.metrics.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "elasticsearch.curator.fullname" -}}
+{{- $name := default "curator" .Values.metrics.nameOverride -}}
+{{- if .Values.curator.fullnameOverride -}}
+{{- .Values.curator.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns true if at least one master-elegible node replica has been configured.
+*/}}
+{{- define "elasticsearch.master.enabled" -}}
+{{- if or .Values.master.autoscaling.enabled (gt (int .Values.master.replicaCount) 0) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns true if at least one coordinating-only node replica has been configured.
+*/}}
+{{- define "elasticsearch.coordinating.enabled" -}}
+{{- if or .Values.coordinating.autoscaling.enabled (gt (int .Values.coordinating.replicaCount) 0) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns true if at least one data-only node replica has been configured.
+*/}}
+{{- define "elasticsearch.data.enabled" -}}
+{{- if or .Values.data.autoscaling.enabled (gt (int .Values.data.replicaCount) 0) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns true if at least one ingest-only node replica has been configured.
+*/}}
+{{- define "elasticsearch.ingest.enabled" -}}
+{{- if or .Values.ingest.autoscaling.enabled (gt (int .Values.ingest.replicaCount) 0) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the hostname of every ElasticSearch seed node
+*/}}
+{{- define "elasticsearch.hosts" -}}
+{{- $clusterDomain := .Values.clusterDomain }}
+{{- $releaseNamespace := include "common.names.namespace" . }}
+{{- if (include "elasticsearch.master.enabled" .) -}}
+{{- $masterFullname := (printf "%s-hl" (include "elasticsearch.master.fullname" .) | trunc 63 | trimSuffix "-") }}
+{{- $masterFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- end -}}
+{{- if (include "elasticsearch.coordinating.enabled" .) -}}
+{{- $coordinatingFullname := (printf "%s-hl" (include "elasticsearch.coordinating.fullname" .) | trunc 63 | trimSuffix "-") }}
+{{- $coordinatingFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- end -}}
+{{- if (include "elasticsearch.data.enabled" .) -}}
+{{- $dataFullname := (printf "%s-hl" (include "elasticsearch.data.fullname" .) | trunc 63 | trimSuffix "-") }}
+{{- $dataFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- end -}}
+{{- if (include "elasticsearch.ingest.enabled" .) -}}
+{{- $ingestFullname := (printf "%s-hl" (include "elasticsearch.ingest.fullname" .) | trunc 63 | trimSuffix "-") }}
+{{- $ingestFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
+{{- end -}}
+{{- end -}}
+
 {{/*
 Get the initialization scripts volume name.
 */}}
@@ -94,7 +219,6 @@ Get the initialization scripts volume name.
 {{- printf "%s-init-scripts" (include "common.names.fullname" .) -}}
 {{- end -}}
 
-{{ template "elasticsearch.initScriptsCM" . }}
 {{/*
 Get the initialization scripts ConfigMap name.
 */}}
@@ -102,7 +226,6 @@ Get the initialization scripts ConfigMap name.
 {{- printf "%s" .Values.initScriptsCM -}}
 {{- end -}}
 
-{{ template "elasticsearch.initScriptsSecret" . }}
 {{/*
 Get the initialization scripts Secret name.
 */}}
@@ -155,101 +278,6 @@ Get the initialization scripts Secret name.
 {{- end -}}
 
 {{/*
-Create a default fully qualified metrics name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "elasticsearch.metrics.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) .Values.metrics.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Return the proper ES exporter image name
-*/}}
-{{- define "elasticsearch.metrics.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return the proper sysctl image name
-*/}}
-{{- define "elasticsearch.sysctl.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.sysctlImage "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return the proper Docker Image Registry Secret Names
-*/}}
-{{- define "elasticsearch.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.curator.image .Values.sysctlImage .Values.volumePermissions.image) "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return the proper image name (for the init container volume-permissions image)
-*/}}
-{{- define "elasticsearch.volumePermissions.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return the proper Storage Class
-Usage:
-{{ include "elasticsearch.storageClass" (dict "global" .Values.global "local" .Values.master) }}
-*/}}
-{{- define "elasticsearch.storageClass" -}}
-{{/*
-Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
-but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
-*/}}
-{{- if .global -}}
-    {{- if .global.storageClass -}}
-        {{- if (eq "-" .global.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .global.storageClass -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .local.persistence.storageClass -}}
-              {{- if (eq "-" .local.persistence.storageClass) -}}
-                  {{- printf "storageClassName: \"\"" -}}
-              {{- else }}
-                  {{- printf "storageClassName: %s" .local.persistence.storageClass -}}
-              {{- end -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .local.persistence.storageClass -}}
-        {{- if (eq "-" .local.persistence.storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-        {{- else }}
-            {{- printf "storageClassName: %s" .local.persistence.storageClass -}}
-        {{- end -}}
-    {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the appropriate apiVersion for cronjob APIs.
-*/}}
-{{- define "cronjob.apiVersion" -}}
-{{- if semverCompare "< 1.8-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "batch/v2alpha1" }}
-{{- else if and (semverCompare ">=1.8-0" .Capabilities.KubeVersion.GitVersion) (semverCompare "< 1.21-0" .Capabilities.KubeVersion.GitVersion) -}}
-{{- print "batch/v1beta1" }}
-{{- else if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "batch/v1" }}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "elasticsearch.curator.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) .Values.curator.name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
 Create the name of the service account to use
 */}}
 {{- define "elasticsearch.curator.serviceAccountName" -}}
@@ -258,13 +286,6 @@ Create the name of the service account to use
 {{- else -}}
     {{ default "default" .Values.curator.serviceAccount.name }}
 {{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper ES curator image name
-*/}}
-{{- define "elasticsearch.curator.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.curator.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -337,7 +358,7 @@ Return true if an authentication credentials secret object should be created
 Return the Elasticsearch authentication credentials secret name
 */}}
 {{- define "elasticsearch.secretName" -}}
-{{- coalesce .Values.security.existingSecret (include "common.names.fullname" .) -}}
+{{- default (include "common.names.fullname" .) .Values.security.existingSecret  -}}
 {{- end -}}
 
 {{/*
@@ -353,17 +374,40 @@ Return true if a TLS password secret object should be created
 Return the Elasticsearch TLS password secret name
 */}}
 {{- define "elasticsearch.tlsPasswordsSecret" -}}
-{{- coalesce .Values.security.tls.passwordsSecret (printf "%s-tls-pass" (include "common.names.fullname" .)) -}}
+{{- default (printf "%s-tls-pass" (include "common.names.fullname" .)) .Values.security.tls.passwordsSecret -}}
 {{- end -}}
 
 {{/*
-Return the name of the http port. Whether or not security is enabeld: http or https
+Returns the name of the secret key containing the Keystore password
 */}}
-{{- define "elasticsearch.httpPortName" -}}
-{{- if .Values.security.enabled }}
-    {{- "https" -}}
+{{- define "elasticsearch.keystorePasswordKey" -}}
+{{- if .Values.security.tls.secretKeystoreKey -}}
+{{- printf "%s" .Values.security.tls.secretKeystoreKey -}}
 {{- else -}}
-    {{- "http" -}}
+{{- print "keystore-password"}}
+{{- end -}}
+{{- end -}}
+
+
+{{/*
+Returns the name of the secret key containing the Truststore password
+*/}}
+{{- define "elasticsearch.truststorePasswordKey" -}}
+{{- if .Values.security.tls.secretTruststoreKey -}}
+{{- printf "%s" .Values.security.tls.secretTruststoreKey -}}
+{{- else -}}
+{{- print "truststore-password"}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the name of the secret key containing the PEM key password
+*/}}
+{{- define "elasticsearch.keyPasswordKey" -}}
+{{- if .Values.security.tls.secretKey -}}
+{{- printf "%s" .Values.security.tls.secretKey -}}
+{{- else -}}
+{{- print "key-password"}}
 {{- end -}}
 {{- end -}}
 
@@ -398,18 +442,21 @@ Add environment variables to configure database values
   valueFrom:
     secretKeyRef:
       name: {{ include "elasticsearch.tlsPasswordsSecret" . }}
-      key: keystore-password
+      key: {{ include "elasticsearch.keystorePasswordKey" . | quote }}
 {{- end }}
 {{- if and (not .Values.security.tls.usePemCerts) (or .Values.security.tls.truststorePassword .Values.security.tls.passwordsSecret) }}
 - name: ELASTICSEARCH_TRUSTSTORE_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "elasticsearch.tlsPasswordsSecret" . }}
-      key: truststore-password
+      key: {{ include "elasticsearch.truststorePasswordKey" . | quote }}
 {{- end }}
 {{- if and .Values.security.tls.usePemCerts (or .Values.security.tls.keyPassword .Values.security.tls.passwordsSecret) }}
 - name: ELASTICSEARCH_KEY_PASSWORD
-  value: {{ .Values.security.tls.keyPassword | quote }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "elasticsearch.tlsPasswordsSecret" . }}
+      key: {{ include "elasticsearch.keyPasswordKey" . | quote }}
 {{- end }}
 {{- end -}}
 
@@ -417,46 +464,49 @@ Add environment variables to configure database values
 Returns true if at least 1 existing secret was provided
 */}}
 {{- define "elasticsearch.security.tlsSecretsProvided" -}}
-{{- $masterSecret :=.Values.security.tls.master.existingSecret -}}
-{{- $dataSecret :=.Values.security.tls.data.existingSecret -}}
-{{- $coordSecret :=.Values.security.tls.coordinating.existingSecret -}}
-{{- $ingestSecret :=.Values.security.tls.ingest.existingSecret -}}
-{{- $ingestEnabled := .Values.ingest.enabled -}}
-{{- if or $masterSecret $dataSecret $coordSecret (and $ingestEnabled $ingestSecret) }}
+{{- $masterSecret := (and (include "elasticsearch.master.enabled" .) .Values.security.tls.master.existingSecret) -}}
+{{- $coordinatingSecret := (and (include "elasticsearch.coordinating.enabled" .) .Values.security.tls.coordinating.existingSecret) -}}
+{{- $dataSecret := (and (include "elasticsearch.data.enabled" .) .Values.security.tls.data.existingSecret) -}}
+{{- $ingestSecret := (and (include "elasticsearch.ingest.enabled" .) .Values.security.tls.ingest.existingSecret) -}}
+{{- if or $masterSecret $coordinatingSecret $dataSecret $ingestSecret }}
     {{- true -}}
 {{- end -}}
 {{- end -}}
 
 {{/* Validate values of Elasticsearch - Existing secret not provided for master nodes */}}
 {{- define "elasticsearch.validateValues.security.missingTlsSecrets.master" -}}
-{{- if and .Values.security.enabled (include "elasticsearch.security.tlsSecretsProvided" .) (not .Values.security.tls.master.existingSecret) -}}
+{{- $masterSecret := (and (include "elasticsearch.master.enabled" .) (not .Values.security.tls.master.existingSecret)) -}}
+{{- if and .Values.security.enabled (include "elasticsearch.security.tlsSecretsProvided" .) $masterSecret -}}
 elasticsearch: security.tls.master.existingSecret
     Missing secret containing the TLS certificates for the Elasticsearch master nodes.
     Provide the certificates using --set .Values.security.tls.master.existingSecret="my-secret".
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Elasticsearch - Existing secret not provided for data nodes */}}
-{{- define "elasticsearch.validateValues.security.missingTlsSecrets.data" -}}
-{{- if and .Values.security.enabled (include "elasticsearch.security.tlsSecretsProvided" .) (not .Values.security.tls.data.existingSecret) -}}
-elasticsearch: security.tls.data.existingSecret
-    Missing secret containing the TLS certificates for the Elasticsearch data nodes.
-    Provide the certificates using --set .Values.security.tls.data.existingSecret="my-secret".
-{{- end -}}
-{{- end -}}
-
 {{/* Validate values of Elasticsearch - Existing secret not provided for coordinating-only nodes */}}
 {{- define "elasticsearch.validateValues.security.missingTlsSecrets.coordinating" -}}
-{{- if and .Values.security.enabled (include "elasticsearch.security.tlsSecretsProvided" .) (not .Values.security.tls.coordinating.existingSecret) -}}
+{{- $coordinatingSecret := (and (include "elasticsearch.coordinating.enabled" .) (not .Values.security.tls.coordinating.existingSecret)) -}}
+{{- if and .Values.security.enabled (include "elasticsearch.security.tlsSecretsProvided" .) $coordinatingSecret -}}
 elasticsearch: security.tls.coordinating.existingSecret
     Missing secret containing the TLS certificates for the Elasticsearch coordinating-only nodes.
     Provide the certificates using --set .Values.security.tls.coordinating.existingSecret="my-secret".
 {{- end -}}
 {{- end -}}
 
+{{/* Validate values of Elasticsearch - Existing secret not provided for data nodes */}}
+{{- define "elasticsearch.validateValues.security.missingTlsSecrets.data" -}}
+{{- $dataSecret := (and (include "elasticsearch.data.enabled" .) (not .Values.security.tls.data.existingSecret)) -}}
+{{- if and .Values.security.enabled (include "elasticsearch.security.tlsSecretsProvided" .) $dataSecret -}}
+elasticsearch: security.tls.data.existingSecret
+    Missing secret containing the TLS certificates for the Elasticsearch data nodes.
+    Provide the certificates using --set .Values.security.tls.data.existingSecret="my-secret".
+{{- end -}}
+{{- end -}}
+
 {{/* Validate values of Elasticsearch - Existing secret not provided for ingest nodes */}}
 {{- define "elasticsearch.validateValues.security.missingTlsSecrets.ingest" -}}
-{{- if and .Values.security.enabled .Values.ingest.enabled (include "elasticsearch.security.tlsSecretsProvided" .) (not .Values.security.tls.ingest.existingSecret) -}}
+{{- $ingestSecret := (and (include "elasticsearch.ingest.enabled" .) (not .Values.security.tls.ingest.existingSecret)) -}}
+{{- if and .Values.security.enabled (include "elasticsearch.security.tlsSecretsProvided" .) $ingestSecret -}}
 elasticsearch: security.tls.ingest.existingSecret
     Missing secret containing the TLS certificates for the Elasticsearch ingest nodes.
     Provide the certificates using --set .Values.security.tls.ingest.existingSecret="my-secret".
@@ -477,11 +527,20 @@ elasticsearch: security.tls
 {{- end -}}
 {{- end -}}
 
+{{/* Validate at least Elasticsearch one master node is configured */}}
+{{- define "elasticsearch.validateValues.master.replicas" -}}
+{{- if not (include "elasticsearch.master.enabled" .) -}}
+elasticsearch: master.replicas
+    Elasticsearch needs at least one master-elegible node to form a cluster.
+{{- end -}}
+{{- end -}}
+
 {{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "elasticsearch.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "elasticsearch.validateValues.master.replicas" .) -}}
 {{- $messages := append $messages (include "elasticsearch.validateValues.security.tls" .) -}}
 {{- $messages := append $messages (include "elasticsearch.validateValues.security.missingTlsSecrets.master" .) -}}
 {{- $messages := append $messages (include "elasticsearch.validateValues.security.missingTlsSecrets.data" .) -}}

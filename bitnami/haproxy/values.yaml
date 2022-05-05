@@ -122,7 +122,7 @@ service:
 image:
   registry: docker.io
   repository: bitnami/haproxy
-  tag: 2.5.6-debian-10-r0
+  tag: 2.5.6-debian-10-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

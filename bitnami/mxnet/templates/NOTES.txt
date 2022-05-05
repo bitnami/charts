@@ -12,7 +12,7 @@ The provided file {{ .Values.entrypoint.file }} is being executed. You can see t
 
 and the list of pods with:
 
-    kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "mxnet.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+    kubectl get pods --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ include "mxnet.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
 
 {{- else }}
 You didn't specify any entrypoint to your code.
@@ -20,7 +20,7 @@ To run it, you can either re-deploy the chart using the `mxnet.entrypoint.file` 
 
 1. Get the running pods:
 
-    kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "mxnet.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+    kubectl get pods --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ include "mxnet.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
 
 2. Get into a pod:
 
@@ -33,7 +33,7 @@ WARNING: You haven't loaded any file. You can access the Python REPL by jumping 
 
 1. Get the running pods:
 
-    kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "mxnet.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+    kubectl get pods --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ include "mxnet.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
 
 2. Run the Python REPL:
 
