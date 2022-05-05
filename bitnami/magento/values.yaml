@@ -582,20 +582,25 @@ elasticsearch:
   sysctlImage:
     enabled: true
   ## Elasticsearch master-eligible node parameters
-  ## @param elasticsearch.master.replicas Desired number of Elasticsearch master-eligible nodes
+  ## @param elasticsearch.master.replicaCount Desired number of Elasticsearch master-eligible nodes
   ##
   master:
-    replicas: 1
+    replicaCount: 1
   ## Elasticsearch coordinating-only node parameters
-  ## @param elasticsearch.coordinating.replicas Desired number of Elasticsearch coordinating-only nodes
+  ## @param elasticsearch.coordinating.replicaCount Desired number of Elasticsearch coordinating-only nodes
   ##
   coordinating:
-    replicas: 1
+    replicaCount: 1
   ## Elasticsearch data node parameters
-  ## @param elasticsearch.data.replicas Desired number of Elasticsearch data nodes
+  ## @param elasticsearch.data.replicaCount Desired number of Elasticsearch data nodes
   ##
   data:
-    replicas: 1
+    replicaCount: 1
+  ## Elasticsearch ingest node parameters
+  ## @param elasticsearch.ingest.replicaCount Desired number of Elasticsearch ingest nodes
+  ##
+  ingest:
+    replicaCount: 1
 ## External elasticsearch configuration
 ##
 externalElasticsearch:
