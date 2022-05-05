@@ -8,7 +8,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - magento-database
-    version: 10.x.x
+    version: 11.x.x
   - condition: elasticsearch.enabled
     name: elasticsearch
     repository: https://charts.bitnami.com/bitnami
