@@ -158,65 +158,65 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### MongoDB(&reg;) statefulset parameters
 
-| Name                                    | Description                                                                                                      | Value           |
-| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------- |
-| `annotations`                           | Additional labels to be added to the MongoDB(&reg;) statefulset. Evaluated as a template                         | `{}`            |
-| `labels`                                | Annotations to be added to the MongoDB(&reg;) statefulset. Evaluated as a template                               | `{}`            |
-| `replicaCount`                          | Number of MongoDB(&reg;) nodes (only when `architecture=replicaset`)                                             | `2`             |
-| `updateStrategy.type`                   | Strategy to use to replace existing MongoDB(&reg;) pods. When architecture=standalone and useStatefulSet=false,  | `RollingUpdate` |
-| `podManagementPolicy`                   | Pod management policy for MongoDB(&reg;)                                                                         | `OrderedReady`  |
-| `podAffinityPreset`                     | MongoDB(&reg;) Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`            |
-| `podAntiAffinityPreset`                 | MongoDB(&reg;) Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`          | `soft`          |
-| `nodeAffinityPreset.type`               | MongoDB(&reg;) Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`         | `""`            |
-| `nodeAffinityPreset.key`                | MongoDB(&reg;) Node label key to match Ignored if `affinity` is set.                                             | `""`            |
-| `nodeAffinityPreset.values`             | MongoDB(&reg;) Node label values to match. Ignored if `affinity` is set.                                         | `[]`            |
-| `affinity`                              | MongoDB(&reg;) Affinity for pod assignment                                                                       | `{}`            |
-| `nodeSelector`                          | MongoDB(&reg;) Node labels for pod assignment                                                                    | `{}`            |
-| `tolerations`                           | MongoDB(&reg;) Tolerations for pod assignment                                                                    | `[]`            |
-| `topologySpreadConstraints`             | MongoDB(&reg;) Spread Constraints for Pods                                                                       | `[]`            |
-| `lifecycleHooks`                        | LifecycleHook for the MongoDB(&reg;) container(s) to automate configuration before or after startup              | `{}`            |
-| `terminationGracePeriodSeconds`         | MongoDB(&reg;) Termination Grace Period                                                                          | `""`            |
-| `podLabels`                             | MongoDB(&reg;) pod labels                                                                                        | `{}`            |
-| `podAnnotations`                        | MongoDB(&reg;) Pod annotations                                                                                   | `{}`            |
-| `priorityClassName`                     | Name of the existing priority class to be used by MongoDB(&reg;) pod(s)                                          | `""`            |
-| `runtimeClassName`                      | Name of the runtime class to be used by MongoDB(&reg;) pod(s)                                                    | `""`            |
-| `podSecurityContext.enabled`            | Enable MongoDB(&reg;) pod(s)' Security Context                                                                   | `true`          |
-| `podSecurityContext.fsGroup`            | Group ID for the volumes of the MongoDB(&reg;) pod(s)                                                            | `1001`          |
-| `podSecurityContext.sysctls`            | sysctl settings of the MongoDB(&reg;) pod(s)'                                                                    | `[]`            |
-| `containerSecurityContext.enabled`      | Enable MongoDB(&reg;) container(s)' Security Context                                                             | `true`          |
-| `containerSecurityContext.runAsUser`    | User ID for the MongoDB(&reg;) container                                                                         | `1001`          |
-| `containerSecurityContext.runAsNonRoot` | Set MongoDB(&reg;) container's Security Context runAsNonRoot                                                     | `true`          |
-| `resources.limits`                      | The resources limits for MongoDB(&reg;) containers                                                               | `{}`            |
-| `resources.requests`                    | The requested resources for MongoDB(&reg;) containers                                                            | `{}`            |
-| `containerPorts.mongodb`                | MongoDB(&reg;) container port                                                                                    | `27017`         |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                             | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                          | `30`            |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                 | `20`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                | `10`            |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                              | `6`             |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                              | `1`             |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                                            | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                         | `5`             |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                | `10`            |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                               | `5`             |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                             | `6`             |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                             | `1`             |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                                              | `false`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                           | `5`             |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                  | `20`            |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                 | `10`            |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                               | `30`            |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                               | `1`             |
-| `customLivenessProbe`                   | Override default liveness probe for MongoDB(&reg;) containers                                                    | `{}`            |
-| `customReadinessProbe`                  | Override default readiness probe for MongoDB(&reg;) containers                                                   | `{}`            |
-| `customStartupProbe`                    | Override default startup probe for MongoDB(&reg;) containers                                                     | `{}`            |
-| `initContainers`                        | Add additional init containers for the hidden node pod(s)                                                        | `[]`            |
-| `sidecars`                              | Add additional sidecar containers for the MongoDB(&reg;) pod(s)                                                  | `[]`            |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the MongoDB(&reg;) container(s)                     | `[]`            |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes to the MongoDB(&reg;) statefulset                            | `[]`            |
-| `pdb.create`                            | Enable/disable a Pod Disruption Budget creation for MongoDB(&reg;) pod(s)                                        | `false`         |
-| `pdb.minAvailable`                      | Minimum number/percentage of MongoDB(&reg;) pods that must still be available after the eviction                 | `1`             |
-| `pdb.maxUnavailable`                    | Maximum number/percentage of MongoDB(&reg;) pods that may be made unavailable after the eviction                 | `""`            |
+| Name                                    | Description                                                                                                     | Value           |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------- |
+| `annotations`                           | Additional labels to be added to the MongoDB(&reg;) statefulset. Evaluated as a template                        | `{}`            |
+| `labels`                                | Annotations to be added to the MongoDB(&reg;) statefulset. Evaluated as a template                              | `{}`            |
+| `replicaCount`                          | Number of MongoDB(&reg;) nodes (only when `architecture=replicaset`)                                            | `2`             |
+| `updateStrategy.type`                   | Strategy to use to replace existing MongoDB(&reg;) pods. When architecture=standalone and useStatefulSet=false, | `RollingUpdate` |
+| `podManagementPolicy`                   | Pod management policy for MongoDB(&reg;)                                                                        | `OrderedReady`  |
+| `podAffinityPreset`                     | MongoDB(&reg;) Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `""`            |
+| `podAntiAffinityPreset`                 | MongoDB(&reg;) Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`         | `soft`          |
+| `nodeAffinityPreset.type`               | MongoDB(&reg;) Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`            |
+| `nodeAffinityPreset.key`                | MongoDB(&reg;) Node label key to match Ignored if `affinity` is set.                                            | `""`            |
+| `nodeAffinityPreset.values`             | MongoDB(&reg;) Node label values to match. Ignored if `affinity` is set.                                        | `[]`            |
+| `affinity`                              | MongoDB(&reg;) Affinity for pod assignment                                                                      | `{}`            |
+| `nodeSelector`                          | MongoDB(&reg;) Node labels for pod assignment                                                                   | `{}`            |
+| `tolerations`                           | MongoDB(&reg;) Tolerations for pod assignment                                                                   | `[]`            |
+| `topologySpreadConstraints`             | MongoDB(&reg;) Spread Constraints for Pods                                                                      | `[]`            |
+| `lifecycleHooks`                        | LifecycleHook for the MongoDB(&reg;) container(s) to automate configuration before or after startup             | `{}`            |
+| `terminationGracePeriodSeconds`         | MongoDB(&reg;) Termination Grace Period                                                                         | `""`            |
+| `podLabels`                             | MongoDB(&reg;) pod labels                                                                                       | `{}`            |
+| `podAnnotations`                        | MongoDB(&reg;) Pod annotations                                                                                  | `{}`            |
+| `priorityClassName`                     | Name of the existing priority class to be used by MongoDB(&reg;) pod(s)                                         | `""`            |
+| `runtimeClassName`                      | Name of the runtime class to be used by MongoDB(&reg;) pod(s)                                                   | `""`            |
+| `podSecurityContext.enabled`            | Enable MongoDB(&reg;) pod(s)' Security Context                                                                  | `true`          |
+| `podSecurityContext.fsGroup`            | Group ID for the volumes of the MongoDB(&reg;) pod(s)                                                           | `1001`          |
+| `podSecurityContext.sysctls`            | sysctl settings of the MongoDB(&reg;) pod(s)'                                                                   | `[]`            |
+| `containerSecurityContext.enabled`      | Enable MongoDB(&reg;) container(s)' Security Context                                                            | `true`          |
+| `containerSecurityContext.runAsUser`    | User ID for the MongoDB(&reg;) container                                                                        | `1001`          |
+| `containerSecurityContext.runAsNonRoot` | Set MongoDB(&reg;) container's Security Context runAsNonRoot                                                    | `true`          |
+| `resources.limits`                      | The resources limits for MongoDB(&reg;) containers                                                              | `{}`            |
+| `resources.requests`                    | The requested resources for MongoDB(&reg;) containers                                                           | `{}`            |
+| `containerPorts.mongodb`                | MongoDB(&reg;) container port                                                                                   | `27017`         |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                            | `true`          |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                         | `30`            |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                | `20`            |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                               | `10`            |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                             | `6`             |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                             | `1`             |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                                           | `true`          |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                        | `5`             |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                               | `10`            |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                              | `5`             |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                            | `6`             |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                            | `1`             |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                                             | `false`         |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                          | `5`             |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                 | `20`            |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                | `10`            |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                              | `30`            |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                              | `1`             |
+| `customLivenessProbe`                   | Override default liveness probe for MongoDB(&reg;) containers                                                   | `{}`            |
+| `customReadinessProbe`                  | Override default readiness probe for MongoDB(&reg;) containers                                                  | `{}`            |
+| `customStartupProbe`                    | Override default startup probe for MongoDB(&reg;) containers                                                    | `{}`            |
+| `initContainers`                        | Add additional init containers for the hidden node pod(s)                                                       | `[]`            |
+| `sidecars`                              | Add additional sidecar containers for the MongoDB(&reg;) pod(s)                                                 | `[]`            |
+| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the MongoDB(&reg;) container(s)                    | `[]`            |
+| `extraVolumes`                          | Optionally specify extra list of additional volumes to the MongoDB(&reg;) statefulset                           | `[]`            |
+| `pdb.create`                            | Enable/disable a Pod Disruption Budget creation for MongoDB(&reg;) pod(s)                                       | `false`         |
+| `pdb.minAvailable`                      | Minimum number/percentage of MongoDB(&reg;) pods that must still be available after the eviction                | `1`             |
+| `pdb.maxUnavailable`                    | Maximum number/percentage of MongoDB(&reg;) pods that may be made unavailable after the eviction                | `""`            |
 
 
 ### Traffic exposure parameters
@@ -502,6 +502,8 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.username`                           | String with username for the metrics exporter                                                                         | `""`                       |
 | `metrics.password`                           | String with password for the metrics exporter                                                                         | `""`                       |
 | `metrics.extraFlags`                         | String with extra flags to the metrics exporter                                                                       | `""`                       |
+| `metrics.command`                            | Override default container command (useful when using custom images)                                                  | `[]`                       |
+| `metrics.args`                               | Override default container args (useful when using custom images)                                                     | `[]`                       |
 | `metrics.resources.limits`                   | The resources limits for Prometheus exporter containers                                                               | `{}`                       |
 | `metrics.resources.requests`                 | The requested resources for Prometheus exporter containers                                                            | `{}`                       |
 | `metrics.containerPort`                      | Port of the Prometheus metrics container                                                                              | `9216`                     |
