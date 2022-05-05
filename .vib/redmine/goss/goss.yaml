@@ -14,7 +14,7 @@ command:
     stderr: [ ]
     timeout: 20000  
 file:
-  /bitnami/redmine/configuration.yml:
+  /bitnami/redmine/config/configuration.yml:
     mode: "0644"
     filetype: file
     exists: true
@@ -23,7 +23,7 @@ file:
       - smtp_settings
       - mysql
       - mariadb
-  /bitnami/redmine/database.yml:
+  /bitnami/redmine/config/database.yml:
     mode: "0644"
     filetype: file
     exists: true
@@ -32,7 +32,7 @@ file:
       - postgresql
       - redmine
   /bitnami/redmine/files:
-    mode: "0644"
+    mode: "0775"
     filetype: directory
     exists: true
     group: root
@@ -40,7 +40,7 @@ file:
       - postgresql
       - redmine
   /opt/bitnami/mysql:
-    mode: "0644"
+    mode: "0755"
     filetype: directory
     exists: true
     group: root
