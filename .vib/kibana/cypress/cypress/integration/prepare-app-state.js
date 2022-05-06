@@ -2,6 +2,7 @@
 
 export const skipTheWelcomeScreen = () => {
   cy.visit('/');
+  cy.get($body).contains('not ready yet');
   closeThePopups();
   cy.get('body').then(($body) => {
     if ($body.text().includes('Explore on my own')) {
