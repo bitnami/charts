@@ -490,7 +490,9 @@ In order to render complete information about the deployment including all the s
 
 ### To 12.0.0
 
-This major updates the Spark subchart to its newest major, 6.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/spark#to-600) you can find more information about the changes introduced in that version.
+This major updates the Spark subchart to its newest major, 6.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/spark#to-600) you can find more information about the changes introduced in that version. Specifically, the following change affects this chart values definition:
+
+- `spark.xxxx.webport` parameters are now renamed to `spark.xxxx.containerPorts.http`.
 
 ### To 11.0.0
 
