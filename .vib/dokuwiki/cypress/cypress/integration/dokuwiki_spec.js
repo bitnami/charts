@@ -33,8 +33,6 @@ it('allows the admin to validate and modify configuration settings', () => {
       'contain.value',
       setting.newSetting.directoryCreationMode
     );
-  });
-  cy.fixture('settings').then((setting) => {
     cy.get('#config___title')
       .scrollIntoView()
       .clear()
