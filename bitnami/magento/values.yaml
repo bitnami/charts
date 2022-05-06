@@ -305,7 +305,6 @@ containerSecurityContext:
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.path Request path for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -314,7 +313,6 @@ containerSecurityContext:
 ##
 livenessProbe:
   enabled: true
-  path: /index.php
   initialDelaySeconds: 300
   periodSeconds: 10
   timeoutSeconds: 5
@@ -323,7 +321,6 @@ livenessProbe:
 ## Configure extra options for readiness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param readinessProbe.enabled Enable readinessProbe
-## @param readinessProbe.path Request path for readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -332,7 +329,6 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  path: /index.php
   initialDelaySeconds: 30
   periodSeconds: 5
   timeoutSeconds: 3
@@ -341,7 +337,6 @@ readinessProbe:
 ## Configure extra options for startupProbe probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param startupProbe.enabled Enable startupProbe
-## @param startupProbe.path Request path for startupProbe
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
 ## @param startupProbe.periodSeconds Period seconds for startupProbe
 ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -350,7 +345,6 @@ readinessProbe:
 ##
 startupProbe:
   enabled: false
-  path: /index.php
   initialDelaySeconds: 0
   periodSeconds: 10
   timeoutSeconds: 3
