@@ -128,7 +128,7 @@ it('allows adding of a canvas', () => {
   });
   cy.contains('span', 'Text').forceClick();
   cy.visit('app/canvas#/');
-  cy.fixture('testdata').then((td) => {
+  cy.fixture('workpads').then((workpad) => {
     cy.contains(`${workpad.newWorkpad.name}${random}`);
   });
 });
