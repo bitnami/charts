@@ -214,16 +214,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Elasticsearch parameters
 
-| Name                                      | Description                                                                | Value  |
-| ----------------------------------------- | -------------------------------------------------------------------------- | ------ |
-| `elasticsearch.enabled`                   | Whether to deploy a elasticsearch server to use as magento's search engine | `true` |
-| `elasticsearch.sysctlImage.enabled`       | Enable kernel settings modifier image for Elasticsearch                    | `true` |
-| `elasticsearch.master.replicaCount`       | Desired number of Elasticsearch master-eligible nodes                      | `1`    |
-| `elasticsearch.coordinating.replicaCount` | Desired number of Elasticsearch coordinating-only nodes                    | `1`    |
-| `elasticsearch.data.replicaCount`         | Desired number of Elasticsearch data nodes                                 | `1`    |
-| `elasticsearch.ingest.replicaCount`       | Desired number of Elasticsearch ingest nodes                               | `1`    |
-| `externalElasticsearch.host`              | Host of the external elasticsearch server                                  | `""`   |
-| `externalElasticsearch.port`              | Port of the external elasticsearch server                                  | `""`   |
+| Name                                      | Description                                                                | Value                   |
+| ----------------------------------------- | -------------------------------------------------------------------------- | ----------------------- |
+| `elasticsearch.enabled`                   | Whether to deploy a elasticsearch server to use as magento's search engine | `true`                  |
+| `elasticsearch.image.registry`            | Elasticsearch image registry                                               | `docker.io`             |
+| `elasticsearch.image.repository`          | Elasticsearch image repository                                             | `bitnami/elasticsearch` |
+| `elasticsearch.image.tag`                 | Elasticsearch image tag (immutable tags are recommended)                   | `7.17.3-debian-10-r7`   |
+| `elasticsearch.sysctlImage.enabled`       | Enable kernel settings modifier image for Elasticsearch                    | `true`                  |
+| `elasticsearch.master.replicaCount`       | Desired number of Elasticsearch master-eligible nodes                      | `1`                     |
+| `elasticsearch.coordinating.replicaCount` | Desired number of Elasticsearch coordinating-only nodes                    | `1`                     |
+| `elasticsearch.data.replicaCount`         | Desired number of Elasticsearch data nodes                                 | `1`                     |
+| `elasticsearch.ingest.replicaCount`       | Desired number of Elasticsearch ingest nodes                               | `1`                     |
+| `externalElasticsearch.host`              | Host of the external elasticsearch server                                  | `""`                    |
+| `externalElasticsearch.port`              | Port of the external elasticsearch server                                  | `""`                    |
 
 
 ### Persistence parameters
