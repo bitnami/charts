@@ -14,7 +14,7 @@ command:
     exec: id -u
     exit-status: 0
     stdout:
-      - "!0"
+      - "/[^0]+/"
     stderr: []
   java-test:
     exec: java -version
