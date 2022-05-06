@@ -245,6 +245,7 @@ args: []
 ## @section etcd statefulset parameters
 ##
 
+
 ## @param replicaCount Number of etcd replicas to deploy
 ##
 replicaCount: 1
@@ -457,6 +458,14 @@ priorityClassName: ""
 ## The value is evaluated as a template
 ##
 topologySpreadConstraints: []
+## persistentVolumeClaimRetentionPolicy
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+## @param persistentVolumeClaimRetentionPolicy controls if and how PVCs are deleted during the lifecycle of a StatefulSet
+persistentVolumeClaimRetentionPolicy:
+  enabled: false
+  whenDeleted: Retain
+  whenScaled: Retain
+
 
 ## @section Traffic exposure parameters
 ##
