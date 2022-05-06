@@ -479,7 +479,7 @@ mariadb:
   ## To use an external database set this to false and configure the externalDatabase parameters
   ##
   enabled: true
-  ## Override MariaDB default image as 10.5 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
+  ## Override MariaDB default image as 10.6 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb
   ## @param mariadb.image.registry MariaDB image registry
   ## @param mariadb.image.repository MariaDB image repository
@@ -571,6 +571,16 @@ elasticsearch:
   ## To use an external server set this to false and configure the externalElasticsearch parameters
   ##
   enabled: true
+  ## Override Elasticsearch default image as version 8 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
+  ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch
+  ## @param elasticsearch.image.registry Elasticsearch image registry
+  ## @param elasticsearch.image.repository Elasticsearch image repository
+  ## @param elasticsearch.image.tag Elasticsearch image tag (immutable tags are recommended)
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/elasticsearch
+    tag: 7.17.3-debian-10-r7
   ## @param elasticsearch.sysctlImage.enabled Enable kernel settings modifier image for Elasticsearch
   ##
   sysctlImage:
