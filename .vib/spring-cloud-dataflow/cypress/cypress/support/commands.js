@@ -1,4 +1,4 @@
-const COMMAND_DELAY = 800;
+const CLICK_DELAY = 800;
 const TYPE_DELAY = 200;
 
 for (const command of ['click']) {
@@ -8,7 +8,7 @@ for (const command of ['click']) {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(origVal);
-      }, COMMAND_DELAY);
+      }, CLICK_DELAY);
     });
   });
 }
@@ -20,7 +20,7 @@ for (const command of ['type']) {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(origVal);
-      }, COMMAND_DELAY);
+      }, TYPE_DELAY);
     });
   });
 }
