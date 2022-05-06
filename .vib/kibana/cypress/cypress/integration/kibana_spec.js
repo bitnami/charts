@@ -101,7 +101,7 @@ it('allows adding a remote cluster', () => {
         force: true,
       }
     );
-    cy.get('[data-test-subj="comboBoxInput"]').type(cluster.newCluster.name);
+    cy.get('[data-test-subj="comboBoxInput"]').type(cluster.newCluster.cluster);
     cy.get('[data-test-subj="remoteClusterFormSaveButton"]').forceClick();
     cy.get('[data-test-subj="remoteClusterDetailFlyout"]').contains(
       cluster.newCluster.name

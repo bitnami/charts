@@ -1,6 +1,6 @@
 {
   "newCluster": {
     "name": "remoteCluster",
-    "cluter": "localhost:90"
+    "cluster": "localhost:90"
   }
 }
