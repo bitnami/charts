@@ -278,9 +278,6 @@ resources:
 ## Controller containers' liveness probe. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.httpGet.path Request path for livenessProbe
-## @param livenessProbe.httpGet.port Port for livenessProbe
-## @param livenessProbe.httpGet.scheme Scheme for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -297,9 +294,6 @@ livenessProbe:
 ## Controller containers' readiness probe. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param readinessProbe.enabled Enable readinessProbe
-## @param readinessProbe.httpGet.path Request path for readinessProbe
-## @param readinessProbe.httpGet.port Port for readinessProbe
-## @param readinessProbe.httpGet.scheme Scheme for readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -316,9 +310,6 @@ readinessProbe:
 ## Controller containers' startup probe. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param startupProbe.enabled Enable startupProbe
-## @param startupProbe.httpGet.path Request path for startupProbe
-## @param startupProbe.httpGet.port Port for startupProbe
-## @param startupProbe.httpGet.scheme Scheme for startupProbe
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
 ## @param startupProbe.periodSeconds Period seconds for startupProbe
 ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -562,9 +553,6 @@ defaultBackend:
   ## Default backend containers' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param defaultBackend.livenessProbe.enabled Enable livenessProbe
-  ## @param defaultBackend.livenessProbe.httpGet.path Request path for livenessProbe
-  ## @param defaultBackend.livenessProbe.httpGet.port Port for livenessProbe
-  ## @param defaultBackend.livenessProbe.httpGet.scheme Scheme for livenessProbe
   ## @param defaultBackend.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param defaultBackend.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param defaultBackend.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -581,9 +569,6 @@ defaultBackend:
   ## Default backend containers' readiness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param defaultBackend.readinessProbe.enabled Enable readinessProbe
-  ## @param defaultBackend.readinessProbe.httpGet.path Request path for readinessProbe
-  ## @param defaultBackend.readinessProbe.httpGet.port Port for readinessProbe
-  ## @param defaultBackend.readinessProbe.httpGet.scheme Scheme for readinessProbe
   ## @param defaultBackend.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param defaultBackend.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param defaultBackend.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -600,9 +585,6 @@ defaultBackend:
   ## Default backend containers' startup probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param defaultBackend.startupProbe.enabled Enable startupProbe
-  ## @param defaultBackend.startupProbe.httpGet.path Request path for startupProbe
-  ## @param defaultBackend.startupProbe.httpGet.port Port for startupProbe
-  ## @param defaultBackend.startupProbe.httpGet.scheme Scheme for startupProbe
   ## @param defaultBackend.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param defaultBackend.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param defaultBackend.startupProbe.timeoutSeconds Timeout seconds for startupProbe
