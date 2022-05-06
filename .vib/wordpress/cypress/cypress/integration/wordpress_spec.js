@@ -27,10 +27,7 @@ it('allows adding a comment to sample blogpost', () => {
   });
 
   cy.get('#submit').click();
-  cy.contains(
-    '.comment-awaiting-moderation',
-    'your comment will be visible after it has been approved'
-  );
+  cy.contains('your comment will be visible after it has been approved');
 });
 
 it('checks if admin can create a post', () => {
