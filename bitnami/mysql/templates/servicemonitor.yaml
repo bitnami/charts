@@ -39,11 +39,11 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ include "common.names.namespace" . }}
+      - {{ include "common.names.namespace" . | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: metrics
       {{- if .Values.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
-{{- end {{ include "common.names.namespace" . }}
+{{- end }}
