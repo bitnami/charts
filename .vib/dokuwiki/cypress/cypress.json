@@ -3,7 +3,7 @@
   "pageLoadTimeout": 240000,
   "defaultCommandTimeout": 80000,
   "env": {
-    "username": "superuser",
-    "password": "bitnami1"
+    "username": "user",
+    "password": "ComplicatedPassword123!4"
   }
 }
