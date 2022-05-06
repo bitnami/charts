@@ -3,7 +3,7 @@ import { random, getPageUrlFromTitle, confirmLogOut } from './utils';
 
 it('allows to log in and out', () => {
   cy.login();
-  cy.get("li[id*='preferences']");
+  cy.contains('li','Preferences')
   cy.contains('Log out').click();
   confirmLogOut();
   cy.contains('You are now logged out');
@@ -22,8 +22,6 @@ it('allows to create user', () => {
   cy.fixture('users').then((user) => {
     cy.contains(`Welcome, ${user.newUser.username}-${random}`);
   });
-  confirmLogOut();
-  cy.contains('Log out').click();
 });
 
 it('allows to create a new page', () => {
@@ -44,7 +42,7 @@ it('allows to create a new page', () => {
   cy.contains('The page has been created');
 });
 
-it('allows to upload files', () => {
+it('allows to upload a file', () => {
   cy.login();
   cy.visit('/wiki/Special:Upload');
   cy.get('#wpUploadFile').selectFile(

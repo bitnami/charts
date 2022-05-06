@@ -13,11 +13,16 @@ file:
     mode: "0644"
     filetype: file
     exists: true
+# Checks the user running the container is non-root
 command:
-  # Checks the user running the container is non-root
   user-id-test:
-    exec: id -u
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+    exit-status: 0
+    stdout: []
+    stderr: []
+  which-php:
+    exec: which php
     exit-status: 0
     stdout:
-      - 1001
+    - "/opt/bitnami/php/bin/php"
     stderr: []
