@@ -1,7 +1,7 @@
 annotations:
   category: E-Commerce
 apiVersion: v2
-appVersion: 2.4.3
+appVersion: 2.4.4
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
