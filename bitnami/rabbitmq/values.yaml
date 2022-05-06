@@ -30,7 +30,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.9.16-debian-10-r1
+  tag: 3.9.16-debian-10-r8
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
   ##
@@ -306,7 +306,7 @@ configuration: |-
   ## Clustering
   ##
   cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
-  cluster_formation.k8s.host = kubernetes.default.svc.{{ .Values.clusterDomain }}
+  cluster_formation.k8s.host = kubernetes.default
   cluster_formation.node_cleanup.interval = 10
   cluster_formation.node_cleanup.only_log_warning = true
   cluster_partition_handling = {{ .Values.clustering.partitionHandling }}
@@ -1170,7 +1170,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r409
+    tag: 10-debian-10-r416
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
