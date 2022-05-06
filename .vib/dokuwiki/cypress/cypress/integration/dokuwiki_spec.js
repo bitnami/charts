@@ -65,8 +65,8 @@ it('allows editing a page in the playground', () => {
   cy.visit('/playground:playground');
   cy.get('.edit > a > svg').click();
   cy.fixture('pages').then((page) => {
-    cy.get('#wiki__text').clear().type(page.newPage.content);
+    cy.get('#wiki__text').clear().type(`${page.newPage.content}.${random}`);
     cy.contains('button', 'Save').click();
-    cy.contains('.page', page.newPage.content);
+    cy.contains('.page', `${page.newPage.content}.${random}`);
   });
 });
