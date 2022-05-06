@@ -28,10 +28,5 @@ spec:
         - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
-        {{- if eq .Values.architecture "high-availability" }}
-        - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
-              app.kubernetes.io/component: relay
-        {{- end }}
       {{- end }}
 {{- end }}
