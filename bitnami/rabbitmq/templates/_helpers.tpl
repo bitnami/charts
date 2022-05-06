@@ -1,19 +1,4 @@
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "rabbitmq.name" -}}
-{{- include "common.names.name" . -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "rabbitmq.fullname" -}}
-{{- include "common.names.fullname" . -}}
-{{- end -}}
 
 {{/*
 Return the proper RabbitMQ image name
@@ -37,23 +22,11 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Return podAnnotations
-*/}}
-{{- define "rabbitmq.podAnnotations" -}}
-{{- if .Values.podAnnotations }}
-{{ include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) }}
-{{- end }}
-{{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
-{{ include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) }}
-{{- end }}
-{{- end -}}
-
-{{/*
  Create the name of the service account to use
  */}}
 {{- define "rabbitmq.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "rabbitmq.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
@@ -66,7 +39,7 @@ Get the password secret.
     {{- if .Values.auth.existingPasswordSecret -}}
         {{- printf "%s" (tpl .Values.auth.existingPasswordSecret $) -}}
     {{- else -}}
-        {{- printf "%s" (include "rabbitmq.fullname" .) -}}
+        {{- printf "%s" (include "common.names.fullname" .) -}}
     {{- end -}}
 {{- end -}}
 
@@ -77,7 +50,7 @@ Get the erlang secret.
     {{- if .Values.auth.existingErlangSecret -}}
         {{- printf "%s" (tpl .Values.auth.existingErlangSecret $) -}}
     {{- else -}}
-        {{- printf "%s" (include "rabbitmq.fullname" .) -}}
+        {{- printf "%s" (include "common.names.fullname" .) -}}
     {{- end -}}
 {{- end -}}
 
@@ -88,7 +61,7 @@ Get the TLS secret.
     {{- if .Values.auth.tls.existingSecret -}}
         {{- printf "%s" (tpl .Values.auth.tls.existingSecret $) -}}
     {{- else -}}
-        {{- printf "%s-certs" (include "rabbitmq.fullname" .) -}}
+        {{- printf "%s-certs" (include "common.names.fullname" .) -}}
     {{- end -}}
 {{- end -}}
 

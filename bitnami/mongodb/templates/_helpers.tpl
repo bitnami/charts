@@ -19,14 +19,10 @@ If release name contains chart name it will be used as a full name.
 Create a default mongo service name which can be overridden.
 */}}
 {{- define "mongodb.service.nameOverride" -}}
-    {{- if .Values.service -}}
-        {{- if .Values.service.nameOverride }}
-            {{- .Values.service.nameOverride -}}
-        {{- else -}}
-            {{ include "mongodb.fullname" . }}-headless
-        {{- end -}}
+    {{- if and .Values.service .Values.service.nameOverride -}}
+        {{- print .Values.service.nameOverride -}}
     {{- else -}}
-        {{ include "mongodb.fullname" . }}-headless
+        {{- printf "%s-headless" (include "mongodb.fullname" .) -}}
     {{- end }}
 {{- end }}
 
@@ -34,14 +30,10 @@ Create a default mongo service name which can be overridden.
 Create a default mongo arbiter service name which can be overridden.
 */}}
 {{- define "mongodb.arbiter.service.nameOverride" -}}
-    {{- if .Values.arbiter.service -}}
-        {{- if .Values.arbiter.service.nameOverride }}
-            {{- .Values.arbiter.service.nameOverride -}}
-        {{- else -}}
-            {{ include "mongodb.fullname" . }}-arbiter-headless
-        {{- end -}}
+    {{- if and .Values.arbiter.service .Values.arbiter.service.nameOverride -}}
+        {{- print .Values.arbiter.service.nameOverride -}}
     {{- else -}}
-        {{ include "mongodb.fullname" . }}-arbiter-headless
+        {{- printf "%s-arbiter-headless" (include "mongodb.fullname" .) -}}
     {{- end }}
 {{- end }}
 
@@ -49,68 +41,64 @@ Create a default mongo arbiter service name which can be overridden.
 Return the proper MongoDB&reg; image name
 */}}
 {{- define "mongodb.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper image name (for the metrics image)
 */}}
 {{- define "mongodb.metrics.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "mongodb.volumePermissions.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper image name (for the init container auto-discovery image)
 */}}
 {{- define "mongodb.externalAccess.autoDiscovery.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.externalAccess.autoDiscovery.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.externalAccess.autoDiscovery.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper image name (for the TLS Certs image)
 */}}
 {{- define "mongodb.tls.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.tls.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.tls.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "mongodb.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image) "global" .Values.global) }}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image .Values.tls.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Allow the release namespace to be overridden for multi-namespace deployments in combined charts.
 */}}
 {{- define "mongodb.namespace" -}}
-    {{- if .Values.global -}}
-        {{- if .Values.global.namespaceOverride }}
-            {{- .Values.global.namespaceOverride -}}
-        {{- else -}}
-            {{- .Release.Namespace -}}
-        {{- end -}}
+    {{- if and .Values.global .Values.global.namespaceOverride -}}
+        {{- print .Values.global.namespaceOverride -}}
     {{- else -}}
-        {{- .Release.Namespace -}}
+        {{- print .Release.Namespace -}}
     {{- end }}
 {{- end -}}
 {{- define "mongodb.serviceMonitor.namespace" -}}
     {{- if .Values.metrics.serviceMonitor.namespace -}}
-        {{- .Values.metrics.serviceMonitor.namespace -}}
+        {{- print .Values.metrics.serviceMonitor.namespace -}}
     {{- else -}}
         {{- include "mongodb.namespace" . -}}
     {{- end }}
 {{- end -}}
 {{- define "mongodb.prometheusRule.namespace" -}}
     {{- if .Values.metrics.prometheusRule.namespace -}}
-        {{- .Values.metrics.prometheusRule.namespace -}}
+        {{- print .Values.metrics.prometheusRule.namespace -}}
     {{- else -}}
         {{- include "mongodb.namespace" . -}}
     {{- end }}
@@ -123,9 +111,9 @@ is true or default otherwise.
 */}}
 {{- define "mongodb.serviceAccountName" -}}
     {{- if .Values.serviceAccount.create -}}
-        {{ default (include "mongodb.fullname" .) .Values.serviceAccount.name }}
+        {{- default (include "mongodb.fullname" .) (print .Values.serviceAccount.name) -}}
     {{- else -}}
-        {{ default "default" .Values.serviceAccount.name }}
+        {{- default "default" (print .Values.serviceAccount.name) -}}
     {{- end -}}
 {{- end -}}
 

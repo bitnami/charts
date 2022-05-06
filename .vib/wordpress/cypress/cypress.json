@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://192.168.64.101/",
+  "baseUrl": "http://localhost/",
   "env": {
     "username": "test_user",
     "password": "ComplicatedPassword123!4",
@@ -9,7 +9,7 @@
     "smtpPort": "120",
     "smtpUser": "test_mail_user",
     "wordpressFirstName": "TestName",
-    "wordpressLastName":"TestLastName"
+    "wordpressLastName": "TestLastName"
   },
-  "defaultCommandTimeout":30000
+  "defaultCommandTimeout": 30000
 }

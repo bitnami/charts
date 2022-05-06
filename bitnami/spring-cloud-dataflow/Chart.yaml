@@ -6,7 +6,7 @@ dependencies:
   - condition: rabbitmq.enabled
     name: rabbitmq
     repository: https://charts.bitnami.com/bitnami
-    version: 8.x.x
+    version: 9.x.x
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
@@ -39,4 +39,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-spring-cloud-dataflow
   - https://github.com/bitnami/bitnami-docker-spring-cloud-skipper
   - https://dataflow.spring.io/
-version: 8.0.1
+version: 9.0.0

@@ -23,7 +23,7 @@ In order to replicate the container startup scripts execute this command:
 {{- else }}
 
 {{- $replicaCount := int .Values.replicaCount }}
-{{- $portNumber := int .Values.service.port }}
+{{- $portNumber := int .Values.service.ports.mongodb }}
 {{- $fullname := include "mongodb.fullname" . }}
 {{- $releaseNamespace := include "mongodb.namespace" . }}
 {{- $clusterDomain := .Values.clusterDomain }}
@@ -152,7 +152,7 @@ To connect to your database nodes from outside, you need to add both primary and
 
         echo "$(kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "mongodb.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=mongodb,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
 
-    MongoDB&reg; nodes port: {{ .Values.externalAccess.service.port }}
+    MongoDB&reg; nodes port: {{ .Values.externalAccess.service.ports.mongodb }}
 
 {{- end }}
 
@@ -187,8 +187,8 @@ To connect to your database from outside the cluster execute the following comma
 
 To access the MongoDB&reg; Prometheus metrics, get the MongoDB&reg; Prometheus URL by running:
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "mongodb.fullname" . }}-metrics {{ .Values.metrics.service.port }}:{{ .Values.metrics.service.port }} &
-    echo "Prometheus Metrics URL: http://127.0.0.1:{{ .Values.metrics.service.port }}/metrics"
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "mongodb.fullname" . }}-metrics {{ .Values.metrics.service.ports.metrics }}:{{ .Values.metrics.service.ports.metrics }} &
+    echo "Prometheus Metrics URL: http://127.0.0.1:{{ .Values.metrics.service.ports.metrics }}/metrics"
 
 Then, open the obtained URL in a browser.
 
@@ -198,7 +198,5 @@ Then, open the obtained URL in a browser.
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- include "common.warnings.rollingTag" .Values.externalAccess.autoDiscovery.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.tls.image }}
 {{- include "mongodb.validateValues" . }}
-{{- $secretName := include "mongodb.fullname" . -}}
-{{- $passwordValidationErrors := include "common.validations.values.mongodb.passwords" (dict "secret" $secretName "context" $) -}}
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $passwordValidationErrors) "context" $) -}}

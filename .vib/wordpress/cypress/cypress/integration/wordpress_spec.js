@@ -98,9 +98,12 @@ it('checks if admin can create a post', () => {
   cy.get('.editor-post-saved-state').and('have.text', 'Saved');
 });
 
-it('checks the SMTP configuration', () => {
+/* TEMPORARILY SHUTTING DOWN THIS TEST DUE TO MAINTENANCE  */
+
+it.skip('checks the SMTP configuration', () => {
   cy.login();
   cy.visit('/wp-admin/admin.php?page=wp-mail-smtp');
+  cy.reload();
   cy.contains('div', 'WP Mail SMTP');
   cy.get('#wp-mail-smtp-setting-smtp-host').should(
     'have.value',
