@@ -139,21 +139,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.runAsUser`    | Magento containers' Security Context                                                                                 | `1001`               |
 | `containerSecurityContext.runAsNonRoot` | Set %%MAIN_CONTAINER_NAME%% container's Security Context runAsNonRoot                                                | `true`               |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                 | `true`               |
-| `livenessProbe.path`                    | Request path for livenessProbe                                                                                       | `/index.php`         |
 | `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                              | `300`                |
 | `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                     | `10`                 |
 | `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                    | `5`                  |
 | `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                  | `6`                  |
 | `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                  | `1`                  |
 | `readinessProbe.enabled`                | Enable readinessProbe                                                                                                | `true`               |
-| `readinessProbe.path`                   | Request path for readinessProbe                                                                                      | `/index.php`         |
 | `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                             | `30`                 |
 | `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                    | `5`                  |
 | `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                   | `3`                  |
 | `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                 | `6`                  |
 | `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                 | `1`                  |
 | `startupProbe.enabled`                  | Enable startupProbe                                                                                                  | `false`              |
-| `startupProbe.path`                     | Request path for startupProbe                                                                                        | `/index.php`         |
 | `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                               | `0`                  |
 | `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                      | `10`                 |
 | `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                     | `3`                  |
