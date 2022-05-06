@@ -121,7 +121,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.exporter.enabled`                               | Start a prometheus exporter                                                                                      | `true`                          |
 | `dataplatform.exporter.image.registry`                        | dataplatform exporter image registry                                                                             | `docker.io`                     |
 | `dataplatform.exporter.image.repository`                      | dataplatform exporter image repository                                                                           | `bitnami/dataplatform-exporter` |
-| `dataplatform.exporter.image.tag`                             | dataplatform exporter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r5`              |
+| `dataplatform.exporter.image.tag`                             | dataplatform exporter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r26`             |
 | `dataplatform.exporter.image.pullPolicy`                      | dataplatform exporter image pull policy                                                                          | `IfNotPresent`                  |
 | `dataplatform.exporter.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                 | `[]`                            |
 | `dataplatform.exporter.config`                                | Data Platform Metrics Configuration emitted in Prometheus format                                                 | `""`                            |
@@ -187,7 +187,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.emitter.enabled`                                | Start Data Platform metrics emitter                                                                              | `true`                          |
 | `dataplatform.emitter.image.registry`                         | Data Platform emitter image registry                                                                             | `docker.io`                     |
 | `dataplatform.emitter.image.repository`                       | Data Platform emitter image repository                                                                           | `bitnami/dataplatform-emitter`  |
-| `dataplatform.emitter.image.tag`                              | Data Platform emitter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r8`              |
+| `dataplatform.emitter.image.tag`                              | Data Platform emitter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r31`             |
 | `dataplatform.emitter.image.pullPolicy`                       | Data Platform emitter image pull policy                                                                          | `IfNotPresent`                  |
 | `dataplatform.emitter.image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                 | `[]`                            |
 | `dataplatform.emitter.livenessProbe.enabled`                  | Enable livenessProbe                                                                                             | `true`                          |
@@ -289,13 +289,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                     | Description                            | Value   |
 | ---------------------------------------- | -------------------------------------- | ------- |
 | `spark.enabled`                          | Enable Spark subchart                  | `true`  |
-| `spark.master.webPort`                   | Web port for spark master              | `8080`  |
+| `spark.master.containerPorts.web`        | Web port for spark master              | `8080`  |
 | `spark.master.resources.limits`          | Spark master resource limits           | `{}`    |
 | `spark.master.resources.requests.cpu`    | Spark master CPUs                      | `250m`  |
 | `spark.master.resources.requests.memory` | Spark master requested memory          | `5Gi`   |
 | `spark.master.affinity.podAntiAffinity`  | Anti affinity rules set for resiliency | `{}`    |
 | `spark.worker.replicaCount`              | Number of spark workers                | `2`     |
-| `spark.worker.webPort`                   | Web port for spark master              | `8081`  |
+| `spark.worker.containerPorts.web`        | Web port for spark master              | `8081`  |
 | `spark.worker.resources.limits`          | Spark master resource limits           | `{}`    |
 | `spark.worker.resources.requests.cpu`    | Spark master CPUs                      | `250m`  |
 | `spark.worker.resources.requests.memory` | Spark master requested memory          | `5Gi`   |
@@ -311,7 +311,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------ | -------------------------------------------- | ------- |
 | `elasticsearch.enabled`                                | Enable Elasticsearch                         | `true`  |
 | `elasticsearch.global.kibanaEnabled`                   | Enable Kibana                                | `true`  |
-| `elasticsearch.master.replicas`                        | Number of Elasticsearch replicas             | `3`     |
+| `elasticsearch.master.replicaCount`                    | Number of Elasticsearch replicas             | `3`     |
 | `elasticsearch.master.heapSize`                        | Heap Size for Elasticsearch master           | `768m`  |
 | `elasticsearch.master.affinity.podAntiAffinity`        | Elasticsearch pod anti affinity              | `{}`    |
 | `elasticsearch.master.resources.limits`                | Elasticsearch master resource limits         | `{}`    |
@@ -319,13 +319,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `elasticsearch.master.resources.requests.memory`       | Elasticsearch master requested memory        | `1Gi`   |
 | `elasticsearch.master.affinity.podAntiAffinity`        | Anti affinity rules set for resiliency       | `{}`    |
 | `elasticsearch.data.name`                              | Elasticsearch data node name                 | `data`  |
-| `elasticsearch.data.replicas`                          | Number of Elasticsearch replicas             | `2`     |
+| `elasticsearch.data.replicaCount`                      | Number of Elasticsearch replicas             | `2`     |
 | `elasticsearch.data.heapSize`                          | Heap Size for Elasticsearch data node        | `4096m` |
 | `elasticsearch.data.affinity.podAntiAffinity`          | Anti affinity rules set for resiliency       | `{}`    |
 | `elasticsearch.data.resources.limits`                  | Elasticsearch data node resource limits      | `{}`    |
 | `elasticsearch.data.resources.requests.cpu`            | Elasticsearch data node CPUs                 | `250m`  |
 | `elasticsearch.data.resources.requests.memory`         | Elasticsearch data node requested memory     | `5Gi`   |
-| `elasticsearch.coordinating.replicas`                  | Number of Elasticsearch replicas             | `2`     |
+| `elasticsearch.coordinating.replicaCount`              | Number of Elasticsearch replicas             | `2`     |
 | `elasticsearch.coordinating.heapSize`                  | Heap Size for Elasticsearch coordinating     | `768m`  |
 | `elasticsearch.coordinating.affinity.podAntiAffinity`  | Anti affinity rules set for resiliency       | `{}`    |
 | `elasticsearch.coordinating.resources.limits`          | Elasticsearch coordinating resource limits   | `{}`    |

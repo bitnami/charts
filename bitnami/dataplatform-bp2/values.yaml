@@ -1044,7 +1044,7 @@ elasticsearch:
         memory: 1Gi
   ## Elasticsearch data node parameters
   ## @param elasticsearch.data.name Elasticsearch data node name
-  ## @param elasticsearch.data. Number of Elasticsearch replicas
+  ## @param elasticsearch.data.replicaCount Number of Elasticsearch replicas
   ## @param elasticsearch.data.heapSize Heap Size for Elasticsearch data node
   ## @param elasticsearch.data.affinity.podAntiAffinity [object] Anti affinity rules set for resiliency
   ## @skip elasticsearch.data.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
@@ -1090,7 +1090,7 @@ elasticsearch:
         cpu: 250m
         memory: 5Gi
   ## Elasticsearch coordinating-only node parameters
-  ## @param elasticsearch.coordinating. Number of Elasticsearch replicas
+  ## @param elasticsearch.coordinating.replicaCount Number of Elasticsearch replicas
   ## @param elasticsearch.coordinating.heapSize Heap Size for Elasticsearch coordinating
   ## @param elasticsearch.coordinating.affinity.podAntiAffinity [object] Anti affinity rules set for resiliency
   ## @skip elasticsearch.coordinating.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
