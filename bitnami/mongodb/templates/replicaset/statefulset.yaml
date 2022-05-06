@@ -318,7 +318,7 @@ spec:
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
-              command: 
+              command:
                 - /bitnami/scripts/ping-mongodb.sh
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
@@ -326,7 +326,7 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
-              command: 
+              command:
                 - /bitnami/scripts/readiness-probe.sh
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
@@ -334,7 +334,7 @@ spec:
           {{- if .Values.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
             exec:
-              command: 
+              command:
                 - /bitnami/scripts/startup-probe.sh
           {{- else if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
@@ -386,6 +386,8 @@ spec:
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /bin/bash
@@ -393,6 +395,8 @@ spec:
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.args "context" $) | nindent 12 }}
           {{- else }}
           args:
             - |
