@@ -18,7 +18,7 @@ it('allows the user to update profile', () => {
   });
   cy.get('input[name="oldpass"]').first().type(Cypress.env('password'));
   cy.contains('Save').click();
-  cy.contains('User profile successfully updated.');
+  cy.contains('User profile successfully updated');
 });
 
 it('allows the user to validate and modify configuration settings', () => {
@@ -40,7 +40,7 @@ it('allows the user to validate and modify configuration settings', () => {
       .clear()
       .type(setting.newSetting.newDokuWikiFullName);
     cy.contains('button', 'Save').click();
-    cy.contains('Settings updated successfully.');
+    cy.contains('Settings updated successfully');
     cy.get('.headings').should(
       'contain',
       setting.newSetting.newDokuWikiFullName
