@@ -9,13 +9,6 @@ Return the proper InfluxDB&trade; image name
 {{- end -}}
 
 {{/*
-Return the proper InfluxDB Relay&trade; image name
-*/}}
-{{- define "influxdb.relay.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.relay.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
 Return the proper init container volume-permissions image name
 */}}
 {{- define "influxdb.volumePermissions.image" -}}
@@ -47,7 +40,7 @@ Return the proper aws-cli image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "influxdb.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.relay.image .Values.volumePermissions.image .Values.backup.uploadProviders.google.image .Values.backup.uploadProviders.azure.image) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.backup.uploadProviders.google.image .Values.backup.uploadProviders.azure.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -99,50 +92,4 @@ Get the InfluxDB&trade; initialization scripts secret.
 */}}
 {{- define "influxdb.initdbScriptsSecret" -}}
 {{- printf "%s" (tpl .Values.influxdb.initdbScriptsSecret $) -}}
-{{- end -}}
-
-{{/*
-Return the InfluxDB&trade; configuration configmap.
-*/}}
-{{- define "influxdb.relay.configmapName" -}}
-{{- if .Values.relay.existingConfiguration -}}
-    {{- printf "%s" (tpl .Values.relay.existingConfiguration $) -}}
-{{- else -}}
-    {{- printf "%s-relay" (include "common.names.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Compile all warnings into a single message, and call fail.
-*/}}
-{{- define "influxdb.validateValues" -}}
-{{- $messages := list -}}
-{{- $messages := append $messages (include "influxdb.validateValues.architecture" .) -}}
-{{- $messages := append $messages (include "influxdb.validateValues.replicaCount" .) -}}
-{{- $messages := without $messages "" -}}
-{{- $message := join "\n" $messages -}}
-
-{{- if $message -}}
-{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
-{{- end -}}
-{{- end -}}
-
-{{/* Validate values of InfluxDB&trade; - must provide a valid architecture */}}
-{{- define "influxdb.validateValues.architecture" -}}
-{{- if and (ne .Values.architecture "standalone") (ne .Values.architecture "high-availability") -}}
-influxdb: architecture
-    Invalid architecture selected. Valid values are "standalone" and
-    "high-availability". Please set a valid architecture (--set architecture="xxxx")
-{{- end -}}
-{{- end -}}
-
-{{/* Validate values of InfluxDB&trade; - number of replicas */}}
-{{- define "influxdb.validateValues.replicaCount" -}}
-{{- $replicaCount := int .Values.influxdb.replicaCount }}
-{{- if and (eq .Values.architecture "standalone") (gt $replicaCount 1) -}}
-influxdb: replicaCount
-    The standalone architecture doesn't allow to run more than 1 replica.
-    Please set a valid number of replicas (--set influxdb.replicaCount=1) or
-    use the "high-availability" architecture (--set architecture="high-availability")
-{{- end -}}
 {{- end -}}
