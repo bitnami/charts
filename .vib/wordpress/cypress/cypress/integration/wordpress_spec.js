@@ -45,29 +45,15 @@ it('checks if admin can create a post', () => {
   cy.contains('.editor-post-saved-state', 'Saved');
 });
 
-it('checks the SMTP configuration', () => {
+it('shows the SMTP configuration', () => {
   cy.login();
   cy.visit('/wp-admin/admin.php?page=wp-mail-smtp');
-  cy.contains('div', 'WP Mail SMTP');
-  cy.fixture('smtps').then((smtp) => {
-    cy.get('#wp-mail-smtp-setting-smtp-host').should(
-      'have.value',
-      smtp.smtpMailServer
-    );
-    cy.get('#wp-mail-smtp-setting-smtp-port').should(
-      'have.value',
-      smtp.smtpPort
-    );
-    cy.get('#wp-mail-smtp-setting-smtp-user').should(
-      'have.value',
-      smtp.smtpUser
-    );
-  });
-
+  cy.contains('WP Mail SMTP');
+  cy.contains('Email Test').click();
   cy.fixture('admins').then((admin) => {
-    cy.get('#wp-mail-smtp-setting-from_name').should(
+    cy.get('#wp-mail-smtp-setting-test_email').should(
       'have.value',
-      `${admin.wordpressFirstName} ${admin.wordpressLastName}`
+      `${admin.defaultAdmin.email}`
     );
   });
 });

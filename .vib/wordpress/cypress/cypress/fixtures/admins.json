@@ -1,4 +1,5 @@
 {
-  "wordpressFirstName": "TestName",
-  "wordpressLastName": "TestLastName"
+  "defaultAdmin": {
+    "email": "test_user_email@email.com"
+  }
 }
