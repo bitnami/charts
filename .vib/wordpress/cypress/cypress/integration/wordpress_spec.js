@@ -9,17 +9,18 @@ it('allows login/logout', () => {
   cy.contains('.message', 'logged out');
 });
 
-it('allows adding a comment to sample blogpost', () => {
+it('allows adding a comment to the sample blogpost', () => {
   cy.visit('/');
   cy.get('.wp-block-query');
   cy.get('.wp-block-post-title a').click();
   cy.fixture('posts').then((post) => {
-    cy.contains('.wp-block-post-title', post.title);
-    cy.contains('.wp-block-post-content', post.content);
-    cy.get('.wp-block-post-title').click();
+    cy.contains('.wp-block-post-title', post.title).click();
+  });
+
+  cy.fixture('comments').then((comment) => {
     cy.get('.commentlist').should('have.length', 1);
-    cy.contains('.comment-author', post.commenter);
-    cy.get('#comment').type(`${post.comment}.${random}`);
+    cy.contains('.comment-author', comment.newComment.commenter);
+    cy.get('#comment').type(`${comment.newComment.comment}.${random}`);
   });
   cy.fixture('users').then((user) => {
     cy.get('#author').type(user.userName);
