@@ -7,7 +7,7 @@ This Helm chart can be used for the automated deployment of a data platform blue
 [Overview of Data Platform Blueprint 2](https://github.com/bitnami/dataplatform-emitter)
 
 
-                           
+
 ## TL;DR
 
 ```console
@@ -541,6 +541,14 @@ Elasticsearch dependency version was bumped to a new major version changing the 
 Regular upgrade is compatible from previous versions.
 
 ## Upgrading
+
+### To 13.0.0
+
+This major updates the three of the subcharts to their newest major:
+
+- [Spark subchart](https://github.com/bitnami/charts/tree/master/bitnami/spark#to-600) was upgraded to its major version 6.0.0.
+- [Elasticsearch subchart](https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch#to-1800) was upgraded to its major version 18.0.0.
+- [Logstash subchart](https://github.com/bitnami/charts/tree/master/bitnami/logstash#to-400) was upgraded to its major version 4.0.0 .
 
 ### To 12.0.0
 
