@@ -21,7 +21,7 @@ it('allows the user to update profile', () => {
   cy.contains('User profile successfully updated');
 });
 
-it('allows the user to validate and modify configuration settings', () => {
+it('allows the admin to validate and modify configuration settings', () => {
   cy.login();
   cy.visit('start?do=admin&page=config');
   cy.fixture('settings').then((setting) => {
