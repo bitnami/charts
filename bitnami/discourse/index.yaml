@@ -1,0 +1,14 @@
+apiVersion: v1
+entries: 
+  discourse:
+    - created: 2022-05-07T16:23:20.499814565-06:00
+      description: modify discourse
+      digest: 99c76e403d752c84ead610644d4b1c2f2b453a74b921f422b9dcb8a7c8b559cd
+      home: https://helm.sh/helm
+      name: alpine
+      sources:
+      - https://github.com/smh2022/charts/tree/master/bitnami/discourse
+      urls:
+      - https://github.com/smh2022/charts/archive/refs/tags/v7.0.16.1.tar.gz
+      version: 7.0.16.1
+generated: "2022-05-07T11:30:36.615163-07:00"
