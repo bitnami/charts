@@ -1,0 +1,47 @@
+apiVersion: v1
+entries:
+  discourse:
+  - annotations:
+      category: Forum
+    apiVersion: v2
+    appVersion: 2.8.3
+    created: "2022-05-07T12:12:25.541083-07:00"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.X.X
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.X.X
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Discourse is an open source discussion platform with built-in moderation
+      and governance systems that let discussion communities protect themselves from
+      bad actors even without official moderators.
+    digest: fb1b0aaa2100765417f60967bcc89e30e5d0e253626f266743ba6f84bb8c86b0
+    home: https://github.com/bitnami/charts/tree/master/bitnami/discourse
+    icon: https://bitnami.com/assets/stacks/discourse/img/discourse-stack-220x234.png
+    keywords:
+    - community
+    - forum
+    maintainers:
+    - email: containers@bitnami.com
+      name: Bitnami
+    - email: username.taken@gmail.com
+      name: paulczar
+    - email: preteluca@gmail.com
+      name: lucaprete
+    name: discourse
+    sources:
+    - https://github.com/bitnami/bitnami-docker-discourse
+    - https://github.com/spinnaker
+    - https://www.discourse.org/
+    urls:
+    - https://github.com/smh2022/charts/releases/download/discourse-7.0.16/discourse-7.0.16.tgz
+    version: 7.0.16
+generated: "2022-05-07T12:12:25.541094-07:00"
