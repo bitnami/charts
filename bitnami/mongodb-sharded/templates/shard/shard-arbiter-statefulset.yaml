@@ -130,7 +130,7 @@ spec:
               value: {{ printf "%s-shard-%d" ( include "common.names.fullname" $ ) $i }}
             {{- if $.Values.common.useHostnames }}
             - name: MONGODB_ADVERTISED_HOSTNAME
-              value: {{ printf "$(MONGODB_POD_NAME).%s-headless.%s.svc.%s" (include "common.names.fullname" $) (include "common.names.namespace" $) .Values.clusterDomain }}
+              value: {{ printf "$(MONGODB_POD_NAME).%s-headless.%s.svc.%s" (include "common.names.fullname" $) (include "common.names.namespace" $) $.Values.clusterDomain }}
             {{- end }}
             - name: MONGODB_ENABLE_IPV6
             {{- if $.Values.common.mongodbEnableIPv6 }}
