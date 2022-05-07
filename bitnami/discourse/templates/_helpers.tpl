@@ -170,7 +170,7 @@ Return the Postgresql secret name
         {{- default (include "discourse.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
     {{- end -}}
 {{- else -}}
-    {{- default (printf "%s-database" .Release.Name) (tpl .Values.externalDatabase.existingSecret $) -}}
+    {{- default (printf "%s-database" (include "common.names.fullname" .)) (tpl .Values.externalDatabase.existingSecret $) -}}
 {{- end -}}
 {{- end -}}
 
