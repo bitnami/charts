@@ -1,4 +1,4 @@
-{{- if and $.Value.shards $.Value.shardsvr.arbiter.replicaCount }}
+{{- if and  $.Values.shards  $.Values.shardsvr.arbiter.replicaCount }}
 {{- $replicas := $.Values.shards | int }}
 {{- range $i, $e := until $replicas }}
 apiVersion: apps/v1
@@ -27,7 +27,7 @@ spec:
       labels: {{- include "common.labels.standard" $ | nindent 8 }}
         app.kubernetes.io/component: shardsvr-arbiter
         {{- if $.Values.common.podLabels }}
-          {{- include "common.tplvalues.render" ( dict "value" $.Value.common.podLabels "context" $ ) | nindent 8 }}
+          {{- include "common.tplvalues.render" ( dict "value"  $.Values.common.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if $.Values.shardsvr.arbiter.podLabels }}
           {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.podLabels "context" $ ) | nindent 8 }}
@@ -208,14 +208,14 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.shardsvr.arbiter.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: mongodb
-          {{- else if $.Value.shardsvr.arbiter.customLivenessProbe }}
+          {{- else if  $.Values.shardsvr.arbiter.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if $.Value.shardsvr.arbiter.readinessProbe.enabled }}
+          {{- if  $.Values.shardsvr.arbiter.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.shardsvr.arbiter.readinessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: mongodb
-          {{- else if $.Value.shardsvr.arbiter.customReadinessProbe }}
+          {{- else if  $.Values.shardsvr.arbiter.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if $.Values.shardsvr.arbiter.startupProbe.enabled }}
@@ -263,7 +263,7 @@ spec:
           env:
           {{- if $.Values.auth.enabled }}
             - name: MONGODB_ROOT_USER
-              value: {{ $.Value.auth.rootUser | quote }}
+              value: {{  $.Values.auth.rootUser | quote }}
           {{- if $.Values.auth.usePasswordFile }}
             - name: MONGODB_ROOT_PASSWORD_FILE
               value: "/bitnami/mongodb/secrets/mongodb-root-password"
@@ -276,8 +276,8 @@ spec:
           {{- end }}
           {{- end }}
           {{- if $.Values.diagnosticMode.enabled }}
-          command: {{- include "common.tplvalues.render" (dict "value" $.Value.diagnosticMode.command "context" $) | nindent 12 }}
-          args: {{- include "common.tplvalues.render" (dict "value" $.Value.diagnosticMode.args "context" $) | nindent 12 }}
+          command: {{- include "common.tplvalues.render" (dict "value"  $.Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value"  $.Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else }}
           command:
             - sh
