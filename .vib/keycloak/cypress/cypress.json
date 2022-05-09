@@ -1,9 +1,9 @@
 {
-    "baseUrl": "http://localhost",
-    "pageLoadTimeout": 240000,
-    "defaultCommandTimeout":40000,
-    "env": {
-      "username": "user",
-      "password": "ComplicatedPassword1234!"
-    }
+  "baseUrl": "http://localhost",
+  "pageLoadTimeout": 240000,
+  "defaultCommandTimeout": 40000,
+  "env": {
+    "username": "user",
+    "password": "ComplicatedPassword1234!"
+  }
 }
