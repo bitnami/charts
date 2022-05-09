@@ -107,15 +107,6 @@ auth:
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
   ##
   rootPassword: ""
-  ## MongoDB(&reg;) custom user and database
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-users-and-databases-on-first-run
-  ## @param auth.username Custom user to be created during the initialization
-  ## @param auth.password Password for the custom user set at `auth.username`
-  ## @param auth.database Database to be created during the initialization
-  ##
-  username: ""
-  password: ""
-  database: ""
   ## @param auth.replicaSetKey Key used for authentication in the replicaset (only when `architecture=replicaset`)
   ##
   replicaSetKey: ""

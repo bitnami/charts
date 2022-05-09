@@ -386,8 +386,8 @@ labels: {}
 ## Ignored when mongodb.architecture=standalone
 ##
 replicaCount: 2
-## @param updateStrategy.type Strategy to use to replace existing MongoDB(&reg;) pods. When architecture=standalone and useStatefulSet=false, 
-##������this parameter will be applied on a deployment object. In other case it will be applied on a statefulset object
+## @param updateStrategy.type Strategy to use to replace existing MongoDB(&reg;) pods. When architecture=standalone and useStatefulSet=false,
+## this parameter will be applied on a deployment object. In other case it will be applied on a statefulset object
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ## Example:
@@ -1846,6 +1846,12 @@ metrics:
   ## ref: https://github.com/percona/mongodb_exporter/blob/master/mongodb_exporter.go
   ##
   extraFlags: ""
+  ## Command and args for running the container (set to default if not set). Use array form
+  ## @param metrics.command Override default container command (useful when using custom images)
+  ## @param metrics.args Override default container args (useful when using custom images)
+  ##
+  command: []
+  args: []
   ## Metrics exporter container resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious

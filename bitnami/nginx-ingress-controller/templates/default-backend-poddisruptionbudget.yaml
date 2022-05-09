@@ -20,6 +20,6 @@ spec:
   maxUnavailable: {{ .Values.defaultBackend.pdb.maxUnavailable }}
   {{- end }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: default-backend
 {{- end }}
