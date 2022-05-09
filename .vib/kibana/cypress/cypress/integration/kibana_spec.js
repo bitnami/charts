@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 import { random } from './utils';
-import { closeThePopups, skipTheWelcomeScreen } from './prepare-app-state.js';
+import { closeThePopups, skipTheWelcomeScreen } from './prepare_app_state.js';
 
 before(() => {
   skipTheWelcomeScreen();
