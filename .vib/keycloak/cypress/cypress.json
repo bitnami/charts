@@ -4,6 +4,6 @@
   "defaultCommandTimeout": 40000,
   "env": {
     "username": "user",
-    "password": "ComplicatedPassword1234!"
+    "password": "ComplicatedPassword123!4"
   }
 }
