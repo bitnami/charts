@@ -142,6 +142,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.extraPorts`                                 | Extra ports to expose (normally used with the `sidecar` value)                                                                                            | `[]`                      |
 | `service.sessionAffinity`                            | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                      | `None`                    |
 | `service.sessionAffinityConfig`                      | Additional settings for the sessionAffinity                                                                                                               | `{}`                      |
+| `livenessProbe.enabled`                              | Enable livenessProbe                                                                                                                                      | `true`                    |
+| `livenessProbe.initialDelaySeconds`                  | Initial delay seconds for livenessProbe                                                                                                                   | `60`                      |
+| `livenessProbe.periodSeconds`                        | Period seconds for livenessProbe                                                                                                                          | `10`                      |
+| `livenessProbe.timeoutSeconds`                       | Timeout seconds for livenessProbe                                                                                                                         | `30`                      |
+| `livenessProbe.failureThreshold`                     | Failure threshold for livenessProbe                                                                                                                       | `15`                      |
+| `livenessProbe.successThreshold`                     | Success threshold for livenessProbe                                                                                                                       | `1`                       |
+| `readinessProbe.enabled`                             | Enable readinessProbe                                                                                                                                     | `true`                    |
+| `readinessProbe.initialDelaySeconds`                 | Initial delay seconds for readinessProbe                                                                                                                  | `60`                      |
+| `readinessProbe.periodSeconds`                       | Period seconds for readinessProbe                                                                                                                         | `10`                      |
+| `readinessProbe.timeoutSeconds`                      | Timeout seconds for readinessProbe                                                                                                                        | `30`                      |
+| `readinessProbe.failureThreshold`                    | Failure threshold for readinessProbe                                                                                                                      | `15`                      |
+| `readinessProbe.successThreshold`                    | Success threshold for readinessProbe                                                                                                                      | `1`                       |
 
 
 ### Config Server parameters
