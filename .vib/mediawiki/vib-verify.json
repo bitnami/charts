@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/mediawiki"
         },
-        "runtime_parameters": "bWVkaWF3aWtpVXNlcjogdXNlcgptZWRpYXdpa2lQYXNzd29yZDogQ29tcGxpY2F0ZWQxMjMhNAptZWRpYXdpa2lFbWFpbDogdXNlckBleGFtcGxlLmNvbQptZWRpYXdpa2lIb3N0OiBiaXRuYW1pLW1lZGlhd2lraS5teQpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODA=",
+        "runtime_parameters": "bWVkaWF3aWtpVXNlcjogdXNlcgptZWRpYXdpa2lQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0Cm1lZGlhd2lraUVtYWlsOiB1c2VyQGV4YW1wbGUuY29tCm1lZGlhd2lraUhvc3Q6IGJpdG5hbWktbWVkaWF3aWtpLm15CnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MA==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -61,7 +61,7 @@
             "app_protocol": "HTTP",
             "env": {
               "username": "user",
-              "password": "Complicated123!4"
+              "password": "ComplicatedPassword123!4"
             }
           }
         }

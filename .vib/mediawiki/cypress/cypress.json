@@ -1,7 +1,7 @@
 {
     "env": {
       "username": "user",
-      "password": "Complicated123!4"
+      "password": "ComplicatedPassword123!4"
     },
     "hosts": {
       "bitnami-mediawiki.my": "{{ TARGET_IP }}"
