@@ -11,10 +11,9 @@ file:
     owner: root
 command:
   user-id-test:
-    exec: id -u
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
     exit-status: 0
-    stdout:
-      - "/[^0]+/"
+    stdout: []
     stderr: []
   java-test:
     exec: java -version

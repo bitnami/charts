@@ -15,9 +15,9 @@ it('allows getting Spring Cloud Dataflow info', () => {
 });
 
 it('allows a stream to be created and deployed', () => {
-  const STREAM_APPLICATION = 'Stream application starters for Kafka/Maven';
-
-  importAnApplication(STREAM_APPLICATION);
+  cy.fixture('applications').then((application) => {
+    importAnApplication(application.newApplication.streamApplicationType);
+  });
   cy.visit('dashboard/#/streams/list');
   cy.contains('button', 'Create stream(s)').click();
   cy.fixture('streams').then((stream) => {
