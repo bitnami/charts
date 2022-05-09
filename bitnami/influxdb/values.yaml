@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.2.0-debian-10-r8
+  tag: 2.2.0-debian-10-r26
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -85,9 +85,6 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-## @param architecture InfluxDB&trade; architecture (`standalone` or `high-availability`)
-##
-architecture: standalone
 ## Authentication parameters
 ##
 auth:
@@ -186,9 +183,6 @@ influxdb:
   ## @param influxdb.initdbScriptsSecret Secret with initdb scripts that contain sensitive information (Note: can be used with `initdbScriptsConfigMap` or `initdbScripts`)
   ##
   initdbScriptsSecret: ""
-  ## @param influxdb.replicaCount The number of InfluxDB&trade; replicas to deploy
-  ##
-  replicaCount: 1
   ## @param influxdb.podAffinityPreset InfluxDB&trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -468,334 +462,6 @@ influxdb:
     ##     timeoutSeconds: 300
     sessionAffinityConfig: {}
 
-## @section InfluxDB Relay&trade; parameters
-
-relay:
-  ## Bitnami InfluxDB Relay&trade; image
-  ## ref: https://hub.docker.com/r/bitnami/influxdb-relay/tags/
-  ## @param relay.image.registry InfluxDB Relay&trade; image registry
-  ## @param relay.image.repository InfluxDB Relay&trade; image repository
-  ## @param relay.image.tag InfluxDB Relay&trade; image tag (immutable tags are recommended)
-  ## @param relay.image.pullPolicy InfluxDB Relay&trade; image pull policy
-  ## @param relay.image.pullSecrets Specify docker-registry secret names as an array
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/influxdb-relay
-    tag: 0.20200717.0-scratch-r19
-    ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-  ## @param relay.configuration [string] InfluxDB Relay&trade; Configuration. Specify content for relay.toml
-  ## Alternatively, you can put your relay.toml under the files/conf/ directory
-  ##
-  configuration: |-
-    [[http]]
-    # Name of the HTTP server, used for display purposes only.
-    name = "relay-server"
-
-    # TCP address to bind to, for HTTP server.
-    bind-addr = "0.0.0.0:9096"
-
-    # Array of InfluxDB&trade; instances to use as backends for Relay.
-    output = [
-        {{- $influxdbReplicaCount := int .Values.influxdb.replicaCount }}
-        {{- $influxdbFullname := include "common.names.fullname" . }}
-        {{- $influxdbHeadlessServiceName := printf "%s-headless" (include "common.names.fullname" .) }}
-        {{- $releaseName := .Release.Namespace }}
-        {{- $clusterDomain:= .Values.clusterDomain }}
-        {{- range $e, $i := until $influxdbReplicaCount }}
-        { name="{{ $influxdbFullname }}-{{ $i }}", location="http://{{ $influxdbFullname }}-{{ $i }}.{{ $influxdbHeadlessServiceName }}.{{ $releaseName }}.svc.{{ $clusterDomain }}:8086/write", timeout="10s"},
-        {{- end }}
-    ]
-  ## @param relay.existingConfiguration Name of existing ConfigMap object with the InfluxDB Relay&trade; configuration (`relay.configuration` will be ignored)
-  ## NOTE: This will override relay.configuration
-  ##
-  existingConfiguration: ""
-  ## @param relay.replicaCount The number of InfluxDB Relay&trade; replicas to deploy
-  ##
-  replicaCount: 1
-  ## @param relay.updateStrategy.type InfluxDB Relay&trade; deployment strategy type.
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-  ## e.g:
-  ## updateStrategy:
-  ##  type: RollingUpdate
-  ##  rollingUpdate:
-  ##    maxSurge: 25%
-  ##    maxUnavailable: 25%
-  ##
-  updateStrategy:
-    type: RollingUpdate
-  ## @param relay.podAnnotations Annotations for InfluxDB Relay&trade; pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-  ## @param relay.podLabels Extra labels for InfluxDB Relay&trade; pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param relay.hostAliases InfluxDB Relay&trade; pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param relay.podAffinityPreset InfluxDB Relay&trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param relay.podAntiAffinityPreset InfluxDB Relay&trade; Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: soft
-  ## Node affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param relay.nodeAffinityPreset.type InfluxDB Relay&trade; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-    type: ""
-    ## @param relay.nodeAffinityPreset.key InfluxDB Relay&trade; Node label key to match Ignored if `affinity` is set.
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
-    ##
-    key: ""
-    ## @param relay.nodeAffinityPreset.values InfluxDB Relay&trade; Node label values to match. Ignored if `affinity` is set.
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param relay.affinity InfluxDB Relay&trade; Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param relay.nodeSelector InfluxDB Relay&trade; Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-  ## @param relay.tolerations InfluxDB Relay&trade; Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param relay.priorityClassName InfluxDB Relay&trade; pods' priorityClassName
-  ##
-  priorityClassName: ""
-  ## @param relay.schedulerName Name of the k8s scheduler (other than default)
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param relay.topologySpreadConstraints Topology Spread Constraints for pod assignment
-  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
-  ## The value is evaluated as a template
-  ##
-  topologySpreadConstraints: []
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param relay.podSecurityContext.enabled Enabled InfluxDB Relay&trade; pods' Security Context
-  ## @param relay.podSecurityContext.fsGroup Set InfluxDB Relay&trade; pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param relay.containerSecurityContext.enabled Enabled InfluxDB Relay&trade; containers' Security Context
-  ## @param relay.containerSecurityContext.runAsUser Set InfluxDB Relay&trade; containers' Security Context runAsUser
-  ## @param relay.containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1001
-    runAsNonRoot: true
-  ## InfluxDB Relay&trade; pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  ## We usually recommend not to specify default resources and to leave this as a conscious
-  ## choice for the user. This also increases chances charts run on environments with little
-  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param relay.resources.limits The resources limits for the container
-  ## @param relay.resources.requests The requested resources for the container
-  ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
-  ## @param relay.command Override default container command (useful when using custom images)
-  ##
-  command: []
-  ## @param relay.args Override default container args (useful when using custom images)
-  ##
-  args: []
-  ## @param relay.lifecycleHooks for the InfluxDB Relay&trade; container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## @param relay.extraEnvVars Array containing extra env vars to configure InfluxDB Relay&trade;
-  ## For example:
-  ## extraEnvVars:
-  ##  - name: INFLUXDB_DATA_QUERY_LOG_ENABLED
-  ##    value: "true"
-  ##
-  extraEnvVars: []
-  ## @param relay.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for InfluxDB Relay&trade; nodes
-  ##
-  extraEnvVarsCM: ""
-  ## @param relay.extraEnvVarsSecret Name of existing Secret containing extra env vars for InfluxDB Relay&trade; nodes
-  ##
-  extraEnvVarsSecret: ""
-  ## @param relay.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting extraVolumeMounts
-  ##
-  extraVolumes: []
-  ## @param relay.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with extraVolumes.
-  ##
-  extraVolumeMounts: []
-
-  ## Configure extra options for InfluxDB Relay&trade; containers' liveness, readiness and startup probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
-  ## @param relay.startupProbe.enabled Enable startupProbe
-  ## @param relay.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param relay.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param relay.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param relay.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param relay.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
-    successThreshold: 1
-    failureThreshold: 6
-  ## @param relay.livenessProbe.enabled Enable livenessProbe
-  ## @param relay.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param relay.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param relay.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param relay.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param relay.livenessProbe.successThreshold Success threshold for livenessProbe
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
-    successThreshold: 1
-    failureThreshold: 6
-  ## @param relay.readinessProbe.enabled Enable readinessProbe
-  ## @param relay.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param relay.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param relay.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param relay.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param relay.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    successThreshold: 1
-    failureThreshold: 6
-  ## @param relay.customStartupProbe Override default startup probe
-  ##
-  customStartupProbe: {}
-  ## @param relay.customLivenessProbe Override default liveness probe
-  ##
-  customLivenessProbe: {}
-  ## @param relay.customReadinessProbe Override default readiness probe
-  ##
-  customReadinessProbe: {}
-  ## @param relay.containerPorts [object] Container ports
-  ##
-  containerPorts:
-    http: 9096
-  ## @param relay.sidecars Add additional sidecar containers to the InfluxDB Relay&trade; pod(s)
-  ## e.g:
-  ## sidecars:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  sidecars: []
-  ## @param relay.initContainers Add additional init containers to the InfluxDB Relay&trade; pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: []
-  ## Service parameters
-  ##
-  service:
-    ## @param relay.service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)
-    ##
-    type: ClusterIP
-    ## @param relay.service.ports.http InfluxDB Relay&trade; HTTP port
-    ##
-    ports:
-      http: 9096
-    ## @param relay.service.nodePorts.http Kubernetes HTTP node port
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
-    ##
-    nodePorts:
-      http: ""
-    ## @param relay.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-    ##
-    loadBalancerIP: ""
-    ## @param relay.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
-    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ##
-    ## loadBalancerSourceRanges:
-    ## - 10.10.10.0/24
-    loadBalancerSourceRanges: []
-    ## @param relay.service.clusterIP Static clusterIP or None for headless services
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
-    ## e.g:
-    ## clusterIP: None
-    ##
-    clusterIP: ""
-    ## @param relay.service.annotations Annotations for InfluxDB Relay&trade; service
-    ##
-    annotations: {}
-    ## @param relay.service.externalTrafficPolicy InfluxDB Relay&trade; service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-    ##
-    externalTrafficPolicy: Cluster
-    ## @param relay.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
-    ##
-    extraPorts: []
-    ## @param relay.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
-    ## If "ClientIP", consecutive client requests will be directed to the same mongos Pod
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
-    ##
-    sessionAffinity: None
-    ## @param relay.service.sessionAffinityConfig Additional settings for the sessionAffinity
-    ## sessionAffinityConfig:
-    ##   clientIP:
-    ##     timeoutSeconds: 300
-    ##
-    sessionAffinityConfig: {}
-
 ## @section InfluxDB Collectd&trade; parameters
 
 collectd:
@@ -866,7 +532,7 @@ ingress:
   enabled: false
   ## @param ingress.tls Create TLS Secret
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" (tpl .Values.ingress.hostname .) }}
-  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ## You can use the ingress.secrets parameter to create this TLS secret on cert-manager to create it
   ##
   tls: false
   ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
@@ -1129,7 +795,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r400
+    tag: 10-debian-10-r417
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -1258,7 +924,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.381.0-debian-10-r7
+        tag: 0.384.0-debian-10-r2
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
         ##
@@ -1295,7 +961,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.35.0-debian-10-r13
+        tag: 2.36.0-debian-10-r10
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
         ##
