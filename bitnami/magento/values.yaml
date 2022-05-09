@@ -27,6 +27,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override magento.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
@@ -36,6 +39,20 @@ commonLabels: {}
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
 ##
 extraDeploy: []
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
 
 ## @section Magento parameters
 
@@ -51,7 +68,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/magento
-  tag: 2.4.4-debian-10-r2
+  tag: 2.4.4-debian-10-r4
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -187,6 +204,22 @@ sidecars: []
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+## @param priorityClassName %%MAIN_CONTAINER_NAME%% pods' priorityClassName
+##
+priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param terminationGracePeriodSeconds In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 ## @param existingSecret Name of a secret with the application password
 ##
 existingSecret: ""
@@ -195,11 +228,6 @@ existingSecret: ""
 containerPorts:
   http: 8080
   https: 8443
-## @param sessionAffinity Control where client requests go, to the same pod or round-robin
-## Values: ClientIP or None
-## ref: https://kubernetes.io/docs/user-guide/services/
-##
-sessionAffinity: "None"
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -268,14 +296,15 @@ podSecurityContext:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable Magento containers' Security Context
 ## @param containerSecurityContext.runAsUser Magento containers' Security Context
+## @param containerSecurityContext.runAsNonRoot Set %%MAIN_CONTAINER_NAME%% container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsNonRoot: true
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.path Request path for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -284,7 +313,6 @@ containerSecurityContext:
 ##
 livenessProbe:
   enabled: true
-  path: /index.php
   initialDelaySeconds: 300
   periodSeconds: 10
   timeoutSeconds: 5
@@ -293,7 +321,6 @@ livenessProbe:
 ## Configure extra options for readiness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param readinessProbe.enabled Enable readinessProbe
-## @param readinessProbe.path Request path for readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -302,7 +329,6 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  path: /index.php
   initialDelaySeconds: 30
   periodSeconds: 5
   timeoutSeconds: 3
@@ -311,7 +337,6 @@ readinessProbe:
 ## Configure extra options for startupProbe probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param startupProbe.enabled Enable startupProbe
-## @param startupProbe.path Request path for startupProbe
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
 ## @param startupProbe.periodSeconds Period seconds for startupProbe
 ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -320,7 +345,6 @@ readinessProbe:
 ##
 startupProbe:
   enabled: false
-  path: /index.php
   initialDelaySeconds: 0
   periodSeconds: 10
   timeoutSeconds: 3
@@ -455,7 +479,7 @@ mariadb:
   ## To use an external database set this to false and configure the externalDatabase parameters
   ##
   enabled: true
-  ## Override MariaDB default image as 10.5 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
+  ## Override MariaDB default image as 10.6 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
   ## ref: https://github.com/bitnami/bitnami-docker-mariadb
   ## @param mariadb.image.registry MariaDB image registry
   ## @param mariadb.image.repository MariaDB image repository
@@ -464,7 +488,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.4.24-debian-10-r79
+    tag: 10.4.24-debian-10-r82
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
   architecture: standalone
@@ -533,6 +557,9 @@ externalDatabase:
   ## @param externalDatabase.database Name of the existing database
   ##
   database: bitnami_magento
+  ## @param externalDatabase.existingSecret Name of an existing secret resource containing the DB password
+  ##
+  existingSecret: ""
 
 ## @section Elasticsearch parameters
 
@@ -544,25 +571,40 @@ elasticsearch:
   ## To use an external server set this to false and configure the externalElasticsearch parameters
   ##
   enabled: true
+  ## Override Elasticsearch default image as version 8 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
+  ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch
+  ## @param elasticsearch.image.registry Elasticsearch image registry
+  ## @param elasticsearch.image.repository Elasticsearch image repository
+  ## @param elasticsearch.image.tag Elasticsearch image tag (immutable tags are recommended)
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/elasticsearch
+    tag: 7.17.3-debian-10-r16
   ## @param elasticsearch.sysctlImage.enabled Enable kernel settings modifier image for Elasticsearch
   ##
   sysctlImage:
     enabled: true
   ## Elasticsearch master-eligible node parameters
-  ## @param elasticsearch.master.replicas Desired number of Elasticsearch master-eligible nodes
+  ## @param elasticsearch.master.replicaCount Desired number of Elasticsearch master-eligible nodes
   ##
   master:
-    replicas: 1
+    replicaCount: 1
   ## Elasticsearch coordinating-only node parameters
-  ## @param elasticsearch.coordinating.replicas Desired number of Elasticsearch coordinating-only nodes
+  ## @param elasticsearch.coordinating.replicaCount Desired number of Elasticsearch coordinating-only nodes
   ##
   coordinating:
-    replicas: 1
+    replicaCount: 1
   ## Elasticsearch data node parameters
-  ## @param elasticsearch.data.replicas Desired number of Elasticsearch data nodes
+  ## @param elasticsearch.data.replicaCount Desired number of Elasticsearch data nodes
   ##
   data:
-    replicas: 1
+    replicaCount: 1
+  ## Elasticsearch ingest node parameters
+  ## @param elasticsearch.ingest.replicaCount Desired number of Elasticsearch ingest nodes
+  ##
+  ingest:
+    replicaCount: 1
 ## External elasticsearch configuration
 ##
 externalElasticsearch:
@@ -590,11 +632,12 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
-  ## @param persistence.accessMode PVC Access Mode for Magento volume
+  ## @param persistence.accessModes PVC Access Modes for Magento volume
   ## Requires persistence.enabled: true
   ## If defined, PVC must be created manually before volume will be bound
   ##
-  accessMode: ReadWriteOnce
+  accessModes:
+    - ReadWriteOnce
   ## @param persistence.size PVC Storage Request for Magento volume
   ##
   size: 8Gi
@@ -609,6 +652,23 @@ persistence:
   ## Default: nil.
   ##
   hostPath: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
+  ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+  ##
+  subPath: ""
+  ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
+  ## @param persistence.dataSource Custom PVC data source
+  ##
+  dataSource: {}
 
 ## @section Volume Permissions parameters
 
@@ -628,7 +688,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r417
+    tag: 10-debian-10-r420
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -667,12 +727,22 @@ service:
   ## @param service.type Kubernetes Service type
   ##
   type: LoadBalancer
-  ## @param service.port Service HTTP port
+  ## @param service.ports.http Service HTTP port
+  ## @param service.ports.https Service HTTPS port
   ##
-  port: 8080
-  ## @param service.httpsPort Service HTTPS port
+  ports:
+    http: 8080
+    https: 8443
+  ## @param service.nodePorts.http Kubernetes http node port
+  ## @param service.nodePorts.https Kubernetes https node port
+  ## e.g:
+  ## nodePorts:
+  ##   http: <to set explicitly, choose port between 30000-32767>
+  ##   https: <to set explicitly, choose port between 30000-32767>
   ##
-  httpsPort: 8443
+  nodePorts:
+    http: ""
+    https: ""
   ## @param service.clusterIP Static clusterIP or None for headless services
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
   ## e.g:
@@ -688,20 +758,27 @@ service:
   ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
   loadBalancerIP: ""
-  ## @param service.nodePorts.http Kubernetes http node port
-  ## @param service.nodePorts.https Kubernetes https node port
-  ## e.g:
-  ## nodePorts:
-  ##   http: <to set explicitly, choose port between 30000-32767>
-  ##   https: <to set explicitly, choose port between 30000-32767>
-  ##
-  nodePorts:
-    http: ""
-    https: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.annotations Additional custom annotations for %%MAIN_CONTAINER_NAME%% service
+  ##
+  annotations: {}
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 ## Configure the ingress resource that allows you to access the
 ## Magento installation. Set up the URL
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -710,10 +787,6 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
-  ## certManager: false
-  ##
-
   ## @param ingress.pathType Default path type for the ingress resource
   ##
   pathType: ImplementationSpecific
@@ -744,6 +817,9 @@ ingress:
   ## let the chart create self-signed certificates for you
   ##
   tls: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
   ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## Example:
@@ -752,6 +828,19 @@ ingress:
   ##   path: /
   ##
   extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
+  ## Useful when looking for additional customization, such as using different backend
+  ##
+  extraRules: []
   ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## Example:
@@ -775,6 +864,11 @@ ingress:
   ##   certificate:
   ##
   secrets: []
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
 
 ## @section Metrics parameters
 
@@ -793,7 +887,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-10-r136
+    tag: 0.11.0-debian-10-r139
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -891,7 +985,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r417
+    tag: 10-debian-10-r420
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
