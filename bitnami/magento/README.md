@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                        | Magento image registry                                                                                               | `docker.io`          |
 | `image.repository`                      | Magento image repository                                                                                             | `bitnami/magento`    |
-| `image.tag`                             | Magento image tag (immutable tags are recommended)                                                                   | `2.4.4-debian-10-r1` |
+| `image.tag`                             | Magento image tag (immutable tags are recommended)                                                                   | `2.4.4-debian-10-r2` |
 | `image.pullPolicy`                      | Magento image pull policy                                                                                            | `IfNotPresent`       |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                     | `[]`                 |
 | `image.debug`                           | Specify if debug logs should be enabled                                                                              | `false`              |
@@ -192,7 +192,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.    | `true`                  |
 | `mariadb.image.registry`                    | MariaDB image registry                                                                   | `docker.io`             |
 | `mariadb.image.repository`                  | MariaDB image repository                                                                 | `bitnami/mariadb`       |
-| `mariadb.image.tag`                         | MariaDB image tag (immutable tags are recommended)                                       | `10.4.24-debian-10-r78` |
+| `mariadb.image.tag`                         | MariaDB image tag (immutable tags are recommended)                                       | `10.4.24-debian-10-r79` |
 | `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                      | `standalone`            |
 | `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`                    |
 | `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_magento`       |
