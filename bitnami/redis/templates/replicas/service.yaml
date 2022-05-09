@@ -23,6 +23,9 @@ spec:
   {{- if eq .Values.replica.service.type "LoadBalancer" }}
   externalTrafficPolicy: {{ .Values.replica.service.externalTrafficPolicy }}
   {{- end }}
+  {{- if (semverCompare ">=1.22-0" (include "common.capabilities.kubeVersion" .)) }}
+  internalTrafficPolicy: {{ .Values.replica.service.internalTrafficPolicy }}
+  {{- end }}
   {{- if and (eq .Values.replica.service.type "LoadBalancer") .Values.replica.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.replica.service.loadBalancerIP }}
   {{- end }}

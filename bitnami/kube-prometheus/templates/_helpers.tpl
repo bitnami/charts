@@ -70,8 +70,8 @@ Common Labels
 */}}
 {{- define "kube-prometheus.labels" -}}
 {{- include "common.labels.standard" . -}}
-{{- if .Values.global.labels -}}
-{{- toYaml .Values.global.labels -}}
+{{- if .Values.global.labels }}
+{{ toYaml .Values.global.labels -}}
 {{- end -}}
 {{- end -}}
 
