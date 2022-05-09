@@ -23,7 +23,7 @@ for (const command of ['type']) {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(origVal);
-      }, COMMAND_DELAY);
+      }, TYPE_DELAY);
     });
   });
 }
