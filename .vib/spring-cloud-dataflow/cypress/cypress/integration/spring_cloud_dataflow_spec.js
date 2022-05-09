@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import { random } from './utils.js';
-import { importAnApplication, createATask } from './prepare-app-state.js';
+import { importAnApplication, createATask } from './prepare_app_state.js';
 
 it('allows getting Spring Cloud Dataflow info', () => {
   cy.visit('/dashboard');
