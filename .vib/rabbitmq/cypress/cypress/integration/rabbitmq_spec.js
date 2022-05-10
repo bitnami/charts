@@ -7,7 +7,7 @@ it('allows login/logout', () => {
   cy.login();
   cy.get('#versions').should('contain', APP_NAME);
   cy.contains('Log out').click();
-  cy.get('#login', 'Username');
+  cy.contains('#login', 'Username');
 });
 
 it('allows upload of broker definitions', () => {
