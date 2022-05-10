@@ -4,6 +4,16 @@ file:
     filetype: symlink
     exists: true
     group: root
+  /opt/bitnami/dokuwiki/conf/users.auth.php:
+    mode: "0777"
+    filetype: file
+    exists: true
+    group: root
+  /opt/bitnami/dokuwiki/conf/acl.auth.php:
+    mode: "0777"
+    filetype: file
+    exists: true
+    group: root      
   /opt/bitnami/apache2/conf/bitnami/php.conf:
     mode: "0644"
     filetype: file
@@ -14,16 +24,4 @@ command:
     exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
     exit-status: 0
     stdout: []
-    stderr: []
-  php-test:
-    exec: php -version
-    exit-status: 0
-    stdout:
-      - "The PHP Group"
-    stderr: []
-  apache-test:
-    exec: /opt/bitnami/apache/bin/httpd -v
-    exit-status: 0
-    stdout:
-      - "Server version: Apache"
     stderr: []
