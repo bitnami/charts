@@ -47,6 +47,9 @@ spec:
       {{- if .Values.web.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.web.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.web.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.web.terminationGracePeriodSeconds }} 
+      {{- end }}
       {{- if .Values.web.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.web.tolerations "context" $) | nindent 8 }}
       {{- end }}
