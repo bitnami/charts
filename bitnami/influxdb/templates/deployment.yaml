@@ -76,7 +76,7 @@ spec:
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
                 xargs -r chown -R `id -u`:`id -G | cut -d " " -f2`
               {{- else }}
-                xargs -r chown -R {{ .Values.influxdb.securityContext.runAsUser }}:{{ .Values.influxdb.securityContext.fsGroup }}
+                xargs -r chown -R {{ .Values.influxdb.containerSecurityContext.runAsUser }}:{{ .Values.influxdb.podSecurityContext.fsGroup }}
               {{- end }}
           {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
           securityContext:

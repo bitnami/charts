@@ -1,0 +1,28 @@
+file:
+ /opt/bitnami/keycloak/standalone/configuration:
+   exists: true
+   filetype: directory
+   mode: "0775"
+   owner: root
+/opt/bitnami/keycloak/domain/configuration/application-users.properties:
+   exists: true
+   filetype: file
+   mode: "0775"
+   contains:
+   - admin
+/opt/bitnami/scripts/keycloak-env.sh:
+   exists: true
+   filetype: file
+   mode: "0664"
+   owner: root
+command:
+  user-id-test:
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+    exit-status: 0
+    stdout: []
+    stderr: []
+  java-test:
+    exec: java -version
+    exit-status: 0
+    stdout:
+    stderr: []
