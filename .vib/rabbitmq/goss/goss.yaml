@@ -5,7 +5,7 @@ command:
     stderr: [ ]
     timeout: 20000
   rabbitmqctl-add-vhost:
-    exec: rabbitmqctl add-vhost test-host
+    exec: rabbitmqctl add_vhost test-host
     exit-status: 0
     stderr: [ ]
     stdout:
