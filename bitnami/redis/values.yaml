@@ -775,7 +775,10 @@ replica:
     ## @param replica.persistence.medium Provide a medium for `emptyDir` volumes.
     ##
     medium: ""
-    ## @param replica.persistence.path The path the volume will be mounted at on Redis&trade; replicas containers
+    ## @param replica.persistence.sizeLimit Set this to enable a size limit for `emptyDir` volumes.
+    ##
+    sizeLimit: ""
+    ##  @param replica.persistence.path The path the volume will be mounted at on Redis&trade; replicas containers
     ## NOTE: Useful when using different Redis&trade; images
     ##
     path: /data
