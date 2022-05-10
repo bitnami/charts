@@ -2,8 +2,10 @@
 import { random } from './utils';
 
 it('allows login/logout', () => {
+  const APP_NAME = 'RabbitMQ';
+
   cy.login();
-  cy.get('#versions').should('contain', 'RabbitMQ').and('contain', 'Erlang');
+  cy.get('#versions').should('contain', APP_NAME);
   cy.contains('Log out').click();
   cy.contains('#login', 'Username');
 });
@@ -69,6 +71,8 @@ it('allows adding a new queue and binding/unbinding it to the exchange', () => {
 });
 
 it('allows adding a new admin and logging in as such', () => {
+  const APP_NAME = 'RabbitMQ';
+
   cy.login();
   cy.visit('/#/users');
   cy.contains('Add a user').click();
@@ -89,5 +93,7 @@ it('allows adding a new admin and logging in as such', () => {
     cy.get('[name="username"]').type(`${admin.newAdmin.userName}${random}`);
     cy.get('[name="password"]').type(`${admin.newAdmin.password}${random}`);
     cy.contains('Login').click();
+    cy.get('#versions').should('contain', APP_NAME);
+    cy.contains('Log out');
   });
 });
