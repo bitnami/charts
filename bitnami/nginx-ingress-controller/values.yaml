@@ -727,9 +727,10 @@ defaultBackend:
     ## @param defaultBackend.service.type Kubernetes Service type for default backend
     ##
     type: ClusterIP
-    ## @param defaultBackend.service.port Default backend service port
+    ## @param defaultBackend.service.ports.http Default backend service HTTP port
     ##
-    port: 80
+    ports:
+      http: 80
     ## @param defaultBackend.service.annotations Annotations for the default backend service
     ##
     annotations: {}
@@ -900,14 +901,15 @@ metrics:
     ## @param metrics.service.type Type of Prometheus metrics service to create
     ##
     type: ClusterIP
-    ## @param metrics.service.port Service HTTP management port
+    ## @param metrics.service.ports.metrics Service HTTP management port
     ##
-    port: 9913
+    ports:
+      metrics: 9913
     ## @param metrics.service.annotations [object] Annotations for the Prometheus exporter service
     ##
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+      prometheus.io/port: "{{ coalesce .Values.metrics.service.ports.metrics .Values.metrics.service.port }}"
     ## @param metrics.service.labels Labels for the Prometheus exporter service
     ##
     labels: {}

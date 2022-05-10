@@ -253,7 +253,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `defaultBackend.nodeSelector`                          | Node labels for pod assignment                                                                        | `{}`                   |
 | `defaultBackend.tolerations`                           | Tolerations for pod assignment                                                                        | `[]`                   |
 | `defaultBackend.service.type`                          | Kubernetes Service type for default backend                                                           | `ClusterIP`            |
-| `defaultBackend.service.port`                          | Default backend service port                                                                          | `80`                   |
+| `defaultBackend.service.ports.http`                    | Default backend service HTTP port                                                                     | `80`                   |
 | `defaultBackend.service.annotations`                   | Annotations for the default backend service                                                           | `{}`                   |
 | `defaultBackend.pdb.create`                            | Enable/disable a Pod Disruption Budget creation for Default backend                                   | `false`                |
 | `defaultBackend.pdb.minAvailable`                      | Minimum number/percentage of Default backend pods that should remain scheduled                        | `1`                    |
@@ -313,7 +313,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------ | --------------------------------------------------------------------------------- | ----------- |
 | `metrics.enabled`                          | Enable exposing Controller statistics                                             | `false`     |
 | `metrics.service.type`                     | Type of Prometheus metrics service to create                                      | `ClusterIP` |
-| `metrics.service.port`                     | Service HTTP management port                                                      | `9913`      |
+| `metrics.service.ports.metrics`            | Service HTTP management port                                                      | `9913`      |
 | `metrics.service.annotations`              | Annotations for the Prometheus exporter service                                   | `{}`        |
 | `metrics.service.labels`                   | Labels for the Prometheus exporter service                                        | `{}`        |
 | `metrics.serviceMonitor.enabled`           | Create ServiceMonitor resource for scraping metrics using PrometheusOperator      | `false`     |

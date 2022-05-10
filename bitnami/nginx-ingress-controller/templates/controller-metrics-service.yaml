@@ -25,7 +25,7 @@ spec:
   type: {{ .Values.metrics.service.type }}
   ports:
     - name: metrics
-      port: {{ .Values.metrics.service.port }}
+      port: {{ coalesce .Values.metrics.service.ports.metrics .Values.metrics.service.port }}
       targetPort: metrics
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: controller
