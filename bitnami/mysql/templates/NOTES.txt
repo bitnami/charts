@@ -70,30 +70,6 @@ To access the MySQL Prometheus metrics from outside the cluster execute the foll
 
 {{- end }}
 
-To upgrade this helm chart:
-
-  1. Obtain the password as described on the 'Administrator credentials' section and set the 'root.password' parameter as shown below:
-
-      ROOT_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.mysql-root-password}" | base64 --decode)
-      helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} bitnami/mysql --set auth.rootPassword=$ROOT_PASSWORD
-
 {{ include "mysql.validateValues" . }}
 {{ include "mysql.checkRollingTags" . }}
-{{- if and (not .Values.auth.existingSecret) (not .Values.auth.customPasswordFiles) -}}
-    {{- $secretName := include "mysql.secretName" . -}}
-    {{- $requiredPasswords := list -}}
-
-    {{- $requiredRootPassword := dict "valueKey" "auth.rootPassword" "secret" $secretName "field" "mysql-root-password" -}}
-    {{- $requiredPasswords = append $requiredPasswords $requiredRootPassword -}}
-
-    {{- if not (empty .Values.auth.username) -}}
-        {{- $requiredPassword := dict "valueKey" "auth.password" "secret" $secretName "field" "mysql-password" -}}
-        {{- $requiredPasswords = append $requiredPasswords $requiredPassword -}}
-    {{- end -}}
-
-    {{- if (eq .Values.architecture "replication") -}}
-        {{- $requiredReplicationPassword := dict "valueKey" "auth.replicationPassword" "secret" $secretName "field" "mysql-replication-password" -}}
-        {{- $requiredPasswords = append $requiredPasswords $requiredReplicationPassword -}}
-    {{- end -}}
-{{- end }}
 {{- end }}
