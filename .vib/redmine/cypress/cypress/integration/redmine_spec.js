@@ -71,11 +71,16 @@ it('allows admin to verify and change application configuration', () => {
   cy.login();
   cy.visit('/admin');
   cy.contains('Settings').click();
-  cy.get('#settings_app_title').clear().type(`VMWare.${random}`);
-  cy.contains('input', 'Save').click();
-  cy.contains('#flash_notice', 'Successful update.');
-  cy.visit('/admin/info');
-  cy.contains('Mysql');
-  cy.contains('production');
-  cy.contains('Git');
+  cy.fixture('settings').then((setting) => {
+    cy.get('#settings_app_title')
+      .clear()
+      .type(`${setting.newSetting.appTitle}.${random}`);
+
+    cy.contains('input', 'Save').click();
+    cy.contains('#flash_notice', 'Successful update.');
+    cy.visit('/admin/info');
+    cy.contains(setting.newSetting.database);
+    cy.contains(setting.newSetting.environment);
+    cy.contains(setting.newSetting.versionControl);
+  });
 });
