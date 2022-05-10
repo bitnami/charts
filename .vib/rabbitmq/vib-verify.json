@@ -46,6 +46,17 @@
           }
         },
         {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/rabbitmq/goss"
+            },
+            "remote": {
+              "workload": "sts-rabbitmq"
+            }
+          }
+        },
+        {
           "action_id": "cypress",
           "params": {
             "resources": {
