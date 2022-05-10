@@ -7,7 +7,7 @@ RabbitMQ is an open source general-purpose message broker that is designed for c
 [Overview of RabbitMQ](https://www.rabbitmq.com)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -59,7 +59,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### RabbitMQ Image parameters
 
 | Name                | Description                                                    | Value                 |
@@ -70,7 +69,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`  | RabbitMQ image pull policy                                     | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array               | `[]`                  |
 | `image.debug`       | Set to true if you would like to see extra information on logs | `false`               |
-
 
 ### Common parameters
 
@@ -149,7 +147,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraSecrets`                     | Optionally specify extra secrets to be created by the chart.                                                                             | `{}`                                              |
 | `extraSecretsPrependReleaseName`   | Set this flag to true if extraSecrets should be created with <release-name> prepended.                                                   | `false`                                           |
 
-
 ### Statefulset parameters
 
 | Name                                    | Description                                                                                                              | Value           |
@@ -205,7 +202,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                           | `1`             |
 | `pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                           | `""`            |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                                                | Value  |
@@ -215,7 +211,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                                            | `true` |
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`   |
 | `rbac.create`                                 | Whether RBAC rules should be created                                                       | `true` |
-
 
 ### Persistence parameters
 
@@ -230,7 +225,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.subPath`       | The subdirectory of the volume to mount to       | `""`                       |
 | `persistence.size`          | PVC Storage Request for RabbitMQ data volume     | `8Gi`                      |
 | `persistence.annotations`   | Persistence annotations. Evaluated as a template | `{}`                       |
-
 
 ### Exposure parameters
 
@@ -271,7 +265,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ingress.enabled`                  | Enable ingress resource for Management console                                                                                   | `false`                  |
-| `ingress.path`                     | Path for the default host. You may need to set this to '/*' in order to use this with ALB ingress controllers.                   | `/`                      |
+| `ingress.path`                     | Path for the default host. You may need to set this to '/\*' in order to use this with ALB ingress controllers.                  | `/`                      |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `rabbitmq.local`         |
 | `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
@@ -286,7 +280,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.enabled`            | Enable creation of NetworkPolicy resources                                                                                       | `false`                  |
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                                                                       | `true`                   |
 | `networkPolicy.additionalRules`    | Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.                                             | `[]`                     |
-
 
 ### Metrics Parameters
 
@@ -314,7 +307,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.namespace`         | namespace where prometheusRules resource should be created                             | `""`                  |
 | `metrics.prometheusRule.rules`             | List of rules, used as template by Helm.                                               | `[]`                  |
 
-
 ### Init Container Parameters
 
 | Name                                   | Description                                                                                                          | Value                   |
@@ -327,7 +319,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | Init container volume-permissions resource requests                                                                  | `{}`                    |
-
 
 The above parameters map to the env variables defined in [bitnami/rabbitmq](https://github.com/bitnami/bitnami-docker-rabbitmq). For more information please refer to the [bitnami/rabbitmq](https://github.com/bitnami/bitnami-docker-rabbitmq) image documentation.
 
@@ -384,12 +375,12 @@ To enable TLS support, first generate the certificates as described in the [Rabb
 
 Once the certificates are generated, you have two alternatives:
 
-* Create a secret with the certificates and associate the secret when deploying the chart
-* Include the certificates in the *values.yaml* file when deploying the chart
+- Create a secret with the certificates and associate the secret when deploying the chart
+- Include the certificates in the _values.yaml_ file when deploying the chart
 
-Set the *auth.tls.failIfNoPeerCert* parameter to *false* to allow a TLS connection if the client fails to provide a certificate.
+Set the _auth.tls.failIfNoPeerCert_ parameter to _false_ to allow a TLS connection if the client fails to provide a certificate.
 
-Set the *auth.tls.sslOptionsVerify* to *verify_peer* to force a node to perform peer verification. When set to *verify_none*, peer verification will be disabled and certificate exchange won't be performed.
+Set the _auth.tls.sslOptionsVerify_ to _verify_peer_ to force a node to perform peer verification. When set to _verify_none_, peer verification will be disabled and certificate exchange won't be performed.
 
 Refer to the chart documentation for [more information and examples of enabling TLS and using Let's Encrypt certificates](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/administration/enable-tls-ingress/).
 
@@ -415,7 +406,7 @@ LDAP support can be enabled in the chart by specifying the `ldap.*` parameters w
 
 It is possible to configure a memory high watermark on RabbitMQ to define [memory thresholds](https://www.rabbitmq.com/memory.html#threshold) using the `memoryHighWatermark.*` parameters. To do so, you have two alternatives:
 
-* Set an absolute limit of RAM to be used on each RabbitMQ node, as shown in the configuration example below:
+- Set an absolute limit of RAM to be used on each RabbitMQ node, as shown in the configuration example below:
 
 ```
 memoryHighWatermark.enabled="true"
@@ -423,7 +414,7 @@ memoryHighWatermark.type="absolute"
 memoryHighWatermark.value="512MB"
 ```
 
-* Set a relative limit of RAM to be used on each RabbitMQ node. To enable this feature,  define the memory limits at pod level too. An example configuration is shown below:
+- Set a relative limit of RAM to be used on each RabbitMQ node. To enable this feature, define the memory limits at pod level too. An example configuration is shown below:
 
 ```
 memoryHighWatermark.enabled="true"
@@ -545,10 +536,10 @@ $ helm upgrade my-release bitnami/rabbitmq --set auth.password=[PASSWORD] --set 
 
 This major release renames several values in this chart and adds missing features, in order to be aligned with the rest of the assets in the Bitnami charts repository.
 
-  .dist
-  .manager
-  .metrics
-  .epmd
+.dist
+.manager
+.metrics
+.epmd
 
 - `service.port` has been renamed as `service.ports.amqp`.
 - `service.portName` has been renamed as `service.portNames.amqp`.
@@ -661,4 +652,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.
+limitations under the License
