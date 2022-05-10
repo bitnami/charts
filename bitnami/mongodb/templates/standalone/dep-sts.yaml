@@ -369,8 +369,8 @@ spec:
               mountPath: /certs
             {{- end }}
           ports:
-            - name: mongodb
-              containerPort: {{ .Values.containerPorts.mongodb }}
+            - name: metrics
+              containerPort: {{ .Values.metrics.containerPort }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
