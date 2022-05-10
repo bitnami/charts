@@ -51,8 +51,8 @@ spec:
     - name: {{ $root.Values.externalAccess.hidden.service.portName | quote }}
       port: {{ $root.Values.externalAccess.hidden.service.ports.mongodb }}
       {{- if not (empty $root.Values.externalAccess.hidden.service.nodePorts) }}
-      {{- $nodePort := index $root.Values.externalAccess.hidden.service.nodePorts $i -}}
-      nodePort: {{ ternary (get $nodePort "mongodb") $nodePort (typeIs "dict" $nodePort)}}
+      {{- $nodePort := index $root.Values.externalAccess.hidden.service.nodePorts $i }}
+      nodePort: {{ $nodePort }}
       {{- else }}
       nodePort: null
       {{- end }}

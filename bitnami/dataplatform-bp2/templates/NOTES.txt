@@ -35,14 +35,14 @@ To access the Kafka service from your local machine execute the following:
 
 To access the Elasticsearch service from your local machine execute the following:
 
-{{- if eq .Values.elasticsearch.master.service.type "LoadBalancer" }}
+{{- if eq .Values.elasticsearch.service.type "LoadBalancer" }}
 
-   export SERVICE_IP=$(kubectl get --namespace {{ .Release.Namespace }} svc {{ include "subcomponent.service.name" ( dict "componentName" "coordinating-only" "context" $ ) }} -o jsonpath="{.status.loadBalancer.ingress[0]['ip', 'hostname'] }")
+   export SERVICE_IP=$(kubectl get --namespace {{ .Release.Namespace }} svc {{ include "subcomponent.service.name" ( dict "componentName" "elasticsearch" "context" $ ) }} -o jsonpath="{.status.loadBalancer.ingress[0]['ip', 'hostname'] }")
    echo http://$SERVICE_IP:9200
 
 {{- else -}}
 
-   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "subcomponent.service.name" ( dict "componentName" "coordinating-only" "context" $ ) }} 9200:9200 &
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "subcomponent.service.name" ( dict "componentName" "elasticsearch" "context" $ ) }} 9200:9200 &
    echo "Elasticsearch service available at : http://127.0.0.1:9200"
 
 {{- end -}}

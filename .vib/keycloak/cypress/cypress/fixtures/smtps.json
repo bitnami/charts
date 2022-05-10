@@ -1,0 +1,6 @@
+{
+  "smtp": {
+    "host": "testhost",
+    "from": "test@test.com"
+  }
+}
