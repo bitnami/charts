@@ -7,7 +7,6 @@ it('allows login/logout', () => {
   cy.login();
   cy.get('#versions').should('contain', APP_NAME);
   cy.contains('Log out').click();
-  cy.reload();
   cy.get('#login', 'Username');
 });
 
