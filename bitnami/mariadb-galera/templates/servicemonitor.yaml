@@ -5,6 +5,8 @@ metadata:
   name: {{ template "common.names.fullname" . }}
   {{- if .Values.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
+  {{- else }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -42,5 +44,5 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ include "common.names.namespace" . | quote }}
 {{- end }}
