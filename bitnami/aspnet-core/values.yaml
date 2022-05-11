@@ -520,7 +520,7 @@ ingress:
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
   ## You can:
   ##   - Use the `ingress.secrets` parameter to create this TLS secret
-  ##   - Relay on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
   ##
   tls: false
   ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
@@ -608,8 +608,8 @@ healthIngress:
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
   ## You can:
   ##   - Use the `ingress.secrets` parameter to create this TLS secret
-  ##   - Relay on cert-manager to create it by setting the corresponding annotations
-  ##   - Relay on Helm to create self-signed certificates
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on Helm to create self-signed certificates
   ##
   tls: false
   ## DEPRECATED: Use healthIngress.annotations instead of healthIngress.certManager
