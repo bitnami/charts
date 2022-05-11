@@ -22,8 +22,6 @@ data:
   KEYCLOAK_DATABASE_PORT: {{ include "keycloak.databasePort" . }}
   KEYCLOAK_DATABASE_NAME: {{ include "keycloak.databaseName" . | quote }}
   KEYCLOAK_DATABASE_USER: {{ include "keycloak.databaseUser" . | quote }}
-  KEYCLOAK_CACHE_OWNERS_COUNT: {{ .Values.cache.ownersCount | quote }}
-  KEYCLOAK_AUTH_CACHE_OWNERS_COUNT: {{ .Values.cache.authOwnersCount | quote }}
   KEYCLOAK_ENABLE_TLS: {{ ternary "true" "false" .Values.auth.tls.enabled | quote }}
   {{- if .Values.auth.tls.enabled }}
   KEYCLOAK_HTTPS_PORT: {{ .Values.containerPorts.https | quote }}
