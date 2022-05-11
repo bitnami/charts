@@ -1,9 +1,9 @@
-{{- if and (eq .Values.architecture "replication") .Values.secondary.pdb.enabled }}
+{{- if and (eq .Values.architecture "replication") .Values.secondary.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "mysql.secondary.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: secondary
     {{- if .Values.commonLabels }}
