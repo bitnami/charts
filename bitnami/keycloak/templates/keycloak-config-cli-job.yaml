@@ -60,7 +60,7 @@ spec:
           {{- end }}
           env:
             - name: KEYCLOAK_URL
-              value: {{ printf "http://%s-headless:%d/auth" (include "keycloak.fullname" .) (.Values.containerPorts.http | int) }}
+              value: {{ printf "http://%s-headless:%d/" (include "keycloak.fullname" .) (.Values.containerPorts.http | int) }}
             - name: KEYCLOAK_USER
               value: {{ .Values.auth.adminUser | quote }}
             - name: KEYCLOAK_PASSWORD

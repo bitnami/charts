@@ -70,7 +70,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 16.1.1-debian-10-r85
+  tag: 17.0.1-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -201,42 +201,13 @@ auth:
       ##    memory: 128Mi
       ##
       requests: {}
-## @param proxyAddressForwarding Enable Proxy Address Forwarding
-## ref: https://www.keycloak.org/docs/latest/server_installation/#_setting-up-a-load-balancer-or-proxy
+## @param proxy reverse Proxy mode edge, reencrypt, passthrough or none
+## ref: https://www.keycloak.org/server/reverseproxy
 ##
-proxyAddressForwarding: false
+proxy: passthrough
 ## Keycloak Service Discovery settings
 ## ref: https://github.com/bitnami/bitnami-docker-keycloak#cluster-configuration
 ##
-serviceDiscovery:
-  ## @param serviceDiscovery.enabled Enable Service Discovery for Keycloak (required if `replicaCount` > `1`)
-  ##
-  enabled: false
-  ## @param serviceDiscovery.protocol Sets the protocol that Keycloak nodes would use to discover new peers
-  ## Available protocols can be found at http://www.jgroups.org/javadoc3/org/jgroups/protocols/
-  ##
-  protocol: kubernetes.KUBE_PING
-  ## @param serviceDiscovery.properties Properties for the discovery protocol set in `serviceDiscovery.protocol` parameter
-  ## List of key=>value pairs
-  ## Example:
-  ## properties:
-  ##   - datasource_jndi_name=>"java:jboss/datasources/KeycloakDS"
-  ##   - initialize_sql=>"CREATE TABLE IF NOT EXISTS JGROUPSPING ( own_addr varchar(200) NOT NULL, cluster_name varchar(200) NOT NULL, created timestamp default current_timestamp, ping_data BYTEA, constraint PK_JGROUPSPING PRIMARY KEY (own_addr, cluster_name))"
-  ##
-  properties: []
-  ## @param serviceDiscovery.transportStack Transport stack for the discovery protocol set in `serviceDiscovery.protocol` parameter
-  ##
-  transportStack: tcp
-## Keycloak cache settings
-## ref: https://github.com/bitnami/bitnami-docker-keycloak#cluster-configuration
-##
-cache:
-  ## @param cache.ownersCount Number of nodes that will replicate cached data
-  ##
-  ownersCount: 1
-  ## @param cache.authOwnersCount Number of nodes that will replicate cached authentication data
-  ##
-  authOwnersCount: 1
 ## @param configuration Keycloak Configuration. Auto-generated based on other parameters when not specified
 ## Specify content for standalone-ha.xml
 ## NOTE: This will override configuring Keycloak based on environment variables (including those set by the chart)
@@ -804,7 +775,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 4.9.0-debian-10-r14
+    tag: 5.2.0-debian-10-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
