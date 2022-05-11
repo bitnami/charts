@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.service.labels }}
@@ -22,26 +22,32 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
-  {{- if not (empty .Values.service.clusterIP) }}
-  clusterIP: {{ .Values.service.clusterIP | quote }}
+  {{- if and .Values.service.clusterIP (eq .Values.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.service.externalIPs }}
   externalIPs: {{- toYaml .Values.service.externalIPs | nindent 4 }}
   {{- end }}
-  {{- if .Values.service.loadBalancerIP }}
+  {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP | quote }}
   {{- end }}
-  {{- if .Values.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.service.loadBalancerSourceRanges }}
   {{- end }}
-  {{- if .Values.service.externalTrafficPolicy }}
+  {{- if or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
   {{- end }}
   {{- if .Values.service.healthCheckNodePort }}
   healthCheckNodePort: {{ .Values.service.healthCheckNodePort }}
   {{- end }}
   ports:
-    {{- if not (empty .Values.service.ports.http) }}
+    {{- if .Values.service.ports.http }}
     - name: http
       port: {{ .Values.service.ports.http }}
       protocol: TCP
@@ -52,7 +58,7 @@ spec:
       nodePort: null
       {{- end }}
     {{- end }}
-    {{- if not (empty .Values.service.ports.https) }}
+    {{- if .Values.service.ports.https }}
     - name: https
       port: {{ .Values.service.ports.https }}
       protocol: TCP
@@ -84,6 +90,9 @@ spec:
       {{- else if eq $.Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- end }}
+    {{- if .Values.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: controller
