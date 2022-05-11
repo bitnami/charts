@@ -7,7 +7,7 @@ Logstash is an open source data processing engine. It ingests data from multiple
 [Overview of Logstash](http://logstash.net)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -193,10 +193,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                             | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                        |
 | `ingress.ingressClassName`                    | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                        |
 | `metrics.enabled`                             | Enable the export of Prometheus metrics                                                                                          | `false`                     |
-| `metrics.image.registry`                      | Logstash Relay image registry                                                                                                    | `docker.io`                 |
-| `metrics.image.repository`                    | Logstash Relay image repository                                                                                                  | `bitnami/logstash-exporter` |
-| `metrics.image.tag`                           | Logstash Relay image tag (immutable tags are recommended)                                                                        | `7.3.0-debian-10-r489`      |
-| `metrics.image.pullPolicy`                    | Logstash Relay image pull policy                                                                                                 | `IfNotPresent`              |
+| `metrics.image.registry`                      | Logstash exporter image registry                                                                                                 | `docker.io`                 |
+| `metrics.image.repository`                    | Logstash exporter image repository                                                                                               | `bitnami/logstash-exporter` |
+| `metrics.image.tag`                           | Logstash exporter image tag (immutable tags are recommended)                                                                     | `7.3.0-debian-10-r489`      |
+| `metrics.image.pullPolicy`                    | Logstash exporter image pull policy                                                                                              | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                 | `[]`                        |
 | `metrics.resources.limits`                    | The resources limits for the Logstash Prometheus Exporter container                                                              | `{}`                        |
 | `metrics.resources.requests`                  | The requested resources for the Logstash Prometheus Exporter container                                                           | `{}`                        |
