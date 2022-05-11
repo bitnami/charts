@@ -9,7 +9,7 @@ it('allows admin to login/logout', () => {
 });
 
 it('allows user to register', () => {
-  cy.visit('account/register');
+  cy.visit('/account/register');
   cy.fixture('users').then((user) => {
     cy.get('#user_login').type(`${user.newUser.userName}.${random}`);
     cy.get('#user_password').type(`${user.newUser.password}.${random}`);
@@ -26,7 +26,7 @@ it('allows user to register', () => {
 
 it('allows admin to create a project and an issue with file uploaded', () => {
   cy.login();
-  cy.visit('projects');
+  cy.visit('/projects');
   cy.contains('New project').click();
   cy.fixture('projects').then((project) => {
     cy.get('#project_name').type(`${project.newProject.name}.${random}`);
