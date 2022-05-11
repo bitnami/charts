@@ -376,7 +376,7 @@ spec:
           {{- else if .Values.web.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- end }}          
+          {{- end }}     
           volumeMounts:
             - name: concourse-keys
               mountPath: /bitnami/concourse/concourse-keys

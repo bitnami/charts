@@ -228,7 +228,7 @@ secrets:
   ## @param secrets.workerAdditionalCerts Additional certificates to add to the worker nodes
   ##
   workerAdditionalCerts: ""
-  
+
 ## @section Concourse Web parameters
 
 web:
