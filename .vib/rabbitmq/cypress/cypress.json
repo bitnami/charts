@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://localhost",
+  "baseUrl": "http://af9055bef74ba496bac67a5759bf4aac-1070387442.us-east-1.elb.amazonaws.com",
   "pageLoadTimeout": 400000,
   "defaultCommandTimeout": 90000,
   "env": {
