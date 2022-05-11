@@ -3,6 +3,7 @@ apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
 kind: ClusterRole
 metadata:
   name: {{ template "external-dns.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{ include "external-dns.labels" . | nindent 4 }}
 rules:
   - apiGroups:
