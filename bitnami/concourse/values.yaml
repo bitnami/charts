@@ -86,7 +86,7 @@ image:
 ##
 secrets:
   ## @param secrets.localAuth.enabled the use of local authentication (basic auth).
-  ## Once enabled, users configured through `local-users` (secret)
+  ## Once enabled, users configured through `local_users` (secret)
   ## are able to authenticate.
   ## Ref: https://concourse-ci.org/local-auth.html
   ##

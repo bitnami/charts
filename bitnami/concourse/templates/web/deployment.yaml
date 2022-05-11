@@ -243,7 +243,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "concourse.web.fullname" . }}
-                  key: local-users
+                  key: local_users
             {{- end }}
             {{- if .Values.web.clusterName }}
             - name: CONCOURSE_CLUSTER_NAME
@@ -406,11 +406,11 @@ spec:
             secretName: {{ include "concourse.web.secretName" . }}
             defaultMode: 0400
             items:
-              - key: host-key
+              - key: host_key
                 path: host_key
-              - key: session-signing-key
+              - key: session_signing_key
                 path: session_signing_key
-              - key: worker-key-pub
+              - key: worker_key.pub
                 path: worker_key.pub
         {{- if .Values.secrets.teamAuthorizedKeys }}
         - name: team-authorized-keys
@@ -428,7 +428,7 @@ spec:
             defaultMode: 0400
             items:
             {{- if .Values.secrets.conjurCACert }}
-              - key: conjur-ca-cert
+              - key: conjur_ca_cert
                 path: ca.cert
             {{- end }}
         {{- end }}
