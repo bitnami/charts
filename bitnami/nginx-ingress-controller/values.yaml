@@ -16,12 +16,18 @@ global:
 
 ## @section Common parameters
 
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname
 ##
 nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param commonLabels Add labels to all the deployed resources
 ##
 commonLabels: {}
@@ -31,6 +37,9 @@ commonAnnotations: {}
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
 
 ## @section Nginx Ingress Controller parameters
 
@@ -45,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 1.2.0-debian-10-r0
+  tag: 1.2.0-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -120,10 +129,12 @@ publishService:
   ## Must be <namespace>/<service_name>
   ##
   pathOverride: ""
-## @param scope.enabled Limit the scope of the controller. Defaults to `.Release.Namespace`
+## @param scope.enabled Limit the scope of the controller.
+## @param scope.namespace Scope namespace. Defaults to `.Release.Namespace`
 ##
 scope:
   enabled: false
+  namespace: ""
 ## @param configMapNamespace Allows customization of the configmap / nginx-configmap namespace
 ## Defaults to .Release.Namespace
 ##
@@ -163,6 +174,9 @@ command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
+## @param lifecycleHooks for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
 ## @param extraArgs Additional command line arguments to pass to nginx-ingress-controller
 ## E.g. to specify the default SSL certificate you can use
 ## extraArgs:
@@ -228,6 +242,7 @@ podSecurityContext:
 ## @param containerSecurityContext.runAsUser User ID for the Controller container
 ## @param containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities that should be dropped
 ## @param containerSecurityContext.capabilities.add [array] Linux Kernel capabilities that should be added
+## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
@@ -236,6 +251,7 @@ containerSecurityContext:
   capabilities:
     drop: ["ALL"]
     add: ["NET_BIND_SERVICE"]
+  runAsNonRoot: true
 ## @param minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
 ##
 minReadySeconds: 0
@@ -262,9 +278,6 @@ resources:
 ## Controller containers' liveness probe. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.httpGet.path Request path for livenessProbe
-## @param livenessProbe.httpGet.port Port for livenessProbe
-## @param livenessProbe.httpGet.scheme Scheme for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -273,10 +286,6 @@ resources:
 ##
 livenessProbe:
   enabled: true
-  httpGet:
-    path: /healthz
-    port: 10254
-    scheme: HTTP
   failureThreshold: 3
   initialDelaySeconds: 10
   periodSeconds: 10
@@ -285,9 +294,6 @@ livenessProbe:
 ## Controller containers' readiness probe. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param readinessProbe.enabled Enable readinessProbe
-## @param readinessProbe.httpGet.path Request path for readinessProbe
-## @param readinessProbe.httpGet.port Port for readinessProbe
-## @param readinessProbe.httpGet.scheme Scheme for readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -296,10 +302,22 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  httpGet:
-    path: /healthz
-    port: 10254
-    scheme: HTTP
+  failureThreshold: 3
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+## Controller containers' startup probe. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
   failureThreshold: 3
   initialDelaySeconds: 10
   periodSeconds: 10
@@ -311,6 +329,9 @@ customLivenessProbe: {}
 ## @param customReadinessProbe Override default readiness probe
 ##
 customReadinessProbe: {}
+## @param customStartupProbe Custom liveness probe for the Web component
+##
+customStartupProbe: {}
 ## @param lifecycle LifecycleHooks to set additional configuration at startup
 ##
 lifecycle: {}
@@ -326,6 +347,10 @@ podAnnotations: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
 ##
 priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
 ## @param hostNetwork If the Nginx deployment / daemonset should run on the host's network namespace
 ## Required on CNI based K8s installations, since CNI and hostport don't mix yet
 ## Can be deprecated once https://github.com/kubernetes/kubernetes/issues/23920 is merged
@@ -453,7 +478,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-10-r98
+    tag: 1.21.6-debian-10-r104
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -499,10 +524,12 @@ defaultBackend:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param defaultBackend.containerSecurityContext.enabled Enable Default backend containers' Security Context
   ## @param defaultBackend.containerSecurityContext.runAsUser User ID for the Default backend container
+  ## @param defaultBackend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
   ## Default backend containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -526,9 +553,6 @@ defaultBackend:
   ## Default backend containers' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param defaultBackend.livenessProbe.enabled Enable livenessProbe
-  ## @param defaultBackend.livenessProbe.httpGet.path Request path for livenessProbe
-  ## @param defaultBackend.livenessProbe.httpGet.port Port for livenessProbe
-  ## @param defaultBackend.livenessProbe.httpGet.scheme Scheme for livenessProbe
   ## @param defaultBackend.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param defaultBackend.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param defaultBackend.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -537,10 +561,6 @@ defaultBackend:
   ##
   livenessProbe:
     enabled: true
-    httpGet:
-      path: /healthz
-      port: http
-      scheme: HTTP
     failureThreshold: 3
     initialDelaySeconds: 30
     periodSeconds: 10
@@ -549,9 +569,6 @@ defaultBackend:
   ## Default backend containers' readiness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param defaultBackend.readinessProbe.enabled Enable readinessProbe
-  ## @param defaultBackend.readinessProbe.httpGet.path Request path for readinessProbe
-  ## @param defaultBackend.readinessProbe.httpGet.port Port for readinessProbe
-  ## @param defaultBackend.readinessProbe.httpGet.scheme Scheme for readinessProbe
   ## @param defaultBackend.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param defaultBackend.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param defaultBackend.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -560,15 +577,36 @@ defaultBackend:
   ##
   readinessProbe:
     enabled: true
-    httpGet:
-      path: /healthz
-      port: http
-      scheme: HTTP
     failureThreshold: 6
     initialDelaySeconds: 0
     periodSeconds: 5
     successThreshold: 1
     timeoutSeconds: 5
+  ## Default backend containers' startup probe. Evaluated as a template.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param defaultBackend.startupProbe.enabled Enable startupProbe
+  ## @param defaultBackend.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param defaultBackend.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param defaultBackend.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param defaultBackend.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param defaultBackend.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    failureThreshold: 6
+    initialDelaySeconds: 0
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 5
+  ## @param defaultBackend.customStartupProbe Custom liveness probe for the Web component
+  ##
+  customStartupProbe: {}
+  ## @param defaultBackend.customLivenessProbe Custom liveness probe for the Web component
+  ##
+  customLivenessProbe: {}
+  ## @param defaultBackend.customReadinessProbe Custom readiness probe for the Web component
+  ##
+  customReadinessProbe: {}
   ## @param defaultBackend.podLabels Extra labels for Controller pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
@@ -581,6 +619,19 @@ defaultBackend:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ""
+  ## @param defaultBackend.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param defaultBackend.terminationGracePeriodSeconds In seconds, time the given to the pod to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: 60
+  ## @param defaultBackend.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## @param defaultBackend.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -608,6 +659,55 @@ defaultBackend:
     ##   - e2e-az2
     ##
     values: []
+  ## @param defaultBackend.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param defaultBackend.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param defaultBackend.lifecycleHooks for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param defaultBackend.extraEnvVars Array with extra environment variables to add to %%MAIN_CONTAINER_NAME%% nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param defaultBackend.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param defaultBackend.extraEnvVarsSecret Name of existing Secret containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param defaultBackend.extraVolumes Optionally specify extra list of additional volumes for the %%MAIN_CONTAINER_NAME%% pod(s)
+  ##
+  extraVolumes: []
+  ## @param defaultBackend.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the %%MAIN_CONTAINER_NAME%% container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param defaultBackend.sidecars Add additional sidecar containers to the %%MAIN_CONTAINER_NAME%% pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param defaultBackend.initContainers Add additional init containers to the %%MAIN_CONTAINER_NAME%% pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
   ## @param defaultBackend.affinity Affinity for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: defaultBackend.podAffinityPreset, defaultBackend.podAntiAffinityPreset, and defaultBackend.nodeAffinityPreset will be ignored when it's set
@@ -627,9 +727,13 @@ defaultBackend:
     ## @param defaultBackend.service.type Kubernetes Service type for default backend
     ##
     type: ClusterIP
-    ## @param defaultBackend.service.port Default backend service port
+    ## @param defaultBackend.service.ports.http Default backend service HTTP port
     ##
-    port: 80
+    ports:
+      http: 80
+    ## @param defaultBackend.service.annotations Annotations for the default backend service
+    ##
+    annotations: {}
   ## Default backend Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -693,6 +797,9 @@ service:
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ##
   loadBalancerSourceRanges: []
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
   ## @param service.externalTrafficPolicy Set external traffic policy to: "Local" to preserve source IP on providers supporting it
   ## Enable client source IP preservation
   ## Ref: https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typeloadbalancer
@@ -701,6 +808,17 @@ service:
   ## @param service.healthCheckNodePort Set this to the managed health-check port the kube-proxy will expose. If blank, a random port in the `NodePort` range will be assigned
   ##
   healthCheckNodePort: 0
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 
 ## @section RBAC parameters
 
@@ -718,6 +836,9 @@ serviceAccount:
   ## Only used if `create` is `true`.
   ##
   annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ##
+  automountServiceAccountToken: true
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
@@ -725,7 +846,18 @@ rbac:
   ## @param rbac.create Specifies whether RBAC rules should be created
   ##
   create: true
-
+  ## @param rbac.rules Custom RBAC rules
+  ## Example:
+  ## rules:
+  ##   - apiGroups:
+  ##       - ""
+  ##     resources:
+  ##       - pods
+  ##     verbs:
+  ##       - get
+  ##       - list
+  ##
+  rules: []
 ## @section Other parameters
 
 ## Controller Pod Disruption Budget configuration
@@ -769,14 +901,18 @@ metrics:
     ## @param metrics.service.type Type of Prometheus metrics service to create
     ##
     type: ClusterIP
-    ## @param metrics.service.port Service HTTP management port
+    ## @param metrics.service.ports.metrics Service HTTP management port
     ##
-    port: 9913
+    ports:
+      metrics: 9913
     ## @param metrics.service.annotations [object] Annotations for the Prometheus exporter service
     ##
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.metrics.service.port }}"
+      prometheus.io/port: "{{ coalesce .Values.metrics.service.ports.metrics .Values.metrics.service.port }}"
+    ## @param metrics.service.labels Labels for the Prometheus exporter service
+    ##
+    labels: {}
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -786,6 +922,9 @@ metrics:
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
     namespace: ""
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
@@ -796,6 +935,14 @@ metrics:
     ## scrapeTimeout: 10s
     ##
     scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    metricRelabelings: []
     ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
@@ -803,6 +950,16 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
+    ## @param metrics.serviceMonitor.annotations Extra annotations for the ServiceMonitor
+    ##
+    annotations: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+
   ## @param metrics.prometheusRule.enabled Create PrometheusRules resource for scraping metrics using PrometheusOperator
   ## @param metrics.prometheusRule.additionalLabels Used to pass Labels that are required by the Installed Prometheus Operator
   ## @param metrics.prometheusRule.namespace Namespace which Prometheus is running in
