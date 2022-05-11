@@ -300,7 +300,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "concourse.web.fullname" . }}
-                  key: conjur-account
+                  key: conjur_account
             {{- if .Values.secrets.conjurCACert }}
             - name: CONCOURSE_CONJUR_CERT_FILE
               value: "/bitnami/concourse/conjur-keys/ca.cert"
@@ -309,17 +309,17 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "concourse.web.fullname" . }}
-                  key: conjur-authn-login
+                  key: conjur_authn_login
             - name: CONCOURSE_CONJUR_AUTHN_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "concourse.web.fullname" . }}
-                  key: conjur-authn-api-key
+                  key: conjur_authn_api_key
             - name: CONCOURSE_CONJUR_AUTHN_TOKEN_FILE
               valueFrom:
                 secretKeyRef:
                   name: {{ template "concourse.web.fullname" . }}
-                  key: conjur-authn-token-file
+                  key: conjur_authn_token_file
             - name: CONCOURSE_CONJUR_PIPELINE_SECRET_TEMPLATE
               value: {{ .Values.web.conjur.pipelineSecretTemplate | quote }}
             - name: CONCOURSE_CONJUR_TEAM_SECRET_TEMPLATE
