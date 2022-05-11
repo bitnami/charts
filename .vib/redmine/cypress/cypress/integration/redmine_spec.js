@@ -64,7 +64,7 @@ it('allows admins to verify SMTP is enabled and modify it', () => {
       .type(`${smtp.newSMTP.footer}.${random}`);
   });
   cy.contains('[type="submit"]', 'Save').click({ force: true });
-  cy.contains('Successful update.');
+  cy.contains('Successful update');
 });
 
 it('allows admin to modify and observe application configuration', () => {
