@@ -1,7 +1,5 @@
 {
   "newMessage": {
-    "routingKey": "testRoutingKey",
-    "headers": "Hello World!",
     "payload": "This is my first message"
   }
 }
