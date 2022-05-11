@@ -13,9 +13,6 @@ it('allows adding a comment to the sample blogpost', () => {
   cy.visit('/');
   cy.get('.wp-block-query');
   cy.get('.wp-block-post-title a').click();
-  cy.fixture('posts').then((post) => {
-    cy.contains('.wp-block-post-title', post.initialPost.title).click();
-  });
 
   cy.fixture('comments').then((comment) => {
     cy.get('.commentlist').should('have.length', 1);
