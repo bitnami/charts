@@ -24,7 +24,13 @@ it('allows a stream to be created and deployed', () => {
     cy.get('.CodeMirror-line').type(stream.newStream.type);
   });
 
-  cy.contains('#v-2', 'mongodb').and('contain', 'cassandra');
+  cy.fixture('applications').then((application) => {
+    cy.contains('#v-2', application.newApplication.streamApplication1).and(
+      'contain',
+      application.newApplication.streamApplication2
+    );
+  });
+
   cy.contains('button', 'Create stream(s)').click();
   cy.get('.modal-content').should('contain', 'Create Stream');
   cy.fixture('streams').then((stream) => {
