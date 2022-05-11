@@ -14,7 +14,7 @@ it('allows adding a comment to the sample blogpost', () => {
   cy.get('.wp-block-query');
   cy.get('.wp-block-post-title a').click();
   cy.fixture('posts').then((post) => {
-    cy.contains('.wp-block-post-title', post.title).click();
+    cy.contains('.wp-block-post-title', post.initialPost.title).click();
   });
 
   cy.fixture('comments').then((comment) => {
@@ -23,8 +23,8 @@ it('allows adding a comment to the sample blogpost', () => {
     cy.get('#comment').type(`${comment.newComment.comment}.${random}`);
   });
   cy.fixture('users').then((user) => {
-    cy.get('#author').type(user.userName);
-    cy.get('#email').type(user.userEmail);
+    cy.get('#author').type(user.randomUser.userName);
+    cy.get('#email').type(user.randomUser.userEmail);
   });
 
   cy.get('#submit').click();

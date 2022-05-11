@@ -1,4 +1,6 @@
 {
-  "userEmail": "random@email.com",
-  "userName": "Random"
+  "randomUser": {
+    "userEmail": "random@email.com",
+    "userName": "Random"
+  }
 }
