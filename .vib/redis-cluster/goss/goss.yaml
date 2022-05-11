@@ -6,7 +6,7 @@ command:
     stderr: [ ]
     timeout: 20000
   redis-auth:
-    exec: REDISCLI_AUTH="$REDIS_PASSWORD"
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli
     exit-status: 0
     stderr: [ ]
     timeout: 20000
