@@ -4,7 +4,7 @@ kind: ServiceMonitor
 metadata:
   name: {{ printf "%s-metrics" (include "common.names.fullname" .) }}
   {{- if .Values.metrics.serviceMonitor.namespace }}
-  namespace: {{ .Values.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.metrics.serviceMonitor.namespace | quote }}
   {{- else }}
   namespace: {{ .Release.Namespace | quote }}
   {{- end }}
@@ -24,7 +24,7 @@ spec:
   {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ .Release.Namespace | quote }}
   endpoints:
     - port: tcp-metrics
       path: /metrics
