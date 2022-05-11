@@ -107,10 +107,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.tls.resources.limits`       | The resources limits for the TLS init container                                               | `{}`                   |
 | `auth.tls.resources.requests`     | The requested resources for the TLS init container                                            | `{}`                   |
 | `proxy`                           | reverse Proxy mode edge, reencrypt, passthrough or none                                       | `passthrough`          |
-| `serviceDiscovery.enabled`        | Enable Service Discovery for Keycloak (required if `replicaCount` > `1`)                      | `false`                |
-| `serviceDiscovery.protocol`       | Sets the protocol that Keycloak nodes would use to discover new peers                         | `kubernetes.KUBE_PING` |
-| `serviceDiscovery.properties`     | Properties for the discovery protocol set in `serviceDiscovery.protocol` parameter            | `[]`                   |
-| `serviceDiscovery.transportStack` | Transport stack for the discovery protocol set in `serviceDiscovery.protocol` parameter       | `tcp`                  |
 | `configuration`                   | Keycloak Configuration. Auto-generated based on other parameters when not specified           | `""`                   |
 | `existingConfigmap`               | Name of existing ConfigMap with Keycloak configuration                                        | `""`                   |
 | `extraStartupArgs`                | Extra default startup args                                                                    | `""`                   |
