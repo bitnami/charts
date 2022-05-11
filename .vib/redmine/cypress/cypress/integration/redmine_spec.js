@@ -48,7 +48,7 @@ it('allows admin to create a project and an issue with file uploaded', () => {
   cy.contains('issues.json');
 });
 
-it('allows admin to check smtp configuration', () => {
+it('allows admins to verify SMTP is enabled and modify it', () => {
   cy.login();
   cy.visit('/settings?tab=notifications');
   cy.fixture('smtps').then((smtp) => {
