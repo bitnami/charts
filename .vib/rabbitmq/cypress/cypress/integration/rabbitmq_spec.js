@@ -6,6 +6,7 @@ it('allows login/logout', () => {
 
   cy.login();
   cy.get('#versions').should('contain', APP_NAME);
+  cy.contains('.hider', 'Queued messages');
   cy.contains('Log out').click();
   cy.contains('#login', 'Username');
 });
