@@ -66,6 +66,17 @@ host. To configure Concourse with the URL of your service:
       --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \
       {{- end }}
       {{- end }}
+      {{- if .Values.web.conjur.enabled }}
+      --set web.conjur.enabled=true \
+      --set web.conjur.applianceUrl={{ .Values.web.conjur.applianceUrl }} \
+      --set web.conjur.pipelineSecretTemplate={{ .Values.web.conjur.pipelineSecretTemplate }} \
+      --set web.conjur.teamSecretTemplate={{ .Values.web.conjur.teamSecretTemplate }} \
+      --set web.conjur.secretTemplate={{ .Values.web.conjur.secretTemplate }} \
+    
+      {{- if .Values.secrets.conjurCACert }}
+      --set secrets.conjurCACert={{ .Values.secrets.conjurCACert }}
+      {{- end }}
+      {{- end }}
       --set service.web.type={{ .Values.service.web.type }} \
       --set web.externalUrl=$APP_HOST
 

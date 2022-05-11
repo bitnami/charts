@@ -336,7 +336,7 @@ web:
     ## @param web.conjur.enabled Enable the use of Conjur as a credential manager
     enabled: false
     ## @param web.conjur.applianceUrl URL of the Conjur instance.
-    applianceUrl:
+    applianceUrl: ""
     ## @param web.conjur.pipelineSecretTemplate Path used to locate pipeline-level secret
     pipelineSecretTemplate: concourse/{{.Team}}/{{.Pipeline}}/{{.Secret}}
     ## @param web.conjur.teamSecretTemplate Path used to locate team-level secret
