@@ -22,6 +22,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override nginx.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
@@ -38,6 +41,21 @@ commonLabels: {}
 ##
 commonAnnotations: {}
 
+## Enable diagnostic mode in the deployment(s)/statefulset(s)
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  args:
+    - infinity
+
 ## @section NGINX parameters
 
 ## Bitnami NGINX image version
@@ -52,7 +70,7 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.21.6-debian-10-r93
+  tag: 1.21.6-debian-10-r105
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -159,10 +177,22 @@ nodeSelector: {}
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: {}
-## @param priorityClassName Priority class name
-## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+## @param priorityClassName NGINX pods' priorityClassName
 ##
 priorityClassName: ""
+## @param schedulerName Name of the k8s scheduler (other than default)
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param terminationGracePeriodSeconds In seconds, time the given to the NGINX pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
 ## NGINX pods' Security Context.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled NGINX pods' Security Context
@@ -234,6 +264,22 @@ lifecycleHooks: {}
   ##     command: ["/bin/sleep", "20"]
   ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
 
+## NGINX containers' startup probe.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 30
+  timeoutSeconds: 5
+  periodSeconds: 10
+  failureThreshold: 6
+  successThreshold: 1
 ## NGINX containers' liveness probe.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -266,6 +312,9 @@ readinessProbe:
   periodSeconds: 5
   failureThreshold: 3
   successThreshold: 1
+## @param customStartupProbe Custom liveness probe for the Web component
+##
+customStartupProbe: {}
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
@@ -305,9 +354,9 @@ serviceAccount:
   ## Only used if `create` is `true`.
   ##
   annotations: {}
-  ## @param serviceAccount.autoMount Auto-mount the service account token in the pod
+  ## @param serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod
   ##
-  autoMount: false
+  automountServiceAccountToken: false
 ## @param sidecars Sidecar parameters
 ## e.g:
 ## sidecars:
@@ -362,7 +411,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.36.0-debian-10-r10
+    tag: 2.36.1-debian-10-r4
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -455,12 +504,13 @@ service:
   ## @param service.type Service type
   ##
   type: LoadBalancer
-  ## @param service.port Service HTTP port
+  ## @param service.ports.http Service HTTP port
+  ## @param service.ports.https Service HTTPS port
   ##
-  port: 80
-  ## @param service.httpsPort Service HTTPS port
+  ports:
+    http: 80
+    https: 443
   ##
-  httpsPort: 443
   ## @param service.nodePorts [object] Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
@@ -474,10 +524,36 @@ service:
   targetPort:
     http: http
     https: https
+  ## @param service.clusterIP NGINX service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
   ## @param service.loadBalancerIP LoadBalancer service IP address
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges NGINX service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
   ## @param service.annotations Service annotations
   ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -495,10 +571,9 @@ ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
-  ## certManager: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
   ##
-
+  selfSigned: false
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
@@ -572,22 +647,29 @@ ingress:
   ##   certificate:
   ##
   secrets: []
+  ## @param ingress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
+  ## Useful when looking for additional customization, such as using different backend
+  ##
+  extraRules: []
 ## Health Ingress parameters
 ##
 healthIngress:
   ## @param healthIngress.enabled Set to true to enable health ingress record generation
   ##
   enabled: false
-  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
-  ## certManager: false
+  ## @param healthIngress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
   ##
-
+  selfSigned: false
   ## @param healthIngress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
   ## @param healthIngress.hostname When the health ingress is enabled, a host pointing to this will be created
   ##
   hostname: example.local
+  ## @param healthIngress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
   ## @param healthIngress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -606,14 +688,22 @@ healthIngress:
   ## let the chart create self-signed certificates for you
   ##
   tls: false
-  ## @param healthIngress.extraHosts The list of additional hostnames to be covered with this health ingress record
-  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## E.g.
+  ## @param healthIngress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
   ## extraHosts:
   ##   - name: example.local
   ##     path: /
   ##
   extraHosts: []
+  ## @param healthIngress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
   ## @param healthIngress.extraTls TLS configuration for additional hostnames to be covered
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## E.g.
@@ -639,6 +729,15 @@ healthIngress:
   ##     certificate:
   ##
   secrets: []
+  ## @param healthIngress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param healthIngress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
+  ## Useful when looking for additional customization, such as using different backend
+  ##
+  extraRules: []
 
 ## @section Metrics parameters
 
@@ -662,7 +761,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 0.10.0-debian-10-r125
+    tag: 0.10.0-debian-10-r137
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -724,6 +823,9 @@ metrics:
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
     namespace: ""
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:
@@ -743,15 +845,18 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
-    ## @param metrics.serviceMonitor.additionalLabels Additional labels that can be used so PodMonitor will be discovered by Prometheus
+    ## @param metrics.serviceMonitor.labels Additional labels that can be used so PodMonitor will be discovered by Prometheus
     ##
-    additionalLabels: {}
+    labels: {}
     ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
     ##
     relabelings: []
     ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
     ##
     metricRelabelings: []
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:
