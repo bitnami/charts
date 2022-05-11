@@ -427,6 +427,14 @@ spec:
             secretName: {{ template "concourse.web.fullname" . }}
             defaultMode: 0400
             items:
+            - key: conjur_account
+              path: conjur_account
+            - key: conjur_authn_api_key
+              path: conjur_authn_api_key
+            - key: conjur_authn_login
+              path: conjur_authn_login
+            - key: conjur_authn_token_file
+              path: conjur_authn_token_file
             {{- if .Values.secrets.conjurCACert }}
               - key: conjur_ca_cert
                 path: ca.cert
