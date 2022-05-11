@@ -91,10 +91,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secrets.localAuth.enabled`     | the use of local authentication (basic auth).                                                                                          | `true`                |
 | `secrets.localUsers`            | List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users. Auto-generated if not set | `""`                  |
 | `secrets.teamAuthorizedKeys`    | Array of team names and public keys for team external workers                                                                          | `[]`                  |
-| `secrets.conjurAccount`         | the conjur org account                                                                                                                 | `""`                  |
-| `secrets.conjurAuthnLogin`      | host username. E.g host/concourse                                                                                                      | `""`                  |
-| `secrets.conjurAuthnApiKey`     | the API key related to the host.                                                                                                       | `""`                  |
-| `secrets.conjurAuthnTokenFile`  | Token file used if conjur instance is running in k8s or iam. E.g. /path/to/token_file                                                  | `""`                  |
+| `secrets.conjurAccount`         | Account for Conjur auth provider.                                                                                                      | `""`                  |
+| `secrets.conjurAuthnLogin`      | Host username for Conjur auth provider.                                                                                                | `""`                  |
+| `secrets.conjurAuthnApiKey`     | API key for host used for Conjur auth provider. Either API key or token file can be used, but not both.                                | `""`                  |
+| `secrets.conjurAuthnTokenFile`  | Token file used for Conjur auth provider if running in Kubernetes or IAM. Either token file or API key can be used, but not both.      | `""`                  |
 | `secrets.conjurCACert`          | CA Certificate to specify if conjur instance is deployed with a self-signed cert                                                       | `""`                  |
 | `secrets.hostKey`               | Concourse Host Keys.                                                                                                                   | `""`                  |
 | `secrets.hostKeyPub`            | Concourse Host Keys.                                                                                                                   | `""`                  |
