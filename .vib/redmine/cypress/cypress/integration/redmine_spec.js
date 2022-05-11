@@ -32,7 +32,7 @@ it('allows admin to create a project and an issue with file uploaded', () => {
     cy.get('#project_name').type(`${project.newProject.name}.${random}`);
     cy.get('#project_description').type(project.newProject.description);
     cy.get('[name="commit"]').click();
-    cy.contains('Successful creation.');
+    cy.contains('Successful creation');
     cy.contains('Projects').click();
     cy.contains('.project', `${project.newProject.name}.${random}`).click();
   });
@@ -67,7 +67,7 @@ it('allows admin to check smtp configuration', () => {
   cy.contains('Successful update.');
 });
 
-it('allows admin to verify and change application configuration', () => {
+it('allows admin to modify and observe application configuration', () => {
   cy.login();
   cy.visit('/admin');
   cy.contains('Settings').click();
@@ -77,7 +77,7 @@ it('allows admin to verify and change application configuration', () => {
       .type(`${setting.newSetting.appTitle}.${random}`);
 
     cy.contains('input', 'Save').click();
-    cy.contains('#flash_notice', 'Successful update.');
+    cy.contains('#flash_notice', 'Successful update');
     cy.visit('/admin/info');
     cy.contains(setting.newSetting.database);
     cy.contains(setting.newSetting.environment);
