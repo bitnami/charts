@@ -3,7 +3,7 @@ import { random } from './utils';
 
 it('allows admin to login/logout', () => {
   cy.login();
-  cy.get('#flash_error').should('not.exist');
+  cy.contains('#flash_error').should('not.exist');
   cy.contains('Sign out').click();
   cy.contains('Sign in');
 });
@@ -18,7 +18,7 @@ it('allows user to register', () => {
     );
     cy.get('#user_firstname').type(`${user.newUser.firstName}.${random}`);
     cy.get('#user_lastname').type(`${user.newUser.lastName}.${random}`);
-    cy.get('#user_mail').type(`${user.newUser.email}.${random}@email.com`);
+    cy.get('#user_mail').type(`.${random}${user.newUser.email}`);
   });
   cy.get('[type="submit"]').click();
   cy.contains('Your account was created');
