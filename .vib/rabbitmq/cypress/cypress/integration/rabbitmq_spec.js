@@ -27,10 +27,12 @@ it('allows publishing a message to a created exchange', () => {
   cy.visit('#/exchanges');
   cy.contains('Add a new exchange').click();
   cy.fixture('exchanges').then((exchange) => {
-    cy.get('[name="name"]').type(`${exchange.newExchange.name}${random}`);
+    cy.get('[name="name"]')
+      .scrollIntoView()
+      .type(`${exchange.newExchange.name}${random}`);
     cy.get('#arguments_1_mfkey').type(exchange.newExchange.argument1);
     cy.get('#arguments_1_mfvalue').type(exchange.newExchange.argument2);
-    cy.contains('Add exchange').click();
+    cy.contains('Add exchange').click({ force: true });
     cy.get('table[class="list"]').should(
       'contain',
       `${exchange.newExchange.name}${random}`
