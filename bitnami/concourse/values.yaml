@@ -109,6 +109,17 @@ secrets:
   ## https://concourse-ci.org/global-resources.html#complications-with-reusing-containers
   ##
   teamAuthorizedKeys: []
+  ## Secrets for Conjur credentials manager.
+  ## @param secrets.conjurAccount the conjur org account
+  conjurAccount:
+  ## @param secrets.conjurAuthnLogin host username. E.g host/concourse
+  conjurAuthnLogin:
+  ## @param secrets.conjurAuthnApiKey the API key related to the host.
+  conjurAuthnApiKey:
+  ## @param secrets.conjurAuthnTokenFile Token file used if conjur instance is running in k8s or iam. E.g. /path/to/token_file
+  conjurAuthnTokenFile:
+  ## @param secrets.conjurCACert CA Certificate to specify if conjur instance is deployed with a self-signed cert
+  conjurCACert:
   ## @param secrets.hostKey [string] Concourse Host Keys.
   ## Example value taken from https://github.com/concourse/concourse-chart/blob/master/values.yaml
   ## Ref: https://concourse-ci.org/install.html#generating-keys
@@ -217,7 +228,7 @@ secrets:
   ## @param secrets.workerAdditionalCerts Additional certificates to add to the worker nodes
   ##
   workerAdditionalCerts: ""
-
+  
 ## @section Concourse Web parameters
 
 web:
@@ -318,6 +329,20 @@ web:
     enabled: false
   ## @param web.configRBAC Set RBAC configuration
   ##
+  ## Configuration for using Conjur as a credential manager.
+  ## Ref: https://concourse-ci.org/conjur-credential-manager.html
+  ##
+  conjur:
+    ## @param web.conjur.enabled Enable the use of Conjur as a credential manager
+    enabled: false
+    ## @param web.conjur.applianceUrl URL of the Conjur instance.
+    applianceUrl:
+    ## @param web.conjur.pipelineSecretTemplate Path used to locate pipeline-level secret
+    pipelineSecretTemplate: concourse/{{.Team}}/{{.Pipeline}}/{{.Secret}}
+    ## @param web.conjur.teamSecretTemplate Path used to locate team-level secret
+    teamSecretTemplate: concourse/{{.Team}}/{{.Secret}}
+    ## @param web.conjur.secretTemplate Path used to locate a vault or safe-level secret
+    secretTemplate: concourse/{{.Secret}}
   configRBAC: ""
   ## @param web.existingConfigmap The name of an existing ConfigMap with your custom configuration for web
   ##
