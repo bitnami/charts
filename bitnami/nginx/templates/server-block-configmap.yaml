@@ -10,7 +10,8 @@ metadata:
     {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}data:
+  {{- end }}
+data:
   server-block.conf: |-
     {{- include "common.tplvalues.render" ( dict "value" .Values.serverBlock "context" $ ) | nindent 4 }}
 {{- end }}
