@@ -3,6 +3,7 @@ kind: RoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ include "elasticsearch.curator.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     role: curator
     component: elasticsearch-curator-configmap
