@@ -2,3 +2,7 @@ primary:
   extendedConfiguration: |
     pg_stat_statements.max = 10000
     pg_stat_statements.track = all
+readReplicas:
+  extendedConfiguration: |
+    pg_stat_statements.max = 10000
+    pg_stat_statements.track = all
