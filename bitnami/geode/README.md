@@ -54,7 +54,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Global parameters
 
 | Name                      | Description                                     | Value |
-|:--------------------------|:------------------------------------------------|:------|
+| ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
@@ -63,7 +63,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
-|:-------------------------|:----------------------------------------------------------------------------------------|:----------------|
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
 | `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
 | `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
@@ -79,10 +79,10 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Apache Geode Common parameters
 
 | Name                                     | Description                                                                            | Value                                                       |
-|:-----------------------------------------|:---------------------------------------------------------------------------------------|:------------------------------------------------------------|
+| ---------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
 | `image.registry`                         | Apache Geode image registry                                                            | `docker.io`                                                 |
 | `image.repository`                       | Apache Geode image repository                                                          | `bitnami/geode`                                             |
-| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                | `1.14.2-debian-10-r23`                                      |
+| `image.tag`                              | Apache Geode image tag (immutable tags are recommended)                                | `1.14.4-debian-10-r21`                                      |
 | `image.pullPolicy`                       | Apache Geode image pull policy                                                         | `IfNotPresent`                                              |
 | `image.pullSecrets`                      | Apache Geode image pull secrets                                                        | `[]`                                                        |
 | `image.debug`                            | Enable Apache Geode image debug mode                                                   | `false`                                                     |
@@ -104,7 +104,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Apache Geode Locator parameters
 
 | Name                                            | Description                                                                                                 | Value               |
-|:------------------------------------------------|:------------------------------------------------------------------------------------------------------------|:--------------------|
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------- |
 | `locator.logLevel`                              | Log level for Locator nodes                                                                                 | `info`              |
 | `locator.initialHeapSize`                       | Initial size of the heap on Locator nodes                                                                   | `""`                |
 | `locator.maxHeapSize`                           | Maximum size of the heap on Locator nodes                                                                   | `""`                |
@@ -196,7 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Apache Geode Cache Server parameters
 
 | Name                                             | Description                                                                                                                                 | Value               |
-|:-------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------|:--------------------|
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `server.logLevel`                                | Log level for Cache Server nodes                                                                                                            | `info`              |
 | `server.initialHeapSize`                         | Initial size of the heap on Cache Server nodes                                                                                              | `""`                |
 | `server.maxHeapSize`                             | Maximum size of the heap on Cache Server nodes                                                                                              | `""`                |
@@ -280,7 +280,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Traffic Exposure Parameters
 
 | Name                  | Description                                                                                                                      | Value                    |
-|:----------------------|:---------------------------------------------------------------------------------------------------------------------------------|:-------------------------|
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `ingress.enabled`     | Enable ingress record generation for Apache Geode                                                                                | `false`                  |
 | `ingress.pathType`    | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
@@ -298,11 +298,11 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                     | Value                   |
-|:-------------------------------------------------------|:------------------------------------------------------------------------------------------------|:------------------------|
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------- |
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r305`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r401`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -313,11 +313,11 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Metrics parameters
 
 | Name                                            | Description                                                                      | Value                 |
-|:------------------------------------------------|:---------------------------------------------------------------------------------|:----------------------|
+| ----------------------------------------------- | -------------------------------------------------------------------------------- | --------------------- |
 | `metrics.enabled`                               | Expose Apache Geode metrics                                                      | `false`               |
 | `metrics.image.registry`                        | Bitnami HAProxy image registry                                                   | `docker.io`           |
 | `metrics.image.repository`                      | Bitnami HAProxy image repository                                                 | `bitnami/haproxy`     |
-| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                       | `2.5.0-debian-10-r45` |
+| `metrics.image.tag`                             | Bitnami HAProxy image tag (immutable tags are recommended)                       | `2.5.5-debian-10-r35` |
 | `metrics.image.pullPolicy`                      | Bitnami HAProxy image pull policy                                                | `IfNotPresent`        |
 | `metrics.image.pullSecrets`                     | Bitnami HAProxy image pull secrets                                               | `[]`                  |
 | `metrics.containerPort`                         | Metrics container port                                                           | `9914`                |
@@ -354,7 +354,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Other Parameters
 
 | Name                                          | Description                                                            | Value   |
-|:----------------------------------------------|:-----------------------------------------------------------------------|:--------|
+| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |

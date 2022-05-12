@@ -16,7 +16,7 @@ Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
     cy.clearCookies();
-    cy.visit('/auth/admin');
+    cy.visit('/admin');
     cy.get('.login-pf-header').should('be.visible');
     cy.get('input#username').type(username);
     cy.get('input#password').type(password);

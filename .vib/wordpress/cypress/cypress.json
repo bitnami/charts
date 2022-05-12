@@ -2,14 +2,7 @@
   "baseUrl": "http://localhost/",
   "env": {
     "username": "test_user",
-    "password": "ComplicatedPassword123!4",
-    "wordpressBlogname": "Test_Users's Blog!",
-    "wordpressEmail": "test_user_email@email.com",
-    "smtpMailServer": "mail.server.com",
-    "smtpPort": "120",
-    "smtpUser": "test_mail_user",
-    "wordpressFirstName": "TestName",
-    "wordpressLastName": "TestLastName"
+    "password": "ComplicatedPassword123!4"
   },
   "defaultCommandTimeout": 30000
 }

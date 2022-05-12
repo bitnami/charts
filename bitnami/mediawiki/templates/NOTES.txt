@@ -116,3 +116,5 @@ host. To configure MediaWiki to use and external database host:
     {{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
 {{- end }}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
+
+{{ include "mediawiki.validateValues" . }}

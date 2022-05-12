@@ -122,3 +122,48 @@ Check if there are rolling tags in the images
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- end -}}
+
+{{/*
+Get the credentials Secret
+*/}}
+{{- define "mediawiki.secretName" -}}
+{{- if .Values.mediawikiSecret -}}
+    {{- printf "%s" (tpl .Values.mediawikiSecret $) -}}
+{{- else -}}
+    {{- printf "%s" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a Secret object should be created
+*/}}
+{{- define "mediawiki.createSecret" -}}
+{{- if .Values.mediawikiSecret -}}
+{{- else -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of password and existing Secret mutually exclusive
+*/}}
+{{- define "mediawiki.validateValues.passwordSecretMutExclusive" -}}
+{{- if and .Values.mediawikiPassword .Values.mediawikiSecret -}}
+mediawiki: mediawikiSecret
+    You cannot provide both mediawikiPassword and mediawikiSecret
+{{- end -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message, and call fail.
+*/}}
+{{- define "mediawiki.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "mediawiki.validateValues.passwordSecretMutExclusive" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
+{{- end -}}
