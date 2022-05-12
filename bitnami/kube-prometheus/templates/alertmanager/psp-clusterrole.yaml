@@ -4,6 +4,7 @@ kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ template "kube-prometheus.alertmanager.fullname" . }}-psp
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
 rules:
   - apiGroups: ['extensions']

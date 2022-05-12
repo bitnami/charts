@@ -3,6 +3,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ template "dataplatform.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: dataplatform
     {{- if .Values.commonLabels }}

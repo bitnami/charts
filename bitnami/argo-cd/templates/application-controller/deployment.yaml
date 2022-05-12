@@ -116,14 +116,12 @@ spec:
           {{- end }}
           {{- if .Values.controller.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.controller.command "context" $) | nindent 12 }}
-          {{- else }}
-          command:
-            - argocd-application-controller
           {{- end }}
           {{- if .Values.controller.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.controller.args "context" $) | nindent 12 }}
           {{- else }}
           args:
+            - argocd-application-controller
             - --status-processors
             - {{ .Values.controller.defaultArgs.statusProcessors | quote }}
             - --operation-processors

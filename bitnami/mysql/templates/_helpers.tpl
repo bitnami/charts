@@ -16,31 +16,30 @@
 Return the proper MySQL image name
 */}}
 {{- define "mysql.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper metrics image name
 */}}
 {{- define "mysql.metrics.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "mysql.volumePermissions.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
+{{- include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "mysql.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image) "global" .Values.global) }}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image) "global" .Values.global) }}
 {{- end -}}
 
-{{ template "mysql.initdbScriptsCM" . }}
 {{/*
 Get the initialization scripts ConfigMap name.
 */}}
@@ -140,36 +139,6 @@ otherwise it generates a random value.
         {{- randAlphaNum $len -}}
     {{- end -}}
 {{- end }}
-
-{{- define "mysql.root.password" -}}
-    {{- if not (empty .Values.auth.rootPassword) }}
-        {{- .Values.auth.rootPassword }}
-    {{- else if (not .Values.auth.forcePassword) }}
-        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "mysql-root-password") }}
-    {{- else }}
-        {{- required "A MySQL Root Password is required!" .Values.auth.rootPassword }}
-    {{- end }}
-{{- end -}}
-
-{{- define "mysql.password" -}}
-    {{- if and (not (empty .Values.auth.username)) (not (empty .Values.auth.password)) }}
-        {{- .Values.auth.password }}
-    {{- else if (not .Values.auth.forcePassword) }}
-        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "mysql-password") }}
-    {{- else }}
-        {{- required "A MySQL Database Password is required!" .Values.auth.password }}
-    {{- end }}
-{{- end -}}
-
-{{- define "mysql.replication.password" -}}
-    {{- if not (empty .Values.auth.replicationPassword) }}
-        {{- .Values.auth.replicationPassword }}
-    {{- else if (not .Values.auth.forcePassword) }}
-        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "mysql-replication-password") }}
-    {{- else }}
-        {{- required "A MySQL Replication Password is required!" .Values.auth.replicationPassword }}
-    {{- end }}
-{{- end -}}
 
 {{/* Check if there are rolling tags in the images */}}
 {{- define "mysql.checkRollingTags" -}}
