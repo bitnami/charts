@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------- | ----------------------- |
 | `image.registry`    | Jenkins image registry                             | `docker.io`             |
 | `image.repository`  | Jenkins image repository                           | `bitnami/jenkins`       |
-| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.332.1-debian-10-r16` |
+| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.332.2-debian-10-r26` |
 | `image.pullPolicy`  | Jenkins image pull policy                          | `IfNotPresent`          |
 | `image.pullSecrets` | Jenkins image pull secrets                         | `[]`                    |
 | `image.debug`       | Enable image debug mode                            | `false`                 |
@@ -207,7 +207,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r379`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r422`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |

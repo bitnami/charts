@@ -131,7 +131,6 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "mongodb-sharded.validateValues" -}}
   {{- $messages := list -}}
-  {{- $messages := append $messages (include "mongodb-sharded.validateValues.mongodbCustomDatabase" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.externalCfgServer" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.replicaCount" .) -}}
   {{- $messages := append $messages (include "mongodb-sharded.validateValues.clusterIPListLength" .) -}}
@@ -144,19 +143,6 @@ Compile all warnings into a single message, and call fail.
   {{- if $message -}}
     {{- printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
   {{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of MongoDB&reg; - both auth.username and auth.database are necessary
-to create a custom user and database during 1st initialization
-*/}}
-{{- define "mongodb-sharded.validateValues.mongodbCustomDatabase" -}}
-{{- if or (and .Values.auth.username (not .Values.auth.database)) (and (not .Values.auth.username) .Values.auth.database) }}
-mongodb: auth.username, auth.database
-    Both auth.username and auth.database must be provided to create
-    a custom user and database during 1st initialization.
-    Please set both of them (--set auth.username="xxxx",auth.database="yyyy")
-{{- end -}}
 {{- end -}}
 
 {{/*

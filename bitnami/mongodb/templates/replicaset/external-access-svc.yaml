@@ -23,7 +23,7 @@ metadata:
     {{- if $root.Values.externalAccess.service.annotations }}
     {{- include "common.tplvalues.render" ( dict "value" $root.Values.externalAccess.service.annotations "context" $) | nindent 4 }}
     {{- end }}
-    {{- if .Values.commonAnnotations }}
+    {{- if $root.Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
@@ -51,8 +51,8 @@ spec:
     - name: {{ $root.Values.externalAccess.service.portName | quote }}
       port: {{ $root.Values.externalAccess.service.ports.mongodb }}
       {{- if not (empty $root.Values.externalAccess.service.nodePorts) }}
-      {{- $nodePort := index $root.Values.externalAccess.service.nodePorts $i -}}
-      nodePort: {{ ternary (get $nodePort "mongodb") $nodePort (typeIs "dict" $nodePort)}}
+      {{- $nodePort := index $root.Values.externalAccess.service.nodePorts $i }}
+      nodePort: {{ $nodePort }}
       {{- else }}
       nodePort: null
       {{- end }}

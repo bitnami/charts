@@ -97,7 +97,7 @@ spec:
     {{- end }}
     {{- if .Values.metrics.enabled }}
     - name: {{ .Values.service.portNames.metrics }}
-      port: {{ .Values.service.ports.metrics.metrics }}
+      port: {{ .Values.service.ports.metrics }}
       targetPort: metrics
       {{- if eq .Values.service.type "ClusterIP" }}
       nodePort: null

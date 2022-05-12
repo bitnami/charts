@@ -3,7 +3,7 @@ apiVersion: {{ if .Values.useStatefulSet }}{{ include "common.capabilities.state
 kind: {{ if .Values.useStatefulSet }}StatefulSet{{- else }}Deployment{{- end }}
 metadata:
   name: {{ include "mongodb.fullname" . }}
-  namespace: {{ include "mongodb.namespace" . }}
+  namespace: {{ include "mongodb.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: mongodb
     {{- if .Values.labels }}
@@ -153,6 +153,9 @@ spec:
             {{- if .Values.tls.extraDnsNames }}
             - -n {{ join "," .Values.tls.extraDnsNames }}
             {{- end }}
+          {{- if .Values.tls.resources }}
+          resources: {{- toYaml .Values.tls.resources | nindent 12 }}
+          {{- end }}
         {{- end }}
       {{- end }}
       containers:
@@ -322,12 +325,24 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.command "context" $) | nindent 12 }}
+          {{- else }}
           command:
             - /bin/bash
             - -ec
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.args "context" $) | nindent 12 }}
+          {{- else }}
           args:
             - |
               /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPort }}" --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
+          {{- end }}
           env:
             {{- if .Values.auth.enabled }}
             {{- if not .Values.metrics.username }}
@@ -354,8 +369,8 @@ spec:
               mountPath: /certs
             {{- end }}
           ports:
-            - name: mongodb
-              containerPort: {{ .Values.containerPorts.mongodb }}
+            - name: metrics
+              containerPort: {{ .Values.metrics.containerPort }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}

@@ -216,6 +216,28 @@ tls:
   ## @param tls.mode Allows to set the tls mode which should be used when tls is enabled (options: `allowTLS`, `preferTLS`, `requireTLS`)
   ##
   mode: requireTLS
+  ## Init Container resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param tls.resources.limits Init container generate-tls-certs resource limits
+  ## @param tls.resources.requests Init container generate-tls-certs resource requests
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##   cpu: 100m
+    ##   memory: 128Mi
+    ##
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##   cpu: 100m
+    ##   memory: 128Mi
+    ##
+    requests: {}
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -364,8 +386,8 @@ labels: {}
 ## Ignored when mongodb.architecture=standalone
 ##
 replicaCount: 2
-## @param updateStrategy.type Strategy to use to replace existing MongoDB(&reg;) pods. When architecture=standalone and useStatefulSet=false, 
-##������this parameter will be applied on a deployment object. In other case it will be applied on a statefulset object
+## @param updateStrategy.type Strategy to use to replace existing MongoDB(&reg;) pods. When architecture=standalone and useStatefulSet=false,
+## this parameter will be applied on a deployment object. In other case it will be applied on a statefulset object
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ## Example:
@@ -1824,6 +1846,12 @@ metrics:
   ## ref: https://github.com/percona/mongodb_exporter/blob/master/mongodb_exporter.go
   ##
   extraFlags: ""
+  ## Command and args for running the container (set to default if not set). Use array form
+  ## @param metrics.command Override default container command (useful when using custom images)
+  ## @param metrics.args Override default container args (useful when using custom images)
+  ##
+  command: []
+  args: []
   ## Metrics exporter container resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious

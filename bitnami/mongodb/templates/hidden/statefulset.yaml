@@ -6,7 +6,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ printf "%s-hidden" (include "mongodb.fullname" .) }}
-  namespace: {{ include "mongodb.namespace" . }}
+  namespace: {{ include "mongodb.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: hidden
     {{- if .Values.hidden.labels }}
@@ -141,6 +141,9 @@ spec:
             {{- if .Values.tls.extraDnsNames }}
             - -n {{ join "," .Values.tls.extraDnsNames }}
             {{- end }}
+          {{- if .Values.tls.resources }}
+          resources: {{- toYaml .Values.tls.resources | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- if and .Values.externalAccess.hidden.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.hidden.service.type "LoadBalancer") }}
         - name: auto-discovery
@@ -329,7 +332,7 @@ spec:
           {{- if .Values.hidden.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hidden.startupProbe "enabled") "context" $) | nindent 12 }}
             exec:
-              command: 
+              command:
                 - /bitnami/scripts/startup-probe.sh
           {{- else if .Values.hidden.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.customStartupProbe "context" $) | nindent 12 }}
@@ -376,6 +379,8 @@ spec:
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.command "context" $) | nindent 12 }}
           {{- else }}
           command:
             - /bin/bash
@@ -383,6 +388,8 @@ spec:
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.args "context" $) | nindent 12 }}
           {{- else }}
           args:
             - |

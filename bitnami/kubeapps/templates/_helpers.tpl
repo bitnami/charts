@@ -338,8 +338,8 @@ kubeapps: ingress.tls
     to be used by the Ingress Controller.
     Please use any of these alternatives:
       - Use the `ingress.extraTls` and `ingress.secrets` parameters to provide your custom TLS certificates.
-      - Relay on cert-manager to create it by adding its supported annotations in `ingress.annotations`
-      - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+      - Rely on cert-manager to create it by adding its supported annotations in `ingress.annotations`
+      - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
 {{- end -}}
 {{- end -}}
 
