@@ -1,15 +1,9 @@
 file:
- /opt/bitnami/keycloak/standalone/configuration:
+ /opt/bitnami/keycloak/conf:
    exists: true
    filetype: directory
    mode: "0775"
    owner: root
-/opt/bitnami/keycloak/domain/configuration/application-users.properties:
-   exists: true
-   filetype: file
-   mode: "0775"
-   contains:
-   - admin
 /opt/bitnami/scripts/keycloak-env.sh:
    exists: true
    filetype: file

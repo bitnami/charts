@@ -319,8 +319,8 @@ spec:
           volumeMounts:
             {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: keycloak-config
-              mountPath: /bitnami/keycloak/configuration/standalone-ha.xml
-              subPath: standalone-ha.xml
+              mountPath: /bitnami/keycloak/conf/keycloak.conf
+              subPath: keycloak.conf
             {{- end }}
             {{- if .Values.auth.tls.enabled }}
             - name: shared-certs
