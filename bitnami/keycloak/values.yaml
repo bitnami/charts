@@ -209,9 +209,9 @@ proxy: passthrough
 ## ref: https://github.com/bitnami/bitnami-docker-keycloak#cluster-configuration
 ##
 ## @param configuration Keycloak Configuration. Auto-generated based on other parameters when not specified
-## Specify content for standalone-ha.xml
+## Specify content for keycloak.conf
 ## NOTE: This will override configuring Keycloak based on environment variables (including those set by the chart)
-## The standalone-ha.xml is auto-generated based on other parameters when this parameter is not specified
+## The keycloak.conf is auto-generated based on other parameters when this parameter is not specified
 ##
 ## Example:
 ## configuration: |-
