@@ -27,9 +27,6 @@ In order to replicate the container startup scripts execute this command:
 Logstash can be accessed through following DNS names from within your cluster:
 
     Logstash: {{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
-    {{- if .Values.metrics.enabled }}
-    Logstash Prometheus Metrics: {{ include "common.names.fullname" . }}-metrics.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.metrics.service.port }})
-    {{- end }}
 
 To access Logstash from outside the cluster execute the following commands:
 
