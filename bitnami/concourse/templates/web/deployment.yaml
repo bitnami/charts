@@ -315,11 +315,13 @@ spec:
                 secretKeyRef:
                   name: {{ template "concourse.web.fullname" . }}
                   key: conjur_authn_api_key
+            {{- if (empty .Values.secrets.conjurAuthnApiKey) }}
             - name: CONCOURSE_CONJUR_AUTHN_TOKEN_FILE
               valueFrom:
                 secretKeyRef:
                   name: {{ template "concourse.web.fullname" . }}
                   key: conjur_authn_token_file
+            {{- end }}
             - name: CONCOURSE_CONJUR_PIPELINE_SECRET_TEMPLATE
               value: {{ .Values.web.conjur.pipelineSecretTemplate | quote }}
             - name: CONCOURSE_CONJUR_TEAM_SECRET_TEMPLATE
