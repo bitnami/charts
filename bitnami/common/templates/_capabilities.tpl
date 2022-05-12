@@ -127,7 +127,7 @@ Return the appropriate apiVersion for APIService.
 {{- end -}}
 
 {{/*
-Return the appropriate apiVersion for APIService.
+Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 */}}
 {{- define "common.capabilities.hpa.apiVersion" -}}
 {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) -}}
