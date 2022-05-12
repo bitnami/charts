@@ -3,6 +3,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: {{ template "kube-prometheus.prometheus.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
 rules:
   - apiGroups:

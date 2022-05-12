@@ -3,12 +3,14 @@ kind: NetworkPolicy
 apiVersion: {{ template "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ template "common.names.fullname" . }}
-  labels:
-  {{- include "common.labels.standard" . | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-  namespace: {{ .Release.Namespace }}
 spec:
   podSelector:
     matchLabels:
@@ -16,7 +18,7 @@ spec:
   ingress:
     # Allow inbound connections
     - ports:
-        - port: {{ .Values.primary.service.port }}
+        - port: {{ .Values.primary.service.ports.mysql }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:

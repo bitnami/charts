@@ -89,6 +89,10 @@ mediawikiUser: user
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##
 mediawikiPassword: ""
+## @param mediawikiSecret Existing `Secret` containing the password for the `mediawikiUser` user; must contain the key `mediawiki-password` and optional key `smtp-password`
+## Mutually exclusive with `mediawikiPassword`
+##
+mediawikiSecret: ""
 ## @param mediawikiEmail Admin email
 ## ref: https://github.com/bitnami/bitnami-docker-mediawiki#environment-variables
 ##

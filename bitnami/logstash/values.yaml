@@ -634,10 +634,10 @@ metrics:
   enabled: false
   ## Bitnami Logstash Promtheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/logstash-exporter/tags/
-  ## @param metrics.image.registry Logstash Relay image registry
-  ## @param metrics.image.repository Logstash Relay image repository
-  ## @param metrics.image.tag Logstash Relay image tag (immutable tags are recommended)
-  ## @param metrics.image.pullPolicy Logstash Relay image pull policy
+  ## @param metrics.image.registry Logstash exporter image registry
+  ## @param metrics.image.repository Logstash exporter image repository
+  ## @param metrics.image.tag Logstash exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.pullPolicy Logstash exporter image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
