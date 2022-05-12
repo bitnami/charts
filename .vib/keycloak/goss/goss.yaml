@@ -4,6 +4,11 @@ file:
    filetype: directory
    mode: "0775"
    owner: keycloak
+/opt/bitnami/keycloak/lib/quarkus/build-system.properties:
+  exists: true
+  filetype: file
+  mode: "0644"
+  owner: keycloak
 /opt/bitnami/scripts/keycloak-env.sh:
    exists: true
    filetype: file
