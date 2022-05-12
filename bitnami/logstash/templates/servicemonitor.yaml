@@ -43,5 +43,5 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ template "common.names.namespace" . }}
+      - {{ include "common.names.namespace" . | quote }}
 {{- end }}
