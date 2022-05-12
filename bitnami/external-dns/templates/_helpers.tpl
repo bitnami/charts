@@ -148,6 +148,8 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "vinyldns") (or .Values.vinyldns.secretKey .Values.vinyldns.accessKey) -}}
     {{- true -}}
+{{- else if and (eq .Values.provider "ns1") .Values.ns1.apiKey (not .Values.ns1.secretName) -}}
+    {{- true -}}
 {{- else -}}
 {{- end -}}
 {{- end -}}
@@ -194,6 +196,8 @@ Return the name of the Secret used to store the passwords
 {{- .Values.infoblox.secretName }}
 {{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.secretName }}
 {{- .Values.rfc2136.secretName }}
+{{- else if and (eq .Values.provider "ns1") .Values.ns1.secretName }}
+{{- .Values.ns1.secretName }}
 {{- else -}}
 {{- template "external-dns.fullname" . }}
 {{- end -}}
@@ -296,6 +300,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "external-dns.validateValues.azurePrivateDns.userAssignedIdentityIDWithoutUseManagedIdentityExtension" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.transip.account" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.transip.apiKey" .) -}}
+{{- $messages := append $messages (include "external-dns.validateValues.ns1.apiKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.linode.apiToken" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.consumerKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.ovh.applicationKey" .) -}}
@@ -660,6 +665,19 @@ Validate values of External DNS:
 external-dns: linode.apiToken
     You must provide the Linode API token when provider="linode".
     Please set the apiToken parameter (--set linode.apiToken="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of External DNS:
+- must provide the NS1 API key when provider is "ns1"
+*/}}
+{{- define "external-dns.validateValues.ns1.apiKey" -}}
+{{- if and (eq .Values.provider "ns1") (not .Values.ns1.apiKey) (not .Values.ns1.secretName) -}}
+external-dns: ns1.apiKey
+    You must provide the NS1 API key when provider="ns1".
+    Please set the token parameter (--set ns1.apiKey="xxxx")
+    or specify a secret that contains an API key. (--set ns1.secretName="xxxx")
 {{- end -}}
 {{- end -}}
 

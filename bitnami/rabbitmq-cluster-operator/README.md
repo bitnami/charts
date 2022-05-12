@@ -142,15 +142,16 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 
 ### Common parameters
 
-| Name                | Description                                        | Value           |
-| ------------------- | -------------------------------------------------- | --------------- |
-| `kubeVersion`       | Override Kubernetes version                        | `""`            |
-| `nameOverride`      | String to partially override common.names.fullname | `""`            |
-| `fullnameOverride`  | String to fully override common.names.fullname     | `""`            |
-| `commonLabels`      | Labels to add to all deployed objects              | `{}`            |
-| `commonAnnotations` | Annotations to add to all deployed objects         | `{}`            |
-| `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
+| Name                     | Description                                          | Value           |
+| ------------------------ | ---------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                          | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname   | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname       | `""`            |
+| `commonLabels`           | Labels to add to all deployed objects                | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects           | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain name                       | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release    | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled) | `false`         |
 
 
 ### RabbitMQ Cluster Operator Parameters
@@ -159,7 +160,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
 | `rabbitmqImage.registry`                                          | RabbitMQ Image registry                                                                                 | `docker.io`                              |
 | `rabbitmqImage.repository`                                        | RabbitMQ Image repository                                                                               | `bitnami/rabbitmq`                       |
-| `rabbitmqImage.tag`                                               | RabbitMQ Image tag (immutable tags are recommended)                                                     | `3.8.27-debian-10-r49`                   |
+| `rabbitmqImage.tag`                                               | RabbitMQ Image tag (immutable tags are recommended)                                                     | `3.8.28-debian-10-r1`                    |
 | `rabbitmqImage.pullSecrets`                                       | RabbitMQ Image pull secrets                                                                             | `[]`                                     |
 | `credentialUpdaterImage.registry`                                 | RabbitMQ Default User Credential Updater Image registry                                                 | `docker.io`                              |
 | `credentialUpdaterImage.repository`                               | RabbitMQ Default User Credential Updater Image repository                                               | `bitnami/rmq-default-credential-updater` |
@@ -167,12 +168,13 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `credentialUpdaterImage.pullSecrets`                              | RabbitMQ Default User Credential Updater Image pull secrets                                             | `[]`                                     |
 | `clusterOperator.image.registry`                                  | RabbitMQ Cluster Operator image registry                                                                | `docker.io`                              |
 | `clusterOperator.image.repository`                                | RabbitMQ Cluster Operator image repository                                                              | `bitnami/rabbitmq-cluster-operator`      |
-| `clusterOperator.image.tag`                                       | RabbitMQ Cluster Operator image tag (immutable tags are recommended)                                    | `1.12.1-scratch-r0`                      |
+| `clusterOperator.image.tag`                                       | RabbitMQ Cluster Operator image tag (immutable tags are recommended)                                    | `1.12.1-scratch-r2`                      |
 | `clusterOperator.image.pullPolicy`                                | RabbitMQ Cluster Operator image pull policy                                                             | `IfNotPresent`                           |
 | `clusterOperator.image.pullSecrets`                               | RabbitMQ Cluster Operator image pull secrets                                                            | `[]`                                     |
 | `clusterOperator.replicaCount`                                    | Number of RabbitMQ Cluster Operator replicas to deploy                                                  | `1`                                      |
 | `clusterOperator.schedulerName`                                   | Alternative scheduler                                                                                   | `""`                                     |
 | `clusterOperator.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment                                                          | `[]`                                     |
+| `clusterOperator.terminationGracePeriodSeconds`                   | In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully             | `""`                                     |
 | `clusterOperator.livenessProbe.enabled`                           | Enable livenessProbe on RabbitMQ Cluster Operator nodes                                                 | `true`                                   |
 | `clusterOperator.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                 | `5`                                      |
 | `clusterOperator.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                        | `30`                                     |
@@ -247,15 +249,18 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterOperator.metrics.service.loadBalancerSourceRanges` | RabbitMQ Cluster Operator metrics service Load Balancer sources             | `[]`                     |
 | `clusterOperator.metrics.service.externalTrafficPolicy`    | RabbitMQ Cluster Operator metrics service external traffic policy           | `Cluster`                |
 | `clusterOperator.metrics.service.annotations`              | Additional custom annotations for RabbitMQ Cluster Operator metrics service | `{}`                     |
+| `clusterOperator.metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"        | `None`                   |
+| `clusterOperator.metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                 | `{}`                     |
 | `clusterOperator.metrics.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator        | `false`                  |
+| `clusterOperator.metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                    | `""`                     |
 | `clusterOperator.metrics.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                     | `app.kubernetes.io/name` |
 | `clusterOperator.metrics.serviceMonitor.honorLabels`       | Honor metrics labels                                                        | `false`                  |
 | `clusterOperator.metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                         | `{}`                     |
 | `clusterOperator.metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                     | `""`                     |
 | `clusterOperator.metrics.serviceMonitor.interval`          | Scrape interval. If not set, the Prometheus default scrape interval is used | `""`                     |
-| `clusterOperator.metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the installed Prometheus Operator  | `{}`                     |
 | `clusterOperator.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                    | `[]`                     |
 | `clusterOperator.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                  | `[]`                     |
+| `clusterOperator.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                         | `{}`                     |
 
 
 ### RabbitMQ Messaging Topology Operator Parameters
@@ -264,12 +269,13 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- |
 | `msgTopologyOperator.image.registry`                                  | RabbitMQ Messaging Topology Operator image registry                                                                | `docker.io`                               |
 | `msgTopologyOperator.image.repository`                                | RabbitMQ Messaging Topology Operator image repository                                                              | `bitnami/rmq-messaging-topology-operator` |
-| `msgTopologyOperator.image.tag`                                       | RabbitMQ Messaging Topology Operator image tag (immutable tags are recommended)                                    | `1.4.1-scratch-r0`                        |
+| `msgTopologyOperator.image.tag`                                       | RabbitMQ Messaging Topology Operator image tag (immutable tags are recommended)                                    | `1.5.0-scratch-r0`                        |
 | `msgTopologyOperator.image.pullPolicy`                                | RabbitMQ Messaging Topology Operator image pull policy                                                             | `IfNotPresent`                            |
 | `msgTopologyOperator.image.pullSecrets`                               | RabbitMQ Messaging Topology Operator image pull secrets                                                            | `[]`                                      |
 | `msgTopologyOperator.replicaCount`                                    | Number of RabbitMQ Messaging Topology Operator replicas to deploy                                                  | `1`                                       |
 | `msgTopologyOperator.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment                                                                     | `[]`                                      |
 | `msgTopologyOperator.schedulerName`                                   | Alternative scheduler                                                                                              | `""`                                      |
+| `msgTopologyOperator.terminationGracePeriodSeconds`                   | In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully                        | `""`                                      |
 | `msgTopologyOperator.livenessProbe.enabled`                           | Enable livenessProbe on RabbitMQ Messaging Topology Operator nodes                                                 | `true`                                    |
 | `msgTopologyOperator.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                            | `5`                                       |
 | `msgTopologyOperator.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                                   | `30`                                      |
@@ -335,6 +341,8 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `msgTopologyOperator.service.loadBalancerSourceRanges`                | RabbitMQ Messaging Topology Operator webhook service Load Balancer sources                                         | `[]`                                      |
 | `msgTopologyOperator.service.externalTrafficPolicy`                   | RabbitMQ Messaging Topology Operator webhook service external traffic policy                                       | `Cluster`                                 |
 | `msgTopologyOperator.service.annotations`                             | Additional custom annotations for RabbitMQ Messaging Topology Operator webhook service                             | `{}`                                      |
+| `msgTopologyOperator.service.sessionAffinity`                         | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                               | `None`                                    |
+| `msgTopologyOperator.service.sessionAffinityConfig`                   | Additional settings for the sessionAffinity                                                                        | `{}`                                      |
 | `msgTopologyOperator.rbac.create`                                     | Specifies whether RBAC resources should be created                                                                 | `true`                                    |
 | `msgTopologyOperator.serviceAccount.create`                           | Specifies whether a ServiceAccount should be created                                                               | `true`                                    |
 | `msgTopologyOperator.serviceAccount.name`                             | The name of the ServiceAccount to use.                                                                             | `""`                                      |
@@ -356,15 +364,18 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `msgTopologyOperator.metrics.service.loadBalancerSourceRanges` | RabbitMQ Cluster Operator metrics service Load Balancer sources             | `[]`                     |
 | `msgTopologyOperator.metrics.service.externalTrafficPolicy`    | RabbitMQ Cluster Operator metrics service external traffic policy           | `Cluster`                |
 | `msgTopologyOperator.metrics.service.annotations`              | Additional custom annotations for RabbitMQ Cluster Operator metrics service | `{}`                     |
+| `msgTopologyOperator.metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"        | `None`                   |
+| `msgTopologyOperator.metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                 | `{}`                     |
 | `msgTopologyOperator.metrics.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator        | `false`                  |
+| `msgTopologyOperator.metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                    | `""`                     |
 | `msgTopologyOperator.metrics.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                     | `app.kubernetes.io/name` |
-| `msgTopologyOperator.metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the installed Prometheus Operator  | `{}`                     |
 | `msgTopologyOperator.metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                         | `{}`                     |
 | `msgTopologyOperator.metrics.serviceMonitor.honorLabels`       | Honor metrics labels                                                        | `false`                  |
 | `msgTopologyOperator.metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                     | `""`                     |
 | `msgTopologyOperator.metrics.serviceMonitor.interval`          | Scrape interval. If not set, the Prometheus default scrape interval is used | `""`                     |
 | `msgTopologyOperator.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                    | `[]`                     |
 | `msgTopologyOperator.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                  | `[]`                     |
+| `msgTopologyOperator.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                         | `{}`                     |
 
 
 ### cert-manager parameters

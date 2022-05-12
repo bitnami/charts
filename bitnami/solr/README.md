@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ------------------------------------------------------------- | ----------------------- |
 | `image.registry`                 | Solr image registry                                           | `docker.io`             |
 | `image.repository`               | Solr image repository                                         | `bitnami/solr`          |
-| `image.tag`                      | Solr image tag (immutable tags are recommended)               | `8.11.1-debian-10-r60`  |
+| `image.tag`                      | Solr image tag (immutable tags are recommended)               | `8.11.1-debian-10-r121` |
 | `image.pullPolicy`               | image pull policy                                             | `IfNotPresent`          |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array              | `[]`                    |
 | `image.debug`                    | Specify if debug values should be set                         | `false`                 |
@@ -116,21 +116,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                          | Number of solr replicas                                                                                                  | `3`             |
 | `containerPorts.http`                   | Solr HTTP container port                                                                                                 | `8983`          |
 | `livenessProbe.enabled`                 | Enable livenessProbe on Solr containers                                                                                  | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                  | `30`            |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                  | `40`            |
 | `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                         | `10`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                        | `5`             |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                        | `15`            |
 | `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                      | `6`             |
 | `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                      | `1`             |
 | `readinessProbe.enabled`                | Enable readinessProbe on Solr containers                                                                                 | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `5`             |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `60`            |
 | `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                        | `10`            |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `5`             |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `15`            |
 | `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                     | `6`             |
 | `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                     | `1`             |
 | `startupProbe.enabled`                  | Enable startupProbe on Solr containers                                                                                   | `false`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `30`            |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `40`            |
 | `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                          | `10`            |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                         | `1`             |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                         | `15`            |
 | `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                       | `15`            |
 | `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                       | `1`             |
 | `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
@@ -216,7 +216,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r340`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r402`     |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |

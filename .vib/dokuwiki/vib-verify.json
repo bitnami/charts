@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/dokuwiki"
         },
-        "runtime_parameters": "ImRva3V3aWtpUGFzc3dvcmQiOiAiYml0bmFtaTEiCiJkb2t1d2lraVVzZXJuYW1lIjogInN1cGVydXNlciI=",
+        "runtime_parameters": "ZG9rdXdpa2lVc2VybmFtZTogdXNlcgpkb2t1d2lraVBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgw",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -43,6 +43,31 @@
           "params": {
             "endpoint": "lb-dokuwiki-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/dokuwiki/cypress"
+            },
+            "endpoint": "lb-dokuwiki-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "user",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/dokuwiki/goss"
+            },
+            "remote": {
+              "workload": "deploy-dokuwiki"
+            }
           }
         }
       ]

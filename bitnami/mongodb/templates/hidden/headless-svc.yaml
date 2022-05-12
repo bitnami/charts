@@ -2,24 +2,33 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "mongodb.fullname" . }}-hidden-headless
-  namespace: {{ include "mongodb.namespace" . }}
+  name: {{ printf "%s-hidden-headless" (include "mongodb.fullname" .) }}
+  namespace: {{ include "mongodb.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: hidden
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.service.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- if or .Values.hidden.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.hidden.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.hidden.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   type: ClusterIP
   clusterIP: None
   publishNotReadyAddresses: true
   ports:
-    - name: {{ .Values.service.portName }}
-      port: {{ .Values.service.port }}
+    - name: {{ .Values.hidden.service.portName | quote }}
+      port: {{ .Values.hidden.service.ports.mongodb }}
       targetPort: mongodb
+    {{- if .Values.hidden.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.hidden.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: hidden
 {{- end }}

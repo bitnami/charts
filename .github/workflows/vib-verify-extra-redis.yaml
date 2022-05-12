@@ -1,5 +1,5 @@
 # Multiple deployments pipelines are custom per asset. All single deployments pipelines are handled by vib-verify.yaml
-name: 'vib'
+name: 'VIB'
 on: # rebuild any PRs and main branch changes
   pull_request_target:
     types:
@@ -19,7 +19,7 @@ jobs:
   vib-verify-sentinel:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'verify') }}
     runs-on: ubuntu-latest
-    name: Redis Sentinel on Tanzu Kubernetes Grid
+    name: Verify Redis Sentinel on Tanzu Kubernetes Grid
     steps:
       - uses: actions/checkout@v2
         with:
@@ -29,12 +29,12 @@ jobs:
         with:
           pipeline: redis/sentinel/vib-verify.json
         env:
-          VIB_ENV_TARGET_PLATFORM: 7ddab896-2e4e-4d58-a501-f79897eba3a0
+          VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
 
   vib-verify-replica:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'verify') }}
     runs-on: ubuntu-latest
-    name: Redis Replica on Tanzu Kubernetes Grid
+    name: Verify Redis Replica on Tanzu Kubernetes Grid
     steps:
       - uses: actions/checkout@v2
         with:
@@ -44,4 +44,4 @@ jobs:
         with:
           pipeline: redis/replicas/vib-verify.json
         env:
-          VIB_ENV_TARGET_PLATFORM: 7ddab896-2e4e-4d58-a501-f79897eba3a0
+          VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}

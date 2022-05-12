@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/elasticsearch"
         },
-        "runtime_parameters": "ImNvb3JkaW5hdGluZyI6CiAgInJlcGxpY2FzIjogIjEiCiJkYXRhIjoKICAicmVwbGljYXMiOiAiMSIKImdsb2JhbCI6CiAgImtpYmFuYUVuYWJsZWQiOiB0cnVlCiJraWJhbmEiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0IjogODAKICAgICJ0eXBlIjogIkxvYWRCYWxhbmNlciIKIm1hc3RlciI6CiAgInJlcGxpY2FzIjogIjEiCiJzeXNjdGxJbWFnZSI6CiAgImVuYWJsZWQiOiB0cnVl",
+        "runtime_parameters": "Imdsb2JhbCI6CiAgImtpYmFuYUVuYWJsZWQiOiB0cnVlCiJtYXN0ZXIiOgogICJyZXBsaWNhQ291bnQiOiAiMSIKImNvb3JkaW5hdGluZyI6CiAgInJlcGxpY2FDb3VudCI6ICIxIgoiZGF0YSI6CiAgInJlcGxpY2FDb3VudCI6ICIxIgoiaW5nZXN0IjoKICAicmVwbGljYUNvdW50IjogIjEiCiJraWJhbmEiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJodHRwIjogODAKICAgICJ0eXBlIjogIkxvYWRCYWxhbmNlciIKInN5c2N0bEltYWdlIjoKICAiZW5hYmxlZCI6IHRydWUK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {

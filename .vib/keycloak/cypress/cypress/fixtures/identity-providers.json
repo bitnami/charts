@@ -1,0 +1,6 @@
+{
+  "identityProvider": {
+    "clientId": "testClientId",
+    "clientSecret": "testClientSecret"
+  }
+}

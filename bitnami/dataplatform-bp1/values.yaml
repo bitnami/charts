@@ -68,7 +68,7 @@ dataplatform:
     image:
       registry: docker.io
       repository: bitnami/dataplatform-exporter
-      tag: 1.0.1-scratch-r23
+      tag: 1.0.1-scratch-r28
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -427,7 +427,7 @@ dataplatform:
     image:
       registry: docker.io
       repository: bitnami/dataplatform-emitter
-      tag: 1.0.1-scratch-r25
+      tag: 1.0.1-scratch-r32
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -978,9 +978,10 @@ spark:
   ## Spark master specific configuration
   ##
   master:
-    ## @param spark.master.webPort Specify the port where the web interface will listen on the master
+    ## @param spark.master.containerPorts.http Specify the port where the web interface will listen on the master
     ##
-    webPort: 8080
+    containerPorts:
+      http: 8080
     ## @param spark.master.resources.limits The resources limits for the container
     ## @param spark.master.resources.requests [object] The resources limits for the container
     ##
@@ -1015,9 +1016,10 @@ spark:
     ## @param spark.worker.replicaCount Set the number of workers
     ##
     replicaCount: 2
-    ## @param spark.worker.webPort Specify the port where the web interface will listen on the worker
+    ## @param spark.worker.containerPorts.http Specify the port where the web interface will listen on the worker
     ##
-    webPort: 8081
+    containerPorts:
+      http: 8081
     ## Anti affinity rules set for resiliency
     ## @param spark.worker.affinity.podAntiAffinity [object] Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template)
     ## @skip spark.worker.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution

@@ -1,6 +1,9 @@
 master:
-  replicas: 1
+  replicaCount: 3
+  masterOnly: false
 data:
-  replicas: 1
+  replicaCount: 0
 coordinating:
-  replicas: 1
+  replicaCount: 0
+ingest:
+  replicaCount: 0

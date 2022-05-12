@@ -68,7 +68,7 @@ dataplatform:
     image:
       registry: docker.io
       repository: bitnami/dataplatform-exporter
-      tag: 1.0.1-scratch-r22
+      tag: 1.0.1-scratch-r26
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -454,7 +454,7 @@ dataplatform:
     image:
       registry: docker.io
       repository: bitnami/dataplatform-emitter
-      tag: 1.0.1-scratch-r26
+      tag: 1.0.1-scratch-r31
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -885,7 +885,7 @@ spark:
   ##
   enabled: true
   ## Spark master specific configuration
-  ## @param spark.master.webPort Web port for spark master
+  ## @param spark.master.containerPorts.web Web port for spark master
   ## @param spark.master.resources.limits Spark master resource limits
   ## @param spark.master.resources.requests.cpu Spark master CPUs
   ## @param spark.master.resources.requests.memory Spark master requested memory
@@ -895,7 +895,8 @@ spark:
   master:
     ## Spark container ports
     ##
-    webPort: 8080
+    containerPorts:
+      web: 8080
     resources:
       ## Recommended values for cpu and memory requests
       ##
@@ -919,7 +920,7 @@ spark:
             topologyKey: "kubernetes.io/hostname"
   ## Spark worker specific configuration
   ## @param spark.worker.replicaCount Number of spark workers
-  ## @param spark.worker.webPort Web port for spark master
+  ## @param spark.worker.containerPorts.web Web port for spark master
   ## @param spark.worker.resources.limits Spark master resource limits
   ## @param spark.worker.resources.requests.cpu Spark master CPUs
   ## @param spark.worker.resources.requests.memory Spark master requested memory
@@ -930,7 +931,8 @@ spark:
     replicaCount: 2
     ## Spark container ports
     ##
-    webPort: 8081
+    containerPorts:
+      web: 8081
     resources:
       ## Recommended values for cpu and memory requests
       ##
@@ -991,7 +993,7 @@ elasticsearch:
   global:
     kibanaEnabled: true
   ## Elasticsearch master-eligible node parameters
-  ## @param elasticsearch.master.replicas Number of Elasticsearch replicas
+  ## @param elasticsearch.master.replicaCount Number of Elasticsearch replicas
   ## @param elasticsearch.master.heapSize Heap Size for Elasticsearch master
   ## @param elasticsearch.master.affinity.podAntiAffinity [object] Elasticsearch pod anti affinity
   ## @param elasticsearch.master.resources.limits Elasticsearch master resource limits
@@ -1001,7 +1003,7 @@ elasticsearch:
   master:
     ## Number of master-eligible node(s) replicas to deploy
     ##
-    replicas: 3
+    replicaCount: 3
     heapSize: 768m
     ## Affinity for pod assignment
     ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -1042,7 +1044,7 @@ elasticsearch:
         memory: 1Gi
   ## Elasticsearch data node parameters
   ## @param elasticsearch.data.name Elasticsearch data node name
-  ## @param elasticsearch.data.replicas Number of Elasticsearch replicas
+  ## @param elasticsearch.data.replicaCount Number of Elasticsearch replicas
   ## @param elasticsearch.data.heapSize Heap Size for Elasticsearch data node
   ## @param elasticsearch.data.affinity.podAntiAffinity [object] Anti affinity rules set for resiliency
   ## @skip elasticsearch.data.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
@@ -1054,7 +1056,7 @@ elasticsearch:
     name: data
     ## Number of data node(s) replicas to deploy
     ##
-    replicas: 2
+    replicaCount: 2
     heapSize: 4096m
     ## Affinity for pod assignment
     ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -1088,7 +1090,7 @@ elasticsearch:
         cpu: 250m
         memory: 5Gi
   ## Elasticsearch coordinating-only node parameters
-  ## @param elasticsearch.coordinating.replicas Number of Elasticsearch replicas
+  ## @param elasticsearch.coordinating.replicaCount Number of Elasticsearch replicas
   ## @param elasticsearch.coordinating.heapSize Heap Size for Elasticsearch coordinating
   ## @param elasticsearch.coordinating.affinity.podAntiAffinity [object] Anti affinity rules set for resiliency
   ## @skip elasticsearch.coordinating.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution
@@ -1099,7 +1101,7 @@ elasticsearch:
   coordinating:
     ## Number of coordinating-only node(s) replicas to deploy
     ##
-    replicas: 2
+    replicaCount: 2
     heapSize: 768m
     ## Affinity for pod assignment
     ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
