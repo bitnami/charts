@@ -173,7 +173,7 @@ tolerations: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
 ##
 priorityClassName: ""
-# @param schedulerName Name of the k8s scheduler (other than default)
+## @param schedulerName Name of the k8s scheduler (other than default)
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
@@ -778,7 +778,7 @@ metrics:
   ## Prometheus exporter service parameters
   ##
   service:
-    ## @param metrics.service.port NGINX Prometheus exporter service port
+    ## @param metrics.service.ports.metrics NGINX Prometheus exporter service port
     ##
     ports:
       metrics: 9113
