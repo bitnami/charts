@@ -6,7 +6,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "mongodb.fullname" . }}
-  namespace: {{ include "mongodb.namespace" . }}
+  namespace: {{ include "mongodb.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: mongodb
     {{- if .Values.commonLabels }}

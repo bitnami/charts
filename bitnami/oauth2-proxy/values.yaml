@@ -157,8 +157,8 @@ ingress:
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
   ## You can:
-  ##   - Relay on cert-manager to create it by setting the corresponding annotations
-  ##   - Relay on Helm to create self-signed certificates by setting `ingress.tls=true` and `ingress.certManager=false`
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on Helm to create self-signed certificates by setting `ingress.tls=true` and `ingress.certManager=false`
   ##
   tls: false
   ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
