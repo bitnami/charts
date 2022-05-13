@@ -46,7 +46,7 @@ it('allows to upload a file', () => {
   cy.login();
   cy.visit('/wiki/Special:Upload');
   cy.get('#wpUploadFile').selectFile(
-    'cypress/fixtures/images/upload_image.png',
+    'cypress/fixtures/images/post_image.png',
     {
       force: true,
     }

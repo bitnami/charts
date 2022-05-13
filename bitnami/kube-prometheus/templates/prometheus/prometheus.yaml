@@ -3,7 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
   name: {{ template "kube-prometheus.prometheus.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.prometheus.replicaCount }}
@@ -28,7 +28,7 @@ spec:
     {{- if .Values.prometheus.alertingEndpoints }}
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.alertingEndpoints "context" $) | nindent 6 }}
     {{- else if .Values.alertmanager.enabled }}
-      - namespace: {{ .Release.Namespace }}
+      - namespace: {{ .Release.Namespace | quote }}
         name: {{ template "kube-prometheus.alertmanager.fullname" . }}
         port: http
         pathPrefix: "{{ .Values.alertmanager.routePrefix }}"

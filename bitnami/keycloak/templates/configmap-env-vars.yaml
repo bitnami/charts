@@ -16,19 +16,12 @@ data:
   KEYCLOAK_ADMIN_USER: {{ .Values.auth.adminUser | quote }}
   KEYCLOAK_MANAGEMENT_USER: {{ .Values.auth.managementUser | quote }}
   KEYCLOAK_HTTP_PORT: {{ .Values.containerPorts.http | quote }}
-  KEYCLOAK_PROXY_ADDRESS_FORWARDING: {{ ternary "true" "false" .Values.proxyAddressForwarding | quote }}
+  KEYCLOAK_PROXY: {{ .Values.proxy }}
   KEYCLOAK_ENABLE_STATISTICS: {{ ternary "true" "false" .Values.metrics.enabled | quote }}
   KEYCLOAK_DATABASE_HOST: {{ include "keycloak.databaseHost" . | quote }}
   KEYCLOAK_DATABASE_PORT: {{ include "keycloak.databasePort" . }}
   KEYCLOAK_DATABASE_NAME: {{ include "keycloak.databaseName" . | quote }}
   KEYCLOAK_DATABASE_USER: {{ include "keycloak.databaseUser" . | quote }}
-  {{- if .Values.serviceDiscovery.enabled }}
-  KEYCLOAK_JGROUPS_DISCOVERY_PROTOCOL: {{ .Values.serviceDiscovery.protocol | quote }}
-  KEYCLOAK_JGROUPS_DISCOVERY_PROPERTIES: {{ (tpl (join "," .Values.serviceDiscovery.properties) $) | quote }}
-  KEYCLOAK_JGROUPS_TRANSPORT_STACK: {{ .Values.serviceDiscovery.transportStack | quote }}
-  {{- end }}
-  KEYCLOAK_CACHE_OWNERS_COUNT: {{ .Values.cache.ownersCount | quote }}
-  KEYCLOAK_AUTH_CACHE_OWNERS_COUNT: {{ .Values.cache.authOwnersCount | quote }}
   KEYCLOAK_ENABLE_TLS: {{ ternary "true" "false" .Values.auth.tls.enabled | quote }}
   {{- if .Values.auth.tls.enabled }}
   KEYCLOAK_HTTPS_PORT: {{ .Values.containerPorts.https | quote }}

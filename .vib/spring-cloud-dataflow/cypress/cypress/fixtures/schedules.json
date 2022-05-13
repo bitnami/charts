@@ -1,0 +1,7 @@
+{
+  "newSchedule": {
+    "name": "test-schedule",
+    "cronExpression": "*/5 * * * *",
+    "taskType": "timestamp"
+  }
+}

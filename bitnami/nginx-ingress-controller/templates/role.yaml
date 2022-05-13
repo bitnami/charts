@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
@@ -39,7 +39,7 @@ rules:
       - update
       - watch
   - apiGroups:
-{{ include "nginx-ingress-controller.role.extensions.apiGroup" . | nindent 6 }}
+      {{- include "nginx-ingress-controller.role.extensions.apiGroup" . | nindent 6 }}
       - networking.k8s.io
     resources:
       - ingresses
@@ -48,7 +48,7 @@ rules:
       - list
       - watch
   - apiGroups:
-{{ include "nginx-ingress-controller.role.extensions.apiGroup" . | nindent 6 }}
+      {{- include "nginx-ingress-controller.role.extensions.apiGroup" . | nindent 6 }}
       - networking.k8s.io
     resources:
       - ingresses/status
@@ -84,6 +84,9 @@ rules:
     verbs:
       - create
       - patch
+  {{- if .Values.rbac.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
+  {{- end }}
   {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
   {{- if and $pspAvailable .Values.podSecurityPolicy.enabled }}
   - apiGroups: [{{ template "nginx-ingress-controller.podSecurityPolicy.apiGroup" . }}]

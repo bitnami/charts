@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ printf "redis-data-%s-master" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: master
   {{- if .Values.master.persistence.annotations }}

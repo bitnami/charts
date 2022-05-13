@@ -2,7 +2,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ template "common.names.namespace" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: %%COMPONENT_NAME%%
     {{- if .Values.commonLabels }}
@@ -12,7 +12,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.%%MAIN_OBJECT_BLOCK%%.replicaCount }}
+  {{- end }}
   {{- if .Values.%%MAIN_OBJECT_BLOCK%%.updateStrategy }}
   strategy: {{- toYaml .Values.%%MAIN_OBJECT_BLOCK%%.updateStrategy | nindent 4 }}
   {{- end }}

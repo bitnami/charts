@@ -27,6 +27,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override drupal.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param commonAnnotations Common annotations to add to all Drupal resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
