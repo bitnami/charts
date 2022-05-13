@@ -1,6 +1,6 @@
 command:
   rabbmitmqctl-version:
-    exec: rabbitmqctl version
+    exec: rabbitmqctl version | grep --quiet $APP_VERSION
     exit-status: 0
     stderr: [ ]
     timeout: 20000

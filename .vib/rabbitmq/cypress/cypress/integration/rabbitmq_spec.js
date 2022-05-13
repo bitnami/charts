@@ -44,7 +44,7 @@ it('allows publishing a message to a created exchange', () => {
     cy.get('textarea').type(message.newMessage.payload);
   });
   cy.contains('input', 'Publish message').click();
-  cy.contains('Message published, but not routed');
+  cy.contains('Message published');
 });
 
 it('allows adding a new queue and binding/unbinding it to the exchange', () => {
