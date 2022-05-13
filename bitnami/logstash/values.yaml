@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/logstash
-  tag: 8.1.3-debian-10-r0
+  tag: 8.2.0-debian-10-r0
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -504,7 +504,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r402
+    tag: 10-debian-10-r414
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -634,16 +634,16 @@ metrics:
   enabled: false
   ## Bitnami Logstash Promtheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/logstash-exporter/tags/
-  ## @param metrics.image.registry Logstash Relay image registry
-  ## @param metrics.image.repository Logstash Relay image repository
-  ## @param metrics.image.tag Logstash Relay image tag (immutable tags are recommended)
-  ## @param metrics.image.pullPolicy Logstash Relay image pull policy
+  ## @param metrics.image.registry Logstash exporter image registry
+  ## @param metrics.image.repository Logstash exporter image repository
+  ## @param metrics.image.tag Logstash exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.pullPolicy Logstash exporter image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/logstash-exporter
-    tag: 7.3.0-debian-10-r504
+    tag: 7.3.0-debian-10-r517
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##

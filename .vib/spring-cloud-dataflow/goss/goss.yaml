@@ -1,0 +1,22 @@
+file:
+  /opt/bitnami/spring-cloud-dataflow/conf/application.yml:
+    exists: true
+    filetype: symlink
+    mode: "0777"
+    owner: root
+  /bitnami/spring-cloud-dataflow:
+    exists: true
+    filetype: directory
+    mode: "0775"
+    owner: root
+command:
+  user-id-test:
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+    exit-status: 0
+    stdout: []
+    stderr: []
+  java-test:
+    exec: java -version
+    exit-status: 0
+    stdout:
+    stderr: []  

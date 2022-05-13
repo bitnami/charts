@@ -1,6 +1,0 @@
-master:
-  replicas: 1
-data:
-  replicas: 1
-coordinating:
-  replicas: 1

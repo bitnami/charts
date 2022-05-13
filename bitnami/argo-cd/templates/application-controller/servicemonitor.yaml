@@ -44,6 +44,7 @@ spec:
   selector:
     matchLabels:
       {{- include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: controller
+      app.kubernetes.io/component: metrics
+      app.kubernetes.io/part-of: controller
 {{- end }}
 

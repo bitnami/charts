@@ -1,0 +1,6 @@
+{
+  "newStream": {
+    "name": "test-stream",
+    "type": "mongodb | cassandra"
+  }
+}

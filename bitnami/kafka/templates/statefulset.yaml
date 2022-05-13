@@ -103,6 +103,7 @@ spec:
             - -ec
             - |
               mkdir -p "{{ .Values.persistence.mountPath }}" "{{ .Values.logPersistence.mountPath }}"
+              chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} "{{ .Values.persistence.mountPath }}" "{{ .Values.logPersistence.mountPath }}"
               find "{{ .Values.persistence.mountPath }}" -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
               find "{{ .Values.logPersistence.mountPath }}" -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
           {{- if eq ( toString ( .Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
@@ -180,7 +181,7 @@ spec:
               {{- if .Values.zookeeper.enabled }}
               value: {{ printf "%s%s" (include "kafka.zookeeper.fullname" .) (tpl .Values.zookeeperChrootPath .) | quote }}
               {{- else }}
-              value: {{ include "common.tplvalues.render" (dict "value" (join "," .Values.externalZookeeper.servers) "context" $) }}
+              value: {{ include "common.tplvalues.render" (dict "value" (printf "%s%s" (join "," .Values.externalZookeeper.servers) (tpl .Values.zookeeperChrootPath .)) "context" $)    }}
               {{- end }}
             - name: KAFKA_INTER_BROKER_LISTENER_NAME
               value: {{ .Values.interBrokerListenerName | quote }}

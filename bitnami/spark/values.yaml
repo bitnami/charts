@@ -5,6 +5,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -13,6 +14,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  storageClass: ""
 
 ## @section Common parameters
 
@@ -25,10 +27,21 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -58,7 +71,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/spark
-  tag: 3.2.1-debian-10-r78
+  tag: 3.2.1-debian-10-r85
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -77,52 +90,38 @@ image:
   ##
   debug: false
 ## @param hostNetwork Enable HOST Network
-## If hostNetwork is true, then  dnsPolicy is set to ClusterFirstWithHostNet
+## If hostNetwork is true, then dnsPolicy is set to ClusterFirstWithHostNet
 ##
 hostNetwork: false
-
-## @section RBAC parameters
-##
-
-## Spark pods ServiceAccount
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-##
-serviceAccount:
-  ## @param serviceAccount.create Enable the creation of a ServiceAccount for Spark pods
-  ##
-  create: true
-  ## @param serviceAccount.name The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the spark.fullname template
-  ##
-  name: ""
-  ## @param serviceAccount.annotations Annotations for Spark Service Account
-  ##
-  annotations: {}
-  ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
-  ##
-  automountServiceAccountToken: true
 
 ## @section Spark master parameters
 
 ## Spark master specific configuration
 ##
 master:
-  ## @param master.configurationConfigMap Set a custom configuration by using an existing configMap with the configuration file.
+  ## @param master.existingConfigmap The name of an existing ConfigMap with your custom configuration for master
   ##
-  configurationConfigMap: ""
-  ## @param master.webPort Specify the port where the web interface will listen on the master over HTTP
+  existingConfigmap: ""
+  ## @param master.containerPorts.http Specify the port where the web interface will listen on the master over HTTP
+  ## @param master.containerPorts.https Specify the port where the web interface will listen on the master over HTTPS
+  ## @param master.containerPorts.cluster Specify the port where the master listens to communicate with workers
   ##
-  webPort: 8080
-  ## @param master.webPortHttps Specify the port where the web interface will listen on the master over HTTPS
-  ##
-  webPortHttps: 8480
-  ## @param master.clusterPort Specify the port where the master listens to communicate with workers
-  ##
-  clusterPort: 7077
+  containerPorts:
+    http: 8080
+    https: 8480
+    cluster: 7077
   ## @param master.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param master.extraContainerPorts Specify the port where the running jobs inside the masters listens
+  ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#containerport-v1-core
+  ## e.g:
+  ## - name: myapp
+  ##   containerPort: 8000
+  ##   protocol: TCP
+  ##
+  extraContainerPorts: []
   ## @param master.daemonMemoryLimit Set the memory limit for the master daemon
   ##
   daemonMemoryLimit: ""
@@ -136,26 +135,50 @@ master:
   ##    value: -Dx=y
   ##
   extraEnvVars: []
-  ## Kubernetes Security Context
-  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param master.securityContext.enabled Enable security context
-  ## @param master.securityContext.fsGroup Group ID for the container
-  ## @param master.securityContext.runAsUser User ID for the container
-  ## @param master.securityContext.runAsGroup Group ID for the container
-  ## @param master.securityContext.seLinuxOptions SELinux options for the container
+  ## @param master.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for master nodes
   ##
-  securityContext:
+  extraEnvVarsCM: ""
+  ## @param master.extraEnvVarsSecret Name of existing Secret containing extra env vars for master nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## Kubernetes Pods Security Context
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param master.podSecurityContext.enabled Enable security context
+  ## @param master.podSecurityContext.fsGroup Set master pod's Security Context Group ID
+  ## @param master.podSecurityContext.runAsUser Set master pod's Security Context User ID
+  ## @param master.podSecurityContext.runAsGroup Set master pod's Security Context Group ID
+  ## @param master.podSecurityContext.seLinuxOptions Set master pod's Security Context SELinux options
+  ##
+  podSecurityContext:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
     runAsGroup: 0
     seLinuxOptions: {}
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param master.containerSecurityContext.enabled Enabled master containers' Security Context
+  ## @param master.containerSecurityContext.runAsUser Set master containers' Security Context runAsUser
+  ## @param master.containerSecurityContext.runAsNonRoot Set master containers' Security Context runAsNonRoot
+  ## @param master.containerSecurityContext.readOnlyRootFilesystem Set master containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+  ## @param master.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param master.args Override default container args (useful when using custom images)
+  ##
+  args: []
   ## @param master.podAnnotations Annotations for pods in StatefulSet
   ##
   podAnnotations: {}
-  ## @param master.extraPodLabels Extra labels for pods in StatefulSet
+  ## @param master.podLabels Extra labels for pods in StatefulSet
   ##
-  extraPodLabels: {}
+  podLabels: {}
   ## @param master.podAffinityPreset Spark master pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -196,6 +219,41 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param master.updateStrategy.type Master statefulset strategy type.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
+  ##
+  updateStrategy: 
+    type: RollingUpdate 
+  ## @param master.priorityClassName master pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param master.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: {}
+  ## @param master.schedulerName Name of the k8s scheduler (other than default) for master pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param master.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param master.lifecycleHooks for the master container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param master.extraVolumes Optionally specify extra list of additional volumes for the master pod(s)
+  ##
+  extraVolumes: []
+  ## @param master.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the master container(s)
+  ##
+  extraVolumeMounts: []
   ## Container resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -248,6 +306,41 @@ master:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## Configure extra options for startup probe
+  ## @param master.startupProbe.enabled Enable startupProbe
+  ## @param master.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param master.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param master.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param master.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param master.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param master.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param master.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param master.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param master.sidecars Add additional sidecar containers to the master pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: {}
   ## @param master.initContainers Add initContainers to the master pods.
   ## Example:
   ## initContainers:
@@ -265,30 +358,29 @@ master:
 ## Spark worker specific configuration
 ##
 worker:
-  ## @param worker.configurationConfigMap Set a custom configuration by using an existing configMap with the configuration file.
+  ## @param worker.existingConfigmap The name of an existing ConfigMap with your custom configuration for workers
   ##
-  configurationConfigMap: ""
-  ## @param worker.webPort Specify the port where the web interface will listen on the worker over HTTP
+  existingConfigmap: ""
+  ## @param worker.containerPorts.http Specify the port where the web interface will listen on the worker over HTTP
+  ## @param worker.containerPorts.https Specify the port where the web interface will listen on the worker over HTTPS
+  ## @param worker.containerPorts.cluster Specify the port where the worker listens to communicate with workers
   ##
-  webPort: 8081
-  ## @param worker.webPortHttps Specify the port where the web interface will listen on the worker over HTTPS
-  ##
-  webPortHttps: 8481
-  ## @param worker.clusterPort Specify the port where the worker listens to communicate with the master
-  ##
-  clusterPort: ""
+  containerPorts:
+    http: 8080
+    https: 8480
+    cluster: ""
   ## @param worker.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param worker.extraPorts Specify the port where the running jobs inside the workers listens
+  ## @param worker.extraContainerPorts Specify the port where the running jobs inside the workers listens
   ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#containerport-v1-core
   ## e.g:
   ## - name: myapp
   ##   containerPort: 8000
   ##   protocol: TCP
   ##
-  extraPorts: []
+  extraContainerPorts: []
   ## @param worker.daemonMemoryLimit Set the memory limit for the worker daemon
   ##
   daemonMemoryLimit: ""
@@ -313,33 +405,53 @@ worker:
   ##  - name: SPARK_DAEMON_JAVA_OPTS
   ##    value: -Dx=y
   extraEnvVars: []
+  ## @param worker.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for worker nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param worker.extraEnvVarsSecret Name of existing Secret containing extra env vars for worker nodes
+  ##
+  extraEnvVarsSecret: ""
   ## @param worker.replicaCount Number of spark workers (will be the minimum number when autoscaling is enabled)
   ##
   replicaCount: 2
-  ## @param worker.podManagementPolicy Statefulset Pod Management Policy Type
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
-  ##
-  podManagementPolicy: OrderedReady
-  ## Kubernetes Security Context
+  ## Kubernetes Pods Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param worker.securityContext.enabled Enable security context
-  ## @param worker.securityContext.fsGroup Group ID for the container
-  ## @param worker.securityContext.runAsUser User ID for the container
-  ## @param worker.securityContext.runAsGroup Group ID for the container
-  ## @param worker.securityContext.seLinuxOptions SELinux options for the container
+  ## @param worker.podSecurityContext.enabled Enable security context
+  ## @param worker.podSecurityContext.fsGroup Group ID for the container
+  ## @param worker.podSecurityContext.runAsUser User ID for the container
+  ## @param worker.podSecurityContext.runAsGroup Group ID for the container
+  ## @param worker.podSecurityContext.seLinuxOptions SELinux options for the container
   ##
-  securityContext:
+  podSecurityContext:
     enabled: true
     fsGroup: 1001
     runAsUser: 1001
     runAsGroup: 0
     seLinuxOptions: {}
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param worker.containerSecurityContext.enabled Enabled worker containers' Security Context
+  ## @param worker.containerSecurityContext.runAsUser Set worker containers' Security Context runAsUser
+  ## @param worker.containerSecurityContext.runAsNonRoot Set worker containers' Security Context runAsNonRoot
+  ## @param worker.containerSecurityContext.readOnlyRootFilesystem Set worker containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+  ## @param worker.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param worker.args Override default container args (useful when using custom images)
+  ##
+  args: []
   ## @param worker.podAnnotations Annotations for pods in StatefulSet
   ##
   podAnnotations: {}
-  ## @param worker.extraPodLabels Extra labels for pods in StatefulSet
+  ## @param worker.podLabels Extra labels for pods in StatefulSet
   ##
-  extraPodLabels: {}
+  podLabels: {}
   ## @param worker.podAffinityPreset Spark worker pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -380,6 +492,45 @@ worker:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param worker.updateStrategy.type Worker statefulset strategy type.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
+  ##
+  updateStrategy: 
+    type: RollingUpdate 
+  ## @param worker.podManagementPolicy Statefulset Pod Management Policy Type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+  ## @param worker.priorityClassName worker pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param worker.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: {}
+  ## @param worker.schedulerName Name of the k8s scheduler (other than default) for worker pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param worker.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param worker.lifecycleHooks for the worker container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param worker.extraVolumes Optionally specify extra list of additional volumes for the worker pod(s)
+  ##
+  extraVolumes: []
+  ## @param worker.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the master container(s)
+  ##
+  extraVolumeMounts: []
   ## Container resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -432,7 +583,42 @@ worker:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
-  ## @param worker.initContainers Add initContainers to the master pods.
+  ## Configure extra options for startup probe
+  ## @param worker.startupProbe.enabled Enable startupProbe
+  ## @param worker.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param worker.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param worker.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param worker.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param worker.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param worker.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param worker.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param worker.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param worker.sidecars Add additional sidecar containers to the worker pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: {}
+  ## @param worker.initContainers Add initContainers to the worker pods.
   ## Example:
   ## initContainers:
   ##   - name: your-image-name
@@ -443,24 +629,19 @@ worker:
   ##         containerPort: 1234
   ##
   initContainers: []
-  ## Array to add extra volumes
-  ##
-  ## extraVolumes:
-  ## Array to add extra mounts (normally used with extraVolumes)
-  ##
-  ## extraVolumeMounts: {}
   ## Autoscaling parameters
+  ## @param worker.autoscaling.enabled Enable replica autoscaling depending on CPU
+  ## @param worker.autoscaling.minReplicas Minimum number of worker replicas
+  ## @param worker.autoscaling.maxReplicas Maximum number of worker replicas
+  ## @param worker.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param worker.autoscaling.targetMemory Target Memory utilization percentage
   ##
   autoscaling:
-    ## @param worker.autoscaling.enabled Enable replica autoscaling depending on CPU
-    ##
     enabled: false
-    ## @param worker.autoscaling.CpuTargetPercentage Kubernetes HPA CPU target percentage
-    ##
-    CpuTargetPercentage: 50
-    ## @param worker.autoscaling.replicasMax Maximum number of workers when using autoscaling
-    ##
-    replicasMax: 5
+    minReplicas: ""
+    maxReplicas: 5
+    targetCPU: 50
+    targetMemory: ""
 
 ## @section Security parameters
 
@@ -541,35 +722,62 @@ service:
   ## @param service.type Kubernetes Service type
   ##
   type: ClusterIP
-  ## @param service.clusterPort Spark cluster port
+  ## @param service.ports.http Spark client port for HTTP
+  ## @param service.ports.https Spark client port for HTTPS
+  ## @param service.ports.cluster Spark cluster port
   ##
-  clusterPort: 7077
-  ## @param service.webPort Spark client port for HTTP
-  ##
-  webPort: 80
-  ## @param service.webPortHttps Spark client port for HTTPS
-  ##
-  webPortHttps: 443
+  ports:
+    http: 80
+    https: 443
+    cluster: 7077
   ## Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## @param service.nodePorts.http Kubernetes web node port for HTTP
+  ## @param service.nodePorts.https Kubernetes web node port for HTTPS
   ## @param service.nodePorts.cluster Kubernetes cluster node port
-  ## @param service.nodePorts.web Kubernetes web node port for HTTP
-  ## @param service.nodePorts.webHttps Kubernetes web node port for HTTPS
   ##
   nodePorts:
+    http: ""
+    https: ""
     cluster: ""
-    web: ""
-    webHttps: ""
+  ## @param service.clusterIP Spark service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
   ## @param service.loadBalancerIP Load balancer IP if spark service type is `LoadBalancer`
   ## Set the LoadBalancer service type to internal only
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   loadBalancerIP: ""
-  ## @param service.annotations Annotations for spark service
-  ## This can be used to set the LoadBalancer service type to internal only.
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ## @param service.loadBalancerSourceRanges Spark service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy Spark service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.annotations Additional custom annotations for Spark service
   ##
   annotations: {}
+  ## @param service.extraPorts Extra ports to expose in Spark service (normally used with the `sidecars` value)
+  ##
+  extraPorts: []
+  ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
+  ## Values: ClientIP or None
+  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 ## Configure the ingress resource that allows you to access the
 ## Spark installation. Set up the URL
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -578,10 +786,6 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
-  ## certManager: false
-  ##
-
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
@@ -591,6 +795,11 @@ ingress:
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: spark.local
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
   ## @param ingress.path The Path to Spark. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
@@ -611,6 +820,9 @@ ingress:
   ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
   ##
   tls: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
   ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
@@ -651,6 +863,26 @@ ingress:
   ##
   secrets: []
 
+## @section Other parameters
+
+## ServiceAccount configuration
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable the creation of a ServiceAccount for Spark pods
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the spark.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Annotations for Spark Service Account
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
+  ##
+  automountServiceAccountToken: true
+
 ## @section Metrics parameters
 
 ## Metrics configuration
@@ -664,13 +896,13 @@ metrics:
   masterAnnotations:
     prometheus.io/scrape: 'true'
     prometheus.io/path: '/metrics/'
-    prometheus.io/port: '{{ .Values.master.webPort }}'
+    prometheus.io/port: '{{ .Values.master.containerPorts.http }}'
   ## @param metrics.workerAnnotations [object] Annotations for the Prometheus metrics on worker nodes
   ##
   workerAnnotations:
     prometheus.io/scrape: 'true'
     prometheus.io/path: '/metrics/'
-    prometheus.io/port: '{{ .Values.worker.webPort }}'
+    prometheus.io/port: '{{ .Values.worker.containerPorts.http }}'
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint

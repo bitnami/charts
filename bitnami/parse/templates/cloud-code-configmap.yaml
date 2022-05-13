@@ -1,8 +1,9 @@
-{{- if and .Values.server.enableCloudCode (or .Values.server.cloudCodeScripts (.Files.Glob "files/cloud/*.js")) (not .Values.server.existingCloudCodeCM) }}
+{{- if and .Values.server.enableCloudCode (or .Values.server.cloudCodeScripts (.Files.Glob "files/cloud/*.js")) (not .Values.server.existingCloudCodeScriptsCM) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "common.names.fullname" . }}-cloud-code-scripts
+  name: {{ printf "%s-cloud-code-scripts" include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{ include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: server
     {{- if .Values.commonLabels }}

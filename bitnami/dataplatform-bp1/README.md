@@ -119,7 +119,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.exporter.enabled`                               | Start a prometheus exporter                                                                                      | `true`                          |
 | `dataplatform.exporter.image.registry`                        | dataplatform exporter image registry                                                                             | `docker.io`                     |
 | `dataplatform.exporter.image.repository`                      | dataplatform exporter image repository                                                                           | `bitnami/dataplatform-exporter` |
-| `dataplatform.exporter.image.tag`                             | dataplatform exporter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r6`              |
+| `dataplatform.exporter.image.tag`                             | dataplatform exporter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r27`             |
 | `dataplatform.exporter.image.pullPolicy`                      | dataplatform exporter image pull policy                                                                          | `IfNotPresent`                  |
 | `dataplatform.exporter.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                 | `[]`                            |
 | `dataplatform.exporter.config`                                | Data Platform Metrics Configuration emitted in Prometheus format                                                 | `""`                            |
@@ -185,7 +185,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.emitter.enabled`                                | Start Data Platform metrics emitter                                                                              | `true`                          |
 | `dataplatform.emitter.image.registry`                         | Data Platform emitter image registry                                                                             | `docker.io`                     |
 | `dataplatform.emitter.image.repository`                       | Data Platform emitter image repository                                                                           | `bitnami/dataplatform-emitter`  |
-| `dataplatform.emitter.image.tag`                              | Data Platform emitter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r8`              |
+| `dataplatform.emitter.image.tag`                              | Data Platform emitter image tag (immutable tags are recommended)                                                 | `1.0.1-scratch-r30`             |
 | `dataplatform.emitter.image.pullPolicy`                       | Data Platform emitter image pull policy                                                                          | `IfNotPresent`                  |
 | `dataplatform.emitter.image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                 | `[]`                            |
 | `dataplatform.emitter.livenessProbe.enabled`                  | Enable livenessProbe                                                                                             | `true`                          |
@@ -311,12 +311,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                    | Description                                                                               | Value   |
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------- |
 | `spark.enabled`                         | Switch to enable or disable the Spark helm chart                                          | `true`  |
-| `spark.master.webPort`                  | Specify the port where the web interface will listen on the master                        | `8080`  |
+| `spark.master.containerPorts.http`      | Specify the port where the web interface will listen on the master                        | `8080`  |
 | `spark.master.resources.limits`         | The resources limits for the container                                                    | `{}`    |
 | `spark.master.resources.requests`       | The resources limits for the container                                                    | `{}`    |
 | `spark.master.affinity.podAntiAffinity` | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`    |
 | `spark.worker.replicaCount`             | Set the number of workers                                                                 | `2`     |
-| `spark.worker.webPort`                  | Specify the port where the web interface will listen on the worker                        | `8081`  |
+| `spark.worker.containerPorts.http`      | Specify the port where the web interface will listen on the worker                        | `8081`  |
 | `spark.worker.affinity.podAntiAffinity` | Zookeeper pods Anti Affinity rules for best possible resiliency (evaluated as a template) | `{}`    |
 | `spark.worker.resources.limits`         | The resources limits for the container                                                    | `{}`    |
 | `spark.worker.resources.requests`       | The resources limits for the container                                                    | `{}`    |
@@ -487,6 +487,12 @@ Find more information about how to deal with common errors related to Bitnami's 
 In order to render complete information about the deployment including all the sub-charts, please use --render-subchart-notes flag while installing the chart.
 
 ## Upgrading
+
+### To 12.0.0
+
+This major updates the Spark subchart to its newest major, 6.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/spark#to-600) you can find more information about the changes introduced in that version. Specifically, the following change affects this chart values definition:
+
+- `spark.xxxx.webport` parameters are now renamed to `spark.xxxx.containerPorts.http`.
 
 ### To 11.0.0
 

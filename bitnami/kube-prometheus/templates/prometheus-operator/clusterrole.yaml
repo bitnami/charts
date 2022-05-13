@@ -3,6 +3,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: {{ template "kube-prometheus.operator.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
 rules:
   - apiGroups:
@@ -33,6 +34,7 @@ rules:
       - alertmanagers/finalizers
       - alertmanagerconfigs
       - prometheuses
+      - prometheuses/status
       - prometheuses/finalizers
       - thanosrulers
       - thanosrulers/finalizers

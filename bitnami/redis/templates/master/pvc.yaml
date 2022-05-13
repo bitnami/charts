@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ printf "redis-data-%s-master" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: master
   {{- if .Values.master.persistence.annotations }}
@@ -22,5 +23,5 @@ spec:
   {{- if .Values.master.persistence.dataSource }}
   dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.master.persistence.dataSource "context" $) | nindent 4 }}
   {{- end }}
-  {{- include "common.storage.class" (dict "persistence" .Values.master.persistence "global" .Values.global) | nindent 4 }}
+  {{- include "common.storage.class" (dict "persistence" .Values.master.persistence "global" .Values.global) | nindent 2 }}
 {{- end }}

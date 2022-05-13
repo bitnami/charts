@@ -65,17 +65,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                             | Value          |
-| ------------------------ | --------------------------------------------------------------------------------------- | -------------- |
-| `kubeVersion`            | Override Kubernetes version                                                             | `""`           |
-| `nameOverride`           | String to partially override common.names.fullname                                      | `""`           |
-| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`           |
-| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`           |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`           |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`           |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
-| `diagnosticMode.command` | Command to override all containers in the deployment(s)/statefulset(s)                  | `["sleep"]`    |
-| `diagnosticMode.args`    | Args to override all containers in the deployment(s)/statefulset(s)                     | `["infinity"]` |
+| Name                     | Description                                                                             | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
+| `clusterDomain`          | Kubernetes Cluster Domain                                                               | `cluster.local` |
+| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment(s)/statefulset(s)                  | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment(s)/statefulset(s)                     | `["infinity"]`  |
 
 
 ### Common Concourse Parameters
@@ -84,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                | image registry                                                                                                                         | `docker.io`           |
 | `image.repository`              | image repository                                                                                                                       | `bitnami/concourse`   |
-| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.6.0-debian-10-r67` |
+| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.7.1-debian-10-r22` |
 | `image.pullPolicy`              | image pull policy                                                                                                                      | `IfNotPresent`        |
 | `image.pullSecrets`             | image pull secrets                                                                                                                     | `[]`                  |
 | `secrets.localAuth.enabled`     | the use of local authentication (basic auth).                                                                                          | `true`                |
@@ -191,7 +192,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.rbac.rules`                                  | Custom RBAC rules to set                                                                                                                    | `[]`            |
 | `web.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                        | `true`          |
 | `web.serviceAccount.name`                         | Override Web service account name                                                                                                           | `""`            |
-| `web.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `false`         |
+| `web.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`          |
 | `web.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`            |
 
 
@@ -206,7 +207,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.existingSecret`                              | name of an existing secret resource containing the keys and the pub                                                                         | `""`                |
 | `worker.baggageclaim.logLevel`                       | Minimum level of logs to see. Allowed values: `debug`, `info`, and `error`                                                                  | `info`              |
 | `worker.baggageclaim.bindIp`                         | IP address on which to listen for API traffic                                                                                               | `127.0.0.1`         |
-| `worker.baggageclaim.debugbindIp`                    | IP address on which to listen for the pprof debugger endpoints                                                                              | `127.0.0.1`         |
+| `worker.baggageclaim.debugBindIp`                    | IP address on which to listen for the pprof debugger endpoints                                                                              | `127.0.0.1`         |
 | `worker.baggageclaim.disableUserNamespaces`          | Disable remapping of user/group IDs in unprivileged volumes                                                                                 | `""`                |
 | `worker.baggageclaim.volumes`                        | Directory in which to place volume data                                                                                                     | `""`                |
 | `worker.baggageclaim.driver`                         | Driver to use for managing volumes. Allowed values: `detect`, `naive`, `btrfs`, and `overlay`                                               | `""`                |
@@ -216,7 +217,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.command`                                     | Override default container command (useful when using custom images)                                                                        | `[]`                |
 | `worker.args`                                        | Override worker default args                                                                                                                | `[]`                |
 | `worker.replicaCount`                                | Number of worker replicas                                                                                                                   | `2`                 |
-| `worker.mode`                                        | Selects kind of Deployment. Valid Options are: statefulSet | deployment                                                                     | `deployment`        |
+| `worker.mode`                                        | Selects kind of Deployment. Allowed values: `deployment` or `statefulset`                                                                   | `deployment`        |
 | `worker.containerPorts.garden`                       | Concourse worker Garden server container port                                                                                               | `7777`              |
 | `worker.containerPorts.health`                       | Concourse worker health-check container port                                                                                                | `8888`              |
 | `worker.containerPorts.baggageclaim`                 | Concourse worker baggageclaim API container port                                                                                            | `7788`              |
@@ -264,6 +265,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.priorityClassName`                           | Priority Class to use for each pod (Concourse worker)                                                                                       | `""`                |
 | `worker.schedulerName`                               | Use an alternate scheduler, e.g. "stork".                                                                                                   | `""`                |
 | `worker.terminationGracePeriodSeconds`               | Seconds Concourse worker pod needs to terminate gracefully                                                                                  | `""`                |
+| `worker.podManagementPolicy`                         | Statefulset Pod Management Policy Type. Allowed values: `OrderedReady` or `Parallel`                                                        | `OrderedReady`      |
 | `worker.updateStrategy.rollingUpdate`                | Concourse worker statefulset rolling update configuration parameters                                                                        | `{}`                |
 | `worker.updateStrategy.type`                         | Concourse worker statefulset strategy type                                                                                                  | `RollingUpdate`     |
 | `worker.lifecycleHooks`                              | for the Concourse worker container(s) to automate configuration before or after startup                                                     | `{}`                |
@@ -280,8 +282,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.autoscaling.builtInMetrics`                  | Array with built-in metrics                                                                                                                 | `[]`                |
 | `worker.autoscaling.customMetrics`                   | Array with custom metrics                                                                                                                   | `[]`                |
 | `worker.pdb.create`                                  | Create Pod disruption budget object for Concourse worker nodes                                                                              | `true`              |
-| `worker.pdb.minAvailable`                            | Minimum number of Concourse workers available after an eviction                                                                             | `2`                 |
-| `worker.pdb.maxAvailable`                            | Maximum number of Concourse workers available                                                                                               | `""`                |
+| `worker.pdb.minAvailable`                            | Minimum number / percentage of Concourse worker pods that should remain scheduled                                                           | `2`                 |
+| `worker.pdb.maxUnavailable`                          | Maximum number/percentage of Concourse worker pods that may be made unavailable                                                             | `""`                |
 | `worker.psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`             |
 | `worker.persistence.enabled`                         | Enable Concourse worker data persistence using PVC                                                                                          | `true`              |
 | `worker.persistence.existingClaim`                   | Name of an existing PVC to use                                                                                                              | `""`                |
@@ -294,7 +296,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.rbac.rules`                                  | Custom RBAC rules to set                                                                                                                    | `[]`                |
 | `worker.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                        | `true`              |
 | `worker.serviceAccount.name`                         | Override worker service account name                                                                                                        | `""`                |
-| `worker.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `false`             |
+| `worker.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`              |
 | `worker.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`                |
 
 
@@ -325,9 +327,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.workerGateway.annotations`              | Additional custom annotations for Concourse worker gateway service                                                               | `{}`                     |
 | `service.workerGateway.extraPorts`               | Extra port to expose on Concourse worker gateway service                                                                         | `[]`                     |
 | `ingress.enabled`                                | Enable ingress record generation for Concourse                                                                                   | `false`                  |
+| `ingress.ingressClassName`                       | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.pathType`                               | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`                             | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`                               | Default host for the ingress record                                                                                              | `Concourse.local`        |
+| `ingress.hostname`                               | Default host for the ingress record                                                                                              | `concourse.local`        |
 | `ingress.path`                                   | Default path for the ingress record                                                                                              | `/`                      |
 | `ingress.annotations`                            | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `ingress.tls`                                    | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
@@ -345,7 +348,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r326`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r402`     |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
