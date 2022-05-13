@@ -42,7 +42,7 @@ spec:
         {{- else }}
         target:
           type: Utilization
-          averageUtilization: {{ $query..autoscaling.targetCPU }}
+          averageUtilization: {{ $query.autoscaling.targetCPU }}
         {{- end }}
     {{- end }}
 {{- end }}
