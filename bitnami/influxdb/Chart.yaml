@@ -24,4 +24,4 @@ name: influxdb
 sources:
   - https://github.com/bitnami/bitnami-docker-influxdb
   - https://www.influxdata.com/products/influxdb-overview/
-version: 5.1.1
+version: 5.1.2

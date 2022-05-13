@@ -1,6 +1,0 @@
-worker:
-  mode: statefulset
-  persistence:
-    enabled: true
-volumePermissions:
-  enabled: true

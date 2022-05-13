@@ -1,4 +1,0 @@
-ingress:
-  enabled: true
-  tls: true
-  selfSigned: true
