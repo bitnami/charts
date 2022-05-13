@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ printf "%s-scheduler" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: scheduler
     {{- if .Values.commonLabels }}
@@ -47,6 +47,9 @@ spec:
       {{- end }}
       {{- if .Values.scheduler.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.scheduler.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.scheduler.terminationGracePeriodSeconds }} 
       {{- end }}
       {{- if .Values.scheduler.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.tolerations "context" $) | nindent 8 }}

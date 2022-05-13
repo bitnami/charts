@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ include "mongodb.fullname" . }}
-  namespace: {{ include "mongodb.namespace" . }}
+  namespace: {{ include "mongodb.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.commonLabels }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,8 +17,8 @@ rules:
       - get
       - list
       - watch
-{{- if .Values.rbac.role.rules }}
-{{- toYaml .Values.rbac.role.rules | nindent 2 }}
+{{- if .Values.rbac.rules }}
+{{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
 {{- end -}}
 {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
 {{- if and $pspAvailable .Values.podSecurityPolicy.create }}

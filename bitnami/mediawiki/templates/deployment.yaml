@@ -3,6 +3,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -105,7 +106,7 @@ spec:
             - name: MEDIAWIKI_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "common.names.fullname" . }}
+                  name: {{ include "mediawiki.secretName" . }}
                   key: mediawiki-password
             - name: MEDIAWIKI_EMAIL
               value: {{ .Values.mediawikiEmail | quote }}
@@ -131,7 +132,7 @@ spec:
             - name: SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "common.names.fullname" . }}
+                  name: {{ include "mediawiki.secretName" . }}
                   key: smtp-password
             {{- end }}
             {{- if .Values.extraEnvVars }}

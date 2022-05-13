@@ -14,14 +14,6 @@ Return the proper Docker Image Registry Secret Names
 {{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
 {{- end -}}
 
-{{- /*
-As we use a headless service we need to append -master-svc to
-the service name.
-*/ -}}
-{{- define "spark.master.service.name" -}}
-{{ include "common.names.fullname" . }}-master-svc
-{{- end -}}
-
 {{/*
 Create the name of the service account to use
 */}}

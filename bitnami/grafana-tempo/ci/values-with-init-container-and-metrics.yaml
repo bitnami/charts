@@ -1,6 +1,0 @@
-volumePermissions:
-  enabled: true
-metrics:
-  enabled: true
-  serviceMonitor:
-    enabled: true

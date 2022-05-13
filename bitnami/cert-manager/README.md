@@ -359,6 +359,12 @@ As an alternative, you can make use of the preset configurations for pod affinit
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
+## Upgrading
+
+### To 0.5.0
+
+Exisiting CRDs have been syncronised with the official [Cert Manager repository](https://github.com/cert-manager/cert-manager/tree/master/deploy/crds). Using the templates present in the 1.8.0 tag.
+
 ## License
 
 Copyright &copy; 2022 Bitnami
