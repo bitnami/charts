@@ -175,6 +175,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                                | Persistent Volume size                                                                       | `10Gi`          |
 | `persistence.existingClaim`                       | The name of an existing PVC to use for persistence                                           | `""`            |
 | `persistence.selector`                            | Selector to match an existing Persistent Volume for Discourse data PVC                       | `{}`            |
+| `persistence.annotations`                         | Persistent Volume Claim annotations                                                          | `{}`            |
 
 
 ### Sidekiq container parameters
