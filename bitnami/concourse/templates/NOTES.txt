@@ -153,6 +153,9 @@ To connect to Concourse from outside the cluster, perform the following steps:
 {{- end }}
 
 {{- include "concourse.validateValues" . }}
+{{- if .Values.web.conjur.enabled -}}
+{{- include "concourse.web.conjur.validateValues" . }}
+{{- end }}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 
@@ -162,17 +165,5 @@ To connect to Concourse from outside the cluster, perform the following steps:
     {{- $requiredWebPassword := dict "valueKey" "secrets.localUsers" "secret" $secretName "field" "local_users" "context" $ -}}
     {{- $requiredWebPasswordError := include "common.validations.values.single.empty" $requiredWebPassword -}}
     {{- $passwordValidationErrors = append $passwordValidationErrors $requiredWebPasswordError -}}
-{{- end }}
-{{- if and .Values.web.conjur.enabled (not .Values.web.existingSecret) -}}
-    {{- $secretName := include "concourse.web.secretName" . -}}
-    {{- $requiredConjurAccount := dict "valueKey" "secrets.conjurAccount" "secret" $secretName "field" "conjur_account" "context" $ -}}
-    {{- $requiredConjurAccountError := include "common.validations.values.single.empty" $requiredConjurAccount -}}
-    {{- $passwordValidationErrors = append $passwordValidationErrors $requiredConjurAccountError -}}
-    {{- $requiredConjurAuthnLogin := dict "valueKey" "secrets.conjurAuthnLogin" "secret" $secretName "field" "conjur_authn_login" "context" $ -}}
-    {{- $requiredConjurAuthnLoginError := include "common.validations.values.single.empty" $requiredConjurAuthnLogin -}}
-    {{- $passwordValidationErrors = append $passwordValidationErrors $requiredConjurAuthnLoginError -}}
-    {{- if and (empty .Values.secrets.conjurAuthnTokenFile) (empty .Values.secrets.conjurAuthnApiKey) -}}
-    {{- $passwordValidationErrors = append $passwordValidationErrors "Either 'secrets.conjurAuthnApiKey' or 'secrets.conjurAuthnTokenFile' must be set." -}}
-    {{- end }}
 {{- end }}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
