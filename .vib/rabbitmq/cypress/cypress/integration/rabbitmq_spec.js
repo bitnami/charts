@@ -74,8 +74,6 @@ it('allows adding a new queue and binding/unbinding it to the exchange', () => {
 });
 
 it('allows adding a new admin and logging in as such', () => {
-  const APP_NAME = 'RabbitMQ';
-
   cy.login();
   cy.visit('/#/users');
   cy.contains('Add a user').click();
@@ -96,7 +94,9 @@ it('allows adding a new admin and logging in as such', () => {
     cy.get('[name="username"]').type(`${admin.newAdmin.userName}${random}`);
     cy.get('[name="password"]').type(`${admin.newAdmin.password}${random}`);
     cy.contains('Login').click();
-    cy.get('#versions').should('contain', APP_NAME);
+    cy.get('#versions')
+      .invoke('text')
+      .should('match', /RabbitMQ\s\d+\.\d+\.\d+/);
     cy.contains('Log out');
   });
 });
