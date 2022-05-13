@@ -11,7 +11,7 @@ it('allows login/logout', () => {
   cy.contains('#login', 'Username');
 });
 
-it('allows upload of broker definitions', () => {
+it('allows uploading broker definitions', () => {
   cy.login();
   cy.contains('Import definitions').click();
   cy.get('input[type="file"]').selectFile(
