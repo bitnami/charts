@@ -67,7 +67,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/concourse
-  tag: 7.7.1-debian-10-r22
+  tag: 7.7.1-debian-10-r43
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1176,7 +1176,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r402
+    tag: 10-debian-10-r424
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
