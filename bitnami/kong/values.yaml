@@ -225,14 +225,12 @@ sidecars: []
 ## Add an horizontal pod autoscaler
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 ## @param autoscaling.enabled Deploy a HorizontalPodAutoscaler object for the Kong deployment
-## @param autoscaling.apiVersion API Version of the HPA object (for compatibility with Openshift)
 ## @param autoscaling.minReplicas Minimum number of replicas to scale back
 ## @param autoscaling.maxReplicas Maximum number of replicas to scale out
 ## @param autoscaling.metrics [array] Metrics to use when deciding to scale the deployment (evaluated as a template)
 ##
 autoscaling:
   enabled: false
-  apiVersion: autoscaling/v2beta1
   minReplicas: 2
   maxReplicas: 5
   metrics:

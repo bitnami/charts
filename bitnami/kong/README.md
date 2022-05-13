@@ -122,7 +122,6 @@ To uninstall/delete the `my-release` deployment:
 | `initContainers`                        | Add additional init containers to the Kong pods                                                                                    | `[]`                  |
 | `sidecars`                              | Add additional sidecar containers to the Kong pods                                                                                 | `[]`                  |
 | `autoscaling.enabled`                   | Deploy a HorizontalPodAutoscaler object for the Kong deployment                                                                    | `false`               |
-| `autoscaling.apiVersion`                | API Version of the HPA object (for compatibility with Openshift)                                                                   | `autoscaling/v2beta1` |
 | `autoscaling.minReplicas`               | Minimum number of replicas to scale back                                                                                           | `2`                   |
 | `autoscaling.maxReplicas`               | Maximum number of replicas to scale out                                                                                            | `5`                   |
 | `autoscaling.metrics`                   | Metrics to use when deciding to scale the deployment (evaluated as a template)                                                     | `[]`                  |
