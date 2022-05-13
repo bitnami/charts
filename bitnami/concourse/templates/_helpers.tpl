@@ -229,7 +229,7 @@ Compile all warnings into a single message.
 {{- define "concourse.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "concourse.validateValues.enabled" .) -}}
-{{- $messages := append $messages (include "concourse.web.conjur.validateValues.enabled" .) -}}
+{{- $messages := append $messages (include "concourse.web.conjur.validateValues" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 {{- if $message -}}
@@ -246,7 +246,7 @@ concourse: enabled
 {{- end -}}
 
 {{/* Check Conjur parameters */}}
-{{- define "concourse.web.conjur.validateValues.enabled" -}}
+{{- define "concourse.web.conjur.validateValues" -}}
 {{- if .Values.web.conjur.enabled -}}
 {{- if (empty .Values.web.conjur.applianceUrl) -}}
 {{- printf "Must set web.conjur.applianceUrl to integrate Conjur. Please set the parameter (--set web.conjur.applianceUrl=\"xxxx\")." -}}
@@ -260,7 +260,7 @@ concourse: enabled
 {{- if and (empty .Values.secrets.conjurAuthnTokenFile) (empty .Values.secrets.conjurAuthnApiKey) -}}
 {{- printf "Must set either secrets.conjurAuthnApiKey or secrets.conjurAuthnTokenFile to integrate Conjur. Please set the parameter (--set secrets.conjurAuthnLogin=\"xxxx\" or --set secrets.conjurAuthnTokenFile=\"xxxx\")" -}}
 {{- end -}}
-{{- if and (not (empty .Values.secrets.conjurAuthnTokenFile)) (not (empty .Values.secrets.conjurAuthnApiKey)) -}}
+{{- if and .Values.secrets.conjurAuthnTokenFile .Values.secrets.conjurAuthnApiKey -}}
 {{- printf "You specified both secrets.conjurAuthnTokenFile and secrets.conjurAuthnApiKey. You can only set one to integrate Conjur." -}}
 {{- end -}}
 {{- end -}}
