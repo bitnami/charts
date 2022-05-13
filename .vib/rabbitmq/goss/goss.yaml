@@ -11,7 +11,7 @@ command:
     stdout:
       - 'Adding vhost'
     timeout: 20000  
-  rabbitmqctl-add-user:
+  rabbitmqctl-list-global-params:
     exec: rabbitmqctl list_global_parameters
     exit-status: 0
     stderr: [ ]
