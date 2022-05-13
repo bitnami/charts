@@ -702,6 +702,9 @@ persistence:
   ##     app: my-app
   ##
   selector: {}
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node

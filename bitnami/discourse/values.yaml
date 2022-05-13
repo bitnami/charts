@@ -383,6 +383,9 @@ persistence:
   ##     app: my-app
   ##
   selector: {}
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
 
 ## @section Sidekiq container parameters
 

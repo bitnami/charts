@@ -834,6 +834,9 @@ prometheus:
     ## @param prometheus.persistence.size Persistent Volume Size
     ##
     size: 8Gi
+    ## @param prometheus.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
   ## @param prometheus.priorityClassName Priority class assigned to the Pods
   ##
   priorityClassName: ""
@@ -1542,6 +1545,9 @@ alertmanager:
     ## @param alertmanager.persistence.size Persistent Volume Size
     ##
     size: 8Gi
+    ## @param alertmanager.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
   ## @param alertmanager.paused If true, the Operator won't process any Alertmanager configuration changes
   ##
   paused: false
