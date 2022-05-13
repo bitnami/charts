@@ -62,6 +62,7 @@ The following table lists the helpers available in the library which are scoped 
 | `common.capabilities.policy.apiVersion`        | Return the appropriate apiVersion for podsecuritypolicy.                                       | `.` Chart context |
 | `common.capabilities.networkPolicy.apiVersion` | Return the appropriate apiVersion for networkpolicy.                                           | `.` Chart context |
 | `common.capabilities.apiService.apiVersion`    | Return the appropriate apiVersion for APIService.                                              | `.` Chart context |
+| `common.capabilities.hpa.apiVersion`           | Return the appropriate apiVersion for Horizontal Pod Autoscaler                                | `.` Chart context |
 | `common.capabilities.supportsHelmVersion`      | Returns true if the used Helm version is 3.3+                                                  | `.` Chart context |
 
 ### Errors
