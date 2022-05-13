@@ -1,5 +1,5 @@
 {{- if and (or .Values.skipper.enabled .Values.server.configuration.streamingEnabled) .Values.skipper.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta1
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" . }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "scdf.fullname" . }}-skipper
