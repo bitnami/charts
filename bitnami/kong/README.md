@@ -83,7 +83,7 @@ To uninstall/delete the `my-release` deployment:
 | ------------------- | ------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | kong image registry                                                             | `docker.io`           |
 | `image.repository`  | kong image repository                                                           | `bitnami/kong`        |
-| `image.tag`         | kong image tag (immutable tags are recommended)                                 | `2.7.1-debian-10-r27` |
+| `image.tag`         | kong image tag (immutable tags are recommended)                                 | `2.8.1-debian-10-r28` |
 | `image.pullPolicy`  | kong image pull policy                                                          | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                | `[]`                  |
 | `image.debug`       | Enable image debug mode                                                         | `false`               |
@@ -217,7 +217,7 @@ To uninstall/delete the `my-release` deployment:
 | `ingressController.enabled`                                     | Enable/disable the Kong Ingress Controller                                                                                                    | `true`                            |
 | `ingressController.image.registry`                              | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
 | `ingressController.image.repository`                            | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
-| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.2.1-debian-10-r9`              |
+| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.3.1-debian-10-r25`             |
 | `ingressController.image.pullPolicy`                            | Kong Ingress Controller image pull policy                                                                                                     | `IfNotPresent`                    |
 | `ingressController.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                              | `[]`                              |
 | `ingressController.proxyReadyTimeout`                           | Maximum time (in seconds) to wait for the Kong container to be ready                                                                          | `300`                             |
@@ -293,7 +293,7 @@ To uninstall/delete the `my-release` deployment:
 | `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                 | `standalone`            |
 | `postgresql.image.registry`                     | PostgreSQL image registry                                               | `docker.io`             |
 | `postgresql.image.repository`                   | PostgreSQL image repository                                             | `bitnami/postgresql`    |
-| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                   | `11.15.0-debian-10-r20` |
+| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                   | `11.15.0-debian-10-r84` |
 | `postgresql.external.host`                      | Database host                                                           | `""`                    |
 | `postgresql.external.port`                      | Database port number                                                    | `5432`                  |
 | `postgresql.external.user`                      | Non-root username for Kong                                              | `kong`                  |

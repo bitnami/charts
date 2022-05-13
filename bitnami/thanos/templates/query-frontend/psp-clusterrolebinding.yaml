@@ -4,6 +4,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
   name: {{ include "common.names.fullname" . }}-query-frontend
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: query-frontend
     {{- if .Values.commonLabels }}
@@ -19,5 +20,5 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "thanos.serviceAccount.name" (dict "component" "query-frontend" "context" $) }}
-    namespace: {{ .Release.Namespace }}
+    namespace: {{ .Release.Namespace | quote }}
 {{- end }}
