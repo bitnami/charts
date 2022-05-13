@@ -1,5 +1,4 @@
 {{- if and .Values.operator.prometheus.serviceMonitor.enabled .Values.operator.enabled }}
----
 apiVersion: v1
 kind: Service
 metadata:

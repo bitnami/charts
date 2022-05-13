@@ -1,8 +1,0 @@
-master:
-  replicaCount: 1
-data:
-  replicaCount: 1
-coordinating:
-  replicaCount: 1
-ingest:
-  replicaCount: 1

@@ -1,5 +1,4 @@
 {{- range .Values.config.clusterCredentials }}
----
 apiVersion: v1
 kind: Secret
 metadata:
@@ -23,4 +22,5 @@ stringData:
   namespaces: {{ .namespaces }}
   config: |
     {{- .config | toPrettyJson | nindent 4 }}
+---
 {{- end }}

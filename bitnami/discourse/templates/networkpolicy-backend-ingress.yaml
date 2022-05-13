@@ -21,8 +21,8 @@ spec:
         - podSelector:
             matchLabels:  {{- include "common.labels.matchLabels" . | nindent 14 }}
 {{- end }}
----
 {{- if and .Values.networkPolicy.enabled .Values.redis.enabled .Values.networkPolicy.ingressRules.backendOnlyAccessibleByFrontend }}
+---
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
@@ -49,8 +49,8 @@ spec:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
 {{- end }}
----
 {{- if and .Values.networkPolicy.enabled .Values.networkPolicy.ingressRules.customBackendSelector .Values.networkPolicy.ingressRules.backendOnlyAccessibleByFrontend }}
+---
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy
 metadata:

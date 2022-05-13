@@ -69,6 +69,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeVersion`       | Override Kubernetes version                       | `""`            |
 | `nameOverride`      | String to partially override aspnet-core.fullname | `""`            |
 | `fullnameOverride`  | String to fully override aspnet-core.fullname     | `""`            |
+| `namespaceOverride` | String to fully override common.names.namespace   | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects             | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects        | `{}`            |
 | `clusterDomain`     | Kubernetes cluster domain name                    | `cluster.local` |
