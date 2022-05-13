@@ -7,7 +7,7 @@ Harbor is an open source trusted cloud-native registry to store, sign, and scan 
 [Overview of Harbor](https://goharbor.io/)
 
 
-                           
+
 ## TL;DR
 
 ```bash
@@ -1195,7 +1195,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `postgresql.primary.initdb.scripts`        | Initdb scripts to create Harbor databases                                                              | `{}`                           |
 | `postgresql.image.registry`                | PostgreSQL image registry                                                                              | `docker.io`                    |
 | `postgresql.image.repository`              | PostgreSQL image repository                                                                            | `bitnami/postgresql`           |
-| `postgresql.image.tag`                     | PostgreSQL image tag (immutable tags are recommended)                                                  | `11.15.0-debian-10-r80`        |
+| `postgresql.image.tag`                     | PostgreSQL image tag (immutable tags are recommended)                                                  | `13.6.0-debian-10-r86 release` |
 | `externalDatabase.host`                    | Database host                                                                                          | `localhost`                    |
 | `externalDatabase.port`                    | Database port number                                                                                   | `5432`                         |
 | `externalDatabase.user`                    | Non-root username for Harbor                                                                           | `bn_harbor`                    |

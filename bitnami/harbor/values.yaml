@@ -3977,7 +3977,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 11.15.0-debian-10-r80
+    tag: 13.6.0-debian-10-r86
   auth:
     enablePostgresUser: true
     postgresPassword: not-secure-database-password
