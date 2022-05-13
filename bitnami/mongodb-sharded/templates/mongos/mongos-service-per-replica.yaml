@@ -1,7 +1,6 @@
 {{- if and .Values.mongos.useStatefulSet .Values.mongos.servicePerReplica.enabled }}
 {{- range $i := until (.Values.mongos.replicaCount | int) }}
 {{- $context := deepCopy $ | merge (dict "index" $i) }}
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -60,5 +59,6 @@ spec:
   selector: {{ include "common.labels.matchLabels" $ | nindent 4 }}
     app.kubernetes.io/component: mongos
     statefulset.kubernetes.io/pod-name: {{ printf "%s-mongos-%d" (include "common.names.fullname" $) $i }}
+---
 {{- end }}
 {{- end }}
