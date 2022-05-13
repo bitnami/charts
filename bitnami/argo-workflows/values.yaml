@@ -1142,7 +1142,7 @@ postgresql:
 
 ## Mysql subchart configuration
 ## @param mysql.enabled Enable MySQL subchart and controller persistence using MySQL
-## @param mysql.service.port MySQL port
+## @param mysql.service.ports.mysql MySQL port
 ## @param mysql.auth.username MySQL username
 ## @param mysql.auth.database MySQL database name
 ## @param mysql.auth.password MySQL database password
@@ -1150,7 +1150,8 @@ postgresql:
 mysql:
   enabled: false
   service:
-    port: 3306
+    ports:
+      mysql: 3306
   auth:
     username: mysql
     database: bn_argo_workflows

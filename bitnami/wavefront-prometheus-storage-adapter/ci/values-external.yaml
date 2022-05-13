@@ -1,6 +1,0 @@
-wavefront:
-  enabled: false
-
-externalProxy:
-  host: test-proxy
-  port: 1234
