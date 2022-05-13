@@ -2,10 +2,10 @@
 import { random } from './utils';
 
 it('allows login/logout', () => {
-  const APP_NAME = 'RabbitMQ';
-
   cy.login();
-  cy.get('#versions').should('contain', APP_NAME);
+  cy.get('#versions')
+    .invoke('text')
+    .should('match', /RabbitMQ\s\d+\.\d+\.\d+/);
   cy.contains('.hider', 'Queued messages');
   cy.contains('Log out').click();
   cy.contains('#login', 'Username');
