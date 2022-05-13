@@ -1,5 +1,5 @@
 {{- if and .Values.storegateway.enabled .Values.storegateway.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta1
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" . }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "common.names.fullname" . }}-storegateway
@@ -24,12 +24,24 @@ spec:
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.storegateway.autoscaling.targetMemory  }}
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.storegateway.autoscaling.targetMemory }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.storegateway.autoscaling.targetMemory }}
+        {{- end }}
     {{- end }}
     {{- if .Values.storegateway.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
         targetAverageUtilization: {{ .Values.storegateway.autoscaling.targetCPU }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.storegateway.autoscaling.targetCPU }}
+        {{- end }}
     {{- end }}
 {{- end }}
