@@ -861,7 +861,7 @@ aggregator:
     annotations: {}
     ## @param aggregator.ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
     ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.aggregator.ingress.hostname }}
-    ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+    ## You can use the ingress.secrets parameter to create this TLS secret or rely on cert-manager to create it
     ##
     tls: false
     ## @param aggregator.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
