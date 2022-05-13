@@ -247,6 +247,7 @@ concourse: enabled
 
 {{/* Check Conjur parameters */}}
 {{- define "concourse.web.conjur.validateValues.enabled" -}}
+{{- if .Values.web.conjur.enabled -}}
 {{- if (empty .Values.web.conjur.applianceUrl) -}}
 {{- printf "Must set web.conjur.applianceUrl to integrate Conjur. Please set the parameter (--set web.conjur.applianceUrl=\"xxxx\")." -}}
 {{- end -}}
@@ -261,5 +262,6 @@ concourse: enabled
 {{- end -}}
 {{- if and (not (empty .Values.secrets.conjurAuthnTokenFile)) (not (empty .Values.secrets.conjurAuthnApiKey)) -}}
 {{- printf "You specified both secrets.conjurAuthnTokenFile and secrets.conjurAuthnApiKey. You can only set one to integrate Conjur." -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
