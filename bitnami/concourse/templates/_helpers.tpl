@@ -248,15 +248,18 @@ concourse: enabled
 {{/* Check Conjur parameters */}}
 {{- define "concourse.web.conjur.validateValues.enabled" -}}
 {{- if (empty .Values.web.conjur.applianceUrl) -}}
-{{- printf "Must set web.conjur.applianceUrl to integrate Conjur. Please set the parameter (--set web.conjur.applianceUrl=\"xxxx\")" -}}
+{{- printf "Must set web.conjur.applianceUrl to integrate Conjur. Please set the parameter (--set web.conjur.applianceUrl=\"xxxx\")." -}}
 {{- end -}}
 {{- if (empty .Values.secrets.conjurAccount) -}}
-{{- printf "Must set secrets.conjurAccount to integrate Conjur. Please set the parameter (--set secrets.conjurAccount=\"xxxx\")" -}}
+{{- printf "Must set secrets.conjurAccount to integrate Conjur. Please set the parameter (--set secrets.conjurAccount=\"xxxx\")." -}}
 {{- end -}}
 {{- if (empty .Values.secrets.conjurAuthnLogin) -}}
-{{- printf "Must set secrets.conjurAuthnLogin to integrate Conjur. Please set the parameter (--set secrets.conjurAuthnLogin=\"xxxx\")" -}}    
+{{- printf "Must set secrets.conjurAuthnLogin to integrate Conjur. Please set the parameter (--set secrets.conjurAuthnLogin=\"xxxx\")." -}}    
 {{- end -}}
 {{- if and (empty .Values.secrets.conjurAuthnTokenFile) (empty .Values.secrets.conjurAuthnApiKey) -}}
 {{- printf "Must set either secrets.conjurAuthnApiKey or secrets.conjurAuthnTokenFile to integrate Conjur. Please set the parameter (--set secrets.conjurAuthnLogin=\"xxxx\" or --set secrets.conjurAuthnTokenFile=\"xxxx\")" -}}
+{{- end -}}
+{{- if and (not (empty .Values.secrets.conjurAuthnTokenFile)) (not (empty .Values.secrets.conjurAuthnApiKey)) -}}
+{{- printf "You specified both secrets.conjurAuthnTokenFile and secrets.conjurAuthnApiKey. You can only set one to integrate Conjur." -}}
 {{- end -}}
 {{- end -}}
