@@ -264,17 +264,12 @@ provisioning:
   ##           - "s3:ListMultipartUploadParts"
   ##           - "s3:PutObject"
   policies: []
-  ## @param provisioning.users MinIO&reg; users provisioning
+  ## @param provisioning.users MinIO&reg; users provisioning. Can be used in addition to provisioning.usersExistingSecrets.
   ## https://docs.min.io/docs/minio-admin-complete-guide.html#user
   ## e.g.
   ## users:
   ##   - username: test-username
   ##     password: test-password
-  ##     ## Instead of setting the plaintext password, a reference to an existing secret can be referenced
-  ##     ## from where the password is retrieved. If used, both keys `existingSecret` and `existingSecretKey`
-  ##     ## must be configured. Otherwise, `password` will be used as fallback.
-  ##     # existingSecret: centralized-minio-user-secrets
-  ##     # existingSecretKey: test-username
   ##     disabled: false
   ##     policies:
   ##       - readwrite
@@ -284,6 +279,31 @@ provisioning:
   ##     # When false, the policies will be added to the existing.
   ##     setPolicies: false
   users: []
+  ## @param provisioning.usersExistingSecrets MinIO&reg; users provisioning from existing Kubernetes secrets. Can be used in addition to provisioning.users.
+  ## https://docs.min.io/docs/minio-admin-complete-guide.html#user
+  ##
+  ## Instead of configuring users inside values.yaml, referring to existing Kubernetes secrets containing user
+  ## configurations is possible.
+  ## e.g.
+  ## usersExistingSecrets:
+  ##   - centralized-minio-users
+  ##
+  ## All provided Kubernetes secrets require a specific data structure. The example from provisioning.users above is
+  ## represented with the following data structure. The secret keys have no meaning to the provisioning job except that
+  ## they are used as filenames.
+  ##   ## apiVersion: v1
+  ##   ## kind: Secret
+  ##   ## metadata:
+  ##   ##   name: centralized-minio-users
+  ##   ## type: Opaque
+  ##   ## stringData:
+  ##   ##   username1: |
+  ##   ##     username=test-username
+  ##   ##     password=test-password
+  ##   ##     disabled=false
+  ##   ##     policies=readwrite,consoleAdmin,diagnostics
+  ##   ##     setPolicies=false
+  usersExistingSecrets: []
   ## @param provisioning.groups MinIO&reg; groups provisioning
   ## https://docs.min.io/docs/minio-admin-complete-guide.html#group
   ## e.g.
