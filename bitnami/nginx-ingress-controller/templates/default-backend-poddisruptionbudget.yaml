@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "nginx-ingress-controller.defaultBackend.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: default-backend
     {{- if .Values.commonLabels }}
@@ -20,6 +20,6 @@ spec:
   maxUnavailable: {{ .Values.defaultBackend.pdb.maxUnavailable }}
   {{- end }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: default-backend
 {{- end }}

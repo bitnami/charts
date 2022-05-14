@@ -1,9 +1,0 @@
-master:
-  replicaCount: 3
-  masterOnly: false
-data:
-  replicaCount: 0
-coordinating:
-  replicaCount: 0
-ingest:
-  replicaCount: 0

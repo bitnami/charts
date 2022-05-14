@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------- | --------------------- |
 | `image.registry`    | Argo CD image registry                             | `docker.io`           |
 | `image.repository`  | Argo CD image repository                           | `bitnami/argo-cd`     |
-| `image.tag`         | Argo CD image tag (immutable tags are recommended) | `2.3.3-debian-10-r24` |
+| `image.tag`         | Argo CD image tag (immutable tags are recommended) | `2.3.3-debian-10-r29` |
 | `image.pullPolicy`  | Argo CD image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | Argo CD image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable Argo CD image debug mode                    | `false`               |
@@ -120,7 +120,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.containerSecurityContext.runAsUser`                | Set Argo CD containers' Security Context runAsUser                                                   | `1001`          |
 | `controller.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD containers' Security Context allowPrivilegeEscalation                                    | `false`         |
 | `controller.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' Security Context capabilities to be dropped                                  | `["all"]`       |
-| `controller.containerSecurityContext.readOnlyRootFilesystem`   | Set Argo CD containers' Security Context readOnlyRootFilesystem                                      | `true`          |
+| `controller.containerSecurityContext.readOnlyRootFilesystem`   | Set Argo CD containers' Security Context readOnlyRootFilesystem                                      | `false`         |
 | `controller.containerSecurityContext.runAsNonRoot`             | Set Argo CD container's Security Context runAsNonRoot                                                | `true`          |
 | `controller.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                 | `true`          |
 | `controller.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                               | `""`            |
@@ -234,7 +234,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.containerSecurityContext.runAsUser`                | Set Argo CD server containers' Security Context runAsUser                                                                       | `1001`                   |
 | `server.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD server containers' Security Context allowPrivilegeEscalation                                                        | `false`                  |
 | `server.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' server Security Context capabilities to be dropped                                                      | `["all"]`                |
-| `server.containerSecurityContext.readOnlyRootFilesystem`   | Set Argo CD containers' server Security Context readOnlyRootFilesystem                                                          | `true`                   |
+| `server.containerSecurityContext.readOnlyRootFilesystem`   | Set Argo CD containers' server Security Context readOnlyRootFilesystem                                                          | `false`                  |
 | `server.containerSecurityContext.runAsNonRoot`             | Set Argo CD server containers' Security Context runAsNonRoot                                                                    | `true`                   |
 | `server.autoscaling.enabled`                               | Enable Argo CD server deployment autoscaling                                                                                    | `false`                  |
 | `server.autoscaling.minReplicas`                           | Argo CD server deployment autoscaling minimum number of replicas                                                                | `1`                      |
@@ -372,10 +372,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.podSecurityContext.enabled`                        | Enabled Argo CD repo server pods' Security Context                                                   | `true`          |
 | `repoServer.podSecurityContext.fsGroup`                        | Set Argo CD repo server pod's Security Context fsGroup                                               | `1001`          |
 | `repoServer.containerSecurityContext.enabled`                  | Enabled Argo CD repo server containers' Security Context                                             | `true`          |
-| `repoServer.containerSecurityContext.runAsUser`                | Set Argo CD repo server containers' Security Context runAsUser                                       | `65534`         |
+| `repoServer.containerSecurityContext.runAsUser`                | Set Argo CD repo server containers' Security Context runAsUser                                       | `1001`          |
 | `repoServer.containerSecurityContext.allowPrivilegeEscalation` | Set Argo CD repo server containers' Security Context allowPrivilegeEscalation                        | `false`         |
 | `repoServer.containerSecurityContext.capabilities.drop`        | Set Argo CD containers' repo server Security Context capabilities to be dropped                      | `["all"]`       |
-| `repoServer.containerSecurityContext.readOnlyRootFilesystem`   | Set Argo CD containers' repo server Security Context readOnlyRootFilesystem                          | `true`          |
+| `repoServer.containerSecurityContext.readOnlyRootFilesystem`   | Set Argo CD containers' repo server Security Context readOnlyRootFilesystem                          | `false`         |
 | `repoServer.containerSecurityContext.runAsNonRoot`             | Set Argo CD repo server containers' Security Context runAsNonRoot                                    | `true`          |
 | `repoServer.service.type`                                      | Repo server service type                                                                             | `ClusterIP`     |
 | `repoServer.service.port`                                      | Repo server service port                                                                             | `8081`          |
@@ -455,7 +455,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------- |
 | `dex.image.registry`                                    | Dex image registry                                                                            | `docker.io`            |
 | `dex.image.repository`                                  | Dex image repository                                                                          | `bitnami/dex`          |
-| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                | `2.31.1-debian-10-r33` |
+| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                | `2.31.1-debian-10-r35` |
 | `dex.image.pullPolicy`                                  | Dex image pull policy                                                                         | `IfNotPresent`         |
 | `dex.image.pullSecrets`                                 | Dex image pull secrets                                                                        | `[]`                   |
 | `dex.image.debug`                                       | Enable Dex image debug mode                                                                   | `false`                |
@@ -489,7 +489,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.containerSecurityContext.enabled`                  | Enabled Dex containers' Security Context                                                      | `true`                 |
 | `dex.containerSecurityContext.runAsUser`                | Set Dex containers' Security Context runAsUser                                                | `1001`                 |
 | `dex.containerSecurityContext.allowPrivilegeEscalation` | Set Dex containers' Security Context allowPrivilegeEscalation                                 | `false`                |
-| `dex.containerSecurityContext.readOnlyRootFilesystem`   | Set Dex containers' server Security Context readOnlyRootFilesystem                            | `true`                 |
+| `dex.containerSecurityContext.readOnlyRootFilesystem`   | Set Dex containers' server Security Context readOnlyRootFilesystem                            | `false`                |
 | `dex.containerSecurityContext.runAsNonRoot`             | Set Dex containers' Security Context runAsNonRoot                                             | `true`                 |
 | `dex.service.type`                                      | Dex service type                                                                              | `ClusterIP`            |
 | `dex.service.ports.http`                                | Dex HTTP service port                                                                         | `5556`                 |
@@ -592,7 +592,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r409`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r411`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -607,7 +607,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`                             | Specifies whether RBAC resources should be created                          | `true`               |
 | `redis.image.registry`                    | Argo CD controller image registry                                           | `docker.io`          |
 | `redis.image.repository`                  | Argo CD controller image repository                                         | `bitnami/redis`      |
-| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `6.2.7-debian-10-r0` |
+| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `6.2.7-debian-10-r2` |
 | `redis.image.pullPolicy`                  | Argo CD controller image pull policy                                        | `IfNotPresent`       |
 | `redis.image.pullSecrets`                 | Argo CD controller image pull secrets                                       | `[]`                 |
 | `redis.enabled`                           | Enable Redis dependency                                                     | `true`               |

@@ -2,6 +2,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ template "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
@@ -117,7 +118,7 @@ spec:
             - name: MARIADB_GALERA_CLUSTER_NAME
               value: {{ .Values.galera.name | quote }}
             {{- $fullName := include "common.names.fullname" . }}
-            {{- $releaseName := .Release.Namespace }}
+            {{- $releaseName := include "common.names.namespace" . }}
             {{- $clusterDomain := .Values.clusterDomain }}
             {{- $initialCluster := list }}
             {{- range $e, $i := until (int .Values.replicaCount) }}

@@ -4,6 +4,7 @@ kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ template "kube-prometheus.prometheus.fullname" . }}-psp
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
 rules:
   - apiGroups: ['extensions']

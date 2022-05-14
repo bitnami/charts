@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "mysql.secondary.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: secondary
     {{- if .Values.commonLabels }}
@@ -14,5 +14,5 @@ metadata:
   {{- end }}
 data:
   my.cnf: |-
-    {{ .Values.secondary.configuration | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.secondary.configuration "context" $ ) | nindent 4 }}
 {{- end -}}
