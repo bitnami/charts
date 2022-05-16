@@ -41,7 +41,7 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-nginx-http",
+            "endpoint": "lb-nginx-intel-http",
             "app_protocol": "HTTP"
           }
         }
