@@ -439,9 +439,9 @@ serviceMonitor:
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
   ##
   metricRelabelings: []
-  ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+  ## @param serviceMonitor.labels Extra labels for the ServiceMonitor
   ##
   labels: {}
-  ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+  ## @param serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
   ##
   honorLabels: false
