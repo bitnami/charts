@@ -67,7 +67,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/concourse
-  tag: 7.7.1-debian-10-r22
+  tag: 7.7.1-debian-10-r43
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -86,7 +86,7 @@ image:
 ##
 secrets:
   ## @param secrets.localAuth.enabled the use of local authentication (basic auth).
-  ## Once enabled, users configured through `local-users` (secret)
+  ## Once enabled, users configured through `local_users` (secret)
   ## are able to authenticate.
   ## Ref: https://concourse-ci.org/local-auth.html
   ##
@@ -109,6 +109,17 @@ secrets:
   ## https://concourse-ci.org/global-resources.html#complications-with-reusing-containers
   ##
   teamAuthorizedKeys: []
+  ## Secrets for Conjur credentials manager.
+  ## @param secrets.conjurAccount Account for Conjur auth provider.
+  conjurAccount: ""
+  ## @param secrets.conjurAuthnLogin Host username for Conjur auth provider.
+  conjurAuthnLogin: ""
+  ## @param secrets.conjurAuthnApiKey API key for host used for Conjur auth provider. Either API key or token file can be used, but not both.
+  conjurAuthnApiKey: ""
+  ## @param secrets.conjurAuthnTokenFile Token file used for Conjur auth provider if running in Kubernetes or IAM. Either token file or API key can be used, but not both.
+  conjurAuthnTokenFile: ""
+  ## @param secrets.conjurCACert CA Certificate to specify if conjur instance is deployed with a self-signed cert
+  conjurCACert: ""
   ## @param secrets.hostKey [string] Concourse Host Keys.
   ## Example value taken from https://github.com/concourse/concourse-chart/blob/master/values.yaml
   ## Ref: https://concourse-ci.org/install.html#generating-keys
@@ -318,6 +329,20 @@ web:
     enabled: false
   ## @param web.configRBAC Set RBAC configuration
   ##
+  ## Configuration for using Conjur as a credential manager.
+  ## Ref: https://concourse-ci.org/conjur-credential-manager.html
+  ##
+  conjur:
+    ## @param web.conjur.enabled Enable the use of Conjur as a credential manager
+    enabled: false
+    ## @param web.conjur.applianceUrl URL of the Conjur instance.
+    applianceUrl: ""
+    ## @param web.conjur.pipelineSecretTemplate Path used to locate pipeline-level secret
+    pipelineSecretTemplate: concourse/{{.Team}}/{{.Pipeline}}/{{.Secret}}
+    ## @param web.conjur.teamSecretTemplate Path used to locate team-level secret
+    teamSecretTemplate: concourse/{{.Team}}/{{.Secret}}
+    ## @param web.conjur.secretTemplate Path used to locate a vault or safe-level secret
+    secretTemplate: concourse/{{.Secret}}
   configRBAC: ""
   ## @param web.existingConfigmap The name of an existing ConfigMap with your custom configuration for web
   ##
@@ -1151,7 +1176,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r402
+    tag: 10-debian-10-r424
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

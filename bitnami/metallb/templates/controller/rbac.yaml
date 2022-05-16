@@ -1,5 +1,4 @@
 {{- if and .Values.rbac.create .Values.controller.rbac.create -}}
----
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:

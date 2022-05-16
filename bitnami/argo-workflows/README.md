@@ -341,13 +341,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### MySQL subchart
 
-| Name                  | Description                                                  | Value               |
-| --------------------- | ------------------------------------------------------------ | ------------------- |
-| `mysql.enabled`       | Enable MySQL subchart and controller persistence using MySQL | `false`             |
-| `mysql.service.port`  | MySQL port                                                   | `3306`              |
-| `mysql.auth.username` | MySQL username                                               | `mysql`             |
-| `mysql.auth.database` | MySQL database name                                          | `bn_argo_workflows` |
-| `mysql.auth.password` | MySQL database password                                      | `""`                |
+| Name                        | Description                                                  | Value               |
+| --------------------------- | ------------------------------------------------------------ | ------------------- |
+| `mysql.enabled`             | Enable MySQL subchart and controller persistence using MySQL | `false`             |
+| `mysql.service.ports.mysql` | MySQL port                                                   | `3306`              |
+| `mysql.auth.username`       | MySQL username                                               | `mysql`             |
+| `mysql.auth.database`       | MySQL database name                                          | `bn_argo_workflows` |
+| `mysql.auth.password`       | MySQL database password                                      | `""`                |
 
 
 ### External Database configuration
