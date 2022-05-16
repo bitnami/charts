@@ -1982,19 +1982,15 @@ testImage:
 ##
 postgresql:
   enabled: true
-  architecture: "replication"
   auth:
     postgresPassword: ""
     database: assets
     existingSecret: ""
-  ## PostgreSQL Persistence parameters
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
-  ## @param postgresql.persistence.enabled Enable persistence on PostgreSQL using PVC(s)
-  ## @param postgresql.persistence.size Persistent Volume size
-  ##
-  persistence:
-    enabled: false
-    size: 8Gi
+  primary:
+    ## PostgreSQL Primary persistence configuration
+    persistence:
+      ## @param primary.persistence.enabled Enable PostgreSQL Primary data persistence using PVC
+      enabled: false
   ## @param postgresql.securityContext.enabled Enabled PostgreSQL replicas pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
