@@ -337,7 +337,7 @@ locator:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param locator.terminationGracePeriodSeconds In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully
+  ## @param locator.terminationGracePeriodSeconds In seconds, time the given to the Locator pod needs to terminate gracefully
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
@@ -436,7 +436,7 @@ locator:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
-    ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param locator.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -689,7 +689,7 @@ server:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param server.terminationGracePeriodSeconds In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully
+  ## @param server.terminationGracePeriodSeconds In seconds, time the given to the Cache server pod needs to terminate gracefully
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
