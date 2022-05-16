@@ -281,6 +281,20 @@ ingress:
     ##       -----END CERTIFICATE-----
     ##
     secrets: []
+    ## @param ingress.core.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend: 
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
   ## Configure the ingress resource that allows you to access Notary
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
@@ -374,6 +388,20 @@ ingress:
     ##       -----END CERTIFICATE-----
     ##
     secrets: []
+    ## @param ingress.notary.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend: 
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
 
 ## @section Persistence Parameters
 ##

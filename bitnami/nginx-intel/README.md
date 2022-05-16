@@ -208,6 +208,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
 | `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.extraRules`            | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 | `healthIngress.enabled`         | Set to true to enable health ingress record generation                                                                           | `false`                  |
 | `healthIngress.pathType`        | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `healthIngress.hostname`        | When the health ingress is enabled, a host pointing to this will be created                                                      | `example.local`          |
@@ -216,6 +217,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `healthIngress.extraHosts`      | The list of additional hostnames to be covered with this health ingress record                                                   | `[]`                     |
 | `healthIngress.extraTls`        | TLS configuration for additional hostnames to be covered                                                                         | `[]`                     |
 | `healthIngress.secrets`         | TLS Secret configuration                                                                                                         | `[]`                     |
+| `healthIngress.extraRules`      | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Metrics parameters
