@@ -30,14 +30,12 @@ it('should be possible to create a new Git Project', () => {
   // will always be the first one.
   const nextBuildNumber = 1;
   cy.get("a[title='Build Now']").click();
-  cy.contains(`#${nextBuildNumber}`, { timeout: 30000 });
+  cy.contains(`#${nextBuildNumber}`);
 
   cy.get("a[title='Build Now']");
   // Depending on the setup, the node where to execute the build needs to be
   // provisioned, which can take up some time
-  cy.get(`a[href$='/${nextBuildNumber}/'][class*='display-name']`, {
-    timeout: 120000,
-  }).click();
+  cy.get(`a[href$='/${nextBuildNumber}/'][class*='display-name']`).click();
 
   cy.fixture('items').then((item) => {
     cy.visit(
