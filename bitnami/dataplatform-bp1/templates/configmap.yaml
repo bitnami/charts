@@ -12,4 +12,4 @@ metadata:
   {{- end }}
 data:
   bp.json: |-
-    {{- .Values.dataplatform.exporter.config | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.config "context" $) | nindent 4 }}
