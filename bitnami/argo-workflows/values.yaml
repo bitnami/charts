@@ -672,10 +672,9 @@ controller:
           name: {{ include "argo-workflows.controller.database.password.secret" . }}
           key: {{ include "argo-workflows.controller.database.password.secret.key" . }}
     {{- end }}
-    ## Uncomment to set workflowDefaults
-    ## Ref: https://argoproj.github.io/argo-workflows/default-workflow-specs/#setting-default-workflow-values
-    ## workflowDefaults: {}
-    ##
+    {{- if .Values.controller.workflowDefaults.enabled }}
+    workflowDefaults: {{- include "common.tplvalues.render" (dict "value" .Values.controller.workflowDefaults "context" $) | nindent 2 }}
+    {{- end }}
     {{- if and .Values.server.auth.enabled .Values.server.auth.sso.enabled }}
     sso: {{- include "common.tplvalues.render" (dict "value" .Values.server.auth.sso "context" $) | nindent 4 }}
     {{- end }}
@@ -739,6 +738,10 @@ controller:
   ##
   workflowNamespaces:
     - default
+  ## Default Workflow Values
+  ## Ref: https://argoproj.github.io/argo-workflows/default-workflow-specs/#setting-default-workflow-values
+  workflowDefaults:
+    enabled: false
   ## Logging level for the controller
   ## @param controller.logging.level Level for the controller logging
   ## @param controller.logging.globalLevel Global logging level for the controller
@@ -1103,7 +1106,7 @@ ingress:
   ## - host: server.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: server-svc
   ##           port:
