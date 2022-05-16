@@ -709,7 +709,7 @@ elasticsearch:
       ##
       createSystemUser: false
       ## @param elasticsearch.security.auth.elasticsearchPasswordSecret Name of the existing secret containing the password for the 'elastic' user.
-      ## Required if createSystemUser=true. The secret must containt the key 'password'.
+      ## Required if createSystemUser=true. The secret must containt the key 'elasticsearch-password'.
       ##
       elasticsearchPasswordSecret: ""
     tls:
