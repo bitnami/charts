@@ -80,7 +80,7 @@ spec:
           topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.curator.topologySpreadConstraints "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.curator.podSecurityContext }}
-          securityContext: {{- toYaml .Values.curator.podSecurityContext | nindent 12 }}
+          securityContext: {{- omit .Values.curator.podSecurityContext | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.curator.initContainers }}
           initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.curator.initContainers "context" $) | nindent 12 }}
