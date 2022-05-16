@@ -1371,6 +1371,9 @@ metrics:
     ## @param metrics.service.port Redis&trade; exporter service port
     ##
     port: 9121
+    ## @param metrics.service.name Redis&trade; exporter service port name
+    ##
+    name: http-metrics
     ## @param metrics.service.externalTrafficPolicy Redis&trade; exporter service external traffic policy
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
