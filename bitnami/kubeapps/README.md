@@ -102,6 +102,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `ingress.extraTls`         | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`          | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.ingressClassName` | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraRules`       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Kubeapps packaging options
