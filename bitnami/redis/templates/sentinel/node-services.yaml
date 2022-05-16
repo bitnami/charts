@@ -11,8 +11,6 @@
 {{ $redisport = index $portsmap (printf "%s-node-%s-%s" (include "common.names.fullname" $) (toString $i) "redis") }}
 {{- else }}
 {{- end }}
-
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -67,5 +65,6 @@ spec:
     targetPort: {{ $.Values.replica.containerPorts.redis }}
   selector:
     statefulset.kubernetes.io/pod-name: {{ template "common.names.fullname" $ }}-node-{{ $i }}
+---
 {{- end }}
 {{- end }}

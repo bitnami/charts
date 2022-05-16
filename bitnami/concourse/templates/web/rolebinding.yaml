@@ -21,10 +21,10 @@ subjects:
   - kind: ServiceAccount
     name: {{ include "concourse.web.serviceAccountName" . }}
     namespace: {{ .Release.Namespace | quote }}
----
 {{- end }}
 {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) }}
 {{- if and $pspAvailable .Values.web.psp.create }}
+---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
@@ -46,6 +46,5 @@ subjects:
   - kind: ServiceAccount
     name: {{ include "concourse.web.serviceAccountName" . }}
     namespace: {{ .Release.Namespace | quote }}
----
 {{- end }}
 {{- end }}
