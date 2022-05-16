@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/mongodb-sharded"
         },
-        "runtime_parameters": "Im1vbmdvZGJSb290UGFzc3dvcmQiOiAiQzY1ZDRRcnQiCiJyZXBsaWNhU2V0S2V5IjogIjl3NnFUeGtWIgoic2VydmljZSI6CiAgInBvcnQiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
+        "runtime_parameters": "ImF1dGgiOgogICJyb290UGFzc3dvcmQiOiAiQzY1ZDRRcnQiCiAgInJlcGxpY2FTZXRLZXkiOiAiOXc2cVR4a1YiCiJzZXJ2aWNlIjoKICAicG9ydHMiOgogICAgIm1vbmdvZGIiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIKInBlcnNpc3RlbmNlIjoKICAiZW5hYmxlZCI6IGZhbHNlCg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
