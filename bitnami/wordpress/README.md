@@ -245,6 +245,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.dataSource`                               | Custom PVC data source                                                                          | `{}`                    |
 | `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                              | `""`                    |
 | `persistence.selector`                                 | Selector to match an existing Persistent Volume for WordPress data PVC                          | `{}`                    |
+| `persistence.annotations`                              | Persistent Volume Claim annotations                                                             | `{}`                    |
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
