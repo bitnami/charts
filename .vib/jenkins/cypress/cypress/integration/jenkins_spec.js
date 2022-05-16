@@ -9,7 +9,9 @@ it('allows to create system credentials', () => {
     cy.contains('div.jenkins-form-item', 'Kind').within(() => {
       cy.get('select').select(credential.newUserAndPass.kind);
     });
-    cy.get('[name="_.username"]').type(`${credential.newUserAndPass.username}-${random}`);
+    cy.get('[name="_.username"]').type(
+      `${credential.newUserAndPass.username}-${random}`
+    );
     cy.get('[name="_.password"]').type(credential.newUserAndPass.password);
     cy.get('[name="_.id"]').type(`${credential.newUserAndPass.id}-${random}`);
     cy.contains('button', 'OK').click();
@@ -31,7 +33,7 @@ it('should be possible to create a new Jenkins pipeline', () => {
     cy.contains('Error').should('not.be.visible');
 
     cy.get('.radio-block-start').contains('Git').click();
-    cy.get("input[name*='url']").type(item.freestyleProject.repositoryURL);
+    cy.get("[name*='url']").type(item.freestyleProject.repositoryURL);
     cy.contains('button', 'Save').click();
     cy.contains('h1', item.freestyleProject.name);
   });
@@ -63,12 +65,10 @@ it('should be possible to register a new user', () => {
   cy.contains('Create User');
   cy.fixture('users').then((user) => {
     cy.get('#username').type(`${user.newUser1.username}-${random}`);
-    cy.get("input[name='password1']").type(user.newUser1.password);
-    cy.get("input[name='password2']").type(user.newUser1.password);
-    cy.get("input[name='fullname']").type(
-      `${user.newUser1.fullname}-${random}`
-    );
-    cy.get("input[name='email']").type(`${random}-${user.newUser1.email}`);
+    cy.get("[name='password1']").type(user.newUser1.password);
+    cy.get("[name='password2']").type(user.newUser1.password);
+    cy.get("[name='fullname']").type(`${user.newUser1.fullname}-${random}`);
+    cy.get("[name='email']").type(`${random}-${user.newUser1.email}`);
     cy.contains('button', 'Create User').click();
 
     cy.visit('/securityRealm');

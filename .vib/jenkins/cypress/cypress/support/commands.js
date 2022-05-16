@@ -17,7 +17,7 @@ Cypress.Commands.add(
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
     cy.visit('/login');
     cy.get('#j_username').type(username);
-    cy.get('input[name=j_password]').type(password);
+    cy.get('[name=j_password]').type(password);
     cy.contains('Sign in').click();
   }
 );
