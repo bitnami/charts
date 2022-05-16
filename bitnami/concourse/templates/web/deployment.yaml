@@ -243,7 +243,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "concourse.web.fullname" . }}
-                  key: local-users
+                  key: local_users
             {{- end }}
             {{- if .Values.web.clusterName }}
             - name: CONCOURSE_CLUSTER_NAME
@@ -293,6 +293,42 @@ spec:
               value: {{ include "concourse.database.port" . }}
             - name: CONCOURSE_POSTGRES_USER
               value: {{ include "concourse.database.user" . }}
+            {{- if .Values.web.conjur.enabled }}
+            - name: CONCOURSE_CONJUR_APPLIANCE_URL
+              value: {{ .Values.web.conjur.applianceUrl | quote }}
+            - name: CONCOURSE_CONJUR_ACCOUNT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "concourse.web.fullname" . }}
+                  key: conjur_account
+            {{- if .Values.secrets.conjurCACert }}
+            - name: CONCOURSE_CONJUR_CERT_FILE
+              value: "/bitnami/concourse/conjur-keys/ca.cert"
+            {{- end }}
+            - name: CONCOURSE_CONJUR_AUTHN_LOGIN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "concourse.web.fullname" . }}
+                  key: conjur_authn_login
+            - name: CONCOURSE_CONJUR_AUTHN_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "concourse.web.fullname" . }}
+                  key: conjur_authn_api_key
+            {{- if (empty .Values.secrets.conjurAuthnApiKey) }}
+            - name: CONCOURSE_CONJUR_AUTHN_TOKEN_FILE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "concourse.web.fullname" . }}
+                  key: conjur_authn_token_file
+            {{- end }}
+            - name: CONCOURSE_CONJUR_PIPELINE_SECRET_TEMPLATE
+              value: {{ .Values.web.conjur.pipelineSecretTemplate | quote }}
+            - name: CONCOURSE_CONJUR_TEAM_SECRET_TEMPLATE
+              value: {{ .Values.web.conjur.teamSecretTemplate | quote }}
+            - name: CONCOURSE_CONJUR_SECRET_TEMPLATE
+              value: {{ .Values.web.conjur.secretTemplate | quote }}
+            {{- end }}
           envFrom:
             {{- if .Values.web.extraEnvVarsCM }}
             - configMapRef:
@@ -342,7 +378,7 @@ spec:
           {{- else if .Values.web.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- end }}
+          {{- end }}     
           volumeMounts:
             - name: concourse-keys
               mountPath: /bitnami/concourse/concourse-keys
@@ -350,6 +386,11 @@ spec:
             {{- if .Values.secrets.teamAuthorizedKeys }}
             - name: team-authorized-keys
               mountPath: /bitnami/concourse/team-authorized-keys
+              readOnly: true
+            {{- end }}
+            {{- if .Values.web.conjur.enabled }}
+            - name: conjur-keys
+              mountPath: /bitnami/concourse/conjur-keys
               readOnly: true
             {{- end }}
           {{- if .Values.web.extraVolumeMounts }}
@@ -366,6 +407,13 @@ spec:
           secret:
             secretName: {{ include "concourse.web.secretName" . }}
             defaultMode: 0400
+            items:
+              - key: host_key
+                path: host_key
+              - key: session_signing_key
+                path: session_signing_key
+              - key: worker_key.pub
+                path: worker_key.pub
         {{- if .Values.secrets.teamAuthorizedKeys }}
         - name: team-authorized-keys
           secret:
@@ -374,5 +422,24 @@ spec:
         {{- end }}
         {{- if .Values.web.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.web.conjur.enabled }}
+        - name: conjur-keys
+          secret:
+            secretName: {{ template "concourse.web.fullname" . }}
+            defaultMode: 0400
+            items:
+            - key: conjur_account
+              path: conjur_account
+            - key: conjur_authn_api_key
+              path: conjur_authn_api_key
+            - key: conjur_authn_login
+              path: conjur_authn_login
+            - key: conjur_authn_token_file
+              path: conjur_authn_token_file
+            {{- if .Values.secrets.conjurCACert }}
+              - key: conjur_ca_cert
+                path: ca.cert
+            {{- end }}
         {{- end }}
 {{- end }}

@@ -20,6 +20,9 @@ metadata:
 spec:
   type: {{ .Values.locator.service.type }}
   sessionAffinity: {{ .Values.locator.service.sessionAffinity }}
+  {{- if .Values.locator.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.locator.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
   {{- if and (eq .Values.locator.service.type "ClusterIP") .Values.locator.service.clusterIP }}
   clusterIP: {{ .Values.locator.service.clusterIP }}
   {{- end }}
