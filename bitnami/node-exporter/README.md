@@ -7,7 +7,7 @@ Prometheus exporter for hardware and OS metrics exposed by UNIX kernels, with pl
 [Overview of Node Exporter](https://prometheus.io/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -178,6 +178,17 @@ Find more information about how to deal with common errors related to Bitnami's 
 ```bash
 $ helm upgrade my-release bitnami/node-exporter
 ```
+
+### To 3.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be aligned with the rest of the assets in the Bitnami charts repository.
+
+Affected values:
+- `service.port` was renamed as `service.ports.metrics`.
+- `service.targetPort` was renamed as `containerPorts.metrics`.
+- `service.nodePort` was renamed as `service.nodePorts.metrics`.
+- `securityContext` was split in `podSecurityContext` and `containerSecurityContext`.
+- Removed unused value `rbac.apiVersion`.
 
 ### To 2.1.0
 
