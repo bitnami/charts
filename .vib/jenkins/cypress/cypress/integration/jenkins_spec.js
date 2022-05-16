@@ -10,7 +10,7 @@ it('allows user to log in and log out', () => {
   cy.get('form[name*="login"]');
 });
 
-it('should be possible to create a new Git Project', () => {
+it('should be possible to create a new Jenkins pipeline', () => {
   cy.login();
   cy.visit('/view/All/newJob');
 
@@ -67,7 +67,7 @@ it('should be possible to register a new user', () => {
   });
 });
 
-it('should not contain errors', () => {
+it('should not report any configuration errors', () => {
   cy.login();
   cy.visit('/manage');
 
