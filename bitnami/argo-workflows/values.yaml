@@ -740,7 +740,7 @@ controller:
     - default
   ## Default Workflow Values
   ## Ref: https://argoproj.github.io/argo-workflows/default-workflow-specs/#setting-default-workflow-values
-  ## @param controller.workflowDefaults Default Workflow Values
+  ## @param controller.workflowDefaults.enabled Enable Default Workflow Values
   workflowDefaults:
     enabled: false
   ## Logging level for the controller
