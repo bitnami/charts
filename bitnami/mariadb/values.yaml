@@ -1171,7 +1171,7 @@ metrics:
     ##      severity: warning
     ##      service: mariadb
     ##    annotations:
-    ##      message: 'MariaDB instance {{ $labels.instance }} is down'
+    ##      message: 'MariaDB instance {{ `{{` }} $labels.instance {{ `}}` }} is down'
     ##      summary: MariaDB instance is down
     ##
     rules: []
