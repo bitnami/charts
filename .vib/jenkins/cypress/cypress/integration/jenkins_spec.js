@@ -1,13 +1,23 @@
 /// <reference types="cypress" />
 import { random, checkErrors } from './utils';
 
-it('allows user to log in and log out', () => {
+it('allows to create system credentials', () => {
   cy.login();
-  cy.contains('.alert-danger').should('not.exist');
-  cy.get('div#tasks');
+  cy.visit('/credentials/store/system/domain/_/newCredentials');
 
-  cy.get('[href$="/logout"]').click();
-  cy.get('form[name*="login"]');
+  cy.fixture('credentials').then((credential) => {
+    cy.contains('div.jenkins-form-item', 'Kind').within(() => {
+      cy.get('select').select(credential.newUserAndPass.kind);
+    });
+    cy.get('[name="_.username"]').type(`${credential.newUserAndPass.username}-${random}`);
+    cy.get('[name="_.password"]').type(credential.newUserAndPass.password);
+    cy.get('[name="_.id"]').type(`${credential.newUserAndPass.id}-${random}`);
+    cy.contains('button', 'OK').click();
+    cy.visit(
+      `/credentials/store/system/domain/_/credential/${credential.newUserAndPass.id}-${random}`
+    );
+    cy.contains(`${credential.newUserAndPass.username}-${random}`);
+  });
 });
 
 it('should be possible to create a new Jenkins pipeline', () => {
