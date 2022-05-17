@@ -152,6 +152,20 @@ ingress:
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
   ingressClassName: ""
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: example.local
+  ##     http:
+  ##       path: /
+  ##       backend: 
+  ##         service:
+  ##           name: example-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
 
 ## @section Kubeapps packaging options
 ## Note: the helm and flux plugins are mutually exclusive, you can only
@@ -1974,7 +1988,6 @@ testImage:
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Deploy a PostgreSQL server to satisfy the applications database requirements
-## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
 ## @param postgresql.auth.postgresPassword Password for 'postgres' user
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
 ## @param postgresql.auth.database Name for a custom database to create
@@ -1982,19 +1995,15 @@ testImage:
 ##
 postgresql:
   enabled: true
-  architecture: "replication"
   auth:
     postgresPassword: ""
     database: assets
     existingSecret: ""
-  ## PostgreSQL Persistence parameters
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
-  ## @param postgresql.persistence.enabled Enable persistence on PostgreSQL using PVC(s)
-  ## @param postgresql.persistence.size Persistent Volume size
-  ##
-  persistence:
-    enabled: false
-    size: 8Gi
+  ## PostgreSQL Primary persistence configuration
+  ## @param postgresql.primary.persistence.enabled Enable PostgreSQL Primary data persistence using PVC
+  primary:
+    persistence:
+      enabled: false
   ## @param postgresql.securityContext.enabled Enabled PostgreSQL replicas pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
