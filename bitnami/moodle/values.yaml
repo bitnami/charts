@@ -317,10 +317,10 @@ containerSecurityContext:
 startupProbe:
   enabled: false
   path: /login/index.php
-  initialDelaySeconds: 600
+  initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
-  failureThreshold: 6
+  failureThreshold: 60
   successThreshold: 1
 ## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.path Request path for livenessProbe
