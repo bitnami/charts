@@ -6,7 +6,7 @@ it('allows login/logout', () => {
   cy.get('#versions')
     .invoke('text')
     .should('match', /RabbitMQ\s\d+\.\d+\.\d+/);
-  cy.contains('.hider', 'Queued messages');
+  cy.contains('RabbitMQ Management');
   cy.contains('Log out').click();
   cy.contains('#login', 'Username');
 });

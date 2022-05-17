@@ -1,4 +1,4 @@
-const COMMAND_DELAY = 1100;
+const COMMAND_DELAY = 900;
 
 for (const command of ['click']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
