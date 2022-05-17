@@ -7,7 +7,7 @@ Prometheus Operator provides easy monitoring definitions for Kubernetes services
 [Overview of Prometheus Operator](https://github.com/coreos/prometheus-operator)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -260,6 +260,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.externalLabels`                                           | External labels to add to any time series or alerts when communicating with external systems                                     | `{}`                     |
 | `prometheus.replicaExternalLabelName`                                 | Name of the external label used to denote replica name                                                                           | `""`                     |
 | `prometheus.replicaExternalLabelNameClear`                            | Clear external label used to denote replica name                                                                                 | `false`                  |
+| `prometheus.shards`                                                   | Number of Prometheus shards desired                                                                                              | `1`                      |
 | `prometheus.routePrefix`                                              | Prefix used to register routes, overriding externalUrl route                                                                     | `/`                      |
 | `prometheus.prometheusExternalLabelName`                              | Name of the external label used to denote Prometheus instance name                                                               | `""`                     |
 | `prometheus.prometheusExternalLabelNameClear`                         | Clear external label used to denote Prometheus instance name                                                                     | `false`                  |
