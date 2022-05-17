@@ -279,7 +279,7 @@ provisioning:
   ##     # When false, the policies will be added to the existing.
   ##     setPolicies: false
   users: []
-  ## @param provisioning.usersExistingSecrets MinIO&reg; users provisioning from existing Kubernetes secrets. Can be used in addition to provisioning.users.
+  ## @param provisioning.usersExistingSecrets Array if existing secrets containing MinIO&reg; users to be provisioned. Can be used in addition to provisioning.users.
   ## https://docs.min.io/docs/minio-admin-complete-guide.html#user
   ##
   ## Instead of configuring users inside values.yaml, referring to existing Kubernetes secrets containing user
@@ -288,8 +288,8 @@ provisioning:
   ## usersExistingSecrets:
   ##   - centralized-minio-users
   ##
-  ## All provided Kubernetes secrets require a specific data structure. The example from provisioning.users above is
-  ## represented with the following data structure. The secret keys have no meaning to the provisioning job except that
+  ## All provided Kubernetes secrets require a specific data structure. The same data from the provisioning.users example above
+  ##  can be defined via secrets with the following data structure. The secret keys have no meaning to the provisioning job except that
   ## they are used as filenames.
   ##   ## apiVersion: v1
   ##   ## kind: Secret
