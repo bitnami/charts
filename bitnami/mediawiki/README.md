@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`     | MediaWiki image registry                                                                                                                           | `docker.io`            |
 | `image.repository`   | MediaWiki image repository                                                                                                                         | `bitnami/mediawiki`    |
-| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                                                                                               | `1.37.2-debian-10-r21` |
+| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                                                                                               | `1.37.2-debian-10-r44` |
 | `image.pullPolicy`   | Image pull policy                                                                                                                                  | `IfNotPresent`         |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                   | `[]`                   |
 | `image.debug`        | Enable MediaWiki image debug mode                                                                                                                  | `false`                |
@@ -203,6 +203,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Database parameters
@@ -236,7 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                         | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                               | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                   | `0.11.0-debian-10-r122`   |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                   | `0.11.0-debian-10-r144`   |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                             | `[]`                      |
 | `metrics.resources`                        | Exporter resource requests/limit                                             | `{}`                      |

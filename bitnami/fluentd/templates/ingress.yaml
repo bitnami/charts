@@ -49,6 +49,9 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" $serviceName "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
+    {{- if .Values.aggregator.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
   {{- if or .Values.aggregator.ingress.tls .Values.aggregator.ingress.extraTls }}
   tls:
     {{- if .Values.aggregator.ingress.tls }}

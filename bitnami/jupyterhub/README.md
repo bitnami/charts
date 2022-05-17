@@ -332,6 +332,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.ingress.extraPaths`                       | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `proxy.ingress.extraTls`                         | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `proxy.ingress.secrets`                          | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `proxy.ingress.extraRules`                       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Proxy Metrics parameters
