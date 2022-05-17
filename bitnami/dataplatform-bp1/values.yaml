@@ -74,7 +74,7 @@ dataplatform:
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
     automountServiceAccountToken: true
-    ## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+    ## @param dataplatform.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
   ## Role Based Access
