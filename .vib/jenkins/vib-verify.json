@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/jenkins"
         },
-        "runtime_parameters": "ImplbmtpbnNQYXNzd29yZCI6ICJTMzlCS1dqU2toIgoicG9kQWZmaW5pdHlQcmVzZXQiOiAiaGFyZCIKInBvZEFudGlBZmZpbml0eVByZXNldCI6ICIiCiJzZXJ2aWNlIjoKICAicG9ydCI6IDgwCiAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIg==",
+        "runtime_parameters": "amVua2luc1VzZXI6ICJ1c2VyIgpqZW5raW5zUGFzc3dvcmQ6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -43,6 +43,31 @@
           "params": {
             "endpoint": "lb-jenkins-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/jenkins/goss"
+            },
+            "remote": {
+              "workload": "deploy-jenkins"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/jenkins/cypress"
+            },
+            "endpoint": "lb-jenkins-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "user",
+              "password": "ComplicatedPassword123!4"
+            }
           }
         }
       ]
