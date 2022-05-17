@@ -442,7 +442,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.podAnnotations`                     | Annotations for Redis&trade; exporter pods                                                       | `{}`                     |
 | `metrics.service.type`                       | Redis&trade; exporter service type                                                               | `ClusterIP`              |
 | `metrics.service.port`                       | Redis&trade; exporter service port                                                               | `9121`                   |
-| `metrics.service.portName`                       | Redis&trade; exporter service name                                                               | `http-metrics`                   |
+| `metrics.service.portName`                   | Redis&trade; exporter service port name                                                          | `http-metrics`           |
 | `metrics.service.externalTrafficPolicy`      | Redis&trade; exporter service external traffic policy                                            | `Cluster`                |
 | `metrics.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                   | `[]`                     |
 | `metrics.service.loadBalancerIP`             | Redis&trade; exporter service Load Balancer IP                                                   | `""`                     |
