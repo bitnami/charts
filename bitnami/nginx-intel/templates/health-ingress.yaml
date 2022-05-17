@@ -43,6 +43,9 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
+    {{- if .Values.healthIngress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.healthIngress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
   {{- if or .Values.healthIngress.tls .Values.healthIngress.extraTls }}
   tls:
     {{- if .Values.healthIngress.tls }}
