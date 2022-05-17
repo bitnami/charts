@@ -366,6 +366,7 @@ $ helm uninstall my-release
 | `ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                             | `[]`                     |
 | `ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.               | `[]`                     |
 | `ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets        | `[]`                     |
+| `ingress.extraRules`                                | Additional rules to be covered with this ingress record                                              | `[]`                     |
 
 
 ### Metrics parameters

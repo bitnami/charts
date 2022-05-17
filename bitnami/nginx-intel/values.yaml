@@ -638,8 +638,18 @@ ingress:
   ##   certificate:
   ##
   secrets: []
-  ## @param ingress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
-  ## Useful when looking for additional customization, such as using different backend
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: nginx.local
+  ##     http:
+  ##       path: /
+  ##       backend: 
+  ##         service:
+  ##           name: nginx-svc
+  ##           port:
+  ##             name: http
   ##
   extraRules: []
 ## Health Ingress parameters
@@ -726,8 +736,18 @@ healthIngress:
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
   ingressClassName: ""
-  ## @param healthIngress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
-  ## Useful when looking for additional customization, such as using different backend
+  ## @param healthIngress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: nginx.local
+  ##     http:
+  ##       path: /
+  ##       backend: 
+  ##         service:
+  ##           name: nginx-svc
+  ##           port:
+  ##             name: http
   ##
   extraRules: []
 
