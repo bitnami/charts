@@ -108,7 +108,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`                              | NodeJS image registry                                                                                                    | `docker.io`            |
 | `image.repository`                            | NodeJS image repository                                                                                                  | `bitnami/node`         |
-| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                                                        | `16.15.0-debian-10-r0` |
+| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                                                        | `16.15.0-debian-10-r7` |
 | `image.pullPolicy`                            | NodeJS image pull policy                                                                                                 | `IfNotPresent`         |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                         | `[]`                   |
 | `image.debug`                                 | Set to true if you would like to see extra information on logs                                                           | `false`                |
@@ -181,7 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | -------------------------------------------------------------- | -------------------------------------------- |
 | `git.image.registry`           | Git image registry                                             | `docker.io`                                  |
 | `git.image.repository`         | Git image repository                                           | `bitnami/git`                                |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                 | `2.36.0-debian-10-r8`                        |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                 | `2.36.0-debian-10-r14`                       |
 | `git.image.pullPolicy`         | Git image pull policy                                          | `IfNotPresent`                               |
 | `git.image.pullSecrets`        | Specify docker-registry secret names as an array               | `[]`                                         |
 | `git.image.debug`              | Set to true if you would like to see extra information on logs | `false`                                      |
@@ -198,7 +198,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory  | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                             | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r408`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r414`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                          | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                             | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                       | `{}`                    |
@@ -248,6 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 The above parameters map to the env variables defined in [bitnami/node](https://github.com/bitnami/bitnami-docker-node). For more information please refer to the [bitnami/node](https://github.com/bitnami/bitnami-docker-node) image documentation.

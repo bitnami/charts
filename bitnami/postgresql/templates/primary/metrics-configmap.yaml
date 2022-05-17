@@ -12,5 +12,5 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  custom-metrics.yaml: {{- toYaml .Values.metrics.customMetrics | nindent 4 }}
+  custom-metrics.yaml: {{ toYaml .Values.metrics.customMetrics | quote }}
 {{- end }}

@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ------------------------------------------------------------- | ----------------------- |
 | `image.registry`                 | Solr image registry                                           | `docker.io`             |
 | `image.repository`               | Solr image repository                                         | `bitnami/solr`          |
-| `image.tag`                      | Solr image tag (immutable tags are recommended)               | `8.11.1-debian-10-r121` |
+| `image.tag`                      | Solr image tag (immutable tags are recommended)               | `8.11.1-debian-10-r125` |
 | `image.pullPolicy`               | image pull policy                                             | `IfNotPresent`          |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array              | `[]`                    |
 | `image.debug`                    | Specify if debug values should be set                         | `false`                 |
@@ -194,6 +194,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Persistence parameters
@@ -216,7 +217,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r402`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r406`     |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |

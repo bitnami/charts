@@ -560,6 +560,20 @@ ingress:
   ##       -----END CERTIFICATE-----
   ##
   secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: apache.local
+  ##     http:
+  ##       path: /
+  ##       backend: 
+  ##         service:
+  ##           name: apache-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
 
 ## @section Metrics Parameters
 

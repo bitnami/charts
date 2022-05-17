@@ -210,6 +210,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 | `healthIngress.enabled`            | Enable healthIngress record generation for ASP.NET Core                                                                          | `false`                  |
 | `healthIngress.pathType`           | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `healthIngress.path`               | Default path for the ingress record                                                                                              | `/`                      |
@@ -220,6 +221,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `healthIngress.extraHosts`         | n array with additional hostname(s) to be covered with the ingress record                                                        | `[]`                     |
 | `healthIngress.extraTls`           | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `healthIngress.secrets`            | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `healthIngress.extraRules`         | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### RBAC parameters
