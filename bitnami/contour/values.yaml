@@ -261,7 +261,7 @@ contour:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param contour.containerSecurityContext.enabled Envoy Container securityContext
   ## @param contour.containerSecurityContext.runAsUser User ID for the Contour container (to change this, http and https containerPorts must be set to >1024)
-  ## @param contour.containerSecurityContext.runAsNonRoot Run as noon root
+  ## @param contour.containerSecurityContext.runAsNonRoot Run as non root
   ##
   containerSecurityContext:
     enabled: true
@@ -374,12 +374,12 @@ contour:
     ## @param contour.service.extraPorts Extra port to expose on Contour service
     ##
     extraPorts: []
-    ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## @param contour.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
     ## If "ClientIP", consecutive client requests will be directed to the same Pod
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
     ##
     sessionAffinity: None
-    ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param contour.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -643,6 +643,7 @@ envoy:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param envoy.containerSecurityContext.enabled Envoy Container securityContext
   ## @param envoy.containerSecurityContext.runAsUser User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024)
+  ## @param envoy.containerSecurityContext.runAsNonRoot Run as non root
   ##
   containerSecurityContext:
     enabled: true
@@ -970,6 +971,7 @@ defaultBackend:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param defaultBackend.containerSecurityContext.enabled Default backend container securityContext
   ## @param defaultBackend.containerSecurityContext.runAsUser User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024)
+  ## @param defaultBackend.containerSecurityContext.runAsNonRoot Run as non root
   ##
   containerSecurityContext:
     enabled: true
