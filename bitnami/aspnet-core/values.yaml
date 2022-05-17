@@ -580,6 +580,20 @@ ingress:
   ##       -----END CERTIFICATE-----
   ##
   secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: aspnet-core.local
+  ##     http:
+  ##       path: /
+  ##       backend: 
+  ##         service:
+  ##           name: aspnet-core-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
 ## Health Ingress
 ##
 healthIngress:
@@ -658,6 +672,20 @@ healthIngress:
   ##       -----END CERTIFICATE-----
   ##
   secrets: []
+  ## @param healthIngress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: aspnet-core.local
+  ##     http:
+  ##       path: /
+  ##       backend: 
+  ##         service:
+  ##           name: aspnet-core-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
 
 ## @section RBAC parameters
 ##
