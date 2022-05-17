@@ -16,7 +16,7 @@ metadata:
   {{- end }}
 spec:
   endpoints:
-    - port: {{ .Values.metrics.service.name }}
+    - port: {{ .Values.metrics.service.portName }}
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}
