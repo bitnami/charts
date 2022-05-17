@@ -328,7 +328,7 @@ livenessProbe:
   enabled: true
   initialDelaySeconds: 60
   periodSeconds: 30
-  timeoutSeconds: 5
+  timeoutSeconds: 30
   successThreshold: 1
   failureThreshold: 5
 ## @param readinessProbe.enabled Enable readinessProbe
@@ -342,7 +342,7 @@ readinessProbe:
   enabled: true
   initialDelaySeconds: 60
   periodSeconds: 10
-  timeoutSeconds: 5
+  timeoutSeconds: 30
   successThreshold: 1
   failureThreshold: 5
 ## Configure extra options for startup probe
