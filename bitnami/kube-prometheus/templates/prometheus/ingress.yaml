@@ -40,6 +40,9 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.prometheus.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
+    {{- if .Values.prometheus.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
   {{- if or .Values.prometheus.ingress.tls .Values.prometheus.ingress.extraTls }}
   tls:
     {{- if .Values.prometheus.ingress.tls }}
