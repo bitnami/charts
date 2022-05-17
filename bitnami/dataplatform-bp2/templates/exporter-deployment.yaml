@@ -2,16 +2,16 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
+  name: {{ include "dataplatform.exporter-name" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: dataplatform-exporter
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  name: {{ include "dataplatform.exporter-name" . }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-  namespace: {{ .Release.Namespace | quote }}
 spec:
   replicas: 1
   {{- if .Values.dataplatform.exporter.updateStrategy }}
@@ -57,13 +57,21 @@ spec:
       {{- if .Values.dataplatform.exporter.priorityClassName }}
       priorityClassName: {{ .Values.dataplatform.exporter.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.dataplatform.exporter.schedulerName }}
+      schedulerName: {{ .Values.dataplatform.exporter.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.dataplatform.exporter.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.dataplatform.exporter.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.dataplatform.exporter.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      initContainers:
-        {{- if .Values.dataplatform.exporter.initContainers }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.initContainers "context" $) | nindent 8 }}
-        {{- end }}
+      {{- if .Values.dataplatform.exporter.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.dataplatform.exporter.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.dataplatform.exporter.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: dataplatform-exporter
           image: {{ include "dataplatform.exporter.image" . }}
@@ -71,18 +79,27 @@ spec:
           {{- if .Values.dataplatform.exporter.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.dataplatform.exporter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.dataplatform.exporter.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.dataplatform.exporter.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.dataplatform.exporter.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.dataplatform.exporter.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dataplatform.exporter.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: METRIC_CONFIG_PATH
               value: "/data/bp.json"
             - name: DP_URI
               value: http://{{ include "dataplatform.emitter-name" . }}:{{ .Values.dataplatform.emitter.service.ports.http }}
-          {{- if or .Values.dataplatform.exporter.extraEnvVarsCM .Values.dataplatform.exporter.extraEnvVarsSecret }}
+            {{- if .Values.dataplatform.exporter.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           envFrom:
             {{- if .Values.dataplatform.exporter.extraEnvVarsCM }}
             - configMapRef:
@@ -92,59 +109,45 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.extraEnvVarsSecret "context" $) }}
             {{- end }}
-          {{- end }}
           ports:
             - name: exporter-port
               containerPort: {{ .Values.dataplatform.exporter.containerPorts.http }}
           {{- if .Values.dataplatform.exporter.resources }}
           resources: {{- toYaml .Values.dataplatform.exporter.resources | nindent 12 }}
           {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.dataplatform.exporter.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataplatform.exporter.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: "/metrics"
-              port: {{ .Values.dataplatform.exporter.containerPorts.http }}
-            initialDelaySeconds: {{ .Values.dataplatform.exporter.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.dataplatform.exporter.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.dataplatform.exporter.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.dataplatform.exporter.livenessProbe.failureThreshold }}
-            successThreshold: {{ .Values.dataplatform.exporter.livenessProbe.successThreshold }}
+              port: exporter-port
           {{- else if .Values.dataplatform.exporter.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.dataplatform.exporter.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataplatform.exporter.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: "/metrics"
-              port: {{ .Values.dataplatform.exporter.containerPorts.http }}
-            initialDelaySeconds: {{ .Values.dataplatform.exporter.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.dataplatform.exporter.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.dataplatform.exporter.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.dataplatform.exporter.readinessProbe.failureThreshold }}
-            successThreshold: {{ .Values.dataplatform.exporter.readinessProbe.successThreshold }}
+              port: exporter-port
           {{- else if .Values.dataplatform.exporter.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.dataplatform.exporter.startupProbe.enabled }}
-          startupProbe:
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataplatform.exporter.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: "/v1/health"
-              port: {{ .Values.dataplatform.exporter.containerPorts.http }}
-            initialDelaySeconds: {{ .Values.dataplatform.exporter.startupProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.dataplatform.exporter.startupProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.dataplatform.exporter.startupProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.dataplatform.exporter.startupProbe.failureThreshold }}
-            successThreshold: {{ .Values.dataplatform.exporter.startupProbe.successThreshold }}
+              port: exporter-port
           {{- else if .Values.dataplatform.exporter.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           volumeMounts:
             - name: exporter-config
               mountPath: /data/bp.json
               subPath: bp.json
-          {{- if .Values.dataplatform.exporter.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            {{- if .Values.dataplatform.exporter.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.dataplatform.exporter.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.dataplatform.exporter.sidecars "context" $) | nindent 8 }}
         {{- end }}

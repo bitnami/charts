@@ -8,26 +8,17 @@ Usage:
 {{- end -}}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "dataplatform.fullname" -}}
-{{- include "common.names.fullname" . -}}
-{{- end -}}
-
-{{/*
 Define the name of the dataplatform exporter
 */}}
 {{- define "dataplatform.exporter-name" -}}
-{{- printf "%s-%s" (include "dataplatform.fullname" .) "exporter" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "exporter" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Define the name of the dataplatform emitter
 */}}
 {{- define "dataplatform.emitter-name" -}}
-{{- printf "%s-%s" (include "dataplatform.fullname" .) "emitter" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "emitter" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -35,7 +26,7 @@ Define the name of the dataplatform emitter
  */}}
 {{- define "dataplatform.serviceAccountName" -}}
 {{- if .Values.dataplatform.serviceAccount.create -}}
-    {{- default (include "dataplatform.fullname" .) .Values.dataplatform.serviceAccount.name -}}
+    {{- default (include "common.names.fullname" .) .Values.dataplatform.serviceAccount.name -}}
 {{- else -}}
     {{- default "default" .Values.dataplatform.serviceAccount.name -}}
 {{- end -}}

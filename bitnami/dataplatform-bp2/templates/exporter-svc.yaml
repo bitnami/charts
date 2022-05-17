@@ -2,6 +2,8 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: {{ include "dataplatform.exporter-name" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: dataplatform-exporter
     {{- if .Values.commonLabels }}
@@ -10,24 +12,32 @@ metadata:
     {{- if .Values.dataplatform.exporter.service.labels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.dataplatform.exporter.service.labels "context" $ ) | nindent 4 }}
     {{- end }}
-  name: "{{ include "dataplatform.exporter-name" . }}"
-  {{- if or .Values.dataplatform.exporter.service.annotations .Values.commonAnnotations }}
   annotations:
     {{- if .Values.dataplatform.exporter.service.annotations }}
-    {{ include "common.tplvalues.render" ( dict "value" .Values.dataplatform.exporter.service.annotations "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.dataplatform.exporter.service.annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- end }}
-  namespace: {{ .Release.Namespace | quote }}
 spec:
   type: {{ .Values.dataplatform.exporter.service.type }}
-  {{ if eq .Values.dataplatform.exporter.service.type "LoadBalancer" }}
+  {{- if and (eq .Values.dataplatform.exporter.service.type "LoadBalancer") (not (empty .Values.dataplatform.exporter.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.dataplatform.exporter.service.loadBalancerSourceRanges }}
-  {{ end }}
-  {{- if (and (eq .Values.dataplatform.exporter.service.type "LoadBalancer") (not (empty .Values.dataplatform.exporter.service.loadBalancerIP))) }}
+  {{- end }}
+  {{- if and (eq .Values.dataplatform.exporter.service.type "LoadBalancer") (not (empty .Values.dataplatform.exporter.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.dataplatform.exporter.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and .Values.dataplatform.exporter.service.clusterIP (eq .Values.dataplatform.exporter.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.dataplatform.exporter.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.dataplatform.exporter.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.dataplatform.exporter.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.dataplatform.exporter.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.dataplatform.exporter.service.type "LoadBalancer") (eq .Values.dataplatform.exporter.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.dataplatform.exporter.service.externalTrafficPolicy | quote }}
   {{- end }}
   ports:
     - name: tcp-client
@@ -39,6 +49,9 @@ spec:
       {{- else if eq .Values.dataplatform.exporter.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.dataplatform.exporter.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: dataplatform-exporter
 {{ end }}
