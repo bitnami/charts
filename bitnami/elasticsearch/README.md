@@ -655,6 +655,10 @@ $ helm delete --purge my-release
 | `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                           | `{}`                             |
 | `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                                                                      | `{}`                             |
 | `metrics.serviceMonitor.honorLabels`            | honorLabels chooses the metric's labels on collisions with target labels                                                 | `false`                          |
+| `metrics.prometheusRule.enabled`             | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                   |
+| `metrics.prometheusRule.namespace`           | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                      |
+| `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`                      |
+| `metrics.prometheusRule.rules`               | Prometheus Rule definitions                                                                                                               | `[]`                      |
 
 
 ### Init Container Parameters
