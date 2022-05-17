@@ -286,6 +286,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 5.0.0
+
+This major release is no longer contains the metrics section because the container `bitnami/logstash-exporter` has been deprecated due to the upstream project is not maintained.
+
 ### To 4.0.0
 
 This major release updates the chart to use Logstash 8. In addition, this chart has been standardized adding missing values and renaming others, in order to get aligned with the rest of the assets in the Bitnami charts repository.
