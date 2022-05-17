@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}-default-backend
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: default-backend
     {{- if .Values.commonLabels }}
@@ -66,10 +66,17 @@ spec:
       {{- end }}
       automountServiceAccountToken: false
       serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
-      terminationGracePeriodSeconds: 60
+      {{- if .Values.defaultBackend.schedulerName }}
+      schedulerName: {{ .Values.defaultBackend.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.defaultBackend.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.defaultBackend.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.defaultBackend.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if .Values.defaultBackend.initContainers }}
-      initContainers:
-        {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.initContainers "context" $ ) | nindent 6 }}
+      initContainers: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.initContainers "context" $ ) | nindent 6 }}
       {{- end }}
       containers:
         - name: default-backend
