@@ -139,10 +139,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.runAsNonRoot` | Moodle&trade; containers' Security Context runAsNonRoot                                                               | `true`               |
 | `startupProbe.enabled`                  | Enable startupProbe                                                                                                   | `false`              |
 | `startupProbe.path`                     | Request path for startupProbe                                                                                         | `/login/index.php`   |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                | `30`                |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                | `30`                 |
 | `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                       | `10`                 |
 | `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                      | `5`                  |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                    | `60`                  |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                    | `60`                 |
 | `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                    | `1`                  |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                  | `true`               |
 | `livenessProbe.path`                    | Request path for livenessProbe                                                                                        | `/login/index.php`   |
