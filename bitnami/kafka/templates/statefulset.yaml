@@ -280,7 +280,7 @@ spec:
             {{- end }}
             {{- if .Values.metrics.jmx.enabled }}
             - name: JMX_PORT
-              value: "5555"
+              value: "{{ .Values.metrics.jmx.port }}"
             {{- end }}
             - name: KAFKA_VOLUME_DIR
               value: {{ .Values.persistence.mountPath | quote }}
@@ -455,7 +455,7 @@ spec:
             - -XshowSettings:vm
             - -jar
             - jmx_prometheus_httpserver.jar
-            - "5556"
+            - "{{ .Values.metrics.jmx.containerPorts.metrics }}"
             - /etc/jmx-kafka/jmx-kafka-prometheus.yml
           {{- end }}
           ports:

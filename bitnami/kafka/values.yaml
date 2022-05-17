@@ -1262,6 +1262,9 @@ metrics:
       enabled: true
       runAsUser: 1001
       runAsNonRoot: true
+    ## @param metrics.jmx.port JMX application exporter port - Default conflicts with Kafka CLI
+    ##
+    port: 5555      
     ## @param metrics.jmx.containerPorts.metrics Prometheus JMX exporter metrics container port
     ##
     containerPorts:
@@ -1314,7 +1317,7 @@ metrics:
     ## https://github.com/helm/charts/tree/master/incubator/kafka
     ##
     config: |-
-      jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:5555/jmxrmi
+      jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:{{ .Values.metrics.jmx.port }}/jmxrmi
       lowercaseOutputName: true
       lowercaseOutputLabelNames: true
       ssl: false
