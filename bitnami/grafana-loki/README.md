@@ -203,24 +203,24 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.args`                                  | Override default container args (useful when using custom images)                                 | `[]`                    |
 | `gateway.verboseLogging`                        | Show the gateway access_log                                                                       | `false`                 |
 | `gateway.replicaCount`                          | Number of Gateway replicas to deploy                                                              | `1`                     |
-| `gateway.auth.enabled`                          | Enable basic auth                                                                                 | `true`                  |
+| `gateway.auth.enabled`                          | Enable basic auth                                                                                 | `false`                 |
 | `gateway.auth.username`                         | Basic auth username                                                                               | `user`                  |
 | `gateway.auth.password`                         | Basic auth password                                                                               | `""`                    |
 | `gateway.auth.existingSecret`                   | Name of a secret containing the Basic auth password                                               | `""`                    |
 | `gateway.livenessProbe.enabled`                 | Enable livenessProbe on Gateway nodes                                                             | `true`                  |
-| `gateway.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                           | `60`                    |
+| `gateway.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                           | `10`                    |
 | `gateway.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                  | `10`                    |
 | `gateway.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                 | `1`                     |
 | `gateway.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                               | `3`                     |
 | `gateway.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                               | `1`                     |
 | `gateway.readinessProbe.enabled`                | Enable readinessProbe on Gateway nodes                                                            | `true`                  |
-| `gateway.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                          | `60`                    |
+| `gateway.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                          | `10`                    |
 | `gateway.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                 | `10`                    |
 | `gateway.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                | `1`                     |
 | `gateway.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                              | `3`                     |
 | `gateway.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                              | `1`                     |
 | `gateway.startupProbe.enabled`                  | Enable startupProbe on Gateway containers                                                         | `false`                 |
-| `gateway.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                            | `30`                    |
+| `gateway.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                            | `10`                    |
 | `gateway.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                   | `10`                    |
 | `gateway.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                  | `1`                     |
 | `gateway.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                | `15`                    |
@@ -925,7 +925,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.resources.limits`                      | The resources limits for the Promtail containers                                                   | `{}`                 |
 | `promtail.resources.requests`                    | The requested resources for the Promtail containers                                                | `{}`                 |
 | `promtail.podSecurityContext.enabled`            | Enabled Promtail pods' Security Context                                                            | `true`               |
-| `promtail.podSecurityContext.fsGroup`            | Set Promtail pod's Security Context fsGroup                                                        | `1001`               |
+| `promtail.podSecurityContext.fsGroup`            | Set Promtail pod's Security Context fsGroup                                                        | `0`                  |
 | `promtail.containerSecurityContext.enabled`      | Enabled Promtail containers' Security Context                                                      | `true`               |
 | `promtail.containerSecurityContext.runAsUser`    | Set Promtail containers' Security Context runAsUser                                                | `0`                  |
 | `promtail.containerSecurityContext.runAsNonRoot` | Set Promtail containers' Security Context runAsNonRoot                                             | `false`              |
