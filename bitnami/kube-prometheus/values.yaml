@@ -580,7 +580,7 @@ prometheus:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -796,6 +796,9 @@ prometheus:
   ## @param prometheus.replicaCount Number of Prometheus replicas desired
   ##
   replicaCount: 1
+  ## @param prometheus.shards Number of Prometheus shards desired
+  ##
+  shards: 1
   ## @param prometheus.logLevel Log level for Prometheus
   ##
   logLevel: info
@@ -1403,7 +1406,7 @@ alertmanager:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
