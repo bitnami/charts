@@ -28,7 +28,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
-description: Grafana Loki is a distributed tracing system that has out-of-the-box integration with Grafana. It is highly scalable and works with many popular tracing protocols.
+description: Grafana Loki is a horizontally scalable, highly available, and multi-tenant log aggregation system. It provides real-time long tailing and full persistence to object storage.
 engine: gotpl
 home: https://github.com/grafana/loki/
 icon: https://bitnami.com/assets/stacks/grafana-loki/img/grafana-loki-stack-220x234.png
