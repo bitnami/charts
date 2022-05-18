@@ -17,17 +17,22 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.blackboxExporter.service.type }}
+  {{- if .Values.blackboxExporter.service.sessionAffinity }}
   sessionAffinity: {{ .Values.blackboxExporter.service.sessionAffinity }}
-  {{- if .Values.blackboxExporter.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.blackboxExporter.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if and .Values.blackboxExporter.service.clusterIP (eq .Values.blackboxExporter.service.type "ClusterIP") }}
   clusterIP: {{ .Values.blackboxExporter.service.clusterIP }}
   {{- end }}
-  {{- if (or (eq .Values.blackboxExporter.service.type "LoadBalancer") (eq .Values.blackboxExporter.service.type "NodePort")) }}
+  {{- if or (eq .Values.blackboxExporter.service.type "LoadBalancer") (eq .Values.blackboxExporter.service.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.blackboxExporter.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{ if eq .Values.blackboxExporter.service.type "LoadBalancer" }}
+  {{- if and (eq .Values.blackboxExporter.service.type "LoadBalancer") (not (empty .Values.blackboxExporter.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.blackboxExporter.service.loadBalancerSourceRanges }}
-  {{ end }}
-  {{- if (and (eq .Values.blackboxExporter.service.type "LoadBalancer") (not (empty .Values.blackboxExporter.service.loadBalancerIP))) }}
+  {{- end }}
+  {{- if and (eq .Values.blackboxExporter.service.type "LoadBalancer") (not (empty .Values.blackboxExporter.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.blackboxExporter.service.loadBalancerIP }}
   {{- end }}
   publishNotReadyAddresses: true

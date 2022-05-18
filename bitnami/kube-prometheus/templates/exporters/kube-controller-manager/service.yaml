@@ -17,9 +17,9 @@ spec:
   clusterIP: None
   ports:
     - name: http-metrics
-      port: {{ .Values.kubeControllerManager.service.port }}
+      port: {{ .Values.kubeControllerManager.service.ports.http }}
       protocol: TCP
-      targetPort: {{ .Values.kubeControllerManager.service.targetPort }}
+      targetPort: {{ .Values.kubeControllerManager.service.targetPorts.http }}
   {{- if not .Values.kubeControllerManager.endpoints }}
   selector:
     {{- if .Values.kubeControllerManager.service.selector }}

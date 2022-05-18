@@ -13,12 +13,13 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  type: ClusterIP
   clusterIP: None
   ports:
     - name: http-metrics
-      port: {{ .Values.coreDns.service.port }}
+      port: {{ .Values.coreDns.service.ports.http }}
       protocol: TCP
-      targetPort: {{ .Values.coreDns.service.targetPort }}
+      targetPort: {{ .Values.coreDns.service.targetPorts.http }}
   selector:
     {{- if .Values.coreDns.service.selector }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.coreDns.service.selector "context" $ ) | nindent 4 }}

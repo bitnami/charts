@@ -63,9 +63,12 @@ spec:
       {{- if .Values.blackboxExporter.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.blackboxExporter.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.%%MAIN_OBJECT_BLOCK%%.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.terminationGracePeriodSeconds }}
+      {{- end }}
       initContainers:
         {{- if .Values.blackboxExporter.initContainers }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.initContainers "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: blackbox-exporter

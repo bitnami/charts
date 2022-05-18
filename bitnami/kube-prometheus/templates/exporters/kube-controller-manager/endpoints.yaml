@@ -19,6 +19,6 @@ subsets:
       {{- end }}
     ports:
       - name: http-metrics
-        port: {{ .Values.kubeControllerManager.service.port }}
+        port: {{ .Values.kubeControllerManager.service.ports.http }}
         protocol: TCP
 {{- end }}

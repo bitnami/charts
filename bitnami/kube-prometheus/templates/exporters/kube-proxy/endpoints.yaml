@@ -19,6 +19,6 @@ subsets:
       {{- end }}
     ports:
       - name: http-metrics
-        port: {{ .Values.kubeProxy.service.port }}
+        port: {{ .Values.kubeProxy.service.ports.http }}
         protocol: TCP
 {{- end }}

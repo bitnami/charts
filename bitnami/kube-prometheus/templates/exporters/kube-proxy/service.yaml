@@ -13,12 +13,13 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  type: ClusterIP
   clusterIP: None
   ports:
     - name: http-metrics
-      port: {{ .Values.kubeProxy.service.port }}
+      port: {{ .Values.kubeProxy.service.ports.http }}
       protocol: TCP
-      targetPort: {{ .Values.kubeProxy.service.targetPort }}
+      targetPort: {{ .Values.kubeProxy.service.targetPorts.http }}
   {{- if not .Values.kubeProxy.endpoints }}
   selector:
     {{- if .Values.kubeProxy.service.selector }}
@@ -26,6 +27,5 @@ spec:
     {{- else }}
     k8s-app: kube-proxy
     {{- end }}
-{{- end }}
-  type: ClusterIP
+  {{- end }}
 {{- end -}}
