@@ -609,6 +609,20 @@ ingress:
   ##   certificate:
   ##
   secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: nats.local
+  ##     http:
+  ##       path: /
+  ##       backend: 
+  ##         service:
+  ##           name: nats-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
 ## Network Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##

@@ -11,7 +11,12 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  {{- if .Values.updateStrategy }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   template:
@@ -20,7 +25,6 @@ spec:
         {{- if .Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
-      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) (and .Values.serverBlock (not .Values.existingServerBlockConfigmap)) }}
       annotations:
         {{- if .Values.podAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
@@ -31,10 +35,9 @@ spec:
         {{- if and .Values.serverBlock (not .Values.existingServerBlockConfigmap) }}
         checksum/server-block-configuration: {{ include (print $.Template.BasePath "/server-block-configmap.yaml") . | sha256sum }}
         {{- end }}
-      {{- end }}
     spec:
       {{- include "nginx.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: {{ .Values.serviceAccount.autoMount }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
       shareProcessNamespace: {{ .Values.sidecarSingleProcessNamespace }}
       serviceAccountName: {{ template "nginx.serviceAccountName" . }}
       {{- if .Values.hostAliases }}
@@ -57,11 +60,20 @@ spec:
       {{- if .Values.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if .Values.cloneStaticSiteFromGit.enabled }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
       initContainers:
+        {{- if .Values.cloneStaticSiteFromGit.enabled }}
         - name: git-clone-repository
           image: {{ include "nginx.cloneStaticSiteFromGit.image" . }}
           imagePullPolicy: {{ .Values.cloneStaticSiteFromGit.image.pullPolicy | quote }}
@@ -84,14 +96,18 @@ spec:
           volumeMounts:
             - name: staticsite
               mountPath: /app
-          {{- if .Values.cloneStaticSiteFromGit.extraVolumeMounts }}
+            {{- if .Values.cloneStaticSiteFromGit.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            {{- end }}
           {{- if .Values.cloneStaticSiteFromGit.extraEnvVars }}
-          env:
-            {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.extraEnvVars "context" $) | nindent 12 }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.extraEnvVars "context" $) | nindent 12 }}
           {{- end }}
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       containers:
+        {{- if .Values.cloneStaticSiteFromGit.enabled }}
         - name: git-repo-syncer
           image: {{ include "nginx.cloneStaticSiteFromGit.image" . }}
           imagePullPolicy: {{ .Values.cloneStaticSiteFromGit.image.pullPolicy | quote }}
@@ -117,31 +133,31 @@ spec:
           volumeMounts:
             - name: staticsite
               mountPath: /app
-          {{- if .Values.cloneStaticSiteFromGit.extraVolumeMounts }}
+            {{- if .Values.cloneStaticSiteFromGit.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            {{- end }}
           {{- if .Values.cloneStaticSiteFromGit.extraEnvVars }}
-          env:
-            {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.extraEnvVars "context" $) | nindent 12 }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.extraEnvVars "context" $) | nindent 12 }}
           {{- end }}
-      {{- else }}
-      {{- with .Values.initContainers }}
-      initContainers:
-      {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
-      {{- end }}
-      containers:
-      {{- end }}
+        {{- end }}
         - name: nginx
           image: {{ include "nginx.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.command }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.args }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -149,17 +165,15 @@ spec:
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ tpl .Values.extraEnvVarsCM . | quote }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
             {{- end }}
             {{- if .Values.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ tpl .Values.extraEnvVarsSecret . | quote }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
-          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.containerPorts.http }}
@@ -167,28 +181,28 @@ spec:
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
             {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- else if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
@@ -232,10 +246,9 @@ spec:
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
         {{- end }}
-        {{- with .Values.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.extraVolumes (include "nginx.useStaticSite" .) }}
       volumes:
         {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
         - name: nginx-server-block
@@ -249,4 +262,3 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-      {{- end }}

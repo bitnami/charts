@@ -59,6 +59,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
+
 ### Common parameters
 
 | Name                | Description                                                                                  | Value           |
@@ -71,22 +72,24 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                            | `[]`            |
 
+
 ### phpMyAdmin parameters
 
-| Name                 | Description                                                                       | Value                  |
-| -------------------- | --------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`     | phpMyAdmin image registry                                                         | `docker.io`            |
-| `image.repository`   | phpMyAdmin image repository                                                       | `bitnami/phpmyadmin`   |
-| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                             | `5.1.1-debian-10-r201` |
-| `image.pullPolicy`   | Image pull policy                                                                 | `IfNotPresent`         |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                                  | `[]`                   |
-| `image.debug`        | Enable phpmyadmin image debug mode                                                | `false`                |
-| `command`            | Override default container command (useful when using custom images)              | `[]`                   |
-| `args`               | Override default container args (useful when using custom images)                 | `[]`                   |
-| `lifecycleHooks`     | for the phpmyadmin container(s) to automate configuration before or after startup | `{}`                   |
-| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container                     | `[]`                   |
-| `extraEnvVarsCM`     | Name of a existing ConfigMap containing extra env vars                            | `""`                   |
-| `extraEnvVarsSecret` | Name of a existing Secret containing extra env vars                               | `""`                   |
+| Name                 | Description                                                                       | Value                 |
+| -------------------- | --------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`     | phpMyAdmin image registry                                                         | `docker.io`           |
+| `image.repository`   | phpMyAdmin image repository                                                       | `bitnami/phpmyadmin`  |
+| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                             | `5.1.3-debian-10-r87` |
+| `image.pullPolicy`   | Image pull policy                                                                 | `IfNotPresent`        |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                                  | `[]`                  |
+| `image.debug`        | Enable phpmyadmin image debug mode                                                | `false`               |
+| `command`            | Override default container command (useful when using custom images)              | `[]`                  |
+| `args`               | Override default container args (useful when using custom images)                 | `[]`                  |
+| `lifecycleHooks`     | for the phpmyadmin container(s) to automate configuration before or after startup | `{}`                  |
+| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container                     | `[]`                  |
+| `extraEnvVarsCM`     | Name of a existing ConfigMap containing extra env vars                            | `""`                  |
+| `extraEnvVarsSecret` | Name of a existing Secret containing extra env vars                               | `""`                  |
+
 
 ### phpMyAdmin deployment parameters
 
@@ -148,6 +151,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                        | Add init containers to the PhpMyAdmin pods                                                | `[]`            |
 | `sidecars`                              | Add sidecar containers to the PhpMyAdmin pods                                             | `[]`            |
 
+
 ### Traffic Exposure parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -177,6 +181,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+
 
 ### Database parameters
 
@@ -195,6 +201,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `db.ssl.verify`            | Enable SSL certificate validation                                 | `true`  |
 | `mariadb`                  | MariaDB chart configuration                                       | `{}`    |
 
+
 ### Metrics parameters
 
 | Name                                       | Description                                                                       | Value                     |
@@ -202,7 +209,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                              | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                    | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                  | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                        | `0.11.0-debian-10-r26`    |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                        | `0.11.0-debian-10-r145`   |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                 | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                  | `[]`                      |
 | `metrics.resources`                        | Metrics exporter resource requests and limits                                     | `{}`                      |
@@ -226,6 +233,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                          | `false`                   |
 | `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                    | `{}`                      |
 
+
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                    | Value   |
@@ -245,6 +253,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                             | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                 | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                     | `{}`    |
+
 
 For more information please refer to the [bitnami/phpmyadmin](https://github.com/bitnami/bitnami-docker-Phpmyadmin) image documentation.
 
