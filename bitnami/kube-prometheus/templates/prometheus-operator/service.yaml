@@ -5,9 +5,16 @@ metadata:
   name: {{ template "kube-prometheus.operator.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
-  {{- with .Values.operator.service.annotations }}
-  annotations: {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.operator.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.operator.service.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.operator.service.type }}
   {{- if and .Values.operator.service.loadBalancerIP (eq .Values.operator.service.type "LoadBalancer") }}
@@ -33,6 +40,9 @@ spec:
       targetPort: http
       {{- if and .Values.operator.service.nodePort (or (eq .Values.operator.service.type "NodePort") (eq .Values.operator.service.type "LoadBalancer")) }}
       nodePort: {{ .Values.operator.service.nodePort }}
+      {{- end }}
+      {{- if .Values.operator.service.extraPorts }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.operator.service.extraPorts "context" $) | nindent 4 }}
       {{- end }}
   selector: {{- include "kube-prometheus.operator.matchLabels" . | nindent 4 }}
 {{- end }}

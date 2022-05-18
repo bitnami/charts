@@ -6,12 +6,15 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
     app.kubernetes.io/subcomponent: thanos
-  annotations:
-    {{- if .Values.prometheus.thanos.ingress.certManager }}
-    kubernetes.io/tls-acme: "true"
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- range $key, $value := .Values.prometheus.thanos.ingress.annotations }}
-    {{ $key }}: {{ $value | quote }}
+  annotations:
+    {{- if .Values.prometheus.thanos.ingress.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.prometheus.thanos.ingress.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
   {{- if and .Values.prometheus.thanos.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
@@ -32,7 +35,6 @@ spec:
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.ingress.extraRules "context" $) | nindent 4 }}
     {{- end }}
   {{- if .Values.prometheus.thanos.ingress.tls }}
-  tls:
-{{ toYaml .Values.prometheus.thanos.ingress.tls | indent 4 }}
+  tls: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.ingress.tls "context" $) | nindent 4 }}
   {{- end }}
 {{- end -}}

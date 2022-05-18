@@ -5,12 +5,19 @@ metadata:
   name: {{ template "kube-prometheus.alertmanager.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
-  {{- with .Values.alertmanager.service.annotations }}
-  annotations: {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.alertmanager.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.service.annotations "context" $) | nindent 10 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
+    {{- end }}
 spec:
   type: {{ .Values.alertmanager.service.type }}
-  {{- if index .Values.alertmanager "stickySessions" }}
+  {{- if .Values.alertmanager.stickySessions }}
   sessionAffinity: ClientIP
   {{- end }}
   {{- if and .Values.alertmanager.service.loadBalancerIP (eq .Values.alertmanager.service.type "LoadBalancer") }}

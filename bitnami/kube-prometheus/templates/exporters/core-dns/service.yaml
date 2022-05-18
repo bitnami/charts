@@ -4,8 +4,14 @@ kind: Service
 metadata:
   name: {{ template "kube-prometheus.fullname" . }}-coredns
   namespace: {{ .Values.coreDns.namespace }}
-  labels: {{- include "kube-prometheus.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-coredns
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   clusterIP: None
   ports:
@@ -15,7 +21,7 @@ spec:
       targetPort: {{ .Values.coreDns.service.targetPort }}
   selector:
     {{- if .Values.coreDns.service.selector }}
-{{ toYaml .Values.coreDns.service.selector | indent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.coreDns.service.selector "context" $ ) | nindent 4 }}
     {{- else }}
     k8s-app: kube-dns
     {{- end }}

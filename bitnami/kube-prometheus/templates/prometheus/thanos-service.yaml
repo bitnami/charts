@@ -6,9 +6,16 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
     app.kubernetes.io/subcomponent: thanos
-  {{- if .Values.prometheus.thanos.service.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.service.annotations "context" $) | nindent 4 }}
-  {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.prometheus.thanos.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.prometheus.thanos.service.type }}
   {{- if and .Values.prometheus.thanos.service.loadBalancerIP (eq .Values.prometheus.thanos.service.type "LoadBalancer") }}

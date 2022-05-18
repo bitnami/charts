@@ -7,7 +7,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
-## @param global.labels Additional labels to apply to all resources
 ##
 global:
   imageRegistry: ""
@@ -17,20 +16,34 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-  labels: {}
 
 ## @section Common parameters
 ##
 
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
 ## @param nameOverride String to partially override `kube-prometheus.name` template with a string (will prepend the release name)
 ##
 nameOverride: ""
 ## @param fullnameOverride String to fully override `kube-prometheus.fullname` template with a string
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
 
 ## @section Prometheus Operator Parameters
 ##
@@ -85,6 +98,12 @@ operator:
     ## If not set and create is true, a name is generated using the kube-prometheus.operator.fullname template
     ##
     name: ""
+    ## @param operator.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
+    ## @param operator.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+    ##
+    annotations: {}
   ## @param operator.schedulerName Name of the Kubernetess scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -387,6 +406,9 @@ prometheus:
     ##   eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT:role/prometheus
     ##
     annotations: {}
+    ## @param prometheus.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
   ## Prometheus pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param prometheus.podSecurityContext.enabled Enable security context
@@ -415,12 +437,12 @@ prometheus:
         - ALL
   ## Configure pod disruption budgets for Prometheus
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
-  ## @param prometheus.podDisruptionBudget.enabled Create a pod disruption budget for Prometheus
-  ## @param prometheus.podDisruptionBudget.minAvailable Minimum number / percentage of pods that should remain scheduled
-  ## @param prometheus.podDisruptionBudget.maxUnavailable Maximum number / percentage of pods that may be made unavailable
+  ## @param prometheus.pdb.create Create a pod disruption budget for Prometheus
+  ## @param prometheus.pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
+  ## @param prometheus.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
   ##
-  podDisruptionBudget:
-    enabled: false
+  pdb:
+    create: false
     minAvailable: 1
     maxUnavailable: ""
   ## Prometheus Service
@@ -580,7 +602,7 @@ prometheus:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -1210,6 +1232,12 @@ alertmanager:
     ## If not set and create is true, a name is generated using the kube-prometheus.alertmanager.fullname template
     ##
     name: ""
+    ## @param alertmanager.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
+    ## @param alertmanager.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+    ##
+    annotations: {}
   ## Prometheus Alertmanager pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param alertmanager.podSecurityContext.enabled Enable security context
@@ -1238,12 +1266,12 @@ alertmanager:
         - ALL
   ## Configure pod disruption budgets for Alertmanager
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
-  ## @param alertmanager.podDisruptionBudget.enabled Create a pod disruption budget for Alertmanager
-  ## @param alertmanager.podDisruptionBudget.minAvailable Minimum number / percentage of pods that should remain scheduled
-  ## @param alertmanager.podDisruptionBudget.maxUnavailable Maximum number / percentage of pods that may be made unavailable
+  ## @param alertmanager.pdb.create Create a pod disruption budget for Alertmanager
+  ## @param alertmanager.pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
+  ## @param alertmanager.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
   ##
-  podDisruptionBudget:
-    enabled: false
+  pdb:
+    create: false
     minAvailable: 1
     maxUnavailable: ""
   ## Alertmanager Service
@@ -1403,7 +1431,7 @@ alertmanager:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
