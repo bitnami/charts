@@ -50,7 +50,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.56.1-debian-10-r0
+    tag: 0.56.2-debian-10-r7
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -362,7 +362,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.35.0-debian-10-r12
+    tag: 2.35.0-debian-10-r24
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -573,6 +573,20 @@ prometheus:
     ##   certificate:
     ##
     secrets: []
+    ## @param prometheus.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend: 
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
   ## @param prometheus.externalUrl External URL used to access Prometheus
   ## If not creating an ingress but still exposing the service some other way (like a proxy)
   ## let Prometheus know what its external URL is so that it can properly create links
@@ -834,6 +848,9 @@ prometheus:
     ## @param prometheus.persistence.size Persistent Volume Size
     ##
     size: 8Gi
+    ## @param prometheus.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
   ## @param prometheus.priorityClassName Priority class assigned to the Pods
   ##
   priorityClassName: ""
@@ -955,7 +972,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.25.2-scratch-r5
+      tag: 0.26.0-scratch-r0
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
@@ -1173,7 +1190,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.24.0-debian-10-r39
+    tag: 0.24.0-debian-10-r51
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1379,6 +1396,20 @@ alertmanager:
     ##   certificate:
     ##
     secrets: []
+    ## @param alertmanager.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend: 
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
   ## @param alertmanager.externalUrl External URL used to access Alertmanager
   ## e.g:
   ## externalUrl: https://alertmanager.example.com
@@ -1542,6 +1573,9 @@ alertmanager:
     ## @param alertmanager.persistence.size Persistent Volume Size
     ##
     size: 8Gi
+    ## @param alertmanager.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
   ## @param alertmanager.paused If true, the Operator won't process any Alertmanager configuration changes
   ##
   paused: false
@@ -1665,7 +1699,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.20.0-debian-10-r47
+    tag: 0.20.0-debian-10-r59
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

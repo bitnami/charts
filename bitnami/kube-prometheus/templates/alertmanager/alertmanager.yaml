@@ -3,7 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: Alertmanager
 metadata:
   name: {{ template "kube-prometheus.alertmanager.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.alertmanager.replicaCount }}
@@ -41,6 +41,17 @@ spec:
   {{- if .Values.alertmanager.persistence.enabled }}
   storage:
     volumeClaimTemplate:
+      metadata:
+        annotations:
+          {{- if .Values.alertmanager.persistence.annotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.persistence.annotations "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.commonAnnotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
+          {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
           {{- range .Values.alertmanager.persistence.accessModes }}

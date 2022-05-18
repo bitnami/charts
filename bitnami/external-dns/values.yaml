@@ -56,7 +56,7 @@ kubeVersion: ""
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.11.1-debian-10-r1
+  tag: 0.11.1-debian-10-r20
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -192,6 +192,10 @@ aws:
   ## @param aws.batchChangeSize When using the AWS provider, set the maximum number of changes that will be applied in each batch
   ##
   batchChangeSize: 1000
+  ## @param aws.zonesCacheDuration If the list of Route53 zones managed by ExternalDNS doesn't change frequently, cache it by setting a TTL
+  ## (default 0 - disabled, can be set to time interval like 1m or 1h)
+  ##
+  zonesCacheDuration: 0
   ## @param aws.zoneTags When using the AWS provider, filter for zones with these tags
   ##
   zoneTags: []

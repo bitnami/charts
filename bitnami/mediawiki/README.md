@@ -62,6 +62,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                | Description                                                                                  | Value           |
@@ -74,34 +75,37 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`     | Default Kubernetes cluster domain                                                            | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                            | `[]`            |
 
+
 ### Mediawiki parameters
 
-| Name                 | Description                                                                      | Value                  |
-| -------------------- | -------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`     | MediaWiki image registry                                                         | `docker.io`            |
-| `image.repository`   | MediaWiki image repository                                                       | `bitnami/mediawiki`    |
-| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                             | `1.37.1-debian-10-r20` |
-| `image.pullPolicy`   | Image pull policy                                                                | `IfNotPresent`         |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                                 | `[]`                   |
-| `image.debug`        | Enable MediaWiki image debug mode                                                | `false`                |
-| `hostAliases`        | Deployment pod host aliases                                                      | `[]`                   |
-| `mediawikiUser`      | User of the application                                                          | `user`                 |
-| `mediawikiPassword`  | Application password                                                             | `""`                   |
-| `mediawikiEmail`     | Admin email                                                                      | `user@example.com`     |
-| `mediawikiName`      | Name for the wiki                                                                | `My Wiki`              |
-| `mediawikiHost`      | Mediawiki host to create application URLs                                        | `""`                   |
-| `allowEmptyPassword` | Allow DB blank passwords                                                         | `yes`                  |
-| `smtpHost`           | SMTP host                                                                        | `""`                   |
-| `smtpPort`           | SMTP port                                                                        | `""`                   |
-| `smtpHostID`         | SMTP host ID                                                                     | `""`                   |
-| `smtpUser`           | SMTP user                                                                        | `""`                   |
-| `smtpPassword`       | SMTP password                                                                    | `""`                   |
-| `command`            | Override default container command (useful when using custom images)             | `[]`                   |
-| `args`               | Override default container args (useful when using custom images)                | `[]`                   |
-| `lifecycleHooks`     | for the Mediawiki container(s) to automate configuration before or after startup | `{}`                   |
-| `extraEnvVars`       | Extra environment variables to be set on Mediawki container                      | `[]`                   |
-| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                             | `""`                   |
-| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                                | `""`                   |
+| Name                 | Description                                                                                                                                        | Value                  |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`     | MediaWiki image registry                                                                                                                           | `docker.io`            |
+| `image.repository`   | MediaWiki image repository                                                                                                                         | `bitnami/mediawiki`    |
+| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                                                                                               | `1.37.2-debian-10-r44` |
+| `image.pullPolicy`   | Image pull policy                                                                                                                                  | `IfNotPresent`         |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                   | `[]`                   |
+| `image.debug`        | Enable MediaWiki image debug mode                                                                                                                  | `false`                |
+| `hostAliases`        | Deployment pod host aliases                                                                                                                        | `[]`                   |
+| `mediawikiUser`      | User of the application                                                                                                                            | `user`                 |
+| `mediawikiPassword`  | Application password                                                                                                                               | `""`                   |
+| `mediawikiSecret`    | Existing `Secret` containing the password for the `mediawikiUser` user; must contain the key `mediawiki-password` and optional key `smtp-password` | `""`                   |
+| `mediawikiEmail`     | Admin email                                                                                                                                        | `user@example.com`     |
+| `mediawikiName`      | Name for the wiki                                                                                                                                  | `My Wiki`              |
+| `mediawikiHost`      | Mediawiki host to create application URLs                                                                                                          | `""`                   |
+| `allowEmptyPassword` | Allow DB blank passwords                                                                                                                           | `yes`                  |
+| `smtpHost`           | SMTP host                                                                                                                                          | `""`                   |
+| `smtpPort`           | SMTP port                                                                                                                                          | `""`                   |
+| `smtpHostID`         | SMTP host ID                                                                                                                                       | `""`                   |
+| `smtpUser`           | SMTP user                                                                                                                                          | `""`                   |
+| `smtpPassword`       | SMTP password                                                                                                                                      | `""`                   |
+| `command`            | Override default container command (useful when using custom images)                                                                               | `[]`                   |
+| `args`               | Override default container args (useful when using custom images)                                                                                  | `[]`                   |
+| `lifecycleHooks`     | for the Mediawiki container(s) to automate configuration before or after startup                                                                   | `{}`                   |
+| `extraEnvVars`       | Extra environment variables to be set on Mediawki container                                                                                        | `[]`                   |
+| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars                                                                                               | `""`                   |
+| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars                                                                                                  | `""`                   |
+
 
 ### Mediawiki deployment parameters
 
@@ -169,6 +173,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                      | PVC Storage Request for MediaWiki volume                                                  | `8Gi`                                             |
 | `persistence.annotations`               | Persistent Volume Claim annotations                                                       | `{}`                                              |
 
+
 ### Traffic Exposure parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -198,6 +203,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+
 
 ### Database parameters
 
@@ -222,6 +229,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.password`                 | Password for the above username                                                       | `""`                |
 | `externalDatabase.database`                 | Name of the existing database                                                         | `bitnami_mediawiki` |
 
+
 ### Metrics parameters
 
 | Name                                       | Description                                                                  | Value                     |
@@ -229,7 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                         | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                               | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                             | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                   | `0.11.0-debian-10-r18`    |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                   | `0.11.0-debian-10-r144`   |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                            | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                             | `[]`                      |
 | `metrics.resources`                        | Exporter resource requests/limit                                             | `{}`                      |
@@ -244,6 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                               | `{}`                      |
 | `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                          | `{}`                      |
 | `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels     | `false`                   |
+
 
 ### NetworkPolicy parameters
 
@@ -264,6 +273,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                            | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                    | `{}`    |
+
 
 The above parameters map to the env variables defined in [bitnami/mediawiki](https://github.com/bitnami/bitnami-docker-mediawiki). For more information please refer to the [bitnami/mediawiki](https://github.com/bitnami/bitnami-docker-mediawiki) image documentation.
 

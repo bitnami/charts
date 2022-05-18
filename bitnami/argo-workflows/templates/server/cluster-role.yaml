@@ -70,6 +70,7 @@ rules:
       - secrets
     verbs:
       - get
+      - list
   {{- if and .Values.server.auth.enabled .Values.server.auth.sso.enabled }}
     {{- if .Values.server.auth.sso.rbac }}
       {{- with .Values.server.auth.sso.rbac.secretWhitelist }}

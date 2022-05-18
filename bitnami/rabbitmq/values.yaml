@@ -30,7 +30,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.9.16-debian-10-r8
+  tag: 3.9.17-debian-10-r5
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
   ##
@@ -908,8 +908,8 @@ ingress:
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can:
   ##   - Use the `ingress.secrets` parameter to create this TLS secret
-  ##   - Relay on cert-manager to create it by setting the corresponding annotations
-  ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
   ##
   tls: false
   ## @param ingress.selfSigned Set this to true in order to create a TLS secret for this ingress record
@@ -1170,7 +1170,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r416
+    tag: 10-debian-10-r427
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

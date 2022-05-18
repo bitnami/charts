@@ -82,14 +82,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WildFly Image parameters
 
-| Name                | Description                                        | Value                  |
-| ------------------- | -------------------------------------------------- | ---------------------- |
-| `image.registry`    | WildFly image registry                             | `docker.io`            |
-| `image.repository`  | WildFly image repository                           | `bitnami/wildfly`      |
-| `image.tag`         | WildFly image tag (immutable tags are recommended) | `26.0.1-debian-10-r31` |
-| `image.pullPolicy`  | WildFly image pull policy                          | `IfNotPresent`         |
-| `image.pullSecrets` | WildFly image pull secrets                         | `[]`                   |
-| `image.debug`       | Enable image debug mode                            | `false`                |
+| Name                | Description                                        | Value                 |
+| ------------------- | -------------------------------------------------- | --------------------- |
+| `image.registry`    | WildFly image registry                             | `docker.io`           |
+| `image.repository`  | WildFly image repository                           | `bitnami/wildfly`     |
+| `image.tag`         | WildFly image tag (immutable tags are recommended) | `26.1.0-debian-10-r5` |
+| `image.pullPolicy`  | WildFly image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | WildFly image pull secrets                         | `[]`                  |
+| `image.debug`       | Enable image debug mode                            | `false`               |
 
 
 ### WildFly Configuration parameters
@@ -192,6 +192,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                                         | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                                          | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                               | `""`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                                     | `[]`                     |
 | `mgmtIngress.enabled`              | Set to true to enable ingress record generation for the Management console                                                                  | `false`                  |
 | `mgmtIngress.pathType`             | Ingress path type                                                                                                                           | `ImplementationSpecific` |
 | `mgmtIngress.hostname`             | When the Management ingress is enabled, a host pointing to this will be created                                                             | `management.local`       |
@@ -217,7 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r342`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r400`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |

@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ template "kube-prometheus.thanos.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
     app.kubernetes.io/subcomponent: thanos
   annotations:
@@ -27,6 +27,9 @@ spec:
           pathType: {{ default "ImplementationSpecific" .pathType }}
           {{- end }}
           backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.thanos.fullname" $) "servicePort" "grpc" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.prometheus.thanos.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.ingress.extraRules "context" $) | nindent 4 }}
     {{- end }}
   {{- if .Values.prometheus.thanos.ingress.tls }}
   tls:

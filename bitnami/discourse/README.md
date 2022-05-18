@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `image.registry`                | Discourse image registry                                                                                                 | `docker.io`           |
 | `image.repository`              | Discourse image repository                                                                                               | `bitnami/discourse`   |
-| `image.tag`                     | Discourse image tag                                                                                                      | `2.7.13-debian-10-r0` |
+| `image.tag`                     | Discourse image tag                                                                                                      | `2.8.3-debian-10-r27` |
 | `image.pullPolicy`              | Discourse image pull policy                                                                                              | `IfNotPresent`        |
 | `image.pullSecrets`             | Discourse image pull secrets                                                                                             | `[]`                  |
 | `image.debug`                   | Enable image debug mode                                                                                                  | `false`               |
@@ -175,6 +175,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                                | Persistent Volume size                                                                       | `10Gi`          |
 | `persistence.existingClaim`                       | The name of an existing PVC to use for persistence                                           | `""`            |
 | `persistence.selector`                            | Selector to match an existing Persistent Volume for Discourse data PVC                       | `{}`            |
+| `persistence.annotations`                         | Persistent Volume Claim annotations                                                          | `{}`            |
 
 
 ### Sidekiq container parameters
@@ -221,7 +222,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Discourse service type                                                                                                           | `ClusterIP`              |
-| `service.ports.http`               | Discourse service HTTP port                                                                                                      | `8080`                   |
+| `service.ports.http`               | Discourse service HTTP port                                                                                                      | `80`                     |
 | `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
 | `service.clusterIP`                | Discourse service Cluster IP                                                                                                     | `""`                     |
@@ -243,6 +244,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Volume Permissions parameters

@@ -134,14 +134,12 @@ spec:
           {{- end }}
           {{- if .Values.repoServer.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.command "context" $) | nindent 12 }}
-          {{- else }}
-          command:
-            - argocd-repo-server
           {{- end }}
           {{- if .Values.repoServer.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.args "context" $) | nindent 12 }}
           {{- else }}
           args:
+            - argocd-repo-server
             - --logformat
             - {{ .Values.repoServer.logFormat }}
             - --loglevel
