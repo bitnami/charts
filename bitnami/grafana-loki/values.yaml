@@ -519,7 +519,7 @@ compactor:
     ##
     nodePorts:
       http: ""
-    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param compactor.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -828,7 +828,7 @@ gateway:
     ##
     nodePorts:
       http: ""
-    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param gateway.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -1193,7 +1193,7 @@ indexGateway:
     nodePorts:
       http: ""
       grpc: ""
-    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param indexGateway.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -1457,7 +1457,7 @@ distributor:
     nodePorts:
       http: ""
       grpc: ""
-    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param distributor.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -1765,7 +1765,7 @@ ingester:
     nodePorts:
       http: ""
       grpc: ""
-    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param ingester.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -2073,7 +2073,7 @@ querier:
     nodePorts:
       http: ""
       grpc: ""
-    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param querier.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -2337,7 +2337,7 @@ queryFrontend:
     nodePorts:
       http: ""
       grpc: ""
-    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param queryFrontend.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -2648,7 +2648,7 @@ ruler:
     nodePorts:
       http: ""
       grpc: ""
-    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param ruler.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -2915,7 +2915,7 @@ tableManager:
     nodePorts:
       http: ""
       grpc: ""
-    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param tableManager.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -3001,9 +3001,6 @@ promtail:
   ## @param promtail.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param promtail.replicaCount Number of Promtail replicas to deploy
-  ##
-  replicaCount: 1
 
   ## @param promtail.containerPorts.http Promtail HTTP port
   ##
@@ -3299,7 +3296,7 @@ promtail:
     ##
     nodePorts:
       http: ""
-    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param promtail.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -3500,19 +3497,6 @@ memcachedchunks:
   ## @param memcachedchunks.architecture Memcached architecture
   ##
   architecture: high-availability
-  ## Authentication parameters
-  ## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
-  ##
-  auth:
-    ## @param memcachedchunks.auth.enabled Enable Memcached authentication
-    ##
-    enabled: false
-    ## @param memcachedchunks.auth.username Memcached admin user
-    ##
-    username: ""
-    ## @param memcachedchunks.auth.password Memcached admin password
-    ##
-    password: ""
   ## @param memcachedchunks.service.ports.memcached Memcached service port
   ##
   service:
@@ -3542,19 +3526,6 @@ memcachedfrontend:
   ## @param memcachedfrontend.nameOverride override the subchart name
   ##
   nameOverride: ""
-  ## Authentication parameters
-  ## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
-  ##
-  auth:
-    ## @param memcachedfrontend.auth.enabled Enable Memcached authentication
-    ##
-    enabled: false
-    ## @param memcachedfrontend.auth.username Memcached admin user
-    ##
-    username: ""
-    ## @param memcachedfrontend.auth.password Memcached admin password
-    ##
-    password: ""
   ## @param memcachedfrontend.service.ports.memcached Memcached service port
   ##
   service:
@@ -3578,25 +3549,12 @@ memcachedindexqueries:
   ## @param memcachedindexqueries.enabled Deploy memcached sub-chart
   ##
   enabled: true
-  ## @param memcachedfrontend.architecture Memcached architecture
+  ## @param memcachedindexqueries.architecture Memcached architecture
   ##
   architecture: high-availability
   ## @param memcachedindexqueries.nameOverride override the subchart name
   ##
   nameOverride: ""
-  ## Authentication parameters
-  ## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
-  ##
-  auth:
-    ## @param memcachedindexqueries.auth.enabled Enable Memcached authentication
-    ##
-    enabled: false
-    ## @param memcachedindexqueries.auth.username Memcached admin user
-    ##
-    username: ""
-    ## @param memcachedindexqueries.auth.password Memcached admin password
-    ##
-    password: ""
   ## @param memcachedindexqueries.service.ports.memcached Memcached service port
   ##
   service:
@@ -3626,19 +3584,6 @@ memcachedindexwrites:
   ## @param memcachedindexwrites.nameOverride override the subchart name
   ##
   nameOverride: ""
-  ## Authentication parameters
-  ## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
-  ##
-  auth:
-    ## @param memcachedindexwrites.auth.enabled Enable Memcached authentication
-    ##
-    enabled: false
-    ## @param memcachedindexwrites.auth.username Memcached admin user
-    ##
-    username: ""
-    ## @param memcachedindexwrites.auth.password Memcached admin password
-    ##
-    password: ""
   ## @param memcachedindexwrites.service.ports.memcached Memcached service port
   ##
   service:

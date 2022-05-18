@@ -176,6 +176,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.service.type`                     | Compactor service type                                           | `ClusterIP` |
 | `compactor.service.ports.http`               | Compactor HTTP service port                                      | `3100`      |
 | `compactor.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
+| `compactor.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `compactor.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
 | `compactor.service.clusterIP`                | Compactor service Cluster IP                                     | `""`        |
 | `compactor.service.loadBalancerIP`           | Compactor service Load Balancer IP                               | `""`        |
@@ -266,6 +267,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.service.type`                     | Gateway service type                                                                                                             | `ClusterIP`              |
 | `gateway.service.ports.http`               | Gateway HTTP service port                                                                                                        | `80`                     |
 | `gateway.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
+| `gateway.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `gateway.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
 | `gateway.service.clusterIP`                | Gateway service Cluster IP                                                                                                       | `""`                     |
 | `gateway.service.loadBalancerIP`           | Gateway service Load Balancer IP                                                                                                 | `""`                     |
@@ -299,6 +301,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexGateway.command`                               | Override default container command (useful when using custom images)                                   | `[]`            |
 | `indexGateway.args`                                  | Override default container args (useful when using custom images)                                      | `[]`            |
 | `indexGateway.replicaCount`                          | Number of index-gateway replicas to deploy                                                             | `1`             |
+| `indexGateway.podManagementPolicy`                   | podManagementPolicy to manage scaling operation                                                        | `""`            |
 | `indexGateway.livenessProbe.enabled`                 | Enable livenessProbe on index-gateway nodes                                                            | `true`          |
 | `indexGateway.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                | `60`            |
 | `indexGateway.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                       | `10`            |
@@ -359,6 +362,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexGateway.service.ports.grpc`               | index-gateway GRPC service port                                  | `9095`      |
 | `indexGateway.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `indexGateway.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
+| `indexGateway.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `indexGateway.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
 | `indexGateway.service.clusterIP`                | index-gateway service Cluster IP                                 | `""`        |
 | `indexGateway.service.loadBalancerIP`           | index-gateway service Load Balancer IP                           | `""`        |
@@ -438,6 +442,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.service.ports.grpc`               | Distributor GRPC service port                                    | `9095`      |
 | `distributor.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `distributor.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
+| `distributor.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `distributor.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
 | `distributor.service.clusterIP`                | Distributor service Cluster IP                                   | `""`        |
 | `distributor.service.loadBalancerIP`           | Distributor service Load Balancer IP                             | `""`        |
@@ -531,6 +536,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.service.ports.grpc`               | Ingester GRPC service port                                       | `9095`      |
 | `ingester.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `ingester.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
+| `ingester.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `ingester.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
 | `ingester.service.clusterIP`                | Ingester service Cluster IP                                      | `""`        |
 | `ingester.service.loadBalancerIP`           | Ingester service Load Balancer IP                                | `""`        |
@@ -550,6 +556,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Querier nodes                               | `""`            |
 | `querier.command`                               | Override default container command (useful when using custom images)                              | `[]`            |
 | `querier.args`                                  | Override default container args (useful when using custom images)                                 | `[]`            |
+| `querier.podManagementPolicy`                   | podManagementPolicy to manage scaling operation                                                   | `""`            |
 | `querier.livenessProbe.enabled`                 | Enable livenessProbe on Querier nodes                                                             | `true`          |
 | `querier.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                           | `10`            |
 | `querier.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                  | `10`            |
@@ -623,6 +630,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.service.ports.grpc`               | Querier GRPC service port                                        | `9095`      |
 | `querier.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `querier.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
+| `querier.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `querier.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
 | `querier.service.clusterIP`                | Querier service Cluster IP                                       | `""`        |
 | `querier.service.loadBalancerIP`           | Querier service Load Balancer IP                                 | `""`        |
@@ -702,6 +710,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.service.ports.grpc`               | queryFrontend GRPC service port                                  | `9095`      |
 | `queryFrontend.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `queryFrontend.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
+| `queryFrontend.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `queryFrontend.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
 | `queryFrontend.service.clusterIP`                | queryFrontend service Cluster IP                                 | `""`        |
 | `queryFrontend.service.loadBalancerIP`           | queryFrontend service Load Balancer IP                           | `""`        |
@@ -721,6 +730,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for ruler nodes                               | `""`            |
 | `ruler.command`                               | Override default container command (useful when using custom images)                            | `[]`            |
 | `ruler.args`                                  | Override default container args (useful when using custom images)                               | `[]`            |
+| `ruler.podManagementPolicy`                   | podManagementPolicy to manage scaling operation                                                 | `""`            |
 | `ruler.replicaCount`                          | Number of Ruler replicas to deploy                                                              | `1`             |
 | `ruler.livenessProbe.enabled`                 | Enable livenessProbe on Ruler nodes                                                             | `true`          |
 | `ruler.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                         | `10`            |
@@ -795,6 +805,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.service.ports.grpc`               | Ruler GRPC service port                                          | `9095`      |
 | `ruler.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `ruler.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
+| `ruler.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `ruler.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
 | `ruler.service.clusterIP`                | Ruler service Cluster IP                                         | `""`        |
 | `ruler.service.loadBalancerIP`           | Ruler service Load Balancer IP                                   | `""`        |
@@ -875,6 +886,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tableManager.service.ports.grpc`               | table-manager GRPC service port                                  | `9095`      |
 | `tableManager.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `tableManager.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
+| `tableManager.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `tableManager.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
 | `tableManager.service.clusterIP`                | table-manager service Cluster IP                                 | `""`        |
 | `tableManager.service.loadBalancerIP`           | table-manager service Load Balancer IP                           | `""`        |
@@ -898,7 +910,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for promtail nodes                               | `""`                 |
 | `promtail.command`                               | Override default container command (useful when using custom images)                               | `[]`                 |
 | `promtail.args`                                  | Override default container args (useful when using custom images)                                  | `[]`                 |
-| `promtail.replicaCount`                          | Number of Promtail replicas to deploy                                                              | `1`                  |
 | `promtail.containerPorts.http`                   | Promtail HTTP port                                                                                 | `8080`               |
 | `promtail.livenessProbe.enabled`                 | Enable livenessProbe on Promtail nodes                                                             | `true`               |
 | `promtail.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                            | `10`                 |
@@ -961,6 +972,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.service.type`                                | Promtail service type                                                           | `ClusterIP` |
 | `promtail.service.ports.http`                          | Promtail HTTP service port                                                      | `3100`      |
 | `promtail.service.nodePorts.http`                      | Node port for HTTP                                                              | `""`        |
+| `promtail.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                     | `{}`        |
 | `promtail.service.sessionAffinity`                     | Control where client requests go, to the same pod or round-robin                | `None`      |
 | `promtail.service.clusterIP`                           | Promtail service Cluster IP                                                     | `""`        |
 | `promtail.service.loadBalancerIP`                      | Promtail service Load Balancer IP                                               | `""`        |
@@ -1027,14 +1039,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Chunks)
 
-| Name                                      | Description                     | Value   |
-| ----------------------------------------- | ------------------------------- | ------- |
-| `memcachedchunks.enabled`                 | Deploy memcached sub-chart      | `true`  |
-| `memcachedchunks.nameOverride`            | override the subchart name      | `""`    |
-| `memcachedchunks.auth.enabled`            | Enable Memcached authentication | `false` |
-| `memcachedchunks.auth.username`           | Memcached admin user            | `""`    |
-| `memcachedchunks.auth.password`           | Memcached admin password        | `""`    |
-| `memcachedchunks.service.ports.memcached` | Memcached service port          | `11211` |
+| Name                                      | Description                | Value               |
+| ----------------------------------------- | -------------------------- | ------------------- |
+| `memcachedchunks.enabled`                 | Deploy memcached sub-chart | `true`              |
+| `memcachedchunks.nameOverride`            | override the subchart name | `""`                |
+| `memcachedchunks.architecture`            | Memcached architecture     | `high-availability` |
+| `memcachedchunks.service.ports.memcached` | Memcached service port     | `11211`             |
 
 
 ### External Memcached (Frontend) Parameters
@@ -1047,14 +1057,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Frontend)
 
-| Name                                        | Description                     | Value   |
-| ------------------------------------------- | ------------------------------- | ------- |
-| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart      | `true`  |
-| `memcachedfrontend.nameOverride`            | override the subchart name      | `""`    |
-| `memcachedfrontend.auth.enabled`            | Enable Memcached authentication | `false` |
-| `memcachedfrontend.auth.username`           | Memcached admin user            | `""`    |
-| `memcachedfrontend.auth.password`           | Memcached admin password        | `""`    |
-| `memcachedfrontend.service.ports.memcached` | Memcached service port          | `11211` |
+| Name                                        | Description                | Value               |
+| ------------------------------------------- | -------------------------- | ------------------- |
+| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart | `true`              |
+| `memcachedfrontend.architecture`            | Memcached architecture     | `high-availability` |
+| `memcachedfrontend.nameOverride`            | override the subchart name | `""`                |
+| `memcachedfrontend.service.ports.memcached` | Memcached service port     | `11211`             |
 
 
 ### External Memcached (Index-Queries) Parameters
@@ -1067,14 +1075,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Index-Queries)
 
-| Name                                            | Description                     | Value   |
-| ----------------------------------------------- | ------------------------------- | ------- |
-| `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart      | `true`  |
-| `memcachedindexqueries.nameOverride`            | override the subchart name      | `""`    |
-| `memcachedindexqueries.auth.enabled`            | Enable Memcached authentication | `false` |
-| `memcachedindexqueries.auth.username`           | Memcached admin user            | `""`    |
-| `memcachedindexqueries.auth.password`           | Memcached admin password        | `""`    |
-| `memcachedindexqueries.service.ports.memcached` | Memcached service port          | `11211` |
+| Name                                            | Description                | Value               |
+| ----------------------------------------------- | -------------------------- | ------------------- |
+| `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart | `true`              |
+| `memcachedindexqueries.architecture`            | Memcached architecture     | `high-availability` |
+| `memcachedindexqueries.nameOverride`            | override the subchart name | `""`                |
+| `memcachedindexqueries.service.ports.memcached` | Memcached service port     | `11211`             |
 
 
 ### External Memcached (IndexWrites) Parameters
@@ -1087,14 +1093,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Index-Writes)
 
-| Name                                           | Description                     | Value   |
-| ---------------------------------------------- | ------------------------------- | ------- |
-| `memcachedindexwrites.enabled`                 | Deploy memcached sub-chart      | `false` |
-| `memcachedindexwrites.nameOverride`            | override the subchart name      | `""`    |
-| `memcachedindexwrites.auth.enabled`            | Enable Memcached authentication | `false` |
-| `memcachedindexwrites.auth.username`           | Memcached admin user            | `""`    |
-| `memcachedindexwrites.auth.password`           | Memcached admin password        | `""`    |
-| `memcachedindexwrites.service.ports.memcached` | Memcached service port          | `11211` |
+| Name                                           | Description                | Value               |
+| ---------------------------------------------- | -------------------------- | ------------------- |
+| `memcachedindexwrites.enabled`                 | Deploy memcached sub-chart | `false`             |
+| `memcachedindexwrites.architecture`            | Memcached architecture     | `high-availability` |
+| `memcachedindexwrites.nameOverride`            | override the subchart name | `""`                |
+| `memcachedindexwrites.service.ports.memcached` | Memcached service port     | `11211`             |
 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table

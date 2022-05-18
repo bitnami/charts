@@ -49,6 +49,15 @@ spec:
       {{- else if eq .Values.tableManager.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    - name: grpc
+      port: {{ .Values.tableManager.service.ports.grpc }}
+      protocol: TCP
+      targetPort: grpc
+      {{- if (and (or (eq .Values.tableManager.service.type "NodePort") (eq .Values.tableManager.service.type "LoadBalancer")) (not (empty .Values.tableManager.service.nodePorts.grpc))) }}
+      nodePort: {{ .Values.tableManager.service.nodePorts.grpc }}
+      {{- else if eq .Values.tableManager.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     {{- if .Values.tableManager.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
