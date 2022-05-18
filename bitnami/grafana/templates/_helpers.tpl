@@ -161,7 +161,7 @@ grafana: config.useGrafanaIniFile config.grafanaIniSecret and config.grafanaIniC
 
 {{/* Validate values of Grafana - A custom ldap.toml file must be provided when enabling LDAP */}}
 {{- define "grafana.validateValues.ldap.configuration" -}}
-{{- if and .Values.ldap.enabled (empty .Values.ldap.configuration) (empty .Values.ldap.configMapName) (empty .Values.ldap.secretName) -}}
+{{- if and .Values.ldap.enabled (empty .Values.ldap.uri) (empty .Values.ldap.configuration) (empty .Values.ldap.configMapName) (empty .Values.ldap.secretName) -}}
 grafana: ldap.enabled ldap.configuration ldap.configMapName and ldap.secretName
         You must provide the content of your custom ldap.toml file when enabling LDAP (--set ldap.configuration="xxx")
         As an alternative, you can set the name of an existing ConfigMap (--set ldap.configMapName="yyy") or
@@ -175,4 +175,46 @@ grafana: ldap.enabled ldap.configuration ldap.configMapName and ldap.secretName
 grafana: ldap.enabled ldap.configMapName and ldap.secretName
         You cannot load a custom ldap.toml file both from a ConfigMap and a Secret simultaneously
 {{- end -}}
+{{- end -}}
+
+{{- define "grafana.ldap.config" -}}
+{{- $hostPort := get (urlParse .Values.ldap.uri) "host" -}}
+[[servers]]
+# Ldap server host (specify multiple hosts space separated)
+host = {{ index (splitList ":" $hostPort) 0 | quote }}
+# Default port is 389 or 636 if use_ssl = true
+port = {{ index (splitList ":" $hostPort) 1 | default 389 }}
+# Set to true if LDAP server should use an encrypted TLS connection (either with STARTTLS or LDAPS)
+use_ssl = false
+# If set to true, use LDAP with STARTTLS instead of LDAPS
+start_tls = false
+# set to true if you want to skip SSL cert validation
+ssl_skip_verify = false
+# set to the path to your root CA certificate or leave unset to use system defaults
+# root_ca_cert = "/path/to/certificate.crt"
+# Authentication against LDAP servers requiring client certificates
+# client_cert = "/path/to/client.crt"
+# client_key = "/path/to/client.key"
+
+# Search user bind dn
+bind_dn = {{ .Values.ldap.binddn | quote }}
+# Search user bind password
+# If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
+bind_password = {{ .Values.ldap.bindpw | quote }}
+
+# User search filter, for example "(cn=%s)" or "(sAMAccountName=%s)" or "(uid=%s)"
+# Allow login from email or username, example "(|(sAMAccountName=%s)(userPrincipalName=%s))"
+search_filter = "(cn=%s)"
+
+# An array of base dns to search through
+search_base_dns = [{{ .Values.ldap.base | quote }}]
+
+# group_search_filter = "(&(objectClass=posixGroup)(memberUid=%s))"
+# group_search_filter_user_attribute = "distinguishedName"
+# group_search_base_dns = ["ou=groups,dc=grafana,dc=org"]
+
+# Specify names of the LDAP attributes your LDAP uses
+[servers.attributes]
+# member_of = "memberOf"
+# email =  "email"
 {{- end -}}
