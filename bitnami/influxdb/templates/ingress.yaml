@@ -1,5 +1,4 @@
 {{- if .Values.ingress.enabled -}}
-{{- $architecture := .Values.architecture }}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
@@ -33,14 +32,6 @@ spec:
           {{- if .Values.ingress.extraPaths }}
           {{- toYaml .Values.ingress.extraPaths | nindent 10 }}
           {{- end }}
-          {{- if eq $architecture "high-availability" }}
-          - path: /write
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
-            pathType: {{ .Values.ingress.pathType }}
-            {{- end }}
-            {{- $relayServiceName := printf "%s-%s" (include "common.names.fullname" .) "relay" }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" $relayServiceName  "servicePort" "http" "context" $)  | nindent 14 }}
-          {{- end }}
           - path: {{ default "/" .Values.ingress.path }}
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.pathType }}
@@ -54,19 +45,14 @@ spec:
           {{- if $.Values.ingress.extraPaths }}
           {{- toYaml $.Values.ingress.extraPaths | nindent 10 }}
           {{- end }}
-          {{- if eq $architecture "high-availability" }}
-          - path: /write
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
-            pathType: {{ $.Values.ingress.pathType }}
-            {{- end }}
-            {{- $relayServiceName := printf "%s-%s" (include "common.names.fullname" $) "relay" }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" $relayServiceName  "servicePort" "http" "context" $)  | nindent 14 }}
-          {{- end }}
           - path: {{ default "/" .path }}
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ingress.extraRules "context" $) | nindent 4 }}
     {{- end }}
   {{- if or (and .Values.ingress.tls (or .Values.ingress.certManager .Values.ingress.selfSigned)) .Values.ingress.extraTls }}
   tls:

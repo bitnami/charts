@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ template "kube-prometheus.alertmanager.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
   annotations:
     {{- if .Values.alertmanager.ingress.certManager }}
@@ -39,6 +39,9 @@ spec:
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.alertmanager.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.alertmanager.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.ingress.extraRules "context" $) | nindent 4 }}
     {{- end }}
   {{- if or .Values.alertmanager.ingress.tls .Values.alertmanager.ingress.extraTls }}
   tls:

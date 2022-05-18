@@ -97,6 +97,14 @@ spec:
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.replica.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.replica.lifecycleHooks "context" $) | nindent 12 }}
+          {{- else }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/bash
+                  - -c
+                  - /opt/bitnami/scripts/start-scripts/prestop-redis.sh
           {{- end }}
           {{- end }}
           {{- if .Values.replica.containerSecurityContext.enabled }}
@@ -263,18 +271,21 @@ spec:
             {{- if .Values.replica.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.replica.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
+        - name: sentinel
+          image: {{ template "redis.sentinel.image" . }}
+          imagePullPolicy: {{ .Values.sentinel.image.pullPolicy | quote }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.sentinel.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.lifecycleHooks "context" $) | nindent 12 }}
+          {{- else }}
           lifecycle:
             preStop:
               exec:
                 command:
                   - /bin/bash
                   - -c
-                  - /opt/bitnami/scripts/start-scripts/prestop-redis.sh
-        - name: sentinel
-          image: {{ template "redis.sentinel.image" . }}
-          imagePullPolicy: {{ .Values.sentinel.image.pullPolicy | quote }}
-          {{- if .Values.sentinel.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.lifecycleHooks "context" $) | nindent 12 }}
+                  - /opt/bitnami/scripts/start-scripts/prestop-sentinel.sh
+          {{- end }}
           {{- end }}
           {{- if .Values.sentinel.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.sentinel.containerSecurityContext "enabled" | toYaml | nindent 12 }}
@@ -399,15 +410,6 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
-          {{- if not .Values.diagnosticMode.enabled }}
-          lifecycle:
-            preStop:
-              exec:
-                command:
-                  - /bin/bash
-                  - -c
-                  - /opt/bitnami/scripts/start-scripts/prestop-sentinel.sh
-          {{- end }}
           {{- if .Values.sentinel.resources }}
           resources: {{- toYaml .Values.sentinel.resources | nindent 12 }}
           {{- end }}
@@ -483,6 +485,9 @@ spec:
             - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
               value: {{ template "redis.tlsCACert" . }}
             {{- end }}
+            {{- if .Values.metrics.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: metrics
               containerPort: 9121
@@ -498,6 +503,9 @@ spec:
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
               readOnly: true
+            {{- end }}
+            {{- if .Values.metrics.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- end }}
         {{- if .Values.replica.sidecars }}
@@ -608,6 +616,9 @@ spec:
           {{- end }}
         {{- if .Values.replica.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.replica.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.metrics.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if .Values.sentinel.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.extraVolumes "context" $ ) | nindent 8 }}

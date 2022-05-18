@@ -6,7 +6,7 @@ metadata:
   {{- if .Values.metrics.podMonitor.namespace }}
   namespace: {{ .Values.metrics.podMonitor.namespace }}
   {{- else }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- end }}
   labels:
     {{- include "common.labels.standard" . | nindent 4 }}
@@ -42,7 +42,7 @@ spec:
   {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ include "common.names.namespace" . | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
 {{- end }}

@@ -181,7 +181,7 @@ spec:
               {{- if .Values.zookeeper.enabled }}
               value: {{ printf "%s%s" (include "kafka.zookeeper.fullname" .) (tpl .Values.zookeeperChrootPath .) | quote }}
               {{- else }}
-              value: {{ include "common.tplvalues.render" (dict "value" (join "," .Values.externalZookeeper.servers) "context" $) }}
+              value: {{ include "common.tplvalues.render" (dict "value" (printf "%s%s" (join "," .Values.externalZookeeper.servers) (tpl .Values.zookeeperChrootPath .)) "context" $)    }}
               {{- end }}
             - name: KAFKA_INTER_BROKER_LISTENER_NAME
               value: {{ .Values.interBrokerListenerName | quote }}

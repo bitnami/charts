@@ -1,0 +1,24 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "elasticsearch.metrics.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.metrics.service.type }}
+  ports:
+    - name: http-metrics
+      port: {{ .Values.metrics.service.port }}
+      targetPort: metrics
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+{{- end }}

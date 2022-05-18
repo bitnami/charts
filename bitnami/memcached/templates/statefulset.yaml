@@ -69,7 +69,7 @@ spec:
       serviceAccountName: {{ template "memcached.serviceAccountName" . }}
       {{- if or .Values.persistence.enabled .Values.initContainers }}
       initContainers:
-        {{- if .Values.persistence.enabled }}
+        {{- if and .Values.persistence.enabled .Values.volumePermissions.enabled }}
         - name: volume-permissions
           image: {{ include "memcached.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -82,7 +82,7 @@ spec:
               touch /cache-state/memory_file
               find /cache-state -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
           securityContext:
-            runAsUser: 0
+            runAsUser: {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}

@@ -62,6 +62,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                | Description                                                                                               | Value |
@@ -69,9 +70,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`  |
 | `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name)              | `""`  |
 | `fullnameOverride`  | String to fully override common.names.fullname template                                                   | `""`  |
+| `namespaceOverride` | String to fully override common.names.namespace                                                           | `""`  |
 | `commonAnnotations` | Common annotations to add to all phpBB resources (sub-charts are not considered). Evaluated as a template | `{}`  |
 | `commonLabels`      | Common labels to add to all phpBB resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template)                               | `[]`  |
+
 
 ### phpBB parameters
 
@@ -79,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                        | phpBB image registry                                                                                                                                      | `docker.io`             |
 | `image.repository`                      | phpBB Image repository                                                                                                                                    | `bitnami/phpbb`         |
-| `image.tag`                             | phpBB Image tag (immutable tags are recommended)                                                                                                          | `3.3.5-debian-10-r92`   |
+| `image.tag`                             | phpBB Image tag (immutable tags are recommended)                                                                                                          | `3.3.7-debian-10-r58`   |
 | `image.pullPolicy`                      | phpBB image pull policy                                                                                                                                   | `IfNotPresent`          |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `image.debug`                           | Specify if debug logs should be enabled                                                                                                                   | `false`                 |
@@ -106,7 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`             | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`      | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`    | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`           | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r305`     |
+| `volumePermissions.image.tag`           | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r426`     |
 | `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`   | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`    | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -166,6 +169,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                        | Pod annotations                                                                                                                                           | `{}`                    |
 | `podLabels`                             | Pod extra labels                                                                                                                                          | `{}`                    |
 
+
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -195,6 +199,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+
 
 ### Database parameters
 
@@ -219,6 +225,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.password`                 | Password for the above username                                                      | `""`                |
 | `externalDatabase.database`                 | Name of the existing database                                                        | `bitnami_phpbb`     |
 
+
 ### Metrics parameters
 
 | Name                        | Description                                                | Value                     |
@@ -226,11 +233,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a side-car prometheus exporter                       | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                             | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                           | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended) | `0.11.0-debian-10-r23`    |
+| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended) | `0.11.0-debian-10-r145`   |
 | `metrics.image.pullPolicy`  | Image pull policy                                          | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array           | `[]`                      |
 | `metrics.resources`         | Metrics exporter resource requests and limits              | `{}`                      |
 | `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod            | `{}`                      |
+
 
 ### NetworkPolicy parameters
 
@@ -251,6 +259,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                        | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                            | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                | `{}`    |
+
 
 The above parameters map to the env variables defined in [bitnami/phpbb](https://github.com/bitnami/bitnami-docker-phpbb). For more information please refer to the [bitnami/phpbb](https://github.com/bitnami/bitnami-docker-phpbb) image documentation.
 

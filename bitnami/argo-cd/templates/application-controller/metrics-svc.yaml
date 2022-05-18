@@ -5,7 +5,8 @@ metadata:
   name: {{ include "argocd.application-controller" . }}-metrics
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: controller
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: controller
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -39,7 +40,7 @@ spec:
   sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.metrics.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
-    - name: metrics
+    - name: http-metrics
       port: {{ .Values.controller.metrics.service.port }}
       protocol: TCP
       {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty .Values.controller.metrics.service.nodePort))) }}

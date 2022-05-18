@@ -62,6 +62,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                | Description                                        | Value |
@@ -73,16 +74,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonLabels`      | Labels to add to all deployed objects              | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`  |
 
+
 ### Osclass Image parameters
 
-| Name                | Description                                        | Value                |
-| ------------------- | -------------------------------------------------- | -------------------- |
-| `image.registry`    | Osclass image registry                             | `docker.io`          |
-| `image.repository`  | Osclass image repository                           | `bitnami/osclass`    |
-| `image.tag`         | Osclass image tag (immutable tags are recommended) | `8.0.1-debian-10-r6` |
-| `image.pullPolicy`  | Osclass image pull policy                          | `IfNotPresent`       |
-| `image.pullSecrets` | Osclass image pull secrets                         | `[]`                 |
-| `image.debug`       | Enable Bitnami debug mode in Osclass image         | `false`              |
+| Name                | Description                                        | Value                  |
+| ------------------- | -------------------------------------------------- | ---------------------- |
+| `image.registry`    | Osclass image registry                             | `docker.io`            |
+| `image.repository`  | Osclass image repository                           | `bitnami/osclass`      |
+| `image.tag`         | Osclass image tag (immutable tags are recommended) | `8.0.1-debian-10-r126` |
+| `image.pullPolicy`  | Osclass image pull policy                          | `IfNotPresent`         |
+| `image.pullSecrets` | Osclass image pull secrets                         | `[]`                   |
+| `image.debug`       | Enable Bitnami debug mode in Osclass image         | `false`                |
+
 
 ### Osclass Configuration parameters
 
@@ -100,6 +103,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `smtpUser`           | SMTP username                                          | `""`               |
 | `smtpPassword`       | SMTP user password                                     | `""`               |
 | `smtpProtocol`       | SMTP protocol                                          | `""`               |
+
 
 ### Osclass deployment parameters
 
@@ -149,7 +153,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                   | `""`                                     |
 | `certificates.image.registry`                        | Apache Exporter image registry                                                            | `docker.io`                              |
 | `certificates.image.repository`                      | Apache Exporter image repository                                                          | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                | `10-debian-10-r305`                      |
+| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                | `10-debian-10-r426`                      |
 | `certificates.image.pullPolicy`                      | Apache Exporter image pull policy                                                         | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Apache Exporter image pull secrets                                                        | `[]`                                     |
 | `lifecycleHooks`                                     | lifecycleHooks for the container to automate configuration before or after startup.       | `{}`                                     |
@@ -183,6 +187,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `schedulerName`                                      | Name of the k8s scheduler (other than default)                                            | `""`                                     |
 | `topologySpreadConstraints`                          | Topology Spread Constraints for pod assignment                                            | `[]`                                     |
 
+
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -212,6 +217,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+
 
 ### Database Parameters
 
@@ -243,11 +250,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`         | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`       | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r305`     |
+| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r426`     |
 | `volumePermissions.image.pullPolicy`       | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`      | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`       | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`     | The requested resources for the init container                                                  | `{}`                    |
+
 
 ### Other Parameters
 
@@ -262,6 +270,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `50`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage                           | `50`    |
 
+
 ### Metrics Parameters
 
 | Name                                       | Description                                                                       | Value                     |
@@ -269,7 +278,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a sidecar prometheus exporter to expose metrics                             | `false`                   |
 | `metrics.image.registry`                   | Apache Exporter image registry                                                    | `docker.io`               |
 | `metrics.image.repository`                 | Apache Exporter image repository                                                  | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                        | `0.11.0-debian-10-r23`    |
+| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                        | `0.11.0-debian-10-r145`   |
 | `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                 | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                | `[]`                      |
 | `metrics.resources.limits`                 | The resources limits for the Prometheus exporter container                        | `{}`                      |
@@ -288,6 +297,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                    | `{}`                      |
 | `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                               | `{}`                      |
 | `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus. | `""`                      |
+
 
 ### NetworkPolicy parameters
 
@@ -308,6 +318,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                          | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                              | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                  | `{}`    |
+
 
 The above parameters map to the env variables defined in [bitnami/osclass](https://github.com/bitnami/bitnami-docker-osclass). For more information please refer to the [bitnami/osclass](https://github.com/bitnami/bitnami-docker-osclass) image documentation.
 

@@ -85,13 +85,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.replicaCount`                                | Number of Controller replicas                                                                        | `1`                    |
 | `controller.image.registry`                              | Controller image registry                                                                            | `docker.io`            |
 | `controller.image.repository`                            | Controller image repository                                                                          | `bitnami/cert-manager` |
-| `controller.image.tag`                                   | Controller image tag (immutable tags are recommended)                                                | `1.6.1-debian-10-r72`  |
+| `controller.image.tag`                                   | Controller image tag (immutable tags are recommended)                                                | `1.8.0-debian-10-r21`  |
 | `controller.image.pullPolicy`                            | Controller image pull policy                                                                         | `IfNotPresent`         |
 | `controller.image.pullSecrets`                           | Controller image pull secrets                                                                        | `[]`                   |
 | `controller.image.debug`                                 | Controller image debug mode                                                                          | `false`                |
 | `controller.acmesolver.image.registry`                   | Controller image registry                                                                            | `docker.io`            |
 | `controller.acmesolver.image.repository`                 | Controller image repository                                                                          | `bitnami/acmesolver`   |
-| `controller.acmesolver.image.tag`                        | Controller image tag (immutable tags are recommended)                                                | `1.6.1-debian-10-r73`  |
+| `controller.acmesolver.image.tag`                        | Controller image tag (immutable tags are recommended)                                                | `1.8.0-debian-10-r21`  |
 | `controller.acmesolver.image.pullPolicy`                 | Controller image pull policy                                                                         | `IfNotPresent`         |
 | `controller.acmesolver.image.pullSecrets`                | Controller image pull secrets                                                                        | `[]`                   |
 | `controller.acmesolver.image.debug`                      | Controller image debug mode                                                                          | `false`                |
@@ -144,7 +144,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.replicaCount`                                | Number of Webhook replicas                                                                        | `1`                            |
 | `webhook.image.registry`                              | Webhook image registry                                                                            | `docker.io`                    |
 | `webhook.image.repository`                            | Webhook image repository                                                                          | `bitnami/cert-manager-webhook` |
-| `webhook.image.tag`                                   | Webhook image tag (immutable tags are recommended)                                                | `1.6.1-debian-10-r73`          |
+| `webhook.image.tag`                                   | Webhook image tag (immutable tags are recommended)                                                | `1.8.0-debian-10-r21`          |
 | `webhook.image.pullPolicy`                            | Webhook image pull policy                                                                         | `IfNotPresent`                 |
 | `webhook.image.pullSecrets`                           | Webhook image pull secrets                                                                        | `[]`                           |
 | `webhook.image.debug`                                 | Webhook image debug mode                                                                          | `false`                        |
@@ -213,7 +213,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.replicaCount`                                | Number of CAInjector replicas                                                                        | `1`                   |
 | `cainjector.image.registry`                              | CAInjector image registry                                                                            | `docker.io`           |
 | `cainjector.image.repository`                            | CAInjector image repository                                                                          | `bitnami/cainjector`  |
-| `cainjector.image.tag`                                   | CAInjector image tag (immutable tags are recommended)                                                | `1.6.1-debian-10-r72` |
+| `cainjector.image.tag`                                   | CAInjector image tag (immutable tags are recommended)                                                | `1.8.0-debian-10-r22` |
 | `cainjector.image.pullPolicy`                            | CAInjector image pull policy                                                                         | `IfNotPresent`        |
 | `cainjector.image.pullSecrets`                           | CAInjector image pull secrets                                                                        | `[]`                  |
 | `cainjector.image.debug`                                 | CAInjector image debug mode                                                                          | `false`               |
@@ -358,6 +358,12 @@ As an alternative, you can make use of the preset configurations for pod affinit
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 0.5.0
+
+Exisiting CRDs have been syncronised with the official [Cert Manager repository](https://github.com/cert-manager/cert-manager/tree/master/deploy/crds). Using the templates present in the 1.8.0 tag.
 
 ## License
 

@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ printf "%s-worker" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: worker
     {{- if .Values.commonLabels }}
@@ -51,6 +51,9 @@ spec:
       {{- end }}
       {{- if .Values.worker.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.worker.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.worker.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.worker.terminationGracePeriodSeconds }} 
       {{- end }}
       {{- if .Values.worker.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.worker.tolerations "context" $) | nindent 8 }}

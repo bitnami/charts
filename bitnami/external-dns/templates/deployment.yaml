@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "external-dns.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{ include "external-dns.labels" . | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -181,6 +181,9 @@ spec:
             {{- if .Values.aws.batchChangeSize }}
             - --aws-batch-change-size={{ .Values.aws.batchChangeSize }}
             {{- end }}
+            {{- end }}
+            {{- if .Values.aws.zonesCacheDuration }}
+             - --aws-zones-cache-duration={{ .Values.aws.zonesCacheDuration }}
             {{- end }}
             {{- range .Values.aws.zoneTags }}
             - --aws-zone-tags={{ . }}
@@ -534,6 +537,16 @@ spec:
               {{- if .Values.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
               {{- end }}
+            {{- if eq .Values.provider "ns1" }}
+            # NS1 environment variables
+            {{- if or (.Values.ns1.apiKey) (.Values.ns1.secretName) }}
+            - name: NS1_APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: ns1-api-key
+            {{- end }}
+            {{- end }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:

@@ -3,6 +3,7 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: joomla
     {{- if .Values.commonLabels }}
@@ -45,6 +46,9 @@ spec:
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ingress.extraRules "context" $) | nindent 4 }}
     {{- end }}
   {{- if or .Values.ingress.tls .Values.ingress.extraTls }}
   tls:

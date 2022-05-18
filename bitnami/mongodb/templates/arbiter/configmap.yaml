@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "mongodb.fullname" . }}-arbiter
-  namespace: {{ include "mongodb.namespace" . }}
+  name: {{ print "%s-arbiter" (include "mongodb.fullname" .) }}
+  namespace: {{ include "mongodb.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: arbiter
     {{- if .Values.commonLabels }}

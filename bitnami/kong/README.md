@@ -83,7 +83,7 @@ To uninstall/delete the `my-release` deployment:
 | ------------------- | ------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | kong image registry                                                             | `docker.io`           |
 | `image.repository`  | kong image repository                                                           | `bitnami/kong`        |
-| `image.tag`         | kong image tag (immutable tags are recommended)                                 | `2.7.1-debian-10-r27` |
+| `image.tag`         | kong image tag (immutable tags are recommended)                                 | `2.8.1-debian-10-r28` |
 | `image.pullPolicy`  | kong image pull policy                                                          | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                | `[]`                  |
 | `image.debug`       | Enable image debug mode                                                         | `false`               |
@@ -92,43 +92,42 @@ To uninstall/delete the `my-release` deployment:
 
 ### Kong deployment / daemonset parameters
 
-| Name                                    | Description                                                                                                                        | Value                 |
-| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `useDaemonset`                          | Use a daemonset instead of a deployment. `replicaCount` will not take effect.                                                      | `false`               |
-| `replicaCount`                          | Number of Kong replicas                                                                                                            | `2`                   |
-| `containerSecurityContext.enabled`      | Enabled Kong containers' Security Context                                                                                          | `true`                |
-| `containerSecurityContext.runAsUser`    | Set Kong container's Security Context runAsUser                                                                                    | `1001`                |
-| `containerSecurityContext.runAsNonRoot` | Set Kong container's Security Context runAsNonRoot                                                                                 | `true`                |
-| `podSecurityContext.enabled`            | Enabled Kong pods' Security Context                                                                                                | `false`               |
-| `podSecurityContext.fsGroup`            | Set Kong pod's Security Context fsGroup                                                                                            | `1001`                |
-| `updateStrategy.type`                   | Kong update strategy                                                                                                               | `RollingUpdate`       |
-| `updateStrategy.rollingUpdate`          | Kong deployment rolling update configuration parameters                                                                            | `{}`                  |
-| `hostAliases`                           | Add deployment host aliases                                                                                                        | `[]`                  |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template           | `{}`                  |
-| `priorityClassName`                     | Priority Class Name                                                                                                                | `""`                  |
-| `schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                          | `""`                  |
-| `terminationGracePeriodSeconds`         | Seconds Kong pod needs to terminate gracefully                                                                                     | `""`                  |
-| `podAnnotations`                        | Additional pod annotations                                                                                                         | `{}`                  |
-| `podLabels`                             | Additional pod labels                                                                                                              | `{}`                  |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                | `""`                  |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                           | `soft`                |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                          | `""`                  |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                              | `""`                  |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                                          | `[]`                  |
-| `affinity`                              | Affinity for pod assignment                                                                                                        | `{}`                  |
-| `nodeSelector`                          | Node labels for pod assignment                                                                                                     | `{}`                  |
-| `tolerations`                           | Tolerations for pod assignment                                                                                                     | `[]`                  |
-| `extraVolumes`                          | Array of extra volumes to be added to the Kong deployment deployment (evaluated as template). Requires setting `extraVolumeMounts` | `[]`                  |
-| `initContainers`                        | Add additional init containers to the Kong pods                                                                                    | `[]`                  |
-| `sidecars`                              | Add additional sidecar containers to the Kong pods                                                                                 | `[]`                  |
-| `autoscaling.enabled`                   | Deploy a HorizontalPodAutoscaler object for the Kong deployment                                                                    | `false`               |
-| `autoscaling.apiVersion`                | API Version of the HPA object (for compatibility with Openshift)                                                                   | `autoscaling/v2beta1` |
-| `autoscaling.minReplicas`               | Minimum number of replicas to scale back                                                                                           | `2`                   |
-| `autoscaling.maxReplicas`               | Maximum number of replicas to scale out                                                                                            | `5`                   |
-| `autoscaling.metrics`                   | Metrics to use when deciding to scale the deployment (evaluated as a template)                                                     | `[]`                  |
-| `pdb.create`                            | Deploy a PodDisruptionBudget object for Kong deployment                                                                            | `false`               |
-| `pdb.minAvailable`                      | Minimum available Kong replicas (expressed in percentage)                                                                          | `""`                  |
-| `pdb.maxUnavailable`                    | Maximum unavailable Kong replicas (expressed in percentage)                                                                        | `50%`                 |
+| Name                                    | Description                                                                                                                        | Value           |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `useDaemonset`                          | Use a daemonset instead of a deployment. `replicaCount` will not take effect.                                                      | `false`         |
+| `replicaCount`                          | Number of Kong replicas                                                                                                            | `2`             |
+| `containerSecurityContext.enabled`      | Enabled Kong containers' Security Context                                                                                          | `true`          |
+| `containerSecurityContext.runAsUser`    | Set Kong container's Security Context runAsUser                                                                                    | `1001`          |
+| `containerSecurityContext.runAsNonRoot` | Set Kong container's Security Context runAsNonRoot                                                                                 | `true`          |
+| `podSecurityContext.enabled`            | Enabled Kong pods' Security Context                                                                                                | `false`         |
+| `podSecurityContext.fsGroup`            | Set Kong pod's Security Context fsGroup                                                                                            | `1001`          |
+| `updateStrategy.type`                   | Kong update strategy                                                                                                               | `RollingUpdate` |
+| `updateStrategy.rollingUpdate`          | Kong deployment rolling update configuration parameters                                                                            | `{}`            |
+| `hostAliases`                           | Add deployment host aliases                                                                                                        | `[]`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template           | `{}`            |
+| `priorityClassName`                     | Priority Class Name                                                                                                                | `""`            |
+| `schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                          | `""`            |
+| `terminationGracePeriodSeconds`         | Seconds Kong pod needs to terminate gracefully                                                                                     | `""`            |
+| `podAnnotations`                        | Additional pod annotations                                                                                                         | `{}`            |
+| `podLabels`                             | Additional pod labels                                                                                                              | `{}`            |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                | `""`            |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                           | `soft`          |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                          | `""`            |
+| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                              | `""`            |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                                          | `[]`            |
+| `affinity`                              | Affinity for pod assignment                                                                                                        | `{}`            |
+| `nodeSelector`                          | Node labels for pod assignment                                                                                                     | `{}`            |
+| `tolerations`                           | Tolerations for pod assignment                                                                                                     | `[]`            |
+| `extraVolumes`                          | Array of extra volumes to be added to the Kong deployment deployment (evaluated as template). Requires setting `extraVolumeMounts` | `[]`            |
+| `initContainers`                        | Add additional init containers to the Kong pods                                                                                    | `[]`            |
+| `sidecars`                              | Add additional sidecar containers to the Kong pods                                                                                 | `[]`            |
+| `autoscaling.enabled`                   | Deploy a HorizontalPodAutoscaler object for the Kong deployment                                                                    | `false`         |
+| `autoscaling.minReplicas`               | Minimum number of replicas to scale back                                                                                           | `2`             |
+| `autoscaling.maxReplicas`               | Maximum number of replicas to scale out                                                                                            | `5`             |
+| `autoscaling.metrics`                   | Metrics to use when deciding to scale the deployment (evaluated as a template)                                                     | `[]`            |
+| `pdb.create`                            | Deploy a PodDisruptionBudget object for Kong deployment                                                                            | `false`         |
+| `pdb.minAvailable`                      | Minimum available Kong replicas (expressed in percentage)                                                                          | `""`            |
+| `pdb.maxUnavailable`                    | Maximum unavailable Kong replicas (expressed in percentage)                                                                        | `50%`           |
 
 
 ### Kong Container Parameters
@@ -208,6 +207,7 @@ To uninstall/delete the `my-release` deployment:
 | `ingress.extraPaths`               | Additional arbitrary path/backend objects                                                                                        | `[]`                     |
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Kong Ingress Controller Container Parameters
@@ -217,7 +217,7 @@ To uninstall/delete the `my-release` deployment:
 | `ingressController.enabled`                                     | Enable/disable the Kong Ingress Controller                                                                                                    | `true`                            |
 | `ingressController.image.registry`                              | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
 | `ingressController.image.repository`                            | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
-| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.2.1-debian-10-r9`              |
+| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.3.1-debian-10-r25`             |
 | `ingressController.image.pullPolicy`                            | Kong Ingress Controller image pull policy                                                                                                     | `IfNotPresent`                    |
 | `ingressController.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                              | `[]`                              |
 | `ingressController.proxyReadyTimeout`                           | Maximum time (in seconds) to wait for the Kong container to be ready                                                                          | `300`                             |
@@ -293,7 +293,7 @@ To uninstall/delete the `my-release` deployment:
 | `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                 | `standalone`            |
 | `postgresql.image.registry`                     | PostgreSQL image registry                                               | `docker.io`             |
 | `postgresql.image.repository`                   | PostgreSQL image repository                                             | `bitnami/postgresql`    |
-| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                   | `11.15.0-debian-10-r20` |
+| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                   | `11.15.0-debian-10-r84` |
 | `postgresql.external.host`                      | Database host                                                           | `""`                    |
 | `postgresql.external.port`                      | Database port number                                                    | `5432`                  |
 | `postgresql.external.user`                      | Non-root username for Kong                                              | `kong`                  |

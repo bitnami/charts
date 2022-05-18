@@ -1,18 +1,18 @@
 annotations:
   category: E-Commerce
 apiVersion: v2
-appVersion: 2.4.3
+appVersion: 2.4.4
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
     tags:
       - magento-database
-    version: 9.x.x
+    version: 11.x.x
   - condition: elasticsearch.enabled
     name: elasticsearch
     repository: https://charts.bitnami.com/bitnami
-    version: 17.x.x
+    version: 18.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -35,4 +35,4 @@ name: magento
 sources:
   - https://github.com/bitnami/bitnami-docker-magento
   - https://magento.com/
-version: 19.2.24
+version: 20.1.0
