@@ -166,7 +166,7 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
-Create a default fully qualified memcached name.
+Create a default fully qualified memcached (chunks) name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "grafana-loki.memcached-chunks.fullname" -}}
@@ -175,28 +175,24 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Create a default fully qualified memcached (Chunks) name.
+Create a default fully qualified memcached (chunks) name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "grafana-loki.memcached-chunks.url" -}}
+{{- define "grafana-loki.memcached-chunks.host" -}}
 {{- $port := "" -}}
 {{- if .Values.externalMemcachedChunks.host -}}
   {{- $servicePortString := printf "%v" .Values.externalMemcachedChunks.port -}}
-  {{- if (not (eq $servicePortString "11211")) -}}
-    {{- $port = printf ":%s" $servicePortString -}}
-  {{- end -}}
+  {{- $port = printf ":%s" $servicePortString -}}
   {{- printf "%s%s" .Values.externalMemcachedChunks.host $port }}
 {{- else -}}
   {{- $servicePortString := printf "%v" .Values.memcachedchunks.service.ports.memcached -}}
-  {{- if (not (eq $servicePortString "11211")) -}}
-    {{- $port = printf ":%s" $servicePortString -}}
-  {{- end -}}
+  {{- $port = printf ":%s" $servicePortString -}}
   {{- printf "%s%s" (include "grafana-loki.memcached-chunks.fullname" .) $port }}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Create a default fully qualified memcached name.
+Create a default fully qualified memcached (index-queries) name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "grafana-loki.memcached-index-queries.fullname" -}}
@@ -205,28 +201,24 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Create a default fully qualified memcached (IndexQueries) name.
+Create a default fully qualified memcached (index-queries) name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "grafana-loki.memcached-index-queries.url" -}}
+{{- define "grafana-loki.memcached-index-queries.host" -}}
 {{- $port := "" -}}
 {{- if .Values.externalMemcachedIndexQueries.host -}}
   {{- $servicePortString := printf "%v" .Values.externalMemcachedIndexQueries.port -}}
-  {{- if (not (eq $servicePortString "11211")) -}}
     {{- $port = printf ":%s" $servicePortString -}}
-  {{- end -}}
   {{- printf "%s%s" .Values.externalMemcachedIndexQueries.host $port }}
 {{- else -}}
   {{- $servicePortString := printf "%v" .Values.memcachedindexqueries.service.ports.memcached -}}
-  {{- if (not (eq $servicePortString "11211")) -}}
     {{- $port = printf ":%s" $servicePortString -}}
-  {{- end -}}
   {{- printf "%s%s" (include "grafana-loki.memcached-index-queries.fullname" .) $port }}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Create a default fully qualified memcached name.
+Create a default fully qualified memcached (frontend) name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "grafana-loki.memcached-frontend.fullname" -}}
@@ -235,28 +227,24 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Create a default fully qualified memcached (Frontend) name.
+Create a default fully qualified memcached (frontend) name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "grafana-loki.memcached-frontend.url" -}}
+{{- define "grafana-loki.memcached-frontend.host" -}}
 {{- $port := "" -}}
 {{- if .Values.externalMemcachedFrontend.host -}}
   {{- $servicePortString := printf "%v" .Values.externalMemcachedFrontend.port -}}
-  {{- if (not (eq $servicePortString "11211")) -}}
-    {{- $port = printf ":%s" $servicePortString -}}
-  {{- end -}}
+  {{- $port = printf ":%s" $servicePortString -}}
   {{- printf "%s%s" .Values.externalMemcachedFrontend.host $port }}
 {{- else -}}
   {{- $servicePortString := printf "%v" .Values.memcachedfrontend.service.ports.memcached -}}
-  {{- if (not (eq $servicePortString "11211")) -}}
-    {{- $port = printf ":%s" $servicePortString -}}
-  {{- end -}}
+  {{- $port = printf ":%s" $servicePortString -}}
   {{- printf "%s%s" (include "grafana-loki.memcached-frontend.fullname" .) $port }}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Create a default fully qualified memcached name.
+Create a default fully qualified memcached (index-writes) name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "grafana-loki.memcached-index-writes.fullname" -}}
@@ -265,22 +253,18 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Create a default fully qualified memcached (IndexWrites) name.
+Create a default fully qualified memcached (index-writes) name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "grafana-loki.memcached-index-writes.url" -}}
+{{- define "grafana-loki.memcached-index-writes.host" -}}
 {{- $port := "" -}}
 {{- if .Values.externalMemcachedIndexWrites.host -}}
   {{- $servicePortString := printf "%v" .Values.externalMemcachedIndexWrites.port -}}
-  {{- if (not (eq $servicePortString "11211")) -}}
-    {{- $port = printf ":%s" $servicePortString -}}
-  {{- end -}}
+  {{- $port = printf ":%s" $servicePortString -}}
   {{- printf "%s%s" .Values.externalMemcachedIndexWrites.host $port }}
 {{- else -}}
   {{- $servicePortString := printf "%v" .Values.memcachedindexwrites.service.ports.memcached -}}
-  {{- if (not (eq $servicePortString "11211")) -}}
-    {{- $port = printf ":%s" $servicePortString -}}
-  {{- end -}}
+  {{- $port = printf ":%s" $servicePortString -}}
   {{- printf "%s%s" (include "grafana-loki.memcached-index-writes.fullname" .) $port }}
 {{- end -}}
 {{- end -}}

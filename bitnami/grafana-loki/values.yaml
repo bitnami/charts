@@ -152,7 +152,7 @@ loki:
           parallelism: 100
         memcached_client:
           consistent_hash: true
-          host: {{ include "grafana-loki.memcached-index-queries.url" . }}
+          addresses: dns+{{ include "grafana-loki.memcached-index-queries.host" . }}
           service: http
         {{- end }}
 
@@ -165,8 +165,7 @@ loki:
           parallelism: 100
         memcached_client:
           consistent_hash: true
-          host: {{ include "grafana-loki.memcached-chunks.url" . }}
-          service: http
+          addresses: dns+{{ include "grafana-loki.memcached-chunks.host" . }}
       {{- end }}
       {{- if .Values.memcachedindexwrites.enabled }}
       write_dedupe_cache_config:
@@ -175,8 +174,7 @@ loki:
           parallelism: 100
         memcached_client:
           consistent_hash: true
-          host: {{ include "grafana-loki.memcached-index-writes.url" . }}
-          service: http
+          addresses: dns+{{ include "grafana-loki.memcached-index-writes.host" . }}
       {{- end }}
 
     table_manager:
@@ -192,9 +190,8 @@ loki:
           {{- if .Values.memcachedfrontend.enabled }}
           memcached_client:
             consistent_hash: true
-            host: {{ include "grafana-loki.memcached-frontend.url" . }}
+            addresses: dns+{{ include "grafana-loki.memcached-frontend.host" . }}
             max_idle_conns: 16
-            service: http
             timeout: 500ms
             update_interval: 1m
           {{- else }}
@@ -3428,6 +3425,9 @@ memcachedchunks:
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
   nameOverride: ""
+  ## @param memcachedchunks.architecture Memcached architecture
+  ##
+  architecture: high-availability
   ## Authentication parameters
   ## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
   ##
@@ -3464,6 +3464,9 @@ memcachedfrontend:
   ## @param memcachedfrontend.enabled Deploy memcached sub-chart
   ##
   enabled: true
+  ## @param memcachedfrontend.architecture Memcached architecture
+  ##
+  architecture: high-availability
   ## @param memcachedfrontend.nameOverride override the subchart name
   ##
   nameOverride: ""
@@ -3503,6 +3506,9 @@ memcachedindexqueries:
   ## @param memcachedindexqueries.enabled Deploy memcached sub-chart
   ##
   enabled: true
+  ## @param memcachedfrontend.architecture Memcached architecture
+  ##
+  architecture: high-availability
   ## @param memcachedindexqueries.nameOverride override the subchart name
   ##
   nameOverride: ""
@@ -3542,6 +3548,9 @@ memcachedindexwrites:
   ## @param memcachedindexwrites.enabled Deploy memcached sub-chart
   ##
   enabled: false
+  ## @param memcachedindexwrites.architecture Memcached architecture
+  ##
+  architecture: high-availability
   ## @param memcachedindexwrites.nameOverride override the subchart name
   ##
   nameOverride: ""
