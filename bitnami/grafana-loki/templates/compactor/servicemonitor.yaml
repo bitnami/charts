@@ -3,11 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "grafana-loki.compactor.fullname" . }}
-  {{- if .Values.metrics.serviceMonitor.namespace }}
-  namespace: {{ .Values.metrics.serviceMonitor.namespace }}
-  {{- else }}
-  namespace: {{ .Release.Namespace }}
-  {{- end }}
+  namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: grafana-loki
     app.kubernetes.io/component: compactor
@@ -17,8 +13,14 @@ metadata:
     {{- if .Values.metrics.serviceMonitor.labels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.labels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+   {{- if or .Values.commonAnnotations .Values.metrics.serviceMonitor.annotations }}
+   annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.metrics.serviceMonitor.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   {{- if .Values.metrics.serviceMonitor.jobLabel }}
@@ -50,5 +52,5 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ .Release.Namespace | quote }}
 {{- end }}

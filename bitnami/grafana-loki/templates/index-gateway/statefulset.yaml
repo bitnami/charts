@@ -19,6 +19,8 @@ spec:
   {{- if .Values.indexGateway.updateStrategy }}
   updateStrategy: {{- toYaml .Values.indexGateway.updateStrategy | nindent 4 }}
   {{- end }}
+  podManagementPolicy: {{ .Values.indexGateway.podManagementPolicy }}
+
   serviceName: {{ template "grafana-loki.index-gateway.fullname" . }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}

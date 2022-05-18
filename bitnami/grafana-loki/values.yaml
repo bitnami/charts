@@ -519,6 +519,12 @@ compactor:
     ##
     nodePorts:
       http: ""
+    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param compactor.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/user-guide/services/
@@ -822,6 +828,12 @@ gateway:
     ##
     nodePorts:
       http: ""
+    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param gateway.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/user-guide/services/
@@ -976,6 +988,10 @@ indexGateway:
   ## @param indexGateway.replicaCount Number of index-gateway replicas to deploy
   ##
   replicaCount: 1
+  ## @param indexGateway.podManagementPolicy podManagementPolicy to manage scaling operation
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: ""
   ## Configure extra options for index-gateway containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param indexGateway.livenessProbe.enabled Enable livenessProbe on index-gateway nodes
@@ -1177,6 +1193,12 @@ indexGateway:
     nodePorts:
       http: ""
       grpc: ""
+    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param indexGateway.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/user-guide/services/
@@ -1435,6 +1457,12 @@ distributor:
     nodePorts:
       http: ""
       grpc: ""
+    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param distributor.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/user-guide/services/
@@ -1737,6 +1765,12 @@ ingester:
     nodePorts:
       http: ""
       grpc: ""
+    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param ingester.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/user-guide/services/
@@ -1794,6 +1828,10 @@ querier:
   ## @param querier.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param querier.podManagementPolicy podManagementPolicy to manage scaling operation
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: ""
   ## Configure extra options for Querier containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param querier.livenessProbe.enabled Enable livenessProbe on Querier nodes
@@ -2035,6 +2073,12 @@ querier:
     nodePorts:
       http: ""
       grpc: ""
+    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param querier.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/user-guide/services/
@@ -2293,6 +2337,12 @@ queryFrontend:
     nodePorts:
       http: ""
       grpc: ""
+    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param queryFrontend.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/user-guide/services/
@@ -2350,6 +2400,10 @@ ruler:
   ## @param ruler.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param ruler.podManagementPolicy podManagementPolicy to manage scaling operation
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: ""
   ## @param ruler.replicaCount Number of Ruler replicas to deploy
   ##
   replicaCount: 1
@@ -2594,6 +2648,12 @@ ruler:
     nodePorts:
       http: ""
       grpc: ""
+    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param ruler.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/user-guide/services/
@@ -2855,6 +2915,12 @@ tableManager:
     nodePorts:
       http: ""
       grpc: ""
+    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param tableManager.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/user-guide/services/
@@ -3233,6 +3299,12 @@ promtail:
     ##
     nodePorts:
       http: ""
+    ## @param controller.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param promtail.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/user-guide/services/

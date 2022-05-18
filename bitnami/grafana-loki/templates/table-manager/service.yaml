@@ -21,7 +21,12 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.tableManager.service.type }}
+  {{- if .Values.tableManager.service.sessionAffinity }}
   sessionAffinity: {{ .Values.tableManager.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.tableManager.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
   {{- if .Values.tableManager.service.clusterIP }}
   clusterIP: {{ .Values.tableManager.service.clusterIP }}
   {{- end }}

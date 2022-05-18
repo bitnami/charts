@@ -9,77 +9,77 @@ Return the proper Grafana Loki image name
 Return the proper Grafana Loki compactor fullname
 */}}
 {{- define "grafana-loki.compactor.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "compactor" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "compactor" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Return the proper Grafana Loki distributor fullname
 */}}
 {{- define "grafana-loki.distributor.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "distributor" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "distributor" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Return the proper Grafana Loki gateway fullname
 */}}
 {{- define "grafana-loki.gateway.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "gateway" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "gateway" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Return the proper Grafana Loki index-gateway fullname
 */}}
 {{- define "grafana-loki.index-gateway.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "index-gateway" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "index-gateway" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Return the proper Grafana Loki ingester fullname
 */}}
 {{- define "grafana-loki.ingester.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "ingester" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "ingester" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Return the proper Grafana Loki querier fullname
 */}}
 {{- define "grafana-loki.querier.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "querier" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "querier" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Return the proper Grafana Loki query-frontend fullname
 */}}
 {{- define "grafana-loki.query-frontend.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "query-frontend" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "query-frontend" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Return the proper Grafana Loki ruler fullname
 */}}
 {{- define "grafana-loki.ruler.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "ruler" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "ruler" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Return the proper Grafana Loki table-manager fullname
 */}}
 {{- define "grafana-loki.table-manager.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "table-manager" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "table-manager" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Return the proper Grafana Loki gossip-ring fullname
 */}}
 {{- define "grafana-loki.gossip-ring.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "gossip-ring" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "gossip-ring" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Return the proper Grafana Loki promtail fullname
 */}}
 {{- define "grafana-loki.promtail.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "promtail" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "promtail" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -107,7 +107,7 @@ Return the proper Grafana Loki image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "grafana-loki.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.loki.image .Values.gateway.image .Values.gateway.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.loki.image .Values.gateway.image .Values.promtail.image .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*

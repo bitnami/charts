@@ -20,7 +20,12 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.promtail.service.type }}
+  {{- if .Values.promtail.service.sessionAffinity }}
   sessionAffinity: {{ .Values.promtail.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.promtail.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.promtail.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
   {{- if .Values.promtail.service.clusterIP }}
   clusterIP: {{ .Values.promtail.service.clusterIP }}
   {{- end }}

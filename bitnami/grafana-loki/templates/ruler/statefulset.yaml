@@ -19,6 +19,7 @@ spec:
   {{- if .Values.ruler.updateStrategy }}
   updateStrategy: {{- toYaml .Values.ruler.updateStrategy | nindent 4 }}
   {{- end }}
+  podManagementPolicy: {{ .Values.ruler.podManagementPolicy }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/part-of: grafana-loki

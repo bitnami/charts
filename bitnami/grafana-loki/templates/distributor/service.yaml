@@ -20,7 +20,12 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.distributor.service.type }}
+  {{- if .Values.distributor.service.sessionAffinity }}
   sessionAffinity: {{ .Values.distributor.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.distributor.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
   {{- if .Values.distributor.service.clusterIP }}
   clusterIP: {{ .Values.distributor.service.clusterIP }}
   {{- end }}

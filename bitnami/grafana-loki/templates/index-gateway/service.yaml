@@ -21,7 +21,12 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.indexGateway.service.type }}
+  {{- if .Values.indexGateway.service.sessionAffinity }}
   sessionAffinity: {{ .Values.indexGateway.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.indexGateway.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
   {{- if .Values.indexGateway.service.clusterIP }}
   clusterIP: {{ .Values.indexGateway.service.clusterIP }}
   {{- end }}

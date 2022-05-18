@@ -19,12 +19,8 @@ metadata:
   {{- end }}
 spec:
   accessModes:
-  {{- if not (empty .Values.compactor.persistence.accessModes) }}
   {{- range .Values.compactor.persistence.accessModes }}
     - {{ . | quote }}
-  {{- end }}
-  {{- else }}
-    - {{ .Values.compactor.persistence.accessMode | quote }}
   {{- end }}
   resources:
     requests:
