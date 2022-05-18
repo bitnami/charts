@@ -154,11 +154,13 @@ spec:
                   key: kibana-password
             {{- end }}
             {{- if and .Values.elasticsearch.security.auth.enabled .Values.elasticsearch.security.auth.createSystemUser }}
-            - name: KIBANA_PASSWORD
+            - name: KIBANA_ELASTICSEARCH_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.elasticsearch.security.auth.elasticsearchPasswordSecret }}
-                  key: password
+                  name: {{ tpl .Values.elasticsearch.security.auth.elasticsearchPasswordSecret . }}
+                  key: elasticsearch-password
+            - name: KIBANA_CREATE_USER
+              value: "true"
             {{- end }}
             - name: KIBANA_ELASTICSEARCH_ENABLE_TLS
               value: {{ ternary "true" "false" .Values.elasticsearch.security.tls.enabled | quote }}
