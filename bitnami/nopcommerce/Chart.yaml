@@ -1,0 +1,32 @@
+annotations:
+  category: E-Commerce
+apiVersion: v2
+appVersion: 4.50.1
+dependencies:
+  - condition: mysql.enabled
+    name: mysql
+    repository: https://charts.bitnami.com/bitnami
+    version: 8.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: nopCommerce is the best open-source eCommerce platform. nopCommerce is free, and it is the most popular ASP.NET Core shopping cart.
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/nopcommerce
+icon: https://bitnami.com/assets/stacks/nopcommerce/img/nopcommerce-stack-220x234.png
+keywords:
+  - nopcommerce
+  - e-commerce
+  - http
+  - web
+  - .net
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: nopcommerce
+sources:
+  - https://github.com/bitnami/bitnami-docker-nopcommerce
+  - https://www.nopcommerce.com/
+version: 0.1.0
