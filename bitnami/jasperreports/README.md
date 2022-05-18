@@ -62,6 +62,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                | Description                                                          | Value           |
@@ -74,13 +75,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`     | Default Kubernetes cluster domain                                    | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                    | `[]`            |
 
+
 ### JasperReports parameters
 
 | Name                    | Description                                                            | Value                   |
 | ----------------------- | ---------------------------------------------------------------------- | ----------------------- |
 | `image.registry`        | JasperReports image registry                                           | `docker.io`             |
 | `image.repository`      | JasperReports image repository                                         | `bitnami/jasperreports` |
-| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `7.8.1-debian-10-r57`   |
+| `image.tag`             | JasperReports image tag (immutable tags are recommended)               | `8.0.0-debian-10-r33`   |
 | `image.pullPolicy`      | JasperReports image pull policy                                        | `IfNotPresent`          |
 | `image.pullSecrets`     | Specify docker-registry secret names as an array                       | `[]`                    |
 | `jasperreportsUsername` | JasperReports user                                                     | `jasperadmin`           |
@@ -99,6 +101,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsCM`        | Name of existing ConfigMap containing extra env vars                   | `""`                    |
 | `extraEnvVarsSecret`    | Name of existing Secret containing extra env vars                      | `""`                    |
 | `updateStrategy.type`   | StrategyType                                                           | `RollingUpdate`         |
+
 
 ### Jasperreports deployment parameters
 
@@ -162,6 +165,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.existingClaim`             | An Existing PVC name for Jasperreports volume                                             | `""`                       |
 | `persistence.annotations`               | Persistent Volume Claim annotations                                                       | `{}`                       |
 
+
 ### Exposure parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -189,6 +193,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+
 
 ### Database parameters
 
@@ -213,6 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.password`                 | Password for the above username                      | `""`                    |
 | `externalDatabase.database`                 | Name of the existing database                        | `bitnami_jasperreports` |
 
+
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                       | Value   |
@@ -229,6 +236,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                                | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                    | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                        | `{}`    |
+
 
 The above parameters map to the env variables defined in [bitnami/jasperreports](https://github.com/bitnami/bitnami-docker-jasperreports). For more information please refer to the [bitnami/jasperreports](https://github.com/bitnami/bitnami-docker-jasperreports) image documentation.
 

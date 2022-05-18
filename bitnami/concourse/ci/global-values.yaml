@@ -1,9 +1,0 @@
-global:
-  postgresql:
-    auth:
-      username: other_username
-      password: other_password
-      database: other_database
-service:
-  web:
-    type: ClusterIP

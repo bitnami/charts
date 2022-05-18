@@ -1,5 +1,4 @@
 {{- if .Values.contour.enabled }}
----
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:

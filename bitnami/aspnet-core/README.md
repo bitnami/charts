@@ -69,6 +69,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeVersion`       | Override Kubernetes version                       | `""`            |
 | `nameOverride`      | String to partially override aspnet-core.fullname | `""`            |
 | `fullnameOverride`  | String to fully override aspnet-core.fullname     | `""`            |
+| `namespaceOverride` | String to fully override common.names.namespace   | `""`            |
 | `commonLabels`      | Labels to add to all deployed objects             | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects        | `{}`            |
 | `clusterDomain`     | Kubernetes cluster domain name                    | `cluster.local` |
@@ -81,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------------- | --------------------- |
 | `image.registry`     | ASP.NET Core image registry                                          | `docker.io`           |
 | `image.repository`   | ASP.NET Core image repository                                        | `bitnami/aspnet-core` |
-| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)              | `6.0.1-debian-10-r30` |
+| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)              | `6.0.5-debian-10-r0`  |
 | `image.pullPolicy`   | ASP.NET Core image pull policy                                       | `IfNotPresent`        |
 | `image.pullSecrets`  | ASP.NET Core image pull secrets                                      | `[]`                  |
 | `image.debug`        | Enable image debug mode                                              | `false`               |
@@ -165,7 +166,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.enabled`                   | Enable to download/build ASP.NET Core app from external git repository | `true`                                                              |
 | `appFromExternalRepo.clone.image.registry`      | Git image registry                                                     | `docker.io`                                                         |
 | `appFromExternalRepo.clone.image.repository`    | Git image repository                                                   | `bitnami/git`                                                       |
-| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                         | `2.34.1-debian-10-r46`                                              |
+| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                         | `2.36.1-debian-10-r4`                                               |
 | `appFromExternalRepo.clone.image.pullPolicy`    | Git image pull policy                                                  | `IfNotPresent`                                                      |
 | `appFromExternalRepo.clone.image.pullSecrets`   | Git image pull secrets                                                 | `[]`                                                                |
 | `appFromExternalRepo.clone.repository`          | Git repository to clone                                                | `https://github.com/dotnet/AspNetCore.Docs.git`                     |
@@ -173,7 +174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.clone.extraVolumeMounts`   | Add extra volume mounts for the GIT container                          | `[]`                                                                |
 | `appFromExternalRepo.publish.image.registry`    | .NET SDK image registry                                                | `docker.io`                                                         |
 | `appFromExternalRepo.publish.image.repository`  | .NET SDK image repository                                              | `bitnami/dotnet-sdk`                                                |
-| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                    | `6.0.101-debian-10-r29`                                             |
+| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                    | `6.0.202-debian-10-r29`                                             |
 | `appFromExternalRepo.publish.image.pullPolicy`  | .NET SDK image pull policy                                             | `IfNotPresent`                                                      |
 | `appFromExternalRepo.publish.image.pullSecrets` | .NET SDK image pull secrets                                            | `[]`                                                                |
 | `appFromExternalRepo.publish.subFolder`         | Sub folder under the Git repository containing the ASP.NET Core app    | `aspnetcore/fundamentals/servers/kestrel/samples/6.x/KestrelSample` |
@@ -209,6 +210,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 | `healthIngress.enabled`            | Enable healthIngress record generation for ASP.NET Core                                                                          | `false`                  |
 | `healthIngress.pathType`           | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `healthIngress.path`               | Default path for the ingress record                                                                                              | `/`                      |
@@ -219,6 +221,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `healthIngress.extraHosts`         | n array with additional hostname(s) to be covered with the ingress record                                                        | `[]`                     |
 | `healthIngress.extraTls`           | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `healthIngress.secrets`            | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `healthIngress.extraRules`         | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### RBAC parameters

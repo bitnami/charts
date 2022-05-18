@@ -3,6 +3,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
   name: {{ template "kube-prometheus.prometheus.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -11,5 +12,5 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "kube-prometheus.prometheus.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace }}
+    namespace: {{ .Release.Namespace | quote }}
 {{- end }}

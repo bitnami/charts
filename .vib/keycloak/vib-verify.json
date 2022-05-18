@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/keycloak"
         },
-        "runtime_parameters": "ImF1dGgiOgogICJhZG1pblBhc3N3b3JkIjogIlMzOUJLV2pTa2giCiAgIm1hbmFnZW1lbnRQYXNzd29yZCI6ICJTMzlCS1dqU2toIg==",
+        "runtime_parameters": "YXV0aDoKICBhZG1pblBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKICBtYW5hZ2VtZW50UGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNApzZXJ2aWNlOgogIHBvcnRzOgogICAgaHR0cDogODAKICB0eXBlOiBMb2FkQmFsYW5jZXI=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -43,6 +43,31 @@
           "params": {
             "endpoint": "lb-keycloak-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/keycloak/goss"
+            },
+            "remote": {
+              "workload": "sts-keycloak"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/keycloak/cypress"
+            },
+            "endpoint": "lb-keycloak-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "user",
+              "password": "ComplicatedPassword123!4"
+            }
           }
         }
       ]

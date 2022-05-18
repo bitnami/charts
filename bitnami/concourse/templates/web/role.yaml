@@ -4,6 +4,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: {{ include "concourse.web.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: web
     {{- if .Values.commonLabels }}
@@ -19,10 +20,10 @@ rules:
   {{- if .Values.web.rbac.rules }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.web.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}
----
 {{- end }}
 {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) }}
 {{- if and $pspAvailable .Values.web.psp.create }}
+---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
@@ -41,6 +42,5 @@ rules:
     verbs:     ['use']
     resourceNames:
       - {{ include "concourse.web.fullname" . }}
----
 {{- end }}
 {{- end }}

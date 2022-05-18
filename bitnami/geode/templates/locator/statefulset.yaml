@@ -82,6 +82,9 @@ spec:
       {{- if .Values.locator.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.locator.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.locator.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.locator.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if or .Values.volumePermissions.enabled .Values.locator.initContainers }}
       initContainers:
         {{- if .Values.volumePermissions.enabled }}

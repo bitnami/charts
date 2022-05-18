@@ -3,6 +3,7 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "aspnet-core.fullname" . }}-health
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -47,6 +48,9 @@ spec:
             pathType: {{ .Values.healthIngress.pathType }}
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "aspnet-core.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- if .Values.healthIngress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.healthIngress.extraRules "context" $) | nindent 4 }}
     {{- end }}
   {{- if or .Values.healthIngress.tls .Values.healthIngress.extraTls .Values.healthIngress.hosts }}
   tls:

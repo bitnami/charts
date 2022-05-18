@@ -29,6 +29,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override aspnet-core.fullname
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -57,7 +60,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/aspnet-core
-  tag: 6.0.4-debian-10-r7
+  tag: 6.0.5-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -367,7 +370,7 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/git
-      tag: 2.36.0-debian-10-r1
+      tag: 2.36.1-debian-10-r10
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -407,7 +410,7 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/dotnet-sdk
-      tag: 6.0.202-debian-10-r7
+      tag: 6.0.300-debian-10-r6
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -520,7 +523,7 @@ ingress:
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
   ## You can:
   ##   - Use the `ingress.secrets` parameter to create this TLS secret
-  ##   - Relay on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
   ##
   tls: false
   ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
@@ -577,6 +580,20 @@ ingress:
   ##       -----END CERTIFICATE-----
   ##
   secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: aspnet-core.local
+  ##     http:
+  ##       path: /
+  ##       backend: 
+  ##         service:
+  ##           name: aspnet-core-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
 ## Health Ingress
 ##
 healthIngress:
@@ -608,8 +625,8 @@ healthIngress:
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
   ## You can:
   ##   - Use the `ingress.secrets` parameter to create this TLS secret
-  ##   - Relay on cert-manager to create it by setting the corresponding annotations
-  ##   - Relay on Helm to create self-signed certificates
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on Helm to create self-signed certificates
   ##
   tls: false
   ## DEPRECATED: Use healthIngress.annotations instead of healthIngress.certManager
@@ -655,6 +672,20 @@ healthIngress:
   ##       -----END CERTIFICATE-----
   ##
   secrets: []
+  ## @param healthIngress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: aspnet-core.local
+  ##     http:
+  ##       path: /
+  ##       backend: 
+  ##         service:
+  ##           name: aspnet-core-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
 
 ## @section RBAC parameters
 ##
