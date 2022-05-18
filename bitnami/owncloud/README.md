@@ -62,6 +62,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name               | Description                                                                              | Value |
@@ -71,89 +72,91 @@ The command removes all the Kubernetes components associated with the chart and 
 | `fullnameOverride` | String to fully override owncloud.fullname template                                      | `""`  |
 | `extraDeploy`      | Array of extra objects to deploy with the release (evaluated as a template)              | `[]`  |
 
+
 ### ownCloud parameters
 
-| Name                                    | Description                                                                                                  | Value                 |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------- |
-| `image.registry`                        | ownCloud image registry                                                                                      | `docker.io`           |
-| `image.repository`                      | ownCloud image repository                                                                                    | `bitnami/owncloud`    |
-| `image.tag`                             | ownCloud Image tag (immutable tags are recommended)                                                          | `10.9.1-debian-10-r0` |
-| `image.pullPolicy`                      | ownCloud image pull policy                                                                                   | `IfNotPresent`        |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                             | `[]`                  |
-| `image.debug`                           | Specify if debug logs should be enabled                                                                      | `false`               |
-| `hostAliases`                           | Deployment pod host aliases                                                                                  | `[]`                  |
-| `replicaCount`                          | Number of replicas (requires ReadWriteMany PVC support)                                                      | `1`                   |
-| `owncloudSkipInstall`                   | Skip ownCloud installation wizard. Useful for migrations and restoring from SQL dump                         | `false`               |
-| `owncloudHost`                          | ownCloud host to create application URLs (when ingress, it will be ignored)                                  | `""`                  |
-| `owncloudUsername`                      | User of the application                                                                                      | `user`                |
-| `owncloudPassword`                      | Application password                                                                                         | `""`                  |
-| `owncloudEmail`                         | Admin email                                                                                                  | `user@example.com`    |
-| `allowEmptyPassword`                    | Allow DB blank passwords                                                                                     | `false`               |
-| `command`                               | Override default container command (useful when using custom images)                                         | `[]`                  |
-| `args`                                  | Override default container args (useful when using custom images)                                            | `[]`                  |
-| `commonAnnotations`                     | Common annotations to add to all ownCloud resources (sub-charts are not considered). Evaluated as a template | `{}`                  |
-| `commonLabels`                          | Common labels to add to all ownCloud resources (sub-charts are not considered). Evaluated as a template      | `{}`                  |
-| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                               | `RollingUpdate`       |
-| `extraEnvVars`                          | An array to add extra env vars                                                                               | `[]`                  |
-| `extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                   | `""`                  |
-| `extraEnvVarsSecret`                    | Secret with extra environment variables                                                                      | `""`                  |
-| `extraVolumes`                          | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`                                 | `[]`                  |
-| `extraVolumeMounts`                     | Extra volume mounts to add to the container. Normally used with `extraVolumes`                               | `[]`                  |
-| `initContainers`                        | Extra init containers to add to the deployment                                                               | `[]`                  |
-| `sidecars`                              | Extra sidecar containers to add to the deployment                                                            | `[]`                  |
-| `tolerations`                           | Tolerations for pod assignment                                                                               | `[]`                  |
-| `priorityClassName`                     | ownCloud pods' priorityClassName                                                                             | `""`                  |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                                               | `""`                  |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                               | `[]`                  |
-| `existingSecret`                        | Name of a secret with the application password                                                               | `""`                  |
-| `smtpHost`                              | SMTP host                                                                                                    | `""`                  |
-| `smtpPort`                              | SMTP port                                                                                                    | `""`                  |
-| `smtpUser`                              | SMTP user                                                                                                    | `""`                  |
-| `smtpPassword`                          | SMTP password                                                                                                | `""`                  |
-| `smtpProtocol`                          | SMTP Protocol (options: ssl,tls, nil)                                                                        | `""`                  |
-| `containerPorts.http`                   | Sets HTTP port inside NGINX container                                                                        | `8080`                |
-| `containerPorts.https`                  | Sets HTTPS port inside NGINX container                                                                       | `8443`                |
-| `sessionAffinity`                       | Control where client requests go, to the same pod or round-robin                                             | `None`                |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                          | `""`                  |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `soft`                |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                    | `""`                  |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                        | `""`                  |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                    | `[]`                  |
-| `affinity`                              | Affinity for pod assignment                                                                                  | `{}`                  |
-| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                                     | `{}`                  |
-| `resources`                             | Metrics exporter resource requests and limits                                                                | `{}`                  |
-| `podSecurityContext.enabled`            | Enable ownCloud pods' Security Context                                                                       | `true`                |
-| `podSecurityContext.fsGroup`            | ownCloud pods' group ID                                                                                      | `1001`                |
-| `containerSecurityContext.enabled`      | Enable ownCloud containers' Security Context                                                                 | `true`                |
-| `containerSecurityContext.runAsUser`    | ownCloud containers' Security Context runAsUser                                                              | `1001`                |
-| `containerSecurityContext.runAsNonRoot` | ownCloud containers' Security Context runAsNonRoot                                                           | `true`                |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                         | `true`                |
-| `livenessProbe.path`                    | Request path for livenessProbe                                                                               | `/status.php`         |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                      | `120`                 |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                             | `10`                  |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                            | `5`                   |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                          | `6`                   |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                          | `1`                   |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                                        | `true`                |
-| `readinessProbe.path`                   | Request path for readinessProbe                                                                              | `/status.php`         |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                     | `30`                  |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                            | `5`                   |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                           | `3`                   |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                         | `6`                   |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                         | `1`                   |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                                          | `false`               |
-| `startupProbe.path`                     | Request path for startupProbe                                                                                | `/status.php`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                       | `0`                   |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                              | `10`                  |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                             | `3`                   |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                           | `60`                  |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                           | `1`                   |
-| `customLivenessProbe`                   | Override default liveness probe                                                                              | `{}`                  |
-| `customReadinessProbe`                  | Override default readiness probe                                                                             | `{}`                  |
-| `customStartupProbe`                    | Override default startup probe                                                                               | `{}`                  |
-| `lifecycleHooks`                        | LifecycleHook to set additional configuration before or after startup                                        | `{}`                  |
-| `podAnnotations`                        | Pod annotations                                                                                              | `{}`                  |
-| `podLabels`                             | Pod extra labels                                                                                             | `{}`                  |
+| Name                                    | Description                                                                                                  | Value                   |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `image.registry`                        | ownCloud image registry                                                                                      | `docker.io`             |
+| `image.repository`                      | ownCloud image repository                                                                                    | `bitnami/owncloud`      |
+| `image.tag`                             | ownCloud Image tag (immutable tags are recommended)                                                          | `10.9.1-debian-10-r115` |
+| `image.pullPolicy`                      | ownCloud image pull policy                                                                                   | `IfNotPresent`          |
+| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                             | `[]`                    |
+| `image.debug`                           | Specify if debug logs should be enabled                                                                      | `false`                 |
+| `hostAliases`                           | Deployment pod host aliases                                                                                  | `[]`                    |
+| `replicaCount`                          | Number of replicas (requires ReadWriteMany PVC support)                                                      | `1`                     |
+| `owncloudSkipInstall`                   | Skip ownCloud installation wizard. Useful for migrations and restoring from SQL dump                         | `false`                 |
+| `owncloudHost`                          | ownCloud host to create application URLs (when ingress, it will be ignored)                                  | `""`                    |
+| `owncloudUsername`                      | User of the application                                                                                      | `user`                  |
+| `owncloudPassword`                      | Application password                                                                                         | `""`                    |
+| `owncloudEmail`                         | Admin email                                                                                                  | `user@example.com`      |
+| `allowEmptyPassword`                    | Allow DB blank passwords                                                                                     | `false`                 |
+| `command`                               | Override default container command (useful when using custom images)                                         | `[]`                    |
+| `args`                                  | Override default container args (useful when using custom images)                                            | `[]`                    |
+| `commonAnnotations`                     | Common annotations to add to all ownCloud resources (sub-charts are not considered). Evaluated as a template | `{}`                    |
+| `commonLabels`                          | Common labels to add to all ownCloud resources (sub-charts are not considered). Evaluated as a template      | `{}`                    |
+| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                               | `RollingUpdate`         |
+| `extraEnvVars`                          | An array to add extra env vars                                                                               | `[]`                    |
+| `extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                   | `""`                    |
+| `extraEnvVarsSecret`                    | Secret with extra environment variables                                                                      | `""`                    |
+| `extraVolumes`                          | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`                                 | `[]`                    |
+| `extraVolumeMounts`                     | Extra volume mounts to add to the container. Normally used with `extraVolumes`                               | `[]`                    |
+| `initContainers`                        | Extra init containers to add to the deployment                                                               | `[]`                    |
+| `sidecars`                              | Extra sidecar containers to add to the deployment                                                            | `[]`                    |
+| `tolerations`                           | Tolerations for pod assignment                                                                               | `[]`                    |
+| `priorityClassName`                     | ownCloud pods' priorityClassName                                                                             | `""`                    |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                                               | `""`                    |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                               | `[]`                    |
+| `existingSecret`                        | Name of a secret with the application password                                                               | `""`                    |
+| `smtpHost`                              | SMTP host                                                                                                    | `""`                    |
+| `smtpPort`                              | SMTP port                                                                                                    | `""`                    |
+| `smtpUser`                              | SMTP user                                                                                                    | `""`                    |
+| `smtpPassword`                          | SMTP password                                                                                                | `""`                    |
+| `smtpProtocol`                          | SMTP Protocol (options: ssl,tls, nil)                                                                        | `""`                    |
+| `containerPorts.http`                   | Sets HTTP port inside NGINX container                                                                        | `8080`                  |
+| `containerPorts.https`                  | Sets HTTPS port inside NGINX container                                                                       | `8443`                  |
+| `sessionAffinity`                       | Control where client requests go, to the same pod or round-robin                                             | `None`                  |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                          | `""`                    |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `soft`                  |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                    | `""`                    |
+| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                        | `""`                    |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                    | `[]`                    |
+| `affinity`                              | Affinity for pod assignment                                                                                  | `{}`                    |
+| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                                     | `{}`                    |
+| `resources`                             | Metrics exporter resource requests and limits                                                                | `{}`                    |
+| `podSecurityContext.enabled`            | Enable ownCloud pods' Security Context                                                                       | `true`                  |
+| `podSecurityContext.fsGroup`            | ownCloud pods' group ID                                                                                      | `1001`                  |
+| `containerSecurityContext.enabled`      | Enable ownCloud containers' Security Context                                                                 | `true`                  |
+| `containerSecurityContext.runAsUser`    | ownCloud containers' Security Context runAsUser                                                              | `1001`                  |
+| `containerSecurityContext.runAsNonRoot` | ownCloud containers' Security Context runAsNonRoot                                                           | `true`                  |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                         | `true`                  |
+| `livenessProbe.path`                    | Request path for livenessProbe                                                                               | `/status.php`           |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                      | `120`                   |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                             | `10`                    |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                            | `5`                     |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                          | `6`                     |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                          | `1`                     |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                                        | `true`                  |
+| `readinessProbe.path`                   | Request path for readinessProbe                                                                              | `/status.php`           |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                     | `30`                    |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                            | `5`                     |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                           | `3`                     |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                         | `6`                     |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                         | `1`                     |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                                          | `false`                 |
+| `startupProbe.path`                     | Request path for startupProbe                                                                                | `/status.php`           |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                       | `0`                     |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                              | `10`                    |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                             | `3`                     |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                           | `60`                    |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                           | `1`                     |
+| `customLivenessProbe`                   | Override default liveness probe                                                                              | `{}`                    |
+| `customReadinessProbe`                  | Override default readiness probe                                                                             | `{}`                    |
+| `customStartupProbe`                    | Override default startup probe                                                                               | `{}`                    |
+| `lifecycleHooks`                        | LifecycleHook to set additional configuration before or after startup                                        | `{}`                    |
+| `podAnnotations`                        | Pod annotations                                                                                              | `{}`                    |
+| `podLabels`                             | Pod extra labels                                                                                             | `{}`                    |
+
 
 ### Database parameters
 
@@ -178,6 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_owncloud`  |
 | `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                           | `""`                |
 
+
 ### Persistence parameters
 
 | Name                        | Description                                                                | Value               |
@@ -190,6 +194,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.hostPath`      | If defined, the owncloud-data volume will mount to the specified hostPath. | `""`                |
 | `persistence.annotations`   | Persistent Volume Claim annotations                                        | `{}`                |
 
+
 ### Volume Permissions parameters
 
 | Name                                   | Description                                                                                                                                               | Value                   |
@@ -197,11 +202,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r307`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `10-debian-10-r425`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
+
 
 ### Traffic Exposure Parameters
 
@@ -232,6 +238,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+
 
 ### Metrics parameters
 
@@ -240,7 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                 | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                       | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                     | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)           | `0.11.0-debian-10-r24`    |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)           | `0.11.0-debian-10-r144`   |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                    | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                     | `[]`                      |
 | `metrics.resources`                        | Metrics exporter resource requests and limits                        | `{}`                      |
@@ -253,6 +261,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.externalTrafficPolicy`    | Metrics service external traffic policy                              | `Cluster`                 |
 | `metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP" | `None`                    |
 | `metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                          | `{}`                      |
+
 
 ### Certificate injection parameters
 
@@ -272,9 +281,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                              | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image repository                                   | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r307`                      |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)         | `10-debian-10-r425`                      |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
+
 
 ### NetworkPolicy parameters
 
@@ -295,6 +305,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                           | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                               | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                   | `{}`    |
+
 
 The above parameters map to the env variables defined in [bitnami/owncloud](https://github.com/bitnami/bitnami-docker-owncloud). For more information please refer to the [bitnami/owncloud](https://github.com/bitnami/bitnami-docker-owncloud) image documentation.
 

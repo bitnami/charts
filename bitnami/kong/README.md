@@ -207,6 +207,7 @@ To uninstall/delete the `my-release` deployment:
 | `ingress.extraPaths`               | Additional arbitrary path/backend objects                                                                                        | `[]`                     |
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Kong Ingress Controller Container Parameters

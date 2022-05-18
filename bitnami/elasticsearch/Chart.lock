@@ -1,9 +1,9 @@
 dependencies:
 - name: kibana
   repository: https://charts.bitnami.com/bitnami
-  version: 10.0.7
+  version: 10.0.8
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 1.14.0
-digest: sha256:95c61599aa2ee4d5602fce50016516efd8e428d4c015c2ef363c46224b595da8
-generated: "2022-05-13T15:00:44.152246+02:00"
+digest: sha256:57905fb849f56d879c40dc89a63ea15633225b1559948c6a31b42444c21fa15c
+generated: "2022-05-15T14:02:28.985709926Z"

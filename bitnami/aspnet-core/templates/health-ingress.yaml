@@ -49,6 +49,9 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "aspnet-core.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
+    {{- if .Values.healthIngress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.healthIngress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
   {{- if or .Values.healthIngress.tls .Values.healthIngress.extraTls .Values.healthIngress.hosts }}
   tls:
     {{- if .Values.healthIngress.tls }}
