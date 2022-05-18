@@ -63,9 +63,9 @@ it('allows creating a visualisation', () => {
     .should('contain.text', 'Custom visualization')
     .forceClick();
   cy.contains('[data-test-subj="visualizeSaveButton"]', 'Save').forceClick();
-  cy.fixture('testdata').then((td) => {
+  cy.fixture('visualizations').then((visualization) => {
     cy.get('[data-test-subj="savedObjectTitle"]').type(
-      `${td.visualizationTitle}.${random}`
+      `${visualization.newVisualization.title}.${random}`
     );
   });
   cy.get('[id="new-dashboard-option"]').forceClick();
