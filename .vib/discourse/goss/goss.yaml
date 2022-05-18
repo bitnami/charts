@@ -16,7 +16,7 @@ file:
     owner: root
     group: root
     contains:
-      - hostname = bitnami-discourse.my
+      - {{ printf "hostname = %s" .Env.DISCOURSE_HOST }}
 command:
   discourse-cli:
     exec: cd /opt/bitnami/discourse/ && RAILS_ENV=production bundle exec rake -T

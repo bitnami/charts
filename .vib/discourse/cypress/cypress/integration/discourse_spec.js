@@ -10,7 +10,7 @@ it('allows to log in and out', () => {
   cy.contains('button', 'Log In');
 });
 
-it('allows to sign in', () => {
+it('allows to sign up', () => {
   cy.contains('button', 'Sign Up').click();
   cy.fixture('users').then((user) => {
     cy.get('#new-account-email').type(`${random}.${user.newUser.email}`);
@@ -48,7 +48,7 @@ it('allows to modify user settings', () => {
         .type(`${userSettings.user.realName} ${random}`);
     });
     cy.contains('button', 'Save Changes').click();
-    cy.contains('Saved').click();
+    cy.contains('Saved');
     cy.contains('h2', `${userSettings.user.realName} ${random}`);
   });
 });
