@@ -68,7 +68,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.1.1-debian-10-r0
+  tag: 3.1.1-debian-10-r4
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -342,6 +342,39 @@ auth:
     ## ref: https://docs.confluent.io/current/kafka/authentication_ssl.html#optional-settings
     ##
     endpointIdentificationAlgorithm: https
+  ## Zookeeper client configuration for kafka brokers
+  ##
+  zookeeper:
+    ## TLS configuration
+    ##
+    tls:
+      ## @param auth.zookeeper.tls.enabled Enable TLS for Zookeeper client connections.
+      ##
+      enabled: false
+      ## @param auth.zookeeper.tls.type Format to use for TLS certificates. Allowed types: `jks` and `pem`.
+      ##
+      type: jks
+      ## @param auth.zookeeper.tls.verifyHostname Hostname validation.
+      ##
+      verifyHostname: true
+      ## @param auth.zookeeper.tls.existingSecret Name of the existing secret containing the TLS certificates for ZooKeeper client communications.
+      ##
+      existingSecret: ""
+      ## @param auth.zookeeper.tls.existingSecretKeystoreKey The secret key from the  auth.zookeeper.tls.existingSecret containing the Keystore.
+      ##
+      existingSecretKeystoreKey: zookeeper.keystore.jks
+      ## @param auth.zookeeper.tls.existingSecretTruststoreKey The secret key from the auth.zookeeper.tls.existingSecret containing the Truststore.
+      ##
+      existingSecretTruststoreKey: zookeeper.truststore.jks
+      ## @param auth.zookeeper.tls.passwordsSecret Existing secret containing Keystore and Truststore passwords.
+      ##
+      passwordsSecret: ""
+      ## @param auth.zookeeper.tls.passwordsSecretKeystoreKey The secret key from the auth.zookeeper.tls.passwordsSecret containing the password for the Keystore.
+      ##
+      passwordsSecretKeystoreKey: keystore-password
+      ## @param auth.zookeeper.tls.passwordsSecretTruststoreKey The secret key from the auth.zookeeper.tls.passwordsSecret containing the password for the Truststore.
+      ##
+      passwordsSecretTruststoreKey: truststore-password
 ## @param listeners The address(es) the socket server listens on. Auto-calculated it's set to an empty array
 ## When it's set to an empty array, the listeners will be configured
 ## based on the authentication protocols (auth.clientProtocol, auth.externalClientProtocol and auth.interBrokerProtocol parameters)
@@ -702,7 +735,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.23.6-debian-10-r22
+      tag: 1.24.0-debian-10-r0
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -929,7 +962,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r424
+    tag: 10-debian-10-r429
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1007,7 +1040,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.4.2-debian-10-r233
+      tag: 1.4.2-debian-10-r237
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1233,7 +1266,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.16.1-debian-10-r296
+      tag: 0.16.1-debian-10-r301
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
