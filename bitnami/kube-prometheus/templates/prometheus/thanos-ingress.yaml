@@ -28,6 +28,9 @@ spec:
           {{- end }}
           backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.thanos.fullname" $) "servicePort" "grpc" "context" $) | nindent 14 }}
     {{- end }}
+    {{- if .Values.prometheus.thanos.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
   {{- if .Values.prometheus.thanos.ingress.tls }}
   tls:
 {{ toYaml .Values.prometheus.thanos.ingress.tls | indent 4 }}
