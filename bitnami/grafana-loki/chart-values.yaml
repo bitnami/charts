@@ -1,0 +1,5 @@
+gateway:
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
