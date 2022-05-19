@@ -135,6 +135,17 @@ spec:
   {{- else if .Values.prometheus.persistence.enabled }}
   storage:
     volumeClaimTemplate:
+      metadata:
+        annotations:
+          {{- if .Values.prometheus.persistence.annotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.persistence.annotations "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.commonAnnotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
+          {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
           {{- range .Values.prometheus.persistence.accessModes }}

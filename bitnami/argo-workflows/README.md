@@ -316,6 +316,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`       | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `ingress.extraTls`         | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`          | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.extraRules`       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Workflows configuration
@@ -341,13 +342,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### MySQL subchart
 
-| Name                  | Description                                                  | Value               |
-| --------------------- | ------------------------------------------------------------ | ------------------- |
-| `mysql.enabled`       | Enable MySQL subchart and controller persistence using MySQL | `false`             |
-| `mysql.service.port`  | MySQL port                                                   | `3306`              |
-| `mysql.auth.username` | MySQL username                                               | `mysql`             |
-| `mysql.auth.database` | MySQL database name                                          | `bn_argo_workflows` |
-| `mysql.auth.password` | MySQL database password                                      | `""`                |
+| Name                        | Description                                                  | Value               |
+| --------------------------- | ------------------------------------------------------------ | ------------------- |
+| `mysql.enabled`             | Enable MySQL subchart and controller persistence using MySQL | `false`             |
+| `mysql.service.ports.mysql` | MySQL port                                                   | `3306`              |
+| `mysql.auth.username`       | MySQL username                                               | `mysql`             |
+| `mysql.auth.database`       | MySQL database name                                          | `bn_argo_workflows` |
+| `mysql.auth.password`       | MySQL database password                                      | `""`                |
 
 
 ### External Database configuration

@@ -556,6 +556,20 @@ query:
     ##   certificate:
     ##
     secrets: []
+    ## @param query.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend: 
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
     ## @param query.ingress.tls Enable TLS configuration for the hostname defined at `query.ingress.hostname` parameter
     ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.query.ingress.hostname }}`
     ## You can:
@@ -639,6 +653,20 @@ query:
       ##   certificate:
       ##
       secrets: []
+      ## @param query.ingress.grpc.extraRules Additional rules to be covered with this ingress record
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+      ## e.g:
+      ## extraRules:
+      ## - host: example.local
+      ##     http:
+      ##       path: /
+      ##       backend: 
+      ##         service:
+      ##           name: example-svc
+      ##           port:
+      ##             name: http
+      ##
+      extraRules: []
       ## @param query.ingress.grpc.tls Enable TLS configuration for the hostname defined at `query.ingress.grpc.hostname` parameter
       ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.query.ingress.grpc.hostname }}`
       ## You can:
@@ -1047,6 +1075,20 @@ queryFrontend:
     ##   certificate:
     ##
     secrets: []
+    ## @param queryFrontend.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend: 
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
     ## @param queryFrontend.ingress.tls Enable TLS configuration for the hostname defined at `queryFrontend.ingress.hostname` parameter
     ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.queryFrontend.ingress.hostname }}`
     ## You can:
@@ -1429,6 +1471,20 @@ bucketweb:
     ##   certificate:
     ##
     secrets: []
+    ## @param bucketweb.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend: 
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
     ## @param bucketweb.ingress.tls Enable TLS configuration for the hostname defined at `bucketweb.ingress.hostname` parameter
     ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.bucketweb.ingress.hostname }}`
     ## You can:
@@ -1791,6 +1847,20 @@ compactor:
     ##   certificate:
     ##
     secrets: []
+    ## @param compactor.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend: 
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
     ## @param compactor.ingress.tls Enable TLS configuration for the hostname defined at `compactor.ingress.hostname` parameter
     ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.compactor.ingress.hostname }}`
     ## You can:
@@ -2271,6 +2341,20 @@ storegateway:
     ##   certificate:
     ##
     secrets: []
+    ## @param storegateway.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend: 
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
     ## @param storegateway.ingress.tls Enable TLS configuration for the hostname defined at `storegateway.ingress.hostname` parameter
     ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.storegateway.ingress.hostname }}`
     ## You can:
@@ -2354,6 +2438,20 @@ storegateway:
       ##   certificate:
       ##
       secrets: []
+      ## @param storegateway.ingress.grpc.extraRules Additional rules to be covered with this ingress record
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+      ## e.g:
+      ## extraRules:
+      ## - host: example.local
+      ##     http:
+      ##       path: /
+      ##       backend: 
+      ##         service:
+      ##           name: example-svc
+      ##           port:
+      ##             name: http
+      ##
+      extraRules: []
       ## @param storegateway.ingress.grpc.tls Enable TLS configuration for the hostname defined at `storegateway.ingress.grpc.hostname` parameter
       ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.storegateway.ingress.grpc.hostname }}`
       ## You can:
@@ -2847,6 +2945,20 @@ ruler:
     ##   certificate:
     ##
     secrets: []
+    ## @param ruler.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend: 
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
     ## @param ruler.ingress.apiVersion Force Ingress API version (automatically detected if not set)
     ##
     apiVersion: ""
@@ -3312,6 +3424,20 @@ receive:
     ##   certificate:
     ##
     secrets: []
+    ## @param receive.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend: 
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
     ## @param receive.ingress.tls Enable TLS configuration for the hostname defined at `receive.ingress.hostname` parameter
     ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.receive.ingress.hostname }}`
     ## You can:
