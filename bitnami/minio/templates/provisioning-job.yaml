@@ -76,6 +76,32 @@ spec:
                 fi;
               };
 
+              function addUsersFromFile() {
+                local username=$(grep -oP '^username=\K.+' $1);
+                local password=$(grep -oP '^password=\K.+' $1);
+                local disabled=$(grep -oP '^disabled=\K.+' $1);
+                local policies_list=$(grep -oP '^policies=\K.+' $1);
+                local set_policies=$(grep -oP '^setPolicies=\K.+' $1);
+
+                mc admin user add {{ $minioAlias }} "${username}" "${password}";
+
+                if [ "${set_policies}" == "true" ]; then
+                  mc admin policy set {{ $minioAlias }} "${policies_list}" user="${username}";
+                else
+                  IFS=',' read -r -a POLICIES <<< "${policies_list}";
+                  for policy in "${POLICIES[@]}"; do
+                    addPolicy user "${username}" "${policy}";
+                  done
+                fi;
+
+                local user_status="enable";
+                if [[ "${disabled}" != "" && "${disabled,,}" == "true" ]]; then
+                  user_status="disable";
+                fi;
+
+                mc admin user "${user_status}" {{ $minioAlias }} "${username}";
+              };
+
               {{- $minioUrl := printf "$MINIO_SCHEME://%s:%d" (include "common.names.fullname" .) (.Values.service.ports.api | int) }}
               {{- $minioRootUser := ternary ("$(<$MINIO_ROOT_USER_FILE)") ("$MINIO_ROOT_USER") (.Values.auth.useCredentialsFiles) }}
               {{- $minioRootPassword := ternary ("$(<$MINIO_ROOT_PASSWORD_FILE)") ("$MINIO_ROOT_PASSWORD") (.Values.auth.useCredentialsFiles) }}
@@ -107,6 +133,11 @@ spec:
               {{- end }}
               {{- $userStatus := ternary ("disable") ("enable") (and (not (empty $user.disabled)) $user.disabled) }}
               mc admin user {{ $userStatus }} {{ $minioAlias }} {{ $user.username }};
+              {{- end }}
+              {{- if gt (len .Values.provisioning.usersExistingSecrets) 0 }}
+              while read -d '' configFile; do
+                addUsersFromFile "${configFile}";
+              done < <(find "/opt/bitnami/minio/users/" -type l -not -name '..data' -print0);
               {{- end }}
 
               {{- range $group := .Values.provisioning.groups }}
@@ -212,6 +243,10 @@ spec:
             - name: minio-certs
               mountPath: {{ default "/certs" .Values.tls.mountPath }}
             {{- end }}
+            {{- range $idx, $_ := .Values.provisioning.usersExistingSecrets }}
+            - name: {{ printf "users-secret-%d" $idx }}
+              mountPath: /opt/bitnami/minio/users/{{ $idx }}/
+            {{- end }}
             {{- if .Values.provisioning.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -228,6 +263,11 @@ spec:
         - name: minio-credentials
           secret:
             secretName: {{ include "minio.secretName" . }}
+        {{- end }}
+        {{- range $idx, $userSecret := .Values.provisioning.usersExistingSecrets }}
+        - name: {{ printf "users-secret-%d" $idx }}
+          secret:
+            secretName: {{ $userSecret }}
         {{- end }}
         {{- if .Values.tls.enabled }}
         - name: minio-certs
