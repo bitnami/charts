@@ -1,0 +1,6 @@
+file:
+  /opt/bitnami/nginx/conf/nginx.conf:
+    mode: "0644"
+    filetype: file
+    exists: true
+    group: root
