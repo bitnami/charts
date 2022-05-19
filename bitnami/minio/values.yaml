@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2022.5.8-debian-10-r0
+  tag: 2022.5.8-debian-10-r8
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -80,7 +80,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2022.5.4-debian-10-r4
+  tag: 2022.5.9-debian-10-r8
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
@@ -264,7 +264,7 @@ provisioning:
   ##           - "s3:ListMultipartUploadParts"
   ##           - "s3:PutObject"
   policies: []
-  ## @param provisioning.users MinIO&reg; users provisioning
+  ## @param provisioning.users MinIO&reg; users provisioning. Can be used in addition to provisioning.usersExistingSecrets.
   ## https://docs.min.io/docs/minio-admin-complete-guide.html#user
   ## e.g.
   ## users:
@@ -279,6 +279,31 @@ provisioning:
   ##     # When false, the policies will be added to the existing.
   ##     setPolicies: false
   users: []
+  ## @param provisioning.usersExistingSecrets Array if existing secrets containing MinIO&reg; users to be provisioned. Can be used in addition to provisioning.users.
+  ## https://docs.min.io/docs/minio-admin-complete-guide.html#user
+  ##
+  ## Instead of configuring users inside values.yaml, referring to existing Kubernetes secrets containing user
+  ## configurations is possible.
+  ## e.g.
+  ## usersExistingSecrets:
+  ##   - centralized-minio-users
+  ##
+  ## All provided Kubernetes secrets require a specific data structure. The same data from the provisioning.users example above
+  ##  can be defined via secrets with the following data structure. The secret keys have no meaning to the provisioning job except that
+  ## they are used as filenames.
+  ##   ## apiVersion: v1
+  ##   ## kind: Secret
+  ##   ## metadata:
+  ##   ##   name: centralized-minio-users
+  ##   ## type: Opaque
+  ##   ## stringData:
+  ##   ##   username1: |
+  ##   ##     username=test-username
+  ##   ##     password=test-password
+  ##   ##     disabled=false
+  ##   ##     policies=readwrite,consoleAdmin,diagnostics
+  ##   ##     setPolicies=false
+  usersExistingSecrets: []
   ## @param provisioning.groups MinIO&reg; groups provisioning
   ## https://docs.min.io/docs/minio-admin-complete-guide.html#group
   ## e.g.
@@ -673,6 +698,20 @@ ingress:
   ##     certificate: ""
   ##
   secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: example.local
+  ##     http:
+  ##       path: /
+  ##       backend: 
+  ##         service:
+  ##           name: example-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
 
 ## Configure the ingress resource that allows you to access the
 ## MinIO&reg; API. Set up the URL
@@ -840,7 +879,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r420
+    tag: 10-debian-10-r429
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

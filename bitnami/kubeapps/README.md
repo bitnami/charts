@@ -7,7 +7,7 @@ Kubeapps is a web-based UI for launching and managing applications on Kubernetes
 [Overview of Kubeapps](https://github.com/vmware-tanzu/kubeapps)
 
 
-
+                           
 ## TL;DR
 
 ```bash
@@ -102,6 +102,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `ingress.extraTls`         | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`          | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.ingressClassName` | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraRules`       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Kubeapps packaging options
@@ -582,19 +583,17 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 ### Database Parameters
 
-| Name                                   | Description                                                                  | Value         |
-| -------------------------------------- | ---------------------------------------------------------------------------- | ------------- |
-| `postgresql.enabled`                   | Deploy a PostgreSQL server to satisfy the applications database requirements | `true`        |
-| `postgresql.architecture`              | PostgreSQL architecture (`standalone` or `replication`)                      | `replication` |
-| `postgresql.auth.postgresPassword`     | Password for 'postgres' user                                                 | `""`          |
-| `postgresql.auth.database`             | Name for a custom database to create                                         | `assets`      |
-| `postgresql.auth.existingSecret`       | Name of existing secret to use for PostgreSQL credentials                    | `""`          |
-| `postgresql.persistence.enabled`       | Enable persistence on PostgreSQL using PVC(s)                                | `false`       |
-| `postgresql.persistence.size`          | Persistent Volume size                                                       | `8Gi`         |
-| `postgresql.securityContext.enabled`   | Enabled PostgreSQL replicas pods' Security Context                           | `false`       |
-| `postgresql.resources.limits`          | The resources limits for the PostreSQL container                             | `{}`          |
-| `postgresql.resources.requests.cpu`    | The requested CPU for the PostreSQL container                                | `250m`        |
-| `postgresql.resources.requests.memory` | The requested memory for the PostreSQL container                             | `256Mi`       |
+| Name                                     | Description                                                                  | Value    |
+| ---------------------------------------- | ---------------------------------------------------------------------------- | -------- |
+| `postgresql.enabled`                     | Deploy a PostgreSQL server to satisfy the applications database requirements | `true`   |
+| `postgresql.auth.postgresPassword`       | Password for 'postgres' user                                                 | `""`     |
+| `postgresql.auth.database`               | Name for a custom database to create                                         | `assets` |
+| `postgresql.auth.existingSecret`         | Name of existing secret to use for PostgreSQL credentials                    | `""`     |
+| `postgresql.primary.persistence.enabled` | Enable PostgreSQL Primary data persistence using PVC                         | `false`  |
+| `postgresql.securityContext.enabled`     | Enabled PostgreSQL replicas pods' Security Context                           | `false`  |
+| `postgresql.resources.limits`            | The resources limits for the PostreSQL container                             | `{}`     |
+| `postgresql.resources.requests.cpu`      | The requested CPU for the PostreSQL container                                | `250m`   |
+| `postgresql.resources.requests.memory`   | The requested memory for the PostreSQL container                             | `256Mi`  |
 
 
 ### kubeappsapis parameters
