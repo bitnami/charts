@@ -264,7 +264,7 @@ provisioning:
   ##           - "s3:ListMultipartUploadParts"
   ##           - "s3:PutObject"
   policies: []
-  ## @param provisioning.users MinIO&reg; users provisioning
+  ## @param provisioning.users MinIO&reg; users provisioning. Can be used in addition to provisioning.usersExistingSecrets.
   ## https://docs.min.io/docs/minio-admin-complete-guide.html#user
   ## e.g.
   ## users:
@@ -279,6 +279,31 @@ provisioning:
   ##     # When false, the policies will be added to the existing.
   ##     setPolicies: false
   users: []
+  ## @param provisioning.usersExistingSecrets Array if existing secrets containing MinIO&reg; users to be provisioned. Can be used in addition to provisioning.users.
+  ## https://docs.min.io/docs/minio-admin-complete-guide.html#user
+  ##
+  ## Instead of configuring users inside values.yaml, referring to existing Kubernetes secrets containing user
+  ## configurations is possible.
+  ## e.g.
+  ## usersExistingSecrets:
+  ##   - centralized-minio-users
+  ##
+  ## All provided Kubernetes secrets require a specific data structure. The same data from the provisioning.users example above
+  ##  can be defined via secrets with the following data structure. The secret keys have no meaning to the provisioning job except that
+  ## they are used as filenames.
+  ##   ## apiVersion: v1
+  ##   ## kind: Secret
+  ##   ## metadata:
+  ##   ##   name: centralized-minio-users
+  ##   ## type: Opaque
+  ##   ## stringData:
+  ##   ##   username1: |
+  ##   ##     username=test-username
+  ##   ##     password=test-password
+  ##   ##     disabled=false
+  ##   ##     policies=readwrite,consoleAdmin,diagnostics
+  ##   ##     setPolicies=false
+  usersExistingSecrets: []
   ## @param provisioning.groups MinIO&reg; groups provisioning
   ## https://docs.min.io/docs/minio-admin-complete-guide.html#group
   ## e.g.
