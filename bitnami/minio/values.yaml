@@ -998,7 +998,7 @@ metrics:
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:
-    ## @param metrics.prometheusRule.enabled if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)
+    ## @param metrics.prometheusRule.enabled Create a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)
     ##
     enabled: false
     ## @param metrics.prometheusRule.namespace Namespace for the PrometheusRule Resource (defaults to the Release Namespace)
