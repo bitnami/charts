@@ -44,16 +44,6 @@
             "endpoint": "lb-grafana-loki-gateway-http",
             "app_protocol": "HTTP"
           }
-        },
-        {
-          "action_id": "cypress",
-          "params": {
-            "resources": {
-              "path": "/.vib/grafana-loki/cypress"
-            },
-            "endpoint": "lb-grafana-loki-gateway-http",
-            "app_protocol": "HTTP"
-          }
         }
       ]
     }
