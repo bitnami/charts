@@ -63,8 +63,8 @@ spec:
       {{- if .Values.blackboxExporter.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.blackboxExporter.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if .Values.%%MAIN_OBJECT_BLOCK%%.terminationGracePeriodSeconds }}
-      terminationGracePeriodSeconds: {{ .Values.%%MAIN_OBJECT_BLOCK%%.terminationGracePeriodSeconds }}
+      {{- if .Values.blackboxExporter.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.blackboxExporter.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
         {{- if .Values.blackboxExporter.initContainers }}

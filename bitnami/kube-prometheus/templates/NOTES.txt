@@ -51,7 +51,7 @@ To access Prometheus from outside the cluster execute the following commands:
 
 {{- if and .Values.prometheus.thanos.create }}
 
-Thanos Sidecar can be accessed via port "{{ .Values.prometheus.thanos.service.port }}" on the following DNS name from within your cluster:
+Thanos Sidecar can be accessed via port "{{ .Values.prometheus.thanos.service.ports.grpc }}" on the following DNS name from within your cluster:
 
     {{ template "kube-prometheus.thanos.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
 

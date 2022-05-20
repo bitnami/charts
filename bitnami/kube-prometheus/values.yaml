@@ -369,6 +369,31 @@ operator:
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## Configure extra options for startup probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param operator.startupProbe.enabled Turn on and off startup probe
+  ## @param operator.startupProbe.initialDelaySeconds Delay before startup probe is initiated
+  ## @param operator.startupProbe.periodSeconds How often to perform the probe
+  ## @param operator.startupProbe.timeoutSeconds When the probe times out
+  ## @param operator.startupProbe.failureThreshold Minimum consecutive failures for the probe
+  ## @param operator.startupProbe.successThreshold Minimum consecutive successes for the probe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param operator.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param operator.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param operator.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## @param operator.logLevel Log level for Prometheus Operator
   ##
   logLevel: info
@@ -1310,7 +1335,7 @@ prometheus:
       ## @param prometheus.thanos.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
       ## e.g:
       ## extraHosts:
-      ##   - name: %%COMPONENT_NAME%%.local
+      ##   - name: thanos.prometheus.local
       ##     path: /
       ##
       extraHosts: []
@@ -1328,8 +1353,8 @@ prometheus:
       ## e.g:
       ## extraTls:
       ## - hosts:
-      ##     - %%COMPONENT_NAME%%.local
-      ##   secretName: %%COMPONENT_NAME%%.local-tls
+      ##     - thanos.prometheus.local
+      ##   secretName: thanos.prometheus.local-tls
       ##
       extraTls: []
       ## @param prometheus.thanos.ingress.secrets Custom TLS certificates as secrets
@@ -1341,7 +1366,7 @@ prometheus:
       ## Please see README.md for more information
       ## e.g:
       ## secrets:
-      ##   - name: %%COMPONENT_NAME%%.local-tls
+      ##   - name: thanos.prometheus.local-tls
       ##     key: |-
       ##       -----BEGIN RSA PRIVATE KEY-----
       ##       ...
@@ -2182,6 +2207,10 @@ blackboxExporter:
   ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## @param blackboxExporter.terminationGracePeriodSeconds In seconds, time the given to the Blackbox Exporter pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
   ## @param blackboxExporter.updateStrategy.type Blackbox Exporter statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
