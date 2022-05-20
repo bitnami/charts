@@ -3,7 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: Alertmanager
 metadata:
   name: {{ template "kube-prometheus.alertmanager.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -23,7 +23,7 @@ spec:
   {{- else if and .Values.alertmanager.ingress.enabled }}
   externalUrl: {{ printf "%s://%s%s" (ternary "https" "http" .Values.alertmanager.ingress.tls) .Values.alertmanager.ingress.hostname .Values.alertmanager.routePrefix }}
   {{- else }}
-  externalUrl: http://{{ template "kube-prometheus.alertmanager.fullname" . }}.{{ .Release.Namespace }}:{{ .Values.alertmanager.service.ports.http }}{{ .Values.alertmanager.routePrefix }}
+  externalUrl: http://{{ template "kube-prometheus.alertmanager.fullname" . }}.{{ include "common.names.namespace" . }}:{{ .Values.alertmanager.service.ports.http }}{{ .Values.alertmanager.routePrefix }}
   {{- end }}
   portName: "{{ .Values.alertmanager.portName }}"
   paused: {{ .Values.alertmanager.paused }}

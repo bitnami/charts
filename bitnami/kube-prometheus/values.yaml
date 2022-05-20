@@ -80,7 +80,7 @@ operator:
   ## @param operator.extraArgs Additional arguments passed to Prometheus Operator
   ## Example:
   ## extraArgs:
-  ##   - --namespaces={{ .Release.Namespace }}
+  ##   - --namespaces={{ include "common.names.namespace" . }}
   ##
   extraArgs: []
   ## @param operator.command Override default container command (useful when using custom images)

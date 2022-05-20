@@ -3,7 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "kube-prometheus.operator.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
     {{- if .Values.operator.serviceMonitor.labels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.operator.serviceMonitor.labels "context" $ ) | nindent 4 }}
@@ -38,5 +38,5 @@ spec:
     matchLabels: {{- include "kube-prometheus.operator.matchLabels" . | nindent 6 }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ include "common.names.namespace" . | quote }}
 {{- end }}

@@ -3,7 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "kube-prometheus.alertmanager.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
     {{- if .Values.alertmanager.serviceMonitor.labels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.alertmanager.serviceMonitor.labels "context" $ ) | nindent 4 }}
@@ -27,7 +27,7 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ include "common.names.namespace" . | quote }}
   endpoints:
     - port: http
       path: {{ trimSuffix "/" .Values.alertmanager.routePrefix }}/metrics
