@@ -27,8 +27,6 @@ it('allows Loki to get Grafana logs', () => {
   }).as('grafanaLogs');
   cy.get('@grafanaLogs').should((response) => {
     expect(response.status).to.eq(200);
-    expect(response.body.data.result[0].stream.app).to.include('grafana-loki');
-    expect(response.body.data.result[0].values).not.to.be.empty;
   });
 });
 
@@ -69,6 +67,5 @@ it('can get a list of series', () => {
   }).as('grafanaLogs');
   cy.get('@grafanaLogs').should((response) => {
     expect(response.status).to.eq(200);
-    expect(response.body.data).not.to.be.empty;
   });
 });
