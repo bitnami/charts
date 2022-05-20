@@ -44,9 +44,35 @@
             "endpoint": "lb-rabbitmq-http-stats",
             "app_protocol": "HTTP"
           }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/rabbitmq/cypress"
+            },
+            "endpoint": "lb-rabbitmq-http-stats",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "user",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/rabbitmq/goss"
+            },
+            "remote": {
+              "workload": "sts-rabbitmq"
+            }
+          }
         }
       ]
     },
+
     "publish": {
       "actions": [
         {
