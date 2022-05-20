@@ -159,7 +159,6 @@ spec:
           {{- else if .Values.operator.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- end }}
           {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
           {{- end }}
