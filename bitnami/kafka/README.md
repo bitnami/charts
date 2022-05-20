@@ -409,6 +409,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `provisioning.numPartitions`                         | Default number of partitions for topics when unspecified                                                                      | `1`                   |
 | `provisioning.replicationFactor`                     | Default replication factor for topics when unspecified                                                                        | `1`                   |
 | `provisioning.topics`                                | Kafka topics to provision                                                                                                     | `[]`                  |
+| `provisioning.tolerations`                           | Tolerations for pod assignment                                                                                                | `[]`                  |
 | `provisioning.extraProvisioningCommands`             | Extra commands to run to provision cluster resources                                                                          | `[]`                  |
 | `provisioning.parallel`                              | Number of provisioning commands to run at the same time                                                                       | `1`                   |
 | `provisioning.preScript`                             | Extra bash script to run before topic provisioning. $CLIENT_CONF is path to properties file with most needed configurations   | `""`                  |
