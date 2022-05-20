@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "dataplatform.emitter-name" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: dataplatform-emitter
     {{- if .Values.commonLabels }}
@@ -98,7 +98,7 @@ spec:
             - name: BP_RELEASE_NAME
               value: {{ .Release.Name }}
             - name: BP_NAMESPACE
-              value: {{ .Release.Namespace }}
+              value: {{ include "common.names.namespace" . | quote }}
             {{- if .Values.dataplatform.emitter.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.emitter.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

@@ -21,10 +21,10 @@ global:
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
-## @param nameOverride String to partially override %%COMPONENT_NAME%%.fullname template with a string (will prepend the release name)
+## @param nameOverride String to partially override common.names.fullname template with a string (will prepend the release name)
 ##
 nameOverride: ""
-## @param fullnameOverride String to fully override %%COMPONENT_NAME%%.fullname template with a string
+## @param fullnameOverride String to fully override common.names.fullname template with a string
 ##
 fullnameOverride: ""
 ## @param namespaceOverride String to fully override common.names.namespace
@@ -42,21 +42,6 @@ extraDeploy: []
 ## @param clusterDomain Kubernetes cluster domain name
 ##
 clusterDomain: cluster.local
-
-## Enable diagnostic mode in the deployment(s)/statefulset(s)
-##
-diagnosticMode:
-  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
-  ##
-  enabled: false
-  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
-  ##
-  command:
-    - sleep
-  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
-  ##
-  args:
-    - infinity
 
 ## @section Data Platform Chart parameters
 ## Configuration for the dataplatform prometheus exporter
@@ -284,7 +269,7 @@ dataplatform:
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
     schedulerName: ""
-    ## @param dataplatform.exporter.terminationGracePeriodSeconds In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully
+    ## @param dataplatform.exporter.terminationGracePeriodSeconds In seconds, time the given to the Data Platform Prometheus exporter pod needs to terminate gracefully
     ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
     ##
     terminationGracePeriodSeconds: ""
@@ -293,7 +278,7 @@ dataplatform:
     ## The value is evaluated as a template
     ##
     topologySpreadConstraints: []
-    ## @param dataplatform.exporter.lifecycleHooks for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup
+    ## @param dataplatform.exporter.lifecycleHooks for the Data Platform Prometheus exporter container(s) to automate configuration before or after startup
     ##
     lifecycleHooks: {}
     ## @param dataplatform.exporter.command Override Data Platform Exporter entrypoint string.
@@ -427,7 +412,7 @@ dataplatform:
     ## @param dataplatform.exporter.extraVolumeMounts Extra volume mounts to add to the container
     ##
     extraVolumeMounts: []
-    ## @param dataplatform.exporter.initContainers Add init containers to the %%MAIN_CONTAINER_NAME%% pods
+    ## @param dataplatform.exporter.initContainers Add init containers to the Data Platform Prometheus exporter pods
     ## Example:
     ## initContainers:
     ##   - name: your-image-name
@@ -438,7 +423,7 @@ dataplatform:
     ##         containerPort: 1234
     ##
     initContainers: []
-    ## @param dataplatform.exporter.sidecars Add sidecars to the %%MAIN_CONTAINER_NAME%% pods
+    ## @param dataplatform.exporter.sidecars Add sidecars to the Data Platform Prometheus exporter pods
     ## Example:
     ## sidecars:
     ##   - name: your-image-name
@@ -484,12 +469,12 @@ dataplatform:
       ##   - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
-      ## @param dataplatform.exporter.service.clusterIP %%MAIN_CONTAINER_NAME%% service Cluster IP
+      ## @param dataplatform.exporter.service.clusterIP Data Platform Prometheus exporter service Cluster IP
       ## e.g.:
       ## clusterIP: None
       ##
       clusterIP: ""
-      ## @param dataplatform.exporter.service.externalTrafficPolicy %%MAIN_CONTAINER_NAME%% service external traffic policy
+      ## @param dataplatform.exporter.service.externalTrafficPolicy Data Platform Prometheus exporter service external traffic policy
       ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
       externalTrafficPolicy: Cluster
@@ -600,7 +585,7 @@ dataplatform:
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
     schedulerName: ""
-    ## @param dataplatform.emitter.terminationGracePeriodSeconds In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully
+    ## @param dataplatform.emitter.terminationGracePeriodSeconds In seconds, time the given to the Data Platform emitter pod needs to terminate gracefully
     ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
     ##
     terminationGracePeriodSeconds: ""
@@ -609,7 +594,7 @@ dataplatform:
     ## The value is evaluated as a template
     ##
     topologySpreadConstraints: []
-    ## @param dataplatform.emitter.lifecycleHooks for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup
+    ## @param dataplatform.emitter.lifecycleHooks for the Data Platform emitter container(s) to automate configuration before or after startup
     ##
     lifecycleHooks: {}
     ## @param dataplatform.emitter.command Override Data Platform entrypoint string.
@@ -705,10 +690,10 @@ dataplatform:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     podAnnotations: {}
-    ## @param dataplatform.emitter.customLivenessProbe Override default liveness probe%%MAIN_CONTAINER_NAME%%
+    ## @param dataplatform.emitter.customLivenessProbe Override default liveness probeData Platform emitter
     ##
     customLivenessProbe: {}
-    ## @param dataplatform.emitter.customReadinessProbe Override default readiness probe%%MAIN_CONTAINER_NAME%%
+    ## @param dataplatform.emitter.customReadinessProbe Override default readiness probeData Platform emitter
     ##
     customReadinessProbe: {}
     ## @param dataplatform.emitter.customStartupProbe Override default startup probe
@@ -743,7 +728,7 @@ dataplatform:
     ## @param dataplatform.emitter.extraVolumeMounts Extra volume mounts to add to the container
     ##
     extraVolumeMounts: []
-    ## @param dataplatform.emitter.initContainers Add init containers to the %%MAIN_CONTAINER_NAME%% pods
+    ## @param dataplatform.emitter.initContainers Add init containers to the Data Platform emitter pods
     ## Example:
     ## initContainers:
     ##   - name: your-image-name
@@ -754,7 +739,7 @@ dataplatform:
     ##         containerPort: 1234
     ##
     initContainers: []
-    ## @param dataplatform.emitter.sidecars Add sidecars to the %%MAIN_CONTAINER_NAME%% pods
+    ## @param dataplatform.emitter.sidecars Add sidecars to the Data Platform emitter pods
     ## Example:
     ## sidecars:
     ##   - name: your-image-name
@@ -797,12 +782,12 @@ dataplatform:
       ##   - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
-      ## @param dataplatform.emitter.service.clusterIP %%MAIN_CONTAINER_NAME%% service Cluster IP
+      ## @param dataplatform.emitter.service.clusterIP Data Platform emitter service Cluster IP
       ## e.g.:
       ## clusterIP: None
       ##
       clusterIP: ""
-      ## @param dataplatform.emitter.service.externalTrafficPolicy %%MAIN_CONTAINER_NAME%% service external traffic policy
+      ## @param dataplatform.emitter.service.externalTrafficPolicy Data Platform emitter service external traffic policy
       ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
       externalTrafficPolicy: Cluster
