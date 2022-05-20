@@ -58,9 +58,7 @@ spec:
       {{- if .Values.influxdb.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.influxdb.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if .Values.serviceAccount.enabled }}
-      serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name }}
-      {{- end }}
+      serviceAccountName: {{ include "influxdb.serviceAccountName" . }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: init-chmod-data
