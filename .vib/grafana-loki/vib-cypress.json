@@ -32,13 +32,6 @@
       },
       "actions": [
         {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
-          }
-        },
-        {
           "action_id": "cypress",
           "params": {
             "resources": {
@@ -46,21 +39,6 @@
             },
             "endpoint": "lb-grafana-loki-gateway-http",
             "app_protocol": "HTTP"
-          }
-        }
-      ]
-    },
-    "publish": {
-      "actions": [
-        {
-          "action_id": "helm-publish",
-          "params": {
-            "repository": {
-              "kind": "S3",
-              "url": "{VIB_ENV_S3_URL}",
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
-            }
           }
         }
       ]
