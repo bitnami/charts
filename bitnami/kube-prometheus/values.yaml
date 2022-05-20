@@ -50,7 +50,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.56.2-debian-10-r7
+    tag: 0.56.2-debian-10-r8
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -362,7 +362,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.35.0-debian-10-r24
+    tag: 2.35.0-debian-10-r25
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -580,7 +580,7 @@ prometheus:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -796,6 +796,9 @@ prometheus:
   ## @param prometheus.replicaCount Number of Prometheus replicas desired
   ##
   replicaCount: 1
+  ## @param prometheus.shards Number of Prometheus shards desired
+  ##
+  shards: 1
   ## @param prometheus.logLevel Log level for Prometheus
   ##
   logLevel: info
@@ -1190,7 +1193,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.24.0-debian-10-r51
+    tag: 0.24.0-debian-10-r53
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1403,7 +1406,7 @@ alertmanager:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -1699,7 +1702,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.20.0-debian-10-r59
+    tag: 0.20.0-debian-10-r61
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

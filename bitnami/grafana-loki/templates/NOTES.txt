@@ -50,7 +50,11 @@ Installed components:
 {{- if .Values.gateway.enabled }}
 {{- if .Values.gateway.ingress.enabled }}
 
+<<<<<<< HEAD
 1. Get the gateway URL and associate WordPress hostname to your cluster external IP:
+=======
+1. Get the gateway URL and associate the gateway hostname to your cluster external IP:
+>>>>>>> master
 
    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
    echo "Gateway URL: http{{ if .Values.gateway.ingress.tls }}s{{ end }}://{{ .Values.gateway.ingress.hostname }}/"

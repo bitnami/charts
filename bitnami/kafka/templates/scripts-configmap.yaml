@@ -179,4 +179,17 @@ data:
     {{- end }}
     {{- end }}
 
+    # Configure zookeeper client
+    {{- if and (not (empty .Values.auth.zookeeper.tls.existingSecret)) .Values.auth.zookeeper.tls.enabled }}
+    JKS_TRUSTSTORE={{ printf "/kafka-zookeeper-cert/%s" (.Values.auth.zookeeper.tls.existingSecretTruststoreKey) | quote }}
+    JKS_KEYSTORE={{ printf "/kafka-zookeeper-cert/%s" (.Values.auth.zookeeper.tls.existingSecretKeystoreKey) | quote }}
+    if [[ -f "$JKS_TRUSTSTORE" ]] && [[ -f "$JKS_KEYSTORE" ]]; then
+      CERT_DIR="/opt/bitnami/kafka/config/certs"
+      TRUSTSTORE_LOCATION="${CERT_DIR}/zookeeper.truststore.jks"
+      cp "$JKS_TRUSTSTORE" "$TRUSTSTORE_LOCATION"
+      cp "$JKS_KEYSTORE" "${CERT_DIR}/zookeeper.keystore.jks"
+      export KAFKA_ZOOKEEPER_TLS_TRUSTSTORE_FILE="${TRUSTSTORE_LOCATION}"
+    fi
+    {{- end }}
+
     exec /entrypoint.sh /run.sh

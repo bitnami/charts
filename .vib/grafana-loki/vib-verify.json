@@ -20,7 +20,7 @@
       "context": {
         "resources": {
           "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/grafana-tempo"
+          "path": "/bitnami/grafana-loki"
         },
         "runtime_parameters": "ImdhdGV3YXkiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJodHRwIjogODAKICAgICJ0eXBlIjogIkxvYWRCYWxhbmNlciIK",
         "target_platform": {
@@ -49,7 +49,7 @@
           "action_id": "cypress",
           "params": {
             "resources": {
-              "path": "/.vib/airflow/cypress"
+              "path": "/.vib/grafana-loki/cypress"
             },
             "endpoint": "lb-grafana-loki-gateway-http",
             "app_protocol": "HTTP"
