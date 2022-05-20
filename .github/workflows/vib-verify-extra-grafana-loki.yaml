@@ -28,7 +28,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
       - uses: vmware-labs/vmware-image-builder-action@main
         with:
-          pipeline: grafana-loki/vib-cypress.json
+          pipeline: grafana-loki/vib-verify-cypress.json
         env:
           VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
 
@@ -43,6 +43,6 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
       - uses: vmware-labs/vmware-image-builder-action@main
         with:
-          pipeline: grafana-loki/vib-goss.json
+          pipeline: grafana-loki/vib-verify-goss.json
         env:
           VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
