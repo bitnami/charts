@@ -79,14 +79,10 @@ spec:
           {{- if .Values.dataplatform.exporter.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.dataplatform.exporter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          {{- else if .Values.dataplatform.exporter.command }}
+          {{- if .Values.dataplatform.exporter.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else if .Values.dataplatform.exporter.args }}
+          {{- if .Values.dataplatform.exporter.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.args "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.dataplatform.exporter.lifecycleHooks }}
@@ -115,7 +111,6 @@ spec:
           {{- if .Values.dataplatform.exporter.resources }}
           resources: {{- toYaml .Values.dataplatform.exporter.resources | nindent 12 }}
           {{- end }}
-          {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.dataplatform.exporter.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataplatform.exporter.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
@@ -139,7 +134,6 @@ spec:
               port: exporter-port
           {{- else if .Values.dataplatform.exporter.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataplatform.exporter.customStartupProbe "context" $) | nindent 12 }}
-          {{- end }}
           {{- end }}
           volumeMounts:
             - name: exporter-config
