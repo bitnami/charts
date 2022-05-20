@@ -103,19 +103,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                                                     | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                            | `""`            |
-| `nameOverride`           | String to partially override %%COMPONENT_NAME%%.fullname template with a string (will prepend the release name) | `""`            |
-| `fullnameOverride`       | String to fully override %%COMPONENT_NAME%%.fullname template with a string                                     | `""`            |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                                 | `""`            |
-| `commonLabels`           | Labels to add to all deployed objects                                                                           | `{}`            |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                                      | `{}`            |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                               | `[]`            |
-| `clusterDomain`          | Kubernetes cluster domain name                                                                                  | `cluster.local` |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                         | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                                      | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                                         | `["infinity"]`  |
+| Name                | Description                                                                                               | Value           |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname template with a string                                     | `""`            |
+| `namespaceOverride` | String to fully override common.names.namespace                                                           | `""`            |
+| `commonLabels`      | Labels to add to all deployed objects                                                                     | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                                | `{}`            |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                                         | `[]`            |
+| `clusterDomain`     | Kubernetes cluster domain name                                                                            | `cluster.local` |
 
 
 ### Data Platform Chart parameters
@@ -155,9 +152,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.exporter.containerPorts.http`                   | Data Platform Prometheus exporter port                                                                           | `9090`                          |
 | `dataplatform.exporter.priorityClassName`                     | exporter priorityClassName                                                                                       | `""`                            |
 | `dataplatform.exporter.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                   | `""`                            |
-| `dataplatform.exporter.terminationGracePeriodSeconds`         | In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully                      | `""`                            |
+| `dataplatform.exporter.terminationGracePeriodSeconds`         | In seconds, time the given to the Data Platform Prometheus exporter pod needs to terminate gracefully            | `""`                            |
 | `dataplatform.exporter.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                   | `[]`                            |
-| `dataplatform.exporter.lifecycleHooks`                        | for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup                   | `{}`                            |
+| `dataplatform.exporter.lifecycleHooks`                        | for the Data Platform Prometheus exporter container(s) to automate configuration before or after startup         | `{}`                            |
 | `dataplatform.exporter.command`                               | Override Data Platform Exporter entrypoint string.                                                               | `[]`                            |
 | `dataplatform.exporter.args`                                  | Arguments for the provided command if needed                                                                     | `[]`                            |
 | `dataplatform.exporter.resources.limits`                      | The resources limits for the container                                                                           | `{}`                            |
@@ -187,8 +184,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.exporter.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                          | `""`                            |
 | `dataplatform.exporter.extraVolumes`                          | Extra volumes to add to the deployment                                                                           | `[]`                            |
 | `dataplatform.exporter.extraVolumeMounts`                     | Extra volume mounts to add to the container                                                                      | `[]`                            |
-| `dataplatform.exporter.initContainers`                        | Add init containers to the %%MAIN_CONTAINER_NAME%% pods                                                          | `[]`                            |
-| `dataplatform.exporter.sidecars`                              | Add sidecars to the %%MAIN_CONTAINER_NAME%% pods                                                                 | `[]`                            |
+| `dataplatform.exporter.initContainers`                        | Add init containers to the Data Platform Prometheus exporter pods                                                | `[]`                            |
+| `dataplatform.exporter.sidecars`                              | Add sidecars to the Data Platform Prometheus exporter pods                                                       | `[]`                            |
 | `dataplatform.exporter.service.type`                          | Service type for default Data Platform Prometheus exporter service                                               | `ClusterIP`                     |
 | `dataplatform.exporter.service.annotations`                   | Exporter service annotations                                                                                     | `{}`                            |
 | `dataplatform.exporter.service.labels`                        | Additional labels for Data Platform exporter service                                                             | `{}`                            |
@@ -196,8 +193,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.exporter.service.loadBalancerIP`                | Load balancer IP for the Data Platform Exporter Service (optional, cloud specific)                               | `""`                            |
 | `dataplatform.exporter.service.nodePorts.http`                | Node ports for the HTTP exporter service                                                                         | `""`                            |
 | `dataplatform.exporter.service.loadBalancerSourceRanges`      | Exporter Load Balancer Source ranges                                                                             | `[]`                            |
-| `dataplatform.exporter.service.clusterIP`                     | %%MAIN_CONTAINER_NAME%% service Cluster IP                                                                       | `""`                            |
-| `dataplatform.exporter.service.externalTrafficPolicy`         | %%MAIN_CONTAINER_NAME%% service external traffic policy                                                          | `Cluster`                       |
+| `dataplatform.exporter.service.clusterIP`                     | Data Platform Prometheus exporter service Cluster IP                                                             | `""`                            |
+| `dataplatform.exporter.service.externalTrafficPolicy`         | Data Platform Prometheus exporter service external traffic policy                                                | `Cluster`                       |
 | `dataplatform.exporter.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                   | `[]`                            |
 | `dataplatform.exporter.service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                             | `None`                          |
 | `dataplatform.exporter.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                      | `{}`                            |
@@ -229,9 +226,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.emitter.containerPorts.http`                    | Data Platform emitter port                                                                                       | `8091`                          |
 | `dataplatform.emitter.priorityClassName`                      | exporter priorityClassName                                                                                       | `""`                            |
 | `dataplatform.emitter.schedulerName`                          | Name of the k8s scheduler (other than default)                                                                   | `""`                            |
-| `dataplatform.emitter.terminationGracePeriodSeconds`          | In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully                      | `""`                            |
+| `dataplatform.emitter.terminationGracePeriodSeconds`          | In seconds, time the given to the Data Platform emitter pod needs to terminate gracefully                        | `""`                            |
 | `dataplatform.emitter.topologySpreadConstraints`              | Topology Spread Constraints for pod assignment                                                                   | `[]`                            |
-| `dataplatform.emitter.lifecycleHooks`                         | for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup                   | `{}`                            |
+| `dataplatform.emitter.lifecycleHooks`                         | for the Data Platform emitter container(s) to automate configuration before or after startup                     | `{}`                            |
 | `dataplatform.emitter.command`                                | Override Data Platform entrypoint string.                                                                        | `[]`                            |
 | `dataplatform.emitter.args`                                   | Arguments for the provided command if needed                                                                     | `[]`                            |
 | `dataplatform.emitter.resources.limits`                       | The resources limits for the container                                                                           | `{}`                            |
@@ -251,8 +248,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.emitter.tolerations`                            | Tolerations for emitter pods assignment. Evaluated as a template                                                 | `[]`                            |
 | `dataplatform.emitter.podLabels`                              | Additional labels for Metrics emitter pod                                                                        | `{}`                            |
 | `dataplatform.emitter.podAnnotations`                         | Additional annotations for Metrics emitter pod                                                                   | `{}`                            |
-| `dataplatform.emitter.customLivenessProbe`                    | Override default liveness probe%%MAIN_CONTAINER_NAME%%                                                           | `{}`                            |
-| `dataplatform.emitter.customReadinessProbe`                   | Override default readiness probe%%MAIN_CONTAINER_NAME%%                                                          | `{}`                            |
+| `dataplatform.emitter.customLivenessProbe`                    | Override default liveness probeData Platform emitter                                                             | `{}`                            |
+| `dataplatform.emitter.customReadinessProbe`                   | Override default readiness probeData Platform emitter                                                            | `{}`                            |
 | `dataplatform.emitter.customStartupProbe`                     | Override default startup probe                                                                                   | `{}`                            |
 | `dataplatform.emitter.updateStrategy.type`                    | Update strategy - only really applicable for deployments with RWO PVs attached                                   | `RollingUpdate`                 |
 | `dataplatform.emitter.updateStrategy.rollingUpdate`           | Deployment rolling update configuration parameters                                                               | `{}`                            |
@@ -261,8 +258,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.emitter.extraEnvVarsSecret`                     | Secret with extra environment variables                                                                          | `""`                            |
 | `dataplatform.emitter.extraVolumes`                           | Extra volumes to add to the deployment                                                                           | `[]`                            |
 | `dataplatform.emitter.extraVolumeMounts`                      | Extra volume mounts to add to the container                                                                      | `[]`                            |
-| `dataplatform.emitter.initContainers`                         | Add init containers to the %%MAIN_CONTAINER_NAME%% pods                                                          | `[]`                            |
-| `dataplatform.emitter.sidecars`                               | Add sidecars to the %%MAIN_CONTAINER_NAME%% pods                                                                 | `[]`                            |
+| `dataplatform.emitter.initContainers`                         | Add init containers to the Data Platform emitter pods                                                            | `[]`                            |
+| `dataplatform.emitter.sidecars`                               | Add sidecars to the Data Platform emitter pods                                                                   | `[]`                            |
 | `dataplatform.emitter.service.type`                           | Service type for default Data Platform metrics emitter service                                                   | `ClusterIP`                     |
 | `dataplatform.emitter.service.annotations`                    | annotations for Data Platform emitter service                                                                    | `{}`                            |
 | `dataplatform.emitter.service.labels`                         | Additional labels for Data Platform emitter service                                                              | `{}`                            |
@@ -270,8 +267,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataplatform.emitter.service.loadBalancerIP`                 | Load balancer IP for the dataplatform emitter Service (optional, cloud specific)                                 | `""`                            |
 | `dataplatform.emitter.service.nodePorts.http`                 | Node ports for the HTTP emitter service                                                                          | `""`                            |
 | `dataplatform.emitter.service.loadBalancerSourceRanges`       | Data Platform Emitter Load Balancer Source ranges                                                                | `[]`                            |
-| `dataplatform.emitter.service.clusterIP`                      | %%MAIN_CONTAINER_NAME%% service Cluster IP                                                                       | `""`                            |
-| `dataplatform.emitter.service.externalTrafficPolicy`          | %%MAIN_CONTAINER_NAME%% service external traffic policy                                                          | `Cluster`                       |
+| `dataplatform.emitter.service.clusterIP`                      | Data Platform emitter service Cluster IP                                                                         | `""`                            |
+| `dataplatform.emitter.service.externalTrafficPolicy`          | Data Platform emitter service external traffic policy                                                            | `Cluster`                       |
 | `dataplatform.emitter.service.extraPorts`                     | Extra ports to expose (normally used with the `sidecar` value)                                                   | `[]`                            |
 | `dataplatform.emitter.service.sessionAffinity`                | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                             | `None`                          |
 | `dataplatform.emitter.service.sessionAffinityConfig`          | Additional settings for the sessionAffinity                                                                      | `{}`                            |
