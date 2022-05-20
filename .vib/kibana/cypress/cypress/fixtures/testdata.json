@@ -1,9 +1,0 @@
-{
-  "dashboardTitle": "Test_dashboard",
-  "dashboardDescription": "Test_dashboard_description",
-  "visualizationTitle": "Test_visualisation",
-  "testIndexName": "test_index",
-  "remoteClusterName":"remoteCluster",
-  "remoteCluster":"localhost:90",
-  "workpadName":"testWorkpad"
-}

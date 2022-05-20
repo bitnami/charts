@@ -211,6 +211,21 @@ SASL_PLAINTEXT
 {{- end -}}
 
 {{/*
+Return the protocol used with zookeeper
+*/}}
+{{- define "kafka.zookeeper.protocol" -}}
+{{- if and .Values.auth.zookeeper.tls.enabled .Values.zookeeper.auth.enabled .Values.auth.sasl.jaas.zookeeperUser -}}
+SASL_SSL
+{{- else if and .Values.auth.zookeeper.tls.enabled -}}
+SSL
+{{- else if and .Values.zookeeper.auth.enabled .Values.auth.sasl.jaas.zookeeperUser -}}
+SASL
+{{- else -}}
+PLAINTEXT
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Kafka JAAS credentials secret
 */}}
 {{- define "kafka.jaasSecretName" -}}
