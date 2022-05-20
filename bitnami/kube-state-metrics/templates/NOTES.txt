@@ -4,6 +4,26 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 ** Please be patient while the chart is being deployed **
 
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ template "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ template "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    kube-state-metrics --port=8080 --telemetry-port=8081
+
+{{- else }}
+
 Watch the kube-state-metrics Deployment status using the command:
 
     kubectl get deploy -w --namespace {{ include "common.names.namespace" . }} {{ template "common.names.fullname" . }}
@@ -35,6 +55,7 @@ To access kube-state-metrics from outside the cluster execute the following comm
     export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
     echo "URL: http://$NODE_IP:$NODE_PORT/"
 
+{{- end }}
 {{- end }}
 
 {{- include "kube-state-metrics.checkRollingTags" . }}
