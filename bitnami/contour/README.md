@@ -99,7 +99,7 @@ $ helm uninstall my-release
 | `contour.replicaCount`                                        | Number of Contour Pod replicas                                                                                                     | `1`                    |
 | `contour.priorityClassName`                                   | Priority class assigned to the pods                                                                                                | `""`                   |
 | `contour.schedulerName`                                       | Name of the k8s scheduler (other than default)                                                                                     | `""`                   |
-| `contour.terminationGracePeriodSeconds`                       | In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully                                        | `""`                   |
+| `contour.terminationGracePeriodSeconds`                       | In seconds, time the given to the Contour pod needs to terminate gracefully                                                        | `""`                   |
 | `contour.topologySpreadConstraints`                           | Topology Spread Constraints for pod assignment                                                                                     | `[]`                   |
 | `contour.containerPorts.xds`                                  | Set xds port inside Contour pod                                                                                                    | `8001`                 |
 | `contour.containerPorts.metrics`                              | Set metrics port inside Contour pod                                                                                                | `8000`                 |
@@ -357,7 +357,7 @@ $ helm uninstall my-release
 | `defaultBackend.podAnnotations`                        | Annotations for Controller pods                                                                      | `{}`                     |
 | `defaultBackend.priorityClassName`                     | Priority class assigned to the pods                                                                  | `""`                     |
 | `defaultBackend.schedulerName`                         | Name of the k8s scheduler (other than default)                                                       | `""`                     |
-| `defaultBackend.terminationGracePeriodSeconds`         | In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully          | `60`                     |
+| `defaultBackend.terminationGracePeriodSeconds`         | In seconds, time the given to the default backend pod needs to terminate gracefully                  | `60`                     |
 | `defaultBackend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                       | `[]`                     |
 | `defaultBackend.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                  | `""`                     |
 | `defaultBackend.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`             | `soft`                   |
