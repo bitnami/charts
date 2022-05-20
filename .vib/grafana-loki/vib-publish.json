@@ -49,7 +49,7 @@
           "action_id": "cypress",
           "params": {
             "resources": {
-              "path": "/.vib/airflow/cypress"
+              "path": "/.vib/grafana-loki/cypress"
             },
             "endpoint": "lb-grafana-loki-gateway-http",
             "app_protocol": "HTTP"

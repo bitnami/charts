@@ -1,5 +1,9 @@
 {{- if .Values.gateway.ingress.enabled }}
+<<<<<<< HEAD
 apiVersion: {{ include "common.capabilities.gateway.ingress.apiVersion" . }}
+=======
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+>>>>>>> master
 kind: Ingress
 metadata:
   name: {{ include "grafana-loki.gateway.fullname" . }}
@@ -16,7 +20,11 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
+<<<<<<< HEAD
   {{- if and .Values.gateway.ingress.ingressClassName (eq "true" (include "common.gateway.ingress.supportsIngressClassname" .)) }}
+=======
+  {{- if and .Values.gateway.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+>>>>>>> master
   ingressClassName: {{ .Values.gateway.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -28,16 +36,24 @@ spec:
           {{- toYaml .Values.gateway.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.gateway.ingress.path }}
+<<<<<<< HEAD
             {{- if eq "true" (include "common.gateway.ingress.supportsPathType" .) }}
             pathType: {{ .Values.gateway.ingress.pathType }}
             {{- end }}
             backend: {{- include "common.gateway.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+=======
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.gateway.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+>>>>>>> master
     {{- end }}
     {{- range .Values.gateway.ingress.extraHosts }}
     - host: {{ .name | quote }}
       http:
         paths:
           - path: {{ default "/" .path }}
+<<<<<<< HEAD
             {{- if eq "true" (include "common.gateway.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
@@ -46,6 +62,16 @@ spec:
   {{- if or (and .Values.gateway.ingress.tls (or (include "common.gateway.ingress.certManagerRequest" ( dict "annotations" .Values.gateway.ingress.annotations )) .Values.gateway.ingress.selfSigned)) .Values.gateway.ingress.extraTls }}
   tls:
     {{- if and .Values.gateway.ingress.tls (or (include "common.gateway.ingress.certManagerRequest" ( dict "annotations" .Values.gateway.ingress.annotations )) .Values.gateway.ingress.selfSigned) }}
+=======
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+  {{- if or (and .Values.gateway.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.gateway.ingress.annotations )) .Values.gateway.ingress.selfSigned)) .Values.gateway.ingress.extraTls }}
+  tls:
+    {{- if and .Values.gateway.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.gateway.ingress.annotations )) .Values.gateway.ingress.selfSigned) }}
+>>>>>>> master
     - hosts:
         - {{ .Values.gateway.ingress.hostname | quote }}
       secretName: {{ printf "%s-tls" .Values.gateway.ingress.hostname }}
