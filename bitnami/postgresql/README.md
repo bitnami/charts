@@ -69,26 +69,27 @@ kubectl delete pvc -l release=my-release
 
 ### Global parameters
 
-| Name                                                           | Description                                                                                     | Value     |
-|----------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-----------|
-| `global.imageRegistry`                                         | Global Docker image registry                                                                    | `""`      |
-| `global.imagePullSecrets`                                      | Global Docker registry secret names as an array                                                 | `[]`      |
-| `global.storageClass`                                          | Global StorageClass for Persistent Volume(s)                                                    | `""`      |
-| `global.postgresql.auth.postgresPassword`                      | Password for the "postgres" admin user (overrides `auth.postgresPassword`)                      | `""`      |
-| `global.postgresql.auth.username`                              | Name for a custom user to create (overrides `auth.username`)                                    | `""`      |
-| `global.postgresql.auth.password`                              | Password for the custom user to create (overrides `auth.password`)                              | `""`      |
-| `global.postgresql.auth.database`                              | Name for a custom database to create (overrides `auth.database`)                                | `""`      |
-| `global.postgresql.auth.existingSecret.enabled`                | Enable the use an existing secret for PostgreSQL credentials (overrides `auth.existingSecret`). | `"false"` |
-| `global.postgresql.auth.existingSecret.secretName`             | Name of existing secret to use for PostgreSQL credentials.                                      | `""`      |
-| `global.postgresql.auth.existingSecret.adminPasswordKey`       | Name of key in existing secret to use for PostgreSQL credentials.                               | `""`      |
-| `global.postgresql.auth.existingSecret.userPasswordKey`        | Name of key in existing secret to use for PostgreSQL credentials.                               | `""`      |
-| `global.postgresql.auth.existingSecret.replicationPasswordKey` | Name of key in existing secret to use for PostgreSQL credentials.                               | `""`      |
-| `global.postgresql.service.ports.postgresql`                   | PostgreSQL service port (overrides `service.ports.postgresql`)                                  | `""`      |
+| Name                                                           | Description                                                                                     | Value                  |
+| -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------- |
+| `global.imageRegistry`                                         | Global Docker image registry                                                                    | `""`                   |
+| `global.imagePullSecrets`                                      | Global Docker registry secret names as an array                                                 | `[]`                   |
+| `global.storageClass`                                          | Global StorageClass for Persistent Volume(s)                                                    | `""`                   |
+| `global.postgresql.auth.postgresPassword`                      | Password for the "postgres" admin user (overrides `auth.postgresPassword`)                      | `""`                   |
+| `global.postgresql.auth.username`                              | Name for a custom user to create (overrides `auth.username`)                                    | `""`                   |
+| `global.postgresql.auth.password`                              | Password for the custom user to create (overrides `auth.password`)                              | `""`                   |
+| `global.postgresql.auth.database`                              | Name for a custom database to create (overrides `auth.database`)                                | `""`                   |
+| `global.postgresql.auth.existingSecret.enabled`                | Enable the use an existing secret for PostgreSQL credentials (overrides `auth.existingSecret`). | `false`                |
+| `global.postgresql.auth.existingSecret.secretName`             | Name of existing secret to use for PostgreSQL credentials.                                      | `name-of-secret`       |
+| `global.postgresql.auth.existingSecret.adminPasswordKey`       | Name of key in existing secret to use for PostgreSQL credentials.                               | `admin-password`       |
+| `global.postgresql.auth.existingSecret.userPasswordKey`        | Name of key in existing secret to use for PostgreSQL credentials.                               | `user-password`        |
+| `global.postgresql.auth.existingSecret.replicationPasswordKey` | Name of key in existing secret to use for PostgreSQL credentials.                               | `replication-password` |
+| `global.postgresql.service.ports.postgresql`                   | PostgreSQL service port (overrides `service.ports.postgresql`)                                  | `""`                   |
+
 
 ### Common parameters
 
 | Name                     | Description                                                                                  | Value           |
-|--------------------------|----------------------------------------------------------------------------------------------|-----------------|
+| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
 | `kubeVersion`            | Override Kubernetes version                                                                  | `""`            |
 | `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
@@ -100,13 +101,14 @@ kubectl delete pvc -l release=my-release
 | `diagnosticMode.command` | Command to override all containers in the statefulset                                        | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the statefulset                                           | `["infinity"]`  |
 
+
 ### PostgreSQL common parameters
 
 | Name                                         | Description                                                                                                                                                                                                                                                                                                                                      | Value                      |
-|----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
 | `image.registry`                             | PostgreSQL image registry                                                                                                                                                                                                                                                                                                                        | `docker.io`                |
 | `image.repository`                           | PostgreSQL image repository                                                                                                                                                                                                                                                                                                                      | `bitnami/postgresql`       |
-| `image.tag`                                  | PostgreSQL image tag (immutable tags are recommended)                                                                                                                                                                                                                                                                                            | `14.2.0-debian-10-r58`     |
+| `image.tag`                                  | PostgreSQL image tag (immutable tags are recommended)                                                                                                                                                                                                                                                                                            | `14.3.0-debian-10-r7`      |
 | `image.pullPolicy`                           | PostgreSQL image pull policy                                                                                                                                                                                                                                                                                                                     | `IfNotPresent`             |
 | `image.pullSecrets`                          | Specify image pull secrets                                                                                                                                                                                                                                                                                                                       | `[]`                       |
 | `image.debug`                                | Specify if debug values should be set                                                                                                                                                                                                                                                                                                            | `false`                    |
@@ -117,11 +119,11 @@ kubectl delete pvc -l release=my-release
 | `auth.database`                              | Name for a custom database to create                                                                                                                                                                                                                                                                                                             | `""`                       |
 | `auth.replicationUsername`                   | Name of the replication user                                                                                                                                                                                                                                                                                                                     | `repl_user`                |
 | `auth.replicationPassword`                   | Password for the replication user. Ignored if `auth.existingSecret` with key `replication-password` is provided                                                                                                                                                                                                                                  | `""`                       |
-| `auth.existingSecret.enabled`                | Enable the use an existing secret for PostgreSQL credentials. `auth.postgresPassword`, `auth.password`, and `auth.replicationPassword` will be ignored and picked up from this secret. The secret might also contains the key `ldap-password` if LDAP is enabled. `ldap.bind_password` will be ignored and picked from this secret in this case. | `"false"`                  |
-| `auth.existingSecret.secretName`             | Name of existing secret to use for PostgreSQL credentials.                                                                                                                                                                                                                                                                                       | `""`                       |
-| `auth.existingSecret.adminPasswordKey`       | Name of key in existing secret to use for PostgreSQL credentials.                                                                                                                                                                                                                                                                                | `""`                       |
-| `auth.existingSecret.userPasswordKey`        | Name of key in existing secret to use for PostgreSQL credentials.                                                                                                                                                                                                                                                                                | `""`                       |
-| `auth.existingSecret.replicationPasswordKey` | Name of key in existing secret to use for PostgreSQL credentials.                                                                                                                                                                                                                                                                                | `""`                       |
+| `auth.existingSecret.enabled`                | Enable the use an existing secret for PostgreSQL credentials. `auth.postgresPassword`, `auth.password`, and `auth.replicationPassword` will be ignored and picked up from this secret. The secret might also contains the key `ldap-password` if LDAP is enabled. `ldap.bind_password` will be ignored and picked from this secret in this case. | `false`                    |
+| `auth.existingSecret.secretName`             | Name of existing secret to use for PostgreSQL credentials.                                                                                                                                                                                                                                                                                       | `name-of-secret`           |
+| `auth.existingSecret.adminPasswordKey`       | Name of key in existing secret to use for PostgreSQL credentials.                                                                                                                                                                                                                                                                                | `admin-password`           |
+| `auth.existingSecret.userPasswordKey`        | Name of key in existing secret to use for PostgreSQL credentials.                                                                                                                                                                                                                                                                                | `user-password`            |
+| `auth.existingSecret.replicationPasswordKey` | Name of key in existing secret to use for PostgreSQL credentials.                                                                                                                                                                                                                                                                                | `replication-password`     |
 | `auth.usePasswordFiles`                      | Mount credentials as a files instead of using an environment variable                                                                                                                                                                                                                                                                            | `false`                    |
 | `architecture`                               | PostgreSQL architecture (`standalone` or `replication`)                                                                                                                                                                                                                                                                                          | `standalone`               |
 | `replication.synchronousCommit`              | Set synchronous commit mode. Allowed values: `on`, `remote_apply`, `remote_write`, `local` and `off`                                                                                                                                                                                                                                             | `off`                      |
@@ -161,6 +163,7 @@ kubectl delete pvc -l release=my-release
 | `tls.certKeyFilename`                        | Certificate key filename                                                                                                                                                                                                                                                                                                                         | `""`                       |
 | `tls.certCAFilename`                         | CA Certificate filename                                                                                                                                                                                                                                                                                                                          | `""`                       |
 | `tls.crlFilename`                            | File containing a Certificate Revocation List                                                                                                                                                                                                                                                                                                    | `""`                       |
+
 
 ### PostgreSQL Primary parameters
 
@@ -261,6 +264,7 @@ kubectl delete pvc -l release=my-release
 | `primary.persistence.selector`               | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                  | `{}`                  |
 | `primary.persistence.dataSource`             | Custom PVC data source                                                                                                   | `{}`                  |
 
+
 ### PostgreSQL read only replica parameters
 
 | Name                                              | Description                                                                                                              | Value                 |
@@ -345,6 +349,7 @@ kubectl delete pvc -l release=my-release
 | `readReplicas.persistence.selector`               | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                  | `{}`                  |
 | `readReplicas.persistence.dataSource`             | Custom PVC data source                                                                                                   | `{}`                  |
 
+
 ### NetworkPolicy parameters
 
 | Name                                                                      | Description                                                                                                                                        | Value   |
@@ -364,6 +369,7 @@ kubectl delete pvc -l release=my-release
 | `networkPolicy.egressRules.denyConnectionsToExternal`                     | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                                     | `false` |
 | `networkPolicy.egressRules.customRules`                                   | Custom network policy rule                                                                                                                         | `{}`    |
 
+
 ### Volume Permissions parameters
 
 | Name                                                   | Description                                                                     | Value                   |
@@ -371,12 +377,13 @@ kubectl delete pvc -l release=my-release
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r388`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r430`     |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
 | `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                             | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                  | `0`                     |
+
 
 ### Other Parameters
 
@@ -390,6 +397,7 @@ kubectl delete pvc -l release=my-release
 | `rbac.rules`                                  | Custom RBAC rules to set                                                                                                                    | `[]`    |
 | `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
 
+
 ### Metrics Parameters
 
 | Name                                            | Description                                                                           | Value                       |
@@ -397,7 +405,7 @@ kubectl delete pvc -l release=my-release
 | `metrics.enabled`                               | Start a prometheus exporter                                                           | `false`                     |
 | `metrics.image.registry`                        | PostgreSQL Prometheus Exporter image registry                                         | `docker.io`                 |
 | `metrics.image.repository`                      | PostgreSQL Prometheus Exporter image repository                                       | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                             | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)             | `0.10.1-debian-10-r76`      |
+| `metrics.image.tag`                             | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)             | `0.10.1-debian-10-r117`     |
 | `metrics.image.pullPolicy`                      | PostgreSQL Prometheus Exporter image pull policy                                      | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                     | Specify image pull secrets                                                            | `[]`                        |
 | `metrics.customMetrics`                         | Define additional custom metrics                                                      | `{}`                        |
@@ -447,6 +455,7 @@ kubectl delete pvc -l release=my-release
 | `metrics.prometheusRule.namespace`              | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)         | `""`                        |
 | `metrics.prometheusRule.labels`                 | Additional labels that can be used so PrometheusRule will be discovered by Prometheus | `{}`                        |
 | `metrics.prometheusRule.rules`                  | PrometheusRule definitions                                                            | `[]`                        |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
