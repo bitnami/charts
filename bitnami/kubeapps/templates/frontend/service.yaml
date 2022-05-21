@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: frontend
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.frontend.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.frontend.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.frontend.service.type }}
+  {{- if and .Values.frontend.service.clusterIP (eq .Values.frontend.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.frontend.service.clusterIP }}
+  {{- end }}
+  {{- if or (eq .Values.frontend.service.type "LoadBalancer") (eq .Values.frontend.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.frontend.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.frontend.service.type "LoadBalancer") .Values.frontend.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.frontend.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  {{- if and (eq .Values.frontend.service.type "LoadBalancer") (not (empty .Values.frontend.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.frontend.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.frontend.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.frontend.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.frontend.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.frontend.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.frontend.service.ports.http }}
+      protocol: TCP
+      {{- if and .Values.authProxy.enabled (not .Values.authProxy.external) }}
+      targetPort: proxy
+      {{- else }}
+      targetPort: http
+      {{- end }}
+      {{- if and (or (eq .Values.frontend.service.type "NodePort") (eq .Values.frontend.service.type "LoadBalancer")) (not (empty .Values.frontend.service.nodePorts.http)) }}
+      nodePort: {{ .Values.frontend.service.nodePorts.http }}
+      {{- else if eq .Values.frontend.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.frontend.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.frontend.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: frontend
+{{- if .Values.pinnipedProxy.enabled }}
+---
+# Include an additional ClusterIP service for the pinniped-proxy as some configurations
+# require the normal frontend service to use NodePort.
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kubeapps.pinniped-proxy.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: frontend
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.pinnipedProxy.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.pinnipedProxy.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.pinnipedProxy.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.pinnipedProxy.service.ports.pinnipedProxy }}
+      targetPort: pinniped-proxy
+      protocol: TCP
+      name: pinniped-proxy
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: frontend
+{{- end }}

@@ -1,0 +1,33 @@
+{{- if (include "mongodb.arbiter.enabled" .) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mongodb.arbiter.service.nameOverride" . }}
+  namespace: {{ include "mongodb.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: arbiter
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.arbiter.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.arbiter.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.arbiter.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: tcp-mongodb
+      port: {{ .Values.arbiter.service.ports.mongodb }}
+      targetPort: mongodb
+    {{- if .Values.arbiter.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: arbiter
+{{- end }}

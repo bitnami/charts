@@ -1,0 +1,28 @@
+{{- if or .Values.config (or (or .Values.proxySetHeaders .Values.headers) .Values.addHeaders) .Values.dhParam }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: controller
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- if .Values.addHeaders }}
+  add-headers: {{ include "common.names.namespace" . }}/{{ printf "%s-custom-add-headers" (include "common.names.fullname" .) }}
+  {{- end }}
+  {{- if or .Values.proxySetHeaders .Values.headers }}
+  proxy-set-headers: {{ include "common.names.namespace" . }}/{{ printf "%s-custom-proxy-headers" (include "common.names.fullname" .) }}
+  {{- end }}
+  {{- if .Values.dhParam }}
+  ssl-dh-param: {{ include "common.names.namespace" . }}/{{ printf "%s" (include "common.names.fullname" .) }}
+  {{- end }}
+  {{- if .Values.config }}
+  {{- include "common.tplvalues.render" (dict "value" .Values.config "context" $) | nindent 2 }}
+  {{- end }}
+{{- end }}

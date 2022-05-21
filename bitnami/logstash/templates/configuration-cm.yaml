@@ -1,0 +1,39 @@
+{{ if and (or .Values.input .Values.filter .Values.output) (not .Values.existingConfiguration) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.ingress.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.ingress.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ingress.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+data:
+{{- if (or .Values.input .Values.filter .Values.output) }}
+  logstash.conf: |-
+{{- if .Values.input }}
+    input {
+    {{- include "common.tplvalues.render" (dict "value" .Values.input "context" $) | nindent 6 }}
+    }
+{{- end }}
+{{- if .Values.filter }}
+    filter {
+    {{- include "common.tplvalues.render" (dict "value" .Values.filter "context" $) | nindent 6 }}
+    }
+{{- end }}
+{{- if .Values.output }}
+    output {
+    {{- include "common.tplvalues.render" (dict "value" .Values.output "context" $) | nindent 6 }}
+    }
+{{- end }}
+{{- end }}
+{{- end }}

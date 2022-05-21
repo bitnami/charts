@@ -1,0 +1,53 @@
+{{- if or .Values.skipper.enabled .Values.server.configuration.streamingEnabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "scdf.fullname" . }}-skipper
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: skipper
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+  {{- if .Values.commonAnnotations }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.skipper.service.annotations }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.skipper.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.skipper.service.type }}
+  {{- if and .Values.skipper.service.clusterIP (eq .Values.skipper.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.skipper.service.clusterIP }}
+  {{- end }}
+  {{- if and .Values.skipper.service.loadBalancerIP (eq .Values.skipper.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.skipper.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.skipper.service.type "LoadBalancer") .Values.skipper.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.skipper.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.skipper.service.type "LoadBalancer") (eq .Values.skipper.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.skipper.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if .Values.skipper.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.skipper.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.skipper.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.skipper.service.port }}
+      targetPort: http
+      {{- if (and (or (eq .Values.skipper.service.type "NodePort") (eq .Values.skipper.service.type "LoadBalancer")) (not (empty .Values.skipper.service.nodePort))) }}
+      nodePort: {{ .Values.skipper.service.nodePort }}
+      {{- else if eq .Values.skipper.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.skipper.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.skipper.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{ include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: skipper
+{{- end }}

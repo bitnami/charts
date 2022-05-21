@@ -1,0 +1,126 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $clusterDomain := .Values.clusterDomain }}
+{{- $fullname := include "common.names.fullname" . }}
+{{- $airflowSecretName := include "airflow.secretName" . }}
+{{- $baseUrl := (include "airflow.baseUrl" .) }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+    kubectl get pods --namespace {{ $releaseNamespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+    kubectl exec --namespace {{ $releaseNamespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/airflow/entrypoint.sh /opt/bitnami/scripts/airflow/run.sh
+
+{{- else }}
+
+{{- if not $baseUrl }}
+###############################################################################
+### ERROR: You did not provide an external URL in your 'helm install' call ###
+###############################################################################
+
+This deployment will be incomplete until you configure Airflow with a resolvable
+host. To configure Airflow with the URL of your service:
+
+1. Get the Airflow URL by running:
+
+  {{- if eq "NodePort" .Values.service.type }}
+
+    export AIRFLOW_HOST=$(kubectl get nodes --namespace {{ $releaseNamespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export AIRFLOW_PORT=$(kubectl get --namespace {{ $releaseNamespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ $fullname }})
+
+  {{- else if eq "LoadBalancer" .Values.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ $releaseNamespace }} -w {{ $fullname }}'
+
+    export AIRFLOW_HOST=$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullname }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    export AIRFLOW_PORT=80
+
+  {{- end }}
+
+2. Complete your Airflow deployment by running:
+
+    {{ include "common.utils.secret.getvalue" (dict "secret" $airflowSecretName "field" "airflow-password" "context" $) }}
+    {{ include "common.utils.secret.getvalue" (dict "secret" $airflowSecretName "field" "airflow-fernet-key" "context" $) }}
+    {{ include "common.utils.secret.getvalue" (dict "secret" $airflowSecretName "field" "airflow-secret-key" "context" $) }}
+    helm upgrade --namespace {{ $releaseNamespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+      --set service.type={{ .Values.service.type }} \
+      --set web.baseUrl=http://$AIRFLOW_HOST:$AIRFLOW_PORT \
+      --set auth.password=$AIRFLOW_PASSWORD \
+      --set auth.fernetKey=$AIRFLOW_FERNETKEY \
+      --set auth.secretKey=$AIRFLOW_SECRETKEY
+
+{{- else }}
+
+Airflow can be accessed via port {{ .Values.service.ports.http }} on the following DNS name from within your cluster:
+
+    {{ printf "%s.%s.svc.%s" $fullname $releaseNamespace $clusterDomain }}
+
+To connect to Airflow from outside the cluster, perform the following steps:
+
+{{- if .Values.ingress.enabled }}
+
+1. Get the Airflow URL and associate its hostname to your cluster external IP:
+
+    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+    echo "Airflow URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}"
+    echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else if eq .Values.service.type "ClusterIP" }}
+
+1.  Create a port-forward to the service:
+
+    kubectl port-forward --namespace {{ $releaseNamespace }} svc/{{ $fullname }} {{ .Values.service.ports.http }}:{{ .Values.service.ports.http }} &
+    echo "Airflow URL: http://127.0.0.1:{{ .Values.service.ports.http }}"
+
+{{- else if eq .Values.service.type "NodePort" }}
+
+1. Obtain the NodePort IP and port:
+
+    export NODE_IP=$(kubectl get nodes --namespace {{ $releaseNamespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullname }} -o jsonpath="{.spec.ports[0].nodePort}")
+    echo "Airflow URL: http://${NODE_IP}:$NODE_PORT"
+
+{{- else if eq .Values.service.type "LoadBalancer" }}
+
+1. Obtain the LoadBalancer IP:
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ $fullname }}'
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ $fullname }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    echo "Airflow URL: http://${SERVICE_IP}:{{ .Values.service.ports.http }}"
+
+{{- end }}
+
+2. Open a browser and access Airflow using the obtained URL.
+
+3. Get your Airflow login credentials by running:
+
+    {{ include "common.utils.secret.getvalue" (dict "secret" $airflowSecretName "field" "airflow-password" "context" $) }}
+    echo User:     {{ .Values.auth.username }}
+    echo Password: $AIRFLOW_PASSWORD
+
+{{- end }}
+{{- end }}
+
+{{ include "airflow.validateValues" . }}
+{{ include "airflow.checkRollingTags" . }}

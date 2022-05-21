@@ -1,0 +1,6 @@
+{
+  "installedPlugins": {
+    "SQL": "Native MySQL authentication",
+    "MariaDB": "MariaDB"
+  }
+}

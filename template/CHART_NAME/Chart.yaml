@@ -1,0 +1,31 @@
+annotations:
+  category: %%CHOOSE_ONE_FROM_CHART_CATEGORIES_FILE%%
+apiVersion: v2
+appVersion: %%UPSTREAM_PROJECT_VERSION%%
+dependencies:
+  - condition: SUBCHART_NAME.enabled
+    name: SUBCHART_NAME
+    repository: https://charts.bitnami.com/bitnami
+    version: %%MAJOR_SUBCHART_VERSION_(A.X.X)%%
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: %%DESCRIPTION%%
+engine: gotpl
+home: %%UPSTREAM_PROJECT_URL%%
+icon: https://bitnami.com/assets/stacks/%%IMAGE_NAME%%/img/%%IMAGE_NAME%%-stack-220x234.png
+keywords:
+  - %%UPSTREAM_PROJECT_KEYWORD%%
+  - %%UPSTREAM_PROJECT_KEYWORD%%
+  - ...
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: %%CHART_NAME%%
+sources:
+  - https://github.com/bitnami/bitnami-docker-%%IMAGE_NAME%%
+  - %%UPSTREAM_PROJECT_SOURCE_CODE_URL%%
+  - ...
+version: 0.1.0

@@ -1,0 +1,114 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: apprepositories.kubeapps.com
+spec:
+  group: kubeapps.com
+  scope: Namespaced
+  names:
+    kind: AppRepository
+    plural: apprepositories
+    shortNames:
+      - apprepos
+  versions:
+    - name: v1alpha1
+      storage: true
+      served: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          required:
+            - spec
+          properties:
+            spec:
+              type: object
+              required:
+                - type
+                - url
+              properties:
+                type:
+                  type: string
+                  enum: ["helm", "oci"]
+                url:
+                  type: string
+                description:
+                  type: string
+                auth:
+                  type: object
+                  properties:
+                    header:
+                      type: object
+                      required:
+                        - secretKeyRef
+                      properties:
+                        secretKeyRef:
+                          type: object
+                          required:
+                            - key
+                            - name
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              type: string
+                    customCA:
+                      type: object
+                      required:
+                        - secretKeyRef
+                      properties:
+                        secretKeyRef:
+                          type: object
+                          required:
+                            - key
+                            - name
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              type: string
+                dockerRegistrySecrets:
+                  type: array
+                  items:
+                    type: string
+                tlsInsecureSkipVerify:
+                  type: boolean
+                passCredentials:
+                  type: boolean
+                filterRule:
+                  type: object
+                  properties:
+                    jq:
+                      type: string
+                    variables:
+                      type: object
+                      additionalProperties:
+                        type: string
+                ociRepositories:
+                  type: array
+                  items:
+                    type: string
+                resyncRequests:
+                  type: integer
+                syncJobPodTemplate:
+                  type: object
+                  properties:
+                    metadata:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                    spec:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+            status:
+              type: object
+              properties:
+                status:
+                  type: string
+      additionalPrinterColumns:
+        - name: Type
+          type: string
+          description: The type of this repository.
+          jsonPath: .spec.type
+        - name: URL
+          type: string
+          description: The URL of this repository.
+          jsonPath: .spec.url

@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "argocd.application-controller" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: controller
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.commonAnnotations .Values.controller.service.annotations }}
+  annotations:
+  {{- if .Values.commonAnnotations }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.controller.service.annotations }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.controller.service.annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.controller.service.type }}
+  {{- if and .Values.controller.service.clusterIP (eq .Values.controller.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.controller.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.controller.service.type "LoadBalancer") (eq .Values.controller.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.controller.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if eq .Values.controller.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.controller.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if (and (eq .Values.controller.service.type "LoadBalancer") (not (empty .Values.controller.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.controller.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.controller.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.controller.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.controller.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  ports:
+    - name: tcp-controller
+      port: {{ .Values.controller.service.port }}
+      targetPort: controller
+      protocol: TCP
+      {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty .Values.controller.service.nodePort))) }}
+      nodePort: {{ .Values.controller.service.nodePort }}
+      {{- else if eq .Values.controller.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.controller.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.controller.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: controller

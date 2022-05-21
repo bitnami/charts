@@ -1,0 +1,87 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+{{- $postgresqlSecretName := include "kubeapps.postgresql.secretName" . -}}
+
+{{- $redisSecretName := include "kubeapps.redis.secretName" . -}}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pods you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+{{- else }}
+
+Tip:
+
+  Watch the deployment status using the command: kubectl get pods -w --namespace {{ .Release.Namespace }}
+
+Kubeapps can be accessed via port {{ .Values.frontend.service.ports.http }} on the following DNS name from within your cluster:
+
+   {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+
+{{- $reposWithOrphanSecrets := include "kubeapps.repos-with-orphan-secrets" . }}
+{{- if ne $reposWithOrphanSecrets "" }}
+
+CAVEAT:
+  Some App Repositories have been installed with a custom CA or authorization header.
+  This generates secrets that won't be cleaned up if the repository is deleted through the Web application.
+  You can delete them manually or when uninstalling this chart.
+
+{{- end }}
+
+To access Kubeapps from outside your K8s cluster, follow the steps below:
+
+{{- if .Values.ingress.enabled }}
+
+1. Get the Kubeapps URL and associate Kubeapps hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Kubeapps URL: {{ printf "%s://%s/" (ternary "http" "https" .Values.ingress.tls) .Values.ingress.hostname }}"
+   echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+
+1. Get the Kubeapps URL by running these commands:
+
+{{- if contains "NodePort" .Values.frontend.service.type }}
+
+   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
+   echo "Kubeapps URL: http://$NODE_IP:$NODE_PORT"
+
+{{- else if contains "LoadBalancer" .Values.frontend.service.type }}
+
+ NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+       Watch the status by running 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
+
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   echo "Kubeapps URL: {{ printf "%s://$SERVICE_IP:%d" (ternary "http" "https" (eq ( .Values.frontend.service.ports.http | toString ) "443")) (int .Values.frontend.service.ports.http) }}"
+
+{{- else if contains "ClusterIP" .Values.frontend.service.type }}
+
+{{- $portNumber := include "kubeapps.frontend-port-number" . }}
+   echo "Kubeapps URL: http://127.0.0.1:{{ $portNumber }}"
+   kubectl port-forward --namespace {{ .Release.Namespace }} service/{{ template "common.names.fullname" . }} {{ $portNumber }}:{{ .Values.frontend.service.ports.http }}
+
+{{- end }}
+{{- end }}
+
+2. Open a browser and access Kubeapps using the obtained URL.
+
+{{- end }}
+
+{{- include "kubeapps.checkRollingTags" . }}
+{{- include "kubeapps.validateValues" . }}

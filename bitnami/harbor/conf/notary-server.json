@@ -1,0 +1,32 @@
+{
+  "server": {
+    "http_addr": ":4443"
+  },
+  "trust_service": {
+    "type": "remote",
+    "hostname": "{{ template "harbor.notary-signer" . }}",
+    "port": "7899",
+{{- if not .Values.notary.secretName }}
+    "tls_ca_file": "/etc/notary/notary-signer-ca.crt",
+{{- else }}
+    "tls_ca_file": "/etc/ssl/notary/cert/notary-signer-ca.crt",
+{{- end }}
+    "key_algorithm": "ecdsa"
+  },
+  "logging": {
+    "level": "{{ .Values.logLevel }}"
+  },
+  "storage": {
+    "backend": "postgres",
+    "db_url": "{{ template "harbor.database.notaryServer" . }}"
+  },
+  "auth": {
+      "type": "token",
+      "options": {
+          "realm": "{{ template "harbor.externalUrl" . }}/service/token",
+          "service": "harbor-notary",
+          "issuer": "harbor-token-issuer",
+          "rootcertbundle": "/root.crt"
+      }
+  }
+}

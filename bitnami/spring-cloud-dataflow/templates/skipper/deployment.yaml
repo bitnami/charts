@@ -1,0 +1,238 @@
+{{- if or .Values.skipper.enabled .Values.server.configuration.streamingEnabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "scdf.fullname" . }}-skipper
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: skipper
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  namespace: {{ .Release.Namespace }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.skipper.replicaCount }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: skipper
+  {{- if .Values.skipper.updateStrategy }}
+  strategy: {{- toYaml .Values.skipper.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      {{- if or (include "scdf.skipper.createConfigmap" .) .Values.skipper.podAnnotations }}
+      annotations:
+        {{- if (include "scdf.skipper.createConfigmap" .) }}
+        checksum/configuration: {{ include (print $.Template.BasePath "/skipper/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.skipper.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.skipper.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: skipper
+        {{- if .Values.skipper.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.skipper.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "scdf.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ include "scdf.serviceAccountName" . }}
+      {{- if .Values.skipper.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.skipper.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.skipper.podAffinityPreset "component" "skipper" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.skipper.podAntiAffinityPreset "component" "skipper" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.skipper.nodeAffinityPreset.type "key" .Values.skipper.nodeAffinityPreset.key "values" .Values.skipper.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.skipper.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.skipper.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.skipper.schedulerName }}
+      schedulerName: {{ .Values.skipper.schedulerName }}
+      {{- end }}
+      {{- if .Values.skipper.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.skipper.priorityClassName }}
+      priorityClassName: {{ .Values.skipper.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.skipper.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.skipper.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if or .Values.skipper.initContainers .Values.waitForBackends.enabled }}
+      initContainers:
+        {{- if .Values.waitForBackends.enabled }}
+        - name: wait-for-backends
+          image: {{ include "scdf.waitForBackends.image" . }}
+          imagePullPolicy: {{ .Values.waitForBackends.image.pullPolicy | quote }}
+          command:
+            - /scripts/wait-for-backends.sh
+          {{- if .Values.waitForBackends.resources }}
+          resources: {{- toYaml .Values.waitForBackends.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts/wait-for-backends.sh
+              subPath: wait-for-backends.sh
+        {{- end }}
+        {{- if .Values.skipper.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.skipper.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: skipper
+          image: {{ include "scdf.skipper.image" . }}
+          imagePullPolicy: {{ .Values.skipper.image.pullPolicy | quote }}
+          {{- if .Values.skipper.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.skipper.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.skipper.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.skipper.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.skipper.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.skipper.image.debug | quote }}
+            - name: SERVER_PORT
+              value: "7577"
+            - name: SPRING_CLOUD_CONFIG_ENABLED
+              value: "false"
+            - name: SPRING_CLOUD_KUBERNETES_CONFIG_ENABLE_API
+              value: "false"
+            - name: SPRING_CLOUD_KUBERNETES_SECRETS_ENABLE_API
+              value: "false"
+            - name: SPRING_CLOUD_KUBERNETES_SECRETS_PATHS
+              value: "/etc/secrets"
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: KUBERNETES_TRUST_CERTIFICATES
+              value: {{ ternary "true" "false" .Values.skipper.configuration.trustK8sCerts | quote }}
+            {{- if .Values.skipper.jdwp.enabled }}
+            - name: JAVA_TOOL_OPTIONS
+              value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address={{ .Values.skipper.jdwp.port }}"
+            {{- end }}
+            {{- range $key, $value := .Values.skipper.extraEnvVars }}
+            - name: {{ $value.name }}
+              value: "{{ $value.value }}"
+            {{- end }}
+          {{- if or .Values.skipper.extraEnvVarsCM .Values.skipper.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.skipper.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ tpl .Values.skipper.extraEnvVarsCM . | quote }}
+            {{- end }}
+            {{- if .Values.skipper.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ tpl .Values.skipper.extraEnvVarsSecret . | quote }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: 7577
+              protocol: TCP
+            {{- if .Values.skipper.jdwp.enabled }}
+            - name: jdwp
+              containerPort: {{ .Values.skipper.jdwp.port }}
+              protocol: TCP
+            {{- end }}
+          {{- if .Values.skipper.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            initialDelaySeconds: {{ .Values.skipper.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.skipper.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.skipper.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.skipper.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.skipper.startupProbe.failureThreshold }}
+          {{- else if .Values.skipper.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.skipper.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            initialDelaySeconds: {{ .Values.skipper.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.skipper.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.skipper.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.skipper.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.skipper.livenessProbe.failureThreshold }}
+          {{- else if .Values.skipper.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.skipper.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            initialDelaySeconds: {{ .Values.skipper.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.skipper.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.skipper.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.skipper.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.skipper.readinessProbe.failureThreshold }}
+          {{- else if .Values.skipper.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.skipper.resources }}
+          resources: {{- toYaml .Values.skipper.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: database
+              mountPath: /etc/secrets/database
+              readOnly: true
+            - name: config
+              mountPath: /opt/bitnami/spring-cloud-skipper/conf
+              readOnly: true
+            {{- if or (.Values.rabbitmq.enabled) (.Values.externalRabbitmq.enabled) }}
+            - name: rabbitmq
+              mountPath: /etc/secrets/rabbitmq
+              readOnly: true
+            {{- end }}
+            {{- if .Values.skipper.extraVolumeMounts }}
+            {{- toYaml .Values.skipper.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+        {{- if .Values.skipper.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.skipper.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: database
+          secret:
+            secretName: {{ include "scdf.database.secretName" . }}
+        - name: config
+          configMap:
+            name: {{ include "scdf.skipper.configmapName" . }}
+            items:
+              - key: application.yaml
+                path: application.yml
+        {{- if or (.Values.rabbitmq.enabled) (.Values.externalRabbitmq.enabled) }}
+        - name: rabbitmq
+          secret:
+            secretName: {{ include "scdf.rabbitmq.secretName" . }}
+        {{- end }}
+        {{- if .Values.waitForBackends.enabled }}
+        - name: scripts
+          configMap:
+            name: {{ include "scdf.fullname" . }}-scripts
+            defaultMode: 0755
+        {{- end }}
+        {{- if .Values.skipper.extraVolumes }}
+          {{- toYaml .Values.skipper.extraVolumes | nindent 8 }}
+        {{- end }}
+{{- end }}

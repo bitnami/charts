@@ -1,0 +1,21 @@
+{{- if (include "keycloak.keycloakConfigCli.createConfigmap" .) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "keycloak.keycloakConfigCli.configmapName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: keycloak-config-cli
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+data:
+  {{- range $fileName, $fileContent := .Values.keycloakConfigCli.configuration }}
+  {{- if $fileContent }}
+  {{ $fileName }}: |
+    {{- include "common.tplvalues.render" (dict "value" $fileContent "context" $) | nindent 4 }}
+  {{- else }}
+    {{- ($.Files.Glob $fileName).AsConfig | nindent 2 }}
+  {{- end }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,27 @@
+{{- if and (not .Values.configurationCM) (and .Values.elasticsearch.hosts .Values.elasticsearch.port) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{printf "%s-conf" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  kibana.yml: |
+    pid.file: /opt/bitnami/kibana/tmp/kibana.pid
+    server.host: "::"
+    server.port: {{ .Values.containerPorts.http }}
+    elasticsearch.hosts: [{{ include "kibana.elasticsearch.url" . }}]
+    {{- if .Values.configuration.server.basePath }}
+    server.basePath: {{ .Values.configuration.server.basePath | quote }}
+    {{- end }}
+    server.rewriteBasePath: {{ .Values.configuration.server.rewriteBasePath }}
+    {{- if .Values.extraConfiguration }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.extraConfiguration "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

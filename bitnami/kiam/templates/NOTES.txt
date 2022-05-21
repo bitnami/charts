@@ -1,0 +1,133 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+    kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+    kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+  {{- if .Values.server.enabled }}
+  Server pods:
+    kiam server \
+      {{- if .Values.server.logJsonOutput }}
+      --json-log \
+      {{- end }}
+      --level={{ .Values.server.logLevel }} \
+      --bind=0.0.0.0:{{ .Values.server.containerPort }} \
+      --cert=/bitnami/kiam/tls/{{ .Values.server.tlsCerts.certFileName }} \
+      --key=/bitnami/kiam/tls/{{ .Values.server.tlsCerts.keyFileName }} \
+      --ca=/bitnami/kiam/tls/{{ .Values.server.tlsCerts.caFileName }} \
+      {{- if .Values.server.roleBaseArn }}
+      --role-base-arn={{ .Values.server.roleBaseArn }} \
+      {{- else }}
+      --role-base-arn-autodetect \
+      {{- end }}
+      {{- if .Values.server.assumeRoleArn }}
+      --assume-role-arn={{ .Values.server.assumeRoleArn }} \
+      {{- end }}
+      --session-duration={{ .Values.server.sessionDuration }} \
+      --sync={{ .Values.server.cacheSyncInterval }} \
+      {{- if .Values.server.metrics.enabled }}
+      --prometheus-listen-addr=0.0.0.0:{{ .Values.server.metrics.port }} \
+      --prometheus-sync-interval={{ .Values.server.metrics.syncInterval }} \
+      {{- end }}
+      {{- range $key, $value := .Values.server.extraArgs }}
+      {{- if $value }}
+      --{{ $key }}={{ $value }} \
+      {{- else }}
+      --{{ $key }} \
+      {{- end }}
+      {{- end }}
+  {{- end }}
+
+  {{- if .Values.agent.enabled }}
+  Agent pods:
+    kiam agent \
+      {{- if .Values.agent.iptables }}
+      --iptables \
+      {{- end }}
+      {{- if not .Values.agent.iptablesRemoveOnShutdown }}
+      --no-iptables-remove \
+      {{- end }}
+      --host-interface={{ .Values.agent.hostInterface }} \
+      {{- if .Values.agent.logJsonOutput }}
+      --json-log \
+      {{- end }}
+      --level={{ .Values.agent.logLevel }} \
+      --port={{ .Values.agent.containerPort }} \
+      --cert=/bitnami/kiam/tls/{{ .Values.agent.tlsCerts.certFileName }} \
+      --key=/bitnami/kiam/tls/{{ .Values.agent.tlsCerts.keyFileName }} \
+      --ca=/bitnami/kiam/tls/{{ .Values.agent.tlsCerts.caFileName }} \
+      --server-address={{ template "common.names.fullname" . }}-server:{{ .Values.server.service.port }} \
+      {{- if .Values.agent.metrics.enabled }}
+      --prometheus-listen-addr=0.0.0.0:{{ .Values.agent.metrics.port }} \
+      --prometheus-sync-interval={{ .Values.agent.metrics.syncInterval }} \
+      {{- end }}
+      {{- if .Values.agent.allowRouteRegExp }}
+      --allow-route-regexp={{ .Values.agent.allowRouteRegExp }} \
+      {{- end }}
+      --gateway-timeout-creation={{ .Values.agent.gatewayTimeoutCreation }} \
+      {{- if .Values.agent.keepaliveParams.time }}
+      --grpc-keepalive-time-duration={{ .Values.agent.keepaliveParams.time }} \
+      {{- end }}
+      {{- if .Values.agent.keepaliveParams.timeout }}
+      --grpc-keepalive-timeout-duration={{ .Values.agent.keepaliveParams.timeout }} \
+      {{- end }}
+      {{- if .Values.agent.keepaliveParams.permitWithoutStream }}
+      --grpc-keepalive-permit-without-stream \
+      {{- end }}
+      {{- range $key, $value := .Values.agent.extraArgs }}
+      {{- if $value }}
+      --{{ $key }}={{ $value }} \
+      {{- else }}
+      --{{ $key }} \
+      {{- end }}
+      {{- end }}
+  {{- end }}
+
+{{- else }}
+
+In order to associate your pods with AWS IAM roles, follow the steps below:
+
+* Annotate your namespace with the allowed role ARNs via `iam.amazonaws.com/permitted`:
+
+    kubectl edit namespace my-namespace
+
+    kind: Namespace
+    metadata:
+      name: my-namespace
+      annotations:
+        iam.amazonaws.com/permitted: "<Role ARN or Regex matching role ARN(s)>"
+
+* Annotate your pods with the desired role via `iam.amazonaws.com/role`:
+
+    kubectl edit pod my-pod
+
+    kind: Pod
+    metadata:
+      name: my-pod
+      annotations:
+        iam.amazonaws.com/role: "<Name of the ARN role>"
+
+* Verify the role by entering your pod and executing the following command
+
+    kubectl exec -ti my-pod bash
+    curl http://169.254.169.254/latest/meta-data/iam/security-credentials/
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "kiam.validateValues" . }}

@@ -1,0 +1,1 @@
+Copy here your `*.conf` virtual host files to have them mounted to the container as a config map.

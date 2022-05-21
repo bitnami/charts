@@ -1,0 +1,38 @@
+{{- if and .Values.imageRenderer.metrics.enabled .Values.imageRenderer.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "common.names.fullname" . }}-image-renderer
+  {{- if .Values.imageRenderer.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.imageRenderer.metrics.serviceMonitor.namespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: image-renderer
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
+      {{- if .Values.imageRenderer.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.imageRenderer.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+      app.kubernetes.io/component: image-renderer
+  endpoints:
+    - port: http
+      path: "/metrics"
+      {{- if .Values.imageRenderer.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.imageRenderer.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.imageRenderer.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.imageRenderer.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+{{- end }}

@@ -1,0 +1,75 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/mariadb/entrypoint.sh /opt/bitnami/scripts/mariadb/run.sh
+
+{{- else }}
+
+Tip:
+
+  Watch the deployment status using the command: kubectl get pods -w --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Services:
+
+  echo Primary: {{ include "mariadb.primary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ coalesce .Values.primary.service.ports.mysql .Values.primary.service.port }}
+{{- if eq .Values.architecture "replication" }}
+  echo Secondary: {{ include "mariadb.secondary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ coalesce .Values.secondary.service.ports.mysql .Values.secondary.service.port }}
+{{- end }}
+
+Administrator credentials:
+
+  Username: root
+  Password : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mariadb.secretName" . }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+
+To connect to your database:
+
+  1. Run a pod that you can use as a client:
+
+      kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --image  {{ template "mariadb.image" . }} --namespace {{ .Release.Namespace }} --command -- bash
+
+  2. To connect to primary service (read/write):
+
+      mysql -h {{ include "mariadb.primary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -uroot -p {{ .Values.auth.database }}
+
+{{- if eq .Values.architecture "replication" }}
+
+  3. To connect to secondary service (read-only):
+
+      mysql -h {{ include "mariadb.secondary.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} -uroot -p {{ .Values.auth.database }}
+{{- end }}
+
+To upgrade this helm chart:
+
+  1. Obtain the password as described on the 'Administrator credentials' section and set the 'auth.rootPassword' parameter as shown below:
+
+      ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mariadb.secretName" . }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+      helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/mariadb --set auth.rootPassword=$ROOT_PASSWORD
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "mariadb.validateValues" . }}
+{{- if not .Values.auth.customPasswordFiles -}}
+  {{- $passwordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" (include "common.names.fullname" .) "context" $) -}}
+  {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $passwordValidationErrors) "context" $) -}}
+{{- end }}
+{{- end }}

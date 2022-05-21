@@ -1,0 +1,36 @@
+annotations:
+  category: CMS
+apiVersion: v2
+appVersion: 4.47.4
+dependencies:
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - ghost-database
+    version: 11.x.x
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x
+description: Ghost is an open source publishing platform designed to create blogs, magazines, and news sites. It includes a simple markdown editor with preview, theming, and SEO built-in to simplify editing.
+engine: gotpl
+home: https://github.com/bitnami/charts/tree/master/bitnami/ghost
+icon: https://bitnami.com/assets/stacks/ghost/img/ghost-stack-220x234.png
+keywords:
+  - ghost
+  - blog
+  - http
+  - web
+  - application
+  - nodejs
+  - javascript
+maintainers:
+  - email: containers@bitnami.com
+    name: Bitnami
+name: ghost
+sources:
+  - https://github.com/bitnami/bitnami-docker-ghost
+  - https://www.ghost.org/
+version: 17.1.3

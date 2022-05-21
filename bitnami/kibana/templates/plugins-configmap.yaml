@@ -1,0 +1,25 @@
+{{- if .Values.plugins -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-plugins
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  install-plugins.sh: |
+    #!/bin/bash
+    echo "==> Plugin installation"
+    {{- $totalPlugins := len .Values.plugins }}
+    echo "Total plugins defined in chart installation: {{ $totalPlugins }}"
+    {{- range $i, $plugin := .Values.plugins }}
+    echo "Installing plugin {{ add $i 1 }} out of {{ $totalPlugins }}: {{ $plugin }}"
+    kibana-plugin install "{{ $plugin }}"
+    {{- end }}
+    echo "==> End of Plugin installation"
+{{- end -}}

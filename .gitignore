@@ -1,0 +1,4 @@
+*.tgz
+/.idea/*
+.vscode
+.DS_Store

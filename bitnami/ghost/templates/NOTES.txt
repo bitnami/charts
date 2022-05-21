@@ -1,0 +1,149 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+{{- $ghostPasswordKey := ( include "common.secrets.key" (dict "existingSecret" .Values.existingSecret "key" "ghost-password") ) -}}
+{{- $ghostSecretName := (include "common.names.fullname" .) -}}
+{{- $databaseSecretName := include "ghost.databaseSecretName" . -}}
+
+{{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
+
+{{- if empty (include "ghost.host" .) -}}
+###############################################################################
+### ERROR: You did not provide an external host in your 'helm install' call ###
+###############################################################################
+
+This deployment will be incomplete until you configure Ghost with a resolvable
+host. To configure Ghost with the URL of your service:
+
+1. Get the Ghost URL by running:
+
+  {{- if contains "NodePort" .Values.service.type }}
+
+  export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+
+  {{- else if contains "LoadBalancer" .Values.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
+
+  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+
+  {{- end }}
+
+  {{ include "common.utils.secret.getvalue" (dict "secret" $ghostSecretName "field" $ghostPasswordKey "context" $) }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $databaseSecretName "field" "mariadb-root-password" "context" $) }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $databaseSecretName "field" "mariadb-password" "context" $) }}
+
+2. Complete your Ghost deployment by running:
+
+{{- if .Values.mariadb.enabled }}
+
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+    --set service.type={{ .Values.service.type }},ghostHost=$APP_HOST,ghostPassword=$GHOST_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
+
+{{- else }}
+
+  ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
+
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+    --set service.type={{ .Values.service.type }},ghostHost=$APP_HOST,ghostPassword=$APP_PASSWORD,{{- if contains "NodePort" .Values.service.type }}service.nodePort=$APP_PORT,{{- end }}mariadb.enabled=false{{- if not (empty .Values.externalDatabase.host) }},externalDatabase.host={{ .Values.externalDatabase.host }}{{- end }}{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }}
+
+{{- end }}
+
+{{- else -}}
+
+{{- if .Values.ingress.enabled }}
+
+1. Get the Ghost URL and associate its hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Ghost URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}"
+   echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+
+1. Get the Ghost URL by running:
+
+{{- if eq .Values.service.type "ClusterIP" }}
+
+  echo Blog URL  : http://127.0.0.1:{{ default "80" (coalesce .Values.service.ports.http .Values.service.port) }}{{ .Values.ghostPath }}
+  echo Admin URL : http://127.0.0.1:{{ default "80" (coalesce .Values.service.ports.http .Values.service.port) }}{{ default "/" .Values.ghostPath }}ghost
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ default "80" (coalesce .Values.service.ports.http .Values.service.port) }}:{{ default "80" (coalesce .Values.service.ports.http .Values.service.port) }}
+
+{{- else if eq .Values.service.type "NodePort" }}
+
+  export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  export APP_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
+
+  echo Blog URL  : http://$APP_HOST:$APP_PORT{{ .Values.ghostPath }}
+  echo Admin URL : http://$APP_HOST:$APP_PORT{{ default "/" .Values.ghostPath }}ghost
+
+{{- else }}
+
+  echo Blog URL  : http://{{ include "ghost.host" . }}
+  echo Admin URL : http://{{ include "ghost.host" . }}ghost
+
+{{- end }}
+{{- end }}
+
+2. Get your Ghost login credentials by running:
+
+  echo Email:    {{ .Values.ghostEmail }}
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.{{- $ghostPasswordKey -}}}" | base64 --decode)
+
+{{- end }}
+
+{{- else -}}
+
+########################################################################################
+### ERROR: You did not provide an external database host in your 'helm install' call ###
+########################################################################################
+
+This deployment will be incomplete until you configure Ghost with a resolvable database
+host. To configure Ghost to use and external database host:
+
+1. Complete your Ghost deployment by running:
+
+{{- if contains "NodePort" .Values.service.type }}
+
+  export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+
+{{- else if contains "LoadBalancer" .Values.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
+
+  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+
+{{- else }}
+
+  export APP_HOST=127.0.0.1
+
+{{- end }}
+
+  {{ include "common.utils.secret.getvalue" (dict "secret" $ghostSecretName "field" $ghostPasswordKey "context" $) }}
+
+  ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
+
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+    --set ghostPassword=$APP_PASSWORD,ghostHost=$APP_HOST,service.type={{ .Values.service.type }},mariadb.enabled=false{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }},externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST
+{{- end }}
+
+{{ include "common.warnings.rollingTag" .Values.image }}
+
+{{- include "ghost.validateValues" . }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- $passwordValidationErrors := list -}}
+{{- if not .Values.existingSecret -}}
+  {{- $requiredGhostPassword := dict "valueKey" "ghostPassword" "secret" $ghostSecretName "field" "ghost-password" "context" $ -}}
+  {{- $requiredGhostPasswordError := include "common.validations.values.single.empty" $requiredGhostPassword -}}
+  {{- $passwordValidationErrors =  append $passwordValidationErrors $requiredGhostPasswordError -}}
+{{- end -}}
+{{- if .Values.mariadb.enabled }}
+    {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $databaseSecretName "subchart" true "context" $) -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
+{{- end }}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

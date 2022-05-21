@@ -1,0 +1,28 @@
+{{- if and (or .Values.postgresql.repmgrConfiguration .Values.postgresql.configuration .Values.postgresql.pgHbaConfiguration) (not .Values.postgresql.configurationCM) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-configuration" (include "postgresql-ha.postgresql" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: postgresql
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- if .Values.postgresql.repmgrConfiguration }}
+  repmgr.conf: |-
+    {{- include "common.tplvalues.render" ( dict "value" .Values.postgresql.repmgrConfiguration "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.postgresql.configuration }}
+  postgresql.conf: |-
+    {{- include "common.tplvalues.render" ( dict "value" .Values.postgresql.configuration "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.postgresql.pgHbaConfiguration }}
+  pg_hba.conf: |-
+    {{- include "common.tplvalues.render" ( dict "value" .Values.postgresql.pgHbaConfiguration "context" $ ) | nindent 4 }}
+  {{- end }}
+{{- end }}

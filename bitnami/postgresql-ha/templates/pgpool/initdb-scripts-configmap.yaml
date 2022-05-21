@@ -1,0 +1,17 @@
+{{- if and .Values.pgpool.initdbScripts (not .Values.pgpool.initdbScriptsCM) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-initdb-scripts" (include "postgresql-ha.pgpool" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: pgpool
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.initdbScripts "context" $) | nindent 4 }}
+{{- end }}

@@ -1,0 +1,269 @@
+{{- $fullname := include "scdf.fullname" .  }}
+{{- $serverServicePort := int .Values.server.service.port }}
+{{- $skipperServicePort := int .Values.skipper.service.port }}
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $clusterDomain := .Values.clusterDomain }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "scdf.fullname" . }}-server
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  namespace: {{ .Release.Namespace }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.server.replicaCount }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: server
+  {{- if .Values.server.updateStrategy }}
+  strategy: {{- toYaml .Values.server.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      {{- if or (include "scdf.server.createConfigmap" .) .Values.server.podAnnotations }}
+      annotations:
+        {{- if (include "scdf.server.createConfigmap" .) }}
+        checksum/configuration: {{ include (print $.Template.BasePath "/server/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.server.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.server.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: server
+        {{- if .Values.server.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.server.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "scdf.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ include "scdf.serviceAccountName" . }}
+      {{- if .Values.server.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.server.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.server.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.server.podAffinityPreset "component" "server" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.server.podAntiAffinityPreset "component" "server" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.server.nodeAffinityPreset.type "key" .Values.server.nodeAffinityPreset.key "values" .Values.server.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.server.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.server.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.server.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.schedulerName }}
+      schedulerName: {{ .Values.server.schedulerName }}
+      {{- end }}
+      {{- if .Values.server.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.server.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.priorityClassName }}
+      priorityClassName: {{ .Values.server.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.server.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.server.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if or .Values.server.initContainers .Values.waitForBackends.enabled }}
+      initContainers:
+        {{- if .Values.waitForBackends.enabled }}
+        - name: wait-for-backends
+          image: {{ include "scdf.waitForBackends.image" . }}
+          imagePullPolicy: {{ .Values.waitForBackends.image.pullPolicy | quote }}
+          command:
+            - /scripts/wait-for-backends.sh
+          {{- if .Values.waitForBackends.resources }}
+          resources: {{- toYaml .Values.waitForBackends.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts/wait-for-backends.sh
+              subPath: wait-for-backends.sh
+        {{- end }}
+        {{- if .Values.server.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.server.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: server
+          image: {{ include "scdf.server.image" . }}
+          imagePullPolicy: {{ .Values.server.image.pullPolicy | quote }}
+          {{- if .Values.server.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.server.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.server.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.server.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.server.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.server.image.debug | quote }}
+            - name: SERVER_PORT
+              value: "8080"
+            - name: SPRING_CLOUD_CONFIG_ENABLED
+              value: "false"
+            - name: SPRING_CLOUD_KUBERNETES_CONFIG_ENABLE_API
+              value: "false"
+            - name: SPRING_CLOUD_KUBERNETES_SECRETS_ENABLE_API
+              value: "false"
+            - name: SPRING_CLOUD_KUBERNETES_SECRETS_PATHS
+              value: "/etc/secrets"
+            - name: SPRING_CLOUD_DATAFLOW_SERVER_URI
+              {{- if ne $serverServicePort 80 }}
+              value: {{ printf "http://%s-server.%s.svc.%s:%d" $fullname $releaseNamespace $clusterDomain $serverServicePort | quote }}
+              {{- else }}
+              value: {{ printf "http://%s-server.%s.svc.%s" $fullname $releaseNamespace $clusterDomain | quote }}
+              {{- end }}
+            - name: SPRING_CLOUD_DATAFLOW_FEATURES_STREAMS_ENABLED
+              value: {{ ternary "true" "false" .Values.server.configuration.streamingEnabled | quote }}
+            - name: SPRING_CLOUD_DATAFLOW_FEATURES_TASKS_ENABLED
+              value: {{ ternary "true" "false" .Values.server.configuration.batchEnabled | quote }}
+            - name: SPRING_CLOUD_DATAFLOW_FEATURES_SCHEDULES_ENABLED
+              value: {{ ternary "true" "false" .Values.server.configuration.batchEnabled | quote }}
+            {{- if .Values.server.configuration.streamingEnabled }}
+            - name: SPRING_CLOUD_SKIPPER_CLIENT_SERVER_URI
+              {{- if .Values.skipper.enabled }}
+              {{- if ne $skipperServicePort 80 }}
+              value: {{ printf "http://%s-skipper.%s.svc.%s:%d/api" $fullname $releaseNamespace $clusterDomain $skipperServicePort | quote }}
+              {{- else }}
+              value: {{ printf "http://%s-skipper.%s.svc.%s/api" $fullname $releaseNamespace $clusterDomain | quote }}
+              {{- end }}
+              {{- else }}
+              value: {{ printf "$s:%d/api" .Values.externalSkipper.host (int .Values.externalSkipper.port) | quote }}
+              {{- end }}
+            {{- end }}
+            {{- if .Values.server.configuration.defaultSpringApplicationJSON }}
+            - name: SPRING_APPLICATION_JSON
+              {{- if .Values.server.proxy }}
+              {{- if .Values.server.proxy.user }}
+              value: "{ \"maven\": { \"local-repository\": null, \"remote-repositories\": { \"repo1\": { \"url\": \"https://repo.spring.io/libs-snapshot\"} }, \"proxy\": { \"host\": \"{{ .Values.server.proxy.host }}\", \"port\":{{ .Values.server.proxy.port }}, \"auth\": { \"username\": \"{{ .Values.server.proxy.user }}\", \"password\": \"{{ .Values.server.proxy.password }}\"} } } }"
+              {{- else }}
+              value: "{ \"maven\": { \"local-repository\": null, \"remote-repositories\": { \"repo1\": { \"url\": \"https://repo.spring.io/libs-snapshot\"} }, \"proxy\": { \"host\": \"{{ .Values.server.proxy.host }}\", \"port\":{{ .Values.server.proxy.port }} } } }"
+              {{- end }}
+              {{- else }}
+              value: "{ \"maven\": { \"local-repository\": null, \"remote-repositories\": { \"repo1\": { \"url\": \"https://repo.spring.io/libs-snapshot\"} } } }"
+              {{- end }}
+            {{- end }}
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: KUBERNETES_TRUST_CERTIFICATES
+              value: {{ ternary "true" "false" .Values.server.configuration.trustK8sCerts | quote }}
+            {{- if .Values.server.jdwp.enabled }}
+            - name: JAVA_TOOL_OPTIONS
+              value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address={{ .Values.server.jdwp.port }}"
+            {{- end }}
+            - name: SPRING_CLOUD_DATAFLOW_TASK_COMPOSEDTASKRUNNER_URI
+              value: 'docker://{{ include "common.images.image" (dict "imageRoot" .Values.server.composedTaskRunner.image) }}'
+            {{- range $key, $value := .Values.server.extraEnvVars }}
+            - name: {{ $value.name }}
+              value: "{{ $value.value }}"
+            {{- end }}
+          {{- if or .Values.server.extraEnvVarsCM .Values.server.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.server.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ tpl .Values.server.extraEnvVarsCM . | quote }}
+            {{- end }}
+            {{- if .Values.server.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ tpl .Values.server.extraEnvVarsSecret . | quote }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.server.containerPort }}
+              protocol: TCP
+            {{- if .Values.server.jdwp.enabled }}
+            - name: jdwp
+              containerPort: {{ .Values.server.jdwp.port }}
+              protocol: TCP
+            {{- end }}
+          {{- if .Values.server.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /management/health
+              port: http
+            initialDelaySeconds: {{ .Values.server.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.server.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.server.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.server.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.server.startupProbe.failureThreshold }}
+          {{- else if .Values.server.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /management/health
+              port: http
+            initialDelaySeconds: {{ .Values.server.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.server.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.server.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.server.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.server.livenessProbe.failureThreshold }}
+          {{- else if .Values.server.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /management/health
+              port: http
+            initialDelaySeconds: {{ .Values.server.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.server.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.server.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.server.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.server.readinessProbe.failureThreshold }}
+          {{- else if .Values.server.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.resources }}
+          resources: {{- toYaml .Values.server.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: database
+              mountPath: /etc/secrets/database
+              readOnly: true
+            - name: config
+              mountPath: /opt/bitnami/spring-cloud-dataflow/conf
+              readOnly: true
+            {{- if .Values.server.extraVolumeMounts }}
+            {{- toYaml .Values.server.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+        {{- if .Values.server.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.server.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: database
+          secret:
+            secretName: {{ include "scdf.database.secretName" . }}
+        - name: config
+          configMap:
+            name: {{ include "scdf.server.configmapName" . }}
+            items:
+              - key: application.yaml
+                path: application.yml
+        {{- if .Values.waitForBackends.enabled }}
+        - name: scripts
+          configMap:
+            name: {{ include "scdf.fullname" . }}-scripts
+            defaultMode: 0755
+        {{- end }}
+        {{- if .Values.server.extraVolumes }}
+          {{- toYaml .Values.server.extraVolumes | nindent 8 }}
+        {{- end }}

@@ -1,0 +1,79 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+** Please be patient while the chart is being deployed **
+
+Thanos chart was deployed enabling the following components:
+
+{{- if $query.enabled }}
+- Thanos Query
+{{- end }}
+{{- if .Values.bucketweb.enabled }}
+- Thanos Bucket Web
+{{- end }}
+{{- if .Values.compactor.enabled }}
+- Thanos Compactor
+{{- end }}
+{{- if .Values.ruler.enabled }}
+- Thanos Ruler
+{{- end }}
+{{- if .Values.storegateway.enabled }}
+- Thanos Store Gateway
+{{- end }}
+
+{{- if $query.enabled }}
+
+Thanos Query can be accessed through following DNS name from within your cluster:
+
+    {{ include "common.names.fullname" . }}-query.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ if $query.service.http }}{{ coalesce $query.service.ports.http $query.service.http.port }}{{ else }}{{ $query.service.ports.http }}{{ end }})
+
+To access Thanos Query from outside the cluster execute the following commands:
+
+{{- if $query.ingress.enabled }}
+
+1. Get the Thanos Query URL and associate Thanos Query hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Thanos Query URL: http{{ if $query.ingress.tls }}s{{ end }}://{{ $query.ingress.hostname }}/"
+   echo "$CLUSTER_IP  {{ $query.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+
+1. Get the Thanos Query URL by running these commands:
+
+{{- if contains "NodePort" $query.service.type }}
+
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }}-query)
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo "http://${NODE_IP}:${NODE_PORT}"
+
+{{- else if contains "LoadBalancer" $query.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "common.names.fullname" . }}-query'
+
+    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "common.names.fullname" . }}-query)
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-query -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo "http://${SERVICE_IP}:${SERVICE_PORT}"
+
+{{- else if contains "ClusterIP" $query.service.type }}
+
+    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "common.names.fullname" . }}-query)
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }}-query ${SERVICE_PORT}:${SERVICE_PORT} &
+    echo "http://127.0.0.1:${SERVICE_PORT}"
+
+{{- end }}
+{{- end }}
+
+2. Open a browser and access Thanos Query using the obtained URL.
+
+{{- else }}
+
+WARNING: You deployed Thanos without enabling Thanos Query!!
+
+{{- end }}
+
+{{- include "thanos.validateValues" . }}
+{{- include "thanos.checkRollingTags" . }}

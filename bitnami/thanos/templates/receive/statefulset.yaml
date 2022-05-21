@@ -1,0 +1,262 @@
+{{- if .Values.receive.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "common.names.fullname" . }}-receive
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: receive
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.receive.autoscaling.enabled }}
+  replicas: {{ .Values.receive.replicaCount }}
+  {{- end }}
+  podManagementPolicy: {{ .Values.receive.podManagementPolicy }}
+  serviceName: {{ include "common.names.fullname" . }}-receive-headless
+  {{- if .Values.receive.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.receive.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: receive
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: receive
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.receive.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.receive.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      annotations:
+        checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
+        {{- if (include "thanos.receive.createConfigmap" .) }}
+        checksum/receive-configuration: {{ include (print $.Template.BasePath "/receive/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.receive.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.receive.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "thanos.imagePullSecrets" . | nindent 6 }}
+      serviceAccount: {{ include "thanos.serviceAccount.name" (dict "component" "receive" "context" $) }}
+      automountServiceAccountToken: {{ .Values.receive.automountServiceAccountToken }}
+      {{- if .Values.receive.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.receive.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.receive.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.receive.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.receive.podAffinityPreset "component" "receive" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.receive.podAntiAffinityPreset "component" "receive" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.receive.nodeAffinityPreset.type "key" .Values.receive.nodeAffinityPreset.key "values" .Values.receive.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.receive.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.receive.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.receive.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.receive.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.receive.priorityClassName }}
+      priorityClassName: {{ .Values.receive.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.receive.schedulerName }}
+      schedulerName: {{ .Values.receive.schedulerName }}
+      {{- end }}
+      {{- if .Values.receive.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.receive.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.receive.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.receive.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if or .Values.receive.initContainers (and .Values.volumePermissions.enabled .Values.receive.persistence.enabled) }}
+      initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.receive.persistence.enabled }}
+        - name: init-chmod-data
+          image: {{ include "thanos.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /var/thanos/receive
+              chown -R "{{ .Values.receive.containerSecurityContext.runAsUser }}:{{ .Values.receive.podSecurityContext.fsGroup }}" /var/thanos/receive
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: data
+              mountPath: /var/thanos/receive
+        {{- end }}
+        {{- if .Values.receive.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.receive.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      containers:
+        {{- if .Values.receive.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.receive.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+        - name: receive
+          image: {{ include "thanos.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.receive.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.receive.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.receive.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.receive.command "context" $) | nindent 12 }}
+          {{- end }}
+          args:
+            {{- if .Values.receive.args }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.receive.args "context" $) | nindent 12 }}
+            {{- else }}
+            - receive
+            - --log.level={{ .Values.receive.logLevel }}
+            - --log.format={{ .Values.receive.logFormat }}
+            - --grpc-address=0.0.0.0:10901
+            - --http-address=0.0.0.0:10902
+            - --remote-write.address=0.0.0.0:19291
+            - --objstore.config=$(OBJSTORE_CONFIG)
+            - --tsdb.path=/var/thanos/receive
+            - --label={{ .Values.receive.replicaLabel }}="$(NAME)"
+            - --label=receive="true"
+            - --tsdb.retention={{ .Values.receive.tsdbRetention }}
+            {{- if not .Values.receive.service.additionalHeadless }}
+            - --receive.local-endpoint=127.0.0.1:10901
+            {{- else }}
+            - --receive.local-endpoint=$(NAME).{{ include "common.names.fullname" . }}-receive-headless.$(NAMESPACE).svc.{{ .Values.clusterDomain }}:10901
+            {{- end }}
+            {{- if eq .Values.receive.mode "standalone" }}
+            - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
+            - --receive.replication-factor={{ .Values.receive.replicationFactor }}
+            {{- end }}
+            {{- if .Values.receive.grpc.server.tls.enabled }}
+            - --grpc-server-tls-cert=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "key" "tls-cert") }}
+            - --grpc-server-tls-key=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "key" "tls-key") }}
+            - --grpc-server-tls-client-ca=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "key" "ca-cert") }}
+            {{- end }}
+            {{- if .Values.receive.extraFlags }}
+            {{- .Values.receive.extraFlags | toYaml | nindent 12 }}
+            {{- end }}
+            {{- end }}
+          env:
+            - name: NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: OBJSTORE_CONFIG
+              valueFrom:
+                secretKeyRef:
+                  key: objstore.yml
+                  name: {{ include "thanos.objstoreSecretName" . }}
+            {{- if .Values.receive.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.receive.extraEnvVarsCM .Values.receive.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.receive.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.receive.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.receive.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.receive.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - containerPort: 10901
+              name: grpc
+              protocol: TCP
+            - containerPort: 10902
+              name: http
+              protocol: TCP
+            - containerPort: 19291
+              name: remote-write
+              protocol: TCP
+          {{- if .Values.receive.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.receive.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /-/healthy
+              port: http
+          {{- else if .Values.receive.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.receive.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.receive.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /-/ready
+              port: http
+          {{- else if .Values.receive.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.receive.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.receive.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /-/ready
+              port: http
+          {{- else if .Values.receive.customReadinessProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.receive.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.receive.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.receive.resources }}
+          resources: {{- toYaml .Values.receive.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: hashring-config
+              mountPath: /var/lib/thanos-receive
+            - name: data
+              mountPath: /var/thanos/receive
+            {{- if .Values.receive.grpc.server.tls.enabled }}
+            - name: grpc-server-tls
+              mountPath: /certs
+            {{- end }}
+            {{- if .Values.receive.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: hashring-config
+          configMap:
+            name: {{ include "thanos.receive.configmapName" . }}
+        {{- if .Values.receive.grpc.server.tls.enabled }}
+        - name: grpc-server-tls
+          secret:
+            secretName: {{ include "common.secrets.name" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "defaultNameSuffix" "receive-grpc-server" "context" $) }}
+        {{- end }}
+        {{- if .Values.receive.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+  {{- if and .Values.receive.persistence.enabled .Values.receive.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.receive.persistence.existingClaim }}
+  {{- else if not .Values.receive.persistence.enabled }}
+        - name: data
+          emptyDir: {}
+  {{- else if and .Values.receive.persistence.enabled (not .Values.receive.persistence.existingClaim) }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        {{- if .Values.receive.persistence.annotations }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.receive.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.receive.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.receive.persistence.size | quote }}
+        {{- include "common.storage.class" (dict "persistence" .Values.receive.persistence "global" .Values.global) | nindent 8 }}
+  {{- end }}
+{{- end }}

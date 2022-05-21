@@ -1,0 +1,116 @@
+{{- if (include "scdf.server.createConfigmap" .) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "scdf.fullname" . }}-server
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  namespace: {{ .Release.Namespace }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  application.yaml: |-
+    {{- if .Values.metrics.enabled }}
+    {{- $fullname := include "scdf.fullname" . }}
+    {{- $rsocketPort := int (coalesce .Values.metrics.service.ports.rsocket .Values.metrics.service.rsocketPort) }}
+    management:
+      metrics:
+         export:
+            prometheus:
+               enabled: true
+               rsocket:
+                  enabled: true
+                  host: {{ $fullname }}-prometheus-proxy
+                  port: {{ $rsocketPort }}
+    {{- end }}
+    spring:
+      cloud:
+        dataflow:
+          {{- if .Values.server.applicationProperties }}
+          applicationProperties: {{- include "common.tplvalues.render" (dict "value" .Values.server.applicationProperties "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.configuration.batchEnabled }}
+          task:
+            platform:
+              kubernetes:
+                accounts:
+                  {{ .Values.server.configuration.accountName }}:
+                    {{- $environmentVariables := include "scdf.deployer.environmentVariables" . }}
+                    {{- if $environmentVariables }}
+                    environmentVariables: {{- $environmentVariables | trim | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.resources.limits }}
+                    limits: {{- toYaml .Values.deployer.resources.limits | trim | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.resources.requests }}
+                    requests: {{- toYaml .Values.deployer.resources.requests | trim | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.readinessProbe.initialDelaySeconds }}
+                    readinessProbeDelay: {{ .Values.deployer.readinessProbe.initialDelaySeconds }}
+                    {{- end }}
+                    {{- if .Values.deployer.livenessProbe.initialDelaySeconds }}
+                    livenessProbeDelay: {{ .Values.deployer.livenessProbe.initialDelaySeconds }}
+                    {{- end }}
+                    {{- if .Values.deployer.nodeSelector }}
+                    nodeSelector: {{ .Values.deployer.nodeSelector }}
+                    {{- end }}
+                    {{- if .Values.deployer.tolerations }}
+                    tolerations: {{- toYaml .Values.deployer.tolerations | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.volumeMounts }}
+                    volumeMounts: {{- toYaml .Values.deployer.volumeMounts | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.volumes }}
+                    volumes: {{- toYaml .Values.deployer.volumes | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.podSecurityContext.enabled }}
+                    podSecurityContext: {{- omit .Values.deployer.podSecurityContext "enabled" | toYaml | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.imagePullSecrets }}
+                    imagePullSecrets: {{- toYaml .Values.deployer.imagePullSecrets | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.secretRefs }}
+                    secretRefs: {{- toYaml .Values.deployer.secretRefs | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.entryPointStyle }}
+                    entryPointStyle: {{ .Values.deployer.entryPointStyle }}
+                    {{- end }}
+          {{- end }}
+          {{- if .Values.server.configuration.containerRegistries }}
+          container:
+            registry-configurations: {{- include "common.tplvalues.render" (dict "value" .Values.server.configuration.containerRegistries "context" $) | nindent 14 }}
+          {{- end }}
+          {{- if .Values.server.configuration.metricsDashboard }}
+          metrics.dashboard:
+            url: {{ .Values.server.configuration.metricsDashboard }}
+          {{- else if .Values.server.configuration.grafanaInfo }}
+          metrics.dashboard:
+            url: {{ .Values.server.configuration.grafanaInfo }}
+          {{- end }}
+        task:
+          closecontextEnabled: true
+      {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}
+      {{- if $hibernateDialect }}
+      jpa:
+        properties:
+          hibernate:
+            dialect: {{ $hibernateDialect }}
+      {{- end }}
+      datasource:
+        url: '{{ include "scdf.database.dataflow.url" . }}'
+        driverClassName: {{ include "scdf.database.driver" . }}
+        username: {{ include "scdf.database.server.user" . }}
+        {{ if .Values.externalDatabase.existingPasswordSecret }}
+        password: {{ .Values.externalDatabase.existingPasswordKey | default "datasource-password" | printf "${%s}" }}
+        {{- else -}}
+        password: ${mariadb-password}
+        {{- end }}
+        testOnBorrow: true
+        validationQuery: "SELECT 1"
+      flyway:
+        enabled: {{ .Values.flyway.enabled }}
+{{ end }}

@@ -1,0 +1,101 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+{{- $clusterDomain:= .Values.clusterDomain }}
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts, check the /opt/bitnami/scripts folder.
+
+  Default PostgreSQL startup command
+
+    /opt/bitnami/scripts/postgresql-repmgr/entrypoint.sh /opt/bitnami/scripts/postgresql-repmgr/run.sh
+
+  Default PgPool startup command
+
+    /opt/bitnami/scripts/pgpool/entrypoint.sh /opt/bitnami/scripts/pgpool/run.sh
+
+{{- else }}
+PostgreSQL can be accessed through Pgpool via port {{ .Values.service.ports.postgresql }} on the following DNS name from within your cluster:
+
+    {{ include "postgresql-ha.pgpool" . }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}
+
+Pgpool acts as a load balancer for PostgreSQL and forward read/write connections to the primary node while read-only connections are forwarded to standby nodes.
+
+To get the password for {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} run:
+
+    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql-ha.postgresqlSecretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+
+To get the password for {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }} run:
+
+    export REPMGR_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql-ha.postgresqlSecretName" . }} -o jsonpath="{.data.repmgr-password}" | base64 --decode)
+
+To connect to your database run the following command:
+
+    kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ include "postgresql-ha.postgresql.image" . }} --env="PGPASSWORD=$POSTGRES_PASSWORD" {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "common.names.fullname" . }}-client=true" {{- end }} \
+        --command -- psql -h {{ include "postgresql-ha.pgpool" . }} -p {{ .Values.service.ports.postgresql }} -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
+
+{{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
+
+Note: Since NetworkPolicy is enabled, only pods with label "{{ include "common.names.fullname" . }}-client=true" will be able to connect to this PostgreSQL cluster.
+
+{{- end }}
+
+To connect to your database from outside the cluster execute the following commands:
+
+{{- if contains "NodePort" .Values.service.type }}
+
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "postgresql-ha.pgpool" . }}
+    PGPASSWORD="$POSTGRES_PASSWORD" psql -h $NODE_IP -p $NODE_PORT -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
+
+{{- else if contains "LoadBalancer" .Values.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "postgresql-ha.pgpool" . }}
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "postgresql-ha.pgpool" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    PGPASSWORD="$POSTGRES_PASSWORD" psql -h $SERVICE_IP -p {{ .Values.service.ports.postgresql }}  -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
+
+{{- else if contains "ClusterIP" .Values.service.type }}
+
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "postgresql-ha.pgpool" . }} {{ .Values.service.ports.postgresql }}:{{ .Values.service.ports.postgresql }} &
+    psql -h 127.0.0.1 -p {{ .Values.service.ports.postgresql }} -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
+
+{{- end }}
+{{- end }}
+
+{{- include "postgresql-ha.validateValues" . }}
+{{- include "postgresql-ha.checkRollingTags" . }}
+
+{{- $passwordValidationErrors := list -}}
+{{- $requiredPasswords := list -}}
+{{- if not (include "postgresql-ha.postgresql.existingSecretProvided" . ) }}
+{{- $secretName := include "postgresql-ha.postgresqlSecretName" . -}}
+{{- $requiredPostgresqlPassword := dict "valueKey" "postgresql.password" "secret" $secretName "field" "postgresql-password" "context" $ -}}
+{{- $requiredPasswords = append $requiredPasswords $requiredPostgresqlPassword -}}
+{{- $requiredRepmgrPassword := dict "valueKey" "postgresql.repmgrPassword" "secret" $secretName "field" "repmgr-password" "context" $ -}}
+{{- $requiredPasswords = append $requiredPasswords $requiredRepmgrPassword -}}
+{{- end }}
+{{- if not (include "postgresql-ha.pgpool.existingSecretProvided" . ) }}
+{{- $secretName := include "postgresql-ha.pgpoolSecretName" . -}}
+{{- $requiredPgpoolPassword := dict "valueKey" "pgpool.adminPassword" "secret" $secretName "field" "admin-password" "context" $ -}}
+{{- $requiredPasswords = append $requiredPasswords $requiredPgpoolPassword -}}
+{{- end }}
+{{- $passwordValidationErrors = include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" .) -}}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

@@ -1,0 +1,111 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if and .Values.waitForBackends.enabled (not .Values.rbac.create) (not .Values.serviceAccount.create) }}
+---------------------------------------------------------------------------------------------
+ WARNING
+
+    By specifying "rbac.create=false" and "serviceAccount.create=false" it's
+    likely your pods enter into a "Init:CrashLoopBackOff" status if your
+    K8s cluster has RBAC enabled.
+
+---------------------------------------------------------------------------------------------
+{{- end }}
+
+Spring Cloud Data Flow chart was deployed enabling the following components:
+
+- Spring Cloud Data Flow server
+{{- if or .Values.skipper.enabled .Values.server.configuration.streamingEnabled }}
+- Spring Cloud Skipper server
+{{- end }}
+
+Spring Cloud Data Flow can be accessed through the following DNS name from within your cluster:
+
+    {{ include "scdf.fullname" . }}-server.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.server.service.port }})
+
+To access Spring Cloud Data Flow dashboard from outside the cluster execute the following commands:
+
+{{- if .Values.server.ingress.enabled }}
+
+1. Get the Data Flow dashboard URL and associate its hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Data Flow dashboard URL: http{{ if .Values.server.ingress.tls }}s{{ end }}://{{ .Values.server.ingress.hostname }}/dashboard"
+   echo "$CLUSTER_IP  {{ .Values.server.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+
+1. Get the Data Flow dashboard URL by running these commands:
+
+{{- if contains "NodePort" .Values.server.service.type }}
+
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "scdf.fullname" . }}-server)
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo "http://${NODE_IP}:${NODE_PORT}/dashboard"
+
+{{- else if contains "LoadBalancer" .Values.server.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "scdf.fullname" . }}-server'
+
+    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "scdf.fullname" . }}-server)
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "scdf.fullname" . }}-server -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo "http://${SERVICE_IP}:${SERVICE_PORT}/dashboard"
+
+{{- else if contains "ClusterIP" .Values.server.service.type }}
+
+    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "scdf.fullname" . }}-server)
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "scdf.fullname" . }}-server ${SERVICE_PORT}:${SERVICE_PORT} &
+    echo "http://127.0.0.1:${SERVICE_PORT}/dashboard"
+
+{{- end }}
+{{- end }}
+
+2. Open a browser and access the Data Flow dashboard using the obtained URL.
+
+{{- include "common.warnings.rollingTag" .Values.server.image }}
+{{- include "common.warnings.rollingTag" .Values.server.composedTaskRunner.image }}
+{{- include "common.warnings.rollingTag" .Values.skipper.image }}
+{{- include "common.warnings.rollingTag" .Values.waitForBackends.image }}
+{{- include "scdf.validateValues" . }}
+
+{{- $passwordErrors := list -}}
+{{- $secretNameMariadb := include "scdf.mariadb.fullname" . -}}
+{{- $secretNameExternalDb := printf "%s-%s" (include "scdf.fullname" .) "externaldb" -}}
+{{- $secretNameRabbitmq := include "scdf.rabbitmq.fullname" . -}}
+{{- $secretNameExternalRabbitmq := printf "%s-%s" (include "scdf.fullname" .) "externalrabbitmq" -}}
+
+{{/* Mysql required password */}}
+{{- $passwordMysqlErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $secretNameMariadb "subchart" true "context" $) -}}
+{{- $passwordErrors = append $passwordErrors $passwordMysqlErrors -}}
+
+{{/* Rabbitmq required password */}}
+{{- if or (.Values.rabbitmq.enabled) (and (.Values.externalRabbitmq.enabled) (not .Values.externalRabbitmq.existingPasswordSecret)) -}}
+{{- $requiredRabbitmqPassword := dict "valueKey" "rabbitmq.auth.password" "secret" $secretNameRabbitmq "field" "rabbitmq-password" -}}
+{{- $requiredErlangPassword := dict "valueKey" "rabbitmq.auth.erlangCookie" "secret" $secretNameRabbitmq "field" "rabbitmq-erlang-cookie" -}}
+{{- $requiredRabbitmqPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" (list $requiredRabbitmqPassword $requiredErlangPassword) "context" $) -}}
+{{- $passwordErrors =  append $passwordErrors $requiredRabbitmqPasswordErrors -}}
+{{- end }}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordErrors "context" $) -}}
+
+{{- if .Release.IsUpgrade -}}
+  {{- $passwordWarnings := list -}}
+
+  {{- if not .Values.mariadb.enabled -}}
+    {{- $requiredExternalDbPassword := dict "valueKey" "externalDatabase.password" "secret" $secretNameExternalDb "field" "mariadb-password" -}}
+    {{- $passwordWarnings =  append $passwordWarnings $requiredExternalDbPassword -}}
+  {{- end -}}
+  {{- if and (.Values.externalRabbitmq.enabled) (not .Values.rabbitmq.enabled) (not .Values.externalRabbitmq.existingPasswordSecret) -}}
+    {{- $requiredExternalRabbitmqPassword := dict "valueKey" "externalRabbitmq.password" "secret" $secretNameExternalRabbitmq "field" "rabbitmq-password" -}}
+    {{- $passwordWarnings =  append $passwordWarnings $requiredExternalRabbitmqPassword -}}
+  {{- end -}}
+
+  {{- if not (empty $passwordWarnings) -}}
+WARNING: Review values for the following password in the command, if they are correct please ignore this notice.
+    {{- include "common.validations.values.multiple.empty" (dict "required" $passwordWarnings "context" $) -}}
+  {{- end -}}
+{{- end -}}

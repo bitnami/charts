@@ -1,0 +1,15 @@
+{{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled .Values.metrics.serviceMonitor.rbac.create }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: RoleBinding
+metadata:
+  name: {{ printf "%s-prometheus" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ printf "%s-prometheus" (include "common.names.fullname" .) }}
+subjects:
+  - namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace }}
+    kind: ServiceAccount
+    name: {{ required "A valid .Values.metrics.serviceMonitor.serviceAccount entry required!" .Values.metrics.serviceMonitor.serviceAccount }}
+{{- end }}

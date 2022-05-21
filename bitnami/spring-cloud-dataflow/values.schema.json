@@ -1,0 +1,344 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "server": {
+      "type": "object",
+      "form": true,
+      "title": "Spring Cloud Dataflow Server configuration",
+      "properties": {
+        "configuration": {
+          "type": "object",
+          "title": "Spring Cloud Dataflow Server configuration",
+          "properties": {
+            "streamingEnabled": {
+              "type": "boolean",
+              "title": "Enable deploying streaming data",
+              "form": true,
+              "description": "Enable support for Stream processing using using RabbitMQ or Kafka"
+            },
+            "batchEnabled": {
+              "type": "boolean",
+              "title": "Enable deploying Batch data",
+              "form": true,
+              "description": "Enable support for Task and Schedules processing"
+            }
+          }
+        },
+        "replicaCount": {
+          "type": "integer",
+          "form": true,
+          "title": "Dataflow server replicas"
+        },
+        "resources": {
+          "type": "object",
+          "title": "Required Resources",
+          "description": "Configure resource requests",
+          "form": true,
+          "properties": {
+            "requests": {
+              "type": "object",
+              "properties": {
+                "memory": {
+                  "type": "string",
+                  "form": true,
+                  "render": "slider",
+                  "title": "Memory Request",
+                  "sliderMin": 10,
+                  "sliderMax": 2048,
+                  "sliderUnit": "Mi"
+                },
+                "cpu": {
+                  "type": "string",
+                  "form": true,
+                  "render": "slider",
+                  "title": "CPU Request",
+                  "sliderMin": 10,
+                  "sliderMax": 2000,
+                  "sliderUnit": "m"
+                }
+              }
+            }
+          }
+        },
+        "ingress": {
+          "type": "object",
+          "form": true,
+          "title": "Ingress configuration",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "form": true,
+              "title": "Use a custom hostname",
+              "description": "Enable the ingress resource that allows you to access the Dataflow Server dashboard."
+            },
+            "hostname": {
+              "type": "string",
+              "form": true,
+              "title": "Hostname",
+              "hidden": {
+                "condition": false,
+                "value": "server/ingress/enabled"
+              }
+            },
+            "tls": {
+              "type": "boolean",
+              "form": true,
+              "title": "Create a TLS secret",
+              "hidden": {
+                "condition": false,
+                "value": "server/ingress/enabled"
+              }
+            }
+          }
+        },
+        "service": {
+          "type": "object",
+          "form": true,
+          "title": "Service Configuration",
+          "properties": {
+            "type": {
+              "type": "string",
+              "form": true,
+              "title": "Service Type",
+              "description": "Allowed values: \"ClusterIP\", \"NodePort\" and \"LoadBalancer\"" 
+            }
+          }
+        }
+      }
+    },
+    "skipper": {
+      "type": "object",
+      "form": true,
+      "title": "Spring Cloud Skipper Server configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "form": true,
+          "title": "Enable Skipper",
+          "description": "Enable Spring Cloud Skipper component"
+        },
+        "replicaCount": {
+          "type": "integer",
+          "form": true,
+          "title": "Skipper server replicas",
+          "hidden": {
+            "condition": false,
+            "value": "skipper/enabled"
+          }
+        },
+        "resources": {
+          "type": "object",
+          "title": "Required Resources",
+          "description": "Configure resource requests",
+          "form": true,
+          "properties": {
+            "requests": {
+              "type": "object",
+              "properties": {
+                "memory": {
+                  "type": "string",
+                  "form": true,
+                  "render": "slider",
+                  "title": "Memory Request",
+                  "sliderMin": 10,
+                  "sliderMax": 2048,
+                  "sliderUnit": "Mi"
+                },
+                "cpu": {
+                  "type": "string",
+                  "form": true,
+                  "render": "slider",
+                  "title": "CPU Request",
+                  "sliderMin": 10,
+                  "sliderMax": 2000,
+                  "sliderUnit": "m"
+                }
+              }
+            }
+          },
+          "hidden": {
+            "condition": false,
+            "value": "skipper/enabled"
+          }
+        }
+      }
+    },
+    "serviceAccount": {
+      "type": "object",
+      "title": "ServiceAccount configuration",
+      "form": true,
+      "properties": {
+        "create": {
+          "type": "boolean",
+          "form": true,
+          "title": "Create a ServiceAcccount",
+          "description": "Specify whether a ServiceAcccount for Spring Cloud pods should be created"
+        },
+        "name": {
+          "type": "string",
+          "form": true,
+          "title": "ServiceAcccount name",
+          "description": "ServiceAcccount name to use. Auto-generated if not specified",
+          "hidden": {
+            "condition": false,
+            "value": "serviceAccount/create"
+          }
+        }
+      }
+    },
+    "rbac": {
+      "type": "object",
+      "title": "RBAC rules configuration",
+      "form": true,
+      "properties": {
+        "create": {
+          "type": "boolean",
+          "form": true,
+          "title": "Create RBAC rules",
+          "description": "Specify whether RBAC resources should be created and used"
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "form": true,
+      "title": "Prometheus metrics details",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Create Prometheus metrics exporter",
+          "description": "Create a side-car container to expose Prometheus metrics",
+          "form": true
+        },
+        "serviceMonitor": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "title": "Create Prometheus Operator ServiceMonitor",
+              "description": "Create a ServiceMonitor to track metrics using Prometheus Operator",
+              "form": true,
+              "hidden": {
+                "condition": false,
+                "value": "metrics/enabled"
+              }
+            }
+          }
+        }
+      }
+    },
+    "mariadb": {
+      "type": "object",
+      "title": "MariaDB Details",
+      "form": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Use a new MariaDB database hosted in the cluster",
+          "form": true,
+          "description": "Whether to deploy a MariaDB server to satisfy the Spring Cloud database requirements. To use an external database switch this off and configure the external database details"
+        }
+      }
+    },
+    "flyway": {
+      "type": "object",
+      "title": "Flyway Details",
+      "form": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Run or skip Database creation scripts on startup",
+          "form": true,
+          "description": "Whether to run or skip running Database creation scripts on startup. This feature can be used in scenario of Database schema and tables already present, when using Mariadb or external database"
+        }
+      }
+    },
+    "externalDatabase": {
+      "type": "object",
+      "title": "External Database Details",
+      "description": "If MariaDB is disabled. Use this section to specify the external database details",
+      "form": true,
+      "properties": {
+        "host": {
+          "type": "string",
+          "form": true,
+          "title": "Database Host",
+          "hidden": "mariadb/enabled"
+        },
+        "port": {
+          "type": "integer",
+          "form": true,
+          "title": "Database Port",
+          "hidden": "mariadb/enabled"
+        },
+        "password": {
+          "type": "string",
+          "form": true,
+          "title": "Database Password",
+          "hidden": "mariadb/enabled"
+        },
+        "dataflow": {
+          "type": "object",
+          "properties": {
+            "user": {
+              "type": "string",
+              "form": true,
+              "title": "Database Username for Dataflow server",
+              "hidden": "mariadb/enabled"
+            },
+            "database": {
+              "type": "string",
+              "form": true,
+              "title": "Database Name for Dataflow server",
+              "hidden": "mariadb/enabled"
+            }
+          }
+        },
+        "skipper": {
+          "type": "object",
+          "properties": {
+            "user": {
+              "type": "string",
+              "form": true,
+              "title": "Database Username for Skipper server",
+              "hidden": "mariadb/enabled"
+            },
+            "database": {
+              "type": "string",
+              "form": true,
+              "title": "Database Name for Skipper server",
+              "hidden": "mariadb/enabled"
+            }
+          }
+        }
+      }
+    },
+    "rabbitmq": {
+      "type": "object",
+      "title": "RabbitMQ Details",
+      "form": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Use a new RabbitMQ server hosted in the cluster",
+          "form": true,
+          "description": "Whether to deploy a RabbitMQ server to satisfy the Spring Cloud Skipper messaging middleware requirements."
+        }
+      }
+    },
+    "kafka": {
+      "type": "object",
+      "title": "Kafka Details",
+      "form": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Use a new Kafka server hosted in the cluster",
+          "form": true,
+          "description": "Whether to deploy a Kafka server to satisfy the Spring Cloud Skipper messaging middleware requirements."
+        }
+      }
+    }
+  }
+}

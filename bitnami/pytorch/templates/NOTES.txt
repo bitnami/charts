@@ -1,0 +1,66 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    %%ENTRYPOINT and CMD from main container%%
+
+{{- else }}
+
+{{- if or (.Values.configMap) (.Files.Glob "files/*") (.Values.cloneFilesFromGit.enabled) }}
+{{- if .Values.entrypoint.file }}
+The provided file {{ .Values.entrypoint.file }} is being executed. You can see the logs of each running node with:
+    kubectl logs [POD_NAME]
+
+and the list of pods:
+    kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+{{- else }}
+You didn't specify any entrypoint to your code.
+To run it, you can either deploy again using the `pytorch.entrypoint.file` option to specify your entrypoint, or execute it manually by jumping into the pods:
+
+1. Get the running pods
+    kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+
+2. Get into a pod
+    kubectl exec -ti [POD_NAME] bash
+
+3. Execute your script as you would normally do.
+{{- end }}
+{{- else }}
+WARNING: You haven't loaded any file. You can access the Python REPL by jumping into the pods:
+
+1. Get the running pods
+    kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+
+2. Run the Python REPL
+    kubectl exec -ti [POD_NAME] python
+
+This chart allows three different methods to load your files:
+
+1. Load the files from an existing ConfigMap, using the `configMap` option.
+2. Putting your files in a `files` folder in the root of the Chart.
+3. Cloning a Git repository with the `cloneFilesFromGit` option.
+
+Examples for the different methods can be found in the README.
+{{- end }}
+{{- end }}
+
+{{ include "pytorch.validateValues" . }}
+{{ include "pytorch.checkRollingTags" . }}

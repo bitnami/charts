@@ -1,0 +1,18 @@
+{{- if and .Values.postgresql.extendedConf (not .Values.postgresql.extendedConfCM) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-extended-configuration" (include "postgresql-ha.postgresql" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: postgresql
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  override.conf: |-
+    {{- include "common.tplvalues.render" ( dict "value" .Values.postgresql.extendedConf "context" $ ) | nindent 4 }}
+{{- end }}

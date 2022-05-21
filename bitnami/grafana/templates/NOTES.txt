@@ -1,0 +1,37 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+1. Get the application URL by running these commands:
+
+{{- if .Values.ingress.enabled }}
+{{- range $host := .Values.ingress.hosts }}
+  {{- range .paths }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.name }}{{ . }}
+  {{- end }}
+{{- end }}
+{{- else if contains "NodePort" .Values.service.type }}
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "common.names.fullname" . }}'
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo http://$SERVICE_IP:{{ .Values.service.ports.grafana }}
+{{- else if contains "ClusterIP" .Values.service.type }}
+    echo "Browse to http://127.0.0.1:8080"
+    kubectl port-forward svc/{{ include "common.names.fullname" . }} 8080:{{ .Values.service.ports.grafana }} &
+{{- end }}
+
+2. Get the admin credentials:
+
+    echo "User: {{ .Values.admin.user }}"
+    echo "Password: $(kubectl get secret {{ include "grafana.adminSecretName" . }} --namespace {{ .Release.Namespace }} -o jsonpath="{.data.{{ include "grafana.adminSecretPasswordKey" . }}}" | base64 --decode)"
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.imageRenderer.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{ include "grafana.validateValues" . }}

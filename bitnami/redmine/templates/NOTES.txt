@@ -1,0 +1,77 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+{{- $secretName := include "redmine.secretName" . -}}
+{{- $dbSecretName := include "redmine.database.secretName" . -}}
+
+{{- if and (not (eq .Values.databaseType "mariadb")) (not (eq .Values.databaseType "postgresql")) }}
+#########################################################################################
+### ERROR: You did not indicate MariaDB nor PostgreSQL as the database server to use. ###
+#########################################################################################
+
+You have 4 alternatives:
+
+  a) Use MariaDB as database creating a new MariaDB server: set `databaseType=mariadb` and `mariadb.enabled=true`
+  b) Use MariaDB as database using a external MariaDB server: set `databaseType=mariadb` and `mariadb.enabled=false`
+  c) Use PostgreSQL as database creating a new PostgreSQL server: set `databaseType=postgresql` and `postgresql.enabled=true`
+  d) Use PostgreSQL as database using a external PostgreSQL server: `databaseType=postgresql` and `postgresql.enabled=false`
+
+{{- else }}
+
+1. Get the Redmine URL:
+
+{{- $redminePort := coalesce .Values.service.ports.http .Values.service.port | toString }}
+{{- if and .Values.ingress.enabled .Values.ingress.hostname }}
+
+  export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+  echo "Redmine URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}/"
+  echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else if eq .Values.service.type "NodePort" }}
+
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo "Redmine URL: http://$NODE_IP:$NODE_PORT/"
+
+{{- else if eq .Values.service.type "LoadBalancer" }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+
+  echo "Redmine URL: http://$SERVICE_IP{{- if ne $redminePort "80" }}:{{ $redminePort }}{{ end }}/"
+
+{{- else if eq .Values.service.type "ClusterIP" }}
+
+  echo "Redmine URL: http://127.0.0.1:{{ $redminePort }}/"
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} 3000:{{ $redminePort }}
+
+{{- end }}
+
+2. Login with the following credentials
+
+  export REDMINE_USERNAME={{ .Values.redmineUsername }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "redmine-password" "context" $) }}
+
+  echo Username: $REDMINE_USERNAME
+  echo Password: $REDMINE_PASSWORD
+
+  You can access the DB using the following password:
+  {{- if eq .Values.databaseType "mariadb" }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $dbSecretName "field" "mariadb-password" "context" $) }}
+  {{- else if eq .Values.databaseType "postgresql" }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $dbSecretName "field" "password" "context" $) }}
+  {{ end }}
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+
+{{- $passwordValidationErrors := list }}
+{{- if eq .Values.databaseType "mariadb" }}
+  {{- $dbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
+  {{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
+{{- end }}
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

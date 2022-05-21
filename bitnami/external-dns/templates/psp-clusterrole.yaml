@@ -1,0 +1,15 @@
+{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+{{- if and $pspAvailable  .Values.rbac.pspEnabled }}
+kind: ClusterRole
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ template "external-dns.fullname" . }}-psp
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{ include "external-dns.labels" . | nindent 4 }}
+rules:
+- apiGroups: ['extensions']
+  resources: ['podsecuritypolicies']
+  verbs:     ['use']
+  resourceNames:
+  - {{ template "external-dns.fullname" . }}
+{{- end }}

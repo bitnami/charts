@@ -1,0 +1,41 @@
+{{- if and .Values.dashboardsProvider.enabled (not .Values.dashboardsProvider.configMapName) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-provider
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: grafana
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  default-provider.yaml: |-
+    apiVersion: 1
+
+    providers:
+      # <string> an unique provider name
+    - name: 'default-provider'
+      # <int> org id. will default to orgId 1 if not specified
+      orgId: 1
+      # <string, required> name of the dashboard folder. Required
+      folder: dashboards
+      # <string> folder UID. will be automatically generated if not specified
+      folderUid: ''
+      # <string, required> provider type. Required
+      type: file
+      # <bool> disable dashboard deletion
+      disableDeletion: false
+      # <bool> enable dashboard editing
+      editable: true
+      # <int> how often Grafana will scan for changed dashboards
+      updateIntervalSeconds: 10
+      options:
+        # <string, required> path to dashboard files on disk. Required
+        path: /opt/bitnami/grafana/dashboards
+        # <bool> enable folders creation for dashboards
+        #foldersFromFilesStructure: true
+{{- end }}

@@ -1,0 +1,131 @@
+{{- if (include "scdf.skipper.createConfigmap" .) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "scdf.fullname" . }}-skipper
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: skipper
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  namespace: {{ .Release.Namespace }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  application.yaml: |-
+    {{- if .Values.metrics.enabled }}
+    {{- $fullname := include "scdf.fullname" . }}
+    {{- $rsocketPort := int (coalesce .Values.metrics.service.ports.rsocket .Values.metrics.service.rsocketPort) }}
+    management:
+      metrics:
+         export:
+            prometheus:
+               enabled: true
+               rsocket:
+                  enabled: true
+                  host: {{ $fullname }}-prometheus-proxy
+                  port: {{ $rsocketPort }}
+    {{- end }}
+    spring:
+      cloud:
+        skipper:
+          server:
+            platform:
+              kubernetes:
+                accounts:
+                  {{ .Values.skipper.configuration.accountName }}:
+                    {{- $environmentVariables := include "scdf.deployer.environmentVariables" . }}
+                    {{- if or (.Values.rabbitmq.enabled) (.Values.externalRabbitmq.enabled) }}
+                    {{- $rabbitmqHost := include "scdf.rabbitmq.host" . }}
+                    {{- $rabbitmqPort := include "scdf.rabbitmq.port" . }}
+                    {{- $rabbitmqUser := include "scdf.rabbitmq.user" . }}
+                    {{- $rabbitmqVhost := include "scdf.rabbitmq.vhost" . }}
+                    environmentVariables:
+                      - SPRING_RABBITMQ_HOST={{ $rabbitmqHost }}
+                      - SPRING_RABBITMQ_PORT={{ $rabbitmqPort }}
+                      - SPRING_RABBITMQ_USERNAME={{ $rabbitmqUser }}
+                      - SPRING_RABBITMQ_PASSWORD=${rabbitmq-password}
+                      - SPRING_RABBITMQ_VIRTUAL_HOST={{ $rabbitmqVhost }}
+                      {{- if $environmentVariables }}
+                      {{- $environmentVariables | nindent 22 }}
+                      {{- end }}
+                    {{- else if .Values.kafka.enabled }}
+                    environmentVariables:
+                      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=${{ printf "{" }}{{ .Release.Name }}_KAFKA_SERVICE_HOST}:${{ printf "{" }}{{ .Release.Name }}_KAFKA_SERVICE_PORT}
+                      - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=${{ printf "{" }}{{ .Release.Name }}_ZOOKEEPER_SERVICE_HOST}:${{ printf "{" }}{{ .Release.Name }}_ZOOKEEPER_SERVICE_PORT}
+                      {{- if $environmentVariables }}
+                      {{- $environmentVariables | nindent 22 }}
+                      {{- end }}
+                    {{- else if .Values.externalKafka.enabled }}
+                    environmentVariables:
+                      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS={{ .Values.externalKafka.brokers }}
+                      - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES={{ .Values.externalKafka.zkNodes }}
+                      {{- if $environmentVariables }}
+                      {{- $environmentVariables | nindent 22 }}
+                      {{- end }}
+                    {{- else }}
+                    {{- if $environmentVariables }}
+                    environmentVariables: {{- $environmentVariables  | trim | nindent 22 }}
+                    {{- end }}
+                    {{- end }}
+                    {{- if .Values.deployer.resources.limits }}
+                    limits: {{- toYaml .Values.deployer.resources.limits | trim | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.resources.requests }}
+                    requests: {{- toYaml .Values.deployer.resources.requests | trim | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.readinessProbe.initialDelaySeconds }}
+                    readinessProbeDelay: {{ .Values.deployer.readinessProbe.initialDelaySeconds }}
+                    {{- end }}
+                    {{- if .Values.deployer.livenessProbe.initialDelaySeconds }}
+                    livenessProbeDelay: {{ .Values.deployer.livenessProbe.initialDelaySeconds }}
+                    {{- end }}
+                    {{- if .Values.deployer.nodeSelector }}
+                    nodeSelector: {{ .Values.deployer.nodeSelector }}
+                    {{- end }}
+                    {{- if .Values.deployer.tolerations }}
+                    tolerations: {{- toYaml .Values.deployer.tolerations | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.volumeMounts }}
+                    volumeMounts: {{- toYaml .Values.deployer.volumeMounts | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.volumes }}
+                    volumes: {{- toYaml .Values.deployer.volumes | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.podSecurityContext.enabled }}
+                    podSecurityContext: {{- omit .Values.deployer.podSecurityContext "enabled" | toYaml | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.imagePullSecrets }}
+                    imagePullSecrets: {{- toYaml .Values.deployer.imagePullSecrets | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.secretRefs }}
+                    secretRefs: {{- toYaml .Values.deployer.secretRefs | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.entryPointStyle }}
+                    entryPointStyle: {{ .Values.deployer.entryPointStyle }}
+                    {{- end }}
+                    {{- if .Values.deployer.imagePullPolicy }}
+                    imagePullPolicy: {{ .Values.deployer.imagePullPolicy }}
+                    {{- end }}
+      {{- $hibernateDialect := include "scdf.database.hibernate.dialect" .  }}
+      {{- if $hibernateDialect }}
+      jpa:
+        properties:
+          hibernate:
+            dialect: {{ $hibernateDialect }}
+      {{- end }}
+      datasource:
+        url: '{{ include "scdf.database.skipper.url" . }}'
+        driverClassName: {{ include "scdf.database.driver" . }}
+        username: {{ include "scdf.database.skipper.user" . }}
+        {{ if .Values.externalDatabase.existingPasswordSecret }}
+        password: {{ .Values.externalDatabase.existingPasswordKey | default "datasource-password" | printf "${%s}" }}
+        {{- else -}}
+        password: ${mariadb-password}
+        {{- end }}
+        testOnBorrow: true
+        validationQuery: "SELECT 1"
+      flyway:
+        enabled: {{ .Values.flyway.enabled }}
+{{ end }}

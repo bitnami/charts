@@ -1,0 +1,197 @@
+{{/* vim: set filetype=mustache: */}}
+{{/*
+Returns the name that will identify the repository internally and it will be used to create folders or
+volume names
+*/}}
+{{- define "airflow.git.repository.name" -}}
+  {{- $defaultName := regexFind "/.*$" .repository | replace "//" "" | replace "/" "-" | replace "." "-" -}}
+  {{- .name | default $defaultName | kebabcase -}}
+{{- end -}}
+
+{{/*
+Returns the volume mounts that will be used by git containers (clone and sync)
+*/}}
+{{- define "airflow.git.volumeMounts" -}}
+{{- if .Values.git.dags.enabled }}
+  {{- range .Values.git.dags.repositories }}
+- name: git-cloned-dag-files-{{ include "airflow.git.repository.name" . }}
+  mountPath: /dags_{{ include "airflow.git.repository.name" . }}
+  {{- end }}
+{{- end }}
+{{- if .Values.git.plugins.enabled }}
+  {{- range .Values.git.plugins.repositories }}
+- name: git-cloned-plugins-files-{{ include "airflow.git.repository.name" . }}
+  mountPath: /plugins_{{ include "airflow.git.repository.name" . }}
+  {{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Returns the volume mounts that will be used by the main container
+*/}}
+{{- define "airflow.git.maincontainer.volumeMounts" -}}
+{{- if .Values.git.dags.enabled }}
+  {{- range .Values.git.dags.repositories }}
+- name: git-cloned-dag-files-{{ include "airflow.git.repository.name" . }}
+  mountPath: /opt/bitnami/airflow/dags/git_{{ include "airflow.git.repository.name" . }}
+    {{- if .path }}
+  subPath: {{ .path }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- if .Values.git.plugins.enabled }}
+  {{- range .Values.git.plugins.repositories }}
+- name: git-cloned-plugins-files-{{ include "airflow.git.repository.name" . }}
+  mountPath: /opt/bitnami/airflow/plugins/git_{{ include "airflow.git.repository.name" . }}
+    {{- if .path }}
+  subPath: {{ .path }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Returns the volumes that will be attached to the workload resources (deployment, statefulset, etc)
+*/}}
+{{- define "airflow.git.volumes" -}}
+{{- if .Values.git.dags.enabled }}
+  {{- range .Values.git.dags.repositories }}
+- name: git-cloned-dag-files-{{ include "airflow.git.repository.name" . }}
+  emptyDir: {}
+  {{- end }}
+{{- end }}
+{{- if .Values.git.plugins.enabled }}
+  {{- range .Values.git.plugins.repositories }}
+- name: git-cloned-plugins-files-{{ include "airflow.git.repository.name" . }}
+  emptyDir: {}
+  {{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Returns the init container that will clone repositories files from a given list of git repositories
+Usage:
+{{ include "airflow.git.containers.clone" ( dict "securityContext" .Values.path.to.the.component.securityContext "context" $ ) }}
+*/}}
+{{- define "airflow.git.containers.clone" -}}
+{{- if or .context.Values.git.dags.enabled .context.Values.git.plugins.enabled }}
+- name: clone-repositories
+  image: {{ include "git.image" .context | quote }}
+  imagePullPolicy: {{ .context.Values.git.image.pullPolicy | quote }}
+{{- if .securityContext.enabled }}
+  securityContext: {{- omit .securityContext "enabled" | toYaml | nindent 4 }}
+{{- end }}
+{{- if .context.Values.git.clone.resources }}
+  resources: {{- toYaml .context.Values.git.clone.resources | nindent 4 }}
+{{- end }}
+{{- if .context.Values.git.clone.command }}
+  command: {{- include "common.tplvalues.render" (dict "value" .context.Values.git.clone.command "context" .context) | nindent 4 }}
+{{- else }}
+  command:
+    - /bin/bash
+{{- end }}
+{{- if .context.Values.git.clone.args }}
+  args: {{- include "common.tplvalues.render" (dict "value" .context.Values.git.clone.args "context" .context) | nindent 4 }}
+{{- else }}
+  args:
+    - -ec
+    - |
+      . /opt/bitnami/scripts/libfs.sh
+      [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && . /opt/bitnami/scripts/git/entrypoint.sh
+    {{- if .context.Values.git.dags.enabled }}
+      {{- range .context.Values.git.dags.repositories }}
+      is_mounted_dir_empty "/dags_{{ include "airflow.git.repository.name" . }}" && git clone {{ .repository }} --branch {{ .branch }} /dags_{{ include "airflow.git.repository.name" . }}
+      {{- end }}
+    {{- end }}
+    {{- if .context.Values.git.plugins.enabled }}
+      {{- range .context.Values.git.plugins.repositories }}
+      is_mounted_dir_empty "/plugins_{{ include "airflow.git.repository.name" . }}" && git clone {{ .repository }} --branch {{ .branch }} /plugins_{{ include "airflow.git.repository.name" . }}
+      {{- end }}
+    {{- end }}
+{{- end }}
+  volumeMounts:
+    {{- include "airflow.git.volumeMounts" .context | trim | nindent 4 }}
+  {{- if .context.Values.git.clone.extraVolumeMounts }}
+    {{- include "common.tplvalues.render" (dict "value" .context.Values.git.clone.extraVolumeMounts "context" .context) | nindent 4 }}
+  {{- end }}
+{{- if .context.Values.git.clone.extraEnvVars }}
+  env: {{- include "common.tplvalues.render" (dict "value" .context.Values.git.clone.extraEnvVars "context" .context) | nindent 4 }}
+{{- end }}
+{{- if or .context.Values.git.clone.extraEnvVarsCM .context.Values.git.clone.extraEnvVarsSecret }}
+  envFrom:
+    {{- if .context.Values.git.clone.extraEnvVarsCM }}
+    - configMapRef:
+        name: {{ .context.Values.git.clone.extraEnvVarsCM }}
+    {{- end }}
+    {{- if .context.Values.git.clone.extraEnvVarsSecret }}
+    - secretRef:
+        name: {{ .context.Values.git.clone.extraEnvVarsSecret }}
+    {{- end }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Returns the a container that will pull and sync repositories files from a given list of git repositories
+Usage:
+{{ include "airflow.git.containers.sync" ( dict "securityContext" .Values.path.to.the.component.securityContext "context" $ ) }}
+*/}}
+{{- define "airflow.git.containers.sync" -}}
+{{- if or .context.Values.git.dags.enabled .context.Values.git.plugins.enabled }}
+- name: sync-repositories
+  image: {{ include "git.image" .context | quote }}
+  imagePullPolicy: {{ .context.Values.git.image.pullPolicy | quote }}
+{{- if .securityContext.enabled }}
+  securityContext: {{- omit .securityContext "enabled" | toYaml | nindent 4 }}
+{{- end }}
+{{- if .context.Values.git.sync.resources }}
+  resources: {{- toYaml .context.Values.git.sync.resources | nindent 4 }}
+{{- end }}
+{{- if .context.Values.git.sync.command }}
+  command: {{- include "common.tplvalues.render" (dict "value" .context.Values.git.sync.command "context" .context) | nindent 4 }}
+{{- else }}
+  command:
+    - /bin/bash
+{{- end }}
+{{- if .context.Values.git.sync.args }}
+  args: {{- include "common.tplvalues.render" (dict "value" .context.Values.git.sync.args "context" .context) | nindent 4 }}
+{{- else }}
+  args:
+    - -ec
+    - |
+      [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && . /opt/bitnami/scripts/git/entrypoint.sh
+      while true; do
+      {{- if .context.Values.git.dags.enabled }}
+        {{- range .context.Values.git.dags.repositories }}
+          cd /dags_{{ include "airflow.git.repository.name" . }} && git pull origin {{ .branch }} || true
+        {{- end }}
+      {{- end }}
+      {{- if .context.Values.git.plugins.enabled }}
+        {{- range .context.Values.git.plugins.repositories }}
+          cd /plugins_{{ include "airflow.git.repository.name" . }} && git pull origin {{ .branch }} || true
+        {{- end }}
+      {{- end }}
+          sleep {{ default "60" .context.Values.git.sync.interval }}
+      done
+{{- end }}
+  volumeMounts:
+    {{- include "airflow.git.volumeMounts" .context | trim | nindent 4 }}
+  {{- if .context.Values.git.sync.extraVolumeMounts }}
+    {{- include "common.tplvalues.render" (dict "value" .context.Values.git.sync.extraVolumeMounts "context" .context) | nindent 4 }}
+  {{- end }}
+{{- if .context.Values.git.sync.extraEnvVars }}
+  env: {{- include "common.tplvalues.render" (dict "value" .context.Values.git.sync.extraEnvVars "context" .context) | nindent 4 }}
+{{- end }}
+{{- if or .context.Values.git.sync.extraEnvVarsCM .context.Values.git.sync.extraEnvVarsSecret }}
+  envFrom:
+    {{- if .context.Values.git.sync.extraEnvVarsCM }}
+    - configMapRef:
+        name: {{ .context.Values.git.sync.extraEnvVarsCM }}
+    {{- end }}
+    {{- if .context.Values.git.sync.extraEnvVarsSecret }}
+    - secretRef:
+        name: {{ .context.Values.git.sync.extraEnvVarsSecret }}
+    {{- end }}
+{{- end }}
+{{- end }}
+{{- end -}}
