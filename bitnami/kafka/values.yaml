@@ -1419,6 +1419,10 @@ provisioning:
   ##     flush.messages: 1
   ##
   topics: []
+  ## @param provisioning.tolerations Tolerations for pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
   ## @param provisioning.extraProvisioningCommands Extra commands to run to provision cluster resources
   ## - echo "Allow user to consume from any topic"
   ## - >-
