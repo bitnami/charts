@@ -161,9 +161,10 @@ grafana: config.useGrafanaIniFile config.grafanaIniSecret and config.grafanaIniC
 
 {{/* Validate values of Grafana - A custom ldap.toml file must be provided when enabling LDAP */}}
 {{- define "grafana.validateValues.ldap.configuration" -}}
-{{- if and .Values.ldap.enabled (empty .Values.ldap.uri) (empty .Values.ldap.configuration) (empty .Values.ldap.configMapName) (empty .Values.ldap.secretName) -}}
+{{- if and .Values.ldap.enabled (empty .Values.ldap.uri) (empty .Values.ldap.base) (empty .Values.ldap.configuration) (empty .Values.ldap.configMapName) (empty .Values.ldap.secretName) -}}
 grafana: ldap.enabled ldap.configuration ldap.configMapName and ldap.secretName
-        You must provide the content of your custom ldap.toml file when enabling LDAP (--set ldap.configuration="xxx")
+        You must provide the uri and basedn of your LDAP Sever (--set ldap.uri="aaa" --set ldap.base="bbb") 
+        or the  content of your custom ldap.toml file when enabling LDAP (--set ldap.configuration="xxx")
         As an alternative, you can set the name of an existing ConfigMap (--set ldap.configMapName="yyy") or
         an an existing Secret (--set ldap.secretName="zzz") containging the custom ldap.toml file.
 {{- end -}}
@@ -177,44 +178,46 @@ grafana: ldap.enabled ldap.configMapName and ldap.secretName
 {{- end -}}
 {{- end -}}
 
+{{/*
+Return LDAP configuration generated from ldap properties.
+*/}}
 {{- define "grafana.ldap.config" -}}
-{{- $hostPort := get (urlParse .Values.ldap.uri) "host" -}}
+{{- $hostPort := get (urlParse (required "You must set ldap.uri" .Values.ldap.uri)) "host" -}}
 [[servers]]
 # Ldap server host (specify multiple hosts space separated)
 host = {{ index (splitList ":" $hostPort) 0 | quote }}
 # Default port is 389 or 636 if use_ssl = true
 port = {{ index (splitList ":" $hostPort) 1 | default 389 }}
 # Set to true if LDAP server should use an encrypted TLS connection (either with STARTTLS or LDAPS)
-use_ssl = false
+{{- if .Values.ldap.tls.enabled }}
+use_ssl = {{ .Values.ldap.tls.enabled }}
 # If set to true, use LDAP with STARTTLS instead of LDAPS
-start_tls = false
-# set to true if you want to skip SSL cert validation
-ssl_skip_verify = false
+start_tls = {{ .Values.ldap.tls.startTls }}
+{{- if .Values.ldap.tls.CAFilename }}
 # set to the path to your root CA certificate or leave unset to use system defaults
-# root_ca_cert = "/path/to/certificate.crt"
+root_ca_cert = {{ printf "%s/%s" .Values.ldap.tls.certificatesMountPath .Values.ldap.tls.CAFilename | quote }}
+{{- end }}
+{{- if .Values.ldap.tls.certFilename }}
 # Authentication against LDAP servers requiring client certificates
-# client_cert = "/path/to/client.crt"
-# client_key = "/path/to/client.key"
-
+client_cert = {{ printf "%s/%s" .Values.ldap.tls.certificatesMountPath .Values.ldap.tls.certFilename | quote }}
+client_key = {{ printf "%s/%s" .Values.ldap.tls.certificatesMountPath (required "ldap.tls.certKeyFilename is required when ldap.tls.certFilename is defined" .Values.ldap.tls.certKeyFilename) | quote }}
+{{- end }}
+{{- end }}
+{{- if .Values.ldap.binddn }}
 # Search user bind dn
 bind_dn = {{ .Values.ldap.binddn | quote }}
+{{- end }}
+{{- if .Values.ldap.bindpw }}
 # Search user bind password
 # If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
 bind_password = {{ .Values.ldap.bindpw | quote }}
+{{- end }}
 
 # User search filter, for example "(cn=%s)" or "(sAMAccountName=%s)" or "(uid=%s)"
 # Allow login from email or username, example "(|(sAMAccountName=%s)(userPrincipalName=%s))"
-search_filter = "(cn=%s)"
-
+search_filter = "({{ .Values.ldap.uidField }}=%s)"
 # An array of base dns to search through
-search_base_dns = [{{ .Values.ldap.base | quote }}]
+search_base_dns = [{{ (required "You must set ldap.base" .Values.ldap.base) | quote }}]
 
-# group_search_filter = "(&(objectClass=posixGroup)(memberUid=%s))"
-# group_search_filter_user_attribute = "distinguishedName"
-# group_search_base_dns = ["ou=groups,dc=grafana,dc=org"]
-
-# Specify names of the LDAP attributes your LDAP uses
-[servers.attributes]
-# member_of = "memberOf"
-# email =  "email"
+{{ .Values.ldap.extraConfiguration }}
 {{- end -}}

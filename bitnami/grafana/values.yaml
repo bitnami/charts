@@ -153,6 +153,50 @@ ldap:
   ## NOTE: When it's set the ldap.configuration parameter is ignored
   ##
   secretName: ""
+  ## @param ldap.binddn DN of the account used to search in the LDAP server.
+  ##
+  binddn: ""
+  ## @param ldap.bindpw Password for binddn account.
+  ##
+  bindpw:
+  ## @param ldap.base Base path where binddn account will search for the users.
+  ##
+  base:
+  ## @param ldap.uidFiled Field used to match with the user name (uid, samAccountName, cn, etc)
+  ##
+  uidField: "uid"
+  ## @param ldap.extraConfiguration Extra ldap configuration.
+  ## Example:
+  ##   extraConfiguration: |-
+  ##     # set to true if you want to skip SSL cert validation
+  ##     ssl_skip_verify = false
+  ##     # group_search_filter = "(&(objectClass=posixGroup)(memberUid=%s))"
+  ##     # group_search_filter_user_attribute = "distinguishedName"
+  ##     # group_search_base_dns = ["ou=groups,dc=grafana,dc=org"]
+  ##     # Specify names of the LDAP attributes your LDAP uses
+  ##     [servers.attributes]
+  ##     # member_of = "memberOf"
+  ##     # email =  "email"
+  ##
+  extraConfiguration: ""
+  ## @param ldap.tls TLS configuration to connect to the LDAP server
+  ## @param ldap.tls.enabled Enabled TLS configuration.
+  ## @param ldap.tls.startTls Use STARTTLS instead of LDAPS.
+  ## @param ldap.tls.certificatesMountPath Where LDAP certifcates are mounted.
+  ## @param ldap.tls.certificatesSecret Secret with LDAP certificates.
+  ## @param ldap.tls.CAFilename  CA certificate filename. Should match with the CA entry key in the ldap.tls.certificatesSecret.
+  ## @param ldap.tls.certFilename Client certificate filename to authenticate against the LDAP server. Should match with certificate the entry key in the ldap.tls.certificatesSecret.
+  ## @param ldap.tls.certKeyFilename Client Key filename to authenticate against the LDAP server. Should match with certificate the entry key in the ldap.tls.certificatesSecret.
+  ##
+  tls:
+    enabled: false
+    startTls: false
+    certificatesMountPath: /opt/bitnami/grafana/conf/ldap/
+    certificatesSecret: ""
+    CAFilename: ""
+    certFilename: ""
+    certKeyFilename: ""
+
 ## Parameters to override the default grafana.ini file.
 ## It is needed to create a configmap or a secret containing the grafana.ini file.
 ## @param config.useGrafanaIniFile Allows to load a `grafana.ini` file
