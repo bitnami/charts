@@ -1,6 +1,6 @@
 {{- $query := (include "thanos.query.values" . | fromYaml) -}}
 {{- if and $query.enabled $query.autoscaling.enabled }}
-apiVersion: {{ include "common.capabilities.hpa.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "common.names.fullname" . }}-query
