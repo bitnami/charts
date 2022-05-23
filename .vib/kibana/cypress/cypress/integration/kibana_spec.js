@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { random, closeThePopups, skipTheWelcomeScreen } from './utils';
+import { closeThePopups, skipTheWelcomeScreen, random } from './utils';
 
 before(() => {
   skipTheWelcomeScreen();
@@ -15,9 +15,9 @@ it('allows uploading a file', () => {
     }
   );
   cy.get('[data-test-subj="dataVisualizerFileOpenImportPageButton"]').click();
-  cy.fixture('testdata').then((td) => {
+  cy.fixture('indexes').then((index) => {
     cy.get('[data-test-subj="dataVisualizerFileIndexNameInput"]').type(
-      `${td.testIndexName}.${random}`
+      `${index.newIndex.name}.${random}`
     );
   });
   cy.get('[data-test-subj="dataVisualizerFileImportButton"]').click();
@@ -37,12 +37,12 @@ it('allows creating a dashboard', () => {
   cy.get('[data-test-subj="dashboardSaveMenuItem"]')
     .should('have.text', 'Save')
     .forceClick();
-  cy.fixture('testdata').then((td) => {
+  cy.fixture('dashboards').then((dashboard) => {
     cy.get('[data-test-subj="savedObjectTitle"]').type(
-      `${td.dashboardTitle}.${random}`
+      `${dashboard.newDashboard.title}.${random}`
     );
     cy.get('[data-test-subj="dashboardDescription"]').type(
-      `${td.dashboardDescription}.${random}`
+      `${dashboard.newDashboard.description}.${random}`
     );
   });
   cy.contains(
@@ -50,8 +50,8 @@ it('allows creating a dashboard', () => {
     'Save'
   ).forceClick(); //forcing because there is a popup we can't control
   cy.visit('/app/dashboards/list');
-  cy.fixture('testdata').then((td) => {
-    cy.contains(`${td.dashboardTitle}.${random}`);
+  cy.fixture('dashboards').then((dashboard) => {
+    cy.contains(`${dashboard.newDashboard.title}.${random}`);
   });
 });
 
@@ -63,20 +63,20 @@ it('allows creating a visualisation', () => {
     .should('contain.text', 'Custom visualization')
     .forceClick();
   cy.contains('[data-test-subj="visualizeSaveButton"]', 'Save').forceClick();
-  cy.fixture('testdata').then((td) => {
+  cy.fixture('visualizations').then((visualization) => {
     cy.get('[data-test-subj="savedObjectTitle"]').type(
-      `${td.visualizationTitle}.${random}`
+      `${visualization.newVisualization.title}.${random}`
     );
   });
   cy.get('[id="new-dashboard-option"]').forceClick();
   cy.contains('Save and go').forceClick();
   cy.contains('Save').click();
-  cy.fixture('testdata').then((td) => {
+  cy.fixture('visualizations').then((visualization) => {
     cy.get('[data-test-subj="savedObjectTitle"]').type(
-      `${td.visualizationTitle}.${random}`
+      `${visualization.newVisualization.title}.${random}`
     );
     cy.get('[data-test-subj="dashboardDescription"]').type(
-      `${td.dashboardDescription}.${random}`
+      `${visualization.newVisualization.description}.${random}`
     );
   });
   cy.contains(
@@ -84,8 +84,8 @@ it('allows creating a visualisation', () => {
     'Save'
   ).forceClick();
   cy.visit('/app/dashboards/list');
-  cy.fixture('testdata').then((td) => {
-    cy.contains(`${td.dashboardDescription}.${random}`);
+  cy.fixture('dashboards').then((dashboard) => {
+    cy.contains(`${dashboard.newDashboard.title}.${random}`);
   });
 });
 
@@ -93,21 +93,21 @@ it('allows adding a remote cluster', () => {
   cy.visit('app/management/data/remote_clusters');
   closeThePopups();
   cy.contains('span', 'Add').forceClick();
-  cy.fixture('testdata').then((td) => {
+  cy.fixture('clusters').then((cluster) => {
     cy.get('[data-test-subj="remoteClusterFormNameInput"]').type(
-      `${td.remoteClusterName}${random}`,
+      `${cluster.newCluster.name}${random}`,
       {
         force: true,
       }
     );
-    cy.get('[data-test-subj="comboBoxInput"]').type(td.remoteCluster);
+    cy.get('[data-test-subj="comboBoxInput"]').type(cluster.newCluster.cluster);
     cy.get('[data-test-subj="remoteClusterFormSaveButton"]').forceClick();
     cy.get('[data-test-subj="remoteClusterDetailFlyout"]').contains(
-      td.remoteClusterName
+      cluster.newCluster.name
     );
     cy.get('#remoteClusterDetailsFlyoutTitle').should(
       'contain.text',
-      `${td.remoteClusterName}${random}`
+      `${cluster.newCluster.name}${random}`
     );
   });
 });
@@ -116,10 +116,10 @@ it('allows adding of a canvas', () => {
   cy.visit('app/canvas#/');
   closeThePopups();
   cy.get('[data-test-subj="create-workpad-button"]').forceClick();
-  cy.fixture('testdata').then((td) => {
+  cy.fixture('workpads').then((workpad) => {
     cy.get('input[value="My Canvas Workpad"]')
       .clear()
-      .type(`${td.workpadName}${random}`);
+      .type(`${workpad.newWorkpad.name}${random}`);
   });
 
   cy.contains('span', 'Add element').forceClick({
@@ -127,7 +127,7 @@ it('allows adding of a canvas', () => {
   });
   cy.contains('span', 'Text').forceClick();
   cy.visit('app/canvas#/');
-  cy.fixture('testdata').then((td) => {
-    cy.contains(`${td.workpadName}${random}`);
+  cy.fixture('workpads').then((workpad) => {
+    cy.contains(`${workpad.newWorkpad.name}${random}`);
   });
 });
