@@ -79,14 +79,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### SonarQube Image parameters
 
-| Name                | Description                                          | Value                |
-| ------------------- | ---------------------------------------------------- | -------------------- |
-| `image.registry`    | SonarQube image registry                             | `docker.io`          |
-| `image.repository`  | SonarQube image repository                           | `bitnami/sonarqube`  |
-| `image.tag`         | SonarQube image tag (immutable tags are recommended) | `9.4.0-debian-10-r0` |
-| `image.pullPolicy`  | SonarQube image pull policy                          | `IfNotPresent`       |
-| `image.pullSecrets` | SonarQube image pull secrets                         | `[]`                 |
-| `image.debug`       | Enable SonarQube image debug mode                    | `false`              |
+| Name                | Description                                          | Value                 |
+| ------------------- | ---------------------------------------------------- | --------------------- |
+| `image.registry`    | SonarQube image registry                             | `docker.io`           |
+| `image.repository`  | SonarQube image repository                           | `bitnami/sonarqube`   |
+| `image.tag`         | SonarQube image tag (immutable tags are recommended) | `9.4.0-debian-10-r20` |
+| `image.pullPolicy`  | SonarQube image pull policy                          | `IfNotPresent`        |
+| `image.pullSecrets` | SonarQube image pull secrets                         | `[]`                  |
+| `image.debug`       | Enable SonarQube image debug mode                    | `false`               |
 
 
 ### SonarQube Configuration parameters
@@ -216,7 +216,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r410`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r431`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -231,7 +231,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`            | Enable kernel settings modifier image                    | `true`                  |
 | `sysctl.image.registry`     | Bitnami Shell image registry                             | `docker.io`             |
 | `sysctl.image.repository`   | Bitnami Shell image repository                           | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended) | `10-debian-10-r410`     |
+| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended) | `10-debian-10-r431`     |
 | `sysctl.image.pullPolicy`   | Bitnami Shell image pull policy                          | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`  | Bitnami Shell image pull secrets                         | `[]`                    |
 | `sysctl.resources.limits`   | The resources limits for the init container              | `{}`                    |
@@ -240,17 +240,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                          | Description                                                            | Value   |
-| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created                     | `false` |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true`  |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
-| `autoscaling.enabled`                         | Enable Horizontal POD autoscaling for SonarQube                        | `false` |
-| `autoscaling.minReplicas`                     | Minimum number of SonarQube replicas                                   | `1`     |
-| `autoscaling.maxReplicas`                     | Maximum number of SonarQube replicas                                   | `11`    |
-| `autoscaling.targetCPU`                       | Target CPU utilization percentage                                      | `50`    |
-| `autoscaling.targetMemory`                    | Target Memory utilization percentage                                   | `50`    |
+| Name                                          | Description                                                                                                         | Value   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                  | `false` |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`  |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true`  |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`    |
+| `autoscaling.enabled`                         | Enable Horizontal POD autoscaling for SonarQube                                                                     | `false` |
+| `autoscaling.minReplicas`                     | Minimum number of SonarQube replicas                                                                                | `1`     |
+| `autoscaling.maxReplicas`                     | Maximum number of SonarQube replicas                                                                                | `11`    |
+| `autoscaling.targetCPU`                       | Target CPU utilization percentage                                                                                   | `50`    |
+| `autoscaling.targetMemory`                    | Target Memory utilization percentage                                                                                | `50`    |
 
 
 ### Metrics parameters
@@ -260,7 +261,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.enabled`                               | Whether or not to expose JMX metrics to Prometheus                                                    | `false`                 |
 | `metrics.jmx.image.registry`                        | JMX exporter image registry                                                                           | `docker.io`             |
 | `metrics.jmx.image.repository`                      | JMX exporter image repository                                                                         | `bitnami/jmx-exporter`  |
-| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                               | `0.16.1-debian-10-r282` |
+| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                               | `0.16.1-debian-10-r303` |
 | `metrics.jmx.image.pullPolicy`                      | JMX exporter image pull policy                                                                        | `IfNotPresent`          |
 | `metrics.jmx.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `metrics.jmx.containerPorts.metrics`                | JMX Exporter metrics container port                                                                   | `10445`                 |
