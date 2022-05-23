@@ -1,0 +1,31 @@
+command:
+  rabbmitmqctl-version:
+    exec: rabbitmqctl version | grep --quiet $APP_VERSION
+    exit-status: 0
+    stderr: [ ]
+    timeout: 20000
+  rabbitmqctl-add-vhost:
+    exec: rabbitmqctl add_vhost test-host
+    exit-status: 0
+    stderr: [ ]
+    stdout:
+      - 'Adding vhost'
+    timeout: 20000  
+  rabbitmqctl-list-global-params:
+    exec: rabbitmqctl list_global_parameters
+    exit-status: 0
+    stderr: [ ]
+    stdout:
+      - 'Listing global runtime parameters'
+    timeout: 20000
+  user-id-test:
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+    exit-status: 0
+    stdout: []
+    stderr: []    
+file:
+  /opt/bitnami/rabbitmq/etc/rabbitmq/rabbitmq.conf:
+    mode: "0644"
+    filetype: file
+    exists: true
+    group: root

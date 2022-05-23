@@ -6,8 +6,10 @@ This Helm chart can be used for the automated deployment of a data platform blue
 
 [Overview of Data Platform Blueprint 1](https://github.com/bitnami/dataplatform-exporter)
 
+## This Helm chart is deprecated
 
-                           
+The project behind this solution has been discontinued.
+
 ## TL;DR
 
 ```console

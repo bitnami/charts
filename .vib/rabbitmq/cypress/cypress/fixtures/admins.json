@@ -1,0 +1,7 @@
+{
+  "newAdmin": {
+    "userName": "Jane Doe Dev",
+    "password": "JanesSecurePassword",
+    "tags": "administrator"
+  }
+}
