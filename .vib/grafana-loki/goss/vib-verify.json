@@ -37,7 +37,9 @@
             "resources": {
               "path": "/.vib/grafana-loki/goss"
             },
-            "workload": "deploy-grafana-loki-gateway"
+            "remote": {
+              "workload": "sts-rabbitmq"
+            }
           }
         }
       ]
