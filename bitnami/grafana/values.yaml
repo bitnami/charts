@@ -162,7 +162,7 @@ ldap:
   ## @param ldap.base Base path where binddn account will search for the users.
   ##
   base:
-  ## @param ldap.uidFiled Field used to match with the user name (uid, samAccountName, cn, etc)
+  ## @param ldap.uidField Field used to match with the user name (uid, samAccountName, cn, etc)
   ##
   uidField: "uid"
   ## @param ldap.extraConfiguration Extra ldap configuration.
@@ -179,7 +179,6 @@ ldap:
   ##     # email =  "email"
   ##
   extraConfiguration: ""
-  ## @param ldap.tls TLS configuration to connect to the LDAP server
   ## @param ldap.tls.enabled Enabled TLS configuration.
   ## @param ldap.tls.startTls Use STARTTLS instead of LDAPS.
   ## @param ldap.tls.certificatesMountPath Where LDAP certifcates are mounted.
