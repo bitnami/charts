@@ -28,7 +28,9 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
-description: This Helm chart can be used for the automated deployment of a data platform blueprint containing Kafka, Apache Spark, and Solr. It covers optimized pod sizing and placement diversity rules.
+# This Helm chart is deprecated and no longer maintained.
+deprecated: true
+description: DEPRECATED This Helm chart can be used for the automated deployment of a data platform blueprint containing Kafka, Apache Spark, and Solr. It covers optimized pod sizing and placement diversity rules.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/dataplatform-bp1
 icon: https://bitnami.com/assets/stacks/dataplatform-bp1/img/dataplatform-bp1-stack-220x234.png
@@ -42,9 +44,7 @@ keywords:
   - observability
   - apache
   - tanzuobservability
-maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+maintainers: []
 name: dataplatform-bp1
 sources:
   - https://github.com/bitnami/bitnami-docker-kafka
@@ -59,4 +59,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-wavefront-proxy
   - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
   - https://github.com/wavefrontHQ/wavefront-proxy
-version: 12.0.1
+version: 12.0.2
