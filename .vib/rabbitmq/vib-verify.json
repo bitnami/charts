@@ -22,11 +22,11 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/rabbitmq"
         },
-        "runtime_parameters": "ImF1dGgiOgogICJlcmxhbmdDb29raWUiOiAiUmpzcENDM25tNGtMdjRMaldGTmZGSFczeEx4Yjd6VEMiCiAgInBhc3N3b3JkIjogIlBIVkhkcXpyTWI5cyIKICAidXNlcm5hbWUiOiAidXNlciIKInNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAibWFuYWdlciI6IDgwCiAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgo=",
+        "runtime_parameters": "YXV0aDoKICBlcmxhbmdDb29raWU6IFJqc3BDQzNubTRrTHY0TGpXRk5mRkhXM3hMeGI3elRDCiAgcGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNAogIHVzZXJuYW1lOiB1c2VyCnNlcnZpY2U6CiAgcG9ydHM6CiAgICBtYW5hZ2VyOiA4MAogIHR5cGU6IExvYWRCYWxhbmNlcg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "S4"
+            "name": "M8"
           }
         }
       },
@@ -43,6 +43,31 @@
           "params": {
             "endpoint": "lb-rabbitmq-http-stats",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/rabbitmq/goss"
+            },
+            "remote": {
+              "workload": "sts-rabbitmq"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/rabbitmq/cypress"
+            },
+            "endpoint": "lb-rabbitmq-http-stats",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "user",
+              "password": "ComplicatedPassword123!4"
+            }
           }
         }
       ]
