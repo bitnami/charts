@@ -1,5 +1,5 @@
 {{- if and .Values.envoy.enabled .Values.envoy.autoscaling.enabled (eq .Values.envoy.kind "deployment") }}
-apiVersion: {{ include "common.capabilities.hpa.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "common.names.fullname" . }}-envoy
