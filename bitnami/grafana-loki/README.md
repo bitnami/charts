@@ -2,12 +2,12 @@
 
 # Grafana Loki packaged by Bitnami
 
-Grafana Loki is a horizontally scalable, highly available, and multi-tenant log aggregation system. It provides real-time long tailing and full persistence to object storage.
+Grafana Loki is a horizontally scalable, highly available, and multi-tenant log aggregation system. It provides real-time long tailing and full persistence to object storage. 
 
-[Overview of Grafana Loki](https://github.com/grafana/loki)
+[Overview of Grafana Loki](https://grafana.com/oss/loki/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | -------------------------------------------------------------- | ----------------------- |
 | `loki.image.registry`                 | Grafana Loki image registry                                    | `docker.io`             |
 | `loki.image.repository`               | Grafana Loki image repository                                  | `bitnami/grafana-loki`  |
-| `loki.image.tag`                      | Grafana Loki image tag (immutable tags are recommended)        | `2.5.0-debian-10-r3`    |
+| `loki.image.tag`                      | Grafana Loki image tag (immutable tags are recommended)        | `2.5.0-debian-10-r7`    |
 | `loki.image.pullPolicy`               | Grafana Loki image pull policy                                 | `IfNotPresent`          |
 | `loki.image.pullSecrets`              | Grafana Loki image pull secrets                                | `[]`                    |
 | `loki.configuration`                  | Loki components configuration                                  | `""`                    |
@@ -193,7 +193,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.enabled`                               | Enable Gateway deployment                                                                         | `true`                  |
 | `gateway.image.registry`                        | Nginx image registry                                                                              | `docker.io`             |
 | `gateway.image.repository`                      | Nginx image repository                                                                            | `bitnami/nginx`         |
-| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                  | `1.21.6-debian-10-r105` |
+| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                  | `1.21.6-debian-10-r112` |
 | `gateway.image.pullPolicy`                      | Nginx image pull policy                                                                           | `IfNotPresent`          |
 | `gateway.image.pullSecrets`                     | Nginx image pull secrets                                                                          | `[]`                    |
 | `gateway.image.debug`                           | Enable debugging in the initialization process                                                    | `false`                 |
@@ -902,7 +902,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------ | -------------------------------------------------------------------------------------------------- | -------------------- |
 | `promtail.image.registry`                        | Grafana Promtail image registry                                                                    | `docker.io`          |
 | `promtail.image.repository`                      | Grafana Promtail image repository                                                                  | `bitnami/promtail`   |
-| `promtail.image.tag`                             | Grafana Promtail image tag (immutable tags are recommended)                                        | `2.5.0-debian-10-r3` |
+| `promtail.image.tag`                             | Grafana Promtail image tag (immutable tags are recommended)                                        | `2.5.0-debian-10-r6` |
 | `promtail.image.pullPolicy`                      | Grafana Promtail image pull policy                                                                 | `IfNotPresent`       |
 | `promtail.image.pullSecrets`                     | Grafana Promtail image pull secrets                                                                | `[]`                 |
 | `promtail.extraEnvVars`                          | Array with extra environment variables to add to promtail nodes                                    | `[]`                 |
@@ -994,7 +994,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r429`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r430`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
