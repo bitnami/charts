@@ -1,5 +1,5 @@
 {{- if and .Values.replica.autoscaling.enabled (not .Values.sentinel.enabled) }}
-apiVersion: {{ include "common.capabilities.hpa.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ printf "%s-replicas" (include "common.names.fullname" .) }}
