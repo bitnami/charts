@@ -183,7 +183,7 @@ spec:
             {{- end }}
             {{- end }}
             {{- if .Values.aws.zonesCacheDuration }}
-             - --aws-zones-cache-duration={{ .Values.aws.zonesCacheDuration }}
+            - --aws-zones-cache-duration={{ .Values.aws.zonesCacheDuration }}
             {{- end }}
             {{- range .Values.aws.zoneTags }}
             - --aws-zone-tags={{ . }}
