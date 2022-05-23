@@ -1039,12 +1039,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Chunks)
 
-| Name                                      | Description                | Value               |
-| ----------------------------------------- | -------------------------- | ------------------- |
-| `memcachedchunks.enabled`                 | Deploy memcached sub-chart | `true`              |
-| `memcachedchunks.nameOverride`            | override the subchart name | `""`                |
-| `memcachedchunks.architecture`            | Memcached architecture     | `high-availability` |
-| `memcachedchunks.service.ports.memcached` | Memcached service port     | `11211`             |
+| Name                                      | Description                                          | Value                  |
+| ----------------------------------------- | ---------------------------------------------------- | ---------------------- |
+| `memcachedchunks.enabled`                 | Deploy memcached sub-chart                           | `true`                 |
+| `memcachedchunks.image.registry`          | Memcached image registry                             | `docker.io`            |
+| `memcachedchunks.image.repository`        | Memcached image repository                           | `bitnami/memcached`    |
+| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended) | `1.6.15-debian-10-r50` |
+| `memcachedchunks.nameOverride`            | override the subchart name                           | `""`                   |
+| `memcachedchunks.architecture`            | Memcached architecture                               | `high-availability`    |
+| `memcachedchunks.service.ports.memcached` | Memcached service port                               | `11211`                |
 
 
 ### External Memcached (Frontend) Parameters
@@ -1057,12 +1060,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Frontend)
 
-| Name                                        | Description                | Value               |
-| ------------------------------------------- | -------------------------- | ------------------- |
-| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart | `true`              |
-| `memcachedfrontend.architecture`            | Memcached architecture     | `high-availability` |
-| `memcachedfrontend.nameOverride`            | override the subchart name | `""`                |
-| `memcachedfrontend.service.ports.memcached` | Memcached service port     | `11211`             |
+| Name                                        | Description                                          | Value                  |
+| ------------------------------------------- | ---------------------------------------------------- | ---------------------- |
+| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                           | `true`                 |
+| `memcachedfrontend.image.registry`          | Memcached image registry                             | `docker.io`            |
+| `memcachedfrontend.image.repository`        | Memcached image repository                           | `bitnami/memcached`    |
+| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended) | `1.6.15-debian-10-r50` |
+| `memcachedfrontend.architecture`            | Memcached architecture                               | `high-availability`    |
+| `memcachedfrontend.nameOverride`            | override the subchart name                           | `""`                   |
+| `memcachedfrontend.service.ports.memcached` | Memcached service port                               | `11211`                |
 
 
 ### External Memcached (Index-Queries) Parameters
@@ -1075,12 +1081,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Index-Queries)
 
-| Name                                            | Description                | Value               |
-| ----------------------------------------------- | -------------------------- | ------------------- |
-| `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart | `true`              |
-| `memcachedindexqueries.architecture`            | Memcached architecture     | `high-availability` |
-| `memcachedindexqueries.nameOverride`            | override the subchart name | `""`                |
-| `memcachedindexqueries.service.ports.memcached` | Memcached service port     | `11211`             |
+| Name                                            | Description                                          | Value                  |
+| ----------------------------------------------- | ---------------------------------------------------- | ---------------------- |
+| `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart                           | `true`                 |
+| `memcachedindexqueries.image.registry`          | Memcached image registry                             | `docker.io`            |
+| `memcachedindexqueries.image.repository`        | Memcached image repository                           | `bitnami/memcached`    |
+| `memcachedindexqueries.image.tag`               | Memcached image tag (immutable tags are recommended) | `1.6.15-debian-10-r50` |
+| `memcachedindexqueries.architecture`            | Memcached architecture                               | `high-availability`    |
+| `memcachedindexqueries.nameOverride`            | override the subchart name                           | `""`                   |
+| `memcachedindexqueries.service.ports.memcached` | Memcached service port                               | `11211`                |
 
 
 ### External Memcached (IndexWrites) Parameters
@@ -1093,12 +1102,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Index-Writes)
 
-| Name                                           | Description                | Value               |
-| ---------------------------------------------- | -------------------------- | ------------------- |
-| `memcachedindexwrites.enabled`                 | Deploy memcached sub-chart | `false`             |
-| `memcachedindexwrites.architecture`            | Memcached architecture     | `high-availability` |
-| `memcachedindexwrites.nameOverride`            | override the subchart name | `""`                |
-| `memcachedindexwrites.service.ports.memcached` | Memcached service port     | `11211`             |
+| Name                                           | Description                                          | Value                  |
+| ---------------------------------------------- | ---------------------------------------------------- | ---------------------- |
+| `memcachedindexwrites.enabled`                 | Deploy memcached sub-chart                           | `false`                |
+| `memcachedindexwrites.image.registry`          | Memcached image registry                             | `docker.io`            |
+| `memcachedindexwrites.image.repository`        | Memcached image repository                           | `bitnami/memcached`    |
+| `memcachedindexwrites.image.tag`               | Memcached image tag (immutable tags are recommended) | `1.6.15-debian-10-r50` |
+| `memcachedindexwrites.architecture`            | Memcached architecture                               | `high-availability`    |
+| `memcachedindexwrites.nameOverride`            | override the subchart name                           | `""`                   |
+| `memcachedindexwrites.service.ports.memcached` | Memcached service port                               | `11211`                |
 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
