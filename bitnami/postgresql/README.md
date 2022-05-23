@@ -63,20 +63,20 @@ kubectl delete pvc -l release=my-release
 
 ### Global parameters
 
-| Name                                                       | Description                                                                                 | Value                  |
-|------------------------------------------------------------|---------------------------------------------------------------------------------------------|------------------------|
-| `global.imageRegistry`                                     | Global Docker image registry                                                                | `""`                   |
-| `global.imagePullSecrets`                                  | Global Docker registry secret names as an array                                             | `[]`                   |
-| `global.storageClass`                                      | Global StorageClass for Persistent Volume(s)                                                | `""`                   |
-| `global.postgresql.auth.postgresPassword`                  | Password for the "postgres" admin user (overrides `auth.postgresPassword`)                  | `""`                   |
-| `global.postgresql.auth.username`                          | Name for a custom user to create (overrides `auth.username`)                                | `""`                   |
-| `global.postgresql.auth.password`                          | Password for the custom user to create (overrides `auth.password`)                          | `""`                   |
-| `global.postgresql.auth.database`                          | Name for a custom database to create (overrides `auth.database`)                            | `""`                   |
-| `global.postgresql.auth.existingSecret`                    | Name of existing secret to use for PostgreSQL credentials (overrides `auth.existingSecret`) | `""`                   |
-| `global.postgresql.auth.secretKeys.adminPasswordKey`       | Name of key in existing secret to use for PostgreSQL credentials.                           | `admin-password`       |
-| `global.postgresql.auth.secretKeys.userPasswordKey`        | Name of key in existing secret to use for PostgreSQL credentials.                           | `user-password`        |
-| `global.postgresql.auth.secretKeys.replicationPasswordKey` | Name of key in existing secret to use for PostgreSQL credentials.                           | `replication-password` |
-| `global.postgresql.service.ports.postgresql`               | PostgreSQL service port (overrides `service.ports.postgresql`)                              | `""`                   |
+| Name                                                       | Description                                                                                  | Value                  |
+| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------- |
+| `global.imageRegistry`                                     | Global Docker image registry                                                                 | `""`                   |
+| `global.imagePullSecrets`                                  | Global Docker registry secret names as an array                                              | `[]`                   |
+| `global.storageClass`                                      | Global StorageClass for Persistent Volume(s)                                                 | `""`                   |
+| `global.postgresql.auth.postgresPassword`                  | Password for the "postgres" admin user (overrides `auth.postgresPassword`)                   | `""`                   |
+| `global.postgresql.auth.username`                          | Name for a custom user to create (overrides `auth.username`)                                 | `""`                   |
+| `global.postgresql.auth.password`                          | Password for the custom user to create (overrides `auth.password`)                           | `""`                   |
+| `global.postgresql.auth.database`                          | Name for a custom database to create (overrides `auth.database`)                             | `""`                   |
+| `global.postgresql.auth.existingSecret`                    | Name of existing secret to use for PostgreSQL credentials (overrides `auth.existingSecret`). | `""`                   |
+| `global.postgresql.auth.secretKeys.adminPasswordKey`       | Name of key in existing secret to use for PostgreSQL credentials.                            | `admin-password`       |
+| `global.postgresql.auth.secretKeys.userPasswordKey`        | Name of key in existing secret to use for PostgreSQL credentials.                            | `user-password`        |
+| `global.postgresql.auth.secretKeys.replicationPasswordKey` | Name of key in existing secret to use for PostgreSQL credentials.                            | `replication-password` |
+| `global.postgresql.service.ports.postgresql`               | PostgreSQL service port (overrides `service.ports.postgresql`)                               | `""`                   |
 
 
 ### Common parameters
@@ -98,10 +98,10 @@ kubectl delete pvc -l release=my-release
 ### PostgreSQL common parameters
 
 | Name                                     | Description                                                                                                                                                                                                                                                                                                                                   | Value                      |
-|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `image.registry`                         | PostgreSQL image registry                                                                                                                                                                                                                                                                                                                     | `docker.io`                |
 | `image.repository`                       | PostgreSQL image repository                                                                                                                                                                                                                                                                                                                   | `bitnami/postgresql`       |
-| `image.tag`                              | PostgreSQL image tag (immutable tags are recommended)                                                                                                                                                                                                                                                                                         | `14.2.0-debian-10-r58`     |
+| `image.tag`                              | PostgreSQL image tag (immutable tags are recommended)                                                                                                                                                                                                                                                                                         | `14.3.0-debian-10-r8`      |
 | `image.pullPolicy`                       | PostgreSQL image pull policy                                                                                                                                                                                                                                                                                                                  | `IfNotPresent`             |
 | `image.pullSecrets`                      | Specify image pull secrets                                                                                                                                                                                                                                                                                                                    | `[]`                       |
 | `image.debug`                            | Specify if debug values should be set                                                                                                                                                                                                                                                                                                         | `false`                    |
@@ -369,7 +369,7 @@ kubectl delete pvc -l release=my-release
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r388`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r431`     |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
@@ -397,7 +397,7 @@ kubectl delete pvc -l release=my-release
 | `metrics.enabled`                               | Start a prometheus exporter                                                           | `false`                     |
 | `metrics.image.registry`                        | PostgreSQL Prometheus Exporter image registry                                         | `docker.io`                 |
 | `metrics.image.repository`                      | PostgreSQL Prometheus Exporter image repository                                       | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                             | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)             | `0.10.1-debian-10-r76`      |
+| `metrics.image.tag`                             | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)             | `0.10.1-debian-10-r118`     |
 | `metrics.image.pullPolicy`                      | PostgreSQL Prometheus Exporter image pull policy                                      | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                     | Specify image pull secrets                                                            | `[]`                        |
 | `metrics.customMetrics`                         | Define additional custom metrics                                                      | `{}`                        |
