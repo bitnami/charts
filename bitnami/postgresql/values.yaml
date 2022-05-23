@@ -19,20 +19,18 @@ global:
     ## @param global.postgresql.auth.username Name for a custom user to create (overrides `auth.username`)
     ## @param global.postgresql.auth.password Password for the custom user to create (overrides `auth.password`)
     ## @param global.postgresql.auth.database Name for a custom database to create (overrides `auth.database`)
-    ## @param global.postgresql.auth.existingSecret.enabled Enable the use an existing secret for PostgreSQL credentials (overrides `auth.existingSecret`).
-    ## @param global.postgresql.auth.existingSecret.secretName Name of existing secret to use for PostgreSQL credentials.
-    ## @param global.postgresql.auth.existingSecret.adminPasswordKey Name of key in existing secret to use for PostgreSQL credentials.
-    ## @param global.postgresql.auth.existingSecret.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials.
-    ## @param global.postgresql.auth.existingSecret.replicationPasswordKey Name of key in existing secret to use for PostgreSQL credentials.
+    ## @param global.postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials (overrides `auth.existingSecret`).
+    ## @param global.postgresql.auth.secretKeys.adminPasswordKey Name of key in existing secret to use for PostgreSQL credentials.
+    ## @param global.postgresql.auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials.
+    ## @param global.postgresql.auth.secretKeys.replicationPasswordKey Name of key in existing secret to use for PostgreSQL credentials.
     ##
     auth:
       postgresPassword: ""
       username: ""
       password: ""
       database: ""
-      existingSecret:
-        enabled: false
-        secretName: name-of-secret
+      existingSecret: ""
+      secretKeys:
         adminPasswordKey: admin-password
         userPasswordKey: user-password
         replicationPasswordKey: replication-password
@@ -140,15 +138,14 @@ auth:
   ## @param auth.replicationPassword Password for the replication user. Ignored if `auth.existingSecret` with key `replication-password` is provided
   ##
   replicationPassword: ""
-  ## @param auth.existingSecret.enabled Enable the use an existing secret for PostgreSQL credentials. `auth.postgresPassword`, `auth.password`, and `auth.replicationPassword` will be ignored and picked up from this secret. The secret might also contains the key `ldap-password` if LDAP is enabled. `ldap.bind_password` will be ignored and picked from this secret in this case.
-  ## @param auth.existingSecret.secretName Name of existing secret to use for PostgreSQL credentials.
-  ## @param auth.existingSecret.adminPasswordKey Name of key in existing secret to use for PostgreSQL credentials.
-  ## @param auth.existingSecret.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials.
-  ## @param auth.existingSecret.replicationPasswordKey Name of key in existing secret to use for PostgreSQL credentials.
+  ## @param auth.existingSecret Name of existing secret to use for PostgreSQL credentials. `auth.postgresPassword`, `auth.password`, and `auth.replicationPassword` will be ignored and picked up from this secret. The secret might also contains the key `ldap-password` if LDAP is enabled. `ldap.bind_password` will be ignored and picked from this secret in this case.
   ##
-  existingSecret:
-    enabled: false
-    secretName: name-of-secret
+  existingSecret: ""
+  ## @param auth.secretKeys.adminPasswordKey Name of key in existing secret to use for PostgreSQL credentials.
+  ## @param auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials.
+  ## @param auth.secretKeys.replicationPasswordKey Name of key in existing secret to use for PostgreSQL credentials.
+  ##
+  secretKeys:
     adminPasswordKey: admin-password
     userPasswordKey: user-password
     replicationPasswordKey: replication-password

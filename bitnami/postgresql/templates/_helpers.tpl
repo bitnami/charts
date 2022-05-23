@@ -87,13 +87,13 @@ Return the name for a custom database to create
 {{- end -}}
 
 {{/*
-Get the password secret name.
+Get the password secret.
 */}}
 {{- define "postgresql.secretName" -}}
-{{- if or .Values.global.postgresql.auth.existingSecret.enabled .Values.auth.existingSecret.enabled }}
-    {{- printf "%s" (tpl .Values.global.postgresql.auth.existingSecret.secretName $) -}}
-{{- else if .Values.auth.existingSecret.enabled -}}
-    {{- printf "%s" (tpl .Values.auth.existingSecret.secretName $) -}}
+{{- if .Values.global.postgresql.auth.existingSecret }}
+    {{- printf "%s" (tpl .Values.global.postgresql.auth.existingSecret $) -}}
+{{- else if .Values.auth.existingSecret -}}
+    {{- printf "%s" (tpl .Values.auth.existingSecret $) -}}
 {{- else -}}
     {{- printf "%s" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -103,11 +103,11 @@ Get the password secret name.
 Get the replication-password key.
 */}}
 {{- define "postgresql.replicationPasswordKey" -}}
-{{- if or .Values.global.postgresql.auth.existingSecret.enabled .Values.auth.existingSecret.enabled }}
-    {{- if .Values.global.postgresql.auth.existingSecret.replicationPasswordKey }}
-        {{- printf "%s" (tpl .Values.global.postgresql.auth.existingSecret.replicationPasswordKey $) -}}
-    {{- else if .Values.auth.existingSecret.replicationPasswordKey -}}
-        {{- printf "%s" (tpl .Values.auth.existingSecret.replicationPasswordKey $) -}}
+{{- if or .Values.global.postgresql.auth.existingSecret .Values.auth.existingSecret }}
+    {{- if .Values.global.postgresql.auth.secretKeys.replicationPasswordKey }}
+        {{- printf "%s" (tpl .Values.global.postgresql.auth.secretKeys.replicationPasswordKey $) -}}
+    {{- else if .Values.auth.secretKeys.replicationPasswordKey -}}
+        {{- printf "%s" (tpl .Values.auth.secretKeys.replicationPasswordKey $) -}}
     {{- else -}}
         {{- "replication-password" -}}
     {{- end -}}
@@ -118,11 +118,11 @@ Get the replication-password key.
 Get the admin-password key.
 */}}
 {{- define "postgresql.adminPasswordKey" -}}
-{{- if or .Values.global.postgresql.auth.existingSecret.enabled .Values.auth.existingSecret.enabled }}
-    {{- if .Values.global.postgresql.auth.existingSecret.adminPasswordKey }}
-        {{- printf "%s" (tpl .Values.global.postgresql.auth.existingSecret.adminPasswordKey $) -}}
-    {{- else if .Values.auth.existingSecret.adminPasswordKey -}}
-        {{- printf "%s" (tpl .Values.auth.existingSecret.adminPasswordKey $) -}}
+{{- if or .Values.global.postgresql.auth.existingSecret .Values.auth.existingSecret }}
+    {{- if .Values.global.postgresql.auth.secretKeys.adminPasswordKey }}
+        {{- printf "%s" (tpl .Values.global.postgresql.auth.secretKeys.adminPasswordKey $) -}}
+    {{- else if .Values.auth.secretKeys.adminPasswordKey -}}
+        {{- printf "%s" (tpl .Values.auth.secretKeys.adminPasswordKey $) -}}
     {{- end -}}
 {{- else -}}
     {{- "postgres-password" -}}
@@ -133,14 +133,14 @@ Get the admin-password key.
 Get the user-password key.
 */}}
 {{- define "postgresql.userPasswordKey" -}}
-{{- if or .Values.global.postgresql.auth.existingSecret.enabled .Values.auth.existingSecret.enabled }}
+{{- if or .Values.global.postgresql.auth.existingSecret .Values.auth.existingSecret }}
     {{- if or (empty (include "postgresql.username" .)) (eq (include "postgresql.username" .) "postgres") }}
         {{- printf "%s" (include "postgresql.adminPasswordKey" .) -}}
     {{- else -}}
-        {{- if .Values.global.postgresql.auth.existingSecret.userPasswordKey }}
-            {{- printf "%s" (tpl .Values.global.postgresql.auth.existingSecret.userPasswordKey $) -}}
-        {{- else if .Values.auth.existingSecret.userPasswordKey -}}
-            {{- printf "%s" (tpl .Values.auth.existingSecret.userPasswordKey $) -}}
+        {{- if .Values.global.postgresql.auth.secretKeys.userPasswordKey }}
+            {{- printf "%s" (tpl .Values.global.postgresql.auth.secretKeys.userPasswordKey $) -}}
+        {{- else if .Values.auth.secretKeys.userPasswordKey -}}
+            {{- printf "%s" (tpl .Values.auth.secretKeys.userPasswordKey $) -}}
         {{- end -}}
     {{- end -}}
 {{- else -}}
@@ -152,7 +152,7 @@ Get the user-password key.
 Return true if a secret object should be created
 */}}
 {{- define "postgresql.createSecret" -}}
-{{- if or .Values.global.postgresql.auth.existingSecret.enabled .Values.auth.existingSecret.enabled -}}
+{{- if or .Values.global.postgresql.auth.existingSecret .Values.auth.existingSecret -}}
     {{- false -}}
 {{- else -}}
     {{- true -}}
