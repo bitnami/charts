@@ -13,6 +13,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.prometheus.replicaCount }}
+  shards: {{ .Values.prometheus.shards }}
   serviceAccountName: {{ template "kube-prometheus.prometheus.serviceAccountName" . }}
   {{- if .Values.prometheus.serviceMonitorSelector }}
   serviceMonitorSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.serviceMonitorSelector "context" $) | nindent 4 }}
