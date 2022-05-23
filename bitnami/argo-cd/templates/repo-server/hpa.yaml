@@ -1,5 +1,5 @@
 {{- if .Values.repoServer.autoscaling.enabled }}
-apiVersion: {{ include "common.capabilities.hpa.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "argocd.repo-server" . }}
