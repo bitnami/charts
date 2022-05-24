@@ -1,5 +1,5 @@
 {{- if .Values.aggregator.autoscaling.enabled }}
-apiVersion: {{ include "common.capabilities.hpa.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "beta2" "true" "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "common.names.fullname" . }}-aggregator-hpa

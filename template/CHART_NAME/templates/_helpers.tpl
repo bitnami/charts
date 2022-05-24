@@ -24,7 +24,7 @@ Create the name of the service account to use
 */}}
 {{- define "%%TEMPLATE_NAME%%.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (printf "%s-foo" (include "common.names.fullname" .)) .Values.serviceAccount.name }}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
