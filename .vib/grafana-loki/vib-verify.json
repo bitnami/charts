@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/grafana-loki"
         },
-        "runtime_parameters": "ImdhdGV3YXkiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0cyI6CiAgICAgICJodHRwIjogODAKICAgICJ0eXBlIjogIkxvYWRCYWxhbmNlciIK",
+        "runtime_parameters": "Z2F0ZXdheToKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDgwCiAgICB0eXBlOiBMb2FkQmFsYW5jZXIKcHJvbXRhaWw6IAogIHJiYWM6CiAgICBjcmVhdGU6IGZhbHNl",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -31,6 +31,17 @@
         }
       },
       "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/grafana-loki/goss"
+            },
+            "remote": {
+              "workload": "deploy-grafana-loki-gateway"
+            }
+          }
+        },
         {
           "action_id": "cypress",
           "params": {

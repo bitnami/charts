@@ -28,4 +28,3 @@ command:
     stdout: 
       - "test is successful"
     stderr: []
-

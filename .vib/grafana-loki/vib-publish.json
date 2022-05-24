@@ -47,6 +47,17 @@
             "endpoint": "lb-grafana-loki-gateway-http",
             "app_protocol": "HTTP"
           }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/grafana-loki/goss"
+            },
+            "remote": {
+              "workload": "deploy-grafana-loki-gateway"
+            }
+          }
         }
       ]
     },
