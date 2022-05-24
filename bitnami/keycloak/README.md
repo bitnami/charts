@@ -312,6 +312,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`               |
 
 
+### Keycloak Cache parameters
+
+| Name            | Description                                                               | Value   |
+| --------------- | ------------------------------------------------------------------------- | ------- |
+| `cache.enabled` | Switch to enable or disable the keycloak distributed cache for kubernetes | `false` |
+
+
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
