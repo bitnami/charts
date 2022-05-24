@@ -30,6 +30,17 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Create the name of the service account to use
+*/}}
+{{- define "ghost.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Get the user defined LoadBalancerIP for this release.
 Note, returns 127.0.0.1 if using ClusterIP.
 */}}

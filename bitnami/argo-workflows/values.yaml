@@ -272,19 +272,18 @@ server:
   containerPorts:
     web: 2746
 
-  ## ServiceAccount configuration
+  ## Server Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param server.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param server.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param server.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
-    ## @param server.serviceAccount.create Specifies whether a ServiceAccount should be created
-    ##
     create: true
-    ## @param server.serviceAccount.name The name of the ServiceAccount to use.
-    ## If not set and create is true, a name is generated using the common.names.fullname template
-    ##
     name: ""
-    ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
-    ##
     automountServiceAccountToken: true
+    annotations: {}
 
   ## @param server.command Override default container command (useful when using custom images)
   ##
@@ -756,18 +755,18 @@ controller:
     enabled: false
     minAvailable: 1
     maxUnavailable: 1
-  ## Service Account configuration
+  ## Controller Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ## @param controller.serviceAccount.create Specifies whether a ServiceAccount should be created
-  ## @param controller.serviceAccount.name Name for the service account
+  ## @param controller.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param controller.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
     create: true
-    ## If not set and create is true, a name is generated using the common.names.fullname template
-    ##
     name: ""
-    ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the controller service account
-    ##
     automountServiceAccountToken: true
+    annotations: {}
 
   ## @param controller.command Override default container command (useful when using custom images)
   ##
@@ -1103,7 +1102,7 @@ ingress:
   ## - host: server.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: server-svc
   ##           port:
@@ -1119,11 +1118,13 @@ workflows:
   ## @param workflows.serviceAccount.create Whether to create a service account to run workflows
   ## @param workflows.serviceAccount.name Service account name to run workflows
   ## @param workflows.serviceAccount.automountServiceAccountToken Automount service account token for the workflows service account
+  ## @param workflows.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
     create: false
     name: ""
     automountServiceAccountToken: true
+    annotations: {}
   ## Create RBAC resources to run workflows.
   ## A Role and Role Bindding are created per namespace in controller.workflowNamespaces
   ## @param workflows.rbac.create Whether to create RBAC resource to run workflows
