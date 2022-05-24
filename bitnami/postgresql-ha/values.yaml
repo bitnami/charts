@@ -940,9 +940,6 @@ pgpool:
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
   connectionLifeTime: ""
-  ##@param postgresql.tcpKeepalivesCount Sets a value for postgresql 'tcp_keepalives_count' property
-  ##
-  tcpKeepalivesCount: ""
   ## @param pgpool.useLoadBalancing Use Pgpool Load-Balancing
   ##
   useLoadBalancing: true
