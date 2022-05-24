@@ -202,7 +202,7 @@ spec:
               mountPath: /opt/bitnami/grafana/conf/ldap.toml
               subPath: ldap.toml
             {{- end }}
-            {{- if .Values.ldap.tls.enabled }}
+            {{- if and .Values.ldap.tls.enabled .Values.ldap.tls.certificatesSecret }}
             - name: ldap-tls
               mountPath: {{ .Values.ldap.tls.certificatesMountPath }}
             {{- end }}
@@ -323,7 +323,7 @@ spec:
             secretName: {{ .Values.config.grafanaIniSecret }}
           {{- end }}
         {{- end }}
-        {{- if .Values.ldap.tls.certificatesSecret }}
+        {{- if and .Values.ldap.tls.enabled .Values.ldap.tls.certificatesSecret }}
         - name: ldap-tls
           secret:
             secretName: {{ .Values.ldap.tls.certificatesSecret }}

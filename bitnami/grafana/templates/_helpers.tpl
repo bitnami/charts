@@ -132,11 +132,12 @@ Validate values for Grafana.
 {{- $messages := append $messages (include "grafana.validateValues.configmapsOrSecrets" .) -}}
 {{- $messages := append $messages (include "grafana.validateValues.ldap.configuration" .) -}}
 {{- $messages := append $messages (include "grafana.validateValues.ldap.configmapsecret" .) -}}
+{{- $messages := append $messages (include "grafana.validateValues.ldap.tls" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
 {{- if $message -}}
-{{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
 {{- end -}}
 {{- end -}}
 
@@ -161,9 +162,9 @@ grafana: config.useGrafanaIniFile config.grafanaIniSecret and config.grafanaIniC
 
 {{/* Validate values of Grafana - A custom ldap.toml file must be provided when enabling LDAP */}}
 {{- define "grafana.validateValues.ldap.configuration" -}}
-{{- if and .Values.ldap.enabled (empty .Values.ldap.uri) (empty .Values.ldap.base) (empty .Values.ldap.configuration) (empty .Values.ldap.configMapName) (empty .Values.ldap.secretName) -}}
-grafana: ldap.enabled ldap.configuration ldap.configMapName and ldap.secretName
-        You must provide the uri and basedn of your LDAP Sever (--set ldap.uri="aaa" --set ldap.base="bbb") 
+{{- if and .Values.ldap.enabled (empty .Values.ldap.uri) (empty .Values.ldap.basedn) (empty .Values.ldap.configuration) (empty .Values.ldap.configMapName) (empty .Values.ldap.secretName) -}}
+grafana: ldap.enabled ldap.uri ldap.basedn ldap.configuration ldap.configMapName and ldap.secretName
+        You must provide the uri and basedn of your LDAP Sever (--set ldap.uri="aaa" --set ldap.basedn="bbb")
         or the  content of your custom ldap.toml file when enabling LDAP (--set ldap.configuration="xxx")
         As an alternative, you can set the name of an existing ConfigMap (--set ldap.configMapName="yyy") or
         an an existing Secret (--set ldap.secretName="zzz") containging the custom ldap.toml file.
@@ -175,6 +176,14 @@ grafana: ldap.enabled ldap.configuration ldap.configMapName and ldap.secretName
 {{- if and .Values.ldap.enabled (not (empty .Values.ldap.configMapName)) (not (empty .Values.ldap.secretName)) -}}
 grafana: ldap.enabled ldap.configMapName and ldap.secretName
         You cannot load a custom ldap.toml file both from a ConfigMap and a Secret simultaneously
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Grafana - LDAP TLS validation */}}
+{{- define "grafana.validateValues.ldap.tls" -}}
+{{- if and .Values.ldap.enabled .Values.ldap.tls.enabled (empty .Values.ldap.tls.certificatesSecret) (or (not (empty .Values.ldap.tls.CAFilename)) (not (empty .Values.ldap.tls.certFilename)) (not (empty .Values.ldap.tls.certKeyFilename))) -}}
+grafana: ldap.enabled ldap.tls.enabled ldap.tls.certificatesSecret ldap.tls.CAFilename ldap.tls.certFilename and ldap.tls.certKeyFilename
+        You must set ldap.tls.certificatesSecret if you want to specify any certificate for LDAP TLS connection
 {{- end -}}
 {{- end -}}
 
@@ -217,7 +226,7 @@ bind_password = {{ .Values.ldap.bindpw | quote }}
 # Allow login from email or username, example "(|(sAMAccountName=%s)(userPrincipalName=%s))"
 search_filter = "({{ .Values.ldap.uidField }}=%s)"
 # An array of base dns to search through
-search_base_dns = [{{ (required "You must set ldap.base" .Values.ldap.base) | quote }}]
+search_base_dns = [{{ (required "You must set ldap.basedn" .Values.ldap.basedn) | quote }}]
 
 {{ .Values.ldap.extraConfiguration }}
 {{- end -}}

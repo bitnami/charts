@@ -158,10 +158,10 @@ ldap:
   binddn: ""
   ## @param ldap.bindpw Password for binddn account.
   ##
-  bindpw:
-  ## @param ldap.base Base path where binddn account will search for the users.
+  bindpw: ""
+  ## @param ldap.basedn Base DN path where binddn account will search for the users.
   ##
-  base:
+  basedn: ""
   ## @param ldap.uidField Field used to match with the user name (uid, samAccountName, cn, etc)
   ##
   uidField: "uid"
