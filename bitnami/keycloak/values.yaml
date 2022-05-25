@@ -934,3 +934,12 @@ externalDatabase:
   password: ""
   existingSecret: ""
   existingSecretPasswordKey: ""
+
+## @section Keycloak Cache parameters
+
+## Keycloak cache configuration
+## ref: https://www.keycloak.org/server/caching
+## @param cache.enabled Switch to enable or disable the keycloak distributed cache for kubernetes
+##
+cache:
+  enabled: false
