@@ -2,7 +2,7 @@
 
 # HAProxy for Intel packaged by Bitnami
 
-HAProxy is a TCP proxy and a HTTP reverse proxy. It supports SSL termination and offloading, TCP and HTTP normalization, traffic regulation, caching and protection against DDoS attacks.
+HAProxy is a high-performance, open-source load balancer and reverse proxy for TCP and HTTP applications. This image is optimized with Intel® QuickAssist Technology OpenSSL* Engine (QAT_Engine).
 
 [Overview of HAProxy](http://www.haproxy.org/)
 
@@ -85,6 +85,8 @@ helm install my-release \
 ```
 
 The above command sets the HAProxy service type as LoadBalancer.
+
+You can use the `configuration` or `existingConfigmap` parameters to set your own configuration file. You can read more about configuration in the [container's readme](https://github.com/bitnami/bitnami-docker-haproxy-intel#configuration).
 
 > NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
