@@ -288,7 +288,7 @@ INGRESS AND CASANDRA: Cassandra-backed deployments of Kong managed by Kong Ingre
 Function to validate incompatibilities with deploying Kong as a daemonset
 */}}
 {{- define "kong.validateValues.daemonset" -}}
-{{- if and .Values.useDaemonset (or .Values.pdb.enabled .Values.autoscaling.enabled) -}}
+{{- if and .Values.useDaemonset (or (coalesce .Values.pdb.create .Values.pdb.enabled) .Values.autoscaling.enabled) -}}
 INVALID SETUP: Deploying a HorizontalPodAutoscaler or a PodDisruptionBudget is not compatible with deploying Kong as a daemonset.
 {{- end -}}
 {{- end -}}
