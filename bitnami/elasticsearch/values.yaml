@@ -176,7 +176,7 @@ initContainers: []
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 8.2.0-debian-10-r14
+  tag: 8.2.0-debian-10-r17
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1734,7 +1734,7 @@ curator:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-curator
-    tag: 5.8.4-debian-10-r349
+    tag: 5.8.4-debian-10-r351
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -2009,7 +2009,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.3.0-debian-10-r205
+    tag: 1.3.0-debian-10-r207
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -2306,7 +2306,7 @@ metrics:
       # - alert: es cluster error
       #   annotations:
       #     summary: "es cluster error"
-      #     description: "es cluster error，cluster state {{`{{`}} $labels.color {{`}}`}}"
+      #     description: "es cluster error���cluster state {{`{{`}} $labels.color {{`}}`}}"
       #   expr: elasticsearch_cluster_health_status{color="red"} ==1 or elasticsearch_cluster_health_status{color="yellow"} ==1
       #   for: 1m
       #   labels:
@@ -2334,7 +2334,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r432
+    tag: 10-debian-10-r434
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -2379,7 +2379,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r432
+  tag: 10-debian-10-r434
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
