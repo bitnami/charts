@@ -861,6 +861,9 @@ metrics:
   ## Service for the Solr Prometheus exporter deployment
   ##
   service:
+    ## @param metrics.service.type Kubernetes Service type
+    ##
+    type: "ClusterIP"
     ## @param metrics.service.ports.http Solr Prometheus exporter HTTP service port
     ##
     ports:
