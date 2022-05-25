@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.5.3
+appVersion: 2.5.7
 dependencies:
 - name: haproxy
   repository: https://charts.bitnami.com/bitnami
