@@ -7,7 +7,7 @@ Kubeapps is a web-based UI for launching and managing applications on Kubernetes
 [Overview of Kubeapps](https://github.com/vmware-tanzu/kubeapps)
 
 
-                           
+
 ## TL;DR
 
 ```bash
@@ -933,6 +933,31 @@ To reduce this response time, you can increase the number of checks that Kubeapp
 Feel free to [open an issue](https://github.com/vmware-tanzu/kubeapps/issues/new) if you have any questions!
 
 ## Troubleshooting
+
+### Upgrading to chart version 8.2.0
+
+This minor release sees Kubeapps using a non-admin user for the postgresql database connection (used for the Helm chart cache).
+
+To upgrade an existing installation, you will need to first check if your Kubeapps database secret already contains a regular `password` in addition to the `postgres-password`:
+
+```
+kubectl --namespace kubeapps get secret kubeapps-postgresql -o jsonpath='{.data}'
+```
+
+If it does not yet contain a regular `password`, add one with:
+
+```
+DBPASS=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+kubectl --namespace kubeapps patch secret kubeapps-postgresql -p="{\"stringData\":{\"password\": \"${DBPASS}\"}}"
+```
+
+Finally, delete the current Postgres stateful set so that the upgrade will create a new Postgres instance:
+
+```
+kubectl --namespace kubeapps delete statefulset kubeapps-postgresql
+```
+
+After upgrading, when displaying the catalog, Kubeapps will initially display an error because the sync job will not yet have re-created the database tables used for the cache, but this will fix itself in a short time as the sync job runs.
 
 ### Upgrading to chart version 8.0.0
 

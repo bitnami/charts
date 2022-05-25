@@ -84,7 +84,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.assetsvc.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - --database-user=postgres
+            - --database-user={{ .Values.postgresql.auth.username }}
             - --database-name={{ .Values.postgresql.auth.database }}
             - --database-url={{ printf "%s-hl:%d" (include "kubeapps.postgresql.host" .) (int (include "kubeapps.postgresql.port" .)) | quote }}
             {{- range .Values.assetsvc.extraFlags }}
@@ -95,7 +95,7 @@ spec:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: postgres-password
+                  key: password
                   name: {{ include "kubeapps.postgresql.secretName" . }}
             - name: POD_NAMESPACE
               valueFrom:
