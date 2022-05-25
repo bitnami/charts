@@ -1,0 +1,11 @@
+{
+  "env": {
+    "baseUrl": "http://localhost",
+    "email": "user@example.com",
+    "username": "user",
+    "password": "ComplicatedPassword123!4"
+  },
+  "defaultCommandTimeout": 10000,
+  "viewportWidth": 1800,
+  "viewportHeight": 800
+}
