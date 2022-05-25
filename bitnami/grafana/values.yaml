@@ -778,7 +778,7 @@ imageRenderer:
   ## @param imageRenderer.replicaCount Number of Grafana Image Renderer Pod replicas
   ##
   replicaCount: 1
-  ## @param imageRenderer.updateStrategy.type %%MAIN_CONTAINER_NAME%% deployment strategy type.
+  ## @param imageRenderer.updateStrategy.type Grafana Image Renderer deployment strategy type.
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ## e.g:
   ## updateStrategy:
@@ -793,7 +793,7 @@ imageRenderer:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-  ## @param %%MAIN_OBJECT_BLOCK%%.podLabels Extra labels for %%MAIN_CONTAINER_NAME%% pods
+  ## @param imageRenderer.podLabels Extra labels for Grafana Image Renderer pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
@@ -801,7 +801,7 @@ imageRenderer:
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
-  ## @param %%MAIN_OBJECT_BLOCK%%.hostAliases %%MAIN_CONTAINER_NAME%% pods host aliases
+  ## @param imageRenderer.hostAliases Grafana Image Renderer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
@@ -1044,7 +1044,7 @@ imageRenderer:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-  ## @param %%MAIN_OBJECT_BLOCK%%.sidecars Add additional sidecar containers to the %%MAIN_CONTAINER_NAME%% pod(s)
+  ## @param imageRenderer.sidecars Add additional sidecar containers to the Grafana Image Renderer pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -1055,16 +1055,16 @@ imageRenderer:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param imageRenderer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes
+  ## @param imageRenderer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Grafana Image Renderer nodes
   ##
   extraEnvVarsCM: ""
-  ## @param imageRenderer.extraEnvVarsSecret Name of existing Secret containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes
+  ## @param imageRenderer.extraEnvVarsSecret Name of existing Secret containing extra env vars for Grafana Image Renderer nodes
   ##
   extraEnvVarsSecret: ""
-  ## @param imageRenderer.extraVolumes Optionally specify extra list of additional volumes for the %%MAIN_CONTAINER_NAME%% pod(s)
+  ## @param imageRenderer.extraVolumes Optionally specify extra list of additional volumes for the Grafana Image Renderer pod(s)
   ##
   extraVolumes: []
-  ## @param imageRenderer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the %%MAIN_CONTAINER_NAME%% container(s)
+  ## @param imageRenderer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Grafana Image Renderer container(s)
   ##
   extraVolumeMounts: []
   ## @param imageRenderer.command Override default container command (useful when using custom images)
@@ -1073,7 +1073,7 @@ imageRenderer:
   ## @param imageRenderer.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param imageRenderer.lifecycleHooks for the %%MAIN_CONTAINER_NAME%% container(s) to automate configuration before or after startup
+  ## @param imageRenderer.lifecycleHooks for the Grafana Image Renderer container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
 
