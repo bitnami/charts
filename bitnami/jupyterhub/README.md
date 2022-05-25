@@ -87,7 +87,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `hub.image.registry`                        | Hub image registry                                                                                                       | `docker.io`            |
 | `hub.image.repository`                      | Hub image repository                                                                                                     | `bitnami/jupyterhub`   |
-| `hub.image.tag`                             | Hub image tag (immutable tags are recommended)                                                                           | `1.5.0-debian-10-r149` |
+| `hub.image.tag`                             | Hub image tag (immutable tags are recommended)                                                                           | `1.5.0-debian-10-r169` |
 | `hub.image.pullPolicy`                      | Hub image pull policy                                                                                                    | `IfNotPresent`         |
 | `hub.image.pullSecrets`                     | Hub image pull secrets                                                                                                   | `[]`                   |
 | `hub.baseUrl`                               | Hub base URL                                                                                                             | `/`                    |
@@ -181,6 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.service.ports.http`                  | Hub service HTTP port                                            | `8081`      |
 | `hub.service.nodePorts.http`              | NodePort for the HTTP endpoint                                   | `""`        |
 | `hub.service.sessionAffinity`             | Control where client requests go, to the same pod or round-robin | `None`      |
+| `hub.service.sessionAffinityConfig`       | Additional settings for the sessionAffinity                      | `{}`        |
 | `hub.service.clusterIP`                   | Hub service Cluster IP                                           | `""`        |
 | `hub.service.loadBalancerIP`              | Hub service Load Balancer IP                                     | `""`        |
 | `hub.service.loadBalancerSourceRanges`    | Hub service Load Balancer sources                                | `[]`        |
@@ -213,7 +214,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------- |
 | `proxy.image.registry`                        | Proxy image registry                                                                                                     | `docker.io`                       |
 | `proxy.image.repository`                      | Proxy image repository                                                                                                   | `bitnami/configurable-http-proxy` |
-| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                                                         | `4.5.1-debian-10-r58`             |
+| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                                                         | `4.5.1-debian-10-r81`             |
 | `proxy.image.pullPolicy`                      | Proxy image pull policy                                                                                                  | `IfNotPresent`                    |
 | `proxy.image.pullSecrets`                     | Proxy image pull secrets                                                                                                 | `[]`                              |
 | `proxy.image.debug`                           | Activate verbose output                                                                                                  | `false`                           |
@@ -293,6 +294,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.service.api.ports.http`                   | API service HTTP port                                                                                                            | `8001`                   |
 | `proxy.service.api.nodePorts.http`               | NodePort for the HTTP endpoint                                                                                                   | `""`                     |
 | `proxy.service.api.sessionAffinity`              | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `proxy.service.api.sessionAffinityConfig`        | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `proxy.service.api.clusterIP`                    | Hub service Cluster IP                                                                                                           | `""`                     |
 | `proxy.service.api.loadBalancerIP`               | Hub service Load Balancer IP                                                                                                     | `""`                     |
 | `proxy.service.api.loadBalancerSourceRanges`     | Hub service Load Balancer sources                                                                                                | `[]`                     |
@@ -303,6 +305,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.service.metrics.ports.http`               | Metrics service port                                                                                                             | `8002`                   |
 | `proxy.service.metrics.nodePorts.http`           | NodePort for the HTTP endpoint                                                                                                   | `""`                     |
 | `proxy.service.metrics.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `proxy.service.metrics.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `proxy.service.metrics.clusterIP`                | Hub service Cluster IP                                                                                                           | `""`                     |
 | `proxy.service.metrics.loadBalancerIP`           | Hub service Load Balancer IP                                                                                                     | `""`                     |
 | `proxy.service.metrics.loadBalancerSourceRanges` | Hub service Load Balancer sources                                                                                                | `[]`                     |
@@ -313,6 +316,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.service.public.ports.http`                | Public service HTTP port                                                                                                         | `80`                     |
 | `proxy.service.public.nodePorts.http`            | NodePort for the HTTP endpoint                                                                                                   | `""`                     |
 | `proxy.service.public.sessionAffinity`           | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `proxy.service.public.sessionAffinityConfig`     | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `proxy.service.public.clusterIP`                 | Hub service Cluster IP                                                                                                           | `""`                     |
 | `proxy.service.public.loadBalancerIP`            | Hub service Load Balancer IP                                                                                                     | `""`                     |
 | `proxy.service.public.loadBalancerSourceRanges`  | Hub service Load Balancer sources                                                                                                | `[]`                     |
@@ -402,7 +406,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------ |
 | `singleuser.image.registry`                     | Single User image registry                                                                          | `docker.io`                          |
 | `singleuser.image.repository`                   | Single User image repository                                                                        | `bitnami/jupyter-base-notebook`      |
-| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                               | `1.5.0-debian-10-r154`               |
+| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                               | `1.5.0-debian-10-r177`               |
 | `singleuser.image.pullPolicy`                   | Single User image pull policy                                                                       | `IfNotPresent`                       |
 | `singleuser.image.pullSecrets`                  | Single User image pull secrets                                                                      | `[]`                                 |
 | `singleuser.notebookDir`                        | Notebook directory (it will be the same as the PVC volume mount)                                    | `/opt/bitnami/jupyterhub-singleuser` |
@@ -464,7 +468,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------- | --------------------------------------------------- | ----------------------- |
 | `auxiliaryImage.registry`    | Auxiliary image registry                            | `docker.io`             |
 | `auxiliaryImage.repository`  | Auxiliary image repository                          | `bitnami/bitnami-shell` |
-| `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended) | `10-debian-10-r403`     |
+| `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended) | `10-debian-10-r426`     |
 | `auxiliaryImage.pullPolicy`  | Auxiliary image pull policy                         | `IfNotPresent`          |
 | `auxiliaryImage.pullSecrets` | Auxiliary image pull secrets                        | `[]`                    |
 
