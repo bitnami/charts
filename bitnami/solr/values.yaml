@@ -366,6 +366,12 @@ service:
   ## ref: https://kubernetes.io/docs/user-guide/services/
   ##
   sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
   ## @param service.clusterIP Solr service Cluster IP
   ## e.g.:
   ## clusterIP: None
@@ -483,7 +489,7 @@ ingress:
   ## - host: solr.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: solr-svc
   ##           port:
@@ -525,7 +531,14 @@ persistence:
   ## @param persistence.mountPath Persistence mount path for Solr
   ##
   mountPath: /bitnami/solr
-
+  ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
 ## @section Volume Permissions parameters
 ##
 
@@ -805,12 +818,6 @@ metrics:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: {}
-  ## @param metrics.podManagementPolicy Management Policy for Solr Prometheus exporter deployment
-  ## StatefulSet controller supports relaxing its ordering guarantees while preserving its uniqueness and identity guarantees
-  ## There are two valid pod management policies: OrderedReady and Parallel
-  ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
-  ##
-  podManagementPolicy: Parallel
   ## @param metrics.priorityClassName Solr Prometheus exporter pods' priority.
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
