@@ -215,7 +215,7 @@ spec:
                   key: root-password
             {{- end }}
             {{- if .Values.tls.mountPath }}
-            - name: MINIO_CERTSDIR
+            - name: MINIO_CERTS_DIR
               value: {{ .Values.tls.mountPath | quote }}
             {{- end }}
           envFrom:
