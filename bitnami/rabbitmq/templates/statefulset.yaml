@@ -300,6 +300,10 @@ spec:
             - name: certs
               mountPath: /opt/bitnami/rabbitmq/certs
             {{- end }}
+            {{- if and .Values.ldap.tls.enabled .Values.ldap.tls.certificatesSecret }}
+            - name: ldap-certs
+              mountPath: {{ .Values.ldap.tls.certificatesMountPath }}
+            {{- end }}
             {{- if .Values.loadDefinition.enabled }}
             - name: load-definition-volume
               mountPath: /app
@@ -323,6 +327,11 @@ spec:
                 path: server_certificate.pem
               - key: tls.key
                 path: server_key.pem
+        {{- end }}
+        {{- if and .Values.ldap.tls.enabled .Values.ldap.tls.certificatesSecret }}
+        - name: ldap-certs
+          secret:
+            secretName: {{ .Values.ldap.tls.certificatesSecret }}
         {{- end }}
         - name: configuration
           configMap:
