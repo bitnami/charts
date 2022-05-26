@@ -81,13 +81,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### kiam image parameters
 
-| Name                | Description                                      | Value                |
-| ------------------- | ------------------------------------------------ | -------------------- |
-| `image.registry`    | kiam image registry                              | `docker.io`          |
-| `image.repository`  | kiam image name                                  | `bitnami/kiam`       |
-| `image.tag`         | kiam image tag                                   | `4.0.0-debian-10-r3` |
-| `image.pullPolicy`  | kiam image pull policy                           | `IfNotPresent`       |
-| `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                 |
+| Name                | Description                                      | Value                  |
+| ------------------- | ------------------------------------------------ | ---------------------- |
+| `image.registry`    | kiam image registry                              | `docker.io`            |
+| `image.repository`  | kiam image name                                  | `bitnami/kiam`         |
+| `image.tag`         | kiam image tag                                   | `4.2.0-debian-10-r188` |
+| `image.pullPolicy`  | kiam image pull policy                           | `IfNotPresent`         |
+| `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                   |
 
 
 ### kiam server parameters
@@ -310,6 +310,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                             | `""`        |
 | `agent.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                        | `[]`        |
 | `agent.service.externalTrafficPolicy`    | Enable client source IP preservation                                         | `Cluster`   |
+| `agent.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)               | `[]`        |
 | `agent.service.annotations`              | Annotations for kiam service                                                 | `{}`        |
 | `agent.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"         | `None`      |
 | `agent.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                  | `{}`        |
