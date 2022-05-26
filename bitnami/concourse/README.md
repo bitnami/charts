@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                | image registry                                                                                                                         | `docker.io`           |
 | `image.repository`              | image repository                                                                                                                       | `bitnami/concourse`   |
-| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.7.1-debian-10-r50` |
+| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.7.1-debian-10-r54` |
 | `image.pullPolicy`              | image pull policy                                                                                                                      | `IfNotPresent`        |
 | `image.pullSecrets`             | image pull secrets                                                                                                                     | `[]`                  |
 | `secrets.localAuth.enabled`     | the use of local authentication (basic auth).                                                                                          | `true`                |
@@ -361,7 +361,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r431`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r434`     |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
