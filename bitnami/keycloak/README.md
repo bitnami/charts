@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | --------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                 | Keycloak image registry                                                                       | `docker.io`           |
 | `image.repository`               | Keycloak image repository                                                                     | `bitnami/keycloak`    |
-| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                           | `17.0.1-debian-10-r0` |
+| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                           | `18.0.0-debian-10-r3` |
 | `image.pullPolicy`               | Keycloak image pull policy                                                                    | `IfNotPresent`        |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                              | `[]`                  |
 | `image.debug`                    | Specify if debug logs should be enabled                                                       | `false`               |
@@ -267,7 +267,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                       | `false`                       |
 | `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                    | `docker.io`                   |
 | `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                  | `bitnami/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                         | `5.2.0-debian-10-r3`          |
+| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                         | `5.2.0-debian-10-r11`         |
 | `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                 | `IfNotPresent`                |
 | `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                | `[]`                          |
 | `keycloakConfigCli.annotations`                           | Annotations for keycloak-config-cli job                                                         | `{}`                          |
@@ -310,6 +310,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                  | Keycloak database name                                                  | `bitnami_keycloak` |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`               |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`               |
+
+
+### Keycloak Cache parameters
+
+| Name            | Description                                                               | Value   |
+| --------------- | ------------------------------------------------------------------------- | ------- |
+| `cache.enabled` | Switch to enable or disable the keycloak distributed cache for kubernetes | `false` |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

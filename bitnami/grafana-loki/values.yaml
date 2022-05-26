@@ -71,7 +71,7 @@ loki:
   image:
     registry: docker.io
     repository: bitnami/grafana-loki
-    tag: 2.5.0-debian-10-r3
+    tag: 2.5.0-debian-10-r7
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -576,7 +576,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-10-r105
+    tag: 1.21.6-debian-10-r112
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2967,7 +2967,7 @@ promtail:
   image:
     registry: docker.io
     repository: bitnami/promtail
-    tag: 2.5.0-debian-10-r3
+    tag: 2.5.0-debian-10-r6
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3380,7 +3380,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r429
+    tag: 10-debian-10-r430
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -3491,6 +3491,17 @@ memcachedchunks:
   ## @param memcachedchunks.enabled Deploy memcached sub-chart
   ##
   enabled: true
+  ## Bitnami Memcached image version
+  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
+  ## @param memcachedchunks.image.registry Memcached image registry
+  ## @param memcachedchunks.image.repository Memcached image repository
+  ## @param memcachedchunks.image.tag Memcached image tag (immutable tags are recommended)
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/memcached
+    tag: 1.6.15-debian-10-r50
+
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
   nameOverride: ""
@@ -3520,6 +3531,16 @@ memcachedfrontend:
   ## @param memcachedfrontend.enabled Deploy memcached sub-chart
   ##
   enabled: true
+  ## Bitnami Memcached image version
+  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
+  ## @param memcachedfrontend.image.registry Memcached image registry
+  ## @param memcachedfrontend.image.repository Memcached image repository
+  ## @param memcachedfrontend.image.tag Memcached image tag (immutable tags are recommended)
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/memcached
+    tag: 1.6.15-debian-10-r50
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
   architecture: high-availability
@@ -3549,6 +3570,17 @@ memcachedindexqueries:
   ## @param memcachedindexqueries.enabled Deploy memcached sub-chart
   ##
   enabled: true
+
+  ## Bitnami Memcached image version
+  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
+  ## @param memcachedindexqueries.image.registry Memcached image registry
+  ## @param memcachedindexqueries.image.repository Memcached image repository
+  ## @param memcachedindexqueries.image.tag Memcached image tag (immutable tags are recommended)
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/memcached
+    tag: 1.6.15-debian-10-r50
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
   architecture: high-availability
@@ -3578,6 +3610,16 @@ memcachedindexwrites:
   ## @param memcachedindexwrites.enabled Deploy memcached sub-chart
   ##
   enabled: false
+  ## Bitnami Memcached image version
+  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
+  ## @param memcachedindexwrites.image.registry Memcached image registry
+  ## @param memcachedindexwrites.image.repository Memcached image repository
+  ## @param memcachedindexwrites.image.tag Memcached image tag (immutable tags are recommended)
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/memcached
+    tag: 1.6.15-debian-10-r50
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##
   architecture: high-availability

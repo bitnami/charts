@@ -155,16 +155,16 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
 | `image.registry`                                  | Contour Operator image registry                                                                                          | `docker.io`                |
 | `image.repository`                                | Contour Operator image repository                                                                                        | `bitnami/contour-operator` |
-| `image.tag`                                       | Contour Operator image tag (immutable tags are recommended)                                                              | `1.20.1-scratch-r1`        |
+| `image.tag`                                       | Contour Operator image tag (immutable tags are recommended)                                                              | `1.20.1-scratch-r5`        |
 | `image.pullPolicy`                                | Contour Operator image pull policy                                                                                       | `IfNotPresent`             |
 | `image.pullSecrets`                               | Contour Operator image pull secrets                                                                                      | `[]`                       |
 | `contourImage.registry`                           | Contour Image registry                                                                                                   | `docker.io`                |
 | `contourImage.repository`                         | Contour Image repository                                                                                                 | `bitnami/contour`          |
-| `contourImage.tag`                                | Contour Image tag (immutable tags are recommended)                                                                       | `1.20.1-debian-10-r19`     |
+| `contourImage.tag`                                | Contour Image tag (immutable tags are recommended)                                                                       | `1.20.1-debian-10-r53`     |
 | `contourImage.pullSecrets`                        | Contour Image pull secrets                                                                                               | `[]`                       |
 | `envoyImage.registry`                             | Envoy Image registry                                                                                                     | `docker.io`                |
 | `envoyImage.repository`                           | Envoy Image repository                                                                                                   | `bitnami/envoy`            |
-| `envoyImage.tag`                                  | Envoy Image tag (immutable tags are recommended)                                                                         | `1.21.1-debian-10-r20`     |
+| `envoyImage.tag`                                  | Envoy Image tag (immutable tags are recommended)                                                                         | `1.21.1-debian-10-r55`     |
 | `envoyImage.pullSecrets`                          | Envoy Image pull secrets                                                                                                 | `[]`                       |
 | `replicaCount`                                    | Number of Contour Operator replicas to deploy                                                                            | `1`                        |
 | `livenessProbe.enabled`                           | Enable livenessProbe on Contour Operator nodes                                                                           | `true`                     |
@@ -227,12 +227,13 @@ This solution allows to easily deploy multiple Contour instances compared to the
 
 ### Other Parameters
 
-| Name                                          | Description                                          | Value  |
-| --------------------------------------------- | ---------------------------------------------------- | ------ |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created   | `true` |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.               | `""`   |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token                      | `true` |
+| Name                                          | Description                                                                                                         | Value  |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------ |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                  | `true` |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true` |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true` |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`   |
 
 
 ### Metrics parameters
