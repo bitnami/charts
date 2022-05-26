@@ -1,0 +1,10 @@
+{
+  "newContact": {
+    "firstName": "Julius Francisco",
+    "lastName": "Doe",
+    "jobTitle": "Engineer",
+    "mobile": "60589284",
+    "email": "julioustesting@email.com",
+    "address": "Calle de Camino de Santiago"
+  }
+}

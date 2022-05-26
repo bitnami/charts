@@ -14,7 +14,6 @@ it('allows to log in/log out', () => {
 it('allows to import accounts', () => {
   cy.login();
   cy.visit('/index.php?module=Accounts&action=index');
-
   cy.contains('Import Accounts').click({ force: true });
   cy.get('input[type="file"]').selectFile('cypress/fixtures/accounts.csv');
   cy.get('input#import_update').click();
@@ -49,4 +48,32 @@ it('allows adding a new user', () => {
     cy.contains('View Users').click({ force: true });
     cy.contains(`${user.newUser.username}.${random}`);
   });
+});
+
+it('allows adding a new contact', () => {
+  cy.login();
+  cy.visit('/index.php?module=Contacts&action=index');
+  cy.contains('Create Contact').click({ force: true });
+  cy.fixture('contacts').then((contact) => {
+    cy.get('#account_name').type(`${contact.newContact.firstName}.${random}`);
+    cy.get('#last_name').type(`${contact.newContact.lastName}.${random}`);
+    cy.get('#primary_address_street').type(
+      `${contact.newContact.address}.${random}`
+    );
+    cy.get('#SAVE').click();
+    cy.contains(
+      '.module-title-text',
+      `${contact.newContact.lastName}.${random}`
+    );
+  });
+});
+
+it('verifies SMTP configuration', () => {
+  cy.login();
+  cy.get('#with-label').click();
+  cy.get('#admin_link').click({ force: true });
+  cy.contains('Email Settings').click();
+  cy.get('#mail_smtpserver').should('have.value', Cypress.env('emailServer'));
+  cy.get('#mail_smtpport').should('have.value', Cypress.env('port'));
+  cy.get('#mail_smtpuser').should('have.value', Cypress.env('smtpUser'));
 });
