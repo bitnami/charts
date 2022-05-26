@@ -288,17 +288,22 @@ Usage:
 {{ include "thanos.serviceAccount.name" (dict "component" "bucketweb" "context" $) }}
 */}}
 {{- define "thanos.serviceAccount.name" -}}
-{{- $component := index .Values .component -}}
-{{- if not (include "thanos.serviceAccount.useExisting" (dict "component" .component "context" $) -}}
+{{- $component := index .context.Values .component -}}
+{{- if eq .component "query-frontend" -}}
+{{- $component = index .context.Values "queryFrontend" -}}
+{{- else if eq .component "receive-distributor" -}}
+{{- $component = index .context.Values "receiveDistributor" -}}
+{{- end -}}
+{{- if not (include "thanos.serviceAccount.useExisting" (dict "component" .component "context" .context)) -}}
     {{- if $component.serviceAccount.create -}}
-        {{ default (printf "%s-%s" (include "common.names.fullname" .) .component) $component.serviceAccount.name }}
-    {{- else if .Values.serviceAccount.create -}}
-        {{ default (include "common.names.fullname" .) .Values.serviceAccount.name  }}
+        {{ default (printf "%s-%s" (include "common.names.fullname" .context) .component) $component.serviceAccount.name }}
+    {{- else if .context.Values.serviceAccount.create -}}
+        {{ default (include "common.names.fullname" .context) .context.Values.serviceAccount.name  }}
     {{- else -}}
-        {{ default "default" (coalesce $component.serviceAccount.name .Values.serviceAccount.name ) }}
+        {{ default "default" (coalesce $component.serviceAccount.name .context.Values.serviceAccount.name ) }}
     {{- end -}}
 {{- else -}}
-    {{- default (printf "%s-%s" (include "common.names.fullname" .) .component) (coalesce $component.serviceAccount.existingServiceAccount .Values.existingServiceAccount) -}}
+    {{ default (printf "%s-%s" (include "common.names.fullname" .context) .component) (coalesce $component.serviceAccount.existingServiceAccount .context.Values.existingServiceAccount) }}
 {{- end -}}
 {{- end -}}
 
@@ -307,6 +312,11 @@ Usage:
 */}}
 {{- define "thanos.serviceAccount.useExisting" -}}
 {{- $component := index .context.Values .component -}}
+{{- if eq .component "query-frontend" -}}
+{{- $component = index .context.Values "queryFrontend" -}}
+{{- else if eq .component "receive-distributor" -}}
+{{- $component = index .context.Values "receiveDistributor" -}}
+{{- end -}}
 {{- if .context.Values.existingServiceAccount -}}
     {{- true -}}
 {{- else if $component.serviceAccount.existingServiceAccount -}}
