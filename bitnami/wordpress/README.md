@@ -212,6 +212,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
 | `service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.clusterIP`                | WordPress service Cluster IP                                                                                                     | `""`                     |
 | `service.loadBalancerIP`           | WordPress service Load Balancer IP                                                                                               | `""`                     |
 | `service.loadBalancerSourceRanges` | WordPress service Load Balancer sources                                                                                          | `[]`                     |
