@@ -288,18 +288,18 @@ Usage:
 {{ include "thanos.serviceAccount.name" (dict "component" "bucketweb" "context" $) }}
 */}}
 {{- define "thanos.serviceAccount.name" -}}
-{{- $name := printf "%s-%s" (include "common.names.fullname" .context) .component -}}
-
-{{- if .context.Values.existingServiceAccount -}}
-    {{- $name = .context.Values.existingServiceAccount -}}
+{{- $component := index .Values .component -}}
+{{- if not (include "thanos.serviceAccount.useExisting" (dict "component" .component "context" $) -}}
+    {{- if $component.serviceAccount.create -}}
+        {{ default (printf "%s-%s" (include "common.names.fullname" .) .component) $component.serviceAccount.name }}
+    {{- else if .Values.serviceAccount.create -}}
+        {{ default (include "common.names.fullname" .) .Values.serviceAccount.name  }}
+    {{- else -}}
+        {{ default "default" (coalesce $component.serviceAccount.name .Values.serviceAccount.name ) }}
+    {{- end -}}
+{{- else -}}
+    {{- default (printf "%s-%s" (include "common.names.fullname" .) .component) (coalesce $component.serviceAccount.existingServiceAccount .Values.existingServiceAccount) -}}
 {{- end -}}
-
-{{- $component := index .context.Values .component -}}
-{{- if $component.serviceAccount.existingServiceAccount -}}
-    {{- $name = $component.serviceAccount.existingServiceAccount -}}
-{{- end -}}
-
-{{- printf "%s" $name -}}
 {{- end -}}
 
 {{/* Service account use existing
