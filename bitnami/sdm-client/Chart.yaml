@@ -1,0 +1,17 @@
+apiVersion: v2
+name: sdm-client
+kubeVersion: '>= 1.16.0-0'
+version: 0.1.0
+appVersion: 1.0.0
+description: strongDM Client Container
+type: application
+icon: https://assets-global.website-files.com/5ecfe3add0194393eabdf182/5f5c071d917205912ebf7f0f_favicon32.png
+home: https://github.com/strongdm/charts
+maintainers:
+  - name: strongDM
+    email: support@strongdm.com
+sources:
+  - https://github.com/strongdm/charts/tree/main/deployments/sdm-client
+keywords:
+  - strongdm
+  - sdm

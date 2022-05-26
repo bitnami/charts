@@ -1,0 +1,16 @@
+global:
+  service:
+    type: ClusterIP
+  secret:
+#   Use `echo -n token | base64` to base64 encode the Service token.
+    token: 
+  deployment:
+    replicas: 1
+    repository: quay.io/sdmrepo/client
+    tag: latest
+    imagePullPolicy: Always
+    ports:
+#     - 80
+#     - 443
+configMap:
+  SDM_DOCKERIZED: "true"

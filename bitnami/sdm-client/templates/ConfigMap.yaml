@@ -1,0 +1,14 @@
+{{- if .Values.configMap }}
+kind: ConfigMap 
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-config
+  labels:
+{{- include "sdm.labels" . | indent 4 }}
+data:
+  {{- with .Values.configMap }}
+  {{- if .SDM_DOCKERIZED  }}
+  SDM_DOCKERIZED: {{ quote .SDM_DOCKERIZED | default "true" }}
+  {{- end }}
+  {{- end }}
+{{- end }}

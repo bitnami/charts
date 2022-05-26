@@ -1,0 +1,8 @@
+Thank you for installing {{ .Chart.Name }} using helm. If you run into any errors please reach out to support@strongdm.com.
+
+Your release is named {{ .Release.Name }}.
+
+To learn more about the release, try:
+
+  $ helm status {{ .Release.Name }}
+  $ helm get all {{ .Release.Name }}

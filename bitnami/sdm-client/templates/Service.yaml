@@ -1,0 +1,20 @@
+{{- if .Values.global.service }}
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-svc
+  labels:
+{{- include "sdm.labels" . | indent 4 }}
+    app: {{ .Release.Name }}-app
+spec:
+  type: {{ .Values.global.service.type | default "ClusterIP" }}
+  selector:
+    app: {{ .Release.Name }}-app
+  ports:
+  {{- range .Values.global.deployment.ports }}
+  - name: port-{{ . }} 
+    port: {{ . }}
+    targetPort: {{ . }}
+    protocol: TCP
+  {{- end }} 
+{{- end }}

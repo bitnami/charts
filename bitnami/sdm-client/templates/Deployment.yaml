@@ -1,0 +1,40 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ .Release.Name }}-deployment
+  labels:
+    app: {{ .Release.Name }}-app
+{{- include "sdm.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.global.deployment.replicas | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-app
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-app
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-app
+        image: {{ .Values.global.deployment.repository | default "quay.io/sdmrepo/client" }}:{{ .Values.global.deployment.tag | default "latest" }}
+        imagePullPolicy: {{ .Values.global.deployment.imagePullPolicy | default "Always" }}
+        ports:
+        {{- range .Values.global.deployment.ports }}
+        - containerPort: {{ . }}
+        {{- end }} 
+        env:
+        - name: SDM_SERVICE_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ $.Release.Name }}-secret
+              key: token
+        {{- with .Values.configMap }}
+        {{- if .SDM_DOCKERIZED }}
+        - name: SDM_DOCKERIZED
+          valueFrom:
+            configMapKeyRef:
+              name: {{ $.Release.Name }}-config
+              key: SDM_DOCKERIZED
+        {{- end }}
+        {{- end }}        
