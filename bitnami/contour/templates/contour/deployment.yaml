@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}-contour
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour
     {{- if .Values.commonLabels }}
@@ -64,9 +64,17 @@ spec:
       {{- if .Values.contour.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.contour.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.contour.schedulerName }}
+      schedulerName: {{ .Values.contour.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.contour.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.contour.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.contour.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.contour.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if .Values.contour.initContainers }}
-      initContainers:
-        {{- include "common.tplvalues.render" ( dict "value" .Values.contour.initContainers "context" $ ) | nindent 6 }}
+      initContainers: {{- include "common.tplvalues.render" ( dict "value" .Values.contour.initContainers "context" $ ) | nindent 6 }}
       {{- end }}
       containers:
         - name: contour

@@ -63,17 +63,20 @@ kubectl delete pvc -l release=my-release
 
 ### Global parameters
 
-| Name                                         | Description                                                                                 | Value |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------- | ----- |
-| `global.imageRegistry`                       | Global Docker image registry                                                                | `""`  |
-| `global.imagePullSecrets`                    | Global Docker registry secret names as an array                                             | `[]`  |
-| `global.storageClass`                        | Global StorageClass for Persistent Volume(s)                                                | `""`  |
-| `global.postgresql.auth.postgresPassword`    | Password for the "postgres" admin user (overrides `auth.postgresPassword`)                  | `""`  |
-| `global.postgresql.auth.username`            | Name for a custom user to create (overrides `auth.username`)                                | `""`  |
-| `global.postgresql.auth.password`            | Password for the custom user to create (overrides `auth.password`)                          | `""`  |
-| `global.postgresql.auth.database`            | Name for a custom database to create (overrides `auth.database`)                            | `""`  |
-| `global.postgresql.auth.existingSecret`      | Name of existing secret to use for PostgreSQL credentials (overrides `auth.existingSecret`) | `""`  |
-| `global.postgresql.service.ports.postgresql` | PostgreSQL service port (overrides `service.ports.postgresql`)                              | `""`  |
+| Name                                                       | Description                                                                                                                                                                           | Value |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `global.imageRegistry`                                     | Global Docker image registry                                                                                                                                                          | `""`  |
+| `global.imagePullSecrets`                                  | Global Docker registry secret names as an array                                                                                                                                       | `[]`  |
+| `global.storageClass`                                      | Global StorageClass for Persistent Volume(s)                                                                                                                                          | `""`  |
+| `global.postgresql.auth.postgresPassword`                  | Password for the "postgres" admin user (overrides `auth.postgresPassword`)                                                                                                            | `""`  |
+| `global.postgresql.auth.username`                          | Name for a custom user to create (overrides `auth.username`)                                                                                                                          | `""`  |
+| `global.postgresql.auth.password`                          | Password for the custom user to create (overrides `auth.password`)                                                                                                                    | `""`  |
+| `global.postgresql.auth.database`                          | Name for a custom database to create (overrides `auth.database`)                                                                                                                      | `""`  |
+| `global.postgresql.auth.existingSecret`                    | Name of existing secret to use for PostgreSQL credentials (overrides `auth.existingSecret`).                                                                                          | `""`  |
+| `global.postgresql.auth.secretKeys.adminPasswordKey`       | Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.adminPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.       | `""`  |
+| `global.postgresql.auth.secretKeys.userPasswordKey`        | Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.userPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.        | `""`  |
+| `global.postgresql.auth.secretKeys.replicationPasswordKey` | Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.replicationPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set. | `""`  |
+| `global.postgresql.service.ports.postgresql`               | PostgreSQL service port (overrides `service.ports.postgresql`)                                                                                                                        | `""`  |
 
 
 ### Common parameters
@@ -526,7 +529,7 @@ For example:
     tls.certKeyFilename="cert.key"
     ```
 
-    > Note TLS and VolumePermissions: PostgreSQL requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding kubernetes permissions and the use of `containerSecurityContext.runAsUser`, you must enable `volumePermissions` to ensure everything works as expected.
+  > Note TLS and VolumePermissions: PostgreSQL requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding kubernetes permissions and the use of `containerSecurityContext.runAsUser`, you must enable `volumePermissions` to ensure everything works as expected.
 
 ### Sidecars
 
