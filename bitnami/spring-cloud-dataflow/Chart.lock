@@ -4,12 +4,12 @@ dependencies:
   version: 9.1.4
 - name: mariadb
   repository: https://charts.bitnami.com/bitnami
-  version: 11.0.7
+  version: 11.0.8
 - name: kafka
   repository: https://charts.bitnami.com/bitnami
   version: 17.0.0
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 1.14.1
-digest: sha256:8f5fa31fe4b10f7124c4007f8969c37a9c5ccab4fd88d380900a5daef6bdb25b
-generated: "2022-05-25T08:46:26.279517+02:00"
+digest: sha256:37fac8c910d099006e5be9eeb5a9bd759c8b4b334c383650e7b62f5f914380c8
+generated: "2022-05-25T23:06:52.298060943Z"
