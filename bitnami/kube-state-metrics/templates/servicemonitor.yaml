@@ -3,18 +3,19 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ default .Release.Namespace .Values.serviceMonitor.namespace | quote }}
+  namespace: {{ default include "common.names.namespace" . .Values.serviceMonitor.namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.serviceMonitor.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.serviceMonitor.labels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.serviceMonitor.jobLabel }}
-  jobLabel: {{ .Values.serviceMonitor.jobLabel }}
-  {{- end }}
+  jobLabel: {{ .Values.serviceMonitor.jobLabel | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       {{- if .Values.serviceMonitor.selector }}
@@ -28,7 +29,7 @@ spec:
       {{- if .Values.serviceMonitor.scrapeTimeout }}
       scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
       {{- end }}
-      {{- if hasKey .Values.serviceMonitor "honorLabels" }}
+      {{- if .Values.serviceMonitor.honorLabels }}
       honorLabels: {{ .Values.serviceMonitor.honorLabels }}
       {{- end }}
       {{- if .Values.serviceMonitor.relabelings }}
@@ -39,5 +40,5 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-    - {{ .Release.Namespace }}
+    - {{ include "common.names.namespace" . | quote }}
 {{- end }}
