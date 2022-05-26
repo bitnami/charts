@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour
     {{- if .Values.commonLabels }}
@@ -18,17 +18,23 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.contour.service.type }}
-  {{- if (or (eq .Values.contour.service.type "LoadBalancer") (eq .Values.contour.service.type "NodePort")) }}
+  {{- if or (eq .Values.contour.service.type "LoadBalancer") (eq .Values.contour.service.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.contour.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{ if .Values.contour.service.clusterIP }}
+  {{- if and .Values.contour.service.clusterIP (eq .Values.contour.service.type "ClusterIP") }}
   clusterIP: {{ .Values.contour.service.clusterIP }}
-  {{ end }}
-  {{ if eq .Values.contour.service.type "LoadBalancer" }}
+  {{- end }}
+  {{- if and (eq .Values.contour.service.type "LoadBalancer") (not (empty .Values.contour.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.contour.service.loadBalancerSourceRanges }}
-  {{ end }}
-  {{- if (and (eq .Values.contour.service.type "LoadBalancer") (not (empty .Values.contour.service.loadBalancerIP))) }}
+  {{- end }}
+  {{- if and (eq .Values.contour.service.type "LoadBalancer") (not (empty .Values.contour.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.contour.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.contour.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.contour.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.contour.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.contour.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
     - port: {{ .Values.contour.service.ports.xds }}
@@ -41,7 +47,7 @@ spec:
       nodePort: null
       {{- end }}
     {{- if .Values.contour.service.extraPorts }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.contour.service.extraPorts "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.contour.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: contour
@@ -51,7 +57,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}-contour-metrics
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour
 spec:

@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: envoy
     {{- if .Values.commonLabels }}
@@ -34,6 +34,9 @@ spec:
         {{- if .Values.commonLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
+        {{- if .Values.envoy.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.envoy.podLabels "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image .Values.envoy.image) "global" .Values.global) | nindent 6 }}
       {{- if .Values.envoy.hostAliases }}
@@ -49,6 +52,12 @@ spec:
       {{- end }}
       {{- if .Values.envoy.priorityClassName }}
       priorityClassName: {{ .Values.envoy.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.envoy.schedulerName }}
+      schedulerName: {{ .Values.envoy.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.envoy.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.envoy.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}

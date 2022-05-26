@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -29,6 +29,9 @@ spec:
       {{- end }}
     spec:
       {{- include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.grafana.image .Values.grafana.pluginsInitContainerImage) "global" .Values.global) | nindent 6 }}
+      {{- if .Values.operator.priorityClassName }}
+      priorityClassName: {{ .Values.operator.priorityClassName | quote }}
+      {{- end }}
       {{- if .Values.operator.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.operator.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
@@ -62,6 +65,9 @@ spec:
       {{- if .Values.operator.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.operator.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.operator.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.operator.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if .Values.operator.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.operator.initContainers "context" $) | nindent 8 }}
       {{- end }}
@@ -69,10 +75,9 @@ spec:
         - name: grafana-operator
           image: {{ include "common.images.image" (dict "imageRoot" .Values.operator.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
-          ports:
-            - containerPort: {{ .Values.operator.containerPorts.metrics }}
-              name: metrics
-              protocol: TCP
+          {{- if .Values.operator.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.operator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.operator.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.operator.command "context" $) | nindent 12 }}
           {{- else }}
@@ -117,50 +122,8 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraArgs "context" $) | nindent 12 }}
             {{- end }}
           {{- end }}
-          {{- if .Values.operator.resources }}
-          resources: {{- toYaml .Values.operator.resources | nindent 12 }}
-          {{- end }}
-          {{- if .Values.operator.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.operator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
-          {{- if .Values.operator.livenessProbe.enabled }}
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 8081
-            initialDelaySeconds: {{ .Values.operator.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.operator.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.operator.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.operator.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.operator.livenessProbe.failureThreshold }}
-          {{- else if .Values.operator.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customLivenessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.operator.readinessProbe.enabled }}
-          readinessProbe:
-            httpGet:
-              path: /metrics
-              port: metrics
-            initialDelaySeconds: {{ .Values.operator.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.operator.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.operator.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.operator.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.operator.readinessProbe.failureThreshold }}
-          {{- else if .Values.operator.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customReadinessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.operator.startupProbe.enabled }}
-          startupProbe:
-            httpGet:
-              path: /metrics
-              port: metrics
-            initialDelaySeconds: {{ .Values.operator.startupProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.operator.startupProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.operator.startupProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.operator.startupProbe.successThreshold }}
-            failureThreshold: {{ .Values.operator.startupProbe.failureThreshold }}
-          {{- else if .Values.operator.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customStartupProbe "context" $) | nindent 12 }}
+          {{- if .Values.operator.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.operator.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: TEMPLATE_PATH
@@ -191,8 +154,36 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.operator.extraEnvVarsSecret "context" $) }}
             {{- end }}
-          {{- if .Values.operator.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.operator.lifecycleHooks "context" $) | nindent 12 }}
+          {{- if .Values.operator.resources }}
+          resources: {{- toYaml .Values.operator.resources | nindent 12 }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.operator.containerPorts.metrics }}
+              name: metrics
+              protocol: TCP
+          {{- if .Values.operator.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.operator.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /healthz
+              port: 8081
+          {{- else if .Values.operator.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.operator.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.operator.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /metrics
+              port: metrics
+          {{- else if .Values.operator.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.operator.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.operator.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /metrics
+              port: metrics
+          {{- else if .Values.operator.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.operator.extraVolumeMounts }}
           volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumeMounts "context" $) | nindent 12 }}
