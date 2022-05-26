@@ -303,6 +303,28 @@ Return the Postgresql secret name
 {{- end -}}
 
 {{/*
+Return the Postgresql secret key
+*/}}
+{{- define "kubeapps.postgresql.secretKey" -}}
+  {{- if .Values.postgresql.useNonAdminUser }}
+      {{- print "password" -}}
+  {{- else -}}
+      {{- print "postgres-password" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Return the Postgresql database user
+*/}}
+{{- define "kubeapps.postgresql.databaseUser" -}}
+  {{- if .Values.postgresql.useNonAdminUser }}
+      {{- printf "%s" .Values.postgresql.auth.username -}}
+  {{- else -}}
+      {{- print "postgres" -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
 Return the Redis secret name
 */}}
 {{- define "kubeapps.redis.secretName" -}}
