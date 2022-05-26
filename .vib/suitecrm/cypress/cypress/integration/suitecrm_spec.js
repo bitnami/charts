@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random, getPageUrlFromTitle, getUserFromEmail } from './utils';
+import { random } from './utils';
 
 it('allows to log in/log out', () => {
   cy.login();
