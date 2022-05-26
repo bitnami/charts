@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | `image.registry`                        | DokuWiki image registry                                                                                               | `docker.io`                   |
 | `image.repository`                      | DokuWiki image repository                                                                                             | `bitnami/dokuwiki`            |
-| `image.tag`                             | DokuWiki image tag                                                                                                    | `20200729.0.0-debian-10-r590` |
+| `image.tag`                             | DokuWiki image tag                                                                                                    | `20200729.0.0-debian-10-r596` |
 | `image.pullPolicy`                      | Image pull policy                                                                                                     | `IfNotPresent`                |
 | `image.pullSecrets`                     | Image pull policy                                                                                                     | `[]`                          |
 | `image.debug`                           | Enable image debugging                                                                                                | `false`                       |
@@ -150,36 +150,41 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                              | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                          |
 | `priorityClassName`                     | Priority class assigned to the Pods                                                                                   | `""`                          |
 | `schedulerName`                         | Alternative scheduler                                                                                                 | `""`                          |
+| `terminationGracePeriodSeconds`         | In seconds, time the given to the pod to terminate gracefully                                                         | `""`                          |
 | `containerPorts.http`                   | Container HTTP port                                                                                                   | `8080`                        |
 | `containerPorts.https`                  | Container HTTPS port                                                                                                  | `8443`                        |
 
 
 ### Traffic Exposure Parameters
 
-| Name                            | Description                                                                                                                      | Value                    |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                  | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
-| `service.loadBalancerIP`        | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                                                 | `""`                     |
-| `service.ports.http`            | Service HTTP port                                                                                                                | `80`                     |
-| `service.ports.https`           | Service HTTPS port                                                                                                               | `443`                    |
-| `service.nodePorts`             | Use nodePorts to request some specific ports when using NodePort                                                                 | `{}`                     |
-| `service.externalTrafficPolicy` | Enable client source IP preservation                                                                                             | `Cluster`                |
-| `service.extraPorts`            | Extra ports to expose in the service (normally used with the `sidecar` value)                                                    | `[]`                     |
-| `service.annotations`           | Annotations to add to the service                                                                                                | `{}`                     |
-| `ingress.enabled`               | Set to true to enable ingress record generation                                                                                  | `false`                  |
-| `ingress.pathType`              | Ingress Path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`            | Override API Version (automatically detected if not set)                                                                         | `""`                     |
-| `ingress.hostname`              | When the ingress is enabled, a host pointing to this will be created                                                             | `dokuwiki.local`         |
-| `ingress.path`                  | The Path to Dokuwiki. You may need to set this to '/*' in order to use this                                                      | `/`                      |
-| `ingress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`                   | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
-| `ingress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
-| `ingress.extraPaths`            | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
-| `ingress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `ingress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
-| `ingress.ingressClassName`      | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `ingress.selfSigned`            | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `ingress.extraRules`            | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                               | Description                                                                                                                      | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | Kubernetes Service type                                                                                                          | `LoadBalancer`           |
+| `service.loadBalancerIP`           | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                                                 | `""`                     |
+| `service.ports.http`               | Service HTTP port                                                                                                                | `80`                     |
+| `service.ports.https`              | Service HTTPS port                                                                                                               | `443`                    |
+| `service.nodePorts`                | Use nodePorts to request some specific ports when using NodePort                                                                 | `{}`                     |
+| `service.clusterIP`                | Kubernetes service Cluster IP                                                                                                    | `""`                     |
+| `service.loadBalancerSourceRanges` | Kubernetes service Load Balancer sources                                                                                         | `[]`                     |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.extraPorts`               | Extra ports to expose in the service (normally used with the `sidecar` value)                                                    | `[]`                     |
+| `service.annotations`              | Annotations to add to the service                                                                                                | `{}`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.pathType`                 | Ingress Path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                                                             | `dokuwiki.local`         |
+| `ingress.path`                     | The Path to Dokuwiki. You may need to set this to '/*' in order to use this                                                      | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Volume Permissions parameters
@@ -189,7 +194,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r425`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r431`     |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -203,7 +208,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a exporter side-car                        | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                   | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image name                       | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                        | `0.11.0-debian-10-r144`   |
+| `metrics.image.tag`         | Apache exporter image tag                        | `0.11.0-debian-10-r150`   |
 | `metrics.image.pullPolicy`  | Image pull policy                                | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                      |
 | `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod  | `{}`                      |
@@ -228,7 +233,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag                                          | `10-debian-10-r425`                      |
+| `certificates.image.tag`                             | Container sidecar image tag                                          | `10-debian-10-r431`                      |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 
