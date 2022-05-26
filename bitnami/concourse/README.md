@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                | image registry                                                                                                                         | `docker.io`           |
 | `image.repository`              | image repository                                                                                                                       | `bitnami/concourse`   |
-| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.7.1-debian-10-r43` |
+| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.7.1-debian-10-r54` |
 | `image.pullPolicy`              | image pull policy                                                                                                                      | `IfNotPresent`        |
 | `image.pullSecrets`             | image pull secrets                                                                                                                     | `[]`                  |
 | `secrets.localAuth.enabled`     | the use of local authentication (basic auth).                                                                                          | `true`                |
@@ -320,6 +320,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.web.nodePorts.http`                     | Node port for HTTP                                                                                                               | `""`                     |
 | `service.web.nodePorts.https`                    | Node port for HTTPS                                                                                                              | `""`                     |
 | `service.web.sessionAffinity`                    | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.web.sessionAffinityConfig`              | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.web.clusterIP`                          | Concourse web service Cluster IP                                                                                                 | `""`                     |
 | `service.web.loadBalancerIP`                     | Concourse web service Load Balancer IP                                                                                           | `""`                     |
 | `service.web.loadBalancerSourceRanges`           | Concourse web service Load Balancer sources                                                                                      | `[]`                     |
@@ -330,6 +331,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.workerGateway.ports.tsa`                | Concourse worker gateway service port                                                                                            | `2222`                   |
 | `service.workerGateway.nodePorts.tsa`            | Node port for worker gateway service                                                                                             | `""`                     |
 | `service.workerGateway.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.workerGateway.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.workerGateway.clusterIP`                | Concourse worker gateway service Cluster IP                                                                                      | `""`                     |
 | `service.workerGateway.loadBalancerIP`           | Concourse worker gateway service Load Balancer IP                                                                                | `""`                     |
 | `service.workerGateway.loadBalancerSourceRanges` | Concourse worker gateway service Load Balancer sources                                                                           | `[]`                     |
@@ -359,7 +361,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r424`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r434`     |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
