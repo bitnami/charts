@@ -22,9 +22,7 @@
           "action_id": "trivy",
           "params": {
             "threshold": "CRITICAL",
-            "vuln_type": [
-              "OS"
-            ]
+            "vuln_type": ["OS"]
           }
         }
       ]
@@ -39,6 +37,20 @@
               "url": "{VIB_ENV_S3_URL}",
               "username": "{VIB_ENV_S3_USERNAME}",
               "password": "{VIB_ENV_S3_PASSWORD}"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/suitecrm/cypress"
+            },
+            "endpoint": "lb-suitecrm-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "user",
+              "password": "ComplicatedPassword123!4"
             }
           }
         }

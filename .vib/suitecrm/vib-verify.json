@@ -24,6 +24,20 @@
             "threshold": "CRITICAL",
             "vuln_type": ["OS"]
           }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/suitecrm/cypress"
+            },
+            "endpoint": "lb-suitecrm-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "user",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
         }
       ]
     }
