@@ -472,9 +472,6 @@ master:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/
     ##
     internalTrafficPolicy: Cluster
-    ## @param master.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
-    ##
-    extraPorts: []
     ## @param master.service.clusterIP Redis&trade; master service Cluster IP
     ##
     clusterIP: ""
