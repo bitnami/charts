@@ -32,7 +32,7 @@ spec:
         {{- if .Values.commonAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
-        checksum/config: {{ include (print $.Template.BasePath "/configuration.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/config-secret.yaml") . | sha256sum }}
         {{- if or (not .Values.auth.existingErlangSecret) (not .Values.auth.existingPasswordSecret) .Values.extraSecrets }}
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
@@ -334,8 +334,8 @@ spec:
             secretName: {{ .Values.ldap.tls.certificatesSecret }}
         {{- end }}
         - name: configuration
-          configMap:
-            name: {{ printf "%s-config" (include "common.names.fullname" .) }}
+          secret:
+            secretName: {{ printf "%s-config" (include "common.names.fullname" .) }}
             items:
               - key: rabbitmq.conf
                 path: rabbitmq.conf
