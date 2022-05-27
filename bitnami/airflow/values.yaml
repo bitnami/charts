@@ -1016,7 +1016,7 @@ git:
 ## LDAP configuration
 ## @param ldap.enabled Enable LDAP authentication
 ## @param ldap.uri Server URI, eg. ldap://ldap_server:389
-## @param ldap.base Base of the search, eg. ou=example,o=org. DEPRECATED, please use basedn instead
+## DEPRECATED ldap.base It will be removed in a future release,, please use basedn instead
 ## @param ldap.basedn Base of the search, eg. ou=example,o=org.
 ## @param ldap.uidField if doing an indirect bind to ldap, this is the field that matches the username when searching for the account to bind to
 ## @param ldap.binddn DN of the account used to search in the LDAP server.
@@ -1030,7 +1030,6 @@ ldap:
   enabled: false
   uri: "ldap://ldap_server:389"
   basedn: "dc=example,dc=org"
-  base: ""
   uidField: "cn"
   binddn: "cn=admin,dc=example,dc=org"
   bindpw: ""
@@ -1042,19 +1041,17 @@ ldap:
   ## SSL/TLS parameters for LDAP
   ## @param ldap.tls.enabled Enabled TLS/SSL for LDAP, you must include the CA file.
   ## @param ldap.tls.allowSelfSigned Allow to use self signed certificates
-  ## @param ldap.tls.CAcertificateSecret Name of the existing secret containing the certificate CA file that will be used by ldap client. DEPRECATED, please use ldap.tls.certificatesSecret instead
+  ## DEPRECATED ldap.tls.CAcertificateSecret It will be removed in a future release, please use ldap.tls.certificatesSecret instead
   ## @param ldap.tls.certificatesSecret Name of the existing secret containing the certificate CA file that will be used by ldap client
   ## @param ldap.tls.certificatesMountPath Where LDAP certifcates are mounted.
-  ## @param ldap.tls.CAcertificateFilename LDAP CA cert filename. DEPRECATED, please use ldap.tls.CAFilename instead
+  ## DEPRECATED ldap.tls.CAcertificateFilename It will be removed in a future release, please use ldap.tls.CAFilename instead
   ## @param ldap.tls.CAFilename LDAP CA cert filename
   ##
   tls:
     enabled: false
     allowSelfSigned: true
-    CAcertificateSecret: ""
     certificatesSecret: ""
     certificatesMountPath: /opt/bitnami/airflow/conf/certs
-    CAcertificateFilename: ""
     CAFilename: ""
 
 ## @section Traffic Exposure Parameters
