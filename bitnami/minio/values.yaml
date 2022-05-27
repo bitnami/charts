@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2022.5.23-debian-10-r0
+  tag: 2022.5.26-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -80,7 +80,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2022.5.9-debian-10-r13
+  tag: 2022.5.9-debian-10-r15
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
@@ -153,6 +153,10 @@ args: []
 ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
+## @param terminationGracePeriodSeconds In seconds, time the given to the MinIO pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
 ## MinIO&reg; deployment parameters
 ## Only when 'mode' is 'standalone' or 'gateway.enabled' is 'true'
 ##
@@ -705,7 +709,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -807,7 +811,20 @@ apiIngress:
   ##     certificate: ""
   ##
   secrets: []
-
+  ## @param apiIngress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: example.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: example-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
 ## NetworkPolicy parameters
 ##
 networkPolicy:
@@ -879,7 +896,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r433
+    tag: 10-debian-10-r436
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1011,7 +1028,7 @@ metrics:
       # - alert: minio cluster nodes offline
       #   annotations:
       #     summary: "minio cluster nodes offline"
-      #     description: "minio cluster nodes offline，pod {{`{{`}} $labels.pod {{`}}`}} service {{`{{`}} $labels.job {{`}}`}} offline"
+      #     description: "minio cluster nodes offline���pod {{`{{`}} $labels.pod {{`}}`}} service {{`{{`}} $labels.job {{`}}`}} offline"
       #   for: 10m
       #   expr: minio_cluster_nodes_offline_total > 0
       #   labels:

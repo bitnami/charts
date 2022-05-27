@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `image.registry`                | Discourse image registry                                                                                                 | `docker.io`           |
 | `image.repository`              | Discourse image repository                                                                                               | `bitnami/discourse`   |
-| `image.tag`                     | Discourse image tag                                                                                                      | `2.8.3-debian-10-r27` |
+| `image.tag`                     | Discourse image tag                                                                                                      | `2.8.3-debian-10-r36` |
 | `image.pullPolicy`              | Discourse image pull policy                                                                                              | `IfNotPresent`        |
 | `image.pullSecrets`             | Discourse image pull secrets                                                                                             | `[]`                  |
 | `image.debug`                   | Enable image debug mode                                                                                                  | `false`               |
@@ -225,6 +225,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.ports.http`               | Discourse service HTTP port                                                                                                      | `80`                     |
 | `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.clusterIP`                | Discourse service Cluster IP                                                                                                     | `""`                     |
 | `service.loadBalancerIP`           | Discourse service Load Balancer IP                                                                                               | `""`                     |
 | `service.loadBalancerSourceRanges` | Discourse service Load Balancer sources                                                                                          | `[]`                     |

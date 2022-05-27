@@ -705,6 +705,18 @@ pgpool:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
+  ## @param pgpool.schedulerName Use an alternate scheduler, e.g. "stork".
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param pgpool.terminationGracePeriodSeconds Seconds pgpool pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param pgpool.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: {}
   ## @param pgpool.podAffinityPreset Pgpool pod affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -867,6 +879,9 @@ pgpool:
   ##
   adminUsername: admin
   adminPassword: ""
+  ## @param pgpool.usePasswordFile Set to `true` to mount pgpool secret as a file instead of passing environment variable
+  ##
+  usePasswordFile: ""
   ## Authentication method for pgpool container (PGPOOL_AUTHENTICATION_METHOD)
   ## @param pgpool.authenticationMethod Pgpool authentication method. Use 'md5' for PSQL < 14.
   ##
@@ -1069,7 +1084,7 @@ serviceAccount:
 ##
 psp:
   create: false
-  
+
 ## @section Metrics parameters
 
 ## PostgreSQL Prometheus exporter parameters

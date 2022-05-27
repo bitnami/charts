@@ -994,6 +994,12 @@ service:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
+    ## @param service.web.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param service.web.clusterIP Concourse web service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1041,6 +1047,12 @@ service:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
+    ## @param service.workerGateway.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param service.workerGateway.clusterIP Concourse worker gateway service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1164,7 +1176,7 @@ ingress:
   ## - host: concourse.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: concourse-svc
   ##           port:
