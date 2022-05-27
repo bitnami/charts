@@ -1,0 +1,7 @@
+"operator":
+  "customResourceDeletePolicy": "before-hook-creation"
+"prometheus":
+  "service":
+    "type": "LoadBalancer"
+    "ports": 
+      "http": 80
