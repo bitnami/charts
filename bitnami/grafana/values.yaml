@@ -158,9 +158,12 @@ ldap:
   ## @param ldap.basedn Base DN path where binddn account will search for the users.
   ##
   basedn: ""
-  ## @param ldap.uidField Field used to match with the user name (uid, samAccountName, cn, etc)
+  ## @param ldap.uidField Field used to match with the user name (uid, samAccountName, cn, etc). This value will be ignored if 'ldap.searchFilter' is set
   ##
   uidField: "uid"
+  ## @param ldap.searchFilter User search filter, for example "(cn=%s)" or "(sAMAccountName=%s)" or "(|(sAMAccountName=%s)(userPrincipalName=%s)"
+  ##
+  searchFilter: ""
   ## @param ldap.extraConfiguration Extra ldap configuration.
   ## Example:
   ##   extraConfiguration: |-
@@ -177,6 +180,7 @@ ldap:
   extraConfiguration: ""
   ## @param ldap.tls.enabled Enabled TLS configuration.
   ## @param ldap.tls.startTls Use STARTTLS instead of LDAPS.
+  ## @param ldap.tls.skipVerify Skip hostname verification
   ## @param ldap.tls.certificatesMountPath Where LDAP certifcates are mounted.
   ## @param ldap.tls.certificatesSecret Secret with LDAP certificates.
   ## @param ldap.tls.CAFilename  CA certificate filename. Should match with the CA entry key in the ldap.tls.certificatesSecret.
@@ -186,6 +190,7 @@ ldap:
   tls:
     enabled: false
     startTls: false
+    skipVerify: false
     certificatesMountPath: /opt/bitnami/grafana/conf/ldap/
     certificatesSecret: ""
     CAFilename: ""

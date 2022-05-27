@@ -200,6 +200,7 @@ port = {{ index (splitList ":" $hostPort) 1 | default 389 }}
 # Set to true if LDAP server should use an encrypted TLS connection (either with STARTTLS or LDAPS)
 {{- if .Values.ldap.tls.enabled }}
 use_ssl = {{ .Values.ldap.tls.enabled }}
+ssl_skip_verify = {{ .Values.ldap.tls.skipVerify }}
 # If set to true, use LDAP with STARTTLS instead of LDAPS
 start_tls = {{ .Values.ldap.tls.startTls }}
 {{- if .Values.ldap.tls.CAFilename }}
@@ -224,7 +225,11 @@ bind_password = {{ .Values.ldap.bindpw | quote }}
 
 # User search filter, for example "(cn=%s)" or "(sAMAccountName=%s)" or "(uid=%s)"
 # Allow login from email or username, example "(|(sAMAccountName=%s)(userPrincipalName=%s))"
+{{- if .Values.ldap.searchFilter }}
+search_filter = {{ .Values.ldap.searchFilter | quote }}
+{{- else if .Values.ldap.uidField }}
 search_filter = "({{ .Values.ldap.uidField }}=%s)"
+{{- end }}
 # An array of base dns to search through
 search_base_dns = [{{ (required "You must set ldap.basedn" .Values.ldap.basedn) | quote }}]
 
