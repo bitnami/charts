@@ -63,15 +63,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
 
-### HAProxy parameters
+### HAProxy chart parameters
 
-| Name                        | Description                                        | Value                                       |
-| --------------------------- | -------------------------------------------------- | ------------------------------------------- |
-| `haproxy.image.registry`    | HAProxy image registry                             | `projects.registry.vmware.com/mktp-giralda` |
-| `haproxy.image.repository`  | HAProxy image repository                           | `bitnami/haproxy-intel`                     |
-| `haproxy.image.tag`         | HAProxy image tag (immutable tags are recommended) | `2.5.3-r0`                                  |
-| `haproxy.image.pullPolicy`  | HAProxy image pull policy                          | `IfNotPresent`                              |
-| `haproxy.image.pullSecrets` | HAProxy image pull secrets                         | `[]`                                        |
+| Name                        | Description                                        | Value                   |
+| --------------------------- | -------------------------------------------------- | ----------------------- |
+| `haproxy.image.registry`    | HAProxy image registry                             | `docker.io`             |
+| `haproxy.image.repository`  | HAProxy image repository                           | `bitnami/haproxy-intel` |
+| `haproxy.image.tag`         | HAProxy image tag (immutable tags are recommended) | `2.5.7-debian-10-r4`    |
+| `haproxy.image.pullPolicy`  | HAProxy image pull policy                          | `IfNotPresent`          |
+| `haproxy.image.pullSecrets` | HAProxy image pull secrets                         | `[]`                    |
 
 
 HAProxy is installed as a subchart, meaning that the whole list of parameters is defined in [bitnami/haproxy](https://github.com/bitnami/charts/tree/master/bitnami/haproxy). Please, note that parameters from the subchart should be prefixed with `haproxy.` in this chart.
