@@ -6,8 +6,6 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 
 [Overview of Spring Cloud Data Flow](https://github.com/spring-cloud/spring-cloud-dataflow)
 
-
-                           
 ## TL;DR
 
 ```bash
@@ -58,7 +56,6 @@ helm uninstall my-release
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                           | Value           |
@@ -70,7 +67,6 @@ helm uninstall my-release
 | `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                  | `""`            |
 | `clusterDomain`     | Default Kubernetes cluster domain                                                     | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                     | `[]`            |
-
 
 ### Dataflow Server parameters
 
@@ -186,7 +182,6 @@ helm uninstall my-release
 | `server.proxy`                                      | Add proxy configuration for SCDF server                                                                                          | `{}`                                                 |
 | `server.applicationProperties`                      | Specify common application properties added by SCDF server to streams and/or tasks                                               | `{}`                                                 |
 
-
 ### Dataflow Skipper parameters
 
 | Name                                         | Description                                                                                               | Value                          |
@@ -278,7 +273,6 @@ helm uninstall my-release
 | `externalSkipper.host`                       | Host of a external Skipper Server                                                                         | `localhost`                    |
 | `externalSkipper.port`                       | External Skipper Server port number                                                                       | `7577`                         |
 
-
 ### Deployer parameters
 
 | Name                                          | Description                                                                                                                                     | Value          |
@@ -299,7 +293,6 @@ helm uninstall my-release
 | `deployer.entryPointStyle`                    | An entry point style affects how application properties are passed to the container to be deployed. Allowed values: exec (default), shell, boot | `exec`         |
 | `deployer.imagePullPolicy`                    | An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never  | `IfNotPresent` |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                                                                             | Value  |
@@ -309,7 +302,6 @@ helm uninstall my-release
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                          | `true` |
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                              | `{}`   |
 | `rbac.create`                                 | Whether to create and use RBAC resources or not                                                                         | `true` |
-
 
 ### Metrics parameters
 
@@ -387,7 +379,6 @@ helm uninstall my-release
 | `metrics.autoscaling.targetCPU`              | Target CPU utilization percentage                                                                                          | `""`                               |
 | `metrics.autoscaling.targetMemory`           | Target Memory utilization percentage                                                                                       | `""`                               |
 
-
 ### Init Container parameters
 
 | Name                                 | Description                                                                                       | Value                 |
@@ -400,7 +391,6 @@ helm uninstall my-release
 | `waitForBackends.image.pullSecrets`  | Specify docker-registry secret names as an array                                                  | `[]`                  |
 | `waitForBackends.resources.limits`   | Init container wait-for-backend resource limits                                                   | `{}`                  |
 | `waitForBackends.resources.requests` | Init container wait-for-backend resource requests                                                 | `{}`                  |
-
 
 ### Database parameters
 
@@ -431,7 +421,6 @@ helm uninstall my-release
 | `externalDatabase.skipper.username`       | Existing username in the external db to be used by Skipper server                                   | `skipper`    |
 | `externalDatabase.hibernateDialect`       | Hibernate Dialect used by Dataflow/Skipper servers                                                  | `""`         |
 
-
 ### RabbitMQ chart parameters
 
 | Name                                      | Description                                                                     | Value       |
@@ -446,7 +435,6 @@ helm uninstall my-release
 | `externalRabbitmq.vhost`                  | External RabbitMQ virtual host. It will be saved in a kubernetes secret         | `""`        |
 | `externalRabbitmq.existingPasswordSecret` | Existing secret with RabbitMQ password. It will be saved in a kubernetes secret | `""`        |
 
-
 ### Kafka chart parameters
 
 | Name                                  | Description                             | Value            |
@@ -458,7 +446,6 @@ helm uninstall my-release
 | `externalKafka.enabled`               | Enable/disable external Kafka           | `false`          |
 | `externalKafka.brokers`               | External Kafka brokers                  | `localhost:9092` |
 | `externalKafka.zkNodes`               | External Zookeeper nodes                | `localhost:2181` |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -663,6 +650,9 @@ Find more information about how to deal with common errors related to Bitnami He
 
 If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
 
+### To 11.0.0
+
+This chart bumps the RabbitMQ version to 3.10.x. No issues are expected during upgrade.
 ### To 10.0.0
 
 This major updates the Kafka subchart to it newest major, 17.0.0. No major issues are expected during the upgrade.
