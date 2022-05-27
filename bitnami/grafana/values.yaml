@@ -149,6 +149,9 @@ ldap:
   ## NOTE: When it's set the ldap.configuration parameter is ignored
   ##
   secretName: ""
+  ## @param ldap.uri Server URI, eg. ldap://ldap_server:389
+  ##
+  uri: ""
   ## @param ldap.binddn DN of the account used to search in the LDAP server.
   ##
   binddn: ""
