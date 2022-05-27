@@ -23,7 +23,7 @@ metadata:
     {{ include "common.tplvalues.render" ( dict "value" (index $root.Values.externalAccess.service.loadBalancerAnnotations $i) "context" $) | nindent 4 }}
     {{- end }}
     {{- if $root.Values.externalAccess.service.annotations }}
-    {{ include "common.tplvalues.render" ( dict "value" $root.Values.externalAccess.service.annotations "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" $root.Values.externalAccess.service.annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if $root.Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" $root.Values.commonAnnotations "context" $ ) | nindent 4 }}
