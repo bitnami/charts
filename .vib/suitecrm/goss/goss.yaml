@@ -12,7 +12,6 @@ file:
       - sugar_db_version
       - sugar_version
     exists: true
-    group: root
   /opt/bitnami/suitecrm/config.php:
     mode: "0755"
     filetype: file
@@ -20,7 +19,6 @@ file:
       - bitnami-suitecrm
       - dbconfig
     exists: true
-    group: root
   /opt/bitnami/apache/conf/extra/httpd-manual.conf:
     mode: "0664"
     filetype: file
