@@ -22,6 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/haproxy-intel"
         },
+        "runtime_parameters": "aGFwcm94eToKICBzZXJ2aWNlOgogICAgdHlwZTogTG9hZEJhbGFuY2VyCiAgICBwb3J0czoKICAgICAgLSBuYW1lOiBodHRwCiAgICAgICAgcHJvdG9jb2w6IFRDUAogICAgICAgIHBvcnQ6IDgwCiAgICAgICAgdGFyZ2V0UG9ydDogaHR0cAo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {

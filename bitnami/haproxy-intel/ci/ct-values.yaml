@@ -1,3 +1,0 @@
-haproxy:
-  service:
-    type: ClusterIP
