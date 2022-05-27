@@ -68,7 +68,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.2.0-debian-10-r3
+  tag: 3.2.0-debian-10-r4
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -684,6 +684,12 @@ service:
   ## ref: https://kubernetes.io/docs/user-guide/services/
   ##
   sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
   ## @param service.clusterIP Kafka service Cluster IP
   ## e.g.:
   ## clusterIP: None
@@ -735,7 +741,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.24.0-debian-10-r4
+      tag: 1.24.0-debian-10-r5
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -962,7 +968,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r433
+    tag: 10-debian-10-r434
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1040,7 +1046,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.4.2-debian-10-r241
+      tag: 1.4.2-debian-10-r243
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1175,6 +1181,14 @@ metrics:
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
     schedulerName: ""
+    ## @param metrics.kafka.priorityClassName Kafka exporter pods' priorityClassName
+    ##
+    priorityClassName: ""
+    ## @param metrics.kafka.topologySpreadConstraints Topology Spread Constraints for pod assignment
+    ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+    ## The value is evaluated as a template
+    ##
+    topologySpreadConstraints: []
     ## @param metrics.kafka.extraVolumes Optionally specify extra list of additional volumes for the Kafka exporter pod(s)
     ## e.g:
     ## extraVolumes:
@@ -1266,7 +1280,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.16.1-debian-10-r305
+      tag: 0.16.1-debian-10-r306
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

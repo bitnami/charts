@@ -538,6 +538,12 @@ hub:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
+    ## @param hub.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param hub.service.clusterIP Hub service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -915,6 +921,12 @@ proxy:
       ## ref: https://kubernetes.io/docs/user-guide/services/
       ##
       sessionAffinity: None
+      ## @param proxy.service.api.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
       ## @param proxy.service.api.clusterIP Hub service Cluster IP
       ## e.g.:
       ## clusterIP: None
@@ -959,6 +971,12 @@ proxy:
       ## ref: https://kubernetes.io/docs/user-guide/services/
       ##
       sessionAffinity: None
+      ## @param proxy.service.metrics.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
       ## @param proxy.service.metrics.clusterIP Hub service Cluster IP
       ## e.g.:
       ## clusterIP: None
@@ -1004,6 +1022,12 @@ proxy:
       ## ref: https://kubernetes.io/docs/user-guide/services/
       ##
       sessionAffinity: None
+      ## @param proxy.service.public.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
       ## @param proxy.service.public.clusterIP Hub service Cluster IP
       ## e.g.:
       ## clusterIP: None
@@ -1125,7 +1149,7 @@ proxy:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
