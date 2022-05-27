@@ -46,6 +46,17 @@
           }
         },
         {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/suitecrm/goss"
+            },
+            "remote": {
+              "workload": "deploy-suitecrm"
+            }
+          }
+        },
+        {
           "action_id": "cypress",
           "params": {
             "resources": {
