@@ -4,37 +4,58 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 ** Please be patient while the chart is being deployed **
 
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ template "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ template "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/node-exporter/bin/node_exporter --path.procfs=/host/proc --path.sysfs=/host/sys --web.listen-address=0.0.0.0:{{ .Values.containerPorts.metrics }}
+
+{{- else }}
+
 Watch the Node Exporter DaemonSet status using the command:
 
-    kubectl get ds -w --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}
+    kubectl get ds -w --namespace {{ include "common.names.namespace" . }} {{ template "common.names.fullname" . }}
 
-Node Exporter can be accessed via port "{{ .Values.service.port }}" on the following DNS name from within your cluster:
+Node Exporter can be accessed via port "{{ .Values.service.ports.metrics }}" on the following DNS name from within your cluster:
 
-    {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+    {{ template "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.cluster.local
 
 To access Node Exporter from outside the cluster execute the following commands:
 
 {{- if contains "LoadBalancer" .Values.service.type }}
 
     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-    Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
+    Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ template "common.names.fullname" . }}'
 
-{{- $port:=.Values.service.port | toString }}
+{{- $port:=.Values.service.ports.metrics | toString }}
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-    echo "URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    echo "URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.ports.metrics }}{{ end }}/"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
     echo "URL: http://127.0.0.1:9100/"
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 9100:{{ .Values.service.port }}
+    kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ template "common.names.fullname" . }} 9100:{{ .Values.service.ports.metrics }}
 
 {{- else if contains "NodePort" .Values.service.type }}
 
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
     echo "URL: http://$NODE_IP:$NODE_PORT/"
 
+{{- end }}
 {{- end }}
 
 {{- include "node-exporter.validateValues" . }}

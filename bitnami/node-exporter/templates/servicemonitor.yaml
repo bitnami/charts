@@ -3,17 +3,17 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "common.names.fullname" . }}
-  {{- if .Values.serviceMonitor.namespace }}
-  namespace: {{ .Values.serviceMonitor.namespace | quote }}
-  {{- else }}
-  namespace: {{ .Release.Namespace | quote }}
-  {{- end }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.serviceMonitor.namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- range $key, $value := .Values.serviceMonitor.selector }}
-    {{ $key }}: {{ $value | quote }}
+    {{- if .Values.serviceMonitor.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.serviceMonitor.labels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
   {{- if .Values.serviceMonitor.jobLabel }}
@@ -21,6 +21,9 @@ spec:
   {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      {{- if .Values.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
   endpoints:
     - port: metrics
       {{- if .Values.serviceMonitor.interval }}
@@ -28,6 +31,9 @@ spec:
       {{- end }}
       {{- if .Values.serviceMonitor.scrapeTimeout }}
       scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.serviceMonitor.honorLabels }}
       {{- end }}
       {{- if .Values.serviceMonitor.relabelings }}
       relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.serviceMonitor.relabelings "context" $) | nindent 8 }}
@@ -37,5 +43,5 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-    - {{ .Release.Namespace }}
+    - {{ include "common.names.namespace" . }}
 {{- end }}

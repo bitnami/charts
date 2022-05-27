@@ -70,7 +70,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 18.0.0-debian-10-r2
+  tag: 18.0.0-debian-10-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -487,6 +487,12 @@ service:
   ## ref: https://kubernetes.io/docs/user-guide/services/
   ##
   sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
   ## @param service.clusterIP Keycloak service clusterIP IP
   ## e.g:
   ## clusterIP: None
@@ -608,7 +614,7 @@ ingress:
   ## - host: airflow.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: airflow-svc
   ##           port:
@@ -789,7 +795,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 5.2.0-debian-10-r10
+    tag: 5.2.0-debian-10-r15
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -934,3 +940,12 @@ externalDatabase:
   password: ""
   existingSecret: ""
   existingSecretPasswordKey: ""
+
+## @section Keycloak Cache parameters
+
+## Keycloak cache configuration
+## ref: https://www.keycloak.org/server/caching
+## @param cache.enabled Switch to enable or disable the keycloak distributed cache for kubernetes
+##
+cache:
+  enabled: false

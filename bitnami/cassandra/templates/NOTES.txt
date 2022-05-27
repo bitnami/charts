@@ -37,7 +37,7 @@ To get your password run:
 
 Check the cluster status by running:
 
-   kubectl exec -it --namespace {{ .Release.Namespace }} $(kubectl get pods --namespace {{ .Release.Namespace }} -l app={{ include "common.names.name" . }},release={{ .Release.Name }} -o jsonpath='{.items[0].metadata.name}') nodetool status
+   kubectl exec -it --namespace {{ .Release.Namespace }} $(kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }} -o jsonpath='{.items[0].metadata.name}') nodetool status
 
 To connect to your Cassandra cluster using CQL:
 
