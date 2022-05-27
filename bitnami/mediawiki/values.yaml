@@ -42,7 +42,7 @@ extraDeploy: []
 
 ## @section Mediawiki parameters
 
-## Bitnami DokuWiki image version
+## Bitnami Mediawiki image version
 ## ref: https://hub.docker.com/r/bitnami/mediawiki/tags/
 ## @param image.registry MediaWiki image registry
 ## @param image.repository MediaWiki image repository
