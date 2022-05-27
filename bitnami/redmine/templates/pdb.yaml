@@ -1,4 +1,4 @@
-{{- if .Values.pdb.enabled }}
+{{- if .Values.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:

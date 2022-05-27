@@ -475,6 +475,12 @@ compactor:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
+    ## @param compactor.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param compactor.service.clusterIP Compactor service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -732,6 +738,12 @@ distributor:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
+    ## @param distributor.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param distributor.service.clusterIP Distributor service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1032,6 +1044,12 @@ ingester:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
+    ## @param ingester.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param ingester.service.clusterIP Ingester service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1289,6 +1307,12 @@ querier:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
+    ## @param querier.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param querier.service.clusterIP Querier service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1557,12 +1581,6 @@ queryFrontend:
     containerPorts:
       jaegerMetrics: 16687
       jaegerUI: 16686
-    ## @param queryFrontend.query.jaegerMetricsContainerPort Jaeger metrics container port
-    ##
-    jaegerMetricsContainerPort: 16687
-    ## @param queryFrontend.query.jaegerUIContainerPort Jaeger UI container port
-    ##
-    jaegerUIContainerPort: 16686
     ## @param queryFrontend.query.existingConfigmap Name of a configmap with the query configuration
     ##
     existingConfigmap: ""
@@ -1692,6 +1710,12 @@ queryFrontend:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
+    ## @param queryFrontend.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param queryFrontend.service.clusterIP queryFrontend service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1977,6 +2001,12 @@ vulture:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
+    ## @param vulture.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param vulture.service.clusterIP Vulture service Cluster IP
     ## e.g.:
     ## clusterIP: None

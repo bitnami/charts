@@ -142,7 +142,7 @@ Validate values for Grafana.
 
 {{/* Validate values of Grafana - Requirements to use an external database */}}
 {{- define "grafana.validateValues.database" -}}
-{{- $replicaCount := int .Values.replicaCount }}
+{{- $replicaCount := int .Values.grafana.replicaCount }}
 {{- if gt $replicaCount 1 -}}
 grafana: replicaCount
         Using more than one replica requires using an external database to share data between Grafana instances.
