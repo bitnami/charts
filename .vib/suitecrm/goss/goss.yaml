@@ -1,0 +1,10 @@
+command:
+file:
+  /opt/bitnami/suitecrm/sugar_version.json:
+    mode: "0644"
+    filetype: file
+    contains:
+      - sugar_db_version
+      - sugar_db_version
+    exists: true
+    group: root
