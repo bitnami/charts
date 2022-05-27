@@ -1051,14 +1051,9 @@ ldap:
   tls:
     enabled: false
     allowSelfSigned: true
-    ## Cloud be create with: kubectl create secret generic airflow-secret --from-file=./ca.pem
-    ##
     CAcertificateSecret: ""
     certificatesSecret: ""
     certificatesMountPath: /opt/bitnami/airflow/conf/certs
-    ## Example:
-    ## CAcertificateFilename: 'ca.pem'
-    ##
     CAcertificateFilename: ""
     CAFilename: ""
 
