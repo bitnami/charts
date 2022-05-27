@@ -332,8 +332,7 @@ configuration: |-
   {{- end }}
   {{- if .Values.ldap.enabled }}
   auth_backends.1.authn = ldap
-  # LDAP authorisation not yet supported
-  auth_backends.1.authz = internal
+  auth_backends.1.authz = {{ ternary "ldap" "internal" .Values.ldap.authorisationEnabled }}
   auth_backends.2 = internal
   {{- $host :=  list }}
   {{- $port :=  ternary 636 389 .Values.ldap.tls.enabled }}
@@ -371,7 +370,12 @@ configuration: |-
   auth_ldap.ssl_options.certfile = {{ .Values.ldap.tls.certificatesMountPath }}/{{ .Values.ldap.tls.certFilename }}
   auth_ldap.ssl_options.keyfile = {{ .Values.ldap.tls.certificatesMountPath }}/{{ required "'ldap.tls.certKeyFilename' is required when 'ldap.tls.certFilename' is defined" .Values.ldap.tls.certKeyFilename }}
   {{- end }}
+  {{- if .Values.ldap.tls.skipVerify }}
+  auth_ldap.ssl_options.verify = verify_none
+  auth_ldap.ssl_options.fail_if_no_peer_cert = false
+  {{- else if .Values.ldap.tls.verify }}
   auth_ldap.ssl_options.verify = {{ .Values.ldap.tls.verify }}
+  {{- end }}
   {{- end }}
   {{- end }}
   {{- if .Values.metrics.enabled }}
@@ -396,20 +400,12 @@ extraConfiguration: |-
 ## @param advancedConfiguration Configuration file content: advanced configuration
 ## Use this as additional configuration in classic config format (Erlang term configuration format)
 ##
-## If you set LDAP with TLS/SSL enabled and you are using self-signed certificates, uncomment these lines.
+## LDAP authorisation example:
 ## advancedConfiguration: |-
-##   [{
-##     rabbitmq_auth_backend_ldap,
-##     [{
-##         ssl_options,
-##         [{
-##             verify, verify_none
-##         }, {
-##             fail_if_no_peer_cert,
-##             false
-##         }]
-##     ]}
-##   }].
+##   [{rabbitmq_auth_backend_ldap,[
+##      {tag_queries,           [{administrator, {constant, true}},
+##                               {management,    {constant, true}}]}
+##   ]}].
 ##
 advancedConfiguration: |-
 
@@ -450,9 +446,15 @@ ldap:
   ## @param ldap.uidField Field used to match with the user name (uid, samAccountName, cn, etc). It matches with 'dn_lookup_attribute' in RabbitMQ configuration
   ## ref: https://www.rabbitmq.com/ldap.html#usernames-and-dns
   ##
+  ## @param ldap.uidField Field used to match with the user name (uid, samAccountName, cn, etc). It matches with 'dn_lookup_attribute' in RabbitMQ configuration
   uidField: ""
+  ## @param ldap.authorisationEnabled Enable LDAP authorisation. Please set 'advancedConfiguration' with tag, topic, resources and vhost mappings
+  ## ref: https://www.rabbitmq.com/ldap.html#authorisation
+  ##
+  authorisationEnabled: false
   ## @param ldap.tls.enabled Enabled TLS configuration.
   ## @param ldap.tls.startTls Use STARTTLS instead of LDAPS.
+  ## @param ldap.tls.skipVerify Skip any SSL verification (hostanames or certificates)
   ## @param ldap.tls.verify Verify connection. Valid values are 'verify_peer' or 'verify_none'
   ## @param ldap.tls.certificatesMountPath Where LDAP certifcates are mounted.
   ## @param ldap.tls.certificatesSecret Secret with LDAP certificates.
@@ -463,6 +465,7 @@ ldap:
   tls:
     enabled: false
     startTls: false
+    skipVerify: false
     verify: "verify_peer"
     certificatesMountPath: /opt/bitnami/rabbitmq/ldap/certs
     certificatesSecret: ""
