@@ -85,9 +85,23 @@ existingObjstoreSecret: ""
 ## @param existingObjstoreSecretItems Optional item list for specifying a custom Secret key. If so, path should be objstore.yml
 ##
 existingObjstoreSecretItems: []
-## @param existingServiceAccount Provide a common service account to be shared with all components
+
+## Common Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+## @param serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
 ##
-existingServiceAccount: ""
+serviceAccount:
+  create: false
+  name: ""
+  automountServiceAccountToken: true
+  annotations: {}
+
+## DEPRECATED - existingServiceAccount. This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
+##
+## existingServiceAccount: ""
 
 ## @section Thanos Query parameters
 
@@ -444,14 +458,18 @@ query:
   ##
   automountServiceAccountToken: true
   ## ServiceAccount configuration
+  ## @param query.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param query.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param query.serviceAccount.annotations Annotations for Thanos Query Service Account
-  ## @param query.serviceAccount.existingServiceAccount Name for an existing Thanos Query Service Account
   ## @param query.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+  ## DEPRECATED query.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
+    create: true
+    name: ""
     annotations: {}
-    existingServiceAccount: ""
     automountServiceAccountToken: true
+    ## existingServiceAccount: ""
   ## RBAC configuration
   ##
   rbac:
@@ -563,7 +581,7 @@ query:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -660,7 +678,7 @@ query:
       ## - host: example.local
       ##     http:
       ##       path: /
-      ##       backend: 
+      ##       backend:
       ##         service:
       ##           name: example-svc
       ##           port:
@@ -963,14 +981,18 @@ queryFrontend:
   ##
   automountServiceAccountToken: true
   ## ServiceAccount configuration
+  ## @param queryFrontend.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param queryFrontend.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param queryFrontend.serviceAccount.annotations Annotations for Thanos Query Frontend Service Account
-  ## @param queryFrontend.serviceAccount.existingServiceAccount Name for an existing Thanos Query Frontend Service Account
   ## @param queryFrontend.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+  ## DEPRECATED queryFrontend.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
+    create: true
+    name: ""
     annotations: {}
-    existingServiceAccount: ""
     automountServiceAccountToken: true
+    ## existingServiceAccount: ""
   ## RBAC configuration
   ##
   rbac:
@@ -1082,7 +1104,7 @@ queryFrontend:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -1381,14 +1403,18 @@ bucketweb:
   ##
   automountServiceAccountToken: true
   ## ServiceAccount configuration
+  ## @param bucketweb.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param bucketweb.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param bucketweb.serviceAccount.annotations Annotations for Thanos Bucket Web Service Account
-  ## @param bucketweb.serviceAccount.existingServiceAccount Name for an existing Thanos Bucket Web Service Account
   ## @param bucketweb.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+  ## DEPRECATED bucketweb.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
+    create: true
+    name: ""
     annotations: {}
-    existingServiceAccount: ""
     automountServiceAccountToken: true
+    ## existingServiceAccount: ""
   ## Thanos Bucket Web Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param bucketweb.autoscaling.enabled Enable autoscaling for Thanos Bucket Web
@@ -1478,7 +1504,7 @@ bucketweb:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -1781,14 +1807,18 @@ compactor:
   ##
   automountServiceAccountToken: true
   ## ServiceAccount configuration
+  ## @param compactor.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param compactor.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param compactor.serviceAccount.annotations Annotations for Thanos Compactor Service Account
-  ## @param compactor.serviceAccount.existingServiceAccount Name for an existing Thanos Compactor Service Account
   ## @param compactor.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+  ## DEPRECATED compactor.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
+    create: true
+    name: ""
     annotations: {}
-    existingServiceAccount: ""
     automountServiceAccountToken: true
+    ## existingServiceAccount: ""
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
@@ -1854,7 +1884,7 @@ compactor:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -2251,14 +2281,18 @@ storegateway:
   ##
   automountServiceAccountToken: true
   ## ServiceAccount configuration
+  ## @param storegateway.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param storegateway.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param storegateway.serviceAccount.annotations Annotations for Thanos Store Gateway Service Account
-  ## @param storegateway.serviceAccount.existingServiceAccount Name for an existing Thanos Store Gateway Service Account
   ## @param storegateway.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+  ## DEPRECATED storegateway.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
+    create: true
+    name: ""
     annotations: {}
-    existingServiceAccount: ""
     automountServiceAccountToken: true
+    ## existingServiceAccount: ""
   ## Thanos Store Gateway Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param storegateway.autoscaling.enabled Enable autoscaling for Thanos Store Gateway
@@ -2348,7 +2382,7 @@ storegateway:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -2445,7 +2479,7 @@ storegateway:
       ## - host: example.local
       ##     http:
       ##       path: /
-      ##       backend: 
+      ##       backend:
       ##         service:
       ##           name: example-svc
       ##           port:
@@ -2855,14 +2889,18 @@ ruler:
   ##
   automountServiceAccountToken: true
   ## ServiceAccount configuration
+  ## @param ruler.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param ruler.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param ruler.serviceAccount.annotations Annotations for Thanos Ruler Service Account
-  ## @param ruler.serviceAccount.existingServiceAccount Name for an existing Thanos Ruler Service Account
   ## @param ruler.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+  ## DEPRECATED ruler.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
+    create: true
+    name: ""
     annotations: {}
-    existingServiceAccount: ""
     automountServiceAccountToken: true
+    ## existingServiceAccount: ""
   ## Thanos Ruler Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param ruler.autoscaling.enabled Enable autoscaling for Thanos Ruler
@@ -2952,7 +2990,7 @@ ruler:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -3307,14 +3345,18 @@ receive:
   ##
   automountServiceAccountToken: true
   ## ServiceAccount configuration
+  ## @param receive.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param receive.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param receive.serviceAccount.annotations Annotations for Thanos Receive Service Account
-  ## @param receive.serviceAccount.existingServiceAccount Name for an existing Thanos Receive Service Account
   ## @param receive.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+  ## DEPRECATED receive.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
+    create: true
+    name: ""
     annotations: {}
-    existingServiceAccount: ""
     automountServiceAccountToken: true
+    ## existingServiceAccount: ""
   ## Thanos Receive Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param receive.autoscaling.enabled Enable autoscaling for Thanos Receive
@@ -3431,7 +3473,7 @@ receive:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -3688,14 +3730,18 @@ receiveDistributor:
   ##
   automountServiceAccountToken: true
   ## ServiceAccount configuration
+  ## @param receiveDistributor.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param receiveDistributor.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param receiveDistributor.serviceAccount.annotations Annotations for Thanos Receive Distributor Service Account
-  ## @param receiveDistributor.serviceAccount.existingServiceAccount Name for an existing Thanos Receive Distributor Service Account
   ## @param receiveDistributor.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
+  ## DEPRECATED receive.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
+    create: true
+    name: ""
     annotations: {}
-    existingServiceAccount: ""
     automountServiceAccountToken: true
+    ## existingServiceAccount: ""
   ## Thanos Receive Distributor Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param receiveDistributor.autoscaling.enabled Enable autoscaling for Thanos Receive Distributor
