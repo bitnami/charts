@@ -18,18 +18,45 @@ global:
 
 ## @section Common parameters
 
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
 nameOverride: ""
 ## @param fullnameOverride String to fully override `common.names.fullname` template with a string
 ##
 fullnameOverride: ""
-## @param commonLabels Add labels to all the deployed resources
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+
+## Enable diagnostic mode in the deployment(s)/statefulset(s)
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
+  ##
+  args:
+    - infinity
 
 ## @section Node Exporter parameters
 
@@ -44,22 +71,22 @@ rbac:
   ## @param rbac.create Whether to create and use RBAC resources or not
   ##
   create: true
-  ## @param rbac.apiVersion Version of the RBAC API
-  ##
-  apiVersion: v1beta1
   ## @param rbac.pspEnabled Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   pspEnabled: true
 ## Service account for Node Exporter to use.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+## @param serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
 ##
 serviceAccount:
-  ## @param serviceAccount.create Specify whether to create a ServiceAccount for Node Exporter
-  ##
   create: true
-  ## @param serviceAccount.name The name of the ServiceAccount to create
-  ## If not set and create is true, a name is generated using the common.names.fullname template
   name: ""
+  automountServiceAccountToken: true
+  annotations: {}
+
 ## Bitnami Node Exporter image version
 ## ref: https://hub.docker.com/r/bitnami/node-exporter/tags/
 ## @param image.registry Node Exporter image registry
@@ -85,12 +112,61 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+
+## @param containerPorts.metrics Node Exporter container port
+##
+containerPorts:
+  metrics: 9100
+## @param sidecars Add additional sidecar containers to the Node exporter pod(s)
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+## @param initContainers Add additional init containers to the Node exporter pod(s)
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## e.g:
+## initContainers:
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
+##    command: ['sh', '-c', 'echo "hello world"']
+##
+initContainers: []
+
 ## @param extraArgs Additional command line arguments to pass to node-exporter
 ## e.g:
 ##  collector.filesystem.ignored-mount-points: "^/(dev|proc|sys|var/lib/docker/.+)($|/)"
 ##  collector.filesystem.ignored-fs-types: "^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$"
 ##
 extraArgs: {}
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param lifecycleHooks for the Node exporter container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
+## @param extraEnvVars Array with extra environment variables to add to Node exporter container
+## e.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnvVars: []
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Node exporter container
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for Node exporter container
+##
+extraEnvVarsSecret: ""
 ## @param extraVolumes Additional volumes to the node-exporter pods
 ## e.g:
 ##  - name: copy-portal-skins
@@ -103,36 +179,44 @@ extraVolumes: []
 ##   mountPath: /var/lib/lemonldap-ng/portal/skins
 ##
 extraVolumeMounts: []
-## SecurityContext configuration
-## @param securityContext.enabled Enable security context
-## @param securityContext.fsGroup Group ID for the container filesystem
-## @param securityContext.runAsUser User ID for the container
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled Node exporter pods' Security Context
+## @param podSecurityContext.fsGroup Set Node exporter pod's Security Context fsGroup
 ##
-securityContext:
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+## Configure Container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param containerSecurityContext.enabled Enabled Node exporter containers' Security Context
+## @param containerSecurityContext.runAsUser Set Node exporter containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set Node exporter container's Security Context runAsNonRoot
+##
+containerSecurityContext:
   enabled: true
   runAsUser: 1001
-  fsGroup: 1001
+  runAsNonRoot: true
 ## Node Exporter Service
 ##
 service:
   ## @param service.type Kubernetes service type
   ##
   type: ClusterIP
-  ## @param service.targetPort Node Exporter container target port
+  ## @param service.ports.metrics Node Exporter metrics service port
   ##
-  targetPort: 9100
-  ## @param service.port Node Exporter service port
-  ##
-  port: 9100
-  ## @param service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` for headless service
-  ##
-  clusterIP: ""
-  ## @param service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types
+  ports:
+    metrics: 9100
+  ## @param service.nodePorts.metrics Specify the nodePort value for the LoadBalancer and NodePort service types
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ## e.g:
   ## nodePort: 30080
   ##
-  nodePort: ""
+  nodePorts:
+    metrics: ""
+  ## @param service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` for headless service
+  ##
+  clusterIP: ""
   ## @param service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
   ## Set the LoadBalancer service type to internal only
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -145,6 +229,13 @@ service:
   ## - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy Node exporter service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
   ## @param service.addPrometheusScrapeAnnotation Add the `prometheus.io/scrape: "true"` annotation to the service
   ##
   addPrometheusScrapeAnnotation: true
@@ -154,6 +245,17 @@ service:
   ## @param service.labels Additional labels for Node Exporter service
   ##
   labels: {}
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 ## @param updateStrategy.type The update strategy type to apply to the DaemonSet
 ## @param updateStrategy.rollingUpdate.maxUnavailable Maximum number of pods that may be made unavailable
 ##
@@ -169,6 +271,10 @@ minReadySeconds: 0
 ## @param priorityClassName Priority class assigned to the Pods
 ##
 priorityClassName: ""
+## @param terminationGracePeriodSeconds In seconds, time the given to the Node exporter pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
 ## Resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -239,6 +345,7 @@ nodeSelector: {}
 tolerations: []
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -246,6 +353,7 @@ tolerations: []
 ## @param livenessProbe.successThreshold Success threshold for livenessProbe
 ##
 livenessProbe:
+  enabled: true
   initialDelaySeconds: 120
   periodSeconds: 10
   timeoutSeconds: 5
@@ -253,6 +361,7 @@ livenessProbe:
   successThreshold: 1
 ## Configure extra options for readiness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param readinessProbe.enabled Enable readinessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -260,11 +369,37 @@ livenessProbe:
 ## @param readinessProbe.successThreshold Success threshold for readinessProbe
 ##
 readinessProbe:
+  enabled: true
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
+## Configure extra options for startup probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+## @param customStartupProbe Custom liveness probe for the Node exporter container
+##
+customStartupProbe: {}
+## @param customLivenessProbe Custom liveness probe for the Node exporter container
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom readiness probe for the Node exporter container
+##
+customReadinessProbe: {}
 ## ServiceMonitor configuration
 ##
 serviceMonitor:
@@ -304,3 +439,9 @@ serviceMonitor:
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
   ##
   metricRelabelings: []
+  ## @param serviceMonitor.labels Extra labels for the ServiceMonitor
+  ##
+  labels: {}
+  ## @param serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+  ##
+  honorLabels: false
