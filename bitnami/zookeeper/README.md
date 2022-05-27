@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`            | ZooKeeper image registry                                                                                                   | `docker.io`             |
 | `image.repository`          | ZooKeeper image repository                                                                                                 | `bitnami/zookeeper`     |
-| `image.tag`                 | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.8.0-debian-10-r34`   |
+| `image.tag`                 | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.8.0-debian-10-r64`   |
 | `image.pullPolicy`          | ZooKeeper image pull policy                                                                                                | `IfNotPresent`          |
 | `image.pullSecrets`         | Specify docker-registry secret names as an array                                                                           | `[]`                    |
 | `image.debug`               | Specify if debug values should be set                                                                                      | `false`                 |
@@ -199,6 +199,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.nodePorts.tls`                     | Node port for TLS                                                                       | `""`        |
 | `service.disableBaseClientPort`             | Remove client port from service definitions.                                            | `false`     |
 | `service.sessionAffinity`                   | Control where client requests go, to the same pod or round-robin                        | `None`      |
+| `service.sessionAffinityConfig`             | Additional settings for the sessionAffinity                                             | `{}`        |
 | `service.clusterIP`                         | ZooKeeper service Cluster IP                                                            | `""`        |
 | `service.loadBalancerIP`                    | ZooKeeper service Load Balancer IP                                                      | `""`        |
 | `service.loadBalancerSourceRanges`          | ZooKeeper service Load Balancer sources                                                 | `[]`        |
@@ -244,7 +245,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r400`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r431`     |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
