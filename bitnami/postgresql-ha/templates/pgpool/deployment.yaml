@@ -69,7 +69,7 @@ spec:
       {{- if .Values.pgpool.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.pgpool.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if .Values.serviceAccount.enabled }}
+      {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name }}
       {{- end }}
       initContainers:

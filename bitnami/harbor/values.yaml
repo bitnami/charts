@@ -160,6 +160,12 @@ service:
   ## ref: https://kubernetes.io/docs/user-guide/services/
   ##
   sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
   ## @param service.clusterIP NGINX proxy service Cluster IP
   ## e.g.:
   ## clusterIP: None
@@ -288,7 +294,7 @@ ingress:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -395,7 +401,7 @@ ingress:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -659,7 +665,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r431
+    tag: 10-debian-10-r435
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -703,7 +709,7 @@ nginx:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-10-r114
+    tag: 1.21.6-debian-10-r117
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -966,7 +972,7 @@ portal:
   image:
     registry: docker.io
     repository: bitnami/harbor-portal
-    tag: 2.5.0-debian-10-r39
+    tag: 2.5.0-debian-10-r43
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1224,7 +1230,7 @@ core:
   image:
     registry: docker.io
     repository: bitnami/harbor-core
-    tag: 2.5.0-debian-10-r41
+    tag: 2.5.0-debian-10-r45
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1515,7 +1521,7 @@ jobservice:
   image:
     registry: docker.io
     repository: bitnami/harbor-jobservice
-    tag: 2.5.0-debian-10-r31
+    tag: 2.5.0-debian-10-r35
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1956,7 +1962,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registry
-      tag: 2.5.0-debian-10-r39
+      tag: 2.5.0-debian-10-r43
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2101,7 +2107,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registryctl
-      tag: 2.5.0-debian-10-r39
+      tag: 2.5.0-debian-10-r43
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2242,7 +2248,7 @@ chartmuseum:
   image:
     registry: docker.io
     repository: bitnami/chartmuseum
-    tag: 0.14.0-debian-10-r106
+    tag: 0.14.0-debian-10-r110
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2683,7 +2689,7 @@ clair:
     image:
       registry: docker.io
       repository: bitnami/harbor-adapter-clair
-      tag: 2.5.0-debian-10-r38
+      tag: 2.5.0-debian-10-r42
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2822,7 +2828,7 @@ clair:
     image:
       registry: docker.io
       repository: bitnami/harbor-clair
-      tag: 2.5.0-debian-10-r39
+      tag: 2.5.0-debian-10-r43
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2977,7 +2983,7 @@ notary:
     image:
       registry: docker.io
       repository: bitnami/harbor-notary-server
-      tag: 2.5.0-debian-10-r39
+      tag: 2.5.0-debian-10-r43
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3212,7 +3218,7 @@ notary:
     image:
       registry: docker.io
       repository: bitnami/harbor-notary-signer
-      tag: 2.5.0-debian-10-r39
+      tag: 2.5.0-debian-10-r43
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3460,7 +3466,7 @@ trivy:
   image:
     registry: docker.io
     repository: bitnami/harbor-adapter-trivy
-    tag: 2.5.0-debian-10-r40
+    tag: 2.5.0-debian-10-r44
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3766,7 +3772,7 @@ exporter:
   image:
     registry: docker.io
     repository: bitnami/harbor-exporter
-    tag: 2.5.0-debian-10-r39
+    tag: 2.5.0-debian-10-r43
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3946,6 +3952,14 @@ exporter:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ""
+  ## @param exporter.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param exporter.serviceAccountName Name of the serviceAccountName for Harbor Exporter pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  serviceAccountName: ""
   ## @param exporter.nodeSelector Harbor Exporter Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -4005,7 +4019,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 13.7.0-debian-10-r7
+    tag: 13.7.0-debian-10-r11
   auth:
     enablePostgresUser: true
     postgresPassword: not-secure-database-password

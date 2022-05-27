@@ -3,13 +3,12 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "common.names.fullname" . }}-contour
-  {{- if .Values.metrics.serviceMonitor.namespace }}
-  namespace: {{ .Values.metrics.serviceMonitor.namespace }}
-  {{- else }}
-  namespace: {{ .Release.Namespace }}
-  {{- end }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.metrics.serviceMonitor.namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour
+    {{- if .Values.metrics.serviceMonitor.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.labels "context" $ ) | nindent 4 }}
+    {{- end }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -26,7 +25,7 @@ spec:
     {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ include "common.names.namespace" . | quote }}
   endpoints:
     - port: metrics
       {{- if .Values.metrics.serviceMonitor.interval }}

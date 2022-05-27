@@ -15,6 +15,9 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
   replicas: {{ .Values.replicaCount }}
+  {{- if .Values.podManagementPolicy }}
+  podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
+  {{- end }}
   serviceName: {{ template "common.names.fullname" . }}
   {{- if .Values.updateStrategy }}
   updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
@@ -65,6 +68,9 @@ spec:
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
       serviceAccountName: {{ template "memcached.serviceAccountName" . }}
       {{- if or .Values.persistence.enabled .Values.initContainers }}

@@ -19,17 +19,22 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.ingester.service.type }}
+  {{- if .Values.ingester.service.sessionAffinity }}
   sessionAffinity: {{ .Values.ingester.service.sessionAffinity }}
-  {{- if .Values.ingester.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.ingester.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if and .Values.ingester.service.clusterIP (eq .Values.ingester.service.type "ClusterIP") }}
   clusterIP: {{ .Values.ingester.service.clusterIP }}
   {{- end }}
-  {{- if (or (eq .Values.ingester.service.type "LoadBalancer") (eq .Values.ingester.service.type "NodePort")) }}
+  {{- if or (eq .Values.ingester.service.type "LoadBalancer") (eq .Values.ingester.service.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.ingester.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{ if eq .Values.ingester.service.type "LoadBalancer" }}
+  {{- if and (eq .Values.ingester.service.type "LoadBalancer") (not (empty .Values.ingester.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.ingester.service.loadBalancerSourceRanges }}
-  {{ end }}
-  {{- if (and (eq .Values.ingester.service.type "LoadBalancer") (not (empty .Values.ingester.service.loadBalancerIP))) }}
+  {{- end }}
+  {{- if and (eq .Values.ingester.service.type "LoadBalancer") (not (empty .Values.ingester.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.ingester.service.loadBalancerIP }}
   {{- end }}
   ports:

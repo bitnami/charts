@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redmine
-  tag: 5.0.1-debian-10-r7
+  tag: 5.0.1-debian-10-r8
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -388,6 +388,12 @@ service:
   ## ref: https://kubernetes.io/docs/user-guide/services/
   ##
   sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
   ## @param service.clusterIP Redmine service Cluster IP
   ## e.g.:
   ## clusterIP: None
@@ -508,7 +514,7 @@ ingress:
   ## - host: redmine.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: redmine-svc
   ##           port:
@@ -933,7 +939,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r434
+    tag: 10-debian-10-r435
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

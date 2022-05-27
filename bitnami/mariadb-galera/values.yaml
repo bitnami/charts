@@ -142,11 +142,26 @@ service:
   ## - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy %%MAIN_CONTAINER_NAME%% service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
   ## @param service.annotations Additional annotations for MariaDB Galera service
   ## This can be used toset the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
   ## Headless service properties
   ##
   headless:
@@ -622,15 +637,23 @@ persistence:
 ##
 priorityClassName: ""
 ## @param initContainers Additional init containers (this value is evaluated as a template)
-## extraInitContainers:
+## initContainers:
 ## - name: do-something
 ##   image: bitnami/minideb
 ##   command: ['do', 'something']
 ##
 initContainers: []
-## @param extraContainers Additional containers (this value is evaluated as a template)
+## @param sidecars Add additional sidecar containers (this value is evaluated as a template)
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
 ##
-extraContainers: []
+sidecars: []
 ## extraVolumes and extraVolumeMounts allows you to mount other volumes
 ## @param extraVolumes Extra volumes
 ## @param extraVolumeMounts Mount extra volume(s)
