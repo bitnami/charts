@@ -7,7 +7,7 @@ SuiteCRM is a completely open source, enterprise-grade Customer Relationship Man
 [Overview of SuiteCRM](http://www.suitecrm.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -64,6 +64,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                | Description                                                                                                  | Value |
@@ -74,6 +75,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array with extra yaml to deploy with the chart. Evaluated as a template                                      | `[]`  |
 | `commonAnnotations` | Common annotations to add to all SuiteCRM resources (sub-charts are not considered). Evaluated as a template | `{}`  |
 | `commonLabels`      | Common labels to add to all SuiteCRM resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
+
 
 ### SuiteCRM parameters
 
@@ -159,6 +161,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                        | Pod annotations                                                                           | `{}`                   |
 | `podLabels`                             | Pod extra labels                                                                          | `{}`                   |
 
+
 ### Database parameters
 
 | Name                                        | Description                                                                              | Value               |
@@ -182,6 +185,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_suitecrm`  |
 | `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                           | `""`                |
 
+
 ### Persistence parameters
 
 | Name                        | Description                              | Value               |
@@ -193,6 +197,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.existingClaim` | An Existing PVC name for SuiteCRM volume | `""`                |
 | `persistence.hostPath`      | Host mount path for SuiteCRM volume      | `""`                |
 | `persistence.annotations`   | Persistent Volume Claim annotations      | `{}`                |
+
 
 ### Volume Permissions parameters
 
@@ -206,6 +211,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
+
 
 ### Traffic Exposure Parameters
 
@@ -238,6 +244,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
+
 ### Metrics parameters
 
 | Name                                       | Description                                                          | Value                     |
@@ -259,6 +266,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.externalTrafficPolicy`    | SuiteCRM service external traffic policy                             | `Cluster`                 |
 | `metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP" | `None`                    |
 | `metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                          | `{}`                      |
+
 
 ### Certificate injection parameters
 
@@ -282,6 +290,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                       | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                      | `[]`                                     |
 
+
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                  | Value   |
@@ -301,6 +310,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                           | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                               | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                   | `{}`    |
+
 
 The above parameters map to the env variables defined in [bitnami/suitecrm](https://github.com/bitnami/bitnami-docker-suitecrm). For more information please refer to the [bitnami/suitecrm](https://github.com/bitnami/bitnami-docker-suitecrm) image documentation.
 
@@ -357,10 +367,10 @@ If you configure the `image` value to one in a private registry, you will need t
 1. Manually create image pull secret(s) in the namespace. See [this YAML example reference](https://kubernetes.io/docs/concepts/containers/images/#creating-a-secret-with-a-docker-config). Consult your image registry's documentation about getting the appropriate secret.
 1. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
 
-   ```yaml
-   imagePullSecrets:
-     - name: SECRET_NAME
-   ```
+    ```yaml
+    imagePullSecrets:
+      - name: SECRET_NAME
+    ```
 
 1. Install the chart
 
@@ -383,9 +393,9 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Create the PersistentVolumeClaim
 1. Install the chart
 
-   ```bash
-   $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/suitecrm
-   ```
+    ```bash
+    $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/suitecrm
+    ```
 
 ### Host path
 
@@ -399,12 +409,11 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. The specified `hostPath` directory must already exist (create one if it does not).
 1. Install the chart
 
-   ```bash
-   $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/suitecrm
-   ```
+    ```bash
+    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/suitecrm
+    ```
 
-   This will mount the `suitecrm-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
-
+    This will mount the `suitecrm-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
 1. Because the container cannot control the host machine's directory permissions, you must set the SuiteCRM file directory permissions yourself and disable or clear SuiteCRM cache.
 
 ## Troubleshooting
@@ -446,9 +455,9 @@ Please read the update notes carefully.
 **What changes were introduced in this major version?**
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
-- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
-- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
 **Considerations when upgrading to this version**
 
@@ -483,7 +492,7 @@ To upgrade to `9.0.0`, you can either install a new SuiteCRM chart and migrate y
 
 Obtain the credentials and the names of the PVCs used to hold both the MariaDB and SuiteCRM data on your current release:
 
-````console
+```console
 export SUITECRM_HOST=$(kubectl get svc --namespace default suitecrm --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
 export SUITECRM_PASSWORD=$(kubectl get secret --namespace default suitecrm -o jsonpath="{.data.suitecrm-password}" | base64 --decode)
 export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
@@ -511,7 +520,7 @@ $ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=suitecrm,app.kub
 mariadb 12:13:24.98 INFO  ==> Using persisted data
 mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 ...
-````
+```
 
 This upgrade also adapts the chart to the latest Bitnami good practices. Check the Parameters section for more information.
 
@@ -555,4 +564,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License
+limitations under the License.
