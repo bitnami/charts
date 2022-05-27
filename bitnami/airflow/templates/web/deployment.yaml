@@ -125,7 +125,7 @@ spec:
             - name: AIRFLOW_LDAP_SEARCH
               value: {{ coalesce .Values.ldap.base .Values.ldap.basedn | quote }}
             - name: AIRFLOW_LDAP_UID_FIELD
-              value: {{ .Values.ldap.uidField | quote }}
+              value: {{ coalesce .Values.ldap.uidField .Values.ldap.searchAttribute | quote }}
             - name: AIRFLOW_LDAP_BIND_USER
               value: {{ .Values.ldap.binddn | quote }}
             - name: AIRFLOW_LDAP_BIND_PASSWORD

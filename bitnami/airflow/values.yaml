@@ -1016,9 +1016,10 @@ git:
 ## LDAP configuration
 ## @param ldap.enabled Enable LDAP authentication
 ## @param ldap.uri Server URI, eg. ldap://ldap_server:389
-## DEPRECATED ldap.base It will be removed in a future release,, please use basedn instead
+## DEPRECATED ldap.base It will be removed in a future release, please use 'ldap.basedn' instead
 ## @param ldap.basedn Base of the search, eg. ou=example,o=org.
-## @param ldap.uidField if doing an indirect bind to ldap, this is the field that matches the username when searching for the account to bind to
+## DEPRECATED ldap.uidField It will be removed in a future release,, please use 'ldap.searchAttribute' instead
+## @param ldap.searchAttribute if doing an indirect bind to ldap, this is the field that matches the username when searching for the account to bind to
 ## @param ldap.binddn DN of the account used to search in the LDAP server.
 ## @param ldap.bindpw Bind Password
 ## @param ldap.userRegistration Set to True to enable user self registration
@@ -1030,7 +1031,7 @@ ldap:
   enabled: false
   uri: "ldap://ldap_server:389"
   basedn: "dc=example,dc=org"
-  uidField: "cn"
+  searchAttribute: "cn"
   binddn: "cn=admin,dc=example,dc=org"
   bindpw: ""
   userRegistration: 'True'
