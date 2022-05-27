@@ -227,8 +227,8 @@ bind_password = {{ .Values.ldap.bindpw | quote }}
 # Allow login from email or username, example "(|(sAMAccountName=%s)(userPrincipalName=%s))"
 {{- if .Values.ldap.searchFilter }}
 search_filter = {{ .Values.ldap.searchFilter | quote }}
-{{- else if .Values.ldap.uidField }}
-search_filter = "({{ .Values.ldap.uidField }}=%s)"
+{{- else if .Values.ldap.searchAttribute }}
+search_filter = "({{ .Values.ldap.searchAttribute }}=%s)"
 {{- end }}
 # An array of base dns to search through
 search_base_dns = [{{ (required "You must set ldap.basedn" .Values.ldap.basedn) | quote }}]

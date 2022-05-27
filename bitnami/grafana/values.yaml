@@ -161,9 +161,9 @@ ldap:
   ## @param ldap.basedn Base DN path where binddn account will search for the users.
   ##
   basedn: ""
-  ## @param ldap.uidField Field used to match with the user name (uid, samAccountName, cn, etc). This value will be ignored if 'ldap.searchFilter' is set
+  ## @param ldap.searchAttribute Field used to match with the user name (uid, samAccountName, cn, etc). This value will be ignored if 'ldap.searchFilter' is set
   ##
-  uidField: "uid"
+  searchAttribute: "uid"
   ## @param ldap.searchFilter User search filter, for example "(cn=%s)" or "(sAMAccountName=%s)" or "(|(sAMAccountName=%s)(userPrincipalName=%s)"
   ##
   searchFilter: ""
