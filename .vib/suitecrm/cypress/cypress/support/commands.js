@@ -1,5 +1,4 @@
 const COMMAND_DELAY = 800;
-const BASE_URL = 'http://localhost';
 
 for (const command of ['click']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
@@ -12,9 +11,6 @@ for (const command of ['click']) {
     });
   });
 }
-Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
-  return originalFn(`${BASE_URL}${url}`, options);
-});
 
 Cypress.Commands.add(
   'login',

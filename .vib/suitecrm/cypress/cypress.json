@@ -1,6 +1,6 @@
 {
+  "baseUrl": "http://localhost",
   "env": {
-    "baseUrl": "http://a24dfab5e42904bb5bb6acfdde234724-1707130814.us-east-1.elb.amazonaws.com",
     "email": "user@example.com",
     "username": "user",
     "password": "ComplicatedPassword123!4",
