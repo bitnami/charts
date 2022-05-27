@@ -30,13 +30,27 @@
     "publish": {
       "actions": [
         {
-          "action_id": "helm-publish",
+          "action_id": "trivy",
           "params": {
-            "repository": {
-              "kind": "S3",
-              "url": "{VIB_ENV_S3_URL}",
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
+            "threshold": "CRITICAL",
+            "vuln_type": ["OS"]
+          }
+        },
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-suitecrm-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/suitecrm/goss"
+            },
+            "remote": {
+              "workload": "deploy-suitecrm"
             }
           }
         },
@@ -51,6 +65,17 @@
             "env": {
               "username": "user",
               "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}",
+              "password": "{VIB_ENV_S3_PASSWORD}"
             }
           }
         }
