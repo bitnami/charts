@@ -618,7 +618,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.auth.enabled`                      | Enable Redis dependency authentication                                      | `true`                |
 | `redis.auth.existingSecret`               | Existing secret to load redis dependency password                           | `""`                  |
 | `redis.auth.existingSecretPasswordKey`    | Pasword key name inside the existing secret                                 | `redis-password`      |
-| `redis.architecture`                      | Redis&trade; architecture. Allowed values: `standalone` or `replication`    | `standalone`          |
+| `redis.architecture`                      | Redis&reg; architecture. Allowed values: `standalone` or `replication`    | `standalone`          |
 | `externalRedis.host`                      | External Redis host                                                         | `""`                  |
 | `externalRedis.port`                      | External Redis port                                                         | `6379`                |
 | `externalRedis.password`                  | External Redis password                                                     | `""`                  |
@@ -713,13 +713,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 3.0.0
 
-This major update the Redis&trade; subchart to its newest major, 16.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1600) you can find more info about the specific changes.
+This major update the Redis&reg; subchart to its newest major, 16.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1600) you can find more info about the specific changes.
 
 Additionally, this chart has been standardised adding features from other charts.
 
 ### To 2.0.0
 
-This major update the Redis&trade; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
+This major update the Redis&reg; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
 
 ### To 1.0.0
 

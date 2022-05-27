@@ -19,7 +19,7 @@ $ helm install my-release bitnami/discourse
 
 This chart bootstraps a [Discourse](https://www.discourse.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) and [Bitnami Redis&trade;](https://github.com/bitnami/charts/tree/master/bitnami/redis) which are required as databases for the Discourse application.
+It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) and [Bitnami Redis&reg;](https://github.com/bitnami/charts/tree/master/bitnami/redis) which are required as databases for the Discourse application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
@@ -316,19 +316,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecretPostgresPasswordKey` | Name of an existing secret key containing the database admin user credentials                          | `postgres-password`   |
 
 
-### Redis&trade; parameters
+### Redis&reg; parameters
 
 | Name                                      | Description                                                                | Value            |
 | ----------------------------------------- | -------------------------------------------------------------------------- | ---------------- |
-| `redis.enabled`                           | Switch to enable or disable the Redis&trade; helm                          | `true`           |
+| `redis.enabled`                           | Switch to enable or disable the Redis&reg; helm                          | `true`           |
 | `redis.auth.enabled`                      | Enable password authentication                                             | `true`           |
-| `redis.auth.password`                     | Redis&trade; password                                                      | `""`             |
-| `redis.auth.existingSecret`               | The name of an existing secret with Redis&trade; credentials               | `""`             |
-| `redis.architecture`                      | Redis&trade; architecture. Allowed values: `standalone` or `replication`   | `standalone`     |
-| `externalRedis.host`                      | Redis&trade; host                                                          | `localhost`      |
-| `externalRedis.port`                      | Redis&trade; port number                                                   | `6379`           |
-| `externalRedis.username`                  | Redis&trade; username                                                      | `""`             |
-| `externalRedis.password`                  | Redis&trade; password                                                      | `""`             |
+| `redis.auth.password`                     | Redis&reg; password                                                      | `""`             |
+| `redis.auth.existingSecret`               | The name of an existing secret with Redis&reg; credentials               | `""`             |
+| `redis.architecture`                      | Redis&reg; architecture. Allowed values: `standalone` or `replication`   | `standalone`     |
+| `externalRedis.host`                      | Redis&reg; host                                                          | `localhost`      |
+| `externalRedis.port`                      | Redis&reg; port number                                                   | `6379`           |
+| `externalRedis.username`                  | Redis&reg; username                                                      | `""`             |
+| `externalRedis.password`                  | Redis&reg; password                                                      | `""`             |
 | `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis&trade credentials | `""`             |
 | `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis&trade credentials      | `redis-password` |
 
@@ -445,7 +445,7 @@ Note also that if you disable PostgreSQL per above you MUST supply values for th
 
 In case the database already contains data from a previous Discourse installation, you need to set the `discourse.skipInstall` parameter to _true_. Otherwise, the container would execute the installation wizard and could modify the existing data in the database. This parameter force the container to not execute the Discourse installation wizard.
 
-Similarly, you can specify an external Redis&trade; instance rather than installing one inside your cluster. First, you may disable the Redis&trade; installation with the `redis.enabled` option. As aforementioned, used the provided parameters to provide data about your instance:
+Similarly, you can specify an external Redis&reg; instance rather than installing one inside your cluster. First, you may disable the Redis&reg; installation with the `redis.enabled` option. As aforementioned, used the provided parameters to provide data about your instance:
 
 ```console
 redis.enabled=false

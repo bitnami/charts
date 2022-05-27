@@ -23,7 +23,7 @@ This Helm chart has been developed based on [goharbor/harbor-helm](https://githu
 For example, the following changes have been introduced:
 
 - Possibility to pull all the required images from a private registry through the  Global Docker image parameters.
-- Redis&trade; and PostgreSQL are managed as chart dependencies.
+- Redis&reg; and PostgreSQL are managed as chart dependencies.
 - Liveness and Readiness probes for all deployments are exposed to the values.yaml.
 - Uses new Helm chart labels formatting.
 - Uses Bitnami container images:
@@ -1218,18 +1218,18 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `externalDatabase.notarySignerPassword`    | External database password for notary signer                                                           | `""`                           |
 
 
-### Redis&trade; parameters
+### Redis&reg; parameters
 
 | Name                                      | Description                                                              | Value        |
 | ----------------------------------------- | ------------------------------------------------------------------------ | ------------ |
-| `redis.enabled`                           | Switch to enable or disable the Redis&trade; helm                        | `true`       |
+| `redis.enabled`                           | Switch to enable or disable the Redis&reg; helm                        | `true`       |
 | `redis.auth.enabled`                      | Enable password authentication                                           | `false`      |
-| `redis.auth.password`                     | Redis&trade; password                                                    | `""`         |
-| `redis.auth.existingSecret`               | The name of an existing secret with Redis&trade; credentials             | `""`         |
-| `redis.architecture`                      | Redis&trade; architecture. Allowed values: `standalone` or `replication` | `standalone` |
-| `externalRedis.host`                      | Redis&trade; host                                                        | `localhost`  |
-| `externalRedis.port`                      | Redis&trade; port number                                                 | `6379`       |
-| `externalRedis.password`                  | Redis&trade; password                                                    | `""`         |
+| `redis.auth.password`                     | Redis&reg; password                                                    | `""`         |
+| `redis.auth.existingSecret`               | The name of an existing secret with Redis&reg; credentials             | `""`         |
+| `redis.architecture`                      | Redis&reg; architecture. Allowed values: `standalone` or `replication` | `standalone` |
+| `externalRedis.host`                      | Redis&reg; host                                                        | `localhost`  |
+| `externalRedis.port`                      | Redis&reg; port number                                                 | `6379`       |
+| `externalRedis.password`                  | Redis&reg; password                                                    | `""`         |
 | `externalRedis.coreDatabaseIndex`         | Index for core database                                                  | `0`          |
 | `externalRedis.jobserviceDatabaseIndex`   | Index for jobservice database                                            | `1`          |
 | `externalRedis.registryDatabaseIndex`     | Index for registry database                                              | `2`          |

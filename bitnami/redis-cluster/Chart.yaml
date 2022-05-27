@@ -8,7 +8,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
-description: Redis(TM) is an open source, scalable, distributed in-memory cache for applications. It can be used to store and serve data in the form of strings, hashes, lists, sets and sorted sets.
+description: Redis(R) is an open source, scalable, distributed in-memory cache for applications. It can be used to store and serve data in the form of strings, hashes, lists, sets and sorted sets.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster
 icon: https://bitnami.com/assets/stacks/redis/img/redis-stack-220x234.png

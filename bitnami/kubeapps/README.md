@@ -682,17 +682,17 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `kubeappsapis.serviceAccount.annotations`                                                       | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`                    |
 
 
-### Redis&trade; chart configuration
+### Redis&reg; chart configuration
 
 | Name                            | Description                                                        | Value                                                    |
 | ------------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------- |
 | `redis.auth.enabled`            | Enable password authentication                                     | `true`                                                   |
-| `redis.auth.password`           | Redis&trade; password                                              | `""`                                                     |
-| `redis.auth.existingSecret`     | The name of an existing secret with Redis&trade; credentials       | `""`                                                     |
-| `redis.master.extraFlags`       | Array with additional command line flags for Redis&trade; master   | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
+| `redis.auth.password`           | Redis&reg; password                                              | `""`                                                     |
+| `redis.auth.existingSecret`     | The name of an existing secret with Redis&reg; credentials       | `""`                                                     |
+| `redis.master.extraFlags`       | Array with additional command line flags for Redis&reg; master   | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
 | `redis.master.disableCommands`  | Array with commands to deactivate on Redis&trade                   | `[]`                                                     |
-| `redis.replica.replicaCount`    | Number of Redis&trade; replicas to deploy                          | `1`                                                      |
-| `redis.replica.extraFlags`      | Array with additional command line flags for Redis&trade; replicas | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
+| `redis.replica.replicaCount`    | Number of Redis&reg; replicas to deploy                          | `1`                                                      |
+| `redis.replica.extraFlags`      | Array with additional command line flags for Redis&reg; replicas | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
 | `redis.replica.disableCommands` | Array with commands to deactivate on Redis&trade                   | `[]`                                                     |
 
 

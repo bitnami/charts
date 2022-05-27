@@ -496,7 +496,7 @@ Affected values:
 - `aggregator.securityContext` and `forwarder.securityContext` have been renamed as `aggregator.podSecurityContext` and `forwarder.podSecurityContext` respectively.
 - `rbac.*` and `serviceAccount.*` have been definitely removed. Deprecation warning will no longer show.
 
-Additionally also updates the Redis&trade; subchart to it newest major, 14.0.0, which contains similar changes.
+Additionally also updates the Redis&reg; subchart to it newest major, 14.0.0, which contains similar changes.
 
 ### To 4.0.0
 

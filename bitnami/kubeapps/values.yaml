@@ -2336,20 +2336,20 @@ kubeappsapis:
     automountServiceAccountToken: true
     annotations: {}
 
-## @section Redis&trade; chart configuration
+## @section Redis&reg; chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
 ## Redis will be enabled and installed if `packages.flux.enabled` is true.
 redis:
   ## @param redis.auth.enabled Enable password authentication
-  ## @param redis.auth.password Redis&trade; password
-  ## @param redis.auth.existingSecret The name of an existing secret with Redis&trade; credentials
+  ## @param redis.auth.password Redis&reg; password
+  ## @param redis.auth.existingSecret The name of an existing secret with Redis&reg; credentials
   auth:
     enabled: true
     password: ""
     existingSecret: ""
   master:
-    ## @param redis.master.extraFlags Array with additional command line flags for Redis&trade; master
+    ## @param redis.master.extraFlags Array with additional command line flags for Redis&reg; master
     extraFlags:
       ## The maxmemory configuration directive is used in order to configure Redis to use a specified
       ## amount of memory for the data set. Setting maxmemory to zero results into no memory limits
@@ -2365,9 +2365,9 @@ redis:
     ## @param redis.master.disableCommands Array with commands to deactivate on Redis&trade
     disableCommands: []
   replica:
-    ## @param redis.replica.replicaCount Number of Redis&trade; replicas to deploy
+    ## @param redis.replica.replicaCount Number of Redis&reg; replicas to deploy
     replicaCount: 1
-    ## @param redis.replica.extraFlags Array with additional command line flags for Redis&trade; replicas
+    ## @param redis.replica.extraFlags Array with additional command line flags for Redis&reg; replicas
     extraFlags:
       ## The maxmemory configuration directive is used in order to configure Redis to use a specified
       ## amount of memory for the data set. Setting maxmemory to zero results into no memory limits
