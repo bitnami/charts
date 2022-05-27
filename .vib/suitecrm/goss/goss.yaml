@@ -1,10 +1,28 @@
 command:
+    user-id-test:
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+    exit-status: 0
+    stdout: []
+    stderr: []    
 file:
   /opt/bitnami/suitecrm/sugar_version.json:
-    mode: "0644"
+    mode: "0664"
     filetype: file
     contains:
       - sugar_db_version
       - sugar_db_version
+    exists: true
+    group: root
+  /opt/bitnami/suitecrm/config.php:
+    mode: "0664"
+    filetype: file
+    contains:
+      - bitnami-suitecrm
+      - db_config
+    exists: true
+    group: root
+  /opt/bitnami/apache/conf/extra/httpd.conf:
+    mode: "0664"
+    filetype: file
     exists: true
     group: root
