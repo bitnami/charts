@@ -24,7 +24,7 @@
         },
         "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCiAgICBodHRwczogNDQzCnN1aXRlY3JtSG9zdDogYml0bmFtaS1zdWl0ZWNybS5teQpzdWl0ZWNybVVzZXJuYW1lOiB1c2VyCnN1aXRlY3JtUGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNApzdWl0ZWNybVNtdHBIb3N0OiB0ZXN0aG9zdApzdWl0ZWNybVNtdHBQb3J0OiA5MTI1CnN1aXRlY3JtU210cFVzZXI6IHRlc3RIb3N0VXNlcgpzdWl0ZWNybVNtdHBQYXNzd29yZDogdGVzdEhvc3RQYXNzd29yZA==",
         "target_platform": {
-          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
             "name": "M4"
           }
