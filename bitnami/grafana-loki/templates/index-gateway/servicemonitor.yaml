@@ -6,7 +6,7 @@ metadata:
   namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: grafana-loki
-    app.kubernetes.io/component: index-gateway
+    app.kubernetes.io/component: {{ template "grafana-loki.index-gateway.fullname" . }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -32,7 +32,7 @@ spec:
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
       app.kubernetes.io/part-of: grafana-loki
-      app.kubernetes.io/component: indexGateway
+      app.kubernetes.io/component: {{ template "grafana-loki.index-gateway.fullname" . }}
   endpoints:
     - port: http
       {{- if .Values.metrics.serviceMonitor.interval }}
