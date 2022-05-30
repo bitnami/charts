@@ -41,7 +41,7 @@ Obtain the Argo Workflows UI URL:
 Obtain the Argo Workflows access token:
 
   SECRET=$(kubectl get sa {{ include "argo-workflows.server.serviceAccountName" . }} -o=jsonpath='{.secrets[0].name}')
-  ARGO_TOKEN="Bearer $(kubectl get secret $SECRET -o=jsonpath='{.data.token}' | base64 --decode)"
+  ARGO_TOKEN="Bearer $(kubectl get secret $SECRET -o=jsonpath='{.data.token}' | base64 -d)"
   echo "$ARGO_TOKEN"
 
 {{- end }}
