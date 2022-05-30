@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | -------------------------------------------------------------- | ----------------------------- |
 | `tempo.image.registry`                 | Grafana Tempo image registry                                   | `docker.io`                   |
 | `tempo.image.repository`               | Grafana Tempo image repository                                 | `bitnami/grafana-tempo`       |
-| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)       | `1.3.2-debian-10-r35`         |
+| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)       | `1.4.1-debian-10-r17`         |
 | `tempo.image.pullPolicy`               | Grafana Tempo image pull policy                                | `IfNotPresent`                |
 | `tempo.image.pullSecrets`              | Grafana Tempo image pull secrets                               | `[]`                          |
 | `tempo.memBallastSizeMbs`              | Tempo components memory ballast size in MB                     | `1024`                        |
@@ -181,6 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.service.ports.http`               | Compactor HTTP service port                                      | `3100`      |
 | `compactor.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `compactor.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
+| `compactor.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `compactor.service.clusterIP`                | Compactor service Cluster IP                                     | `""`        |
 | `compactor.service.loadBalancerIP`           | Compactor service Load Balancer IP                               | `""`        |
 | `compactor.service.loadBalancerSourceRanges` | Compactor service Load Balancer sources                          | `[]`        |
@@ -260,6 +261,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `distributor.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
 | `distributor.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
+| `distributor.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `distributor.service.clusterIP`                | Distributor service Cluster IP                                   | `""`        |
 | `distributor.service.loadBalancerIP`           | Distributor service Load Balancer IP                             | `""`        |
 | `distributor.service.loadBalancerSourceRanges` | Distributor service Load Balancer sources                        | `[]`        |
@@ -353,6 +355,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `ingester.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
 | `ingester.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
+| `ingester.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `ingester.service.clusterIP`                | Ingester service Cluster IP                                      | `""`        |
 | `ingester.service.loadBalancerIP`           | Ingester service Load Balancer IP                                | `""`        |
 | `ingester.service.loadBalancerSourceRanges` | Ingester service Load Balancer sources                           | `[]`        |
@@ -432,6 +435,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `querier.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
 | `querier.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
+| `querier.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `querier.service.clusterIP`                | Querier service Cluster IP                                       | `""`        |
 | `querier.service.loadBalancerIP`           | Querier service Load Balancer IP                                 | `""`        |
 | `querier.service.loadBalancerSourceRanges` | Querier service Load Balancer sources                            | `[]`        |
@@ -501,14 +505,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.initContainers`                              | Add additional init containers to the queryFrontend pod(s)                                              | `[]`                          |
 | `queryFrontend.query.image.registry`                        | Grafana Tempo Query image registry                                                                      | `docker.io`                   |
 | `queryFrontend.query.image.repository`                      | Grafana Tempo Query image repository                                                                    | `bitnami/grafana-tempo-query` |
-| `queryFrontend.query.image.tag`                             | Grafana Tempo Query image tag (immutable tags are recommended)                                          | `1.3.2-debian-10-r37`         |
+| `queryFrontend.query.image.tag`                             | Grafana Tempo Query image tag (immutable tags are recommended)                                          | `1.4.1-debian-10-r18`         |
 | `queryFrontend.query.image.pullPolicy`                      | Grafana Tempo Query image pull policy                                                                   | `IfNotPresent`                |
 | `queryFrontend.query.image.pullSecrets`                     | Grafana Tempo Query image pull secrets                                                                  | `[]`                          |
 | `queryFrontend.query.configuration`                         | Query sidecar configuration                                                                             | `""`                          |
 | `queryFrontend.query.containerPorts.jaegerMetrics`          | queryFrontend query sidecar Jaeger metrics container port                                               | `16687`                       |
 | `queryFrontend.query.containerPorts.jaegerUI`               | queryFrontend query sidecar Jaeger UI container port                                                    | `16686`                       |
-| `queryFrontend.query.jaegerMetricsContainerPort`            | Jaeger metrics container port                                                                           | `16687`                       |
-| `queryFrontend.query.jaegerUIContainerPort`                 | Jaeger UI container port                                                                                | `16686`                       |
 | `queryFrontend.query.existingConfigmap`                     | Name of a configmap with the query configuration                                                        | `""`                          |
 | `queryFrontend.query.extraEnvVars`                          | Array with extra environment variables to add to queryFrontend nodes                                    | `[]`                          |
 | `queryFrontend.query.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for queryFrontend nodes                            | `""`                          |
@@ -555,6 +557,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `queryFrontend.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
 | `queryFrontend.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
+| `queryFrontend.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `queryFrontend.service.clusterIP`                | queryFrontend service Cluster IP                                 | `""`        |
 | `queryFrontend.service.loadBalancerIP`           | queryFrontend service Load Balancer IP                           | `""`        |
 | `queryFrontend.service.loadBalancerSourceRanges` | queryFrontend service Load Balancer sources                      | `[]`        |
@@ -570,7 +573,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.enabled`                               | Enable vulture deployment                                                                         | `true`                          |
 | `vulture.image.registry`                        | Grafana Vulture image registry                                                                    | `docker.io`                     |
 | `vulture.image.repository`                      | Grafana Vulture image repository                                                                  | `bitnami/grafana-tempo-vulture` |
-| `vulture.image.tag`                             | Grafana Vulture image tag (immutable tags are recommended)                                        | `1.3.2-debian-10-r38`           |
+| `vulture.image.tag`                             | Grafana Vulture image tag (immutable tags are recommended)                                        | `1.4.1-debian-10-r18`           |
 | `vulture.image.pullPolicy`                      | Grafana Vulture image pull policy                                                                 | `IfNotPresent`                  |
 | `vulture.image.pullSecrets`                     | Grafana Vulture image pull secrets                                                                | `[]`                            |
 | `vulture.extraEnvVars`                          | Array with extra environment variables to add to vulture nodes                                    | `[]`                            |
@@ -639,6 +642,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.service.ports.http`               | Vulture HTTP service port                                        | `3100`      |
 | `vulture.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
 | `vulture.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
+| `vulture.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `vulture.service.clusterIP`                | Vulture service Cluster IP                                       | `""`        |
 | `vulture.service.loadBalancerIP`           | Vulture service Load Balancer IP                                 | `""`        |
 | `vulture.service.loadBalancerSourceRanges` | Vulture service Load Balancer sources                            | `[]`        |
@@ -654,7 +658,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r384`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r435`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |

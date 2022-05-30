@@ -4,22 +4,28 @@ kind: Service
 metadata:
   name: {{ template "kube-prometheus.fullname" . }}-kube-proxy
   namespace: {{ .Values.kubeProxy.namespace }}
-  labels: {{- include "kube-prometheus.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: kube-proxy
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
+  type: ClusterIP
   clusterIP: None
   ports:
     - name: http-metrics
-      port: {{ .Values.kubeProxy.service.port }}
+      port: {{ .Values.kubeProxy.service.ports.http }}
       protocol: TCP
-      targetPort: {{ .Values.kubeProxy.service.targetPort }}
-{{- if .Values.kubeProxy.endpoints }}{{- else }}
+      targetPort: {{ .Values.kubeProxy.service.targetPorts.http }}
+  {{- if not .Values.kubeProxy.endpoints }}
   selector:
     {{- if .Values.kubeProxy.service.selector }}
-    {{ toYaml .Values.kubeProxy.service.selector | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.kubeProxy.service.selector "context" $ ) | nindent 4 }}
     {{- else }}
     k8s-app: kube-proxy
     {{- end }}
-{{- end }}
-  type: ClusterIP
+  {{- end }}
 {{- end -}}

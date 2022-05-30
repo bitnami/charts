@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -68,10 +68,10 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.grafana.podSecurityContext.enabled }}
-      securityContext:
-        runAsUser: {{ .Values.grafana.podSecurityContext.runAsUser }}
-        fsGroup: {{ .Values.grafana.podSecurityContext.fsGroup }}
-        runAsNonRoot: {{ .Values.grafana.podSecurityContext.runAsNonRoot }}
+      securityContext: {{- omit .Values.grafana.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.grafana.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.grafana.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
         {{- if .Values.volumePermissions.enabled }}

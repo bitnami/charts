@@ -53,7 +53,7 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 8.5.3-debian-10-r1
+  tag: 8.5.3-debian-10-r5
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -66,10 +66,6 @@ image:
   ## pullSecrets:
   ##   - myRegistryKeySecretName
   pullSecrets: []
-## @param hostAliases Add deployment host aliases
-## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-##
-hostAliases: []
 ## Admin credentials configuration
 ##
 admin:
@@ -220,10 +216,18 @@ grafana:
   ##
   updateStrategy:
     type: RollingUpdate
+  ## @param grafana.hostAliases Add deployment host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## @param grafana.schedulerName Alternative scheduler
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## @param grafana.terminationGracePeriodSeconds In seconds, time the given to the Grafana pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
   ## @param grafana.priorityClassName Priority class name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
@@ -431,10 +435,10 @@ grafana:
   ##     mountPath: /opt/bitnami/grafana/my-stuff
   ##
   extraVolumeMounts: []
-  ## @param grafana.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes
+  ## @param grafana.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Grafana nodes
   ##
   extraEnvVarsCM: ""
-  ## @param grafana.extraEnvVarsSecret Name of existing Secret containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes
+  ## @param grafana.extraEnvVarsSecret Name of existing Secret containing extra env vars for Grafana nodes
   ##
   extraEnvVarsSecret: ""
   ## @param grafana.extraEnvVars Array containing extra env vars to configure Grafana
@@ -544,6 +548,17 @@ service:
   ## @param service.extraPorts Extra port to expose on Redmine service
   ##
   extraPorts: []
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 ## Configure the ingress resource that allows you to access the
 ## Grafana installation. Set up the URL
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -637,7 +652,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -687,16 +702,21 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
-    ## @param metrics.serviceMonitor.metricRelabelings Specify Metric Relabellings to add to the scrape endpoint
-    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmetricsendpoint
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     metricRelabelings: []
     ## @param metrics.serviceMonitor.honorLabels Labels to honor to add to the scrape endpoint
     ##
     honorLabels: false
-    ## @param metrics.serviceMonitor.additionalLabels Additional custom labels for the ServiceMonitor
+    ## DEPRECATED metrics.serviceMonitor.additionalLabels - It will be removed in a future release, please use metrics.serviceMonitor.labels instead
+    ## @param metrics.serviceMonitor.labels Additional custom labels for the ServiceMonitor
     ##
-    additionalLabels: {}
+    labels: {}
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
@@ -742,7 +762,7 @@ imageRenderer:
   image:
     registry: docker.io
     repository: bitnami/grafana-image-renderer
-    tag: 3.4.2-debian-10-r55
+    tag: 3.4.2-debian-10-r60
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -758,25 +778,51 @@ imageRenderer:
   ## @param imageRenderer.replicaCount Number of Grafana Image Renderer Pod replicas
   ##
   replicaCount: 1
+  ## @param imageRenderer.updateStrategy.type Grafana Image Renderer deployment strategy type.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
+  ##
+  updateStrategy:
+    type: RollingUpdate
   ## @param imageRenderer.podAnnotations Grafana Image Renderer Pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param imageRenderer.podLabels Extra labels for Grafana Image Renderer pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
   ## @param imageRenderer.nodeSelector Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector: {}
+  ## @param imageRenderer.hostAliases Grafana Image Renderer pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## @param imageRenderer.tolerations Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param imageRenderer.topologySpreadConstraints Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in
-  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## @param imageRenderer.priorityClassName Grafana Image Renderer pods' priorityClassName
   ##
-  ## topologySpreadConstraints:
-  ##   - maxSkew: 1
-  ##     topologyKey: failure-domain.beta.kubernetes.io/zone
-  ##     whenUnsatisfiable: DoNotSchedule
+  priorityClassName: ""
+  ## @param imageRenderer.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param imageRenderer.terminationGracePeriodSeconds In seconds, time the given to the Grafana Image Renderer pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param imageRenderer.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
   ## @param imageRenderer.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -897,6 +943,17 @@ imageRenderer:
     ## @param imageRenderer.service.extraPorts Extra port to expose on Redmine service
     ##
     extraPorts: []
+    ## @param imageRenderer.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param imageRenderer.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
   ## Enable Prometheus metrics endpoint
   ##
   metrics:
@@ -918,6 +975,9 @@ imageRenderer:
       ## @param imageRenderer.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
       ##
       namespace: ""
+      ## @param imageRenderer.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
       ## @param imageRenderer.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
       ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ## e.g:
@@ -930,6 +990,27 @@ imageRenderer:
       ## scrapeTimeout: 10s
       ##
       scrapeTimeout: ""
+      ## @param imageRenderer.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+      ##
+      relabelings: []
+      ## @param imageRenderer.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+      ##
+      metricRelabelings: []
+      ## @param imageRenderer.metrics.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param imageRenderer.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param imageRenderer.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
     ## Prometheus Operator PrometheusRule configuration
     ##
     prometheusRule:
@@ -963,18 +1044,38 @@ imageRenderer:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-  ## @param imageRenderer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes
+  ## @param imageRenderer.sidecars Add additional sidecar containers to the Grafana Image Renderer pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param imageRenderer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Grafana Image Renderer nodes
   ##
   extraEnvVarsCM: ""
-  ## @param imageRenderer.extraEnvVarsSecret Name of existing Secret containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes
+  ## @param imageRenderer.extraEnvVarsSecret Name of existing Secret containing extra env vars for Grafana Image Renderer nodes
   ##
   extraEnvVarsSecret: ""
+  ## @param imageRenderer.extraVolumes Optionally specify extra list of additional volumes for the Grafana Image Renderer pod(s)
+  ##
+  extraVolumes: []
+  ## @param imageRenderer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Grafana Image Renderer container(s)
+  ##
+  extraVolumeMounts: []
   ## @param imageRenderer.command Override default container command (useful when using custom images)
   ##
   command: []
   ## @param imageRenderer.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param imageRenderer.lifecycleHooks for the Grafana Image Renderer container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
 
 ## @section Volume permissions init Container Parameters
 
@@ -998,7 +1099,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r432
+    tag: 10-debian-10-r436
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
