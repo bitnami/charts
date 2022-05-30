@@ -11,7 +11,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
-description: HAProxy is a TCP proxy and a HTTP reverse proxy. It supports SSL termination and offloading, TCP and HTTP normalization, traffic regulation, caching and protection against DDoS attacks.
+description: HAProxy is a high-performance, open-source load balancer and reverse proxy for TCP and HTTP applications. This image is optimized with Intel(R) QuickAssist Technology OpenSSL* Engine (QAT_Engine).
 home: https://www.haproxy.org/
 icon: https://bitnami.com/assets/stacks/haproxy/img/haproxy-stack-220x234.png
 keywords:
@@ -26,4 +26,4 @@ name: haproxy-intel
 sources:
   - https://github.com/bitnami/bitnami-docker-haproxy-intel
   - https://github.com/haproxytech/haproxy
-version: 0.1.1
+version: 0.1.2
