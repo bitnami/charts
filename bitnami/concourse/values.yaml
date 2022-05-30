@@ -67,7 +67,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/concourse
-  tag: 7.7.1-debian-10-r50
+  tag: 7.7.1-debian-10-r54
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -994,6 +994,12 @@ service:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
+    ## @param service.web.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param service.web.clusterIP Concourse web service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1041,6 +1047,12 @@ service:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
+    ## @param service.workerGateway.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param service.workerGateway.clusterIP Concourse worker gateway service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1164,7 +1176,7 @@ ingress:
   ## - host: concourse.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: concourse-svc
   ##           port:
@@ -1190,7 +1202,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r431
+    tag: 10-debian-10-r434
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

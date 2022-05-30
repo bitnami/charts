@@ -20,7 +20,7 @@ spec:
   ingress:
     # Allow inbound connections
     - ports:
-        - port: {{ .Values.service.port }}
+        - port: {{ .Values.service.ports.postgresql }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
@@ -31,5 +31,5 @@ spec:
       {{- end }}
     # Allow prometheus scrapes
     - ports:
-        - port: {{ .Values.metrics.service.port }}
+        - port: {{ .Values.metrics.service.ports.metrics }}
 {{- end }}

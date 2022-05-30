@@ -26,6 +26,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override contour.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
@@ -74,7 +77,7 @@ configInline:
   tls:
     fallback-certificate: {}
   leaderelection:
-    configmap-namespace: "{{ .Release.Namespace }}"
+    configmap-namespace: '{{ include "common.names.namespace" . }}'
   envoy-service-name: '{{ include "common.names.fullname" . }}-envoy'
   accesslog-format: envoy
 
@@ -114,6 +117,19 @@ contour:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ""
+  ## @param contour.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param contour.terminationGracePeriodSeconds In seconds, time the given to the Contour pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param contour.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## Configures the ports the Envoy proxy listens on
   ## @param contour.containerPorts.xds Set xds port inside Contour pod
   ## @param contour.containerPorts.metrics Set metrics port inside Contour pod
@@ -225,10 +241,14 @@ contour:
   podAnnotations: {}
   ## @param contour.serviceAccount.create Create a serviceAccount for the Contour pod
   ## @param contour.serviceAccount.name Use the serviceAccount with the specified name, a name is generated using the fullname template
+  ## @param contour.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param contour.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
     create: true
     name: ""
+    automountServiceAccountToken: true
+    annotations: {}
   ## Contour Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param contour.podSecurityContext.enabled Default backend Pod securityContext
@@ -241,7 +261,7 @@ contour:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param contour.containerSecurityContext.enabled Envoy Container securityContext
   ## @param contour.containerSecurityContext.runAsUser User ID for the Contour container (to change this, http and https containerPorts must be set to >1024)
-  ## @param contour.containerSecurityContext.runAsNonRoot Run as noon root
+  ## @param contour.containerSecurityContext.runAsNonRoot Run as non root
   ##
   containerSecurityContext:
     enabled: true
@@ -294,10 +314,14 @@ contour:
   certgen:
     ## @param contour.certgen.serviceAccount.create Create a serviceAccount for the Contour pod
     ## @param contour.certgen.serviceAccount.name Use the serviceAccount with the specified name, a name is generated using the fullname template
+    ## @param contour.certgen.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ## @param contour.certgen.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     serviceAccount:
       create: true
       name: ""
+      automountServiceAccountToken: true
+      annotations: {}
     ## @param contour.certgen.certificateLifetime Generated certificate lifetime (in days).
     ##
     certificateLifetime: 365
@@ -350,6 +374,17 @@ contour:
     ## @param contour.service.extraPorts Extra port to expose on Contour service
     ##
     extraPorts: []
+    ## @param contour.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param contour.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
   ## @param contour.initContainers [array] Attach additional init containers to Contour pods
   ## For example:
   ## initContainers:
@@ -449,6 +484,15 @@ envoy:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ""
+  ## @param envoy.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param envoy.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## @param envoy.extraArgs [array] Extra arguments passed to Envoy container
   ##
   extraArgs: []
@@ -581,6 +625,10 @@ envoy:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param envoy.podLabels Extra labels for Envoy pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param envoy.podSecurityContext.enabled Envoy Pod securityContext
@@ -595,10 +643,12 @@ envoy:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param envoy.containerSecurityContext.enabled Envoy Container securityContext
   ## @param envoy.containerSecurityContext.runAsUser User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024)
+  ## @param envoy.containerSecurityContext.runAsNonRoot Run as non root
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
   ## @param envoy.hostNetwork Envoy Pod host network access
   ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#host-namespaces
   ##
@@ -613,12 +663,14 @@ envoy:
   ## @param envoy.serviceAccount.create Specifies whether a ServiceAccount should be created
   ## @param envoy.serviceAccount.name The name of the ServiceAccount to use. If not set and create is true, a name is generated using the fullname template
   ## @param envoy.serviceAccount.automountServiceAccountToken Whether to auto mount API credentials for a service account
+  ## @param envoy.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
   ##
   serviceAccount:
     create: true
     name: ""
     automountServiceAccountToken: false
+    annotations: {}
   ## @param envoy.livenessProbe.enabled Enable livenessProbe
   ## @param envoy.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param envoy.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -732,6 +784,17 @@ envoy:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
     ##
     extraPorts: []
+    ## @param envoy.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param envoy.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
   ## @param envoy.useHostPort Enable/disable `hostPort` for TCP/80 and TCP/443
   ##
   useHostPort: true
@@ -908,10 +971,12 @@ defaultBackend:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param defaultBackend.containerSecurityContext.enabled Default backend container securityContext
   ## @param defaultBackend.containerSecurityContext.runAsUser User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024)
+  ## @param defaultBackend.containerSecurityContext.runAsNonRoot Run as non root
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsNonRoot: true
   ## Default backend containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1002,6 +1067,19 @@ defaultBackend:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ""
+  ## @param defaultBackend.schedulerName Name of the k8s scheduler (other than default)
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param defaultBackend.terminationGracePeriodSeconds In seconds, time the given to the default backend pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: 60
+  ## @param defaultBackend.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## @param defaultBackend.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
@@ -1071,24 +1149,23 @@ ingress:
   ## Enable Ingress.
   ##
   enabled: false
-
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
   ## @param ingress.certManager Add annotations for cert-manager
   ##
   certManager: false
-
   ## @param ingress.annotations Annotations to be added to the web ingress.
   ## Example:
   ##   kubernetes.io/ingress.class: nginx
   ##   kubernetes.io/tls-acme: 'true'
   ##
   annotations: {}
-
   ## Either `hosts` or `rulesOverride` must be provided if Ingress is enabled.
   ## `hosts` sets up the Ingress with default rules per provided hostname.
   ## @param ingress.hostname Hostname for the Ingress object
   ##
   hostname: contour.local
-
   ## @param ingress.path The Path to Concourse
   ##
   path: /
@@ -1097,20 +1174,16 @@ ingress:
   ## `rulesOverride` allows the user to define the full set of ingress rules, for more complex Ingress setups.
   ##
   rulesOverride: []
-
   ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
   ##
   selfSigned: false
-
   ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
   ##
   ingressClassName: ""
-
   ## @param ingress.extraPaths Add additional arbitrary paths that may need to be added to the ingress under the main host.
   ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
   ##
   extraPaths: []
-
   ## @param ingress.tls TLS configuration.
   ## Secrets must be manually created in the namespace.
   ## Example:
@@ -1119,11 +1192,9 @@ ingress:
   ##       - concourse.domain.com
   ##
   tls: false
-
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
-
   ## @param ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## extraHosts:
@@ -1131,7 +1202,6 @@ ingress:
   ##   path: /
   ##
   extraHosts: []
-
   ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
@@ -1140,7 +1210,6 @@ ingress:
   ##   secretName: concourse.local-tls
   ##
   extraTls: []
-
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
   ## -----BEGIN RSA PRIVATE KEY-----
@@ -1163,7 +1232,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -1184,6 +1253,7 @@ ingress:
 ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
 ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
 ## @param metrics.serviceMonitor.selector Specify honorLabels parameter to add the scrape endpoint
+## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
 ##
 metrics:
   serviceMonitor:
@@ -1196,6 +1266,7 @@ metrics:
     honorLabels: false
     scrapeTimeout: ""
     selector: {}
+    labels: {}
 
 ## @section Other parameters
 ##

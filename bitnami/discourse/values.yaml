@@ -68,7 +68,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 2.8.3-debian-10-r31
+  tag: 2.8.3-debian-10-r36
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -507,6 +507,12 @@ service:
   ## ref: https://kubernetes.io/docs/user-guide/services/
   ##
   sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
   ## @param service.clusterIP Discourse service Cluster IP
   ## e.g.:
   ## clusterIP: None
@@ -631,7 +637,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
