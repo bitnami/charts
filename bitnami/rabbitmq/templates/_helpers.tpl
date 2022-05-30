@@ -147,16 +147,16 @@ Validate values of rabbitmq - LDAP support
 {{- define "rabbitmq.validateValues.ldap" -}}
 {{- if .Values.ldap.enabled }}
 {{- $serversListLength := len .Values.ldap.servers }}
-{{- if or (not (gt $serversListLength 0)) (not (and .Values.ldap.port .Values.ldap.user_dn_pattern)) }}
+{{- $userDnPattern := coalesce .Values.ldap.user_dn_pattern .Values.ldap.userDnPattern }}
+{{- if or (and (not (gt $serversListLength 0)) (empty .Values.ldap.uri)) (and (not $userDnPattern) (not .Values.ldap.basedn)) }}
 rabbitmq: LDAP
-    Invalid LDAP configuration. When enabling LDAP support, the parameters "ldap.servers",
-    "ldap.port", and "ldap. user_dn_pattern" are mandatory. Please provide them:
-
+    Invalid LDAP configuration. When enabling LDAP support, the parameters "ldap.servers" or "ldap.uri" are mandatory
+    to configure the connection and "ldap.userDnPattern" or "ldap.basedn" are necessary to lookup the users. Please provide them:
     $ helm install {{ .Release.Name }} bitnami/rabbitmq \
       --set ldap.enabled=true \
-      --set ldap.servers[0]="lmy-ldap-server" \
+      --set ldap.servers[0]=my-ldap-server" \
       --set ldap.port="389" \
-      --set user_dn_pattern="cn=${username},dc=example,dc=org"
+      --set ldap.userDnPattern="cn=${username},dc=example,dc=org"
 {{- end -}}
 {{- end -}}
 {{- end -}}
