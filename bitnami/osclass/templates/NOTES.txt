@@ -44,7 +44,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 2. Get your Osclass login credentials by running:
 
   echo Username: {{ .Values.osclassUsername }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "osclass.secretName" . }} -o jsonpath="{.data.osclass-password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "osclass.secretName" . }} -o jsonpath="{.data.osclass-password}" | base64 -d)
 
 {{- else -}}
 
@@ -57,7 +57,7 @@ host. To configure Osclass to use and external database host:
 
 1. Complete your Osclass deployment by running:
 
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "osclass.secretName" . }} -o jsonpath="{.data.osclass-password}" | base64 --decode)
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "osclass.secretName" . }} -o jsonpath="{.data.osclass-password}" | base64 -d)
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
 

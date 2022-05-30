@@ -7,7 +7,7 @@ Apache Tomcat is an open-source web server designed to host and run Java-based w
 [Overview of Apache Tomcat](http://tomcat.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -344,7 +344,7 @@ Consequences:
 - Backwards compatibility is not guaranteed. However, you can easily workaround this issue by removing Tomcat deployment before upgrading (the following example assumes that the release name is `tomcat`):
 
 ```console
-$ export TOMCAT_PASSWORD=$(kubectl get secret --namespace default tomcat -o jsonpath="{.data.tomcat-password}" | base64 --decode)
+$ export TOMCAT_PASSWORD=$(kubectl get secret --namespace default tomcat -o jsonpath="{.data.tomcat-password}" | base64 -d)
 $ kubectl delete deployments.apps tomcat
 $ helm upgrade tomcat bitnami/tomcat --set tomcatPassword=$TOMCAT_PASSWORD
 ```

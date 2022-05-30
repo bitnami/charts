@@ -82,7 +82,7 @@ Redis&trade; can be accessed via port {{ .Values.master.service.ports.redis }} o
 
 To get your password run:
 
-    export REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "redis.secretName" . }} -o jsonpath="{.data.redis-password}" | base64 --decode)
+    export REDIS_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "redis.secretName" . }} -o jsonpath="{.data.redis-password}" | base64 -d)
 
 {{- end }}
 

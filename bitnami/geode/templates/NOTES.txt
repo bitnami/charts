@@ -50,8 +50,8 @@ In order to replicate the container startup scripts execute this command:
 
 To obtain the credentials to access Apache Geode locators, run:
 
-    export GEODE_SECURITY_USERNAME=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "geode.secretName" . }} -o jsonpath="{.data.username}" | base64 --decode)
-    export GEODE_SECURITY_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "geode.secretName" . }} -o jsonpath="{.data.password}" | base64 --decode)
+    export GEODE_SECURITY_USERNAME=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "geode.secretName" . }} -o jsonpath="{.data.username}" | base64 -d)
+    export GEODE_SECURITY_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "geode.secretName" . }} -o jsonpath="{.data.password}" | base64 -d)
 
 {{- end }}
 

@@ -43,7 +43,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 2. Login with the following admin user below to create a Notebook:
 
   echo Admin user: {{ .Values.hub.adminUser }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-hub -o jsonpath="{.data['values\.yaml']}" | base64 --decode | awk -F: '/password/ {gsub(/[ \t]+/, "", $2);print $2}')
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-hub -o jsonpath="{.data['values\.yaml']}" | base64 -d | awk -F: '/password/ {gsub(/[ \t]+/, "", $2);print $2}')
 
 {{- include "common.warnings.rollingTag" .Values.hub.image }}
 {{- include "common.warnings.rollingTag" .Values.proxy.image }}
