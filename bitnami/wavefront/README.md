@@ -7,7 +7,7 @@ Wavefront is a high-performance streaming analytics platform for monitoring and 
 [Overview of Wavefront](https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes)
 
 
-                           
+
 ## TL;DR
 
 ```console
@@ -336,6 +336,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 4.0.0
+
+This major updates the kube-state-metrics subchart to it newest major, 3.0.0, which renames several of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics#to-300).
 
 ### To 3.0.0
 
