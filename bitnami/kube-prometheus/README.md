@@ -7,7 +7,7 @@ Prometheus Operator provides easy monitoring definitions for Kubernetes services
 [Overview of Prometheus Operator](https://github.com/coreos/prometheus-operator)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -755,6 +755,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 ```bash
 $ helm upgrade my-release bitnami/kube-prometheus
 ```
+
+### To 8.0.0
+
+This major updates the kube-state-metrics subchart to its newest major, 3.0.0, and the node-exporter subchart to its newest major, 3.0.0. Both releases contains name changes to a few of its values. For more information, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics#to-300) and [node-exporter upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/node-exporter#to-300).
 
 ### To 7.0.0
 
