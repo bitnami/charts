@@ -127,7 +127,7 @@ data:
     elif ! is_empty_value "$current_primary" && [[ "$MONGODB_ADVERTISED_HOSTNAME:$MONGODB_ADVERTISED_PORT_NUMBER" != "$current_primary" ]]; then
         info "Current primary is different from this node. Configuring the node as replica of ${current_primary}"
         export MONGODB_REPLICA_SET_MODE="secondary"
-        export MONOGDB_INITIAL_PRIMARY_HOST="${current_primary%:*}"
+        export MONGODB_INITIAL_PRIMARY_HOST="${current_primary%:*}"
         export MONGODB_INITIAL_PRIMARY_PORT_NUMBER="${current_primary#*:}"
         export MONGODB_SET_SECONDARY_OK="yes"
     elif [[ "$MY_POD_NAME" = "{{ $fullname }}-0" ]]; then
