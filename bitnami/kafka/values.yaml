@@ -713,6 +713,15 @@ service:
   ## @param service.annotations Additional custom annotations for Kafka service
   ##
   annotations: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
+    ## @param service.headless.labels Labels for the headless service.
+    ##
+    labels: {}
   ## @param service.extraPorts Extra ports to expose in the Kafka service (normally used with the `sidecar` value)
   ##
   extraPorts: []
