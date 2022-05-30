@@ -1016,44 +1016,44 @@ git:
 ## LDAP configuration
 ## @param ldap.enabled Enable LDAP authentication
 ## @param ldap.uri Server URI, eg. ldap://ldap_server:389
-## @param ldap.base Base of the search, eg. ou=example,o=org
-## @param ldap.uidField if doing an indirect bind to ldap, this is the field that matches the username when searching for the account to bind to
-## @param ldap.binddn Bind DN
+## DEPRECATED ldap.base It will be removed in a future release, please use 'ldap.basedn' instead
+## @param ldap.basedn Base of the search, eg. ou=example,o=org.
+## DEPRECATED ldap.uidField It will be removed in a future release,, please use 'ldap.searchAttribute' instead
+## @param ldap.searchAttribute if doing an indirect bind to ldap, this is the field that matches the username when searching for the account to bind to
+## @param ldap.binddn DN of the account used to search in the LDAP server.
 ## @param ldap.bindpw Bind Password
 ## @param ldap.userRegistration Set to True to enable user self registration
 ## @param ldap.userRegistrationRole Set role name to be assign when a user registers himself. This role must already exist. Mandatory when using ldap.userRegistration
 ## @param ldap.rolesMapping mapping from LDAP DN to a list of roles
 ## @param ldap.rolesSyncAtLogin replace ALL the user's roles each login, or only on registration
-## @para
 ##
 ldap:
   enabled: false
-  uri: 'ldap://ldap_server:389'
-  base: 'dc=example,dc=org'
-  uidField: 'cn'
-  binddn: 'cn=admin,dc=example,dc=org'
-  bindpw: ''
+  uri: "ldap://ldap_server:389"
+  basedn: "dc=example,dc=org"
+  searchAttribute: "cn"
+  binddn: "cn=admin,dc=example,dc=org"
+  bindpw: ""
   userRegistration: 'True'
-  userRegistrationRole: 'Public'
+  userRegistrationRole: "Public"
   rolesMapping: '{ "cn=All,ou=Groups,dc=example,dc=org": ["User"], "cn=Admins,ou=Groups,dc=example,dc=org": ["Admin"], }'
   rolesSyncAtLogin: 'True'
 
   ## SSL/TLS parameters for LDAP
   ## @param ldap.tls.enabled Enabled TLS/SSL for LDAP, you must include the CA file.
   ## @param ldap.tls.allowSelfSigned Allow to use self signed certificates
-  ## @param ldap.tls.CAcertificateSecret Name of the existing secret containing the certificate CA file that will be used by ldap client.
-  ## @param ldap.tls.CAcertificateFilename LDAP CA cert filename
+  ## DEPRECATED ldap.tls.CAcertificateSecret It will be removed in a future release, please use ldap.tls.certificatesSecret instead
+  ## @param ldap.tls.certificatesSecret Name of the existing secret containing the certificate CA file that will be used by ldap client
+  ## @param ldap.tls.certificatesMountPath Where LDAP certifcates are mounted.
+  ## DEPRECATED ldap.tls.CAcertificateFilename It will be removed in a future release, please use ldap.tls.CAFilename instead
+  ## @param ldap.tls.CAFilename LDAP CA cert filename
   ##
   tls:
     enabled: false
     allowSelfSigned: true
-    ## Cloud be create with: kubectl create secret generic airflow-secret --from-file=./ca.pem
-    ##
-    CAcertificateSecret: ""
-    ## Example:
-    ## CAcertificateFilename: 'ca.pem'
-    ##
-    CAcertificateFilename: ""
+    certificatesSecret: ""
+    certificatesMountPath: /opt/bitnami/airflow/conf/certs
+    CAFilename: ""
 
 ## @section Traffic Exposure Parameters
 

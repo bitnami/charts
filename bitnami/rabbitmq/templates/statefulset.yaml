@@ -32,7 +32,7 @@ spec:
         {{- if .Values.commonAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
-        checksum/config: {{ include (print $.Template.BasePath "/configuration.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/config-secret.yaml") . | sha256sum }}
         {{- if or (not .Values.auth.existingErlangSecret) (not .Values.auth.existingPasswordSecret) .Values.extraSecrets }}
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
@@ -300,6 +300,10 @@ spec:
             - name: certs
               mountPath: /opt/bitnami/rabbitmq/certs
             {{- end }}
+            {{- if and .Values.ldap.tls.enabled .Values.ldap.tls.certificatesSecret }}
+            - name: ldap-certs
+              mountPath: {{ .Values.ldap.tls.certificatesMountPath }}
+            {{- end }}
             {{- if .Values.loadDefinition.enabled }}
             - name: load-definition-volume
               mountPath: /app
@@ -324,9 +328,14 @@ spec:
               - key: tls.key
                 path: server_key.pem
         {{- end }}
+        {{- if and .Values.ldap.tls.enabled .Values.ldap.tls.certificatesSecret }}
+        - name: ldap-certs
+          secret:
+            secretName: {{ .Values.ldap.tls.certificatesSecret }}
+        {{- end }}
         - name: configuration
-          configMap:
-            name: {{ printf "%s-config" (include "common.names.fullname" .) }}
+          secret:
+            secretName: {{ printf "%s-config" (include "common.names.fullname" .) }}
             items:
               - key: rabbitmq.conf
                 path: rabbitmq.conf

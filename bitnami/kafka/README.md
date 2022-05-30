@@ -7,7 +7,7 @@ Apache Kafka is a distributed streaming platform designed to build real-time pip
 [Overview of Apache Kafka](http://kafka.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -245,6 +245,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.loadBalancerSourceRanges`                | Kafka service Load Balancer sources                                                               | `[]`                  |
 | `service.externalTrafficPolicy`                   | Kafka service external traffic policy                                                             | `Cluster`             |
 | `service.annotations`                             | Additional custom annotations for Kafka service                                                   | `{}`                  |
+| `service.headless.annotations`                    | Annotations for the headless service.                                                             | `{}`                  |
+| `service.headless.labels`                         | Labels for the headless service.                                                                  | `{}`                  |
 | `service.extraPorts`                              | Extra ports to expose in the Kafka service (normally used with the `sidecar` value)               | `[]`                  |
 | `externalAccess.enabled`                          | Enable Kubernetes external cluster access to Kafka brokers                                        | `false`               |
 | `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs/ports by querying the K8s API          | `false`               |
