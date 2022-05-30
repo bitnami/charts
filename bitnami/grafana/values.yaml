@@ -149,6 +149,57 @@ ldap:
   ## NOTE: When it's set the ldap.configuration parameter is ignored
   ##
   secretName: ""
+  ## @param ldap.uri Server URI, eg. ldap://ldap_server:389
+  ##
+  uri: ""
+  ## @param ldap.binddn DN of the account used to search in the LDAP server.
+  ##
+  binddn: ""
+  ## @param ldap.bindpw Password for binddn account.
+  ##
+  bindpw: ""
+  ## @param ldap.basedn Base DN path where binddn account will search for the users.
+  ##
+  basedn: ""
+  ## @param ldap.searchAttribute Field used to match with the user name (uid, samAccountName, cn, etc). This value will be ignored if 'ldap.searchFilter' is set
+  ##
+  searchAttribute: "uid"
+  ## @param ldap.searchFilter User search filter, for example "(cn=%s)" or "(sAMAccountName=%s)" or "(|(sAMAccountName=%s)(userPrincipalName=%s)"
+  ##
+  searchFilter: ""
+  ## @param ldap.extraConfiguration Extra ldap configuration.
+  ## Example:
+  ##   extraConfiguration: |-
+  ##     # set to true if you want to skip SSL cert validation
+  ##     ssl_skip_verify = false
+  ##     # group_search_filter = "(&(objectClass=posixGroup)(memberUid=%s))"
+  ##     # group_search_filter_user_attribute = "distinguishedName"
+  ##     # group_search_base_dns = ["ou=groups,dc=grafana,dc=org"]
+  ##     # Specify names of the LDAP attributes your LDAP uses
+  ##     [servers.attributes]
+  ##     # member_of = "memberOf"
+  ##     # email =  "email"
+  ##
+  extraConfiguration: ""
+  ## @param ldap.tls.enabled Enabled TLS configuration.
+  ## @param ldap.tls.startTls Use STARTTLS instead of LDAPS.
+  ## @param ldap.tls.skipVerify Skip any SSL verification (hostanames or certificates)
+  ## @param ldap.tls.certificatesMountPath Where LDAP certifcates are mounted.
+  ## @param ldap.tls.certificatesSecret Secret with LDAP certificates.
+  ## @param ldap.tls.CAFilename  CA certificate filename. Should match with the CA entry key in the ldap.tls.certificatesSecret.
+  ## @param ldap.tls.certFilename Client certificate filename to authenticate against the LDAP server. Should match with certificate the entry key in the ldap.tls.certificatesSecret.
+  ## @param ldap.tls.certKeyFilename Client Key filename to authenticate against the LDAP server. Should match with certificate the entry key in the ldap.tls.certificatesSecret.
+  ##
+  tls:
+    enabled: false
+    startTls: false
+    skipVerify: false
+    certificatesMountPath: /opt/bitnami/grafana/conf/ldap/
+    certificatesSecret: ""
+    CAFilename: ""
+    certFilename: ""
+    certKeyFilename: ""
+
 ## Parameters to override the default grafana.ini file.
 ## It is needed to create a configmap or a secret containing the grafana.ini file.
 ## @param config.useGrafanaIniFile Allows to load a `grafana.ini` file

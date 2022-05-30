@@ -44,7 +44,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 2. Get your Moodle&trade; login credentials by running:
 
   echo Username: {{ .Values.moodleUsername }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "moodle.secretName" . }} -o jsonpath="{.data.moodle-password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "moodle.secretName" . }} -o jsonpath="{.data.moodle-password}" | base64 -d)
 
 {{- else -}}
 
@@ -57,7 +57,7 @@ host. To configure Moodle&trade; to use and external database host:
 
 1. Complete your Moodle&trade; deployment by running:
 
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "moodle.secretName" . }} -o jsonpath="{.data.moodle-password}" | base64 --decode)
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "moodle.secretName" . }} -o jsonpath="{.data.moodle-password}" | base64 -d)
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
 
