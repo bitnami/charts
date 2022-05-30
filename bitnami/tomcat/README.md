@@ -107,7 +107,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `deployment.type`                          | Use Deployment or StatefulSet                                                                                            | `deployment`        |
 | `updateStrategy.type`                      | StrategyType                                                                                                             | `RollingUpdate`     |
 | `containerPorts.http`                      | HTTP port to expose at container level                                                                                   | `8080`              |
-| `containerExtraPorts`                      | Extra ports to expose at container level                                                                                 | `{}`                |
+| `containerExtraPorts`                      | Extra ports to expose at container level                                                                                 | `[]`                |
 | `podSecurityContext.enabled`               | Enable Tomcat pods' Security Context                                                                                     | `true`              |
 | `podSecurityContext.fsGroup`               | Set Tomcat pod's Security Context fsGroup                                                                                | `1001`              |
 | `containerSecurityContext.enabled`         | Enable Tomcat containers' SecurityContext                                                                                | `true`              |
