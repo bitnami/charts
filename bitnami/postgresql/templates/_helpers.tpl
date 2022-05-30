@@ -152,9 +152,7 @@ Get the user-password key.
 Return true if a secret object should be created
 */}}
 {{- define "postgresql.createSecret" -}}
-{{- if or .Values.global.postgresql.auth.existingSecret .Values.auth.existingSecret -}}
-    {{- false -}}
-{{- else -}}
+{{- if not (or .Values.global.postgresql.auth.existingSecret .Values.auth.existingSecret) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}

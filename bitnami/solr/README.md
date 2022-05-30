@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ------------------------------------------------------------- | ----------------------- |
 | `image.registry`                 | Solr image registry                                           | `docker.io`             |
 | `image.repository`               | Solr image repository                                         | `bitnami/solr`          |
-| `image.tag`                      | Solr image tag (immutable tags are recommended)               | `8.11.1-debian-10-r125` |
+| `image.tag`                      | Solr image tag (immutable tags are recommended)               | `9.0.0-debian-10-r4`    |
 | `image.pullPolicy`               | image pull policy                                             | `IfNotPresent`          |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array              | `[]`                    |
 | `image.debug`                    | Specify if debug values should be set                         | `false`                 |
@@ -217,7 +217,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r406`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r434`     |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
@@ -311,6 +311,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Solr Prometheus exporter container(s)                         | `[]`                                                                          |
 | `metrics.initContainers`                        | Add init containers to the Solr Prometheus exporter pod(s)                                                                     | `[]`                                                                          |
 | `metrics.sidecars`                              | Add sidecars to the Solr Prometheus exporter pod(s)                                                                            | `[]`                                                                          |
+| `metrics.service.type`                          | Kubernetes Service type                                                                                                        | `ClusterIP`                                                                   |
 | `metrics.service.ports.http`                    | Solr Prometheus exporter HTTP service port                                                                                     | `8983`                                                                        |
 | `metrics.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                               | `None`                                                                        |
 | `metrics.service.clusterIP`                     | Solr Prometheus exporter service Cluster IP                                                                                    | `""`                                                                          |
