@@ -7,7 +7,7 @@ Joomla! is an award winning open source CMS platform for building websites and a
 [Overview of Joomla!](http://www.joomla.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -417,9 +417,9 @@ To upgrade to `9.0.0`, it should be done reusing the PVCs used to hold both the 
 Obtain the credentials and the names of the PVCs used to hold both the MariaDB and Joomla data on your current release:
 
 ```console
-export JOOMLA_PASSWORD=$(kubectl get secret --namespace default joomla -o jsonpath="{.data.joomla-password}" | base64 --decode)
-export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default joomla-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-export MARIADB_PASSWORD=$(kubectl get secret --namespace default joomla-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export JOOMLA_PASSWORD=$(kubectl get secret --namespace default joomla -o jsonpath="{.data.joomla-password}" | base64 -d)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default joomla-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default joomla-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=joomla -o jsonpath="{.items[0].metadata.name}")
 ```
 

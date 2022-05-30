@@ -175,6 +175,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.ports.http`               | Solr HTTP service port                                                                                                           | `8983`                   |
 | `service.nodePorts.http`           | Node port for the HTTP service                                                                                                   | `""`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.clusterIP`                | Solr service Cluster IP                                                                                                          | `""`                     |
 | `service.loadBalancerIP`           | Solr service Load Balancer IP                                                                                                    | `""`                     |
 | `service.loadBalancerSourceRanges` | Solr service Load Balancer sources                                                                                               | `[]`                     |
@@ -199,15 +200,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence parameters
 
-| Name                        | Description                                    | Value               |
-| --------------------------- | ---------------------------------------------- | ------------------- |
-| `persistence.enabled`       | Use a PVC to persist data.                     | `true`              |
-| `persistence.existingClaim` | A manually managed Persistent Volume and Claim | `""`                |
-| `persistence.storageClass`  | Storage class of backing PVC                   | `""`                |
-| `persistence.accessModes`   | Persistent Volume Access Modes                 | `["ReadWriteOnce"]` |
-| `persistence.size`          | Size of data volume                            | `8Gi`               |
-| `persistence.annotations`   | Persistence annotations for Solr               | `{}`                |
-| `persistence.mountPath`     | Persistence mount path for Solr                | `/bitnami/solr`     |
+| Name                        | Description                                                            | Value               |
+| --------------------------- | ---------------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`       | Use a PVC to persist data.                                             | `true`              |
+| `persistence.existingClaim` | A manually managed Persistent Volume and Claim                         | `""`                |
+| `persistence.storageClass`  | Storage class of backing PVC                                           | `""`                |
+| `persistence.accessModes`   | Persistent Volume Access Modes                                         | `["ReadWriteOnce"]` |
+| `persistence.size`          | Size of data volume                                                    | `8Gi`               |
+| `persistence.annotations`   | Persistence annotations for Solr                                       | `{}`                |
+| `persistence.mountPath`     | Persistence mount path for Solr                                        | `/bitnami/solr`     |
+| `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC | `{}`                |
 
 
 ### Volume Permissions parameters
@@ -301,7 +303,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.nodeSelector`                          | Node labels for Solr Prometheus exporter pods assignment. Evaluated as a template                                              | `{}`                                                                          |
 | `metrics.tolerations`                           | Tolerations for Solr Prometheus exporter pods assignment. Evaluated as a template                                              | `[]`                                                                          |
 | `metrics.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template       | `{}`                                                                          |
-| `metrics.podManagementPolicy`                   | Management Policy for Solr Prometheus exporter deployment                                                                      | `Parallel`                                                                    |
 | `metrics.priorityClassName`                     | Solr Prometheus exporter pods' priority.                                                                                       | `""`                                                                          |
 | `metrics.schedulerName`                         | Kubernetes pod scheduler registry                                                                                              | `""`                                                                          |
 | `metrics.hostAliases`                           | Solr Prometheus exporter pod host aliases                                                                                      | `[]`                                                                          |
