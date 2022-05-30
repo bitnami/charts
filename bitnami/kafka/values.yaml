@@ -684,6 +684,12 @@ service:
   ## ref: https://kubernetes.io/docs/user-guide/services/
   ##
   sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
   ## @param service.clusterIP Kafka service Cluster IP
   ## e.g.:
   ## clusterIP: None
@@ -707,6 +713,15 @@ service:
   ## @param service.annotations Additional custom annotations for Kafka service
   ##
   annotations: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
+    ## @param service.headless.labels Labels for the headless service.
+    ##
+    labels: {}
   ## @param service.extraPorts Extra ports to expose in the Kafka service (normally used with the `sidecar` value)
   ##
   extraPorts: []
@@ -1175,6 +1190,14 @@ metrics:
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
     schedulerName: ""
+    ## @param metrics.kafka.priorityClassName Kafka exporter pods' priorityClassName
+    ##
+    priorityClassName: ""
+    ## @param metrics.kafka.topologySpreadConstraints Topology Spread Constraints for pod assignment
+    ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+    ## The value is evaluated as a template
+    ##
+    topologySpreadConstraints: []
     ## @param metrics.kafka.extraVolumes Optionally specify extra list of additional volumes for the Kafka exporter pod(s)
     ## e.g:
     ## extraVolumes:

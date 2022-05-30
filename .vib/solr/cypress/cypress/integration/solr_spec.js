@@ -80,9 +80,10 @@ it("allows uploading and indexing a file", () => {
         Authorization: getBasicAuthHeader(),
       },
     }).then((response) => {
+      var bodyString = JSON.stringify(response.body);
       expect(response.status).to.eq(200);
-      expect(response.body).to.contain(book.title);
-      expect(response.body).to.contain(book.author);
+      expect(bodyString).to.contain(book.title);
+      expect(bodyString).to.contain(book.author);
     });
   });
 });
@@ -95,8 +96,9 @@ it("allows retrieving sample schema", () => {
       Authorization: getBasicAuthHeader(),
     },
   }).then((response) => {
+    var bodyString = JSON.stringify(response.body);
     expect(response.status).to.eq(200);
-    expect(response.body).to.contain('"name":"text_es"');
-    expect(response.body).to.contain("queryAnalyzer");
+    expect(bodyString).to.contain('"name":"text_es"');
+    expect(bodyString).to.contain("queryAnalyzer");
   });
 });
