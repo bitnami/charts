@@ -33,15 +33,8 @@ command:
     stdout: 
       - /opt/bitnami/mariadb/bin/mariadb
     stderr: []
-  mariadb -h localhost -u root -p{{getEnv "MARIADB_ROOT_PASSWORD"}}  {{getEnv "MARIADB_DATABASE"}}  -e 'DROP TABLE IF EXISTS TEST; create table TEST( test_id int auto_increment, test_value int, primary key(test_id)); INSERT INTO TEST (TEST_VALUE) VALUES (-1);SELECT * FROM TEST':
-    title: Validating that we can log in with $MARIADB_ROOT_PASSWORD, create a table, insert and retrieve the value inserted
-    exit-status: 0
-    stdout:
-    - -1
-    stderr: []
-    timeout: 9000
-  mariadb -h localhost -u {{getEnv "MARIADB_USER"}} -p{{getEnv "MARIADB_PASSWORD"}}  {{getEnv "MARIADB_DATABASE"}}  -e 'DROP TABLE IF EXISTS TEST_U; create table TEST_U( test_id int auto_increment, test_value int, primary key(test_id)); INSERT INTO TEST_U (TEST_VALUE) VALUES (-1);SELECT * FROM TEST_U':
-    title: Validating that we can log in with MARIADB_USER MARIADB_PASSWORD in MARIADB_DATABASE
+  create-database-test:
+    exec: mariadb -h localhost -u root -p{{getEnv "MARIADB_ROOT_PASSWORD"}}  {{getEnv "MARIADB_DATABASE"}}  -e 'DROP TABLE IF EXISTS TEST; create table TEST( test_id int auto_increment, test_value int, primary key(test_id)); INSERT INTO TEST (TEST_VALUE) VALUES (-1);SELECT * FROM TEST'
     exit-status: 0
     stdout:
     - -1
