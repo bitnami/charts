@@ -8,10 +8,9 @@ process:
     running: true
 file:   
   /bitnami/mariadb/data/test_database:
-    mode: "0644"
+    mode: "2700"
     filetype: directory
     exists: true
-    group: root
   /opt/bitnami/mariadb/conf/my.cnf:
     mode: "0644"
     filetype: file
@@ -20,7 +19,6 @@ file:
       "basedir=/opt/bitnami/mariadb",
       "socket=/opt/bitnami/mariadb/tmp/mysql.sock"]
     exists: true
-    group: root  
 command:
   user-id-test:
     exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
