@@ -688,7 +688,7 @@ metrics:
   ## @param metrics.containerPorts.http Solr Prometheus exporter HTTP container port
   ##
   containerPorts:
-    http: 9983
+    http: 9231
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param metrics.livenessProbe.enabled Enable livenessProbe on Solr Prometheus exporter containers
@@ -874,7 +874,7 @@ metrics:
     ## @param metrics.service.ports.http Solr Prometheus exporter HTTP service port
     ##
     ports:
-      http: 8983
+      http: 9231
     ## @param metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/user-guide/services/
