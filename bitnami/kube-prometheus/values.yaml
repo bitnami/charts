@@ -7,7 +7,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
-## @param global.labels Additional labels to apply to all resources
 ##
 global:
   imageRegistry: ""
@@ -17,20 +16,34 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-  labels: {}
 
 ## @section Common parameters
 ##
 
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
 ## @param nameOverride String to partially override `kube-prometheus.name` template with a string (will prepend the release name)
 ##
 nameOverride: ""
 ## @param fullnameOverride String to fully override `kube-prometheus.fullname` template with a string
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
 
 ## @section Prometheus Operator Parameters
 ##
@@ -50,7 +63,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.56.3-debian-10-r0
+    tag: 0.56.3-debian-10-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -67,9 +80,59 @@ operator:
   ## @param operator.extraArgs Additional arguments passed to Prometheus Operator
   ## Example:
   ## extraArgs:
-  ##   - --namespaces={{ .Release.Namespace }}
+  ##   - --namespaces={{ include "common.names.namespace" . }}
   ##
   extraArgs: []
+  ## @param operator.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param operator.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param operator.lifecycleHooks for the Prometheus Operator container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param operator.extraEnvVars Array with extra environment variables to add to Prometheus Operator nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param operator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Prometheus Operator nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param operator.extraEnvVarsSecret Name of existing Secret containing extra env vars for Prometheus Operator nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param operator.extraVolumes Optionally specify extra list of additional volumes for the Prometheus Operator pod(s)
+  ##
+  extraVolumes: []
+  ## @param operator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Prometheus Operator container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param operator.sidecars Add additional sidecar containers to the Prometheus Operator pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+
+  ## @param operator.initContainers Add additional init containers to the Prometheus Operator pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
   ## @param operator.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -85,10 +148,25 @@ operator:
     ## If not set and create is true, a name is generated using the kube-prometheus.operator.fullname template
     ##
     name: ""
+    ## @param operator.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
+    ## @param operator.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+    ##
+    annotations: {}
   ## @param operator.schedulerName Name of the Kubernetess scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## @param operator.terminationGracePeriodSeconds In seconds, time the given to the Prometheus Operator pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param operator.topologySpreadConstraints Topology Spread Constraints for pod assignment
+  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## The value is evaluated as a template
+  ##
+  topologySpreadConstraints: []
   ## Prometheus Operator pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param operator.podSecurityContext.enabled Enable pod security context
@@ -121,20 +199,22 @@ operator:
     ## @param operator.service.type Kubernetes service type
     ##
     type: ClusterIP
-    ## @param operator.service.port Prometheus Operator service port
+    ## @param operator.service.ports.http Prometheus Operator service port
     ##
-    port: 8080
+    ports:
+      http: 8080
     ## @param operator.service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` for headless service
     ## e.g:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param operator.service.nodePort Kubernetes Service nodePort
+    ## @param operator.service.nodePorts.http Kubernetes Service nodePort
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## e.g:
     ## nodePort: 30080
     ##
-    nodePort: ""
+    nodePorts:
+      http: ""
     ## @param operator.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -160,6 +240,20 @@ operator:
     ## @param operator.service.annotations Additional annotations for Prometheus Operator service
     ##
     annotations: {}
+    ## @param operator.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param operator.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param operator.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
   ## Create a servicemonitor for the operator
   ##
   serviceMonitor:
@@ -178,6 +272,16 @@ operator:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
+    ## @param operator.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    scrapeTimeout: ""
+    ## @param operator.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param operator.serviceMonitor.annotations Extra annotations for the ServiceMonitor
+    ##
+    annotations: {}
   ## @param operator.resources Configure resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -222,13 +326,20 @@ operator:
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param operator.podAnnotations Annotations for Prometheus Operator pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param operator.podLabels Extra labels for Prometheus Operator pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
   ## @param operator.priorityClassName Priority class assigned to the Pods
   ##
   priorityClassName: ""
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param operator.livenessProbe.enabled Turn on and off liveness probe
-  ## @param operator.livenessProbe.path Path of the HTTP service for checking the healthy state
   ## @param operator.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
   ## @param operator.livenessProbe.periodSeconds How often to perform the probe
   ## @param operator.livenessProbe.timeoutSeconds When the probe times out
@@ -237,7 +348,6 @@ operator:
   ##
   livenessProbe:
     enabled: true
-    path: /metrics
     initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
@@ -246,7 +356,6 @@ operator:
   ## Configure extra options for readiness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param operator.readinessProbe.enabled Turn on and off readiness probe
-  ## @param operator.readinessProbe.path Path of the HTTP service for checking the ready state
   ## @param operator.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated
   ## @param operator.readinessProbe.periodSeconds How often to perform the probe
   ## @param operator.readinessProbe.timeoutSeconds When the probe times out
@@ -255,12 +364,36 @@ operator:
   ##
   readinessProbe:
     enabled: true
-    path: /metrics
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
+  ## Configure extra options for startup probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param operator.startupProbe.enabled Turn on and off startup probe
+  ## @param operator.startupProbe.initialDelaySeconds Delay before startup probe is initiated
+  ## @param operator.startupProbe.periodSeconds How often to perform the probe
+  ## @param operator.startupProbe.timeoutSeconds When the probe times out
+  ## @param operator.startupProbe.failureThreshold Minimum consecutive failures for the probe
+  ## @param operator.startupProbe.successThreshold Minimum consecutive successes for the probe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param operator.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param operator.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param operator.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## @param operator.logLevel Log level for Prometheus Operator
   ##
   logLevel: info
@@ -362,7 +495,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.35.0-debian-10-r30
+    tag: 2.35.0-debian-10-r33
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -387,6 +520,9 @@ prometheus:
     ##   eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT:role/prometheus
     ##
     annotations: {}
+    ## @param prometheus.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
   ## Prometheus pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param prometheus.podSecurityContext.enabled Enable security context
@@ -415,12 +551,12 @@ prometheus:
         - ALL
   ## Configure pod disruption budgets for Prometheus
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
-  ## @param prometheus.podDisruptionBudget.enabled Create a pod disruption budget for Prometheus
-  ## @param prometheus.podDisruptionBudget.minAvailable Minimum number / percentage of pods that should remain scheduled
-  ## @param prometheus.podDisruptionBudget.maxUnavailable Maximum number / percentage of pods that may be made unavailable
+  ## @param prometheus.pdb.create Create a pod disruption budget for Prometheus
+  ## @param prometheus.pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
+  ## @param prometheus.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
   ##
-  podDisruptionBudget:
-    enabled: false
+  pdb:
+    create: false
     minAvailable: 1
     maxUnavailable: ""
   ## Prometheus Service
@@ -429,19 +565,21 @@ prometheus:
     ## @param prometheus.service.type Kubernetes service type
     ##
     type: ClusterIP
-    ## @param prometheus.service.port Prometheus service port
+    ## @param prometheus.service.ports.http Prometheus service port
     ##
-    port: 9090
+    ports:
+      http: 9090
     ## @param prometheus.service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` for headless service
     ## e.g: clusterIP: None
     ##
     clusterIP: ""
-    ## @param prometheus.service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## @param prometheus.service.nodePorts.http Specify the nodePort value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## e.g:
     ## nodePort: 30090
     ##
-    nodePort: ""
+    nodePorts:
+      http: ""
     ## @param prometheus.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -465,12 +603,20 @@ prometheus:
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     healthCheckNodePort: ""
-    ## @param prometheus.service.stickySessions Set stickySessions to `true` to enable Session Affinity
-    ##
-    stickySessions: ""
     ## @param prometheus.service.annotations Additional annotations for Prometheus service  (this value is evaluated as a template)
     ##
     annotations: {}
+    ## @param prometheus.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param prometheus.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
   serviceMonitor:
     ## @param prometheus.serviceMonitor.enabled Creates a ServiceMonitor to monitor Prometheus itself
     ##
@@ -487,6 +633,7 @@ prometheus:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
+
   ## Configure the ingress resource that allows you to access the
   ## Alertmanager installation. Set up the URL
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -495,10 +642,6 @@ prometheus:
     ## @param prometheus.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## DEPRECATED: Use prometheus.ingress.annotations instead of prometheus.ingress.certManager
-    ## certManager: false
-    ##
-
     ## @param prometheus.ingress.pathType Ingress Path type
     ##
     pathType: ImplementationSpecific
@@ -533,6 +676,9 @@ prometheus:
     ## You can use the prometheus.ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
     ##
     tls: false
+    ## @param prometheus.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
     ## @param prometheus.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
     ## extraHosts:
@@ -753,9 +899,6 @@ prometheus:
   ## If {}, select all ServiceMonitors
   ##
   serviceMonitorSelector: {}
-  ## @param prometheus.matchLabels Matchlabels
-  ##
-  matchLabels: {}
   ## @param prometheus.serviceMonitorNamespaceSelector Namespaces to be selected for ServiceMonitor discovery
   ## See https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#namespaceselector for usage
   ##
@@ -975,7 +1118,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.26.0-scratch-r1
+      tag: 0.26.0-scratch-r2
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
       ##
@@ -1091,19 +1234,21 @@ prometheus:
       ## @param prometheus.thanos.service.type Kubernetes service type
       ##
       type: ClusterIP
-      ## @param prometheus.thanos.service.port Thanos service port
+      ## @param prometheus.thanos.service.ports.grpc Thanos service port
       ##
-      port: 10901
+      ports:
+        grpc: 10901
       ## @param prometheus.thanos.service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` to create headless service by default.
       ## Use a "headless" service by default so it returns every pod's IP instead of loadbalancing requests.
       ##
       clusterIP: None
-      ## @param prometheus.thanos.service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types.
+      ## @param prometheus.thanos.service.nodePorts.grpc Specify the nodePort value for the LoadBalancer and NodePort service types.
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
       ## e.g:
       ## nodePort: 30901
       ##
-      nodePort: ""
+      nodePorts:
+        grpc: ""
       ## @param prometheus.thanos.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
       ## Set the LoadBalancer service type to internal only
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -1127,6 +1272,21 @@ prometheus:
       ##     protocol: TCP
       ##
       extraPorts: []
+      ## @param prometheus.thanos.service.externalTrafficPolicy Prometheus service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param prometheus.thanos.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+      ## If "ClientIP", consecutive client requests will be directed to the same Pod
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+      ##
+      sessionAffinity: None
+      ## @param prometheus.thanos.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
     ## Configure the ingress resource that allows you to access the
     ## Thanos Sidecar installation. Set up the URL
     ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -1135,10 +1295,19 @@ prometheus:
       ## @param prometheus.thanos.ingress.enabled Enable ingress controller resource
       ##
       enabled: false
-      ## DEPRECATED: Use prometheus.thanos.ingress.annotations instead of prometheus.thanos.ingress.certManager
-      ## certManager: false
+      ## @param prometheus.thanos.ingress.pathType Ingress path type
       ##
-
+      pathType: ImplementationSpecific
+      ## @param prometheus.thanos.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+      ##
+      apiVersion: ""
+      ## @param prometheus.thanos.ingress.hostname Default host for the ingress record
+      ##
+      hostname: thanos.prometheus.local
+      ## @param prometheus.thanos.ingress.path Default path for the ingress record
+      ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+      ##
+      path: /
       ## @param prometheus.thanos.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
       ## For a full list of possible ingress annotations, please see
       ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
@@ -1155,20 +1324,66 @@ prometheus:
       ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
       ##
       ingressClassName: ""
-      ## @param prometheus.thanos.ingress.hosts [array] The list of hostnames to be covered with this ingress record.
-      ## Most likely this will be just one host, but in the event more hosts are needed, this is an array
+      ## @param prometheus.thanos.ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+      ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+      ## You can:
+      ##   - Use the `ingress.secrets` parameter to create this TLS secret
+      ##   - Relay on cert-manager to create it by setting `ingress.certManager=true`
+      ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
       ##
-      hosts:
-        - name: thanos.prometheus.local
-          path: /
-      ## @param prometheus.thanos.ingress.tls The tls configuration for the ingress
-      ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-      ## tls:
+      tls: false
+      ## @param prometheus.thanos.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+      ##
+      selfSigned: false
+      ## @param prometheus.thanos.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+      ## e.g:
+      ## extraHosts:
+      ##   - name: thanos.prometheus.local
+      ##     path: /
+      ##
+      extraHosts: []
+      ## @param prometheus.thanos.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+      ## e.g:
+      ## extraPaths:
+      ## - path: /*
+      ##   backend:
+      ##     serviceName: ssl-redirect
+      ##     servicePort: use-annotation
+      ##
+      extraPaths: []
+      ## @param prometheus.thanos.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+      ## e.g:
+      ## extraTls:
       ## - hosts:
       ##     - thanos.prometheus.local
       ##   secretName: thanos.prometheus.local-tls
       ##
-      tls: {}
+      extraTls: []
+      ## @param prometheus.thanos.ingress.secrets Custom TLS certificates as secrets
+      ## NOTE: 'key' and 'certificate' are expected in PEM format
+      ## NOTE: 'name' should line up with a 'secretName' set further up
+      ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+      ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+      ## It is also possible to create and manage the certificates outside of this helm chart
+      ## Please see README.md for more information
+      ## e.g:
+      ## secrets:
+      ##   - name: thanos.prometheus.local-tls
+      ##     key: |-
+      ##       -----BEGIN RSA PRIVATE KEY-----
+      ##       ...
+      ##       -----END RSA PRIVATE KEY-----
+      ##     certificate: |-
+      ##       -----BEGIN CERTIFICATE-----
+      ##       ...
+      ##       -----END CERTIFICATE-----
+      ##
+      secrets: []
+      ## @param prometheus.thanos.ingress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
+      ## Useful when looking for additional customization, such as using different backend
+      ##
+      extraRules: []
   ## @param prometheus.portName Port name used for the pods and governing service. This defaults to web
   ##
   portName: web
@@ -1193,7 +1408,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.24.0-debian-10-r57
+    tag: 0.24.0-debian-10-r60
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1213,6 +1428,12 @@ alertmanager:
     ## If not set and create is true, a name is generated using the kube-prometheus.alertmanager.fullname template
     ##
     name: ""
+    ## @param alertmanager.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
+    ## @param alertmanager.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+    ##
+    annotations: {}
   ## Prometheus Alertmanager pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param alertmanager.podSecurityContext.enabled Enable security context
@@ -1241,12 +1462,12 @@ alertmanager:
         - ALL
   ## Configure pod disruption budgets for Alertmanager
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
-  ## @param alertmanager.podDisruptionBudget.enabled Create a pod disruption budget for Alertmanager
-  ## @param alertmanager.podDisruptionBudget.minAvailable Minimum number / percentage of pods that should remain scheduled
-  ## @param alertmanager.podDisruptionBudget.maxUnavailable Maximum number / percentage of pods that may be made unavailable
+  ## @param alertmanager.pdb.create Create a pod disruption budget for Alertmanager
+  ## @param alertmanager.pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
+  ## @param alertmanager.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
   ##
-  podDisruptionBudget:
-    enabled: false
+  pdb:
+    create: false
     minAvailable: 1
     maxUnavailable: ""
   ## Alertmanager Service
@@ -1255,20 +1476,22 @@ alertmanager:
     ## @param alertmanager.service.type Kubernetes service type
     ##
     type: ClusterIP
-    ## @param alertmanager.service.port Alertmanager service port
+    ## @param alertmanager.service.ports.http Alertmanager service port
     ##
-    port: 9093
+    ports:
+      http: 9093
     ## @param alertmanager.service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` for headless service
     ## e.g:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param alertmanager.service.nodePort Specify the nodePort value for the LoadBalancer and NodePort service types.
+    ## @param alertmanager.service.nodePorts.http Specify the nodePort value for the LoadBalancer and NodePort service types.
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## e.g:
     ## nodePort: 30903
     ##
-    nodePort: ""
+    nodePorts:
+      http: ""
     ## @param alertmanager.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
@@ -1290,9 +1513,20 @@ alertmanager:
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     healthCheckNodePort: ""
-    ## @param alertmanager.service.stickySessions Set stickySessions to `true` to enable Session Affinity
+    ## @param alertmanager.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
     ##
-    stickySessions: ""
+    extraPorts: []
+    ## @param alertmanager.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param alertmanager.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param alertmanager.service.annotations Additional annotations for Alertmanager service (this value is evaluated as a template)
     ##
     annotations: {}
@@ -1314,6 +1548,29 @@ alertmanager:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
+    ## @param alertmanager.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
+    ## @param alertmanager.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ##
+    scrapeTimeout: ""
+    ## @param alertmanager.serviceMonitor.selector ServiceMonitor selector labels
+    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ##
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+    ## @param alertmanager.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param alertmanager.serviceMonitor.annotations Extra annotations for the ServiceMonitor
+    ##
+    annotations: {}
+    ## @param alertmanager.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
   ## Configure the ingress resource that allows you to access the
   ## Alertmanager installation. Set up the URL
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -1322,10 +1579,6 @@ alertmanager:
     ## @param alertmanager.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## DEPRECATED: Use alertmanager.ingress.annotations instead of alertmanager.ingress.certManager
-    ## certManager: false
-    ##
-
     ## @param alertmanager.ingress.pathType Ingress Path type
     ##
     pathType: ImplementationSpecific
@@ -1360,6 +1613,9 @@ alertmanager:
     ## You can use the alertmanager.ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
     ##
     tls: false
+    ## @param alertmanager.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
     ## @param alertmanager.ingress.extraHosts The list of additional hostnames to be covered with this ingress record.
     ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
     ## extraHosts:
@@ -1484,6 +1740,9 @@ alertmanager:
           receiver: 'null'
     receivers:
       - name: 'null'
+  ## @param alertmanager.templateFiles Extra files to be added inside the `alertmanager-{{ template "kube-prometheus.alertmanager.fullname" . }}` secret.
+  ##
+  templateFiles: {}
   ## @param alertmanager.externalConfig Alertmanager configuration is created externally. If true, `alertmanager.config` is ignored, and a secret will not be created.
   ## Alertmanager requires a secret named `alertmanager-{{ template "kube-prometheus.alertmanager.fullname" . }}`
   ## It must contain:
@@ -1684,6 +1943,12 @@ kubelet:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
     cAdvisorRelabelings: []
+    ## @param kubelet.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param kubelet.serviceMonitor.annotations Extra annotations for the ServiceMonitor
+    ##
+    annotations: {}
 
 ## @section Blackbox Exporter Deployment Parameters
 ##
@@ -1702,7 +1967,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.20.0-debian-10-r66
+    tag: 0.20.0-debian-10-r69
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1945,6 +2210,10 @@ blackboxExporter:
   ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## @param blackboxExporter.terminationGracePeriodSeconds In seconds, time the given to the Blackbox Exporter pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
   ## @param blackboxExporter.updateStrategy.type Blackbox Exporter statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -2002,6 +2271,12 @@ blackboxExporter:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
+    ## @param blackboxExporter.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param blackboxExporter.service.clusterIP Blackbox Exporter service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -2066,14 +2341,16 @@ kubeControllerManager:
   namespace: kube-system
   ## Service ports and selector information
   ## @param kubeControllerManager.service.enabled Whether or not to create a Service object for kube-controller-manager
-  ## @param kubeControllerManager.service.port Listening port of the kube-controller-manager Service object
-  ## @param kubeControllerManager.service.targetPort Port to target on the kube-controller-manager Pods. This should be the port that kube-controller-manager is exposing metrics on
+  ## @param kubeControllerManager.service.ports.http Listening port of the kube-controller-manager Service object
+  ## @param kubeControllerManager.service.targetPorts.http Port to target on the kube-controller-manager Pods. This should be the port that kube-controller-manager is exposing metrics on
   ## @param kubeControllerManager.service.selector Optional PODs Label selector for the service
   ##
   service:
     enabled: true
-    port: 10252
-    targetPort: 10252
+    ports:
+      http: 10252
+    targetPorts:
+      http: 10252
     ## selector:
     ##   component: kube-controller-manager
     ##
@@ -2119,14 +2396,16 @@ kubeScheduler:
   namespace: kube-system
   ## If using kubeScheduler.endpoints only the port and targetPort are used
   ## @param kubeScheduler.service.enabled Whether or not to create a Service object for kube-scheduler
-  ## @param kubeScheduler.service.port Listening port of the kube scheduler Service object
-  ## @param kubeScheduler.service.targetPort Port to target on the kube scheduler Pods. This should be the port that kube scheduler is exposing metrics on
+  ## @param kubeScheduler.service.ports.http Listening port of the kube scheduler Service object
+  ## @param kubeScheduler.service.targetPorts.http Port to target on the kube scheduler Pods. This should be the port that kube scheduler is exposing metrics on
   ## @param kubeScheduler.service.selector Optional PODs Label selector for the service
   ##
   service:
     enabled: true
-    port: 10251
-    targetPort: 10251
+    ports:
+      http: 10251
+    targetPorts:
+      http: 10251
     ## selector:
     ##   component: kube-scheduler
     ##
@@ -2162,6 +2441,12 @@ kubeScheduler:
     ##    action: replace
     ##
     relabelings: []
+    ## @param kubeScheduler.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param kubeScheduler.serviceMonitor.annotations Extra annotations for the ServiceMonitor
+    ##
+    annotations: {}
 ## Component scraping coreDns
 ##
 coreDns:
@@ -2173,14 +2458,16 @@ coreDns:
   namespace: kube-system
   ## Create a ServiceMonitor to scrape coredns service
   ## @param coreDns.service.enabled Whether or not to create a Service object for coredns
-  ## @param coreDns.service.port Listening port of the coredns Service object
-  ## @param coreDns.service.targetPort Port to target on the coredns Pods. This should be the port that coredns is exposing metrics on
+  ## @param coreDns.service.ports.http Listening port of the coredns Service object
+  ## @param coreDns.service.targetPorts.http Port to target on the coredns Pods. This should be the port that coredns is exposing metrics on
   ## @param coreDns.service.selector Optional PODs Label selector for the service
   ##
   service:
     enabled: true
-    port: 9153
-    targetPort: 9153
+    ports:
+      http: 9153
+    targetPorts:
+      http: 9153
     ## selector:
     ##   component: kube-dns
     ##
@@ -2219,19 +2506,20 @@ kubeProxy:
   ##  - 10.141.4.24
   ##
   endpoints: []
-  ## @param kubeProxy.namespace Namespace where cube-proxy service is deployed.
+  ## @param kubeProxy.namespace Namespace where kube-proxy service is deployed.
   ##
   namespace: kube-system
-  ## @param kubeProxy.service [object] Service ports and selector information
-  ## @param coreDns.service.enabled Whether or not to create a Service object for coredns
-  ## @param coreDns.service.port Listening port of the coredns Service object
-  ## @param coreDns.service.targetPort Port to target on the coredns Pods. This should be the port that coredns is exposing metrics on
-  ## @param coreDns.service.selector Optional PODs Label selector for the service
+  ## @param kubeProxy.service.enabled Whether or not to create a Service object for kube-proxy
+  ## @param kubeProxy.service.ports.http Listening port of the kube-proxy Service object
+  ## @param kubeProxy.service.targetPorts.http Port to target on the kube-proxy Pods. This should be the port that kube-proxy is exposing metrics on
+  ## @param kubeProxy.service.selector Optional PODs Label selector for the service
   ##
   service:
     enabled: true
-    port: 10249
-    targetPort: 10249
+    ports:
+      http: 10249
+    targetPorts:
+      http: 10249
     ## selector:
     ##   k8s-app: kube-proxy
     ##
@@ -2253,6 +2541,12 @@ kubeProxy:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
+    ## @param kubeProxy.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param kubeProxy.serviceMonitor.annotations Extra annotations for the ServiceMonitor
+    ##
+    annotations: {}
 
 ## @section RBAC parameters
 ##
@@ -2260,10 +2554,8 @@ kubeProxy:
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ## @param rbac.create Whether to create and use RBAC resources or not
-## @param rbac.apiVersion Version of the RBAC API
 ## @param rbac.pspEnabled Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
 ##
 rbac:
   create: true
-  apiVersion: v1beta1
   pspEnabled: true

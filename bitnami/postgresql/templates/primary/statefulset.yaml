@@ -289,6 +289,10 @@ spec:
             - name: POSTGRESQL_ENABLE_LDAP
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
             {{- if .Values.ldap.enabled }}
+            {{- if .Values.ldap.url }}
+            - name: POSTGRESQL_LDAP_URL
+              value: {{ .Values.ldap.url }}
+            {{- else }}
             - name: POSTGRESQL_LDAP_SERVER
               value: {{ .Values.ldap.server }}
             - name: POSTGRESQL_LDAP_PORT
@@ -318,8 +322,7 @@ spec:
               value: {{ .Values.ldap.search_attr }}
             - name: POSTGRESQL_LDAP_SEARCH_FILTER
               value: {{ .Values.ldap.search_filter }}
-            - name: POSTGRESQL_LDAP_URL
-              value: {{ .Values.ldap.url }}
+            {{- end }}
             {{- end }}
             # TLS
             - name: POSTGRESQL_ENABLE_TLS

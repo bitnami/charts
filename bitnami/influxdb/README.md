@@ -7,7 +7,7 @@ InfluxDB(TM) is an open source time-series database. It is a core component of t
 [Overview of InfluxDB&trade;](https://www.influxdata.com/products/influxdb-overview)
 
 InfluxDB(TM) is a trademark owned by InfluxData, which is not affiliated with, and does not endorse, this site.
-                           
+
 ## TL;DR
 
 ```console
@@ -524,7 +524,7 @@ $ helm install influxdb bitnami/influxdb
 ##### Export secrets and required values to update
 
 ```console
-$ export INFLUXDB_ADMIN_PASSWORD=$(kubectl get secret --namespace default influxdb -o jsonpath="{.data.admin-user-password}" | base64 --decode)
+$ export INFLUXDB_ADMIN_PASSWORD=$(kubectl get secret --namespace default influxdb -o jsonpath="{.data.admin-user-password}" | base64 -d)
 ```
 
 ##### Upgrade the chart release

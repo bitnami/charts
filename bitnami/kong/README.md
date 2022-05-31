@@ -7,7 +7,7 @@ Kong is an open source Microservice API gateway and platform designed for managi
 [Overview of Kong](https://konghq.com/kong-community-edition/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -564,7 +564,7 @@ Kong Ingress Controller version was bumped to new major version, `1.x.x`. The as
 ##### Export secrets and required values to update
 
 ```console
-$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default kong-postgresql -o jsonpath="{.data.password}" | base64 --decode)
+$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default kong-postgresql -o jsonpath="{.data.password}" | base64 -d)
 $ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=kong,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
 ```
 
