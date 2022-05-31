@@ -7,7 +7,7 @@ Apache Tomcat is an open-source web server designed to host and run Java-based w
 [Overview of Apache Tomcat](http://tomcat.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -107,7 +107,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `deployment.type`                          | Use Deployment or StatefulSet                                                                                            | `deployment`        |
 | `updateStrategy.type`                      | StrategyType                                                                                                             | `RollingUpdate`     |
 | `containerPorts.http`                      | HTTP port to expose at container level                                                                                   | `8080`              |
-| `containerExtraPorts`                      | Extra ports to expose at container level                                                                                 | `{}`                |
+| `containerExtraPorts`                      | Extra ports to expose at container level                                                                                 | `[]`                |
 | `podSecurityContext.enabled`               | Enable Tomcat pods' Security Context                                                                                     | `true`              |
 | `podSecurityContext.fsGroup`               | Set Tomcat pod's Security Context fsGroup                                                                                | `1001`              |
 | `containerSecurityContext.enabled`         | Enable Tomcat containers' SecurityContext                                                                                | `true`              |
@@ -344,7 +344,7 @@ Consequences:
 - Backwards compatibility is not guaranteed. However, you can easily workaround this issue by removing Tomcat deployment before upgrading (the following example assumes that the release name is `tomcat`):
 
 ```console
-$ export TOMCAT_PASSWORD=$(kubectl get secret --namespace default tomcat -o jsonpath="{.data.tomcat-password}" | base64 --decode)
+$ export TOMCAT_PASSWORD=$(kubectl get secret --namespace default tomcat -o jsonpath="{.data.tomcat-password}" | base64 -d)
 $ kubectl delete deployments.apps tomcat
 $ helm upgrade tomcat bitnami/tomcat --set tomcatPassword=$TOMCAT_PASSWORD
 ```

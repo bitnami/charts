@@ -7,7 +7,7 @@ OpenCart is free open source ecommerce platform for online merchants. OpenCart p
 [Overview of OpenCart](http://www.opencart.com)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -455,9 +455,9 @@ This release includes several breaking changes which are listed below. To upgrad
 Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
 
 ```console
-export OPENCART_PASSWORD=$(kubectl get secret --namespace default opencart -o jsonpath="{.data.opencart-password}" | base64 --decode)
-export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default opencart-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-export MARIADB_PASSWORD=$(kubectl get secret --namespace default opencart-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export OPENCART_PASSWORD=$(kubectl get secret --namespace default opencart -o jsonpath="{.data.opencart-password}" | base64 -d)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default opencart-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default opencart-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 export MARIADB_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=opencart,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
 ```
 
