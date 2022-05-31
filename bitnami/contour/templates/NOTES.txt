@@ -11,11 +11,11 @@ APP VERSION: {{ .Chart.AppVersion }}
 
      You can watch the status by running:
 
-         $ kubectl get svc {{ include "common.names.fullname" . }}-envoy --namespace {{ .Release.Namespace }} -w
+         $ kubectl get svc {{ include "common.names.fullname" . }}-envoy --namespace {{ include "common.names.namespace" . }} -w
 
      Once 'EXTERNAL-IP' is no longer '<pending>':
 
-         $ kubectl describe svc {{ include "common.names.fullname" . }}-envoy --namespace {{ .Release.Namespace }} | grep Ingress | awk '{print $3}'
+         $ kubectl describe svc {{ include "common.names.fullname" . }}-envoy --namespace {{ include "common.names.namespace" . }} | grep Ingress | awk '{print $3}'
 
 2. Configure DNS records corresponding to Kubernetes ingress resources to point to the load balancer IP/hostname found in step 1
 {{- end }}
@@ -28,7 +28,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 {{- else }}
 1. Contour has been started. You can find out the port numbers being used by Contour by running:
 
-          $ kubectl describe svc {{ include "common.names.fullname" . }} --namespace {{ .Release.Namespace }}
+          $ kubectl describe svc {{ include "common.names.fullname" . }} --namespace {{ include "common.names.namespace" . }}
 
 {{- end }}
 
