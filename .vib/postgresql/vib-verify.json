@@ -43,6 +43,17 @@
           "params": {
             "endpoint": "lb-postgresql-tcp-postgresql"
           }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "goss"
+            },
+            "remote": {
+              "workload": "sts-postgresql-postgresql"
+            }
+          }
         }
       ]
     }

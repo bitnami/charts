@@ -1,0 +1,35 @@
+command:
+  postgresql-connect:
+    exec: PGPASSWORD=ComplicatedPassword142! psql -U test_user -d test_database
+    exit-status: 0
+    stderr: [ ]
+    timeout: 20000
+  postgresql-create-database:
+    exec: PGPASSWORD=ComplicatedPassword142! psql -U test_user -d test_database -c 'CREATE DATABASE another2_test_database;'
+    exit-status: 0
+    stdout:
+      - 'CREATE DATABASE'
+    stderr: [ ]
+    timeout: 20000
+  postgresql-create-table:
+    exec: PGPASSWORD=ComplicatedPassword142! psql -U test_user -d test_database -c 'CREATE TABLE new_table_created (id int, first_name VARCHAR(50));'
+    exit-status: 0
+    stdout:
+      - 'CREATE TABLE'
+    stderr: [ ]
+    timeout: 2000
+  postgresql-check-connectivity-and-port:
+    exec: pg_isready -d test_database -h localhost -p 5432 -U test_user
+    exit-status: 0
+    stdout:
+      - 'localhost:5432 - accepting connections'
+    stderr: [ ]
+    timeout: 2000
+file:
+  /bitnami/postgresql/data:
+    filetype: directory
+    exists: true
+  /bitnami/postgresql:
+    filetype: directory
+    exists: true
+  /docker-entrypoint-initdb.d:
