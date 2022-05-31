@@ -652,7 +652,8 @@ If you enabled RabbitMQ chart to be used as the messaging solution for Skipper t
 
 ### To 11.0.0
 
-This chart bumps the RabbitMQ version to 3.10.x. No issues are expected during upgrade.
+This chart bumps the RabbitMQ version to 3.10.x. No issues are expected during the upgrade.
+
 ### To 10.0.0
 
 This major updates the Kafka subchart to it newest major, 17.0.0. No major issues are expected during the upgrade.
