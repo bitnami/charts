@@ -48,7 +48,7 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "goss"
+              "path": "/.vib/postgresql/goss"
             },
             "remote": {
               "workload": "sts-postgresql"
