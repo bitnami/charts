@@ -45,7 +45,7 @@
               "path": "/.vib/mariadb/goss"
             },
             "remote": {
-              "workload": "deploy-mariadb"
+              "workload": "sts-mariadb"
             }
           }
         }
