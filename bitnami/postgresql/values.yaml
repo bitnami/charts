@@ -194,7 +194,6 @@ audit:
   logTimezone: ""
 ## LDAP configuration
 ## @param ldap.enabled Enable LDAP support
-## @param ldap.uri LDAP URL beginning in the form `ldap[s]://host[:port]/basedn`
 ## DEPRECATED ldap.url It will removed in a future, please use 'ldap.uri' instead
 ## @param ldap.server IP address or name of the LDAP server.
 ## @param ldap.port Port number on the LDAP server to connect to
@@ -215,7 +214,6 @@ audit:
 ##
 ldap:
   enabled: false
-  uri: ""
   server: ""
   port: ""
   prefix: ""
@@ -227,9 +225,9 @@ ldap:
   searchFilter: ""
   scheme: ""
   tls: ""
-  ## @param ldap.url LDAP URL beginning in the form `ldap[s]://host[:port]/basedn`. If provided, all the other LDAP parameters will be ignored.
+  ## @param ldap.uri LDAP URL beginning in the form `ldap[s]://host[:port]/basedn`. If provided, all the other LDAP parameters will be ignored.
   ## Ref: https://www.postgresql.org/docs/current/auth-ldap.html
-  url: ""
+  uri: ""
 ## @param postgresqlDataDir PostgreSQL data dir folder
 ##
 postgresqlDataDir: /bitnami/postgresql/data
