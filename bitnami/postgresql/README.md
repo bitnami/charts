@@ -7,7 +7,7 @@ PostgreSQL (Postgres) is an open source object-relational database known for rel
 [Overview of PostgreSQL](http://www.postgresql.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -78,7 +78,6 @@ kubectl delete pvc -l release=my-release
 | `global.postgresql.auth.secretKeys.replicationPasswordKey` | Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.replicationPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set. | `""`  |
 | `global.postgresql.service.ports.postgresql`               | PostgreSQL service port (overrides `service.ports.postgresql`)                                                                                                                        | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                                  | Value           |
@@ -93,7 +92,6 @@ kubectl delete pvc -l release=my-release
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the statefulset                                        | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the statefulset                                           | `["infinity"]`  |
-
 
 ### PostgreSQL common parameters
 
@@ -155,7 +153,6 @@ kubectl delete pvc -l release=my-release
 | `tls.certKeyFilename`                    | Certificate key filename                                                                                                                                                                                                                                                                                                                      | `""`                       |
 | `tls.certCAFilename`                     | CA Certificate filename                                                                                                                                                                                                                                                                                                                       | `""`                       |
 | `tls.crlFilename`                        | File containing a Certificate Revocation List                                                                                                                                                                                                                                                                                                 | `""`                       |
-
 
 ### PostgreSQL Primary parameters
 
@@ -258,7 +255,6 @@ kubectl delete pvc -l release=my-release
 | `primary.persistence.selector`               | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                  | `{}`                  |
 | `primary.persistence.dataSource`             | Custom PVC data source                                                                                                   | `{}`                  |
 
-
 ### PostgreSQL read only replica parameters
 
 | Name                                              | Description                                                                                                              | Value                 |
@@ -345,7 +341,6 @@ kubectl delete pvc -l release=my-release
 | `readReplicas.persistence.selector`               | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                  | `{}`                  |
 | `readReplicas.persistence.dataSource`             | Custom PVC data source                                                                                                   | `{}`                  |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                                      | Description                                                                                                                                        | Value   |
@@ -365,7 +360,6 @@ kubectl delete pvc -l release=my-release
 | `networkPolicy.egressRules.denyConnectionsToExternal`                     | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                                     | `false` |
 | `networkPolicy.egressRules.customRules`                                   | Custom network policy rule                                                                                                                         | `{}`    |
 
-
 ### Volume Permissions parameters
 
 | Name                                                   | Description                                                                     | Value                   |
@@ -380,7 +374,6 @@ kubectl delete pvc -l release=my-release
 | `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                             | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                  | `0`                     |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                                                                                                 | Value   |
@@ -392,7 +385,6 @@ kubectl delete pvc -l release=my-release
 | `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false` |
 | `rbac.rules`                                  | Custom RBAC rules to set                                                                                                                    | `[]`    |
 | `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
-
 
 ### Metrics Parameters
 
@@ -451,7 +443,6 @@ kubectl delete pvc -l release=my-release
 | `metrics.prometheusRule.namespace`              | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)         | `""`                        |
 | `metrics.prometheusRule.labels`                 | Additional labels that can be used so PrometheusRule will be discovered by Prometheus | `{}`                        |
 | `metrics.prometheusRule.rules`                  | PrometheusRule definitions                                                            | `[]`                        |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -518,25 +509,25 @@ For example:
 
 - First, create the secret with the cetificates files:
 
-    ```console
-    kubectl create secret generic certificates-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
-    ```
+  ```console
+  kubectl create secret generic certificates-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
+  ```
 
 - Then, use the following parameters:
 
-    ```console
-    volumePermissions.enabled=true
-    tls.enabled=true
-    tls.certificatesSecret="certificates-tls-secret"
-    tls.certFilename="cert.crt"
-    tls.certKeyFilename="cert.key"
-    ```
+  ```console
+  volumePermissions.enabled=true
+  tls.enabled=true
+  tls.certificatesSecret="certificates-tls-secret"
+  tls.certFilename="cert.crt"
+  tls.certKeyFilename="cert.key"
+  ```
 
   > Note TLS and VolumePermissions: PostgreSQL requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding kubernetes permissions and the use of `containerSecurityContext.runAsUser`, you must enable `volumePermissions` to ensure everything works as expected.
 
 ### Sidecars
 
-If you need  additional containers to run within the same pod as PostgreSQL (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If you need additional containers to run within the same pod as PostgreSQL (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 # For the PostgreSQL primary
@@ -669,4 +660,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.
+limitations under the License
