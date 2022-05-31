@@ -24,6 +24,17 @@
             "threshold": "CRITICAL",
             "vuln_type": ["OS"]
           }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/mariadb/goss"
+            },
+            "remote": {
+              "workload": "deploy-mariadb"
+            }
+          }
         }
       ]
     }
