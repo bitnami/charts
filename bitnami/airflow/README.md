@@ -475,15 +475,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                  | Airflow database name                                                                                  | `bitnami_airflow` |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials                                | `""`              |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                     | `""`              |
-| `redis.enabled`                              | Switch to enable or disable the Redis&reg; helm                                                      | `true`            |
+| `redis.enabled`                              | Switch to enable or disable the Redis&reg; helm                                                        | `true`            |
 | `redis.auth.enabled`                         | Enable password authentication                                                                         | `true`            |
-| `redis.auth.password`                        | Redis&reg; password                                                                                  | `""`              |
-| `redis.auth.existingSecret`                  | The name of an existing secret with Redis&reg; credentials                                           | `""`              |
-| `redis.architecture`                         | Redis&reg; architecture. Allowed values: `standalone` or `replication`                               | `standalone`      |
-| `externalRedis.host`                         | Redis&reg; host                                                                                      | `localhost`       |
-| `externalRedis.port`                         | Redis&reg; port number                                                                               | `6379`            |
-| `externalRedis.username`                     | Redis&reg; username                                                                                  | `""`              |
-| `externalRedis.password`                     | Redis&reg; password                                                                                  | `""`              |
+| `redis.auth.password`                        | Redis&reg; password                                                                                    | `""`              |
+| `redis.auth.existingSecret`                  | The name of an existing secret with Redis&reg; credentials                                             | `""`              |
+| `redis.architecture`                         | Redis&reg; architecture. Allowed values: `standalone` or `replication`                                 | `standalone`      |
+| `externalRedis.host`                         | Redis&reg; host                                                                                        | `localhost`       |
+| `externalRedis.port`                         | Redis&reg; port number                                                                                 | `6379`            |
+| `externalRedis.username`                     | Redis&reg; username                                                                                    | `""`              |
+| `externalRedis.password`                     | Redis&reg; password                                                                                    | `""`              |
 | `externalRedis.existingSecret`               | Name of an existing secret resource containing the Redis&trade credentials                             | `""`              |
 | `externalRedis.existingSecretPasswordKey`    | Name of an existing secret key containing the Redis&trade credentials                                  | `""`              |
 

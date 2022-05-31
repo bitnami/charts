@@ -117,7 +117,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------- | ---------------------- |
 | `image.registry`    | OAuth2 Proxy image registry                             | `docker.io`            |
 | `image.repository`  | OAuth2 Proxy image repository                           | `bitnami/oauth2-proxy` |
-| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.2.1-debian-10-r122` |
+| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.3.0-debian-10-r0`   |
 | `image.pullPolicy`  | OAuth2 Proxy image pull policy                          | `IfNotPresent`         |
 | `image.pullSecrets` | OAuth2 Proxy image pull secrets                         | `[]`                   |
 
@@ -215,8 +215,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### External Redis&reg; parameters
 
-| Name                           | Description                                                  | Value  |
-| ------------------------------ | ------------------------------------------------------------ | ------ |
+| Name                           | Description                                                | Value  |
+| ------------------------------ | ---------------------------------------------------------- | ------ |
 | `externalRedis.host`           | External Redis&reg; server host                            | `""`   |
 | `externalRedis.password`       | External Redis&reg; user password                          | `""`   |
 | `externalRedis.port`           | External Redis&reg; server port                            | `6379` |
@@ -225,8 +225,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&reg; sub-chart parameters
 
-| Name                                   | Description                                                  | Value        |
-| -------------------------------------- | ------------------------------------------------------------ | ------------ |
+| Name                                   | Description                                                | Value        |
+| -------------------------------------- | ---------------------------------------------------------- | ------------ |
 | `redis.enabled`                        | Deploy Redis&reg; sub-chart                                | `true`       |
 | `redis.architecture`                   | Redis&reg; architecture                                    | `standalone` |
 | `redis.master.service.port`            | Redis&reg; (without Sentinel) service port                 | `6379`       |
@@ -234,7 +234,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.auth.enabled`                   | Enable Redis&reg; authentication                           | `true`       |
 | `redis.auth.existingSecret`            | Secret with Redis&reg; credentials                         | `""`         |
 | `redis.auth.existingSecretPasswordKey` | Key inside the existing secret with Redis&reg; credentials | `""`         |
-| `redis.auth.sentinel`                  | Enable authentication in the Sentinel nodes                  | `true`       |
+| `redis.auth.sentinel`                  | Enable authentication in the Sentinel nodes                | `true`       |
 | `redis.sentinel.enabled`               | Enable Redis&reg; sentinel in the deployment               | `false`      |
 | `redis.sentinel.masterSet`             | Name of the Redis&reg; Sentinel master set                 | `mymaster`   |
 | `redis.sentinel.service.port`          | Redis&reg; (with Sentinel) service port                    | `6379`       |
