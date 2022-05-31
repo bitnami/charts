@@ -1017,7 +1017,8 @@ pgpool:
 ## @param ldap.enabled Enable LDAP support
 ## @param ldap.existingSecret Name of existing secret to use for LDAP passwords
 ## @param ldap.uri LDAP URL beginning in the form `ldap[s]://<hostname>:<port>`
-## @param ldap.base LDAP base DN
+## DEPRECATED ldap.base will be removed in a future, please use 'ldap.basedn' instead
+## @param ldap.basedn LDAP base DN
 ## @param ldap.binddn LDAP bind DN
 ## @param ldap.bindpw LDAP bind password
 ## @param ldap.bslookup LDAP base lookup
@@ -1029,7 +1030,7 @@ ldap:
   enabled: false
   existingSecret: ""
   uri: ""
-  base: ""
+  basedn: ""
   binddn: ""
   bindpw: ""
   bslookup: ""
