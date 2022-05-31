@@ -107,19 +107,22 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### Thanos common parameters
 
-| Name                          | Description                                                                               | Value               |
-| ----------------------------- | ----------------------------------------------------------------------------------------- | ------------------- |
-| `image.registry`              | Thanos image registry                                                                     | `docker.io`         |
-| `image.repository`            | Thanos image repository                                                                   | `bitnami/thanos`    |
-| `image.tag`                   | Thanos image tag (immutable tags are recommended)                                         | `0.26.0-scratch-r0` |
-| `image.pullPolicy`            | Thanos image pull policy                                                                  | `IfNotPresent`      |
-| `image.pullSecrets`           | Specify docker-registry secret names as an array                                          | `[]`                |
-| `objstoreConfig`              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                    | `""`                |
-| `indexCacheConfig`            | The [index cache configuration](https://thanos.io/tip/components/store.md/)               | `""`                |
-| `bucketCacheConfig`           | The [bucket cache configuration](https://thanos.io/tip/components/store.md/)              | `""`                |
-| `existingObjstoreSecret`      | Secret with Objstore Configuration                                                        | `""`                |
-| `existingObjstoreSecretItems` | Optional item list for specifying a custom Secret key. If so, path should be objstore.yml | `[]`                |
-| `existingServiceAccount`      | Provide a common service account to be shared with all components                         | `""`                |
+| Name                                          | Description                                                                                                         | Value               |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `image.registry`                              | Thanos image registry                                                                                               | `docker.io`         |
+| `image.repository`                            | Thanos image repository                                                                                             | `bitnami/thanos`    |
+| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.26.0-scratch-r2` |
+| `image.pullPolicy`                            | Thanos image pull policy                                                                                            | `IfNotPresent`      |
+| `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                    | `[]`                |
+| `objstoreConfig`                              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                                              | `""`                |
+| `indexCacheConfig`                            | The [index cache configuration](https://thanos.io/tip/components/store.md/)                                         | `""`                |
+| `bucketCacheConfig`                           | The [bucket cache configuration](https://thanos.io/tip/components/store.md/)                                        | `""`                |
+| `existingObjstoreSecret`                      | Secret with Objstore Configuration                                                                                  | `""`                |
+| `existingObjstoreSecretItems`                 | Optional item list for specifying a custom Secret key. If so, path should be objstore.yml                           | `[]`                |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `false`             |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`                |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true`              |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`                |
 
 
 ### Thanos Query parameters
@@ -220,8 +223,9 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                       | `{}`                     |
 | `query.service.additionalHeadless`                        | Additional Headless service                                                                                                             | `false`                  |
 | `query.automountServiceAccountToken`                      | Enable/disable auto mounting of the service account token only for the deployment                                                       | `true`                   |
+| `query.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                                    | `true`                   |
+| `query.serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                     | `""`                     |
 | `query.serviceAccount.annotations`                        | Annotations for Thanos Query Service Account                                                                                            | `{}`                     |
-| `query.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Query Service Account                                                                                       | `""`                     |
 | `query.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                               | `true`                   |
 | `query.rbac.create`                                       | Create a ClusterRole and ClusterRoleBinding for the Thanos Query Service Account                                                        | `false`                  |
 | `query.rbac.rules`                                        | Custom RBAC rules to set                                                                                                                | `[]`                     |
@@ -339,8 +343,9 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `queryFrontend.service.extraPorts`                                | Extra ports to expose in the Thanos Query Frontend service                                                                       | `[]`                     |
 | `queryFrontend.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                | `{}`                     |
 | `queryFrontend.automountServiceAccountToken`                      | Enable/disable auto mounting of the service account token only for the deployment                                                | `true`                   |
+| `queryFrontend.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                             | `true`                   |
+| `queryFrontend.serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.              | `""`                     |
 | `queryFrontend.serviceAccount.annotations`                        | Annotations for Thanos Query Frontend Service Account                                                                            | `{}`                     |
-| `queryFrontend.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Query Frontend Service Account                                                                       | `""`                     |
 | `queryFrontend.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                        | `true`                   |
 | `queryFrontend.rbac.create`                                       | Create a ClusterRole and ClusterRoleBinding for the Thanos Query Frontend Service Account                                        | `false`                  |
 | `queryFrontend.rbac.rules`                                        | Custom RBAC rules to set                                                                                                         | `[]`                     |
@@ -445,8 +450,9 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `bucketweb.service.extraPorts`                                | Extra ports to expose in the Thanos Bucket Web service                                                                           | `[]`                     |
 | `bucketweb.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                | `{}`                     |
 | `bucketweb.automountServiceAccountToken`                      | Enable/disable auto mounting of the service account token only for the deployment                                                | `true`                   |
+| `bucketweb.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                             | `true`                   |
+| `bucketweb.serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.              | `""`                     |
 | `bucketweb.serviceAccount.annotations`                        | Annotations for Thanos Bucket Web Service Account                                                                                | `{}`                     |
-| `bucketweb.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Bucket Web Service Account                                                                           | `""`                     |
 | `bucketweb.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                        | `true`                   |
 | `bucketweb.autoscaling.enabled`                               | Enable autoscaling for Thanos Bucket Web                                                                                         | `false`                  |
 | `bucketweb.autoscaling.minReplicas`                           | Minimum number of Thanos Bucket Web replicas                                                                                     | `""`                     |
@@ -549,8 +555,9 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `compactor.service.extraPorts`                                | Extra ports to expose in the Thanos Compactor service                                                                            | `[]`                     |
 | `compactor.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                | `{}`                     |
 | `compactor.automountServiceAccountToken`                      | Enable/disable auto mounting of the service account token only for the deployment                                                | `true`                   |
+| `compactor.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                             | `true`                   |
+| `compactor.serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.              | `""`                     |
 | `compactor.serviceAccount.annotations`                        | Annotations for Thanos Compactor Service Account                                                                                 | `{}`                     |
-| `compactor.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Compactor Service Account                                                                            | `""`                     |
 | `compactor.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                        | `true`                   |
 | `compactor.ingress.enabled`                                   | Enable ingress controller resource                                                                                               | `false`                  |
 | `compactor.ingress.hostname`                                  | Default host for the ingress resource                                                                                            | `thanos-compactor.local` |
@@ -666,8 +673,9 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `storegateway.persistence.annotations`                           | Annotations for the PVC                                                                                                                  | `{}`                        |
 | `storegateway.persistence.existingClaim`                         | Name of an existing PVC to use                                                                                                           | `""`                        |
 | `storegateway.automountServiceAccountToken`                      | Enable/disable auto mounting of the service account token only for the sts                                                               | `true`                      |
+| `storegateway.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                                     | `true`                      |
+| `storegateway.serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                      | `""`                        |
 | `storegateway.serviceAccount.annotations`                        | Annotations for Thanos Store Gateway Service Account                                                                                     | `{}`                        |
-| `storegateway.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Store Gateway Service Account                                                                                | `""`                        |
 | `storegateway.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                                | `true`                      |
 | `storegateway.autoscaling.enabled`                               | Enable autoscaling for Thanos Store Gateway                                                                                              | `false`                     |
 | `storegateway.autoscaling.minReplicas`                           | Minimum number of Thanos Store Gateway replicas                                                                                          | `""`                        |
@@ -805,8 +813,9 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `ruler.persistence.annotations`                           | Annotations for the PVC                                                                                                          | `{}`                     |
 | `ruler.persistence.existingClaim`                         | Name of an existing PVC to use                                                                                                   | `""`                     |
 | `ruler.automountServiceAccountToken`                      | Enable/disable auto mounting of the service account token only for the sts                                                       | `true`                   |
+| `ruler.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                             | `true`                   |
+| `ruler.serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.              | `""`                     |
 | `ruler.serviceAccount.annotations`                        | Annotations for Thanos Ruler Service Account                                                                                     | `{}`                     |
-| `ruler.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Ruler Service Account                                                                                | `""`                     |
 | `ruler.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                        | `true`                   |
 | `ruler.autoscaling.enabled`                               | Enable autoscaling for Thanos Ruler                                                                                              | `false`                  |
 | `ruler.autoscaling.minReplicas`                           | Minimum number of Thanos Ruler replicas                                                                                          | `""`                     |
@@ -923,8 +932,9 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `receive.service.labelSelectorsOverride`                    | Selector for Thanos receive service                                                                                              | `{}`                     |
 | `receive.service.additionalHeadless`                        | Additional Headless service                                                                                                      | `false`                  |
 | `receive.automountServiceAccountToken`                      | Enable/disable auto mounting of the service account token only for the sts                                                       | `true`                   |
+| `receive.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                             | `true`                   |
+| `receive.serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.              | `""`                     |
 | `receive.serviceAccount.annotations`                        | Annotations for Thanos Receive Service Account                                                                                   | `{}`                     |
-| `receive.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Receive Service Account                                                                              | `""`                     |
 | `receive.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                        | `true`                   |
 | `receive.autoscaling.enabled`                               | Enable autoscaling for Thanos Receive                                                                                            | `false`                  |
 | `receive.autoscaling.minReplicas`                           | Minimum number of Thanos Receive replicas                                                                                        | `""`                     |
@@ -1022,8 +1032,9 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `receiveDistributor.schedulerName`                                     | Name of the k8s scheduler (other than default) for Thanos Receive Distributor pods                                          | `""`            |
 | `receiveDistributor.topologySpreadConstraints`                         | Topology Spread Constraints for Thanos Receive Distributor pods assignment spread across your cluster among failure-domains | `[]`            |
 | `receiveDistributor.automountServiceAccountToken`                      | Enable/disable auto mounting of the service account token only for the deployment                                           | `true`          |
+| `receiveDistributor.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                        | `true`          |
+| `receiveDistributor.serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.         | `""`            |
 | `receiveDistributor.serviceAccount.annotations`                        | Annotations for Thanos Receive Distributor Service Account                                                                  | `{}`            |
-| `receiveDistributor.serviceAccount.existingServiceAccount`             | Name for an existing Thanos Receive Distributor Service Account                                                             | `""`            |
 | `receiveDistributor.serviceAccount.automountServiceAccountToken`       | Enable/disable auto mounting of the service account token                                                                   | `true`          |
 | `receiveDistributor.autoscaling.enabled`                               | Enable autoscaling for Thanos Receive Distributor                                                                           | `false`         |
 | `receiveDistributor.autoscaling.minReplicas`                           | Minimum number of Thanos Receive Distributor replicas                                                                       | `""`            |
@@ -1062,7 +1073,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `10-debian-10-r416`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `10-debian-10-r435`     |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                | `[]`                    |
 

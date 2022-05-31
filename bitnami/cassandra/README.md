@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`              | Cassandra image registry                                                                                               | `docker.io`          |
 | `image.repository`            | Cassandra image repository                                                                                             | `bitnami/cassandra`  |
-| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.4-debian-10-r0` |
+| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.4-debian-10-r3` |
 | `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`       |
 | `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                 |
 | `image.debug`                 | Enable image debug mode                                                                                                | `false`              |
@@ -164,6 +164,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customStartupProbe`                    | Override default startup probe                                                            | `{}`            |
 | `lifecycleHooks`                        | Override default etcd container hooks                                                     | `{}`            |
 | `schedulerName`                         | Alternative scheduler                                                                     | `""`            |
+| `terminationGracePeriodSeconds`         | In seconds, time the given to the Cassandra pod needs to terminate gracefully             | `""`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for cassandra container               | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for cassandra container          | `[]`            |
 | `initContainers`                        | Add additional init containers to the cassandra pods                                      | `[]`            |
@@ -203,6 +204,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.clusterIP`                | Service Cluster IP                                                            | `""`        |
 | `service.externalTrafficPolicy`    | Service external traffic policy                                               | `Cluster`   |
 | `service.annotations`              | Provide any additional annotations which may be required.                     | `{}`        |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"          | `None`      |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                   | `{}`        |
 | `networkPolicy.enabled`            | Specifies whether a NetworkPolicy should be created                           | `false`     |
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                    | `true`      |
 
@@ -227,7 +230,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume                                                           | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume                                                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume                                                           | `10-debian-10-r410`     |
+| `volumePermissions.image.tag`                 | Init container volume                                                           | `10-debian-10-r431`     |
 | `volumePermissions.image.pullPolicy`          | Init container volume                                                           | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                          | `{}`                    |
@@ -242,7 +245,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                   | `false`                      |
 | `metrics.image.registry`                   | Cassandra exporter image registry                                                                      | `docker.io`                  |
 | `metrics.image.repository`                 | Cassandra exporter image name                                                                          | `bitnami/cassandra-exporter` |
-| `metrics.image.tag`                        | Cassandra exporter image tag                                                                           | `2.3.8-debian-10-r33`        |
+| `metrics.image.tag`                        | Cassandra exporter image tag                                                                           | `2.3.8-debian-10-r54`        |
 | `metrics.image.pullPolicy`                 | image pull policy                                                                                      | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                       | `[]`                         |
 | `metrics.resources.limits`                 | The resources limits for the container                                                                 | `{}`                         |
@@ -254,9 +257,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                | `""`                         |
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                    | `{}`                         |
 | `metrics.serviceMonitor.metricRelabelings` | Specify Metric Relabelings to add to the scrape endpoint                                               | `[]`                         |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                     | `[]`                         |
 | `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                               | `false`                      |
 | `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                      | `""`                         |
-| `metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the installed Prometheus Operator                             | `{}`                         |
+| `metrics.serviceMonitor.labels`            | Used to pass Labels that are required by the installed Prometheus Operator                             | `{}`                         |
 | `metrics.containerPorts.http`              | HTTP Port on the Host and Container                                                                    | `8080`                       |
 | `metrics.containerPorts.jmx`               | JMX Port on the Host and Container                                                                     | `5555`                       |
 

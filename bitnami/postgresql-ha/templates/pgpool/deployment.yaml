@@ -69,7 +69,7 @@ spec:
       {{- if .Values.pgpool.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.pgpool.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if .Values.serviceAccount.enabled }}
+      {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name }}
       {{- end }}
       initContainers:
@@ -166,7 +166,7 @@ spec:
             - name: LDAP_URI
               value: {{ .Values.ldap.uri | quote }}
             - name: LDAP_BASE
-              value: {{ .Values.ldap.base | quote }}
+              value: {{ coalesce .Values.ldap.base .Values.ldap.basedn | quote }}
             - name: LDAP_BIND_DN
               value: {{ .Values.ldap.binddn | quote }}
             - name: LDAP_BIND_PASSWORD

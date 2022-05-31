@@ -41,6 +41,13 @@
           }
         },
         {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-mediawiki-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
           "action_id": "goss",
           "params": {
             "resources": {

@@ -94,7 +94,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`                         | Args to override all containers in the deployment                                                                                                   | `["infinity"]`          |
 | `image.registry`                              | Redis&trade; cluster image registry                                                                                                                 | `docker.io`             |
 | `image.repository`                            | Redis&trade; cluster image repository                                                                                                               | `bitnami/redis-cluster` |
-| `image.tag`                                   | Redis&trade; cluster image tag (immutable tags are recommended)                                                                                     | `6.2.6-debian-10-r190`  |
+| `image.tag`                                   | Redis&trade; cluster image tag (immutable tags are recommended)                                                                                     | `6.2.7-debian-10-r22`   |
 | `image.pullPolicy`                            | Redis&trade; cluster image pull policy                                                                                                              | `IfNotPresent`          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
 | `image.debug`                                 | Enable image debug mode                                                                                                                             | `false`                 |
@@ -142,6 +142,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.loadBalancerIP`                      | Load balancer IP if `service.type` is `LoadBalancer`                                                                                                | `""`                    |
 | `service.loadBalancerSourceRanges`            | Service Load Balancer sources                                                                                                                       | `[]`                    |
 | `service.externalTrafficPolicy`               | Service external traffic policy                                                                                                                     | `Cluster`               |
+| `service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                | `None`                  |
+| `service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                                         | `{}`                    |
 | `persistence.path`                            | Path to mount the volume at, to use other images Redis&trade; images.                                                                               | `/bitnami/redis/data`   |
 | `persistence.subPath`                         | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services                                             | `""`                    |
 | `persistence.storageClass`                    | Storage class of backing PVC                                                                                                                        | `""`                    |
@@ -153,7 +155,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                         | `10-debian-10-r400`     |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                         | `10-debian-10-r431`     |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                                                                                              | `{}`                    |
@@ -280,7 +282,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                                               | `false`                  |
 | `metrics.image.registry`                   | Redis&trade; exporter image registry                                                                                               | `docker.io`              |
 | `metrics.image.repository`                 | Redis&trade; exporter image name                                                                                                   | `bitnami/redis-exporter` |
-| `metrics.image.tag`                        | Redis&trade; exporter image tag                                                                                                    | `1.37.0-debian-10-r31`   |
+| `metrics.image.tag`                        | Redis&trade; exporter image tag                                                                                                    | `1.37.0-debian-10-r62`   |
 | `metrics.image.pullPolicy`                 | Redis&trade; exporter image pull policy                                                                                            | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                   | `[]`                     |
 | `metrics.resources`                        | Metrics exporter resource requests and limits                                                                                      | `{}`                     |
@@ -317,7 +319,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctlImage.command`            | sysctlImage command to execute                     | `[]`                    |
 | `sysctlImage.registry`           | sysctlImage Init container registry                | `docker.io`             |
 | `sysctlImage.repository`         | sysctlImage Init container repository              | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                | sysctlImage Init container tag                     | `10-debian-10-r400`     |
+| `sysctlImage.tag`                | sysctlImage Init container tag                     | `10-debian-10-r431`     |
 | `sysctlImage.pullPolicy`         | sysctlImage Init container pull policy             | `IfNotPresent`          |
 | `sysctlImage.pullSecrets`        | Specify docker-registry secret names as an array   | `[]`                    |
 | `sysctlImage.mountHostSys`       | Mount the host `/sys` folder to `/host-sys`        | `false`                 |

@@ -4,8 +4,14 @@ kind: Endpoints
 metadata:
   name: {{ template "kube-prometheus.fullname" . }}-kube-controller-manager
   namespace: {{ .Values.kubeControllerManager.namespace }}
-  labels: {{- include "kube-prometheus.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: kube-controller-manager
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 subsets:
   - addresses:
       {{- range .Values.kubeControllerManager.endpoints }}
@@ -13,6 +19,6 @@ subsets:
       {{- end }}
     ports:
       - name: http-metrics
-        port: {{ .Values.kubeControllerManager.service.port }}
+        port: {{ .Values.kubeControllerManager.service.ports.http }}
         protocol: TCP
 {{- end }}

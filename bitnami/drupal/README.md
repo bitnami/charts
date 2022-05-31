@@ -7,7 +7,7 @@ Drupal is one of the most versatile open source content management systems in th
 [Overview of Drupal](http://drupal.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -440,9 +440,9 @@ To upgrade to `9.0.0`, you have two alternatives:
 Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
 
 ```console
-export DRUPAL_PASSWORD=$(kubectl get secret --namespace default drupal -o jsonpath="{.data.drupal-password}" | base64 --decode)
-export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default drupal-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-export MARIADB_PASSWORD=$(kubectl get secret --namespace default drupal-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export DRUPAL_PASSWORD=$(kubectl get secret --namespace default drupal -o jsonpath="{.data.drupal-password}" | base64 -d)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default drupal-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default drupal-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=drupal -o jsonpath="{.items[0].metadata.name}")
 ```
 
