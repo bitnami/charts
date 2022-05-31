@@ -7,7 +7,7 @@ MariaDB is an open source, community-developed SQL database server that is widel
 [Overview of MariaDB](https://mariadb.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```bash
@@ -61,6 +61,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global storage class for dynamic provisioning   | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -76,6 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
+
 
 ### MariaDB common parameters
 
@@ -100,6 +102,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication`                                                                                           | `{}`                  |
 | `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                                                                                                                  | `{}`                  |
 | `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                                                                                                           | `""`                  |
+
 
 ### MariaDB Primary parameters
 
@@ -188,6 +191,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.pdb.maxUnavailable`                    | Maximum number/percentage of MariaDB primary pods that can be unavailable after the eviction                      | `""`                |
 | `primary.revisionHistoryLimit`                  | Maximum number of revisions that will be maintained in the StatefulSet                                            | `10`                |
 
+
 ### MariaDB Secondary parameters
 
 | Name                                              | Description                                                                                                           | Value               |
@@ -275,6 +279,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.pdb.maxUnavailable`                    | Maximum number/percentage of MariaDB secondary pods that may be made unavailable                                      | `""`                |
 | `secondary.revisionHistoryLimit`                  | Maximum number of revisions that will be maintained in the StatefulSet                                                | `10`                |
 
+
 ### RBAC parameters
 
 | Name                                          | Description                                                    | Value   |
@@ -284,6 +289,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                  | Annotations for MariaDB Service Account                        | `{}`    |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account | `false` |
 | `rbac.create`                                 | Whether to create and use RBAC resources or not                | `false` |
+
 
 ### Volume Permissions parameters
 
@@ -297,6 +303,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | Init container volume-permissions resource requests                                                                  | `{}`                    |
+
 
 ### Metrics parameters
 
@@ -340,6 +347,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`                      |
 | `metrics.prometheusRule.rules`               | Prometheus Rule definitions                                                                                                               | `[]`                      |
 
+
 ### NetworkPolicy parameters
 
 | Name                                                                   | Description                                                                                                                            | Value   |
@@ -358,6 +366,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.secondaryAccessOnlyFrom.customRules`       | Custom network policy for the secondary nodes.                                                                                         | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`                  | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                         | `false` |
 | `networkPolicy.egressRules.customRules`                                | Custom network policy rule                                                                                                             | `{}`    |
+
 
 The above parameters map to the env variables defined in [bitnami/mariadb](https://github.com/bitnami/bitnami-docker-mariadb). For more information please refer to the [bitnami/mariadb](https://github.com/bitnami/bitnami-docker-mariadb) image documentation.
 
@@ -536,4 +545,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License
+limitations under the License.
