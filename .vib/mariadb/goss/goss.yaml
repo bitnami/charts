@@ -25,12 +25,6 @@ command:
     exit-status: 0
     stdout: []
     stderr: []
-  which-mariadb-test:
-    exec: which mariadb
-    exit-status: 0
-    stdout: 
-      - /opt/bitnami/mariadb/bin/mariadb
-    stderr: []
   create-database-test:
     exec: mariadb -h localhost -u root -p{{getEnv "MARIADB_ROOT_PASSWORD"}}  {{getEnv "MARIADB_DATABASE"}}  -e 'DROP TABLE IF EXISTS TEST; create table TEST( test_id int auto_increment, test_value int, primary key(test_id)); INSERT INTO TEST (TEST_VALUE) VALUES (-1);SELECT * FROM TEST'
     exit-status: 0
