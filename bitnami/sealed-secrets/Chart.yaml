@@ -17,8 +17,8 @@ keywords:
   - sealed-secrets
 kubeVersion: '>=1.16.0-0'
 maintainers:
-  - url: https://github.com/bitnami/charts
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: sealed-secrets
 sources:
   - https://github.com/bitnami/bitnami-docker-sealed-secrets
