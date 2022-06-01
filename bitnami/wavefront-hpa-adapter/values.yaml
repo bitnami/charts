@@ -59,7 +59,7 @@ image:
   repository: bitnami/wavefront-hpa-adapter
   ## @param image.tag Adapter image tag (immutabe tags are recommended)
   ##
-  tag: 0.9.8-scratch-r20
+  tag: 0.9.8-scratch-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -426,7 +426,6 @@ service:
   ## @param service.extraPorts Extra port to expose on WordPress service
   ##
   extraPorts: []
-
   ## loadBalancerIP for the Service (optional, cloud specific)
   ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ## @param service.loadBalancerIP Adapter service LoadBalancer IP
@@ -453,7 +452,17 @@ service:
   ## @param service.externalTrafficPolicy External traffic policy for the service
   ##
   externalTrafficPolicy: Cluster
-
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 ## @section RBAC parameters
 ## Specifies whether RBAC resources should be created
 ## @param rbac.create Weather to create & use RBAC resources or not

@@ -18,12 +18,12 @@ keywords:
   - tls
   - certificate
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: cert-manager
 sources:
   - https://github.com/bitnami/bitnami-docker-cert-manager
   - https://github.com/bitnami/bitnami-docker-cert-manager-webhook
   - https://github.com/bitnami/bitnami-docker-cainjector
   - https://github.com/jetstack/cert-manager
-version: 0.5.5
+version: 0.5.6

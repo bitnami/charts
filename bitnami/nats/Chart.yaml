@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.8.3
+appVersion: 2.8.4
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -18,10 +18,10 @@ keywords:
   - addressing
   - discovery
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: nats
 sources:
   - https://github.com/bitnami/bitnami-docker-nats
   - https://nats.io/
-version: 7.2.5
+version: 7.3.3

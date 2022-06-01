@@ -20,11 +20,11 @@ keywords:
   - learning
   - library
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: tensorflow-resnet
 sources:
   - https://github.com/bitnami/bitnami-docker-tensorflow-serving
   - https://github.com/bitnami/bitnami-docker-tensorflow-resnet
   - https://www.tensorflow.org/serving/
-version: 3.5.11
+version: 3.5.12

@@ -42,6 +42,6 @@ APP VERSION: {{ .Chart.AppVersion }}
 2. Login with the following credentials
 
   echo Username: {{ .Values.jenkinsUser }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.jenkins-password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.jenkins-password}" | base64 -d)
 
 {{- include "jenkins.checkRollingTags" . }}

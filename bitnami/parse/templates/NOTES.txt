@@ -89,7 +89,7 @@ service:
 2. Complete your Parse Dashboard deployment by running:
 
   helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    --set server.host=$APP_HOST,server.containerPorts.http={{ .Values.server.containerPorts.http }},server.masterKey=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.master-key}" | base64 --decode),dashboard.username={{ .Values.dashboard.username }},dashboard.password=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.parse-dashboard-password}" | base64 --decode){{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
+    --set server.host=$APP_HOST,server.containerPorts.http={{ .Values.server.containerPorts.http }},server.masterKey=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.master-key}" | base64 -d),dashboard.username={{ .Values.dashboard.username }},dashboard.password=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.parse-dashboard-password}" | base64 -d){{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 
 {{- else }}
 
@@ -114,7 +114,7 @@ service:
 2. Get your Parse Dashboard login credentials by running:
 
   echo Username: {{ .Values.dashboard.username }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.parse-dashboard-password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.parse-dashboard-password}" | base64 -d)
 {{- end }}
 {{- end }}
 {{- end }}
