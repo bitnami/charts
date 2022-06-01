@@ -29,9 +29,7 @@ it('allows to import accounts', () => {
 
 it('allows adding a new user', () => {
   cy.login();
-  cy.get('#with-label').click();
-  cy.get('#admin_link').click({ force: true });
-  cy.get('#user_management').click();
+  cy.visit('index.php?module=Users&action=index');
   cy.contains('Create New User').click({ force: true });
   cy.fixture('users').then((user) => {
     cy.get('#user_name').type(`${user.newUser.username}.${random}`);
@@ -68,8 +66,7 @@ it('allows adding a new contact', () => {
 
 it('verifies SMTP configuration', () => {
   cy.login();
-  cy.get('#with-label').click();
-  cy.get('#admin_link').click({ force: true });
+  cy.visit('index.php?module=Administration&action=index');
   cy.contains('Email Settings').click();
   cy.get('#mail_smtpserver').should('have.value', Cypress.env('emailServer'));
   cy.get('#mail_smtpport').should('have.value', Cypress.env('smtpPort'));
