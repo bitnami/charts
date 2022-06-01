@@ -1028,7 +1028,7 @@ metrics:
       # - alert: minio cluster nodes offline
       #   annotations:
       #     summary: "minio cluster nodes offline"
-      #     description: "minio cluster nodes offline���pod {{`{{`}} $labels.pod {{`}}`}} service {{`{{`}} $labels.job {{`}}`}} offline"
+      #     description: "minio cluster nodes offline, pod {{`{{`}} $labels.pod {{`}}`}} service {{`{{`}} $labels.job {{`}}`}} offline"
       #   for: 10m
       #   expr: minio_cluster_nodes_offline_total > 0
       #   labels:
