@@ -24,10 +24,10 @@ maintainers:
   - name: cellebyte
     email: cellebyte@gmail.com
   - name: Bitnami
-    email: containers@bitnami.com
+    url: https://github.com/bitnami/charts
 name: metallb
 sources:
   - https://github.com/metallb/metallb
   - https://github.com/bitnami/bitnami-docker-metallb
   - https://metallb.universe.tf
-version: 3.0.6
+version: 3.0.7

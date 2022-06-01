@@ -22,10 +22,10 @@ keywords:
   - nodejs
   - git
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: node
 sources:
   - https://github.com/bitnami/bitnami-docker-node
   - http://nodejs.org/
-version: 18.1.5
+version: 18.1.6

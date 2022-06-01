@@ -17,10 +17,10 @@ keywords:
   - cluster
   - metrics
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: metrics-server
 sources:
   - https://github.com/bitnami/bitnami-docker-metrics-server
   - https://github.com/kubernetes-incubator/metrics-server
-version: 6.0.4
+version: 6.0.5

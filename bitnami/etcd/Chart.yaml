@@ -18,10 +18,10 @@ keywords:
   - cache
   - key-value
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: etcd
 sources:
   - https://github.com/bitnami/bitnami-docker-etcd
   - https://coreos.com/etcd/
-version: 8.2.3
+version: 8.2.4

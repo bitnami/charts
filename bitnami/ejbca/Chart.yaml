@@ -24,10 +24,10 @@ keywords:
   - pki
   - certificate
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: ejbca
 sources:
   - https://github.com/bitnami/bitnami-docker-ejbca
   - https://www.ejbca.org/
-version: 6.2.5
+version: 6.2.6

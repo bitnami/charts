@@ -26,10 +26,10 @@ keywords:
   - application
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: mediawiki
 sources:
   - https://github.com/bitnami/bitnami-docker-mediawiki
   - https://www.mediawiki.org/
-version: 14.2.6
+version: 14.2.7
