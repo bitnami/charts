@@ -4,7 +4,6 @@
     "lastName": "Doe",
     "username": "janedoe",
     "password": "someComplicatedPass12345!",
-    "role": "User",
     "email": "testemails@email.com"
   }
 }

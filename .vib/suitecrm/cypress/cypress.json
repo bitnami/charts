@@ -5,7 +5,7 @@
     "username": "user",
     "password": "ComplicatedPassword123!4",
     "emailServer": "testhost",
-    "port": "9125",
+    "smtpPort": "9125",
     "smtpUser": "testHostUser"
   },
   "defaultCommandTimeout": 40000,

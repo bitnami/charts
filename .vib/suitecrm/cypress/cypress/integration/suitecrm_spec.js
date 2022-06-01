@@ -8,7 +8,7 @@ it('allows to log in/log out', () => {
   );
   cy.contains('SUITECRM DASHBOARD');
   cy.visit('/index.php?module=Users&action=Logout');
-  cy.contains('#bigbutton', 'Log In');
+  cy.contains('Log In');
 });
 
 it('allows to import accounts', () => {
@@ -74,6 +74,6 @@ it('verifies SMTP configuration', () => {
   cy.get('#admin_link').click({ force: true });
   cy.contains('Email Settings').click();
   cy.get('#mail_smtpserver').should('have.value', Cypress.env('emailServer'));
-  cy.get('#mail_smtpport').should('have.value', Cypress.env('port'));
+  cy.get('#mail_smtpport').should('have.value', Cypress.env('smtpPort'));
   cy.get('#mail_smtpuser').should('have.value', Cypress.env('smtpUser'));
 });
