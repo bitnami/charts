@@ -1,11 +1,11 @@
 command:
   postgresql-connect:
-    exec: PGPASSWORD=ComplicatedPassword142! psql -U user -d test_database
+    exec: PGPASSWORD=ComplicatedPassword1234 psql -U user -d test_database
     exit-status: 0
     stderr: [ ]
     timeout: 20000
   postgresql-create-table:
-    exec: PGPASSWORD=ComplicatedPassword142! psql -U user -d test_database -c 'CREATE TABLE new_table_created (id int, first_name VARCHAR(50));'
+    exec: PGPASSWORD=ComplicatedPassword1234 psql -U user -d test_database -c 'CREATE TABLE new_table_created (id int, first_name VARCHAR(50));'
     exit-status: 0
     stdout:
       - 'CREATE TABLE'
