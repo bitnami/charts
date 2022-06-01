@@ -67,7 +67,7 @@ To access your SonarQube site from outside the cluster follow the steps below:
 3. Login with the following credentials below:
 
   echo Username: {{ .Values.sonarqubeUsername }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.sonarqube-password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.sonarqube-password}" | base64 -d)
 
 {{- if .Values.metrics.jmx.enabled }}
 

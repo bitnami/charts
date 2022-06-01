@@ -20,10 +20,10 @@ keywords:
   - monitoring
   - observability
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: kubernetes-event-exporter
 sources:
   - https://github.com/bitnami/bitnami-docker-kubernetes-event-exporter
   - https://github.com/opsgenie/kubernetes-event-exporter
-version: 1.4.12
+version: 1.4.13

@@ -29,10 +29,10 @@ keywords:
   - web
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: magento
 sources:
   - https://github.com/bitnami/bitnami-docker-magento
   - https://magento.com/
-version: 20.1.5
+version: 20.1.7

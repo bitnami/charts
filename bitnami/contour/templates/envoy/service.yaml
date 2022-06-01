@@ -3,13 +3,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}-envoy
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: envoy
     {{- if .Values.envoy.service.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.labels "context" $) | nindent 4 }}
     {{- end }}
-      {{- if .Values.commonLabels }}
+    {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
@@ -35,6 +35,12 @@ spec:
   {{- end }}
   {{- if not (empty .Values.envoy.service.clusterIP) }}
   clusterIP: {{ .Values.envoy.service.clusterIP | quote }}
+  {{- end }}
+  {{- if .Values.envoy.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.envoy.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.envoy.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.envoy.service.externalIPs }}
   externalIPs: {{- toYaml .Values.envoy.service.externalIPs | nindent 4 }}
@@ -68,7 +74,7 @@ spec:
       nodePort: null
       {{- end }}
     {{- if .Values.envoy.service.extraPorts }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.extraPorts "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: envoy

@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 3.3.5
+appVersion: 3.3.6
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -27,8 +27,8 @@ keywords:
   - Continuous delivery
   - Continous deployment
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: argo-workflows
 sources:
   - https://github.com/bitnami/bitnami-docker-argo-workflow-cli

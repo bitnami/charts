@@ -44,7 +44,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 2. Get your Drupal login credentials by running:
 
   echo Username: {{ .Values.drupalUsername }}
-  echo Password: $(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "drupal.secretName" . }} -o jsonpath="{.data.drupal-password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "drupal.secretName" . }} -o jsonpath="{.data.drupal-password}" | base64 -d)
 
 {{- else -}}
 
@@ -57,7 +57,7 @@ host. To configure Drupal to use and external database host:
 
 1. Complete your Drupal deployment by running:
 
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "drupal.secretName" . }} -o jsonpath="{.data.drupal-password}" | base64 --decode)
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "drupal.secretName" . }} -o jsonpath="{.data.drupal-password}" | base64 -d)
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
 

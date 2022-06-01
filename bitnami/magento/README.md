@@ -7,7 +7,7 @@ Magento is a powerful open source e-commerce platform. With easy customizations 
 [Overview of Magento](http://www.magento.com)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -687,9 +687,9 @@ Consequences:
 
 ```console
 $ export APP_HOST=$(kubectl get svc --namespace default magento --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
-$ export APP_PASSWORD=$(kubectl get secret --namespace default magento -o jsonpath="{.data.magento-password}" | base64 --decode)
-$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+$ export APP_PASSWORD=$(kubectl get secret --namespace default magento -o jsonpath="{.data.magento-password}" | base64 -d)
+$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 $ kubectl delete deployments.apps magento
 $ helm upgrade magento bitnami/magento --set magentoHost=$APP_HOST,magentoPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
 ```
@@ -738,9 +738,9 @@ Obtain the credentials and the names of the PVCs used to hold the MariaDB data o
 
 ```console
 $ export MAGENTO_HOST=$(kubectl get svc --namespace default magento --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
-$ export MAGENTO_PASSWORD=$(kubectl get secret --namespace default magento -o jsonpath="{.data.magento-password}" | base64 --decode)
-$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+$ export MAGENTO_PASSWORD=$(kubectl get secret --namespace default magento -o jsonpath="{.data.magento-password}" | base64 -d)
+$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default magento-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 $ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=magento -o jsonpath="{.items[0].metadata.name}")
 ```
 
