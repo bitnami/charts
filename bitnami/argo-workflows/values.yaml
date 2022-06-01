@@ -641,10 +641,10 @@ controller:
     ##  configuration: {}
     ##
     {{- if .Values.controller.metrics.enabled }}
-    metricsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.metrics "context" $) | nindent 4 }}
+    metricsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.metrics "context" $) | nindent 2 }}
     {{- end }}
     {{- if .Values.controller.telemetry.enabled }}
-    telemetryConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.telemetry "context" $) | nindent 4 }}
+    telemetryConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.telemetry "context" $) | nindent 2 }}
     {{- end }}
     {{- if (include "argo-workflows.controller.persistence.enabled" .) }}
     persistence:
@@ -675,7 +675,7 @@ controller:
     workflowDefaults: {{- include "common.tplvalues.render" (dict "value" .Values.controller.workflowDefaults "context" $) | nindent 2 }}
     {{- end }}
     {{- if and .Values.server.auth.enabled .Values.server.auth.sso.enabled }}
-    sso: {{- include "common.tplvalues.render" (dict "value" .Values.server.auth.sso "context" $) | nindent 4 }}
+    sso: {{- include "common.tplvalues.render" (dict "value" .Values.server.auth.sso "context" $) | nindent 2 }}
     {{- end }}
     ## Uncomment to set workflowRestrictions
     ## Ref: https://argoproj.github.io/argo-workflows/workflow-restrictions/
