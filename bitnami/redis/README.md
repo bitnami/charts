@@ -292,6 +292,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.persistence.annotations`            | Additional custom annotations for the PVC                                                                 | `{}`                     |
 | `replica.persistence.selector`               | Additional labels to match for the PVC                                                                    | `{}`                     |
 | `replica.persistence.dataSource`             | Custom PVC data source                                                                                    | `{}`                     |
+| `replica.persistence.existingClaim`          | Use a existing PVC which must be created manually before bound                                            | `""`                     |
 | `replica.service.type`                       | Redis&trade; replicas service type                                                                        | `ClusterIP`              |
 | `replica.service.ports.redis`                | Redis&trade; replicas service port                                                                        | `6379`                   |
 | `replica.service.nodePorts.redis`            | Node port for Redis&trade; replicas                                                                       | `""`                     |
