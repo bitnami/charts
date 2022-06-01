@@ -20,8 +20,8 @@ keywords:
   - infrastructure
   - intel
 maintainers:
-  - url: https://github.com/bitnami/charts
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: haproxy-intel
 sources:
   - https://github.com/bitnami/bitnami-docker-haproxy-intel
