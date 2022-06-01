@@ -7,7 +7,7 @@ process:
   mysqld:
     running: true
 file:   
-  /bitnami/mariadb/data/test_database:
+  {{ printf "/bitnami/mariadb/data/%s:" .Env.MARIADB_DATABASE }}:
     mode: "2700"
     filetype: directory
     exists: true
@@ -26,9 +26,9 @@ command:
     stdout: []
     stderr: []
   create-table-test:
-    exec: mariadb -h localhost -u root -p{{getEnv "MARIADB_ROOT_PASSWORD"}}  {{getEnv "MARIADB_DATABASE"}}  -e 'DROP TABLE IF EXISTS TEST; create table TEST( test_id int auto_increment, test_value int, primary key(test_id)); INSERT INTO TEST (TEST_VALUE) VALUES (-1);SELECT * FROM TEST'
+    exec: mariadb -h localhost -u root -p"$MARIADB_ROOT_PASSWORD" "$MARIADB_DATABASE" -e 'DROP TABLE IF EXISTS TEST; create table TEST( test_id int auto_increment, test_value int, primary key(test_id)); INSERT INTO TEST (TEST_VALUE) VALUES (1989);SELECT * FROM TEST'
     exit-status: 0
     stdout:
-    - -1
+    - 1989
     stderr: []
     timeout: 9000
