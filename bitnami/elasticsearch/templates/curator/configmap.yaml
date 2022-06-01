@@ -15,7 +15,7 @@ metadata:
 data:
   action_file.yml: {{ required "A valid .Values.curator.configMaps.action_file_yml entry is required!" (toYaml .Values.curator.configMaps.action_file_yml | indent 2) }}
   {{- if .Values.curator.configMaps.config_yml }}
-  config.yml: {{- include "common.tplvalues.render" ( dict "value" .Values.curator.configMaps.config_yml "context" $ ) | nindent 2 }}
+  config.yml: {{- include "common.tplvalues.render" ( dict "value" .Values.curator.configMaps.config_yml "context" $ ) | nindent 4 }}
   {{- else }}
   config.yml: |-
     client:
