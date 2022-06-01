@@ -18,10 +18,10 @@ keywords:
   - machine
   - learning
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: mxnet
 sources:
   - https://github.com/bitnami/bitnami-docker-mxnet
   - https://mxnet.apache.org/
-version: 3.0.8
+version: 3.0.9

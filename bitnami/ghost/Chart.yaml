@@ -27,10 +27,10 @@ keywords:
   - nodejs
   - javascript
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: ghost
 sources:
   - https://github.com/bitnami/bitnami-docker-ghost
   - https://www.ghost.org/
-version: 17.2.3
+version: 17.2.4

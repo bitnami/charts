@@ -16,10 +16,10 @@ keywords:
   - apache
   - spark
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: spark
 sources:
   - https://github.com/bitnami/bitnami-docker-spark
   - https://spark.apache.org/
-version: 6.1.5
+version: 6.1.6

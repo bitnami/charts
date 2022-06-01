@@ -18,12 +18,12 @@ keywords:
   - replication
   - cluster
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
   - email: cedric@desaintmartin.fr
     name: desaintmartin
 name: postgresql
 sources:
   - https://github.com/bitnami/bitnami-docker-postgresql
   - https://www.postgresql.org/
-version: 11.6.0
+version: 11.6.1
