@@ -18,10 +18,10 @@ keywords:
   - addressing
   - discovery
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: nats
 sources:
   - https://github.com/bitnami/bitnami-docker-nats
   - https://nats.io/
-version: 7.3.2
+version: 7.3.3

@@ -25,9 +25,9 @@ keywords:
   - service catalog
   - deployment
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: kubeapps
 sources:
   - https://github.com/vmware-tanzu/kubeapps
-version: 8.1.7
+version: 8.1.8

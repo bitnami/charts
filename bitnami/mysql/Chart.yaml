@@ -19,10 +19,10 @@ keywords:
   - cluster
   - high availability
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: mysql
 sources:
   - https://github.com/bitnami/bitnami-docker-mysql
   - https://mysql.com
-version: 9.1.2
+version: 9.1.3

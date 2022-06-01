@@ -21,10 +21,10 @@ keywords:
   - http
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: joomla
 sources:
   - https://github.com/bitnami/bitnami-docker-joomla
   - https://www.joomla.org/
-version: 13.2.7
+version: 13.2.8

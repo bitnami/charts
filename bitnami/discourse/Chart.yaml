@@ -24,8 +24,8 @@ keywords:
   - community
   - forum
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
   - email: username.taken@gmail.com
     name: paulczar
   - email: preteluca@gmail.com
@@ -35,4 +35,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-discourse
   - https://github.com/spinnaker
   - https://www.discourse.org/
-version: 7.3.0
+version: 7.3.1
