@@ -77,7 +77,7 @@ Installed components:
 2. Login with the following credentials below to see your blog:
 
   echo Username: {{ .Values.gateway.auth.username }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "grafana-loki.gateway.secretName" . }} -o jsonpath="{.data.password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "grafana-loki.gateway.secretName" . }} -o jsonpath="{.data.password}" | base64 -d)
 {{- end }}
 {{- else }}
 1. Get the query-frontend URL by running these commands:

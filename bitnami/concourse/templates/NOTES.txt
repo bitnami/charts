@@ -104,7 +104,7 @@ Get your Concourse login credentials by running:
 
     echo "Username : Password
 -------------------
-$(kubectl get secret --namespace {{ $releaseNamespace }} {{ $concourseWebSecretName }} -o jsonpath="{.data.local_users}" | base64 --decode)"
+$(kubectl get secret --namespace {{ $releaseNamespace }} {{ $concourseWebSecretName }} -o jsonpath="{.data.local_users}" | base64 -d)"
 
 Concourse can be accessed via port {{ .Values.web.containerPorts.http }}: on the following DNS name from within your cluster:
 

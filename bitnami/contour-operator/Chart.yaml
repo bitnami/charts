@@ -19,10 +19,10 @@ keywords:
   - envoy
 kubeVersion: '>= 1.21.0-0'
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: contour-operator
 sources:
   - https://github.com/projectcontour/contour-operator
   - https://github.com/bitnami/bitnami-docker-contour-operator
-version: 1.2.0
+version: 1.2.1

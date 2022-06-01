@@ -72,7 +72,7 @@ spec:
       {{- if .Values.postgresql.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.postgresql.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if .Values.serviceAccount.enabled }}
+      {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name }}
       {{- end }}
       hostNetwork: {{ .Values.postgresql.hostNetwork }}
@@ -245,9 +245,9 @@ spec:
             - name: POSTGRESQL_TCP_KEEPALIVES_IDLE
               value: {{ .Values.postgresql.tcpKeepalivesIdle | quote }}
             {{- end }}
-            {{- if .Values.postgresql.tcpKeealivesCount }}
+            {{- if .Values.postgresql.tcpKeepalivesCount }}
             - name: POSTGRESQL_TCP_KEEPALIVES_COUNT
-              value: {{ .Values.postgresql.tcpKeealivesCount | quote }}
+              value: {{ .Values.postgresql.tcpKeepalivesCount | quote }}
             {{- end }}
             {{- if .Values.postgresql.statementTimeout }}
             - name: POSTGRESQL_STATEMENT_TIMEOUT
