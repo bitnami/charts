@@ -289,9 +289,9 @@ spec:
             - name: POSTGRESQL_ENABLE_LDAP
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
             {{- if .Values.ldap.enabled }}
-            {{- if .Values.ldap.url }}
+            {{- if or .Values.ldap.url .Values.ldap.uri }}
             - name: POSTGRESQL_LDAP_URL
-              value: {{ .Values.ldap.url }}
+              value: {{ coalesce .Values.ldap.url .Values.ldap.uri }}
             {{- else }}
             - name: POSTGRESQL_LDAP_SERVER
               value: {{ .Values.ldap.server }}
@@ -308,10 +308,10 @@ spec:
             - name: POSTGRESQL_LDAP_SUFFIX
               value: {{ .Values.ldap.suffix | quote }}
             - name: POSTGRESQL_LDAP_BASE_DN
-              value: {{ .Values.ldap.baseDN }}
+              value: {{ coalesce .Values.ldap.baseDN .Values.ldap.basedn }}
             - name: POSTGRESQL_LDAP_BIND_DN
-              value: {{ .Values.ldap.bindDN }}
-            {{- if not (empty .Values.ldap.bind_password) }}
+              value: {{ coalesce .Values.ldap.bindDN .Values.ldap.binddn}}
+            {{- if or  (not (empty .Values.ldap.bind_password)) (not (empty .Values.ldap.bindpw)) }}
             - name: POSTGRESQL_LDAP_BIND_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -319,9 +319,9 @@ spec:
                   key: ldap-password
             {{- end }}
             - name: POSTGRESQL_LDAP_SEARCH_ATTR
-              value: {{ .Values.ldap.search_attr }}
+              value: {{ coalesce .Values.ldap.search_attr .Values.ldap.searchAttribute }}
             - name: POSTGRESQL_LDAP_SEARCH_FILTER
-              value: {{ .Values.ldap.search_filter }}
+              value: {{ coalesce .Values.ldap.search_filter .Values.ldap.searchFilter }}
             {{- end }}
             {{- end }}
             # TLS
