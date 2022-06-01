@@ -20,10 +20,10 @@ keywords:
   - http
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: phpbb
 sources:
   - https://github.com/bitnami/bitnami-docker-phpbb
   - https://www.phpbb.com/
-version: 12.2.6
+version: 12.2.7

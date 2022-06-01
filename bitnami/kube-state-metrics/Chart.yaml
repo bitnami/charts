@@ -17,10 +17,10 @@ keywords:
   - kube-state-metrics
   - monitoring
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: kube-state-metrics
 sources:
   - https://github.com/bitnami/bitnami-docker-kube-state-metrics
   - https://github.com/kubernetes/kube-state-metrics
-version: 3.0.1
+version: 3.0.2

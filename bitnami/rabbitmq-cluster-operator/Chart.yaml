@@ -20,10 +20,10 @@ keywords:
   - AMQP
 kubeVersion: '>= 1.19.0-0'
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: rabbitmq-cluster-operator
 sources:
   - https://github.com/bitnami/bitnami-docker-rabbitmq-cluster-operator
   - https://github.com/rabbitmq/cluster-operator
-version: 2.6.4
+version: 2.6.5

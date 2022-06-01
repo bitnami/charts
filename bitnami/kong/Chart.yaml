@@ -28,10 +28,10 @@ keywords:
   - www
   - reverse proxy
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: kong
 sources:
   - https://github.com/bitnami/bitnami-docker-kong
   - https://konghq.com/
-version: 6.3.2
+version: 6.3.3

@@ -25,9 +25,9 @@ keywords:
   - observability
   - wavefront
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: wavefront-adapter-for-istio
 sources:
   - https://github.com/bitnami/bitnami-docker-wavefront-adapter-for-istio
-version: 2.0.0
+version: 2.0.1

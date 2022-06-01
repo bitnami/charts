@@ -19,12 +19,12 @@ keywords:
 maintainers:
   - name: cellebyte
     url: https://github.com/Cellebyte
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: contour
 sources:
   - https://github.com/projectcontour/contour
   - https://github.com/envoyproxy/envoy
   - https://github.com/bitnami/bitnami-docker-contour
   - https://projectcontour.io
-version: 7.10.0
+version: 7.10.1
