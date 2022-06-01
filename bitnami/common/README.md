@@ -97,12 +97,13 @@ The following table lists the helpers available in the library which are scoped 
 
 ### Names
 
-| Helper identifier        | Description                                                | Expected Input    |
-|--------------------------|------------------------------------------------------------|-------------------|
-| `common.names.name`      | Expand the name of the chart or use `.Values.nameOverride` | `.` Chart context |
-| `common.names.fullname`  | Create a default fully qualified app name.                 | `.` Chart context |
-| `common.names.namespace` | Allow the release namespace to be overridden               | `.` Chart context |
-| `common.names.chart`     | Chart name plus version                                    | `.` Chart context |
+| Helper identifier                 | Description                                                           | Expected Input    |
+|-----------------------------------|-----------------------------------------------------------------------|-------------------|
+| `common.names.name`               | Expand the name of the chart or use `.Values.nameOverride`            | `.` Chart context |
+| `common.names.fullname`           | Create a default fully qualified app name.                            | `.` Chart context |
+| `common.names.namespace`          | Allow the release namespace to be overridden                          | `.` Chart context |
+| `common.names.fullname.namespace` | Create a fully qualified app name adding the installation's namespace | `.` Chart context |
+| `common.names.chart`              | Chart name plus version                                               | `.` Chart context |
 
 ### Secrets
 
