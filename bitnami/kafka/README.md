@@ -512,7 +512,7 @@ This chart allows you to automatically configure Kafka with 3 listeners:
 
 - One for inter-broker communications.
 - A second one for communications with clients within the K8s cluster.
-- (optional) a third listener for communications with clients outside the K8s cluster. Check [this section](#accessing-kafka-brokers-from-outside-the-clusters) for more information.
+- (optional) a third listener for communications with clients outside the K8s cluster. Check [this section](#accessing-kafka-brokers-from-outside-the-cluster) for more information.
 
 For more complex configurations, set the `listeners`, `advertisedListeners` and `listenerSecurityProtocolMap` parameters as needed.
 
