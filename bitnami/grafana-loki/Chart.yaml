@@ -38,8 +38,8 @@ keywords:
   - metrics
   - infrastructure
 maintainers:
-  - url: https://github.com/bitnami/charts
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: grafana-loki
 sources:
   - https://github.com/bitnami/bitnami-docker-grafana-loki
