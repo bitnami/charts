@@ -3,9 +3,7 @@ import { random } from './utils';
 
 it('allows to log in/log out', () => {
   cy.login();
-  cy.contains('You must specify a valid username and password').should(
-    'not.exist'
-  );
+  cy.get('span[class="error"]').should('not.exist');
   cy.contains('SUITECRM DASHBOARD');
   cy.visit('/index.php?module=Users&action=Logout');
   cy.contains('Log In');
