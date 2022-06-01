@@ -2306,7 +2306,7 @@ metrics:
       # - alert: es cluster error
       #   annotations:
       #     summary: "es cluster error"
-      #     description: "es cluster error���������������������������cluster state {{`{{`}} $labels.color {{`}}`}}"
+      #     description: "es cluster error, cluster state {{`{{`}} $labels.color {{`}}`}}"
       #   expr: elasticsearch_cluster_health_status{color="red"} ==1 or elasticsearch_cluster_health_status{color="yellow"} ==1
       #   for: 1m
       #   labels:

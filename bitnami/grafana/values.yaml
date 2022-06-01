@@ -183,7 +183,7 @@ ldap:
   extraConfiguration: ""
   ## @param ldap.tls.enabled Enabled TLS configuration.
   ## @param ldap.tls.startTls Use STARTTLS instead of LDAPS.
-  ##��@param ldap.tls.skipVerify Skip any SSL verification (hostanames or certificates)
+  ## @param ldap.tls.skipVerify Skip any SSL verification (hostanames or certificates)
   ## @param ldap.tls.certificatesMountPath Where LDAP certifcates are mounted.
   ## @param ldap.tls.certificatesSecret Secret with LDAP certificates.
   ## @param ldap.tls.CAFilename  CA certificate filename. Should match with the CA entry key in the ldap.tls.certificatesSecret.
