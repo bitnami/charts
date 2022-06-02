@@ -425,7 +425,7 @@ Note we are providing the new IPs at `cluster.update.newExternalIPs`, the flag `
 
 To scale down the Redis&trade; Cluster, follow these steps:
 
-First perform a normal upgrade setting the `cluster.nodes` value to the desired number of nodes. It should not be less than `6`. Also it is needed to provide the password using the `password`. For example, having more than 6 nodes, to scale down the cluster to 6 nodes:
+First perform a normal upgrade setting the `cluster.nodes` value to the desired number of nodes. It should not be less than `6` and the difference between current number of nodes and the desired should be less or equal to `cluster.replicas` to avoid removing master node an its slaves at the same time. Also it is needed to provide the password using the `password`. For example, having more than 6 nodes, to scale down the cluster to 6 nodes:
 
 ```
 helm upgrade --timeout 600s <release> --set "password=${REDIS_PASSWORD},cluster.nodes=6" .
@@ -435,7 +435,7 @@ The cluster will continue working during the update as long as the quorum is not
 
 > NOTE: To avoid the creation of the Job that initializes the Redis&trade; Cluster again, you will need to provide `cluster.init=false`.
 
-Once all the nodes are ready, get the list of nodes in the cluster using the `CLUSTER NODES` command. You will see references to the ones that were removed. Write down the node IDs of the nodes that show `fail`. In the following example the cluster scaled down from 8 to 6 nodes.
+Once all the nodes are ready, get the list of nodes in the cluster using the `CLUSTER NODES` command. You will see references to the ones that were removed. Write down the node IDs of the nodes that show `fail`. In the following example the cluster scaled down from 7 to 6 nodes.
 
 ```
 redis-cli -a $REDIS_PASSWORD CLUSTER NODES
@@ -443,7 +443,6 @@ redis-cli -a $REDIS_PASSWORD CLUSTER NODES
 ...
 b23bcffa1fd64368d445c1d9bd9aeb92641105f7 10.0.0.70:6379@16379 slave,fail - 1645633139060 0 0 connected
 ...
-d123b31560d4a32eabb10f1bf5e85e6f8f1d8b2a 10.0.0.23:6379@16379 slave,fail
 ```
 
 In each cluster node, execute the following command. Replace the NODE_ID placeholder.
@@ -456,7 +455,6 @@ In the previous example the commands would look like this in each cluster node:
 
 ```
 redis-cli -a $REDIS_PASSWORD CLUSTER FORGET b23bcffa1fd64368d445c1d9bd9aeb92641105f7
-redis-cli -a $REDIS_PASSWORD CLUSTER FORGET d123b31560d4a32eabb10f1bf5e85e6f8f1d8b2a
 ```
 
 ### Using password file
