@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-| `global.redis.password`   | Redis&reg; password (overrides `password`)    | `""`  |
+| `global.redis.password`   | Redis&reg; password (overrides `password`)      | `""`  |
 
 
 ### Redis&reg; Cluster Common parameters
@@ -92,10 +92,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled`                      | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`                 |
 | `diagnosticMode.command`                      | Command to override all containers in the deployment                                                                                                | `["sleep"]`             |
 | `diagnosticMode.args`                         | Args to override all containers in the deployment                                                                                                   | `["infinity"]`          |
-| `image.registry`                              | Redis&reg; cluster image registry                                                                                                                 | `docker.io`             |
-| `image.repository`                            | Redis&reg; cluster image repository                                                                                                               | `bitnami/redis-cluster` |
-| `image.tag`                                   | Redis&reg; cluster image tag (immutable tags are recommended)                                                                                     | `6.2.7-debian-10-r22`   |
-| `image.pullPolicy`                            | Redis&reg; cluster image pull policy                                                                                                              | `IfNotPresent`          |
+| `image.registry`                              | Redis&reg; cluster image registry                                                                                                                   | `docker.io`             |
+| `image.repository`                            | Redis&reg; cluster image repository                                                                                                                 | `bitnami/redis-cluster` |
+| `image.tag`                                   | Redis&reg; cluster image tag (immutable tags are recommended)                                                                                       | `6.2.7-debian-10-r22`   |
+| `image.pullPolicy`                            | Redis&reg; cluster image pull policy                                                                                                                | `IfNotPresent`          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
 | `image.debug`                                 | Enable image debug mode                                                                                                                             | `false`                 |
 | `networkPolicy.enabled`                       | Enable NetworkPolicy                                                                                                                                | `false`                 |
@@ -108,7 +108,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.                                                                                                    | `false`                 |
 | `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                                                  | `false`                 |
 | `rbac.role.rules`                             | Rules to create. It follows the role specification                                                                                                  | `[]`                    |
-| `podSecurityContext.enabled`                  | Enable Redis&reg; pod Security Context                                                                                                            | `true`                  |
+| `podSecurityContext.enabled`                  | Enable Redis&reg; pod Security Context                                                                                                              | `true`                  |
 | `podSecurityContext.fsGroup`                  | Group ID for the pods                                                                                                                               | `1001`                  |
 | `podSecurityContext.runAsUser`                | User ID for the pods                                                                                                                                | `1001`                  |
 | `podSecurityContext.sysctls`                  | Set namespaced sysctls for the pods                                                                                                                 | `[]`                    |
@@ -119,7 +119,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.runAsUser`          | User ID for the containers.                                                                                                                         | `1001`                  |
 | `containerSecurityContext.runAsNonRoot`       | Run container as non root                                                                                                                           | `true`                  |
 | `usePassword`                                 | Use password authentication                                                                                                                         | `true`                  |
-| `password`                                    | Redis&reg; password (ignored if existingSecret set)                                                                                               | `""`                    |
+| `password`                                    | Redis&reg; password (ignored if existingSecret set)                                                                                                 | `""`                    |
 | `existingSecret`                              | Name of existing secret object (for password authentication)                                                                                        | `""`                    |
 | `existingSecretPasswordKey`                   | Name of key containing password to be retrieved from the existing secret                                                                            | `""`                    |
 | `usePasswordFile`                             | Mount passwords as files instead of environment variables                                                                                           | `false`                 |
@@ -144,7 +144,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.externalTrafficPolicy`               | Service external traffic policy                                                                                                                     | `Cluster`               |
 | `service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                | `None`                  |
 | `service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                                         | `{}`                    |
-| `persistence.path`                            | Path to mount the volume at, to use other images Redis&reg; images.                                                                               | `/bitnami/redis/data`   |
+| `persistence.path`                            | Path to mount the volume at, to use other images Redis&reg; images.                                                                                 | `/bitnami/redis/data`   |
 | `persistence.subPath`                         | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services                                             | `""`                    |
 | `persistence.storageClass`                    | Storage class of backing PVC                                                                                                                        | `""`                    |
 | `persistence.annotations`                     | Persistent Volume Claim annotations                                                                                                                 | `{}`                    |
@@ -165,56 +165,56 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&reg; statefulset parameters
 
-| Name                                           | Description                                                                                                  | Value           |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | --------------- |
+| Name                                           | Description                                                                                                | Value           |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------- |
 | `redis.command`                                | Redis&reg; entrypoint string. The command `redis-server` is executed if this is not provided               | `[]`            |
-| `redis.args`                                   | Arguments for the provided command if needed                                                                 | `[]`            |
-| `redis.updateStrategy.type`                    | Argo Workflows statefulset strategy type                                                                     | `RollingUpdate` |
-| `redis.updateStrategy.rollingUpdate.partition` | Partition update strategy                                                                                    | `0`             |
-| `redis.podManagementPolicy`                    | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join           | `Parallel`      |
-| `redis.hostAliases`                            | Deployment pod host aliases                                                                                  | `[]`            |
-| `redis.hostNetwork`                            | Host networking requested for this pod. Use the host's network namespace.                                    | `false`         |
-| `redis.useAOFPersistence`                      | Whether to use AOF Persistence mode or not                                                                   | `yes`           |
+| `redis.args`                                   | Arguments for the provided command if needed                                                               | `[]`            |
+| `redis.updateStrategy.type`                    | Argo Workflows statefulset strategy type                                                                   | `RollingUpdate` |
+| `redis.updateStrategy.rollingUpdate.partition` | Partition update strategy                                                                                  | `0`             |
+| `redis.podManagementPolicy`                    | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join         | `Parallel`      |
+| `redis.hostAliases`                            | Deployment pod host aliases                                                                                | `[]`            |
+| `redis.hostNetwork`                            | Host networking requested for this pod. Use the host's network namespace.                                  | `false`         |
+| `redis.useAOFPersistence`                      | Whether to use AOF Persistence mode or not                                                                 | `yes`           |
 | `redis.containerPorts.redis`                   | Redis&reg; port                                                                                            | `6379`          |
-| `redis.containerPorts.bus`                     | The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379               | `16379`         |
-| `redis.lifecycleHooks`                         | LifecycleHook to set additional configuration before or after startup. Evaluated as a template               | `{}`            |
-| `redis.extraVolumes`                           | Extra volumes to add to the deployment                                                                       | `[]`            |
-| `redis.extraVolumeMounts`                      | Extra volume mounts to add to the container                                                                  | `[]`            |
-| `redis.customLivenessProbe`                    | Override default liveness probe                                                                              | `{}`            |
-| `redis.customReadinessProbe`                   | Override default readiness probe                                                                             | `{}`            |
-| `redis.customStartupProbe`                     | Custom startupProbe that overrides the default one                                                           | `{}`            |
-| `redis.initContainers`                         | Extra init containers to add to the deployment                                                               | `[]`            |
-| `redis.sidecars`                               | Extra sidecar containers to add to the deployment                                                            | `[]`            |
+| `redis.containerPorts.bus`                     | The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379             | `16379`         |
+| `redis.lifecycleHooks`                         | LifecycleHook to set additional configuration before or after startup. Evaluated as a template             | `{}`            |
+| `redis.extraVolumes`                           | Extra volumes to add to the deployment                                                                     | `[]`            |
+| `redis.extraVolumeMounts`                      | Extra volume mounts to add to the container                                                                | `[]`            |
+| `redis.customLivenessProbe`                    | Override default liveness probe                                                                            | `{}`            |
+| `redis.customReadinessProbe`                   | Override default readiness probe                                                                           | `{}`            |
+| `redis.customStartupProbe`                     | Custom startupProbe that overrides the default one                                                         | `{}`            |
+| `redis.initContainers`                         | Extra init containers to add to the deployment                                                             | `[]`            |
+| `redis.sidecars`                               | Extra sidecar containers to add to the deployment                                                          | `[]`            |
 | `redis.podLabels`                              | Additional labels for Redis&reg; pod                                                                       | `{}`            |
 | `redis.priorityClassName`                      | Redis&reg; Master pod priorityClassName                                                                    | `""`            |
 | `redis.configmap`                              | Additional Redis&reg; configuration for the nodes                                                          | `""`            |
-| `redis.extraEnvVars`                           | An array to add extra environment variables                                                                  | `[]`            |
-| `redis.extraEnvVarsCM`                         | ConfigMap with extra environment variables                                                                   | `""`            |
-| `redis.extraEnvVarsSecret`                     | Secret with extra environment variables                                                                      | `""`            |
+| `redis.extraEnvVars`                           | An array to add extra environment variables                                                                | `[]`            |
+| `redis.extraEnvVarsCM`                         | ConfigMap with extra environment variables                                                                 | `""`            |
+| `redis.extraEnvVarsSecret`                     | Secret with extra environment variables                                                                    | `""`            |
 | `redis.podAnnotations`                         | Redis&reg; additional annotations                                                                          | `{}`            |
-| `redis.resources.limits`                       | The resources limits for the container                                                                       | `{}`            |
-| `redis.resources.requests`                     | The requested resources for the container                                                                    | `{}`            |
-| `redis.schedulerName`                          | Use an alternate scheduler, e.g. "stork".                                                                    | `""`            |
-| `redis.shareProcessNamespace`                  | Enable shared process namespace in a pod.                                                                    | `false`         |
-| `redis.livenessProbe.enabled`                  | Enable livenessProbe                                                                                         | `true`          |
-| `redis.livenessProbe.initialDelaySeconds`      | Initial delay seconds for livenessProbe                                                                      | `5`             |
-| `redis.livenessProbe.periodSeconds`            | Period seconds for livenessProbe                                                                             | `5`             |
-| `redis.livenessProbe.timeoutSeconds`           | Timeout seconds for livenessProbe                                                                            | `5`             |
-| `redis.livenessProbe.failureThreshold`         | Failure threshold for livenessProbe                                                                          | `5`             |
-| `redis.livenessProbe.successThreshold`         | Success threshold for livenessProbe                                                                          | `1`             |
-| `redis.readinessProbe.enabled`                 | Enable readinessProbe                                                                                        | `true`          |
-| `redis.readinessProbe.initialDelaySeconds`     | Initial delay seconds for readinessProbe                                                                     | `5`             |
-| `redis.readinessProbe.periodSeconds`           | Period seconds for readinessProbe                                                                            | `5`             |
-| `redis.readinessProbe.timeoutSeconds`          | Timeout seconds for readinessProbe                                                                           | `1`             |
-| `redis.readinessProbe.failureThreshold`        | Failure threshold for readinessProbe                                                                         | `5`             |
-| `redis.readinessProbe.successThreshold`        | Success threshold for readinessProbe                                                                         | `1`             |
-| `redis.startupProbe.enabled`                   | Enable startupProbe                                                                                          | `false`         |
-| `redis.startupProbe.path`                      | Path to check for startupProbe                                                                               | `/`             |
-| `redis.startupProbe.initialDelaySeconds`       | Initial delay seconds for startupProbe                                                                       | `300`           |
-| `redis.startupProbe.periodSeconds`             | Period seconds for startupProbe                                                                              | `10`            |
-| `redis.startupProbe.timeoutSeconds`            | Timeout seconds for startupProbe                                                                             | `5`             |
-| `redis.startupProbe.failureThreshold`          | Failure threshold for startupProbe                                                                           | `6`             |
-| `redis.startupProbe.successThreshold`          | Success threshold for startupProbe                                                                           | `1`             |
+| `redis.resources.limits`                       | The resources limits for the container                                                                     | `{}`            |
+| `redis.resources.requests`                     | The requested resources for the container                                                                  | `{}`            |
+| `redis.schedulerName`                          | Use an alternate scheduler, e.g. "stork".                                                                  | `""`            |
+| `redis.shareProcessNamespace`                  | Enable shared process namespace in a pod.                                                                  | `false`         |
+| `redis.livenessProbe.enabled`                  | Enable livenessProbe                                                                                       | `true`          |
+| `redis.livenessProbe.initialDelaySeconds`      | Initial delay seconds for livenessProbe                                                                    | `5`             |
+| `redis.livenessProbe.periodSeconds`            | Period seconds for livenessProbe                                                                           | `5`             |
+| `redis.livenessProbe.timeoutSeconds`           | Timeout seconds for livenessProbe                                                                          | `5`             |
+| `redis.livenessProbe.failureThreshold`         | Failure threshold for livenessProbe                                                                        | `5`             |
+| `redis.livenessProbe.successThreshold`         | Success threshold for livenessProbe                                                                        | `1`             |
+| `redis.readinessProbe.enabled`                 | Enable readinessProbe                                                                                      | `true`          |
+| `redis.readinessProbe.initialDelaySeconds`     | Initial delay seconds for readinessProbe                                                                   | `5`             |
+| `redis.readinessProbe.periodSeconds`           | Period seconds for readinessProbe                                                                          | `5`             |
+| `redis.readinessProbe.timeoutSeconds`          | Timeout seconds for readinessProbe                                                                         | `1`             |
+| `redis.readinessProbe.failureThreshold`        | Failure threshold for readinessProbe                                                                       | `5`             |
+| `redis.readinessProbe.successThreshold`        | Success threshold for readinessProbe                                                                       | `1`             |
+| `redis.startupProbe.enabled`                   | Enable startupProbe                                                                                        | `false`         |
+| `redis.startupProbe.path`                      | Path to check for startupProbe                                                                             | `/`             |
+| `redis.startupProbe.initialDelaySeconds`       | Initial delay seconds for startupProbe                                                                     | `300`           |
+| `redis.startupProbe.periodSeconds`             | Period seconds for startupProbe                                                                            | `10`            |
+| `redis.startupProbe.timeoutSeconds`            | Timeout seconds for startupProbe                                                                           | `5`             |
+| `redis.startupProbe.failureThreshold`          | Failure threshold for startupProbe                                                                         | `6`             |
+| `redis.startupProbe.successThreshold`          | Success threshold for startupProbe                                                                         | `1`             |
 | `redis.podAffinityPreset`                      | Redis&reg; pod affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
 | `redis.podAntiAffinityPreset`                  | Redis&reg; pod anti-affinity preset. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
 | `redis.nodeAffinityPreset.type`                | Redis&reg; node affinity preset type. Ignored if `redis.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
@@ -258,21 +258,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Cluster management parameters
 
-| Name                                                      | Description                                                                                     | Value          |
-| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------- |
+| Name                                                      | Description                                                                                   | Value          |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------------------- | -------------- |
 | `cluster.init`                                            | Enable the initialization of the Redis&reg; Cluster                                           | `true`         |
-| `cluster.nodes`                                           | The number of master nodes should always be >= 3, otherwise cluster creation will fail          | `6`            |
-| `cluster.replicas`                                        | Number of replicas for every master in the cluster                                              | `1`            |
-| `cluster.externalAccess.enabled`                          | Enable access to the Redis                                                                      | `false`        |
-| `cluster.externalAccess.service.type`                     | Type for the services used to expose every Pod                                                  | `LoadBalancer` |
-| `cluster.externalAccess.service.port`                     | Port for the services used to expose every Pod                                                  | `6379`         |
+| `cluster.nodes`                                           | The number of master nodes should always be >= 3, otherwise cluster creation will fail        | `6`            |
+| `cluster.replicas`                                        | Number of replicas for every master in the cluster                                            | `1`            |
+| `cluster.externalAccess.enabled`                          | Enable access to the Redis                                                                    | `false`        |
+| `cluster.externalAccess.service.type`                     | Type for the services used to expose every Pod                                                | `LoadBalancer` |
+| `cluster.externalAccess.service.port`                     | Port for the services used to expose every Pod                                                | `6379`         |
 | `cluster.externalAccess.service.loadBalancerIP`           | Array of load balancer IPs for each Redis&reg; node. Length must be the same as cluster.nodes | `[]`           |
-| `cluster.externalAccess.service.loadBalancerSourceRanges` | Service Load Balancer sources                                                                   | `[]`           |
+| `cluster.externalAccess.service.loadBalancerSourceRanges` | Service Load Balancer sources                                                                 | `[]`           |
 | `cluster.externalAccess.service.annotations`              | Annotations to add to the services used to expose every Pod of the Redis&reg; Cluster         | `{}`           |
-| `cluster.update.addNodes`                                 | Boolean to specify if you want to add nodes after the upgrade                                   | `false`        |
+| `cluster.update.addNodes`                                 | Boolean to specify if you want to add nodes after the upgrade                                 | `false`        |
 | `cluster.update.currentNumberOfNodes`                     | Number of currently deployed Redis&reg; nodes                                                 | `6`            |
 | `cluster.update.currentNumberOfReplicas`                  | Number of currently deployed Redis&reg; replicas                                              | `1`            |
-| `cluster.update.newExternalIPs`                           | External IPs obtained from the services for the new nodes to add to the cluster                 | `[]`           |
+| `cluster.update.newExternalIPs`                           | External IPs obtained from the services for the new nodes to add to the cluster               | `[]`           |
 
 
 ### Metrics sidecar parameters
@@ -280,10 +280,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                       | Description                                                                                                                        | Value                    |
 | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                                               | `false`                  |
-| `metrics.image.registry`                   | Redis&reg; exporter image registry                                                                                               | `docker.io`              |
-| `metrics.image.repository`                 | Redis&reg; exporter image name                                                                                                   | `bitnami/redis-exporter` |
-| `metrics.image.tag`                        | Redis&reg; exporter image tag                                                                                                    | `1.37.0-debian-10-r62`   |
-| `metrics.image.pullPolicy`                 | Redis&reg; exporter image pull policy                                                                                            | `IfNotPresent`           |
+| `metrics.image.registry`                   | Redis&reg; exporter image registry                                                                                                 | `docker.io`              |
+| `metrics.image.repository`                 | Redis&reg; exporter image name                                                                                                     | `bitnami/redis-exporter` |
+| `metrics.image.tag`                        | Redis&reg; exporter image tag                                                                                                      | `1.37.0-debian-10-r62`   |
+| `metrics.image.pullPolicy`                 | Redis&reg; exporter image pull policy                                                                                              | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                   | `[]`                     |
 | `metrics.resources`                        | Metrics exporter resource requests and limits                                                                                      | `{}`                     |
 | `metrics.extraArgs`                        | Extra arguments for the binary; possible values [here](https://github.com/oliver006/redis_exporter                                 | `{}`                     |
