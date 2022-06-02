@@ -35,4 +35,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-argo-workflow-controller
   - https://github.com/bitnami/bitnami-docker-argo-workflow-exec
   - https://argoproj.github.io/workflows/
-version: 2.2.4
+version: 2.3.0
