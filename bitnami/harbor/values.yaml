@@ -4079,22 +4079,22 @@ externalDatabase:
   notarySignerUsername: ""
   notarySignerPassword: ""
 
-## @section Redis&trade; parameters
+## @section Redis&reg; parameters
 ##
 
-## Redis&trade; chart configuration
+## Redis&reg; chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
-## @param redis.enabled Switch to enable or disable the Redis&trade; helm
+## @param redis.enabled Switch to enable or disable the Redis&reg; helm
 ## @param redis.auth.enabled Enable password authentication
-## @param redis.auth.password Redis&trade; password
-## @param redis.auth.existingSecret The name of an existing secret with Redis&trade; credentials
-## @param redis.architecture Redis&trade; architecture. Allowed values: `standalone` or `replication`
+## @param redis.auth.password Redis&reg; password
+## @param redis.auth.existingSecret The name of an existing secret with Redis&reg; credentials
+## @param redis.architecture Redis&reg; architecture. Allowed values: `standalone` or `replication`
 ##
 redis:
   enabled: true
   auth:
     enabled: false
-    ## Redis&trade; password (both master and slave). Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
+    ## Redis&reg; password (both master and slave). Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
     ## It should always be set using the password value or in the existingSecret to avoid issues
     ## with Harbor.
     ## The password value is ignored if existingSecret is set
@@ -4103,11 +4103,11 @@ redis:
     existingSecret: ""
   architecture: standalone
 
-## External Redis&trade; configuration
+## External Redis&reg; configuration
 ## All of these values are only used when redis.enabled is set to false
-## @param externalRedis.host Redis&trade; host
-## @param externalRedis.port Redis&trade; port number
-## @param externalRedis.password Redis&trade; password
+## @param externalRedis.host Redis&reg; host
+## @param externalRedis.port Redis&reg; port number
+## @param externalRedis.password Redis&reg; password
 ## @param externalRedis.coreDatabaseIndex Index for core database
 ## @param externalRedis.jobserviceDatabaseIndex Index for jobservice database
 ## @param externalRedis.registryDatabaseIndex Index for registry database
@@ -4125,7 +4125,7 @@ externalRedis:
   chartmuseumDatabaseIndex: '3'
   clairAdapterDatabaseIndex: '4'
   trivyAdapterDatabaseIndex: '5'
-  ## Redis&trade; sentinel configuration
+  ## Redis&reg; sentinel configuration
   ## @param externalRedis.sentinel.enabled If external redis with sentinal is used, set it to `true`
   ## @param externalRedis.sentinel.masterSet Name of sentinel masterSet if sentinel is used
   ## @param externalRedis.sentinel.hosts Sentinel hosts and ports in the format
