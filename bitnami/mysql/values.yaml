@@ -102,7 +102,7 @@ auth:
   ## @param auth.database Name for a custom database to create
   ## ref: https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#creating-a-database-on-first-run
   ##
-  database: my_database
+  database: ""
   ## @param auth.username Name for a custom user to create
   ## ref: https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#creating-a-database-user-on-first-run
   ##

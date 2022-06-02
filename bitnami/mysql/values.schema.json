@@ -13,7 +13,7 @@
       "type": "object",
       "title": "Authentication configuration",
       "form": true,
-      "required": ["database", "username", "password"],
+      "required": ["username", "password"],
       "properties": {
         "rootPassword": {
           "type": "string",
