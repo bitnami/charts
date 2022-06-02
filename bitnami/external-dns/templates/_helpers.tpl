@@ -42,6 +42,12 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 {{- end -}}
 
+{{/* Common labels */}}
+{{- if .Values.commonLabels}}
+{{ toYaml .Values.commonLabels }}
+{{- end }}
+{{- end }}
+
 {{/* matchLabels */}}
 {{- define "external-dns.matchLabels" -}}
 app.kubernetes.io/name: {{ template "external-dns.name" . }}
