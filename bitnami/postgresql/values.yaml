@@ -94,7 +94,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 14.3.0-debian-10-r17
+  tag: 14.3.0-debian-10-r20
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -194,17 +194,24 @@ audit:
   logTimezone: ""
 ## LDAP configuration
 ## @param ldap.enabled Enable LDAP support
+## DEPRECATED ldap.url It will removed in a future, please use 'ldap.uri' instead
 ## @param ldap.server IP address or name of the LDAP server.
 ## @param ldap.port Port number on the LDAP server to connect to
 ## @param ldap.prefix String to prepend to the user name when forming the DN to bind
 ## @param ldap.suffix String to append to the user name when forming the DN to bind
-## @param ldap.baseDN Root DN to begin the search for the user in
-## @param ldap.bindDN DN of user to bind to LDAP
-## @param ldap.bind_password Password for the user to bind to LDAP
-## @param ldap.search_attr Attribute to match against the user name in the search
-## @param ldap.search_filter The search filter to use when doing search+bind authentication
+## DEPRECATED ldap.baseDN It will removed in a future, please use 'ldap.basedn' instead
+## DEPRECATED ldap.bindDN It will removed in a future, please use 'ldap.binddn' instead
+## DEPRECATED ldap.bind_password It will removed in a future, please use 'ldap.bindpw' instead
+## @param ldap.basedn Root DN to begin the search for the user in
+## @param ldap.binddn DN of user to bind to LDAP
+## @param ldap.bindpw Password for the user to bind to LDAP
+## DEPRECATED ldap.search_attr It will removed in a future, please use 'ldap.searchAttribute' instead
+## DEPRECATED ldap.search_filter It will removed in a future, please use 'ldap.searchFilter' instead
+## @param ldap.searchAttribute Attribute to match against the user name in the search
+## @param ldap.searchFilter The search filter to use when doing search+bind authentication
 ## @param ldap.scheme Set to `ldaps` to use LDAPS
-## @param ldap.tls Set to `1` to use TLS encryption
+## DEPRECATED ldap.tls as string is deprecated，please use 'ldap.tls.enabled' instead
+## @param ldap.tls.enabled Se to true to enable TLS encryption
 ##
 ldap:
   enabled: false
@@ -212,16 +219,17 @@ ldap:
   port: ""
   prefix: ""
   suffix: ""
-  baseDN: ""
-  bindDN: ""
-  bind_password: ""
-  search_attr: ""
-  search_filter: ""
+  basedn: ""
+  binddn: ""
+  bindpw: ""
+  searchAttribute: ""
+  searchFilter: ""
   scheme: ""
-  tls: ""
-  ## @param ldap.url LDAP URL beginning in the form `ldap[s]://host[:port]/basedn`. If provided, all the other LDAP parameters will be ignored.
+  tls:
+    enabled: false
+  ## @param ldap.uri LDAP URL beginning in the form `ldap[s]://host[:port]/basedn`. If provided, all the other LDAP parameters will be ignored.
   ## Ref: https://www.postgresql.org/docs/current/auth-ldap.html
-  url: ""
+  uri: ""
 ## @param postgresqlDataDir PostgreSQL data dir folder
 ##
 postgresqlDataDir: /bitnami/postgresql/data
@@ -1088,7 +1096,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r439
+    tag: 10-debian-10-r442
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1173,7 +1181,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.10.1-debian-10-r126
+    tag: 0.10.1-debian-10-r129
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

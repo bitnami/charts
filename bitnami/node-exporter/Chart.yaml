@@ -17,11 +17,11 @@ keywords:
   - node-exporter
   - monitoring
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: node-exporter
 sources:
   - https://github.com/bitnami/bitnami-docker-node-exporter
   - https://github.com/prometheus/node_exporter
   - https://prometheus.io/
-version: 3.0.0
+version: 3.0.1

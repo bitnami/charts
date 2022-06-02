@@ -27,12 +27,12 @@ keywords:
   - Continuous delivery
   - Continous deployment
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: argo-workflows
 sources:
   - https://github.com/bitnami/bitnami-docker-argo-workflow-cli
   - https://github.com/bitnami/bitnami-docker-argo-workflow-controller
   - https://github.com/bitnami/bitnami-docker-argo-workflow-exec
   - https://argoproj.github.io/workflows/
-version: 2.2.3
+version: 2.3.0

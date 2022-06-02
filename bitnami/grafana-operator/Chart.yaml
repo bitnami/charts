@@ -18,10 +18,10 @@ keywords:
 maintainers:
   - name: cellebyte
     url: cellebyte@gmail.com
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: grafana-operator
 sources:
   - https://github.com/grafana-operator/grafana-operator
   - https://github.com/bitnami/bitnami-docker-grafana-operator
-version: 2.6.0
+version: 2.6.1

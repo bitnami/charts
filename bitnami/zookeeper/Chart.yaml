@@ -15,8 +15,8 @@ icon: https://bitnami.com/assets/stacks/zookeeper/img/zookeeper-stack-220x234.pn
 keywords:
   - zookeeper
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: zookeeper
 sources:
   - https://github.com/bitnami/bitnami-docker-zookeeper

@@ -53,7 +53,7 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 8.5.3-debian-10-r5
+  tag: 8.5.4-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -183,7 +183,7 @@ ldap:
   extraConfiguration: ""
   ## @param ldap.tls.enabled Enabled TLS configuration.
   ## @param ldap.tls.startTls Use STARTTLS instead of LDAPS.
-  ## @param ldap.tls.skipVerify Skip any SSL verification (hostanames or certificates)
+  ## @param ldap.tls.skipVerify Skip any SSL verification (hostanames or certificates)
   ## @param ldap.tls.certificatesMountPath Where LDAP certifcates are mounted.
   ## @param ldap.tls.certificatesSecret Secret with LDAP certificates.
   ## @param ldap.tls.CAFilename  CA certificate filename. Should match with the CA entry key in the ldap.tls.certificatesSecret.
@@ -813,7 +813,7 @@ imageRenderer:
   image:
     registry: docker.io
     repository: bitnami/grafana-image-renderer
-    tag: 3.4.2-debian-10-r60
+    tag: 3.4.2-debian-10-r64
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1150,7 +1150,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r436
+    tag: 10-debian-10-r441
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

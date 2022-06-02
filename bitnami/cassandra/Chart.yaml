@@ -17,8 +17,8 @@ keywords:
   - database
   - nosql
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: cassandra
 sources:
   - https://github.com/bitnami/bitnami-docker-cassandra

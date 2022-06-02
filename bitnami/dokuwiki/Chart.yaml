@@ -18,10 +18,10 @@ keywords:
   - application
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: dokuwiki
 sources:
   - https://github.com/bitnami/bitnami-docker-dokuwiki
   - http://www.dokuwiki.org/
-version: 12.5.1
+version: 12.5.2

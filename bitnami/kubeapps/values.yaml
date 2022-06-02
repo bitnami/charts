@@ -867,8 +867,14 @@ apprepository:
   ## initialRepos:
   ##   - name: chartmuseum
   ##     url: https://chartmuseum.default:8080
+  ##     # Specify nodeSelector and tolerations:
   ##     nodeSelector:
   ##       somelabel: somevalue
+  ##     tolerations:
+  ##       - key: "cattle.io/os"
+  ##         operator: "Equal"
+  ##         value: "linux"
+  ##         effect: "NoSchedule"
   ##     # Specify an Authorization Header if you are using an authentication method:
   ##     authorizationHeader: "Bearer xrxNC..."
   ##     # Specify the credentials if you are using a basic authentication method:

@@ -17,10 +17,10 @@ keywords:
   - sealed-secrets
 kubeVersion: '>=1.16.0-0'
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: sealed-secrets
 sources:
   - https://github.com/bitnami/bitnami-docker-sealed-secrets
   - https://github.com/bitnami-labs/sealed-secrets
-version: 1.0.3
+version: 1.0.4
