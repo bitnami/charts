@@ -12,10 +12,10 @@ command:
     stderr: [ ]
     timeout: 2000
   postgresql-check-connectivity-and-port:
-    exec: pg_isready -d "$POSTGRES_DB" -h localhost -p 5432 -U "$POSTGRES_USER" 
+    exec: pg_isready -d "$POSTGRES_DB" -h localhost -p "$POSTGRESQL_PORT_NUMBER" -U "$POSTGRES_USER" 
     exit-status: 0
     stdout:
-      - 'localhost:5432 - accepting connections'
+      - - {{ printf "localhost:%s - accepting connections" .Env.POSTGRESQL_PORT_NUMBER | quote }}
     stderr: [ ]
     timeout: 2000
   user-id-test:
