@@ -1,8 +1,29 @@
+process:
+  owncloud:
+    running: true
 command:
   user-id-test:
-    exec: id -u
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
     exit-status: 0
-    stdout:
-      - 1001
-    stderr: [ ]
-    timeout: 20000
+    stdout: []
+    stderr: []
+file:
+  /opt/bitnami/apache/conf/extra/httpd-manual.conf:
+    mode: "0664"
+    filetype: file
+    exists: true
+    group: root
+  /opt/bitnami/mysql:
+    mode: "0664"
+    filetype: directory
+    exists: true
+    group: root
+  /opt/bitnami/owncloud/config/config.php:
+    mode: "0664"
+    filetype: directory
+    exists: true
+    contains:
+      - dbtype
+      - dbuser
+      - dbpassword
+    group: root
