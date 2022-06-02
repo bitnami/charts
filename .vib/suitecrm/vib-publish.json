@@ -30,7 +30,6 @@
           }
         }
       },
-    "publish": {
       "actions": [
         {
           "action_id": "trivy",
@@ -70,7 +69,11 @@
               "password": "ComplicatedPassword123!4"
             }
           }
-        },
+        }
+      ]
+    },
+    "publish": {
+      "actions": [
         {
           "action_id": "helm-publish",
           "params": {
