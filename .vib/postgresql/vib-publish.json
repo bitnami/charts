@@ -51,7 +51,7 @@
               "path": "goss"
             },
             "remote": {
-              "workload": "sts-postgresql"
+              "workload": "/.vib/postgresql/sts-postgresql"
             }
           }
         }
