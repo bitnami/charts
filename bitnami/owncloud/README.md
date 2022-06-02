@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name               | Description                                                                              | Value |
@@ -71,7 +70,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nameOverride`     | String to partially override owncloud.fullname template (will maintain the release name) | `""`  |
 | `fullnameOverride` | String to fully override owncloud.fullname template                                      | `""`  |
 | `extraDeploy`      | Array of extra objects to deploy with the release (evaluated as a template)              | `[]`  |
-
 
 ### ownCloud parameters
 
@@ -157,7 +155,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                        | Pod annotations                                                                                              | `{}`                    |
 | `podLabels`                             | Pod extra labels                                                                                             | `{}`                    |
 
-
 ### Database parameters
 
 | Name                                        | Description                                                                              | Value               |
@@ -181,7 +178,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_owncloud`  |
 | `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                           | `""`                |
 
-
 ### Persistence parameters
 
 | Name                        | Description                                                                | Value               |
@@ -193,7 +189,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.existingClaim` | An Existing PVC name for ownCloud volume                                   | `""`                |
 | `persistence.hostPath`      | If defined, the owncloud-data volume will mount to the specified hostPath. | `""`                |
 | `persistence.annotations`   | Persistent Volume Claim annotations                                        | `{}`                |
-
 
 ### Volume Permissions parameters
 
@@ -207,7 +202,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
-
 
 ### Traffic Exposure Parameters
 
@@ -240,7 +234,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Metrics parameters
 
 | Name                                       | Description                                                          | Value                     |
@@ -261,7 +254,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.externalTrafficPolicy`    | Metrics service external traffic policy                              | `Cluster`                 |
 | `metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP" | `None`                    |
 | `metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                          | `{}`                      |
-
 
 ### Certificate injection parameters
 
@@ -285,7 +277,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                  | Value   |
@@ -305,7 +296,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                           | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                               | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                   | `{}`    |
-
 
 The above parameters map to the env variables defined in [bitnami/owncloud](https://github.com/bitnami/bitnami-docker-owncloud). For more information please refer to the [bitnami/owncloud](https://github.com/bitnami/bitnami-docker-owncloud) image documentation.
 
@@ -362,10 +352,10 @@ If you configure the `image` value to one in a private registry, you will need t
 1. Manually create image pull secret(s) in the namespace. See [this YAML example reference](https://kubernetes.io/docs/concepts/containers/images/#creating-a-secret-with-a-docker-config). Consult your image registry's documentation about getting the appropriate secret.
 1. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
 
-    ```yaml
-    imagePullSecrets:
-      - name: SECRET_NAME
-    ```
+   ```yaml
+   imagePullSecrets:
+     - name: SECRET_NAME
+   ```
 
 1. Install the chart
 
@@ -388,9 +378,9 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Create the PersistentVolumeClaim
 1. Install the chart
 
-    ```bash
-    $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/owncloud
-    ```
+   ```bash
+   $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/owncloud
+   ```
 
 ### Host path
 
@@ -404,11 +394,12 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. The specified `hostPath` directory must already exist (create one if it does not).
 1. Install the chart
 
-    ```bash
-    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/owncloud
-    ```
+   ```bash
+   $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/owncloud
+   ```
 
-    This will mount the `owncloud-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
+   This will mount the `owncloud-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
+
 1. Because the container cannot control the host machine's directory permissions, you must set the ownCloud file directory permissions yourself and disable or clear ownCloud cache.
 
 ## CA Certificates
@@ -418,11 +409,12 @@ Custom CA certificates not included in the base docker image can be added by mea
 ```yaml
 certificates:
   customCAs:
-  - secret: my-ca-1
-  - secret: my-ca-2
+    - secret: my-ca-1
+    - secret: my-ca-2
 ```
 
 > Tip! You can create a secret containing your CA certificates using the following command:
+
 ```bash
 kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 ```
@@ -490,9 +482,9 @@ Please read the update notes carefully.
 **What changes were introduced in this major version?**
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
-- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
+- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
 **Considerations when upgrading to this version**
 
@@ -594,4 +586,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.
+limitations under the License
