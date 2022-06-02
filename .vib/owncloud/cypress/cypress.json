@@ -1,0 +1,14 @@
+{
+  "baseUrl": "http://localhost",
+  "pageLoadTimeout": 240000,
+  "defaultCommandTimeout": 80000,
+  "env": {
+    "username": "user",
+    "password": "ComplicatedPassword123!4",
+    "smtpHost": "smtptesthost",
+    "smtpPort": "9821",
+    "smtpUser": "smtpUser",
+    "smtpPassword": "smtpComplicatedPassword123!4",
+    "owncloudEmail": "test@example.com"
+  }
+}
