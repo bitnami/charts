@@ -1,0 +1,33 @@
+process:
+  mongod:
+    running: true
+command:
+  mongod-version:
+    exec: mongod --version | grep --quiet "$APP_VERSION"
+    exit-status: 0
+    stdout: [ ]
+    stderr: [ ]
+    timeout: 20000
+  admin-command:
+    exec: mongosh --quiet --username "$MONGODB_ROOT_USER" --password "$MONGODB_ROOT_PASSWORD" --port "$MONGODB_PORT_NUMBER" --eval "db.adminCommand({listCollections:1})"
+    exit-status: 0
+    stdout:
+      - "system.version"
+    stderr: [ ]
+    timeout: 20000
+  create-collection:
+    exec: mongosh --quiet --username "$MONGODB_EXTRA_USERNAMES" --password "$MONGODB_EXTRA_PASSWORDS" --port "$MONGODB_PORT_NUMBER" --eval "db.sapphire.drop(); db.createCollection('sapphire'); db.getCollectionNames()" "$MONGODB_EXTRA_DATABASES"
+    exit-status: 0
+    stdout:
+      - "sapphire"
+    stderr: [ ]
+    timeout: 20000
+file:
+  /opt/bitnami/mongodb/conf/mongodb.conf:
+    mode: "0660"
+    filetype: file
+    contains: [
+      "dbPath: /bitnami/mongodb/data/db",
+      "authorization: enabled"
+    ]
+    exists: true
