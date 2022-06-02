@@ -1,9 +1,4 @@
 const COMMAND_DELAY = 800;
-const BASE_URL = 'http://vmware-owncloud/';
-
-Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
-  return originalFn(`${BASE_URL}${url}`, options);
-});
 
 for (const command of ['click']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {

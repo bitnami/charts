@@ -10,8 +10,5 @@
     "smtpUser": "smtpUser",
     "smtpPassword": "smtpComplicatedPassword123!4",
     "owncloudEmail": "test@example.com"
-  },
-  "hosts": {
-    "bitnami-ghost.my": "{{ TARGET_IP }}"
   }
 }
