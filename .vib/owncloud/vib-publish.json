@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/owncloud"
         },
-        "runtime_parameters": "b3duY2xvdWRIb3N0OiB2bXdhcmUtb3duY2xvdWQKb3duY2xvdWRVc2VybmFtZTogdXNlcgpvd25jbG91ZFBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKb3duY2xvdWRFbWFpbDogdGVzdEBleGFtcGxlLmNvbQpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKc210cEhvc3Q6IHNtdHB0ZXN0aG9zdApzbXRwUG9ydDogOTgyMQpzbXRwVXNlcjogc210cFVzZXIKc210cFBhc3N3b3JkOiBzbXRwQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0",
+        "runtime_parameters": "b3duY2xvdWRIb3N0OiB2bXdhcmUtb3duY2xvdWQubXkKb3duY2xvdWRVc2VybmFtZTogdXNlcgpvd25jbG91ZFBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKb3duY2xvdWRFbWFpbDogdGVzdEBleGFtcGxlLmNvbQpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKc210cEhvc3Q6IHNtdHB0ZXN0aG9zdApzbXRwUG9ydDogOTgyMQpzbXRwVXNlcjogc210cFVzZXIKc210cFBhc3N3b3JkOiBzbXRwQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
