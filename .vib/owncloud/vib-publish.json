@@ -52,7 +52,7 @@
               "path": "/.vib/owncloud/goss"
             },
             "remote": {
-              "workload": "deploy-owncloud-web"
+              "workload": "deploy-owncloud"
             }
           }
         },
