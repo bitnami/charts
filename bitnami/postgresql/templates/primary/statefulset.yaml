@@ -299,7 +299,7 @@ spec:
               value: {{ .Values.ldap.port | quote }}
             - name: POSTGRESQL_LDAP_SCHEME
               value: {{ .Values.ldap.scheme }}
-            {{- if .Values.ldap.tls }}
+            {{- if (include "postgresql.ldap.tls.enabled" .) }}
             - name: POSTGRESQL_LDAP_TLS
               value: "1"
             {{- end }}

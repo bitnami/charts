@@ -252,6 +252,17 @@ Get the initialization scripts ConfigMap name.
 {{- end -}}
 {{- end -}}
 
+{/*
+Return true if TLS is enabled for LDAP connection
+*/}}
+{{- define "postgresql.ldap.tls.enabled" -}}
+{{- if and (kindIs "string" .Values.ldap.tls) (not (empty .Values.ldap.tls)) }}
+    {{- true -}}
+{{- else if and (kindIs "map" .Values.ldap.tls) .Values.ldap.tls.enabled }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
 {{/*
 Get the readiness probe command
 */}}
