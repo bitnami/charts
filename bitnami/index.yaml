@@ -8305,6 +8305,33 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 1.15.1
+    created: "2022-06-02T20:43:28.419235182Z"
+    description: A Library Helm Chart for grouping common logic between bitnami charts.
+      This chart is not deployable by itself.
+    digest: sha256:412afa5097f6099397925a97e11bca8042f97f4f84683a5f7f4a684bfbed742b
+    home: https://github.com/bitnami/charts/tree/master/bitnami/common
+    icon: https://bitnami.com/downloads/logos/bitnami-mark.png
+    keywords:
+    - common
+    - helper
+    - template
+    - function
+    - bitnami
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: common
+    sources:
+    - https://github.com/bitnami/charts
+    - https://www.bitnami.com/
+    type: library
+    urls:
+    - https://charts.bitnami.com/bitnami/common-1.15.2.tgz
+    version: 1.15.2
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 1.15.1
     created: "2022-06-01T20:46:46.320899192Z"
     description: A Library Helm Chart for grouping common logic between bitnami charts.
       This chart is not deployable by itself.
@@ -112798,4 +112825,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-02T10:21:47.225416906Z"
+generated: "2022-06-02T20:43:28.443394553Z"
