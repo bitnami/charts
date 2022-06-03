@@ -20,10 +20,10 @@ keywords:
   - application server
   - jsp
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: wildfly
 sources:
   - https://github.com/bitnami/bitnami-docker-wildfly
   - http://wildfly.org
-version: 13.3.5
+version: 13.3.6

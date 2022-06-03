@@ -18,10 +18,10 @@ keywords:
   - database
   - timeseries
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: influxdb
 sources:
   - https://github.com/bitnami/bitnami-docker-influxdb
   - https://www.influxdata.com/products/influxdb-overview/
-version: 5.3.1
+version: 5.3.2

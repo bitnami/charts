@@ -24,8 +24,8 @@ keywords:
   - vulnerability
   - scan
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: harbor
 sources:
   - https://github.com/bitnami/bitnami-docker-harbor-core
@@ -34,4 +34,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-harbor-registry
   - https://github.com/bitnami/bitnami-docker-harbor-registryctl
   - https://goharbor.io/
-version: 13.2.2
+version: 13.2.4

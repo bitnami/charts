@@ -20,10 +20,10 @@ keywords:
   - web
   - reverse proxy
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: apache
 sources:
   - https://github.com/bitnami/bitnami-docker-apache
   - https://httpd.apache.org
-version: 9.1.7
+version: 9.1.8

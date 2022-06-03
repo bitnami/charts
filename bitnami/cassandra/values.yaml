@@ -515,8 +515,8 @@ networkPolicy:
   enabled: false
   ## @param networkPolicy.allowExternal Don't require client label for connections
   ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to the port Redis&trade; is listening
-  ## on. When true, Redis&trade; will accept connections from any source
+  ## client label will have network access to the port Redis&reg; is listening
+  ## on. When true, Redis&reg; will accept connections from any source
   ## (with the correct destination port).
   ##
   allowExternal: true

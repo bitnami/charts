@@ -19,10 +19,10 @@ keywords:
   - data
   - collector
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: fluentd
 sources:
   - https://github.com/bitnami/bitnami-docker-fluentd
   - https://www.fluentd.org/
-version: 5.1.5
+version: 5.1.7

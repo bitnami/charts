@@ -17,10 +17,10 @@ keywords:
   - configuring
   - services
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: consul
 sources:
   - https://github.com/bitnami/bitnami-docker-consul
   - https://www.consul.io/
-version: 10.6.0
+version: 10.6.1

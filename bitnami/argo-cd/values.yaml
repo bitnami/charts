@@ -2384,29 +2384,29 @@ redis:
     ##
     existingSecret: ""
     ##
-    ## Password key to be retrieved from Redis&trade; secret
+    ## Password key to be retrieved from Redis&reg; secret
     ##
     existingSecretPasswordKey: 'redis-password'
 
   ## Cluster settings
-  ## @param redis.architecture Redis&trade; architecture. Allowed values: `standalone` or `replication`
+  ## @param redis.architecture Redis&reg; architecture. Allowed values: `standalone` or `replication`
   ## TODO(miguelaeh): We need to test the chart with redis sentinel, it seems to be supported at: https://github.com/argoproj/argo-cd/blob/2a410187565e15633b6f2a8c8d8da22cf02b257d/util/cache/cache.go#L40
   ##
   architecture: standalone
 
 ##
-## External Redis&trade;
+## External Redis&reg;
 ##
 externalRedis:
-  ## Redis&trade; host
+  ## Redis&reg; host
   ## @param externalRedis.host External Redis host
   ##
   host: ""
-  ## Redis&trade; port
+  ## Redis&reg; port
   ## @param externalRedis.port External Redis port
   ##
   port: 6379
-  ## Redis&trade; password for authentication
+  ## Redis&reg; password for authentication
   ## Ignored if existingSecret is set
   ## @param externalRedis.password External Redis password
   ##
@@ -2415,7 +2415,7 @@ externalRedis:
   ## @param externalRedis.existingSecret Existing secret for the external redis
   ##
   existingSecret: ""
-  ## Password key to be retrieved from Redis&trade; secret
+  ## Password key to be retrieved from Redis&reg; secret
   ## @param externalRedis.existingSecretPasswordKey Password key for the existing secret containing the external redis password
   ##
   existingSecretPasswordKey: 'redis-password'
