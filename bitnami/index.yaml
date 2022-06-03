@@ -26662,6 +26662,37 @@ entries:
       category: Analytics
     apiVersion: v2
     appVersion: 8.5.4
+    created: "2022-06-03T23:48:42.906603377Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Grafana is an open source metric analytics and visualization suite
+      for visualizing time series data that supports various types of data sources.
+    digest: sha256:a8a874cc40149c4b99bf7d687a234e29790d7fd49c69b4fb98a6643bc494a961
+    home: https://github.com/bitnami/charts/tree/master/bitnami/grafana
+    icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
+    keywords:
+    - analytics
+    - monitoring
+    - metrics
+    - logs
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: grafana
+    sources:
+    - https://github.com/bitnami/bitnami-docker-grafana
+    - https://grafana.com/
+    urls:
+    - https://charts.bitnami.com/bitnami/grafana-7.9.4.tgz
+    version: 7.9.4
+  - annotations:
+      category: Analytics
+    apiVersion: v2
+    appVersion: 8.5.4
     created: "2022-06-01T08:16:03.785517605Z"
     dependencies:
     - name: common
@@ -114725,4 +114756,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-03T23:47:10.509785698Z"
+generated: "2022-06-03T23:48:42.922867501Z"
