@@ -97,7 +97,7 @@ Auxiliary function to get the right value for architecture
 Usage:
 {{ include "common.mongodb.values.architecture" (dict "subchart" "true" "context" $) }}
 Params:
-  - subchart - Boolean - Optional. Whether MariaDB is used as subchart or not. Default: false
+  - subchart - Boolean - Optional. Whether MongoDB&reg; is used as subchart or not. Default: false
 */}}
 {{- define "common.mongodb.values.architecture" -}}
   {{- if .subchart -}}
