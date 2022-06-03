@@ -9,23 +9,19 @@ file:
     mode: "0664"
     filetype: file
     exists: true
-    group: root
   /opt/bitnami/mysql:
     mode: "0755"
     filetype: directory
     exists: true
-    group: root
   /bitnami/owncloud/data:
-    mode: "0755"
+    mode: "0770"
     filetype: directory
     exists: true
-    group: root  
   /opt/bitnami/owncloud/config/config.php:
     mode: "0777"
-    filetype: directory
+    filetype: symlink
     exists: true
     contains:
       - dbtype
       - dbuser
       - dbpassword
-    group: root
