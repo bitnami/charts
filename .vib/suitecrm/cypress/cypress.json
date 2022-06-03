@@ -1,5 +1,4 @@
 {
-  "baseUrl": "http://localhost",
   "env": {
     "email": "user@example.com",
     "username": "user",
@@ -7,6 +6,9 @@
     "emailServer": "testhost",
     "smtpPort": "9125",
     "smtpUser": "testHostUser"
+  },
+  "hosts": {
+    "bitnami-ghost.my": "{{ TARGET_IP }}"
   },
   "defaultCommandTimeout": 40000,
   "viewportWidth": 1800,
