@@ -112246,6 +112246,34 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 3.8.0
+    created: "2022-06-03T01:08:30.572530082Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Apache ZooKeeper provides a reliable, centralized register of configuration
+      data and services for distributed applications.
+    digest: sha256:ae77a4607134304b198ad1888f5bed25cbf3be0f2997693b5182d8444fc15ee0
+    home: https://github.com/bitnami/charts/tree/master/bitnami/zookeeper
+    icon: https://bitnami.com/assets/stacks/zookeeper/img/zookeeper-stack-220x234.png
+    keywords:
+    - zookeeper
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: zookeeper
+    sources:
+    - https://github.com/bitnami/bitnami-docker-zookeeper
+    - https://zookeeper.apache.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/zookeeper-9.2.2.tgz
+    version: 9.2.2
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 3.8.0
     created: "2022-06-02T01:56:22.118314024Z"
     dependencies:
     - name: common
@@ -112975,4 +113003,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-02T23:59:41.29455421Z"
+generated: "2022-06-03T01:08:30.624611525Z"
