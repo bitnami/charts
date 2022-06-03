@@ -1,6 +1,3 @@
-process:
-  owncloud:
-    running: true
 command:
   user-id-test:
     exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
@@ -14,12 +11,17 @@ file:
     exists: true
     group: root
   /opt/bitnami/mysql:
-    mode: "0664"
+    mode: "0755"
     filetype: directory
     exists: true
     group: root
+  /bitnami/owncloud/data:
+    mode: "0755"
+    filetype: directory
+    exists: true
+    group: root  
   /opt/bitnami/owncloud/config/config.php:
-    mode: "0664"
+    mode: "0777"
     filetype: directory
     exists: true
     contains:
