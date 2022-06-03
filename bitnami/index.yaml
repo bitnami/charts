@@ -105188,6 +105188,44 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 0.1.5
+    created: "2022-06-03T03:22:51.694791599Z"
+    dependencies:
+    - condition: wavefront.enabled
+      name: wavefront
+      repository: https://charts.bitnami.com/bitnami
+      version: 4.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Wavefront Adapter for Istio is an adapter for Istio to expose Istio
+      metrics to Wavefront. It is a lightweight tool written in Go. It supports Istio
+      v1.4+ and Kubernetes v1.15+.
+    digest: sha256:95842598e4c9d99b64fc7ec5a6fbf95965764b681d79cd90e28fb97d64a1a42e
+    home: https://github.com/vmware/wavefront-adapter-for-istio/
+    icon: https://bitnami.com/assets/stacks/wavefront-adapter-for-istio/img/wavefront-adapter-for-istio-stack-220x234.png
+    keywords:
+    - alerting
+    - adapter
+    - istio
+    - metrics
+    - monitoring
+    - observability
+    - wavefront
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: wavefront-adapter-for-istio
+    sources:
+    - https://github.com/bitnami/bitnami-docker-wavefront-adapter-for-istio
+    urls:
+    - https://charts.bitnami.com/bitnami/wavefront-adapter-for-istio-2.0.1.tgz
+    version: 2.0.1
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 0.1.5
     created: "2022-05-31T13:19:23.517013167Z"
     dependencies:
     - condition: wavefront.enabled
@@ -113251,4 +113289,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-03T03:21:23.130981561Z"
+generated: "2022-06-03T03:22:51.710885651Z"
