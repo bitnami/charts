@@ -690,10 +690,10 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `redis.auth.password`           | Redis&reg; password                                              | `""`                                                     |
 | `redis.auth.existingSecret`     | The name of an existing secret with Redis&reg; credentials       | `""`                                                     |
 | `redis.master.extraFlags`       | Array with additional command line flags for Redis&reg; master   | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
-| `redis.master.disableCommands`  | Array with commands to deactivate on Redis&reg;                 | `[]`                                                     |
+| `redis.master.disableCommands`  | Array with commands to deactivate on Redis&reg;                  | `[]`                                                     |
 | `redis.replica.replicaCount`    | Number of Redis&reg; replicas to deploy                          | `1`                                                      |
 | `redis.replica.extraFlags`      | Array with additional command line flags for Redis&reg; replicas | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
-| `redis.replica.disableCommands` | Array with commands to deactivate on Redis&reg;                 | `[]`                                                     |
+| `redis.replica.disableCommands` | Array with commands to deactivate on Redis&reg;                  | `[]`                                                     |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
