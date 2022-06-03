@@ -1,5 +1,4 @@
 {
-  "baseUrl": "http://localhost",
   "pageLoadTimeout": 240000,
   "defaultCommandTimeout": 80000,
   "env": {
@@ -10,5 +9,8 @@
     "smtpUser": "smtpUser",
     "smtpPassword": "smtpComplicatedPassword123!4",
     "owncloudEmail": "test@example.com"
+  },
+  "hosts": {
+    "vmware-owncloud.my": "{{ TARGET_IP }}"
   }
 }
