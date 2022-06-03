@@ -48126,6 +48126,45 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 2.4.5
+    created: "2022-06-03T09:05:36.304491419Z"
+    dependencies:
+    - condition: packaging.flux.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.x.x
+    - condition: packaging.helm.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Kubeapps is a web-based UI for launching and managing applications
+      on Kubernetes. It allows users to deploy trusted applications and operators
+      to control users access to the cluster.
+    digest: sha256:6d38e0127b0945b7a50df5b9adffb5211adb64d53a4e18881355338273ec8ad9
+    home: https://kubeapps.com
+    icon: https://bitnami.com/assets/stacks/kubeapps/img/kubeapps-stack-220x234.png
+    keywords:
+    - helm
+    - dashboard
+    - service catalog
+    - deployment
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: kubeapps
+    sources:
+    - https://github.com/vmware-tanzu/kubeapps
+    urls:
+    - https://charts.bitnami.com/bitnami/kubeapps-8.1.9.tgz
+    version: 8.1.9
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 2.4.5
     created: "2022-06-02T02:01:13.517977777Z"
     dependencies:
     - condition: packaging.flux.enabled
@@ -113768,4 +113807,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-03T08:24:00.551007945Z"
+generated: "2022-06-03T09:05:36.321591642Z"
