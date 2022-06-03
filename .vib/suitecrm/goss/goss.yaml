@@ -16,7 +16,7 @@ file:
     mode: "0755"
     filetype: file
     contains:
-      - bitnami-suitecrm
+      - vmware-suitecrm
       - dbconfig
     exists: true
   /opt/bitnami/apache/conf/extra/httpd-manual.conf:
