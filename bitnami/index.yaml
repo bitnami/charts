@@ -73052,6 +73052,41 @@ entries:
       category: CRM
     apiVersion: v2
     appVersion: 15.0.20220510
+    created: "2022-06-03T02:41:19.953070514Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      version: 1.x.x
+    description: Odoo is an open source ERP and CRM platform, formerly known as OpenERP,
+      that can connect a wide variety of business operations such as sales, supply
+      chain, finance, and project management.
+    digest: sha256:ce006f0be5476b213b64f2bf63a02a1eb8841081bdc55e833dd47ccfd69fe6a5
+    home: https://github.com/bitnami/charts/tree/master/bitnami/odoo
+    icon: https://bitnami.com/assets/stacks/odoo/img/odoo-stack-220x234.png
+    keywords:
+    - odoo
+    - crm
+    - www
+    - http
+    - web
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: odoo
+    sources:
+    - https://github.com/bitnami/bitnami-docker-odoo
+    - https://www.odoo.com/
+    urls:
+    - https://charts.bitnami.com/bitnami/odoo-21.4.1.tgz
+    version: 21.4.1
+  - annotations:
+      category: CRM
+    apiVersion: v2
+    appVersion: 15.0.20220510
     created: "2022-05-27T18:39:55.615161991Z"
     dependencies:
     - condition: postgresql.enabled
@@ -113080,4 +113115,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-03T02:36:39.984301068Z"
+generated: "2022-06-03T02:41:20.006243194Z"
