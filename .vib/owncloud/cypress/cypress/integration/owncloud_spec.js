@@ -3,7 +3,6 @@ import { random } from './utils';
 
 it('allows creating a folder and uploading a file ', () => {
   cy.login();
-
   cy.get('.new').click();
   cy.get('[data-action="folder"]').click();
   cy.fixture('folders').then((folder) => {
@@ -60,7 +59,9 @@ it('allows whitelisting a domain', () => {
   cy.login();
   cy.visit('index.php/settings/personal');
   cy.contains('Security').click();
-  cy.get('#domain').type('http://google.com');
-  cy.get('#corsAddNewDomain').click();
-  cy.contains('.grid', 'http://google.com');
+  cy.fixture('domains').then((domain) => {
+    cy.get('#domain').type(`${domain.newDomain.domain}`);
+    cy.get('#corsAddNewDomain').click();
+    cy.contains('.grid', `${domain.newDomain.domain}`);
+  });
 });
