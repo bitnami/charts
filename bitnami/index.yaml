@@ -16405,6 +16405,45 @@ entries:
   - annotations:
       category: CMS
     apiVersion: v2
+    appVersion: 9.3.15
+    created: "2022-06-03T08:01:03.000136536Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Drupal is one of the most versatile open source content management
+      systems in the world. It is pre-configured with the Ctools and Views modules,
+      Drush and Let's Encrypt auto-configuration support.
+    digest: sha256:bdb008424dec81e46f44c2c6c726efe006b31dd88af84d8dd412cd0c01a83bb5
+    home: https://github.com/bitnami/charts/tree/master/bitnami/drupal
+    icon: https://bitnami.com/assets/stacks/drupal/img/drupal-stack-220x234.png
+    keywords:
+    - drupal
+    - cms
+    - blog
+    - http
+    - web
+    - application
+    - php
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: drupal
+    sources:
+    - https://github.com/bitnami/bitnami-docker-drupal
+    - https://www.drupal.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/drupal-12.2.7.tgz
+    version: 12.2.7
+  - annotations:
+      category: CMS
+    apiVersion: v2
     appVersion: 9.3.14
     created: "2022-05-31T21:01:42.332475336Z"
     dependencies:
@@ -113656,4 +113695,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-03T07:00:26.116204397Z"
+generated: "2022-06-03T08:01:03.016622157Z"
