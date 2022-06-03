@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/suitecrm"
         },
-        "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCnN1aXRlY3JtVXNlcm5hbWU6IHVzZXIKc3VpdGVjcm1QYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CnN1aXRlY3JtU210cEhvc3Q6IHRlc3Rob3N0CnN1aXRlY3JtU210cFBvcnQ6IDkxMjUKc3VpdGVjcm1TbXRwVXNlcjogdGVzdEhvc3RVc2VyCnN1aXRlY3JtSG9zdDogdm13YXJlLXN1aXRlY3JtLm15CnN1aXRlY3JtU210cFBhc3N3b3JkOiB0ZXN0SG9zdFBhc3N3b3Jk",
+        "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCnN1aXRlY3JtVXNlcm5hbWU6IHVzZXIKc3VpdGVjcm1QYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CnN1aXRlY3JtU210cEhvc3Q6IHRlc3Rob3N0CnN1aXRlY3JtU210cFBvcnQ6IDkxMjUKc3VpdGVjcm1TbXRwVXNlcjogdGVzdEhvc3RVc2VyCnN1aXRlY3JtSG9zdDogdm13YXJlLXN1aXRlY3JtLm15",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
