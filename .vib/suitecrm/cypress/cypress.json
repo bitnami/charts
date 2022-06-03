@@ -1,6 +1,5 @@
 {
   "env": {
-    "email": "user@example.com",
     "username": "user",
     "password": "ComplicatedPassword123!4",
     "emailServer": "testhost",
