@@ -863,8 +863,8 @@ redis:
 ## @param externalRedis.port Redis&reg; port number
 ## @param externalRedis.username Redis&reg; username
 ## @param externalRedis.password Redis&reg; password
-## @param externalRedis.existingSecret Name of an existing secret resource containing the Redis&trade credentials
-## @param externalRedis.existingSecretPasswordKey Name of an existing secret key containing the Redis&trade credentials
+## @param externalRedis.existingSecret Name of an existing secret resource containing the Redis&reg; credentials
+## @param externalRedis.existingSecretPasswordKey Name of an existing secret key containing the Redis&reg; credentials
 ##
 externalRedis:
   host: localhost

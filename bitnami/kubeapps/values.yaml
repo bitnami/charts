@@ -2368,7 +2368,7 @@ redis:
       - "--maxmemory-policy allkeys-lru"
       ## ref https://stackoverflow.com/questions/22815364/flushall-and-flushdb-commands-on-redis-return-unk-command
       ## Redis official Helm chart by default disables FLUSHDB and FLUSHALL commands
-    ## @param redis.master.disableCommands Array with commands to deactivate on Redis&trade
+    ## @param redis.master.disableCommands Array with commands to deactivate on Redis&reg;
     disableCommands: []
   replica:
     ## @param redis.replica.replicaCount Number of Redis&reg; replicas to deploy
@@ -2385,5 +2385,5 @@ redis:
       - "--maxmemory-policy allkeys-lru"
     ## ref https://stackoverflow.com/questions/22815364/flushall-and-flushdb-commands-on-redis-return-unk-command
     ## Redis official Helm chart by default disables FLUSHDB and FLUSHALL commands
-    ## @param redis.replica.disableCommands Array with commands to deactivate on Redis&trade
+    ## @param redis.replica.disableCommands Array with commands to deactivate on Redis&reg;
     disableCommands: []

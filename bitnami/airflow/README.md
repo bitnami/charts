@@ -484,8 +484,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.port`                         | Redis&reg; port number                                                                                 | `6379`            |
 | `externalRedis.username`                     | Redis&reg; username                                                                                    | `""`              |
 | `externalRedis.password`                     | Redis&reg; password                                                                                    | `""`              |
-| `externalRedis.existingSecret`               | Name of an existing secret resource containing the Redis&trade credentials                             | `""`              |
-| `externalRedis.existingSecretPasswordKey`    | Name of an existing secret key containing the Redis&trade credentials                                  | `""`              |
+| `externalRedis.existingSecret`               | Name of an existing secret resource containing the Redis&reg; credentials                             | `""`              |
+| `externalRedis.existingSecretPasswordKey`    | Name of an existing secret key containing the Redis&reg; credentials                                  | `""`              |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

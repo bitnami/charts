@@ -329,8 +329,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.port`                      | Redis&reg; port number                                                     | `6379`           |
 | `externalRedis.username`                  | Redis&reg; username                                                        | `""`             |
 | `externalRedis.password`                  | Redis&reg; password                                                        | `""`             |
-| `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis&trade credentials | `""`             |
-| `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis&trade credentials      | `redis-password` |
+| `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis&reg; credentials | `""`             |
+| `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis&reg; credentials      | `redis-password` |
 
 
 The above parameters map to the env variables defined in [bitnami/discourse](https://github.com/bitnami/bitnami-docker-discourse). For more information please refer to the [bitnami/discourse](https://github.com/bitnami/bitnami-docker-discourse) image documentation.
