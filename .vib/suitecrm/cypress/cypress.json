@@ -8,7 +8,7 @@
     "smtpUser": "testHostUser"
   },
   "hosts": {
-    "bitnami-ghost.my": "{{ TARGET_IP }}"
+    "vmware-suitecrm.my": "{{ TARGET_IP }}"
   },
   "defaultCommandTimeout": 40000,
   "viewportWidth": 1800,
