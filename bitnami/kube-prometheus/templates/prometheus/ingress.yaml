@@ -51,6 +51,9 @@ spec:
     {{- if and .Values.prometheus.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.prometheus.ingress.annotations )) .Values.prometheus.ingress.selfSigned) }}
     - hosts:
         - {{ .Values.prometheus.ingress.hostname }}
+      {{- if .Values.prometheus.ingress.SecretName }}
+      secretName: {{ .Values.prometheus.ingress.SecretName }}
+      {{- end }}
       secretName: {{ printf "%s-tls" .Values.prometheus.ingress.hostname }}
     {{- end }}
     {{- if .Values.prometheus.ingress.extraTls }}
