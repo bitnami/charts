@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `server.image.registry`                                  | server image registry                                                                                               | `docker.io`                 |
 | `server.image.repository`                                | server image repository                                                                                             | `bitnami/argo-workflow-cli` |
-| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.3.5-scratch-r1`          |
+| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.3.6-scratch-r0`          |
 | `server.image.pullPolicy`                                | server image pull policy                                                                                            | `Always`                    |
 | `server.image.pullSecrets`                               | server image pull secrets                                                                                           | `[]`                        |
 | `server.enabled`                                         | Enable server deployment                                                                                            | `true`                      |
@@ -237,6 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.telemetry.path`                                  | Path to expose telemetry information                                                                                          | `/telemetry`                       |
 | `controller.workflowWorkers`                                 | Number of workflow workers to deploy                                                                                          | `32`                               |
 | `controller.workflowNamespaces`                              | Namespaces allowed to run workflows                                                                                           | `["default"]`                      |
+| `controller.workflowDefaults`                                | Default Workflow Values                                                                                                       | `{}`                               |
 | `controller.logging.level`                                   | Level for the controller logging                                                                                              | `info`                             |
 | `controller.logging.globalLevel`                             | Global logging level for the controller                                                                                       | `0`                                |
 | `controller.pdb.enabled`                                     | Create Pod Disruption Budget for the controller component                                                                     | `false`                            |
@@ -290,7 +291,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------------- | ------------------------------------------------------------- | ---------------------------- |
 | `executor.image.registry`                                  | executor image registry                                       | `docker.io`                  |
 | `executor.image.repository`                                | executor image repository                                     | `bitnami/argo-workflow-exec` |
-| `executor.image.tag`                                       | executor image tag (immutable tags are recommended)           | `3.3.5-debian-10-r13`        |
+| `executor.image.tag`                                       | executor image tag (immutable tags are recommended)           | `3.3.5-debian-10-r20`        |
 | `executor.image.pullPolicy`                                | executor image pull policy                                    | `Always`                     |
 | `executor.image.pullSecrets`                               | executor image pull secrets                                   | `[]`                         |
 | `executor.resources.limits`                                | The resources limits for the init container                   | `{}`                         |

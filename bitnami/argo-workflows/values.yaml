@@ -641,10 +641,10 @@ controller:
     ##  configuration: {}
     ##
     {{- if .Values.controller.metrics.enabled }}
-    metricsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.metrics "context" $) | nindent 4 }}
+    metricsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.metrics "context" $) | nindent 2 }}
     {{- end }}
     {{- if .Values.controller.telemetry.enabled }}
-    telemetryConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.telemetry "context" $) | nindent 4 }}
+    telemetryConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.telemetry "context" $) | nindent 2 }}
     {{- end }}
     {{- if (include "argo-workflows.controller.persistence.enabled" .) }}
     persistence:
@@ -671,12 +671,11 @@ controller:
           name: {{ include "argo-workflows.controller.database.password.secret" . }}
           key: {{ include "argo-workflows.controller.database.password.secret.key" . }}
     {{- end }}
-    ## Uncomment to set workflowDefaults
-    ## Ref: https://argoproj.github.io/argo-workflows/default-workflow-specs/#setting-default-workflow-values
-    ## workflowDefaults: {}
-    ##
+    {{- if .Values.controller.workflowDefaults }}
+    workflowDefaults: {{- include "common.tplvalues.render" (dict "value" .Values.controller.workflowDefaults "context" $) | nindent 2 }}
+    {{- end }}
     {{- if and .Values.server.auth.enabled .Values.server.auth.sso.enabled }}
-    sso: {{- include "common.tplvalues.render" (dict "value" .Values.server.auth.sso "context" $) | nindent 4 }}
+    sso: {{- include "common.tplvalues.render" (dict "value" .Values.server.auth.sso "context" $) | nindent 2 }}
     {{- end }}
     ## Uncomment to set workflowRestrictions
     ## Ref: https://argoproj.github.io/argo-workflows/workflow-restrictions/
@@ -738,6 +737,10 @@ controller:
   ##
   workflowNamespaces:
     - default
+  ## Default Workflow Values
+  ## Ref: https://argoproj.github.io/argo-workflows/default-workflow-specs/#setting-default-workflow-values
+  ## @param controller.workflowDefaults Default Workflow Values
+  workflowDefaults: {}
   ## Logging level for the controller
   ## @param controller.logging.level Level for the controller logging
   ## @param controller.logging.globalLevel Global logging level for the controller
