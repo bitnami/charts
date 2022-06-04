@@ -83705,6 +83705,40 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 14.3.0
+    created: "2022-06-04T03:20:37.80608231Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      version: 1.x.x
+    description: PostgreSQL (Postgres) is an open source object-relational database
+      known for reliability and data integrity. ACID-compliant, it supports foreign
+      keys, joins, views, triggers and stored procedures.
+    digest: sha256:123868274817cc6b1ec4ab0f7d75a3fe90dc7fb7610dc94b24692b694526aa64
+    home: https://github.com/bitnami/charts/tree/master/bitnami/postgresql
+    icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    - cluster
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    - email: cedric@desaintmartin.fr
+      name: desaintmartin
+    name: postgresql
+    sources:
+    - https://github.com/bitnami/bitnami-docker-postgresql
+    - https://www.postgresql.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/postgresql-11.6.3.tgz
+    version: 11.6.3
+  - annotations:
+      category: Database
+    apiVersion: v2
+    appVersion: 14.3.0
     created: "2022-06-03T05:06:11.634397363Z"
     dependencies:
     - name: common
@@ -115106,4 +115140,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-04T03:04:15.429506491Z"
+generated: "2022-06-04T03:20:37.821092524Z"
