@@ -5,6 +5,46 @@ entries:
       category: WorkFlow
     apiVersion: v2
     appVersion: 2.3.2
+    created: "2022-06-06T22:15:45.381575084Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.x.x
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Apache Airflow is a tool to express and execute workflows as directed
+      acyclic graphs (DAGs). It includes utilities to schedule tasks, monitor task
+      progress and handle task dependencies.
+    digest: sha256:9ee37069abd336b3d38d029268951d179e9781d465d5a33fd6af65cca23a157e
+    home: https://github.com/bitnami/charts/tree/master/bitnami/airflow
+    icon: https://bitnami.com/assets/stacks/airflow/img/airflow-stack-220x234.png
+    keywords:
+    - apache
+    - airflow
+    - workflow
+    - dag
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: airflow
+    sources:
+    - https://github.com/bitnami/bitnami-docker-airflow
+    - https://airflow.apache.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/airflow-12.5.5.tgz
+    version: 12.5.5
+  - annotations:
+      category: WorkFlow
+    apiVersion: v2
+    appVersion: 2.3.2
     created: "2022-06-04T21:11:51.191429301Z"
     dependencies:
     - condition: redis.enabled
@@ -116010,4 +116050,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-06T22:03:19.319111564Z"
+generated: "2022-06-06T22:15:45.399556842Z"
