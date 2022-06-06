@@ -3,7 +3,7 @@ import { random } from './utils';
 
 it('allows user to log in and log out', () => {
   cy.login();
-  cy.get('[data-testid="ErrorOutlineIcon"]').should('not.exist');
+  cy.get('div.alert').should('not.exist');
   cy.get('#logout').scrollIntoView().click();
 });
 
