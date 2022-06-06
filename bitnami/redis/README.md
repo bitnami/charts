@@ -585,16 +585,16 @@ See the [official ExternalDNS documentation](https://github.com/kubernetes-sigs/
 
 #### Default: Master-Replicas
 
-When installing the chart with `architecture=replication`, it will deploy a Redis&reg; master StatefulSet (only one master node allowed) and a Redis&reg; replicas StatefulSet. The replicas will be read-replicas of the master. Two services will be exposed:
+When installing the chart with `architecture=replication`, it will deploy a Redis&reg; master StatefulSet and a Redis&reg; replicas StatefulSet. The replicas will be read-replicas of the master. Two services will be exposed:
 
 - Redis&reg; Master service: Points to the master, where read-write operations can be performed
-- Redis&reg; Replicas service: Points to the replicas, where only read operations are allowed.
+- Redis&reg; Replicas service: Points to the replicas, where only read operations are allowed by default.
 
 In case the master crashes, the replicas will wait until the master node is respawned again by the Kubernetes Controller Manager.
 
 #### Standalone
 
-When installing the chart with `architecture=standalone`, it will deploy a standalone Redis&reg; StatefulSet (only one node allowed). A single service will be exposed:
+When installing the chart with `architecture=standalone`, it will deploy a standalone Redis&reg; StatefulSet. A single service will be exposed:
 
 - Redis&reg; Master service: Points to the master, where read-write operations can be performed
 
@@ -613,6 +613,21 @@ SENTINEL get-master-addr-by-name <name of your MasterSet. e.g: mymaster>
 This command will return the address of the current master, which can be accessed from inside the cluster.
 
 In case the current master crashes, the Sentinel containers will elect a new master node.
+
+`master.count` greater than `1` is not designed for use when `sentinel.enabled=true`.
+
+### Multiple masters (experimental)
+
+When `master.count` is greater than `1`, special care must be taken to create a consistent setup.
+
+An example of use case is the creation of a redundant set of standalone masters or master-replicas per Kubernetes node where you must ensure:
+- No more than `1` master can be deployed per Kubernetes node
+- Replicas and writers can only see the single master of their own Kubernetes node
+
+One way of achieving this is by setting `master.service.internalTrafficPolicy=Local` in combination with a `master.affinity.podAntiAffinity` spec to never schedule more than one master per Kubernetes node.
+
+It's recommended to only change `master.count` if you know what you are doing.  
+`master.count` greater than `1` is not designed for use when `sentinel.enabled=true`.
 
 ### Using a password file
 

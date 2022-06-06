@@ -145,6 +145,9 @@ existingConfigmap: ""
 ##
 
 master:
+  ## @param master.count Number of Redis&reg; master instances to deploy (experimental, requires additional configuration)
+  ##
+  count: 1
   ## @param master.configuration Configuration for Redis&reg; master nodes
   ## ref: https://redis.io/topics/config
   ##
