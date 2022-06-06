@@ -112898,6 +112898,49 @@ entries:
       category: CMS
     apiVersion: v2
     appVersion: 5.9.3
+    created: "2022-06-06T21:58:17.636425879Z"
+    dependencies:
+    - condition: memcached.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.x.x
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: WordPress for Intel is the most popular blogging application combined
+      with cryptography acceleration for 3rd gen Xeon Scalable Processors (Ice Lake)
+      to get a breakthrough performance improvement.
+    digest: sha256:1b1cc099e6ba686c3b8b37001acd8d32040c700f096d22163c63deb8193633e1
+    home: https://github.com/bitnami/charts/tree/master/bitnami/wordpress-intel
+    icon: https://bitnami.com/assets/stacks/wordpress/img/wordpress-stack-220x234.png
+    keywords:
+    - application
+    - blog
+    - cms
+    - http
+    - php
+    - web
+    - wordpress
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: wordpress-intel
+    sources:
+    - https://github.com/bitnami/bitnami-docker-wordpress-intel
+    - https://wordpress.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/wordpress-intel-1.3.4.tgz
+    version: 1.3.4
+  - annotations:
+      category: CMS
+    apiVersion: v2
+    appVersion: 5.9.3
     created: "2022-06-03T05:08:07.921932196Z"
     dependencies:
     - condition: memcached.enabled
@@ -115935,4 +115978,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-06T21:55:56.840383628Z"
+generated: "2022-06-06T21:58:17.691026803Z"
