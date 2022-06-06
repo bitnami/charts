@@ -475,15 +475,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                  | Airflow database name                                                                                  | `bitnami_airflow` |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials                                | `""`              |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                     | `""`              |
-| `redis.enabled`                              | Switch to enable or disable the Redis&trade; helm                                                      | `true`            |
+| `redis.enabled`                              | Switch to enable or disable the Redis&reg; helm                                                        | `true`            |
 | `redis.auth.enabled`                         | Enable password authentication                                                                         | `true`            |
-| `redis.auth.password`                        | Redis&trade; password                                                                                  | `""`              |
-| `redis.auth.existingSecret`                  | The name of an existing secret with Redis&trade; credentials                                           | `""`              |
-| `redis.architecture`                         | Redis&trade; architecture. Allowed values: `standalone` or `replication`                               | `standalone`      |
-| `externalRedis.host`                         | Redis&trade; host                                                                                      | `localhost`       |
-| `externalRedis.port`                         | Redis&trade; port number                                                                               | `6379`            |
-| `externalRedis.username`                     | Redis&trade; username                                                                                  | `""`              |
-| `externalRedis.password`                     | Redis&trade; password                                                                                  | `""`              |
+| `redis.auth.password`                        | Redis&reg; password                                                                                    | `""`              |
+| `redis.auth.existingSecret`                  | The name of an existing secret with Redis&reg; credentials                                             | `""`              |
+| `redis.architecture`                         | Redis&reg; architecture. Allowed values: `standalone` or `replication`                                 | `standalone`      |
+| `externalRedis.host`                         | Redis&reg; host                                                                                        | `localhost`       |
+| `externalRedis.port`                         | Redis&reg; port number                                                                                 | `6379`            |
+| `externalRedis.username`                     | Redis&reg; username                                                                                    | `""`              |
+| `externalRedis.password`                     | Redis&reg; password                                                                                    | `""`              |
 | `externalRedis.existingSecret`               | Name of an existing secret resource containing the Redis&trade credentials                             | `""`              |
 | `externalRedis.existingSecretPasswordKey`    | Name of an existing secret key containing the Redis&trade credentials                                  | `""`              |
 
@@ -567,7 +567,7 @@ git.plugins.repositories[0].path=plugins
 
 ### Existing Secrets
 
-You can use an existing secret to configure your Airflow auth, external Postgres, and external Redis&trade; passwords:
+You can use an existing secret to configure your Airflow auth, external Postgres, and external Redis&reg; passwords:
 
 ```console
 postgresql.enabled=false
@@ -629,7 +629,7 @@ Celery executor is the default value for this chart with it you can scale out th
 
 The kubernetes executor is introduced in Apache Airflow 1.10.0. The Kubernetes executor will create a new pod for every task instance using the `pod_template.yaml` that you can find [templates/config/configmap.yaml](https://github.com/bitnami/charts/blob/master/bitnami/airflow/templates/config/configmap.yaml), otherwise you can override this template using `worker.podTemplate`. To enable `KubernetesExecutor` set the following parameters.
 
-> NOTE: Redis&trade; is not needed to be deployed when using KubernetesExecutor so you must disable it using `redis.enabled=false`.
+> NOTE: Redis&reg; is not needed to be deployed when using KubernetesExecutor so you must disable it using `redis.enabled=false`.
 
 ```console
 executor=KubernetesExecutor

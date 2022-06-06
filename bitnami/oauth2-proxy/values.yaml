@@ -589,66 +589,66 @@ serviceAccount:
   ##
   annotations: {}
 
-## @section External Redis&trade; parameters
+## @section External Redis&reg; parameters
 ##
 externalRedis:
-  ## @param externalRedis.host External Redis&trade; server host
+  ## @param externalRedis.host External Redis&reg; server host
   ##
   host: ""
-  ## @param externalRedis.password External Redis&trade; user password
+  ## @param externalRedis.password External Redis&reg; user password
   ##
   password: ""
-  ## @param externalRedis.port External Redis&trade; server port
+  ## @param externalRedis.port External Redis&reg; server port
   ##
   port: 6379
-  ## @param externalRedis.existingSecret The name of an existing secret with Redis&trade; credentials
+  ## @param externalRedis.existingSecret The name of an existing secret with Redis&reg; credentials
   ## NOTE: Must contain key `redis-password`
   ## NOTE: When it's set, the `externalRedis.password` parameter is ignored
   ##
   existingSecret: ""
 
-## @section Redis&trade; sub-chart parameters
+## @section Redis&reg; sub-chart parameters
 ##
 redis:
-  ## @param redis.enabled Deploy Redis&trade; sub-chart
+  ## @param redis.enabled Deploy Redis&reg; sub-chart
   ##
   enabled: true
-  ## @param redis.architecture Redis&trade; architecture
+  ## @param redis.architecture Redis&reg; architecture
   ##
   architecture: "standalone"
   master:
-    ## @param redis.master.service.port Redis&trade; (without Sentinel) service port
+    ## @param redis.master.service.port Redis&reg; (without Sentinel) service port
     ##
     service:
       port: 6379
   replica:
-    ## @param redis.replica.replicaCount Number of Redis&trade; replicas
+    ## @param redis.replica.replicaCount Number of Redis&reg; replicas
     ##
     replicaCount: 3
   auth:
-    ## @param redis.auth.enabled Enable Redis&trade; authentication
+    ## @param redis.auth.enabled Enable Redis&reg; authentication
     ##
     enabled: true
-    ## @param redis.auth.existingSecret Secret with Redis&trade; credentials
+    ## @param redis.auth.existingSecret Secret with Redis&reg; credentials
     ##
     existingSecret: ""
-    ## @param redis.auth.existingSecretPasswordKey Key inside the existing secret with Redis&trade; credentials
+    ## @param redis.auth.existingSecretPasswordKey Key inside the existing secret with Redis&reg; credentials
     ##
     existingSecretPasswordKey: ""
     ## @param redis.auth.sentinel Enable authentication in the Sentinel nodes
     ##
     sentinel: true
   sentinel:
-    ## @param redis.sentinel.enabled Enable Redis&trade; sentinel in the deployment
+    ## @param redis.sentinel.enabled Enable Redis&reg; sentinel in the deployment
     ##
     enabled: false
-    ## @param redis.sentinel.masterSet Name of the Redis&trade; Sentinel master set
+    ## @param redis.sentinel.masterSet Name of the Redis&reg; Sentinel master set
     ##
     masterSet: mymaster
     service:
-      ## @param redis.sentinel.service.port Redis&trade; (with Sentinel) service port
+      ## @param redis.sentinel.service.port Redis&reg; (with Sentinel) service port
       ##
       port: 6379
-      ## @param redis.sentinel.service.sentinelPort Redis&trade; (with Sentinel) sentinel service port
+      ## @param redis.sentinel.service.sentinelPort Redis&reg; (with Sentinel) sentinel service port
       ##
       sentinelPort: 26379

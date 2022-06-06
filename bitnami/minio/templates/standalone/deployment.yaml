@@ -141,7 +141,7 @@ spec:
             - name: MINIO_CONSOLE_PORT_NUMBER
               value: {{ .Values.containerPorts.console | quote }}
             {{- if .Values.tls.mountPath }}
-            - name: MINIO_CERTSDIR
+            - name: MINIO_CERTS_DIR
               value: {{ .Values.tls.mountPath | quote }}
             {{- end }}
             {{- if .Values.extraEnvVars }}

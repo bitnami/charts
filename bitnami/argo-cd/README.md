@@ -76,14 +76,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Argo CD image parameters
 
-| Name                | Description                                        | Value                 |
-| ------------------- | -------------------------------------------------- | --------------------- |
-| `image.registry`    | Argo CD image registry                             | `docker.io`           |
-| `image.repository`  | Argo CD image repository                           | `bitnami/argo-cd`     |
-| `image.tag`         | Argo CD image tag (immutable tags are recommended) | `2.3.3-debian-10-r32` |
-| `image.pullPolicy`  | Argo CD image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | Argo CD image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable Argo CD image debug mode                    | `false`               |
+| Name                | Description                                        | Value                |
+| ------------------- | -------------------------------------------------- | -------------------- |
+| `image.registry`    | Argo CD image registry                             | `docker.io`          |
+| `image.repository`  | Argo CD image repository                           | `bitnami/argo-cd`    |
+| `image.tag`         | Argo CD image tag (immutable tags are recommended) | `2.3.4-debian-10-r6` |
+| `image.pullPolicy`  | Argo CD image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | Argo CD image pull secrets                         | `[]`                 |
+| `image.debug`       | Enable Argo CD image debug mode                    | `false`              |
 
 
 ### Argo CD application controller parameters
@@ -457,7 +457,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------- |
 | `dex.image.registry`                                    | Dex image registry                                                                            | `docker.io`            |
 | `dex.image.repository`                                  | Dex image repository                                                                          | `bitnami/dex`          |
-| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                | `2.31.1-debian-10-r48` |
+| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                | `2.31.1-debian-10-r59` |
 | `dex.image.pullPolicy`                                  | Dex image pull policy                                                                         | `IfNotPresent`         |
 | `dex.image.pullSecrets`                                 | Dex image pull secrets                                                                        | `[]`                   |
 | `dex.image.debug`                                       | Enable Dex image debug mode                                                                   | `false`                |
@@ -594,7 +594,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r424`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r435`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -609,7 +609,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`                             | Specifies whether RBAC resources should be created                          | `true`                |
 | `redis.image.registry`                    | Argo CD controller image registry                                           | `docker.io`           |
 | `redis.image.repository`                  | Argo CD controller image repository                                         | `bitnami/redis`       |
-| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `6.2.7-debian-10-r15` |
+| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `6.2.7-debian-10-r26` |
 | `redis.image.pullPolicy`                  | Argo CD controller image pull policy                                        | `IfNotPresent`        |
 | `redis.image.pullSecrets`                 | Argo CD controller image pull secrets                                       | `[]`                  |
 | `redis.enabled`                           | Enable Redis dependency                                                     | `true`                |
@@ -618,7 +618,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.auth.enabled`                      | Enable Redis dependency authentication                                      | `true`                |
 | `redis.auth.existingSecret`               | Existing secret to load redis dependency password                           | `""`                  |
 | `redis.auth.existingSecretPasswordKey`    | Pasword key name inside the existing secret                                 | `redis-password`      |
-| `redis.architecture`                      | Redis&trade; architecture. Allowed values: `standalone` or `replication`    | `standalone`          |
+| `redis.architecture`                      | Redis&reg; architecture. Allowed values: `standalone` or `replication`      | `standalone`          |
 | `externalRedis.host`                      | External Redis host                                                         | `""`                  |
 | `externalRedis.port`                      | External Redis port                                                         | `6379`                |
 | `externalRedis.password`                  | External Redis password                                                     | `""`                  |
@@ -713,13 +713,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 3.0.0
 
-This major update the Redis&trade; subchart to its newest major, 16.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1600) you can find more info about the specific changes.
+This major update the Redis&reg; subchart to its newest major, 16.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1600) you can find more info about the specific changes.
 
 Additionally, this chart has been standardised adding features from other charts.
 
 ### To 2.0.0
 
-This major update the Redis&trade; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
+This major update the Redis&reg; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
 
 ### To 1.0.0
 

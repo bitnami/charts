@@ -34,13 +34,13 @@ To get your password run:
 
 {{- if .Values.cluster.externalAccess.enabled }}
 
-To connect to your Redis&trade; server from outside the cluster check the following information:
+To connect to your Redis&reg; server from outside the cluster check the following information:
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-    You will have a different external IP for each Redis&trade; node. Get the external ip from `-external` suffixed services: `kubectl get svc`.
-    Redis&trade; port: {{ .Values.cluster.externalAccess.service.port }}
+    You will have a different external IP for each Redis&reg; node. Get the external ip from `-external` suffixed services: `kubectl get svc`.
+    Redis&reg; port: {{ .Values.cluster.externalAccess.service.port }}
 
     {{- if not .Values.cluster.externalAccess.service.loadBalancerIP }}
     Once the LoadBalancerIPs are ready, you need to provide them and perform a Helm Upgrade:
@@ -60,15 +60,15 @@ To connect to your Redis&trade; server from outside the cluster check the follow
 
 {{- else }}
 
-You have deployed a Redis&trade; Cluster accessible only from within you Kubernetes Cluster.
+You have deployed a Redis&reg; Cluster accessible only from within you Kubernetes Cluster.
 
 {{- if .Values.cluster.init -}}
 INFO: The Job to create the cluster will be created.
 {{- end -}}
 
-To connect to your Redis&trade; cluster:
+To connect to your Redis&reg; cluster:
 
-1. Run a Redis&trade; pod that you can use as a client:
+1. Run a Redis&reg; pod that you can use as a client:
 
 {{- if .Values.tls.enabled }}
    kubectl run --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-client --restart='Never' --env REDIS_PASSWORD=$REDIS_PASSWORD --image {{ template "redis-cluster.image" . }} --command -- sleep infinity
@@ -91,7 +91,7 @@ kubectl run --namespace {{ .Release.Namespace }} {{ template "common.names.fulln
 --image {{ template "redis-cluster.image" . }} -- bash
 {{- end }}
 
-2. Connect using the Redis&trade; CLI:
+2. Connect using the Redis&reg; CLI:
 
 redis-cli -c -h {{ template "common.names.fullname" . }}{{ if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
