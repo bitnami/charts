@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                                  | Value |
@@ -74,7 +73,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonAnnotations` | Common annotations to add to all OpenCart resources (sub-charts are not considered). Evaluated as a template | `{}`  |
 | `commonLabels`      | Common labels to add to all OpenCart resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template)                                  | `[]`  |
-
 
 ### OpenCart parameters
 
@@ -164,7 +162,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                        | Pod annotations                                                                           | `{}`                     |
 | `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                | `{}`                     |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -186,7 +183,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                                         | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `opencart.local`         |
-| `ingress.path`                     | The Path to Opencart. You may need to set this to '/*' in order to use this with ALB ingress controllers.                        | `/`                      |
+| `ingress.path`                     | The Path to Opencart. You may need to set this to '/\*' in order to use this with ALB ingress controllers.                       | `/`                      |
 | `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
 | `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
@@ -195,7 +192,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-
 
 ### Database parameters
 
@@ -220,7 +216,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_opencart`  |
 | `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                           | `""`                |
 
-
 ### Volume Permissions parameters
 
 | Name                                   | Description                                                                                                                                               | Value                   |
@@ -234,7 +229,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
 
-
 ### Metrics parameters
 
 | Name                        | Description                                                | Value                     |
@@ -247,7 +241,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array           | `[]`                      |
 | `metrics.resources`         | Metrics exporter resource requests and limits              | `{}`                      |
 | `metrics.podAnnotations`    | Metrics exporter pod Annotation and Labels                 | `{}`                      |
-
 
 ### Certificate injection parameters
 
@@ -271,7 +264,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                  | Value   |
@@ -291,7 +283,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                           | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                               | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                   | `{}`    |
-
 
 The above parameters map to the env variables defined in [bitnami/opencart](https://github.com/bitnami/bitnami-docker-opencart). For more information please refer to the [bitnami/opencart](https://github.com/bitnami/bitnami-docker-opencart) image documentation.
 
@@ -390,11 +381,12 @@ $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/prest
 1. The specified `hostPath` directory must already exist (create one if it does not).
 1. Install the chart
 
-    ```bash
-    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/prestashop
-    ```
+   ```bash
+   $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/prestashop
+   ```
 
-    This will mount the `prestashop-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
+   This will mount the `prestashop-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
+
 1. Because the container cannot control the host machine's directory permissions, you must set the PrestaShop file directory permissions yourself and disable or clear PrestaShop cache.
 
 ## Troubleshooting
@@ -429,9 +421,9 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 **What changes were introduced in this major version?**
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
-- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
+- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
 **Considerations when upgrading to this version**
 
@@ -452,7 +444,7 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 This release includes several breaking changes which are listed below. To upgrade to `8.0.0`, we recommend to install a new OpenCart chart, and migrate your OpenCart site using the application's [Backup & Restore tool](http://docs.opencart.com/en-gb/tools/backup/).
 
 > NOTE: It is highly recommended to create a backup of your database before migrating your site. The steps below would be only valid if your application (e.g. any plugins or custom code) is compatible with MariaDB 10.5.x
-Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
+> Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
 
 ```console
 export OPENCART_PASSWORD=$(kubectl get secret --namespace default opencart -o jsonpath="{.data.opencart-password}" | base64 -d)
@@ -522,4 +514,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.
+limitations under the License

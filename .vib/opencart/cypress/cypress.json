@@ -6,7 +6,7 @@
     "smtpUser": "smtpUser"
   },
   "hosts": {
-    "vmware-opencart.my": "127.0.0.1"
+    "vmware-opencart.my": "{{ TARGET_IP }}"
   },
   "defaultCommandTimeout": 30000
 }
