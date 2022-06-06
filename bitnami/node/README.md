@@ -153,7 +153,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                         | Override default liveness probe                                                                                          | `{}`                    |
 | `customReadinessProbe`                        | Override default readiness probe                                                                                         | `{}`                    |
 | `customStartupProbe`                          | Override default startup probe                                                                                           | `{}`                    |
-| `topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                    |
+| `topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                    |
 | `priorityClassName`                           | Node priorityClassName                                                                                                   | `""`                    |
 | `schedulerName`                               | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                    |
 | `terminationGracePeriodSeconds`               | Seconds Airflow web pod needs to terminate gracefully                                                                    | `""`                    |
