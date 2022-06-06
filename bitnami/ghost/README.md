@@ -387,7 +387,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 19.0.0
 
-This major release changes database management system from MariaDB to MySQL. No major issues are expected during the upgrade.
+This major release changes database management system from MariaDB to MySQL. Since a new DB will be used, you need to create a back up beforehand and restore it in order to keep your data. See [the official migration docs](https://ghost.org/docs/migration/ghost/).
 
 ### To 17.0.0
 
