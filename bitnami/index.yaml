@@ -19150,6 +19150,39 @@ entries:
       category: Analytics
     apiVersion: v2
     appVersion: 8.2.2
+    created: "2022-06-06T20:50:12.049266064Z"
+    dependencies:
+    - condition: global.kibanaEnabled
+      name: kibana
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Elasticsearch is a distributed search and analytics engine. It is
+      used for web search, log monitoring, and real-time analytics. Ideal for Big
+      Data applications.
+    digest: sha256:92e7fa96e4e84a6c43a00b3b9a0ecfc00f25d77eccf5c50890202c44960e69bb
+    home: https://github.com/bitnami/charts/tree/master/bitnami/elasticsearch
+    icon: https://bitnami.com/assets/stacks/elasticsearch/img/elasticsearch-stack-220x234.png
+    keywords:
+    - elasticsearch
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: elasticsearch
+    sources:
+    - https://github.com/bitnami/bitnami-docker-elasticsearch
+    - https://www.elastic.co/products/elasticsearch
+    urls:
+    - https://charts.bitnami.com/bitnami/elasticsearch-18.2.9.tgz
+    version: 18.2.9
+  - annotations:
+      category: Analytics
+    apiVersion: v2
+    appVersion: 8.2.2
     created: "2022-06-03T23:59:40.010055481Z"
     dependencies:
     - condition: global.kibanaEnabled
@@ -115568,4 +115601,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-06T20:37:36.998550281Z"
+generated: "2022-06-06T20:50:12.109719733Z"
