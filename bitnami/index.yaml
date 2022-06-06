@@ -15954,6 +15954,38 @@ entries:
       category: Wiki
     apiVersion: v2
     appVersion: 20200729.0.0
+    created: "2022-06-06T21:52:01.907815528Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      version: 1.x.x
+    description: DokuWiki is a standards-compliant wiki optimized for creating documentation.
+      Designed to be simple to use for small organizations, it stores all data in
+      plain text files so no database is required.
+    digest: sha256:aa099f55225e0df74461a5c40a277fa6544e6e65f8d1c3c8b7b72a00baa75853
+    home: https://github.com/bitnami/charts/tree/master/bitnami/dokuwiki
+    icon: https://bitnami.com/assets/stacks/dokuwiki/img/dokuwiki-stack-220x234.png
+    keywords:
+    - dokuwiki
+    - wiki
+    - http
+    - web
+    - application
+    - php
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: dokuwiki
+    sources:
+    - https://github.com/bitnami/bitnami-docker-dokuwiki
+    - http://www.dokuwiki.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/dokuwiki-12.5.3.tgz
+    version: 12.5.3
+  - annotations:
+      category: Wiki
+    apiVersion: v2
+    appVersion: 20200729.0.0
     created: "2022-06-01T19:20:52.406323288Z"
     dependencies:
     - name: common
@@ -115833,4 +115865,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-06T21:50:10.135343793Z"
+generated: "2022-06-06T21:52:01.973093797Z"
