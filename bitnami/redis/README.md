@@ -124,6 +124,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                        | Description                                                                                           | Value                    |
 | ------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
+| `master.count`                              | Number of Redis&reg; master instances to deploy (experimental, requires additional configuration)     | `1`                      |
 | `master.configuration`                      | Configuration for Redis&reg; master nodes                                                             | `""`                     |
 | `master.disableCommands`                    | Array with Redis&reg; commands to disable on master nodes                                             | `["FLUSHDB","FLUSHALL"]` |
 | `master.command`                            | Override default container command (useful when using custom images)                                  | `[]`                     |
