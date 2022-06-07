@@ -17,6 +17,19 @@
       ]
     },
     "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/nginx-intel"
+        },
+        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0cyI6IAogICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIK",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
       "actions": [
         {
           "action_id": "trivy",
@@ -25,6 +38,13 @@
             "vuln_type": [
               "OS"
             ]
+          }
+        },
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-nginx-intel-http",
+            "app_protocol": "HTTP"
           }
         }
       ]

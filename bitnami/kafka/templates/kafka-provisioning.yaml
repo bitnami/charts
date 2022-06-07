@@ -38,6 +38,9 @@ spec:
       {{- end }}
       restartPolicy: OnFailure
       terminationGracePeriodSeconds: 0
+      {{- if .Values.provisioning.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.tolerations "context" .) | nindent 8 }}
+      {{- end }}
       {{- if or .Values.provisioning.initContainers .Values.provisioning.waitForKafka }}
       initContainers:
         {{- if .Values.provisioning.waitForKafka }}

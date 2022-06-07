@@ -7,7 +7,7 @@ ExternalDNS is a Kubernetes addon that configures public DNS servers with inform
 [Overview of ExternalDNS](https://github.com/kubernetes-incubator/external-dns)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -19,7 +19,7 @@ $ helm install my-release bitnami/external-dns
 
 This chart bootstraps a [ExternalDNS](https://github.com/bitnami/bitnami-docker-external-dns) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                              | ExternalDNS image registry                                                                                                                                                   | `docker.io`               |
 | `image.repository`                            | ExternalDNS image repository                                                                                                                                                 | `bitnami/external-dns`    |
-| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.11.1-debian-10-r1`     |
+| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.12.0-debian-10-r0`     |
 | `image.pullPolicy`                            | ExternalDNS image pull policy                                                                                                                                                | `IfNotPresent`            |
 | `image.pullSecrets`                           | ExternalDNS image pull secrets                                                                                                                                               | `[]`                      |
 | `hostAliases`                                 | Deployment pod host aliases                                                                                                                                                  | `[]`                      |
@@ -184,6 +184,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `oci.privateKey`                              | When using the OCI provider, paste in your RSA private key file for the Oracle API                                                                                           | `""`                      |
 | `oci.privateKeyFingerprint`                   | When using the OCI provider, put in the fingerprint of your privateKey                                                                                                       | `""`                      |
 | `oci.privateKeyPassphrase`                    | When using the OCI provider and your privateKey has a passphrase, put it in here. (optional)                                                                                 | `""`                      |
+| `oci.secretName`                              | When using the OCI provider, it's the name of the secret containing `oci.yaml` file.                                                                                         | `""`                      |
 | `ovh.consumerKey`                             | When using the OVH provider, specify the existing consumer key. (required when provider=ovh and `ovh.secretName` is not provided.)                                           | `""`                      |
 | `ovh.applicationKey`                          | When using the OVH provider with an existing application, specify the application key. (required when provider=ovh and `ovh.secretName` is not provided.)                    | `""`                      |
 | `ovh.applicationSecret`                       | When using the OVH provider with an existing application, specify the application secret. (required when provider=ovh and `ovh.secretName` is not provided.)                 | `""`                      |
@@ -268,6 +269,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.extraPorts`                          | Extra ports to expose in the service (normally used with the `sidecar` value)                                                                                                | `[]`                      |
 | `service.annotations`                         | Annotations to add to service                                                                                                                                                | `{}`                      |
 | `service.labels`                              | Provide any additional labels which may be required.                                                                                                                         | `{}`                      |
+| `service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                         | `None`                    |
+| `service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                                                                  | `{}`                      |
 | `serviceAccount.create`                       | Determine whether a Service Account should be created or it should reuse a exiting one.                                                                                      | `true`                    |
 | `serviceAccount.name`                         | ServiceAccount to use. A name is generated using the external-dns.fullname template if it is not set                                                                         | `""`                      |
 | `serviceAccount.annotations`                  | Additional Service Account annotations                                                                                                                                       | `{}`                      |
@@ -316,7 +319,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.metricRelabelings`    | Specify Metric Relabelings to add to the scrape endpoint                                                                                                                     | `[]`                      |
 | `metrics.serviceMonitor.relabelings`          | Prometheus relabeling rules                                                                                                                                                  | `[]`                      |
 | `metrics.serviceMonitor.honorLabels`          | Specify honorLabels parameter to add the scrape endpoint                                                                                                                     | `false`                   |
-| `metrics.serviceMonitor.additionalLabels`     | Used to pass Labels that are required by the installed Prometheus Operator                                                                                                   | `{}`                      |
+| `metrics.serviceMonitor.labels`               | Used to pass Labels that are required by the installed Prometheus Operator                                                                                                   | `{}`                      |
 | `metrics.serviceMonitor.jobLabel`             | The name of the label on the target service to use as the job name in prometheus.                                                                                            | `""`                      |
 
 

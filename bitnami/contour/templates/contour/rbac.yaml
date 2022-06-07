@@ -167,13 +167,13 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "contour.contourServiceAccountName" . }}
-    namespace: {{ .Release.Namespace }}
+    namespace: {{ include "common.names.namespace" . | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ include "common.names.fullname" . }}-contour
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -203,7 +203,7 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ include "common.names.fullname" . }}-contour-role
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -212,5 +212,5 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "contour.contourServiceAccountName" . }}
-    namespace: {{ .Release.Namespace }}
+    namespace: {{ include "common.names.namespace" . | quote }}
 {{- end }}

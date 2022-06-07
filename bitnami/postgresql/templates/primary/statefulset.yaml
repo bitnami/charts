@@ -218,7 +218,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql.secretName" . }}
-                  key: postgres-password
+                  key: {{ include "postgresql.adminPasswordKey" . }}
             {{- end }}
             {{- end }}
           {{- end }}
@@ -230,7 +230,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql.secretName" . }}
-                  key: {{ ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres")) }}
+                  key: {{ include "postgresql.userPasswordKey" . }}
             {{- end }}
             {{- if (include "postgresql.database" .) }}
             - name: POSTGRES_DB
@@ -250,7 +250,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql.secretName" . }}
-                  key: replication-password
+                  key: {{ include "postgresql.replicationPasswordKey" . }}
             {{- end }}
             {{- if not (eq .Values.replication.synchronousCommit "off") }}
             - name: POSTGRES_SYNCHRONOUS_COMMIT_MODE
@@ -289,13 +289,17 @@ spec:
             - name: POSTGRESQL_ENABLE_LDAP
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
             {{- if .Values.ldap.enabled }}
+            {{- if or .Values.ldap.url .Values.ldap.uri }}
+            - name: POSTGRESQL_LDAP_URL
+              value: {{ coalesce .Values.ldap.url .Values.ldap.uri }}
+            {{- else }}
             - name: POSTGRESQL_LDAP_SERVER
               value: {{ .Values.ldap.server }}
             - name: POSTGRESQL_LDAP_PORT
               value: {{ .Values.ldap.port | quote }}
             - name: POSTGRESQL_LDAP_SCHEME
               value: {{ .Values.ldap.scheme }}
-            {{- if .Values.ldap.tls }}
+            {{- if (include "postgresql.ldap.tls.enabled" .) }}
             - name: POSTGRESQL_LDAP_TLS
               value: "1"
             {{- end }}
@@ -304,10 +308,10 @@ spec:
             - name: POSTGRESQL_LDAP_SUFFIX
               value: {{ .Values.ldap.suffix | quote }}
             - name: POSTGRESQL_LDAP_BASE_DN
-              value: {{ .Values.ldap.baseDN }}
+              value: {{ coalesce .Values.ldap.baseDN .Values.ldap.basedn }}
             - name: POSTGRESQL_LDAP_BIND_DN
-              value: {{ .Values.ldap.bindDN }}
-            {{- if not (empty .Values.ldap.bind_password) }}
+              value: {{ coalesce .Values.ldap.bindDN .Values.ldap.binddn}}
+            {{- if or  (not (empty .Values.ldap.bind_password)) (not (empty .Values.ldap.bindpw)) }}
             - name: POSTGRESQL_LDAP_BIND_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -315,11 +319,10 @@ spec:
                   key: ldap-password
             {{- end }}
             - name: POSTGRESQL_LDAP_SEARCH_ATTR
-              value: {{ .Values.ldap.search_attr }}
+              value: {{ coalesce .Values.ldap.search_attr .Values.ldap.searchAttribute }}
             - name: POSTGRESQL_LDAP_SEARCH_FILTER
-              value: {{ .Values.ldap.search_filter }}
-            - name: POSTGRESQL_LDAP_URL
-              value: {{ .Values.ldap.url }}
+              value: {{ coalesce .Values.ldap.search_filter .Values.ldap.searchFilter }}
+            {{- end }}
             {{- end }}
             # TLS
             - name: POSTGRESQL_ENABLE_TLS
@@ -501,7 +504,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql.secretName" . }}
-                  key: {{ ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres")) }}
+                  key: {{ include "postgresql.userPasswordKey" . }}
             {{- end }}
             - name: DATA_SOURCE_USER
               value: {{ default "postgres" $customUser | quote }}

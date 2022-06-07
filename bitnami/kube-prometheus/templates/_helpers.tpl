@@ -66,20 +66,10 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{/*
-Common Labels
-*/}}
-{{- define "kube-prometheus.labels" -}}
-{{- include "common.labels.standard" . -}}
-{{- if .Values.global.labels }}
-{{ toYaml .Values.global.labels -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Labels for operator
 */}}
 {{- define "kube-prometheus.operator.labels" -}}
-{{- include "kube-prometheus.labels" . }}
+{{- include "common.labels.standard" . }}
 app.kubernetes.io/component: operator
 {{- end -}}
 
@@ -87,7 +77,7 @@ app.kubernetes.io/component: operator
 Labels for prometheus
 */}}
 {{- define "kube-prometheus.prometheus.labels" -}}
-{{- include "kube-prometheus.labels" . }}
+{{- include "common.labels.standard" . }}
 app.kubernetes.io/component: prometheus
 {{- end -}}
 
@@ -95,7 +85,7 @@ app.kubernetes.io/component: prometheus
 Labels for alertmanager
 */}}
 {{- define "kube-prometheus.alertmanager.labels" -}}
-{{- include "kube-prometheus.labels" . }}
+{{- include "common.labels.standard" . }}
 app.kubernetes.io/component: alertmanager
 {{- end -}}
 
@@ -103,7 +93,7 @@ app.kubernetes.io/component: alertmanager
 Labels for blackbox-exporter
 */}}
 {{- define "kube-prometheus.blackboxExporter.labels" -}}
-{{- include "kube-prometheus.labels" . }}
+{{- include "common.labels.standard" . }}
 app.kubernetes.io/component: blackbox-exporter
 {{- end -}}
 

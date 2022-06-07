@@ -7,7 +7,7 @@ MariaDB Galera is a multi-primary database cluster solution for synchronous repl
 [Overview of MariaDB Galera](https://mariadb.com/kb/en/library/galera-cluster/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -19,7 +19,7 @@ $ helm install my-release bitnami/mariadb-galera
 
 This chart bootstraps a [MariaDB Galera](https://github.com/bitnami/bitnami-docker-mariadb-galera) cluster on [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with fluentd and Prometheus on top of [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -96,7 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                              | MariaDB Galera image registry                                                                                                                                                                 | `docker.io`               |
 | `image.repository`                            | MariaDB Galera image repository                                                                                                                                                               | `bitnami/mariadb-galera`  |
-| `image.tag`                                   | MariaDB Galera image tag (immutable tags are recommended)                                                                                                                                     | `10.6.7-debian-10-r56`    |
+| `image.tag`                                   | MariaDB Galera image tag (immutable tags are recommended)                                                                                                                                     | `10.6.8-debian-10-r3`     |
 | `image.pullPolicy`                            | MariaDB Galera image pull policy                                                                                                                                                              | `IfNotPresent`            |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                                                              | `[]`                      |
 | `image.debug`                                 | Specify if debug logs should be enabled                                                                                                                                                       | `false`                   |
@@ -110,7 +110,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.externalIPs`                         | External IP list to use with ClusterIP service type                                                                                                                                           | `[]`                      |
 | `service.loadBalancerIP`                      | `loadBalancerIP` if service type is `LoadBalancer`                                                                                                                                            | `""`                      |
 | `service.loadBalancerSourceRanges`            | Addresses that are allowed when svc is `LoadBalancer`                                                                                                                                         | `[]`                      |
+| `service.externalTrafficPolicy`               | %%MAIN_CONTAINER_NAME%% service external traffic policy                                                                                                                                       | `Cluster`                 |
 | `service.annotations`                         | Additional annotations for MariaDB Galera service                                                                                                                                             | `{}`                      |
+| `service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                                          | `None`                    |
+| `service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                                                                                   | `{}`                      |
 | `service.headless.annotations`                | Annotations for the headless service.                                                                                                                                                         | `{}`                      |
 | `service.headless.publishNotReadyAddresses`   | Publish not Ready MariaDB Galera pods' IPs in the headless service.                                                                                                                           | `true`                    |
 | `serviceAccount.create`                       | Specify whether a ServiceAccount should be created                                                                                                                                            | `false`                   |
@@ -198,7 +201,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                            | Persistent Volume Size                                                                                                                                                                        | `8Gi`                     |
 | `priorityClassName`                           | Priority Class Name for Statefulset                                                                                                                                                           | `""`                      |
 | `initContainers`                              | Additional init containers (this value is evaluated as a template)                                                                                                                            | `[]`                      |
-| `extraContainers`                             | Additional containers (this value is evaluated as a template)                                                                                                                                 | `[]`                      |
+| `sidecars`                                    | Add additional sidecar containers (this value is evaluated as a template)                                                                                                                     | `[]`                      |
 | `extraVolumes`                                | Extra volumes                                                                                                                                                                                 | `[]`                      |
 | `extraVolumeMounts`                           | Mount extra volume(s)                                                                                                                                                                         | `[]`                      |
 | `resources.limits`                            | The resources limits for the container                                                                                                                                                        | `{}`                      |
@@ -230,7 +233,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                             | Start a side-car prometheus exporter                                                                                                                                                          | `false`                   |
 | `metrics.image.registry`                      | MariaDB Prometheus exporter image registry                                                                                                                                                    | `docker.io`               |
 | `metrics.image.repository`                    | MariaDB Prometheus exporter image repository                                                                                                                                                  | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                           | MariaDB Prometheus exporter image tag (immutable tags are recommended)                                                                                                                        | `0.14.0-debian-10-r45`    |
+| `metrics.image.tag`                           | MariaDB Prometheus exporter image tag (immutable tags are recommended)                                                                                                                        | `0.14.0-debian-10-r78`    |
 | `metrics.image.pullPolicy`                    | MariaDB Prometheus exporter image pull policy                                                                                                                                                 | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                   | MariaDB Prometheus exporter image pull secrets                                                                                                                                                | `[]`                      |
 | `metrics.extraFlags`                          | MariaDB Prometheus exporter additional command line flags                                                                                                                                     | `[]`                      |

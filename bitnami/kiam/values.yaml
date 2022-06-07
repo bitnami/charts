@@ -63,7 +63,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kiam
-  tag: 4.2.0-debian-10-r188
+  tag: 4.2.0-debian-11-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -822,6 +822,9 @@ agent:
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
+    ## @param agent.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
     ## @param agent.service.annotations Annotations for kiam service
     ##
     annotations: {}

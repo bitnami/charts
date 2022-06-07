@@ -21,7 +21,7 @@ This chart bootstraps an [ownCloud](https://github.com/bitnami/bitnami-docker-ow
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the ownCloud application.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -518,9 +518,9 @@ Obtain the credentials and the names of the PVCs used to hold both the MariaDB a
 
 ```console
 export OWNCLOUD_HOST=$(kubectl get svc --namespace default owncloud --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
-export OWNCLOUD_PASSWORD=$(kubectl get secret --namespace default owncloud -o jsonpath="{.data.owncloud-password}" | base64 --decode)
-export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default owncloud-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-export MARIADB_PASSWORD=$(kubectl get secret --namespace default owncloud-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export OWNCLOUD_PASSWORD=$(kubectl get secret --namespace default owncloud -o jsonpath="{.data.owncloud-password}" | base64 -d)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default owncloud-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default owncloud-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=owncloud -o jsonpath="{.items[0].metadata.name}")
 ```
 

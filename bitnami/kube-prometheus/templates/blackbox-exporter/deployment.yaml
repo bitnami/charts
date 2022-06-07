@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "kube-prometheus.blackboxExporter.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.blackboxExporter.labels" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -63,9 +63,12 @@ spec:
       {{- if .Values.blackboxExporter.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.blackboxExporter.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.blackboxExporter.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.blackboxExporter.terminationGracePeriodSeconds }}
+      {{- end }}
       initContainers:
         {{- if .Values.blackboxExporter.initContainers }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.initContainers "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: blackbox-exporter

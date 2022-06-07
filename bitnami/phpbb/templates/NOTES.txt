@@ -44,7 +44,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 2. Login with the following credentials
 
   echo Username: {{ .Values.phpbbUsername }}
-  echo Password: $(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "phpbb.secretName" . }} -o jsonpath="{.data.phpbb-password}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "phpbb.secretName" . }} -o jsonpath="{.data.phpbb-password}" | base64 -d)
 
 {{- else -}}
 

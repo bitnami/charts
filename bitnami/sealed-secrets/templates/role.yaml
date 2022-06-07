@@ -1,0 +1,60 @@
+{{- if .Values.rbac.create -}}
+kind: Role
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-key-admin" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - ""
+    resourceNames:
+      - {{ printf "%s-key" (include "common.names.fullname" .) }}
+    resources:
+      - secrets
+    verbs:
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - create
+      - list
+  {{- if .Values.rbac.keyAdmin.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.keyAdmin.rules "context" $ ) | nindent 2 }}
+  {{- end }}
+---
+kind: Role
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-service-proxier" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - ""
+    resourceNames:
+      - '{{ printf "http:%s:" (include "common.names.fullname" .) }}'
+      - {{ template "common.names.fullname" . }}
+    resources:
+      - services/proxy
+    verbs:
+      - create
+      - get
+  {{- if .Values.rbac.serviceProxier.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.serviceProxier.rules "context" $ ) | nindent 2 }}
+  {{- end }}
+{{- end }}

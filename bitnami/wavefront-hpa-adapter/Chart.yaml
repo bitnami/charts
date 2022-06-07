@@ -20,9 +20,9 @@ keywords:
   - observability
   - wavefront
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: wavefront-hpa-adapter
 sources:
   - https://github.com/bitnami/bitnami-docker-wavefront-hpa-adapter
-version: 1.1.2
+version: 1.2.1

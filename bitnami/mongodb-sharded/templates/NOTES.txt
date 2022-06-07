@@ -30,7 +30,7 @@ The MongoDB&reg; Sharded cluster can be accessed via the Mongos instances in por
 
 To get the {{ .Values.auth.rootUser }} password run:
 
-    export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.mongodb-root-password}" | base64 --decode)
+    export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.mongodb-root-password}" | base64 -d)
 
 To connect to your database run the following command:
 

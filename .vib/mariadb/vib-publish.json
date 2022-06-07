@@ -17,14 +17,37 @@
       ]
     },
     "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/mariadb"
+        },
+        "runtime_parameters": "YXV0aDoKICBkYXRhYmFzZTogdGVzdF9kYXRhYmFzZQogIHVzZXJuYW1lOiAidXNlciIKICBwYXNzd29yZDogIkNvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNCI=",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
       "actions": [
         {
           "action_id": "trivy",
           "params": {
             "threshold": "CRITICAL",
-            "vuln_type": [
-              "OS"
-            ]
+            "vuln_type": ["OS"]
+          }
+        },
+
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/mariadb/goss"
+            },
+            "remote": {
+              "workload": "sts-mariadb"
+            }
           }
         }
       ]

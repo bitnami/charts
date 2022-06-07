@@ -3,13 +3,13 @@ import { random } from './utils';
 
 it('allows user to log in and log out', () => {
   cy.login();
-  cy.get('[data-testid="ErrorOutlineIcon"]').should('not.exist');
+  cy.get('div.alert').should('not.exist');
   cy.get('#logout').scrollIntoView().click();
 });
 
 it('allows creating a bucket and file upload', () => {
   cy.login();
-  cy.visit('add-bucket');
+  cy.visit('buckets/add-bucket');
   cy.fixture('testdata').then((td) => {
     cy.get('#bucket-name')
       .should('be.visible')
