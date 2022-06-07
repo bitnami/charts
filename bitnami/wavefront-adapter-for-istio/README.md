@@ -96,7 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------- |
 | `image.registry`                        | Adapter image registry                                                                                                   | `docker.io`                           |
 | `image.repository`                      | Adapter image repository                                                                                                 | `bitnami/wavefront-adapter-for-istio` |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                                                        | `0.1.5-debian-10-r347`                |
+| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                                                        | `0.1.5-debian-11-r0`                  |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                                                | `IfNotPresent`                        |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                                               | `[]`                                  |
 | `startupProbe.enabled`                  | Enable startupProbe                                                                                                      | `true`                                |
@@ -138,7 +138,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podLabels`                             | Extra labels for Adapter pods                                                                                            | `{}`                                  |
 | `priorityClassName`                     | Adapter pod priority                                                                                                     | `""`                                  |
 | `schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                                  |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                                  |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                                  |
 | `terminationGracePeriodSeconds`         | Termination grace period in seconds                                                                                      | `""`                                  |
 | `lifecycleHooks`                        | Add lifecycle hooks to the Adapter deployment                                                                            | `{}`                                  |
 | `customLivenessProbe`                   | Override default liveness probe                                                                                          | `{}`                                  |
