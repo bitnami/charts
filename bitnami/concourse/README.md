@@ -7,7 +7,7 @@ Concourse is an automation system written in Go. It is most commonly used for CI
 [Overview of Concourse](https://concourse-ci.org/)
 
 
-                           
+
 ## TL;DR
 
 ```console
@@ -21,7 +21,7 @@ This chart bootstraps a [Concourse](https://concourse-ci.org/) deployment on a [
 
 It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/master/bitnami/postgresql)
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 

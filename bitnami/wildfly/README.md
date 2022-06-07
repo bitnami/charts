@@ -7,7 +7,7 @@ Wildfly is a lightweight, open source application server, formerly known as JBos
 [Overview of WildFly](http://www.wildfly.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -21,7 +21,7 @@ This chart bootstraps a [WildFly](https://github.com/bitnami/bitnami-docker-wild
 
 WildFly is written in Java, and implements the Java Platform, Enterprise Edition (Java EE) specification.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
