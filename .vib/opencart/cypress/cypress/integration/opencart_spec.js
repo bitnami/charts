@@ -2,7 +2,7 @@
 import { random } from './utils';
 
 it('allows a user to register', () => {
-  cy.visit('//index.php?route=account/login');
+  cy.visit('/index.php?route=account/login');
   cy.contains('Continue').click();
   cy.fixture('users').then((user) => {
     cy.get('#input-firstname').type(`${user.newUser.firstName}.${random}`);
