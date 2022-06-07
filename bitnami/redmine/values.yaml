@@ -324,7 +324,7 @@ terminationGracePeriodSeconds: ""
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
-topologySpreadConstraints: {}
+topologySpreadConstraints: []
 ## @param updateStrategy.type Redmine statefulset strategy type
 ## @param updateStrategy.rollingUpdate Redmine statefulset rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
