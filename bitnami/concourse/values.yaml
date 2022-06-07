@@ -508,7 +508,7 @@ web:
   ## @param web.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param web.priorityClassName Priority Class to use for each pod (Concourse web)
   ##
   priorityClassName: ""
@@ -800,7 +800,7 @@ worker:
   ## @param worker.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param worker.priorityClassName Priority Class to use for each pod (Concourse worker)
   ##
   priorityClassName: ""
