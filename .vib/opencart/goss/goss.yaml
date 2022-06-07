@@ -4,3 +4,24 @@ command:
     exit-status: 0
     stdout: []
     stderr: []
+file:
+  /opt/bitnami/apache/conf/extra/httpd-manual.conf:
+    mode: "0664"
+    filetype: file
+    exists: true
+  /opt/bitnami/opencart/config.php:
+    mode: "0777"
+    filetype: file
+    exists: true
+    contains:
+      - vmware-opencart
+      - mysqli
+      - 3306
+  /opt/bitnami/opencart/system/config:
+    mode: "0777"
+    filetype: directory
+    exists: true
+  /opt/bitnami/mysql:
+    mode: "0755"
+    filetype: directory
+    exists: true
