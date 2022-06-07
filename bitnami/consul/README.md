@@ -313,7 +313,7 @@ This chart will facilitate the creation of TLS secrets for use with the ingress 
 
 - Helm generates/manages certificate secrets
 - User generates/manages certificates separately
-- An additional tool (like kube-lego) manages the secrets for the application
+- An additional tool (like cert-manager) manages the secrets for the application
 
 In the first two cases, one will need a certificate and a key.  We would expect them to look like this:
 
