@@ -7,7 +7,7 @@ Kubeapps is a web-based UI for launching and managing applications on Kubernetes
 [Overview of Kubeapps](https://github.com/vmware-tanzu/kubeapps)
 
 
-
+                           
 ## TL;DR
 
 ```bash
@@ -20,7 +20,7 @@ helm install kubeapps --namespace kubeapps bitnami/kubeapps
 
 ## Introduction
 
-This chart bootstraps a [Kubeapps](https://kubeapps.com) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Kubeapps](https://kubeapps.dev) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 With Kubeapps you can:
 
@@ -738,7 +738,7 @@ kubectl get services --namespace kubeapps --watch
 
 #### Ingress
 
-This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress](https://hub.kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://hub.kubeapps.com/charts/stable/traefik) you can utilize the ingress controller to expose Kubeapps.
+This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as nginx-ingress or traefik you can utilize the ingress controller to expose Kubeapps.
 
 To enable ingress integration, please set `ingress.enabled` to `true`
 

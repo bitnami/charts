@@ -7,7 +7,7 @@ Apache Spark is a high-performance engine for large-scale computing tasks, such 
 [Overview of Apache Spark](https://spark.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -21,7 +21,7 @@ This chart bootstraps an [Apache Spark](https://github.com/bitnami/bitnami-docke
 
 Apache Spark includes APIs for Java, Python, Scala and R.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
