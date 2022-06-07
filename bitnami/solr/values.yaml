@@ -295,7 +295,7 @@ tolerations: []
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
-topologySpreadConstraints: {}
+topologySpreadConstraints: []
 ## @param podManagementPolicy Management Policy for Solr StatefulSet
 ## StatefulSet controller supports relaxing its ordering guarantees while preserving its uniqueness and identity guarantees
 ## There are two valid pod management policies: OrderedReady and Parallel
@@ -817,7 +817,7 @@ metrics:
   ## @param metrics.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param metrics.priorityClassName Solr Prometheus exporter pods' priority.
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
