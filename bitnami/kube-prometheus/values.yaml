@@ -2202,7 +2202,7 @@ blackboxExporter:
   ## @param blackboxExporter.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param blackboxExporter.priorityClassName Blackbox Exporter pods' priorityClassName
   ##
   priorityClassName: ""
