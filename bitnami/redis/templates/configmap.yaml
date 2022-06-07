@@ -32,7 +32,7 @@ data:
     # End of master configuration
   replica.conf: |-
     dir {{ .Values.replica.persistence.path }}
-    slave-read-only yes
+    replica-read-only yes
     # User-supplied replica configuration:
     {{- if .Values.replica.configuration }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.replica.configuration "context" $ ) | nindent 4 }}
