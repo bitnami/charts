@@ -31,6 +31,8 @@ For example, the following changes have been introduced:
   - published for debian-10 and ol-7
 - This chart support the Harbor optional components Chartmuseum, Clair and Notary integrations.
 
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
