@@ -41,7 +41,7 @@ For Redis Sentinel:
  WARNING
 
     By specifying "master.service.type=LoadBalancer" and "auth.enabled=false" you have
-    most likely exposed the Redis&trade; service externally without any authentication
+    most likely exposed the Redis&reg; service externally without any authentication
     mechanism.
 
     For security reasons, we strongly suggest that you switch to "ClusterIP" or
@@ -56,15 +56,15 @@ For Redis Sentinel:
 {{- if eq .Values.architecture "replication" }}
 {{- if .Values.sentinel.enabled }}
 
-Redis&trade; can be accessed via port {{ .Values.sentinel.service.ports.redis }} on the following DNS name from within your cluster:
+Redis&reg; can be accessed via port {{ .Values.sentinel.service.ports.redis }} on the following DNS name from within your cluster:
 
     {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} for read only operations
 
-For read/write operations, first access the Redis&trade; Sentinel cluster, which is available in port {{ .Values.sentinel.service.ports.sentinel }} using the same domain name above.
+For read/write operations, first access the Redis&reg; Sentinel cluster, which is available in port {{ .Values.sentinel.service.ports.sentinel }} using the same domain name above.
 
 {{- else }}
 
-Redis&trade; can be accessed on the following DNS names from within your cluster:
+Redis&reg; can be accessed on the following DNS names from within your cluster:
 
     {{ printf "%s-master.%s.svc.%s" (include "common.names.fullname" .) .Release.Namespace .Values.clusterDomain }} for read/write operations (port {{ .Values.master.service.ports.redis }})
     {{ printf "%s-replicas.%s.svc.%s" (include "common.names.fullname" .) .Release.Namespace .Values.clusterDomain }} for read-only operations (port {{ .Values.replica.service.ports.redis }})
@@ -72,7 +72,7 @@ Redis&trade; can be accessed on the following DNS names from within your cluster
 {{- end }}
 {{- else }}
 
-Redis&trade; can be accessed via port {{ .Values.master.service.ports.redis }} on the following DNS name from within your cluster:
+Redis&reg; can be accessed via port {{ .Values.master.service.ports.redis }} on the following DNS name from within your cluster:
 
     {{ template "common.names.fullname" . }}-master.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
 
@@ -86,9 +86,9 @@ To get your password run:
 
 {{- end }}
 
-To connect to your Redis&trade; server:
+To connect to your Redis&reg; server:
 
-1. Run a Redis&trade; pod that you can use as a client:
+1. Run a Redis&reg; pod that you can use as a client:
 
    kubectl run --namespace {{ .Release.Namespace }} redis-client --restart='Never' {{ if .Values.auth.enabled }} --env REDIS_PASSWORD=$REDIS_PASSWORD {{ end }} --image {{ template "redis.image" . }} --command -- sleep infinity
 
@@ -108,7 +108,7 @@ To connect to your Redis&trade; server:
    {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "common.names.fullname" . }}-client=true" \{{- end }}
    --namespace {{ .Release.Namespace }} -- bash
 
-2. Connect using the Redis&trade; CLI:
+2. Connect using the Redis&reg; CLI:
 
 {{- if eq .Values.architecture "replication" }}
    {{- if .Values.sentinel.enabled }}
