@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.tag`                             | Matomo Image tag                                                                                                      | `4.10.1-debian-10-r11` |
 | `image.pullPolicy`                      | Matomo image pull policy                                                                                              | `IfNotPresent`         |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                   |
-| `image.debug`                           | Specify if debug logs should be enabled                                                                               | `true`                 |
+| `image.debug`                           | Specify if debug logs should be enabled                                                                               | `false`                |
 | `replicaCount`                          | Number of Matomo Pods to run (requires ReadWriteMany PVC support)                                                     | `1`                    |
 | `matomoUsername`                        | User of the application                                                                                               | `user`                 |
 | `matomoPassword`                        | Application password                                                                                                  | `""`                   |
