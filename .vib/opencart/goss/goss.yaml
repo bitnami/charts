@@ -11,14 +11,14 @@ file:
     exists: true
   /opt/bitnami/opencart/config.php:
     mode: "0777"
-    filetype: file
+    filetype: symlink
     exists: true
     contains:
       - vmware-opencart
       - mysqli
       - 3306
   /opt/bitnami/opencart/system/config:
-    mode: "0777"
+    mode: "0775"
     filetype: directory
     exists: true
   /opt/bitnami/mysql:
