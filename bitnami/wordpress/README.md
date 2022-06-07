@@ -149,7 +149,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `updateStrategy.type`                   | WordPress deployment strategy type                                                                                       | `RollingUpdate` |
 | `updateStrategy.rollingUpdate`          | WordPress deployment rolling update configuration parameters                                                             | `{}`            |
 | `schedulerName`                         | Alternate scheduler                                                                                                      | `""`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
 | `priorityClassName`                     | Name of the existing priority class to be used by WordPress pods, priority class needs to be created beforehand          | `""`            |
 | `hostAliases`                           | WordPress pod host aliases                                                                                               | `[]`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for WordPress pods                                                   | `[]`            |
