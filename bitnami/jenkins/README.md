@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------- | ---------------------- |
 | `image.registry`    | Jenkins image registry                             | `docker.io`            |
 | `image.repository`  | Jenkins image repository                           | `bitnami/jenkins`      |
-| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.332.3-debian-10-r0` |
+| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.332.3-debian-11-r0` |
 | `image.pullPolicy`  | Jenkins image pull policy                          | `IfNotPresent`         |
 | `image.pullSecrets` | Jenkins image pull secrets                         | `[]`                   |
 | `image.debug`       | Enable image debug mode                            | `false`                |
@@ -131,7 +131,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
 | `affinity`                              | Affinity for pod assignment                                                               | `{}`            |
 | `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment                                                            | `{}`            |
+| `tolerations`                           | Tolerations for pod assignment                                                            | `[]`            |
 | `resources.limits`                      | The resources limits for the Jenkins container                                            | `{}`            |
 | `resources.requests`                    | The requested resources for the Jenkins container                                         | `{}`            |
 | `containerPorts.http`                   | Jenkins HTTP container port                                                               | `8080`          |
@@ -211,7 +211,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r441`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r0`       |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
