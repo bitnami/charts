@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/kube-prometheus"
         },
-        "runtime_parameters": "Im9wZXJhdG9yIjoKICAiY3VzdG9tUmVzb3VyY2VEZWxldGVQb2xpY3kiOiAiYmVmb3JlLWhvb2stY3JlYXRpb24iCiJwcm9tZXRoZXVzIjoKICAic2VydmljZSI6CiAgICAicG9ydCI6IDgwCiAgICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
+        "runtime_parameters": "Im9wZXJhdG9yIjoKICAiY3VzdG9tUmVzb3VyY2VEZWxldGVQb2xpY3kiOiAiYmVmb3JlLWhvb2stY3JlYXRpb24iCiJwcm9tZXRoZXVzIjoKICAic2VydmljZSI6CiAgICAidHlwZSI6ICJMb2FkQmFsYW5jZXIiCiAgICAicG9ydHMiOiAKICAgICAgImh0dHAiOiA4MAo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {

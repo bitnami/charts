@@ -7,7 +7,7 @@ Kong is an open source Microservice API gateway and platform designed for managi
 [Overview of Kong](https://konghq.com/kong-community-edition/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -21,7 +21,7 @@ This chart bootstraps a [kong](https://github.com/bitnami/bitnami-docker-kong) d
 
 Extra functionalities beyond the Kong core are extended through plugins. Kong is built on top of reliable technologies like NGINX and provides an easy-to-use RESTful API to operate and configure the system.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -83,7 +83,7 @@ To uninstall/delete the `my-release` deployment:
 | ------------------- | ------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | kong image registry                                                             | `docker.io`           |
 | `image.repository`  | kong image repository                                                           | `bitnami/kong`        |
-| `image.tag`         | kong image tag (immutable tags are recommended)                                 | `2.8.1-debian-10-r28` |
+| `image.tag`         | kong image tag (immutable tags are recommended)                                 | `2.8.1-debian-10-r48` |
 | `image.pullPolicy`  | kong image pull policy                                                          | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                | `[]`                  |
 | `image.debug`       | Enable image debug mode                                                         | `false`               |
@@ -188,6 +188,7 @@ To uninstall/delete the `my-release` deployment:
 | `service.nodePorts.adminHttp`      | NodePort for the Kong admin HTTP endpoint                                                                                        | `""`                     |
 | `service.nodePorts.adminHttps`     | NodePort for the Kong admin HTTPS endpoint                                                                                       | `""`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.clusterIP`                | Cluster internal IP of the service                                                                                               | `""`                     |
 | `service.externalTrafficPolicy`    | external traffic policy managing client source IP preservation                                                                   | `""`                     |
 | `service.loadBalancerIP`           | loadBalancerIP if kong service type is `LoadBalancer`                                                                            | `""`                     |
@@ -217,7 +218,7 @@ To uninstall/delete the `my-release` deployment:
 | `ingressController.enabled`                                     | Enable/disable the Kong Ingress Controller                                                                                                    | `true`                            |
 | `ingressController.image.registry`                              | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
 | `ingressController.image.repository`                            | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
-| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.3.1-debian-10-r25`             |
+| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.3.1-debian-10-r45`             |
 | `ingressController.image.pullPolicy`                            | Kong Ingress Controller image pull policy                                                                                                     | `IfNotPresent`                    |
 | `ingressController.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                              | `[]`                              |
 | `ingressController.proxyReadyTimeout`                           | Maximum time (in seconds) to wait for the Kong container to be ready                                                                          | `300`                             |
@@ -293,7 +294,7 @@ To uninstall/delete the `my-release` deployment:
 | `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                 | `standalone`            |
 | `postgresql.image.registry`                     | PostgreSQL image registry                                               | `docker.io`             |
 | `postgresql.image.repository`                   | PostgreSQL image repository                                             | `bitnami/postgresql`    |
-| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                   | `11.15.0-debian-10-r84` |
+| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                   | `11.16.0-debian-10-r12` |
 | `postgresql.external.host`                      | Database host                                                           | `""`                    |
 | `postgresql.external.port`                      | Database port number                                                    | `5432`                  |
 | `postgresql.external.user`                      | Non-root username for Kong                                              | `kong`                  |
@@ -563,7 +564,7 @@ Kong Ingress Controller version was bumped to new major version, `1.x.x`. The as
 ##### Export secrets and required values to update
 
 ```console
-$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default kong-postgresql -o jsonpath="{.data.password}" | base64 --decode)
+$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default kong-postgresql -o jsonpath="{.data.password}" | base64 -d)
 $ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=kong,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
 ```
 

@@ -210,7 +210,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql.secretName" . }}
-                  key: postgres-password
+                  key: {{ include "postgresql.adminPasswordKey" . }}
             {{- end }}
           {{- end }}
             {{- if .Values.auth.usePasswordFiles }}
@@ -221,7 +221,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql.secretName" . }}
-                  key: {{ ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres")) }}
+                  key: {{ include "postgresql.userPasswordKey" . }}
             {{- end }}
             # Replication
             - name: POSTGRES_REPLICATION_MODE
@@ -236,7 +236,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql.secretName" . }}
-                  key: replication-password
+                  key: {{ include "postgresql.replicationPasswordKey" . }}
             {{- end }}
             - name: POSTGRES_CLUSTER_APP_NAME
               value: {{ .Values.replication.applicationName }}
@@ -408,7 +408,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: {{ include "postgresql.secretName" . }}
-                    key: {{ ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres")) }}
+                    key: {{ include "postgresql.userPasswordKey" . }}
               {{- end }}
               - name: DATA_SOURCE_USER
                 value: {{ default "postgres" $customUser | quote }}

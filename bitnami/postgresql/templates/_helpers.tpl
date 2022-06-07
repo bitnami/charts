@@ -100,6 +100,55 @@ Get the password secret.
 {{- end -}}
 
 {{/*
+Get the replication-password key.
+*/}}
+{{- define "postgresql.replicationPasswordKey" -}}
+{{- if or .Values.global.postgresql.auth.existingSecret .Values.auth.existingSecret }}
+    {{- if .Values.global.postgresql.auth.secretKeys.replicationPasswordKey }}
+        {{- printf "%s" (tpl .Values.global.postgresql.auth.secretKeys.replicationPasswordKey $) -}}
+    {{- else if .Values.auth.secretKeys.replicationPasswordKey -}}
+        {{- printf "%s" (tpl .Values.auth.secretKeys.replicationPasswordKey $) -}}
+    {{- else -}}
+        {{- "replication-password" -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the admin-password key.
+*/}}
+{{- define "postgresql.adminPasswordKey" -}}
+{{- if or .Values.global.postgresql.auth.existingSecret .Values.auth.existingSecret }}
+    {{- if .Values.global.postgresql.auth.secretKeys.adminPasswordKey }}
+        {{- printf "%s" (tpl .Values.global.postgresql.auth.secretKeys.adminPasswordKey $) -}}
+    {{- else if .Values.auth.secretKeys.adminPasswordKey -}}
+        {{- printf "%s" (tpl .Values.auth.secretKeys.adminPasswordKey $) -}}
+    {{- end -}}
+{{- else -}}
+    {{- "postgres-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the user-password key.
+*/}}
+{{- define "postgresql.userPasswordKey" -}}
+{{- if or .Values.global.postgresql.auth.existingSecret .Values.auth.existingSecret }}
+    {{- if or (empty (include "postgresql.username" .)) (eq (include "postgresql.username" .) "postgres") }}
+        {{- printf "%s" (include "postgresql.adminPasswordKey" .) -}}
+    {{- else -}}
+        {{- if .Values.global.postgresql.auth.secretKeys.userPasswordKey }}
+            {{- printf "%s" (tpl .Values.global.postgresql.auth.secretKeys.userPasswordKey $) -}}
+        {{- else if .Values.auth.secretKeys.userPasswordKey -}}
+            {{- printf "%s" (tpl .Values.auth.secretKeys.userPasswordKey $) -}}
+        {{- end -}}
+    {{- end -}}
+{{- else -}}
+    {{- ternary "password" "postgres-password" (and (not (empty (include "postgresql.username" .))) (ne (include "postgresql.username" .) "postgres")) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if a secret object should be created
 */}}
 {{- define "postgresql.createSecret" -}}
@@ -200,6 +249,17 @@ Get the initialization scripts ConfigMap name.
     {{- printf "%s" (tpl .Values.primary.initdb.scriptsConfigMap $) -}}
 {{- else -}}
     {{- printf "%s-init-scripts" (include "postgresql.primary.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{/*
+Return true if TLS is enabled for LDAP connection
+*/}}
+{{- define "postgresql.ldap.tls.enabled" -}}
+{{- if and (kindIs "string" .Values.ldap.tls) (not (empty .Values.ldap.tls)) }}
+    {{- true -}}
+{{- else if and (kindIs "map" .Values.ldap.tls) .Values.ldap.tls.enabled }}
+    {{- true -}}
 {{- end -}}
 {{- end -}}
 

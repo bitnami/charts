@@ -30,7 +30,7 @@ In order to replicate the container startup scripts execute this command:
 {{- $externalClientProtocol := include "kafka.listenerType" (dict "protocol" (include "kafka.externalClientProtocol" . )) -}}
 {{- $saslMechanisms := .Values.auth.sasl.mechanisms -}}
 {{- $tlsEndpointIdentificationAlgorithm := default "" .Values.auth.tls.endpointIdentificationAlgorithm -}}
-{{- $tlsPasswordSecret := printf "$(kubectl get secret %s --namespace %s -o jsonpath='{.data.password}' | base64 --decode | cut -d , -f 1)" .Values.auth.tls.existingSecret $releaseNamespace -}}
+{{- $tlsPasswordSecret := printf "$(kubectl get secret %s --namespace %s -o jsonpath='{.data.password}' | base64 -d | cut -d , -f 1)" .Values.auth.tls.existingSecret $releaseNamespace -}}
 {{- $tlsPassword :=  ternary .Values.auth.tls.password $tlsPasswordSecret (eq .Values.auth.tls.existingSecret "") -}}
 {{- $servicePort := int .Values.service.ports.client -}}
 
@@ -74,7 +74,7 @@ org.apache.kafka.common.security.scram.ScramLoginModule required
 org.apache.kafka.common.security.plain.PlainLoginModule required
 {{- end }}
 username="{{ index .Values.auth.sasl.jaas.clientUsers 0 }}"
-password="$(kubectl get secret {{ $fullname }}-jaas --namespace {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 --decode | cut -d , -f 1)";
+password="$(kubectl get secret {{ $fullname }}-jaas --namespace {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)";
 };
 
     - client.properties:
@@ -229,7 +229,7 @@ org.apache.kafka.common.security.scram.ScramLoginModule required
 org.apache.kafka.common.security.plain.PlainLoginModule required
 {{- end }}
 username="{{ index .Values.auth.sasl.jaas.clientUsers 0 }}"
-password="$(kubectl get secret {{ $fullname }}-jaas --namespace {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 --decode | cut -d , -f 1)";
+password="$(kubectl get secret {{ $fullname }}-jaas --namespace {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)";
 };
 
     - client.properties:

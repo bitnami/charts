@@ -27,10 +27,10 @@ host. To configure Magento with the URL of your service:
         Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "common.names.fullname" . }}'
 
   export APP_HOST=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "magento.secretName" . }} -o jsonpath="{.data.magento-password}" | base64 --decode)
-  export DATABASE_ROOT_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "magento.databaseSecretName" . }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "magento.secretName" . }} -o jsonpath="{.data.magento-password}" | base64 -d)
+  export DATABASE_ROOT_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "magento.databaseSecretName" . }} -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
   {{- end }}
-  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "magento.databaseSecretName" . }} -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+  export APP_DATABASE_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "magento.databaseSecretName" . }} -o jsonpath="{.data.mariadb-password}" | base64 -d)
 
 2. Complete your Magento deployment by running:
 
@@ -68,7 +68,7 @@ host. To configure Magento with the URL of your service:
 2. Get your Magento login credentials by running:
 
   echo Username : {{ .Values.magentoUsername }}
-  echo Password : $(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "magento.secretName" . }} -o jsonpath="{.data.magento-password}" | base64 --decode)
+  echo Password : $(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "magento.secretName" . }} -o jsonpath="{.data.magento-password}" | base64 -d)
 {{- end }}
 
 {{- else -}}
@@ -93,7 +93,7 @@ host. To configure Magento to use and external database host:
 
   export APP_HOST=127.0.0.1
 {{- end }}
-  export APP_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "magento.secretName" . }} -o jsonpath="{.data.magento-password}" | base64 --decode)
+  export APP_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "magento.secretName" . }} -o jsonpath="{.data.magento-password}" | base64 -d)
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
 

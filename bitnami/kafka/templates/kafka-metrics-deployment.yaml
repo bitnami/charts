@@ -85,8 +85,8 @@ spec:
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else if .Values.metrics.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.args "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.kafka.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.args "context" $) | nindent 12 }}
           {{- else }}
           args:
             - -ce

@@ -7,7 +7,7 @@ Ghost is an open source publishing platform designed to create blogs, magazines,
 [Overview of Ghost](https://ghost.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -19,9 +19,9 @@ $ helm install my-release bitnami/ghost
 
 This chart bootstraps a [Ghost](https://github.com/bitnami/bitnami-docker-ghost) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Ghost application.
+It also packages the [Bitnami MySQL chart](https://github.com/bitnami/charts/tree/master/bitnami/mysql) which is required for bootstrapping a MySQL deployment for the database requirements of the Ghost application.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -78,14 +78,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Ghost Image parameters
 
-| Name                | Description                                      | Value                 |
-| ------------------- | ------------------------------------------------ | --------------------- |
-| `image.registry`    | Ghost image registry                             | `docker.io`           |
-| `image.repository`  | Ghost image repository                           | `bitnami/ghost`       |
-| `image.tag`         | Ghost image tag (immutable tags are recommended) | `4.47.0-debian-10-r0` |
-| `image.pullPolicy`  | Ghost image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | Ghost image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable image debug mode                          | `false`               |
+| Name                | Description                                      | Value                |
+| ------------------- | ------------------------------------------------ | -------------------- |
+| `image.registry`    | Ghost image registry                             | `docker.io`          |
+| `image.repository`  | Ghost image repository                           | `bitnami/ghost`      |
+| `image.tag`         | Ghost image tag (immutable tags are recommended) | `5.2.2-debian-10-r0` |
+| `image.pullPolicy`  | Ghost image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | Ghost image pull secrets                         | `[]`                 |
+| `image.debug`       | Enable image debug mode                          | `false`              |
 
 
 ### Ghost Configuration parameters
@@ -219,7 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r415`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r444`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -229,27 +229,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database Parameters
 
-| Name                                       | Description                                                               | Value           |
-| ------------------------------------------ | ------------------------------------------------------------------------- | --------------- |
-| `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements | `true`          |
-| `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`       | `standalone`    |
-| `mariadb.auth.rootPassword`                | MariaDB root password                                                     | `""`            |
-| `mariadb.auth.database`                    | MariaDB custom database                                                   | `bitnami_ghost` |
-| `mariadb.auth.username`                    | MariaDB custom user name                                                  | `bn_ghost`      |
-| `mariadb.auth.password`                    | MariaDB custom user password                                              | `""`            |
-| `mariadb.auth.existingSecret`              | Existing secret with MariaDB credentials                                  | `""`            |
-| `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                | `true`          |
-| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                           | `""`            |
-| `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                            | `[]`            |
-| `mariadb.primary.persistence.size`         | Persistent Volume size                                                    | `8Gi`           |
-| `externalDatabase.host`                    | External Database server host                                             | `localhost`     |
-| `externalDatabase.port`                    | External Database server port                                             | `3306`          |
-| `externalDatabase.user`                    | External Database username                                                | `bn_ghost`      |
-| `externalDatabase.password`                | External Database user password                                           | `""`            |
-| `externalDatabase.database`                | External Database database name                                           | `bitnami_ghost` |
-| `externalDatabase.existingSecret`          | The name of an existing secret with database credentials                  | `""`            |
-| `externalDatabase.ssl`                     | External Database ssl                                                     | `false`         |
-| `externalDatabase.sslCaFile`               | External Database ssl CA filepath                                         | `""`            |
+| Name                                     | Description                                                             | Value           |
+| ---------------------------------------- | ----------------------------------------------------------------------- | --------------- |
+| `mysql.enabled`                          | Deploy a MySQL server to satisfy the applications database requirements | `true`          |
+| `mysql.architecture`                     | MySQL architecture. Allowed values: `standalone` or `replication`       | `standalone`    |
+| `mysql.auth.rootPassword`                | MySQL root password                                                     | `""`            |
+| `mysql.auth.database`                    | MySQL custom database                                                   | `bitnami_ghost` |
+| `mysql.auth.username`                    | MySQL custom user name                                                  | `bn_ghost`      |
+| `mysql.auth.password`                    | MySQL custom user password                                              | `""`            |
+| `mysql.auth.existingSecret`              | Existing secret with MySQL credentials                                  | `""`            |
+| `mysql.primary.persistence.enabled`      | Enable persistence on MySQL using PVC(s)                                | `true`          |
+| `mysql.primary.persistence.storageClass` | Persistent Volume storage class                                         | `""`            |
+| `mysql.primary.persistence.accessModes`  | Persistent Volume access modes                                          | `[]`            |
+| `mysql.primary.persistence.size`         | Persistent Volume size                                                  | `8Gi`           |
+| `externalDatabase.host`                  | External Database server host                                           | `localhost`     |
+| `externalDatabase.port`                  | External Database server port                                           | `3306`          |
+| `externalDatabase.user`                  | External Database username                                              | `bn_ghost`      |
+| `externalDatabase.password`              | External Database user password                                         | `""`            |
+| `externalDatabase.database`              | External Database database name                                         | `bitnami_ghost` |
+| `externalDatabase.existingSecret`        | The name of an existing secret with database credentials                | `""`            |
+| `externalDatabase.ssl`                   | External Database ssl                                                   | `false`         |
+| `externalDatabase.sslCaFile`             | External Database ssl CA filepath                                       | `""`            |
 
 
 ### NetworkPolicy parameters
@@ -260,7 +260,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                 | `false` |
 | `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.             | `{}`    |
 | `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                         | `{}`    |
-| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by Ghost's pods.                                     | `false` |
+| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mysql) only accessible by Ghost's pods.                                       | `false` |
 | `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                          | `{}`    |
 | `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes Ghost only accessible from a particular origin                                             | `false` |
 | `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access Ghost. This label will be used to identified the allowed namespace(s). | `{}`    |
@@ -268,7 +268,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                        | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                            | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                | `{}`    |
-| `serviceAccount.name`                                         | Service Account Name                                                                                                      | `""`    |
+| `serviceAccount.create`                                       | Specifies whether a ServiceAccount should be created                                                                      | `true`  |
+| `serviceAccount.name`                                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.       | `""`    |
+| `serviceAccount.automountServiceAccountToken`                 | Automount service account token for the server service account                                                            | `true`  |
+| `serviceAccount.annotations`                                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                | `{}`    |
 
 
 The above parameters map to the env variables defined in [bitnami/ghost](https://github.com/bitnami/bitnami-docker-ghost). For more information please refer to the [bitnami/ghost](https://github.com/bitnami/bitnami-docker-ghost) image documentation.
@@ -291,11 +294,11 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 $ helm install my-release \
-  --set ghostUsername=admin,ghostPassword=password,mariadb.auth.rootPassword=secretpassword \
+  --set ghostUsername=admin,ghostPassword=password,mysql.auth.rootPassword=secretpassword \
     bitnami/ghost
 ```
 
-The above command sets the Ghost administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
+The above command sets the Ghost administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MySQL `root` user password to `secretpassword`.
 
 > NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 
@@ -317,10 +320,10 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### External database support
 
-You may want to have Ghost connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalDatabase` parameter](#database-parameters). You should also disable the MariaDB installation with the `mariadb.enabled` option. Here is an example:
+You may want to have Ghost connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalDatabase` parameter](#database-parameters). You should also disable the MySQL installation with the `mysql.enabled` option. Here is an example:
 
 ```console
-mariadb.enabled=false
+mysql.enabled=false
 externalDatabase.host=myexternalhost
 externalDatabase.user=myuser
 externalDatabase.password=mypassword
@@ -380,6 +383,11 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+
+### To 19.0.0
+
+This major release changes database management system from MariaDB to MySQL. Since a new DB will be used, you need to create a back up beforehand and restore it in order to keep your data. See [the official migration docs](https://ghost.org/docs/migration/ghost/).
 
 ### To 17.0.0
 
@@ -452,9 +460,9 @@ Obtain the credentials and the name of the PVC used to hold the MariaDB data on 
 
 ```console
 $ export GHOST_HOST=$(kubectl get svc --namespace default ghost --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
-$ export GHOST_PASSWORD=$(kubectl get secret --namespace default ghost -o jsonpath="{.data.ghost-password}" | base64 --decode)
-$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default ghost-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default ghost-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+$ export GHOST_PASSWORD=$(kubectl get secret --namespace default ghost -o jsonpath="{.data.ghost-password}" | base64 -d)
+$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default ghost-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default ghost-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 $ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=ghost -o jsonpath="{.items[0].metadata.name}")
 ```
 

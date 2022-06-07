@@ -20,7 +20,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This will deploy a [Wavefront Adapter for Istio](https://github.com/vmware/wavefront-adapter-for-istio/) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -242,6 +242,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 ```bash
 $ helm upgrade my-release bitnami/wavefront-adapter-for-istio
 ```
+
+### To 2.0.0
+
+This major updates the wavefront subchart to it newest major, 4.0.0, which contains a new major for kube-state-metrics. For more information on this subchart's major, please refer to [wavefront upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/wavefront#to-400).
 
 ### To 1.0.0
 
