@@ -7,7 +7,7 @@ InfluxDB(TM) is an open source time-series database. It is a core component of t
 [Overview of InfluxDB&trade;](https://www.influxdata.com/products/influxdb-overview)
 
 InfluxDB(TM) is a trademark owned by InfluxData, which is not affiliated with, and does not endorse, this site.
-
+                           
 ## TL;DR
 
 ```console
@@ -19,7 +19,7 @@ $ helm install my-release bitnami/influxdb
 
 This chart bootstraps a [influxdb](https://github.com/bitnami/bitnami-docker-influxdb) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 

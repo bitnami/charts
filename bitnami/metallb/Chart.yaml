@@ -30,4 +30,4 @@ sources:
   - https://github.com/metallb/metallb
   - https://github.com/bitnami/bitnami-docker-metallb
   - https://metallb.universe.tf
-version: 3.0.7
+version: 3.0.8
