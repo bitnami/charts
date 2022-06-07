@@ -283,7 +283,7 @@ primary:
   ##     topologyKey: topology.kubernetes.io/zone
   ##     whenUnsatisfiable: DoNotSchedule
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param primary.priorityClassName Priority class for MariaDB primary pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
@@ -654,7 +654,7 @@ secondary:
   ##     topologyKey: topology.kubernetes.io/zone
   ##     whenUnsatisfiable: DoNotSchedule
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param secondary.priorityClassName Priority class for MariaDB secondary pods assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
