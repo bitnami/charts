@@ -88,11 +88,11 @@ matomoPassword: ""
 ## ref: https://github.com/bitnami/bitnami-docker-matomo#configuration
 ##
 matomoEmail: user@example.com
-## @param matomoWebsiteName User of the application
+## @param matomoWebsiteName Matomo application name
 ## ref: https://github.com/bitnami/bitnami-docker-matomo#configuration
 ##
 matomoWebsiteName: example
-## @param matomoWebsiteName User of the application
+## @param matomoWebsiteHost Matomo application host
 ## ref: https://github.com/bitnami/bitnami-docker-matomo#configuration
 ##
 matomoWebsiteHost: https://example.org

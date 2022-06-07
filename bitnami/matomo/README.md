@@ -85,11 +85,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.tag`                             | Matomo Image tag                                                                                                      | `4.10.1-debian-10-r11` |
 | `image.pullPolicy`                      | Matomo image pull policy                                                                                              | `IfNotPresent`         |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                   |
-| `image.debug`                           | Specify if debug logs should be enabled                                                                               | `false`                |
+| `image.debug`                           | Specify if debug logs should be enabled                                                                               | `true`                 |
 | `replicaCount`                          | Number of Matomo Pods to run (requires ReadWriteMany PVC support)                                                     | `1`                    |
 | `matomoUsername`                        | User of the application                                                                                               | `user`                 |
 | `matomoPassword`                        | Application password                                                                                                  | `""`                   |
 | `matomoEmail`                           | Admin email                                                                                                           | `user@example.com`     |
+| `matomoWebsiteName`                     | Matomo application name                                                                                               | `example`              |
+| `matomoWebsiteHost`                     | Matomo application host                                                                                               | `https://example.org`  |
+| `matomoSkipInstall`                     | Skip Matomo installation wizard. Useful for migrations and restoring from SQL dump                                    | `false`                |
 | `allowEmptyPassword`                    | Allow DB blank passwords                                                                                              | `true`                 |
 | `command`                               | Override default container command (useful when using custom images)                                                  | `[]`                   |
 | `args`                                  | Override default container args (useful when using custom images)                                                     | `[]`                   |
@@ -136,21 +139,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.runAsUser`    | Matomo containers' Security Context                                                                                   | `1001`                 |
 | `containerSecurityContext.runAsNonRoot` | Set Controller container's Security Context runAsNonRoot                                                              | `true`                 |
 | `startupProbe.enabled`                  | Enable startupProbe                                                                                                   | `false`                |
-| `startupProbe.path`                     | Request path for startupProbe                                                                                         | `/user/login`          |
+| `startupProbe.path`                     | Request path for startupProbe                                                                                         | `/`                    |
 | `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                | `600`                  |
 | `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                       | `10`                   |
 | `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                      | `5`                    |
 | `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                    | `5`                    |
 | `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                    | `1`                    |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                  | `true`                 |
-| `livenessProbe.path`                    | Request path for livenessProbe                                                                                        | `/user/login`          |
+| `livenessProbe.path`                    | Request path for livenessProbe                                                                                        | `/`                    |
 | `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                               | `600`                  |
 | `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                      | `10`                   |
 | `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                     | `5`                    |
 | `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                   | `5`                    |
 | `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                   | `1`                    |
 | `readinessProbe.enabled`                | Enable readinessProbe                                                                                                 | `true`                 |
-| `readinessProbe.path`                   | Request path for readinessProbe                                                                                       | `/user/login`          |
+| `readinessProbe.path`                   | Request path for readinessProbe                                                                                       | `/`                    |
 | `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                              | `30`                   |
 | `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                     | `5`                    |
 | `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                    | `1`                    |
