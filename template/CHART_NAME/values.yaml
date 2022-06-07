@@ -330,7 +330,7 @@ diagnosticMode:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param %%MAIN_OBJECT_BLOCK%%.initContainers Add additional init containers to the %%MAIN_CONTAINER_NAME%% pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -340,7 +340,7 @@ diagnosticMode:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
 ## %%SECONDARY_CONTAINER/POD_DESCRIPTION%%
 ##
