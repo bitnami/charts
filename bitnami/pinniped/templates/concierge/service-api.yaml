@@ -22,7 +22,7 @@ spec:
   ports:
     - protocol: TCP
       port: 443
-      targetPort: http-api
+      targetPort: https-api
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: concierge
 {{- end }}

@@ -294,6 +294,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                        |
 | `supervisor.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                        |
 | `supervisor.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                        |
+| `supervisor.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                        |
 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table

@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "pinniped.supervisor.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -42,6 +42,9 @@ spec:
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "https" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.supervisor.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.ingress.extraRules "context" $) | nindent 4 }}
     {{- end }}
   {{- if or (and .Values.supervisor.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.supervisor.ingress.annotations )) .Values.supervisor.ingress.selfSigned)) .Values.supervisor.ingress.extraTls }}
   tls:

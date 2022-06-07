@@ -47,7 +47,7 @@ spec:
       port: {{ .Values.concierge.service.ports.https }}
       protocol: TCP
       targetPort: https-proxy
-      {{- if and (or (eq .Values.concierge.service.type "NodePort") (eq .Values.concierge.service.type "LoadBalancer")) (not (empty .Values.concierge.service.nodePorts.http)) }}
+      {{- if and (or (eq .Values.concierge.service.type "NodePort") (eq .Values.concierge.service.type "LoadBalancer")) (not (empty .Values.concierge.service.nodePorts.https)) }}
       nodePort: {{ .Values.concierge.service.nodePorts.https }}
       {{- else if eq .Values.concierge.service.type "ClusterIP" }}
       nodePort: null
