@@ -7,7 +7,7 @@ Wavefront Adapter for Istio is an adapter for Istio to expose Istio metrics to W
 [Overview of Wavefront Adapter for Istio](https://github.com/vmware/wavefront-adapter-for-istio)
 
 
-
+                           
 ## TL;DR
 
 ```console
