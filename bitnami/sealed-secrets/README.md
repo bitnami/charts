@@ -7,7 +7,7 @@ Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone
 [Overview of Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
 
 
-                           
+
 ## TL;DR
 
 ```console
@@ -21,7 +21,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [Sealed Secret controller](https://github.com/bitnami-labs/sealed-secrets) Deployment in [Kubernetes](http://kubernetes.io) using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                  | Sealed Secrets image registry                                                                                            | `docker.io`              |
 | `image.repository`                                | Sealed Secrets image repository                                                                                          | `bitnami/sealed-secrets` |
-| `image.tag`                                       | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.17.5-scratch-r0`      |
+| `image.tag`                                       | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.18.0-scratch-r0`      |
 | `image.pullPolicy`                                | Sealed Secrets image pull policy                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                               | Sealed Secrets image pull secrets                                                                                        | `[]`                     |
 | `image.debug`                                     | Enable Sealed Secrets image debug mode                                                                                   | `false`                  |
@@ -131,7 +131,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tolerations`                                     | Tolerations for Sealed Secret pods assignment                                                                            | `[]`                     |
 | `updateStrategy.type`                             | Sealed Secret statefulset strategy type                                                                                  | `RollingUpdate`          |
 | `priorityClassName`                               | Sealed Secret pods' priorityClassName                                                                                    | `""`                     |
-| `topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                     |
+| `topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                     |
 | `schedulerName`                                   | Name of the k8s scheduler (other than default) for Sealed Secret pods                                                    | `""`                     |
 | `terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`                     |
 | `lifecycleHooks`                                  | for the Sealed Secret container(s) to automate configuration before or after startup                                     | `{}`                     |

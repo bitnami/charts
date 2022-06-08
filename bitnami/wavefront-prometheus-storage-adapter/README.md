@@ -7,7 +7,7 @@ Wavefront Storage Adapter is a Prometheus integration to transfer metrics from P
 [Overview of Wavefront Prometheus Adapter](https://github.com/wavefrontHQ/prometheus-storage-adapter)
 
 
-
+                           
 ## TL;DR
 
 ```console
@@ -23,7 +23,7 @@ Wavefront Prometheus Adapter  works as a "fork", such that data written to Prome
 
 This chart bootstraps a [Wavefront Storage Adapter for Prometheus](https://github.com/wavefrontHQ/prometheus-storage-adapter) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
 | `image.registry`                        | Adapter image registry                                                                                                   | `docker.io`                                    |
 | `image.repository`                      | Adapter image repository                                                                                                 | `bitnami/wavefront-prometheus-storage-adapter` |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                                                        | `1.0.5-debian-10-r132`                         |
+| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                                                        | `1.0.5-debian-11-r0`                           |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                                                | `IfNotPresent`                                 |
 | `image.pullSecrets`                     | Adapter image pull secrets                                                                                               | `[]`                                           |
 | `image.debug`                           | Enable image debug mode                                                                                                  | `false`                                        |
@@ -131,7 +131,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                        | Annotations for Adapter pods                                                                                             | `{}`                                           |
 | `priorityClassName`                     | Adapter pod priority                                                                                                     | `""`                                           |
 | `schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                                           |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                                           |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                                           |
 | `terminationGracePeriodSeconds`         | Termination grace period in seconds                                                                                      | `""`                                           |
 | `lifecycleHooks`                        | Add lifecycle hooks to the Adapter deployment                                                                            | `{}`                                           |
 | `customStartupProbe`                    | Override default startup probe                                                                                           | `{}`                                           |

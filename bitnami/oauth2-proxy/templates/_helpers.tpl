@@ -105,7 +105,7 @@ Get the password secret.
 {{- end -}}
 
 {{/*
-Get the password key to be retrieved from Redis&trade; secret.
+Get the password key to be retrieved from Redis&reg; secret.
 */}}
 {{- define "oauth2-proxy.redis.secretPasswordKey" -}}
 {{- if and .Values.redis.auth.existingSecret .Values.redis.auth.existingSecretPasswordKey -}}

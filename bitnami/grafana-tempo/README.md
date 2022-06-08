@@ -7,7 +7,7 @@ Grafana Tempo is a distributed tracing system that has out-of-the-box integratio
 [Overview of Grafana Tempo](https://github.com/grafana/tempo)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -21,7 +21,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [Grafana Tempo](https://github.com/grafana/tempo) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/grafana-tempo/get-started/).
 
@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | -------------------------------------------------------------- | ----------------------------- |
 | `tempo.image.registry`                 | Grafana Tempo image registry                                   | `docker.io`                   |
 | `tempo.image.repository`               | Grafana Tempo image repository                                 | `bitnami/grafana-tempo`       |
-| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)       | `1.4.1-debian-10-r17`         |
+| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)       | `1.4.1-debian-11-r0`          |
 | `tempo.image.pullPolicy`               | Grafana Tempo image pull policy                                | `IfNotPresent`                |
 | `tempo.image.pullSecrets`              | Grafana Tempo image pull secrets                               | `[]`                          |
 | `tempo.memBallastSizeMbs`              | Tempo components memory ballast size in MB                     | `1024`                        |
@@ -162,7 +162,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.affinity`                              | Affinity for Compactor pods assignment                                                              | `{}`            |
 | `compactor.nodeSelector`                          | Node labels for Compactor pods assignment                                                           | `{}`            |
 | `compactor.tolerations`                           | Tolerations for Compactor pods assignment                                                           | `[]`            |
-| `compactor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains     | `{}`            |
+| `compactor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains     | `[]`            |
 | `compactor.priorityClassName`                     | Compactor pods' priorityClassName                                                                   | `""`            |
 | `compactor.schedulerName`                         | Kubernetes pod scheduler registry                                                                   | `""`            |
 | `compactor.updateStrategy.type`                   | Compactor statefulset strategy type                                                                 | `RollingUpdate` |
@@ -240,7 +240,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.affinity`                              | Affinity for Distributor pods assignment                                                              | `{}`            |
 | `distributor.nodeSelector`                          | Node labels for Distributor pods assignment                                                           | `{}`            |
 | `distributor.tolerations`                           | Tolerations for Distributor pods assignment                                                           | `[]`            |
-| `distributor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains       | `{}`            |
+| `distributor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains       | `[]`            |
 | `distributor.priorityClassName`                     | Distributor pods' priorityClassName                                                                   | `""`            |
 | `distributor.schedulerName`                         | Kubernetes pod scheduler registry                                                                     | `""`            |
 | `distributor.updateStrategy.type`                   | Distributor statefulset strategy type                                                                 | `RollingUpdate` |
@@ -320,7 +320,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.affinity`                              | Affinity for ingester pods assignment                                                              | `{}`            |
 | `ingester.nodeSelector`                          | Node labels for Ingester pods assignment                                                           | `{}`            |
 | `ingester.tolerations`                           | Tolerations for Ingester pods assignment                                                           | `[]`            |
-| `ingester.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `{}`            |
+| `ingester.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `[]`            |
 | `ingester.priorityClassName`                     | Ingester pods' priorityClassName                                                                   | `""`            |
 | `ingester.schedulerName`                         | Kubernetes pod scheduler registry                                                                  | `""`            |
 | `ingester.updateStrategy.type`                   | Ingester statefulset strategy type                                                                 | `RollingUpdate` |
@@ -414,7 +414,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.affinity`                              | Affinity for Querier pods assignment                                                              | `{}`            |
 | `querier.nodeSelector`                          | Node labels for Querier pods assignment                                                           | `{}`            |
 | `querier.tolerations`                           | Tolerations for Querier pods assignment                                                           | `[]`            |
-| `querier.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `{}`            |
+| `querier.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `[]`            |
 | `querier.priorityClassName`                     | Querier pods' priorityClassName                                                                   | `""`            |
 | `querier.schedulerName`                         | Kubernetes pod scheduler registry                                                                 | `""`            |
 | `querier.updateStrategy.type`                   | Querier statefulset strategy type                                                                 | `RollingUpdate` |
@@ -494,7 +494,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.affinity`                                    | Affinity for queryFrontend pods assignment                                                              | `{}`                          |
 | `queryFrontend.nodeSelector`                                | Node labels for queryFrontend pods assignment                                                           | `{}`                          |
 | `queryFrontend.tolerations`                                 | Tolerations for queryFrontend pods assignment                                                           | `[]`                          |
-| `queryFrontend.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains         | `{}`                          |
+| `queryFrontend.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains         | `[]`                          |
 | `queryFrontend.priorityClassName`                           | queryFrontend pods' priorityClassName                                                                   | `""`                          |
 | `queryFrontend.schedulerName`                               | Kubernetes pod scheduler registry                                                                       | `""`                          |
 | `queryFrontend.updateStrategy.type`                         | queryFrontend statefulset strategy type                                                                 | `RollingUpdate`               |
@@ -505,7 +505,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.initContainers`                              | Add additional init containers to the queryFrontend pod(s)                                              | `[]`                          |
 | `queryFrontend.query.image.registry`                        | Grafana Tempo Query image registry                                                                      | `docker.io`                   |
 | `queryFrontend.query.image.repository`                      | Grafana Tempo Query image repository                                                                    | `bitnami/grafana-tempo-query` |
-| `queryFrontend.query.image.tag`                             | Grafana Tempo Query image tag (immutable tags are recommended)                                          | `1.4.1-debian-10-r18`         |
+| `queryFrontend.query.image.tag`                             | Grafana Tempo Query image tag (immutable tags are recommended)                                          | `1.4.1-debian-11-r0`          |
 | `queryFrontend.query.image.pullPolicy`                      | Grafana Tempo Query image pull policy                                                                   | `IfNotPresent`                |
 | `queryFrontend.query.image.pullSecrets`                     | Grafana Tempo Query image pull secrets                                                                  | `[]`                          |
 | `queryFrontend.query.configuration`                         | Query sidecar configuration                                                                             | `""`                          |
@@ -573,7 +573,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.enabled`                               | Enable vulture deployment                                                                         | `true`                          |
 | `vulture.image.registry`                        | Grafana Vulture image registry                                                                    | `docker.io`                     |
 | `vulture.image.repository`                      | Grafana Vulture image repository                                                                  | `bitnami/grafana-tempo-vulture` |
-| `vulture.image.tag`                             | Grafana Vulture image tag (immutable tags are recommended)                                        | `1.4.1-debian-10-r18`           |
+| `vulture.image.tag`                             | Grafana Vulture image tag (immutable tags are recommended)                                        | `1.4.1-debian-11-r0`            |
 | `vulture.image.pullPolicy`                      | Grafana Vulture image pull policy                                                                 | `IfNotPresent`                  |
 | `vulture.image.pullSecrets`                     | Grafana Vulture image pull secrets                                                                | `[]`                            |
 | `vulture.extraEnvVars`                          | Array with extra environment variables to add to vulture nodes                                    | `[]`                            |
@@ -623,7 +623,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.affinity`                              | Affinity for Vulture pods assignment                                                              | `{}`                            |
 | `vulture.nodeSelector`                          | Node labels for Vulture pods assignment                                                           | `{}`                            |
 | `vulture.tolerations`                           | Tolerations for Vulture pods assignment                                                           | `[]`                            |
-| `vulture.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `{}`                            |
+| `vulture.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `[]`                            |
 | `vulture.priorityClassName`                     | Vulture pods' priorityClassName                                                                   | `""`                            |
 | `vulture.schedulerName`                         | Kubernetes pod scheduler registry                                                                 | `""`                            |
 | `vulture.updateStrategy.type`                   | Vulture statefulset strategy type                                                                 | `RollingUpdate`                 |
@@ -658,7 +658,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r435`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r0`       |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |

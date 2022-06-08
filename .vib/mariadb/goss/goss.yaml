@@ -1,0 +1,34 @@
+port:
+  tcp6:3306:
+    listening: true
+    ip:
+    - '::'
+process:
+  mysqld:
+    running: true
+file:   
+  {{ printf "/bitnami/mariadb/data/%s:" .Env.MARIADB_DATABASE }}:
+    mode: "2700"
+    filetype: directory
+    exists: true
+  /opt/bitnami/mariadb/conf/my.cnf:
+    mode: "0644"
+    filetype: file
+    contains: [
+      "[mysqld]",
+      "basedir=/opt/bitnami/mariadb",
+      "socket=/opt/bitnami/mariadb/tmp/mysql.sock"]
+    exists: true
+command:
+  user-id-test:
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+    exit-status: 0
+    stdout: []
+    stderr: []
+  create-table-test:
+    exec: mariadb -h localhost -u root -p"$MARIADB_ROOT_PASSWORD" "$MARIADB_DATABASE" -e 'DROP TABLE IF EXISTS TEST; create table TEST( test_id int auto_increment, test_value int, primary key(test_id)); INSERT INTO TEST (TEST_VALUE) VALUES (1989);SELECT * FROM TEST'
+    exit-status: 0
+    stdout:
+    - 1989
+    stderr: []
+    timeout: 9000

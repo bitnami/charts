@@ -232,7 +232,7 @@ spec:
               command:
                 - pgrep
                 - mongod
-          {{- else if $.Value.shardsvr.dataNode.customLivenessProbe }}
+          {{- else if $.Values.shardsvr.dataNode.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if $.Values.shardsvr.dataNode.readinessProbe.enabled }}
@@ -242,7 +242,7 @@ spec:
                 - /bin/sh 
                 - -c 
                 - mongosh --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
-          {{- else if $.Value.shardsvr.dataNode.customReadinessProbe }}
+          {{- else if $.Values.shardsvr.dataNode.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if $.Values.shardsvr.dataNode.startupProbe.enabled }}

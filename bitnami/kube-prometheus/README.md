@@ -7,7 +7,7 @@ Prometheus Operator provides easy monitoring definitions for Kubernetes services
 [Overview of Prometheus Operator](https://github.com/coreos/prometheus-operator)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```bash
@@ -29,7 +29,7 @@ In the default configuration the chart deploys the following components on the K
 
 Only one instance of the Prometheus Operator component should be running in the cluster. If you wish to deploy this chart to **manage multiple instances** of Prometheus in your Kubernetes cluster, you **have to disable** the installation of the Prometheus Operator component using the `operator.enabled=false` chart installation argument.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -96,7 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.enabled`                                                                    | Deploy Prometheus Operator to the cluster                                                                              | `true`                        |
 | `operator.image.registry`                                                             | Prometheus Operator image registry                                                                                     | `docker.io`                   |
 | `operator.image.repository`                                                           | Prometheus Operator image repository                                                                                   | `bitnami/prometheus-operator` |
-| `operator.image.tag`                                                                  | Prometheus Operator Image tag (immutable tags are recommended)                                                         | `0.56.3-debian-10-r0`         |
+| `operator.image.tag`                                                                  | Prometheus Operator Image tag (immutable tags are recommended)                                                         | `0.56.3-debian-11-r0`         |
 | `operator.image.pullPolicy`                                                           | Prometheus Operator image pull policy                                                                                  | `IfNotPresent`                |
 | `operator.image.pullSecrets`                                                          | Specify docker-registry secret names as an array                                                                       | `[]`                          |
 | `operator.extraArgs`                                                                  | Additional arguments passed to Prometheus Operator                                                                     | `[]`                          |
@@ -210,7 +210,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.enabled`                                                  | Deploy Prometheus to the cluster                                                                                                 | `true`                    |
 | `prometheus.image.registry`                                           | Prometheus image registry                                                                                                        | `docker.io`               |
 | `prometheus.image.repository`                                         | Prometheus image repository                                                                                                      | `bitnami/prometheus`      |
-| `prometheus.image.tag`                                                | Prometheus Image tag (immutable tags are recommended)                                                                            | `2.35.0-debian-10-r30`    |
+| `prometheus.image.tag`                                                | Prometheus Image tag (immutable tags are recommended)                                                                            | `2.36.0-debian-11-r0`     |
 | `prometheus.image.pullSecrets`                                        | Specify docker-registry secret names as an array                                                                                 | `[]`                      |
 | `prometheus.serviceAccount.create`                                    | Specify whether to create a ServiceAccount for Prometheus                                                                        | `true`                    |
 | `prometheus.serviceAccount.name`                                      | The name of the ServiceAccount to create                                                                                         | `""`                      |
@@ -348,7 +348,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.create`                                            | Create a Thanos sidecar container                                                                                                | `false`                   |
 | `prometheus.thanos.image.registry`                                    | Thanos image registry                                                                                                            | `docker.io`               |
 | `prometheus.thanos.image.repository`                                  | Thanos image name                                                                                                                | `bitnami/thanos`          |
-| `prometheus.thanos.image.tag`                                         | Thanos image tag                                                                                                                 | `0.26.0-scratch-r1`       |
+| `prometheus.thanos.image.tag`                                         | Thanos image tag                                                                                                                 | `0.26.0-scratch-r2`       |
 | `prometheus.thanos.image.pullPolicy`                                  | Thanos image pull policy                                                                                                         | `IfNotPresent`            |
 | `prometheus.thanos.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                 | `[]`                      |
 | `prometheus.thanos.containerSecurityContext.enabled`                  | Enable container security context                                                                                                | `true`                    |
@@ -411,7 +411,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.enabled`                                           | Deploy Alertmanager to the cluster                                                                                                                                                                                                                                                                         | `true`                   |
 | `alertmanager.image.registry`                                    | Prometheus image registry                                                                                                                                                                                                                                                                                  | `docker.io`              |
 | `alertmanager.image.repository`                                  | Prometheus Image repository                                                                                                                                                                                                                                                                                | `bitnami/alertmanager`   |
-| `alertmanager.image.tag`                                         | Prometheus Image tag (immutable tags are recommended)                                                                                                                                                                                                                                                      | `0.24.0-debian-10-r57`   |
+| `alertmanager.image.tag`                                         | Prometheus Image tag (immutable tags are recommended)                                                                                                                                                                                                                                                      | `0.24.0-debian-11-r0`    |
 | `alertmanager.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                                                                                                                                                                                           | `[]`                     |
 | `alertmanager.serviceAccount.create`                             | Specify whether to create a ServiceAccount for Alertmanager                                                                                                                                                                                                                                                | `true`                   |
 | `alertmanager.serviceAccount.name`                               | The name of the ServiceAccount to create                                                                                                                                                                                                                                                                   | `""`                     |
@@ -546,7 +546,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `blackboxExporter.image.registry`                              | Blackbox Exporter image registry                                                                           | `docker.io`                 |
 | `blackboxExporter.image.repository`                            | Blackbox Exporter Image repository                                                                         | `bitnami/blackbox-exporter` |
 | `blackboxExporter.image.pullPolicy`                            | Blackbox Exporter Image pull policy                                                                        | `IfNotPresent`              |
-| `blackboxExporter.image.tag`                                   | Blackbox Exporter Image tag (immutable tags are recommended)                                               | `0.20.0-debian-10-r66`      |
+| `blackboxExporter.image.tag`                                   | Blackbox Exporter Image tag (immutable tags are recommended)                                               | `0.21.0-debian-11-r0`       |
 | `blackboxExporter.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                           | `[]`                        |
 | `blackboxExporter.extraEnvVars`                                | Array with extra environment variables to add to blackboxExporter nodes                                    | `[]`                        |
 | `blackboxExporter.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for blackboxExporter nodes                            | `""`                        |
@@ -601,7 +601,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `blackboxExporter.affinity`                                    | Affinity for Blackbox Exporter pods assignment                                                             | `{}`                        |
 | `blackboxExporter.nodeSelector`                                | Node labels for Blackbox Exporter pods assignment                                                          | `{}`                        |
 | `blackboxExporter.tolerations`                                 | Tolerations for Blackbox Exporter pods assignment                                                          | `[]`                        |
-| `blackboxExporter.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains            | `{}`                        |
+| `blackboxExporter.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains            | `[]`                        |
 | `blackboxExporter.priorityClassName`                           | Blackbox Exporter pods' priorityClassName                                                                  | `""`                        |
 | `blackboxExporter.schedulerName`                               | Kubernetes pod scheduler registry                                                                          | `""`                        |
 | `blackboxExporter.terminationGracePeriodSeconds`               | In seconds, time the given to the Blackbox Exporter pod needs to terminate gracefully                      | `""`                        |

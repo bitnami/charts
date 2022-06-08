@@ -3,7 +3,7 @@ import { random } from './utils';
 
 it('allows user to log in and log out', () => {
   cy.login();
-  cy.get('[data-testid="ErrorOutlineIcon"]').should('not.exist');
+  cy.get('div.alert').should('not.exist');
   cy.get('#logout').scrollIntoView().click();
 });
 
@@ -65,8 +65,5 @@ it('allows creating a service account and downloading credentials', () => {
   cy.get('[aria-label="Create service account"]').click();
   cy.contains('button[type="submit"]', 'Create').click();
   cy.get('#download-button').click();
-  // Temporarily disable credentials file check, as there is an upstream
-  // issue affecting its generation:
-  //    https://github.com/minio/console/issues/2031
-  // cy.readFile('cypress/downloads/credentials.json').should('exist');
+  cy.readFile('cypress/downloads/credentials.json').should('exist');
 });
