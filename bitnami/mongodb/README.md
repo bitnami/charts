@@ -7,7 +7,7 @@ MongoDB(R) is a relational open source NoSQL database. Easy to use, it stores da
 [Overview of MongoDB&reg;](http://www.mongodb.org)
 
 Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB(R) is run and maintained by MongoDB, which is a completely separate project from Bitnami.
-
+                           
 ## TL;DR
 
 ```bash
