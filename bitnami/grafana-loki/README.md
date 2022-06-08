@@ -150,7 +150,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.affinity`                              | Affinity for Compactor pods assignment                                                              | `{}`                |
 | `compactor.nodeSelector`                          | Node labels for Compactor pods assignment                                                           | `{}`                |
 | `compactor.tolerations`                           | Tolerations for Compactor pods assignment                                                           | `[]`                |
-| `compactor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains     | `{}`                |
+| `compactor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains     | `[]`                |
 | `compactor.priorityClassName`                     | Compactor pods' priorityClassName                                                                   | `""`                |
 | `compactor.schedulerName`                         | Kubernetes pod scheduler registry                                                                   | `""`                |
 | `compactor.updateStrategy.type`                   | Compactor statefulset strategy type                                                                 | `RollingUpdate`     |
@@ -249,7 +249,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.affinity`                              | Affinity for Gateway pods assignment                                                              | `{}`                  |
 | `gateway.nodeSelector`                          | Node labels for Gateway pods assignment                                                           | `{}`                  |
 | `gateway.tolerations`                           | Tolerations for Gateway pods assignment                                                           | `[]`                  |
-| `gateway.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `{}`                  |
+| `gateway.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `[]`                  |
 | `gateway.priorityClassName`                     | Gateway pods' priorityClassName                                                                   | `""`                  |
 | `gateway.schedulerName`                         | Kubernetes pod scheduler registry                                                                 | `""`                  |
 | `gateway.updateStrategy.type`                   | Gateway statefulset strategy type                                                                 | `RollingUpdate`       |
@@ -342,7 +342,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexGateway.affinity`                              | Affinity for index-gateway pods assignment                                                             | `{}`            |
 | `indexGateway.nodeSelector`                          | Node labels for index-gateway pods assignment                                                          | `{}`            |
 | `indexGateway.tolerations`                           | Tolerations for index-gateway pods assignment                                                          | `[]`            |
-| `indexGateway.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains        | `{}`            |
+| `indexGateway.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains        | `[]`            |
 | `indexGateway.priorityClassName`                     | index-gateway pods' priorityClassName                                                                  | `""`            |
 | `indexGateway.schedulerName`                         | Kubernetes pod scheduler registry                                                                      | `""`            |
 | `indexGateway.updateStrategy.type`                   | index-gateway statefulset strategy type                                                                | `RollingUpdate` |
@@ -422,7 +422,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.affinity`                              | Affinity for Distributor pods assignment                                                              | `{}`            |
 | `distributor.nodeSelector`                          | Node labels for Distributor pods assignment                                                           | `{}`            |
 | `distributor.tolerations`                           | Tolerations for Distributor pods assignment                                                           | `[]`            |
-| `distributor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains       | `{}`            |
+| `distributor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains       | `[]`            |
 | `distributor.priorityClassName`                     | Distributor pods' priorityClassName                                                                   | `""`            |
 | `distributor.schedulerName`                         | Kubernetes pod scheduler registry                                                                     | `""`            |
 | `distributor.updateStrategy.type`                   | Distributor statefulset strategy type                                                                 | `RollingUpdate` |
@@ -502,7 +502,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.affinity`                              | Affinity for ingester pods assignment                                                              | `{}`            |
 | `ingester.nodeSelector`                          | Node labels for Ingester pods assignment                                                           | `{}`            |
 | `ingester.tolerations`                           | Tolerations for Ingester pods assignment                                                           | `[]`            |
-| `ingester.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `{}`            |
+| `ingester.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `[]`            |
 | `ingester.podManagementPolicy`                   | podManagementPolicy to manage scaling operation                                                    | `""`            |
 | `ingester.priorityClassName`                     | Ingester pods' priorityClassName                                                                   | `""`            |
 | `ingester.schedulerName`                         | Kubernetes pod scheduler registry                                                                  | `""`            |
@@ -597,7 +597,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.affinity`                              | Affinity for Querier pods assignment                                                              | `{}`            |
 | `querier.nodeSelector`                          | Node labels for Querier pods assignment                                                           | `{}`            |
 | `querier.tolerations`                           | Tolerations for Querier pods assignment                                                           | `[]`            |
-| `querier.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `{}`            |
+| `querier.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `[]`            |
 | `querier.priorityClassName`                     | Querier pods' priorityClassName                                                                   | `""`            |
 | `querier.schedulerName`                         | Kubernetes pod scheduler registry                                                                 | `""`            |
 | `querier.updateStrategy.type`                   | Querier statefulset strategy type                                                                 | `RollingUpdate` |
@@ -690,7 +690,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.affinity`                              | Affinity for queryFrontend pods assignment                                                              | `{}`            |
 | `queryFrontend.nodeSelector`                          | Node labels for queryFrontend pods assignment                                                           | `{}`            |
 | `queryFrontend.tolerations`                           | Tolerations for queryFrontend pods assignment                                                           | `[]`            |
-| `queryFrontend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains         | `{}`            |
+| `queryFrontend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains         | `[]`            |
 | `queryFrontend.priorityClassName`                     | queryFrontend pods' priorityClassName                                                                   | `""`            |
 | `queryFrontend.schedulerName`                         | Kubernetes pod scheduler registry                                                                       | `""`            |
 | `queryFrontend.updateStrategy.type`                   | queryFrontend statefulset strategy type                                                                 | `RollingUpdate` |
@@ -772,7 +772,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.affinity`                              | Affinity for ruler pods assignment                                                              | `{}`            |
 | `ruler.nodeSelector`                          | Node labels for Ruler pods assignment                                                           | `{}`            |
 | `ruler.tolerations`                           | Tolerations for Ruler pods assignment                                                           | `[]`            |
-| `ruler.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains | `{}`            |
+| `ruler.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains | `[]`            |
 | `ruler.priorityClassName`                     | Ruler pods' priorityClassName                                                                   | `""`            |
 | `ruler.schedulerName`                         | Kubernetes pod scheduler registry                                                               | `""`            |
 | `ruler.updateStrategy.type`                   | Ruler statefulset strategy type                                                                 | `RollingUpdate` |
@@ -866,7 +866,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tableManager.affinity`                              | Affinity for table-manager pods assignment                                                             | `{}`            |
 | `tableManager.nodeSelector`                          | Node labels for table-manager pods assignment                                                          | `{}`            |
 | `tableManager.tolerations`                           | Tolerations for table-manager pods assignment                                                          | `[]`            |
-| `tableManager.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains        | `{}`            |
+| `tableManager.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains        | `[]`            |
 | `tableManager.priorityClassName`                     | table-manager pods' priorityClassName                                                                  | `""`            |
 | `tableManager.schedulerName`                         | Kubernetes pod scheduler registry                                                                      | `""`            |
 | `tableManager.updateStrategy.type`                   | table-manager statefulset strategy type                                                                | `RollingUpdate` |
@@ -951,7 +951,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.affinity`                              | Affinity for promtail pods assignment                                                              | `{}`                 |
 | `promtail.nodeSelector`                          | Node labels for Promtail pods assignment                                                           | `{}`                 |
 | `promtail.tolerations`                           | Tolerations for Promtail pods assignment                                                           | `[]`                 |
-| `promtail.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `{}`                 |
+| `promtail.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `[]`                 |
 | `promtail.priorityClassName`                     | Promtail pods' priorityClassName                                                                   | `""`                 |
 | `promtail.schedulerName`                         | Kubernetes pod scheduler registry                                                                  | `""`                 |
 | `promtail.updateStrategy.type`                   | Promtail statefulset strategy type                                                                 | `RollingUpdate`      |
