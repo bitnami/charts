@@ -84265,6 +84265,43 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 5.2.0
+    created: "2022-06-08T10:35:01.526882716Z"
+    dependencies:
+    - condition: db.bundleTestDB
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - phpmyadmin-database
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: phpMyAdmin is a free software tool written in PHP, intended to handle
+      the administration of MySQL over the Web. phpMyAdmin supports a wide range of
+      operations on MySQL and MariaDB.
+    digest: sha256:b51a33bb59016c94b51483ddb072cbc1cf48fe5ff4f7175b8c09789cf8e2fb90
+    home: https://github.com/bitnami/charts/tree/master/bitnami/phpmyadmin
+    icon: https://bitnami.com/assets/stacks/phpmyadmin/img/phpmyadmin-stack-220x234.png
+    keywords:
+    - mariadb
+    - mysql
+    - phpmyadmin
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: phpmyadmin
+    sources:
+    - https://github.com/bitnami/bitnami-docker-phpmyadmin
+    - https://www.phpmyadmin.net/
+    urls:
+    - https://charts.bitnami.com/bitnami/phpmyadmin-10.1.8.tgz
+    version: 10.1.8
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 5.2.0
     created: "2022-06-01T18:15:32.40513932Z"
     dependencies:
     - condition: db.bundleTestDB
@@ -117888,4 +117925,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-08T10:33:31.098148091Z"
+generated: "2022-06-08T10:35:01.571868662Z"
