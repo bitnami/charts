@@ -106386,6 +106386,40 @@ entries:
   - annotations:
       category: MachineLearning
     apiVersion: v2
+    appVersion: 2.8.2
+    created: "2022-06-08T23:43:16.641579204Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: TensorFlow ResNet is a client utility for use with TensorFlow Serving
+      and ResNet models.
+    digest: sha256:ea8e103e10ad2e8b60eace7f649554cfb28652286fa37073c15d804548f5ebe9
+    home: https://github.com/bitnami/charts/tree/master/bitnami/tensorflow-resnet
+    icon: https://bitnami.com/assets/stacks/tensorflow-inception/img/tensorflow-inception-stack-220x234.png
+    keywords:
+    - tensorflow
+    - serving
+    - resnet
+    - machine
+    - learning
+    - library
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: tensorflow-resnet
+    sources:
+    - https://github.com/bitnami/bitnami-docker-tensorflow-serving
+    - https://github.com/bitnami/bitnami-docker-tensorflow-resnet
+    - https://www.tensorflow.org/serving/
+    urls:
+    - https://charts.bitnami.com/bitnami/tensorflow-resnet-3.5.14.tgz
+    version: 3.5.14
+  - annotations:
+      category: MachineLearning
+    apiVersion: v2
     appVersion: 2.8.0
     created: "2022-06-07T05:28:36.706221803Z"
     dependencies:
@@ -119485,4 +119519,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-08T23:41:38.432322837Z"
+generated: "2022-06-08T23:43:16.699980707Z"
