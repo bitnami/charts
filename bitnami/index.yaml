@@ -100601,6 +100601,36 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 3.2.1
+    created: "2022-06-08T10:07:00.035046736Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Apache Spark is a high-performance engine for large-scale computing
+      tasks, such as data processing, machine learning and real-time data streaming.
+      It includes APIs for Java, Python, Scala and R.
+    digest: sha256:1e0a04afacd3f156a3ef007a3a71d5ac01ddaaae3deeee11ed0d7c7f62b3bf57
+    home: https://github.com/bitnami/charts/tree/master/bitnami/spark
+    icon: https://bitnami.com/assets/stacks/spark/img/spark-stack-220x234.png
+    keywords:
+    - apache
+    - spark
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: spark
+    sources:
+    - https://github.com/bitnami/bitnami-docker-spark
+    - https://spark.apache.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/spark-6.1.8.tgz
+    version: 6.1.8
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 3.2.1
     created: "2022-06-03T05:10:12.298826771Z"
     dependencies:
     - name: common
@@ -117346,4 +117376,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-08T10:05:13.709416664Z"
+generated: "2022-06-08T10:07:00.09243577Z"
