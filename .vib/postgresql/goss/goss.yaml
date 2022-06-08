@@ -15,7 +15,7 @@ command:
     exec: pg_isready -d "$POSTGRES_DB" -h localhost -p "$POSTGRESQL_PORT_NUMBER" -U "$POSTGRES_USER" 
     exit-status: 0
     stdout:
-      - - {{ printf "localhost:%s - accepting connections" .Env.POSTGRESQL_PORT_NUMBER | quote }}
+      - {{ printf "localhost:%s - accepting connections" .Env.POSTGRESQL_PORT_NUMBER | quote }}
     stderr: [ ]
     timeout: 2000
   user-id-test:
