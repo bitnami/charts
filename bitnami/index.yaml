@@ -24338,6 +24338,36 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 1.14.4
+    created: "2022-06-08T14:52:50.753008511Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Apache Geode is a data management platform that provides advanced
+      capabilities for data-intensive applications.
+    digest: sha256:b98f9405cbee043183f3df42b78ea50792265c08b7bb7d562e6fc51aefd9744d
+    home: https://github.com/bitnami/charts/tree/master/bitnami/geode
+    icon: https://bitnami.com/assets/stacks/geode/img/geode-stack-220x234.png
+    keywords:
+    - apache
+    - geode
+    - database
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: geode
+    sources:
+    - https://github.com/bitnami/bitnami-docker-geode
+    - https://github.com/apache/geode
+    urls:
+    - https://charts.bitnami.com/bitnami/geode-0.6.7.tgz
+    version: 0.6.7
+  - annotations:
+      category: Database
+    apiVersion: v2
+    appVersion: 1.14.4
     created: "2022-06-04T04:56:55.117140063Z"
     dependencies:
     - name: common
@@ -118850,4 +118880,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-08T14:50:56.605947194Z"
+generated: "2022-06-08T14:52:50.807182017Z"
