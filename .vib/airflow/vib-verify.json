@@ -35,8 +35,7 @@
           "action_id": "trivy",
           "params": {
             "threshold": "CRITICAL",
-            "vuln_type": ["OS"],
-            "timeout": "15m" 
+            "vuln_type": ["OS"]
           }
         },
         {
