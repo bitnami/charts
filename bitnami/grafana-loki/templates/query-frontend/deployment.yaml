@@ -91,6 +91,9 @@ spec:
           args:
             - -target=query-frontend
             - -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
+            {{- if .Values.queryScheduler.enabled }}
+            - -frontend.scheduler-address={{ template "grafana-loki.query-scheduler.fullname" . }}:{{ .Values.queryScheduler.service.ports.grpc }}
+            {{- end }}
           {{- end }}
           {{- if .Values.queryFrontend.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraEnvVars "context" $) | nindent 12 }}
