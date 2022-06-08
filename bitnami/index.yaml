@@ -64686,6 +64686,40 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 5.0.9
+    created: "2022-06-08T14:50:56.587259198Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: MongoDB(R) is an open source NoSQL database that uses JSON for data
+      storage. MongoDB(TM) Sharded improves scalability and reliability for large
+      datasets by distributing data across multiple machines.
+    digest: sha256:cfe367c3fe19f599aa5478f70a3df7c83cf217917110d39f931d98de86d6d702
+    home: https://github.com/bitnami/charts/tree/master/bitnami/mongodb-sharded
+    icon: https://bitnami.com/assets/stacks/mongodb/img/mongodb-stack-220x234.png
+    keywords:
+    - mongodb
+    - database
+    - nosql
+    - cluster
+    - replicaset
+    - replication
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: mongodb-sharded
+    sources:
+    - https://github.com/bitnami/bitnami-docker-mongodb-sharded
+    - https://mongodb.org
+    urls:
+    - https://charts.bitnami.com/bitnami/mongodb-sharded-5.0.11.tgz
+    version: 5.0.11
+  - annotations:
+      category: Database
+    apiVersion: v2
+    appVersion: 5.0.9
     created: "2022-06-08T12:27:49.409310043Z"
     dependencies:
     - name: common
@@ -118816,4 +118850,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-08T14:49:07.341547567Z"
+generated: "2022-06-08T14:50:56.605947194Z"
