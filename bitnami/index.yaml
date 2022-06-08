@@ -51671,6 +51671,40 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 0.11.0
+    created: "2022-06-08T10:55:29.914332628Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Kubernetes Event Exporter makes it easy to export Kubernetes events
+      to other tools, thereby enabling better event observability, custom alerts and
+      aggregation.
+    digest: sha256:ca3cd5bc2dbfa88a3eab11b7444e24cb873d6124f2d9cc2d8962d224b416272f
+    home: https://github.com/bitnami/charts/tree/master/bitnami/kubernetes-event-exporter
+    icon: https://bitnami.com/assets/stacks/kubernetes-event-exporter/img/kubernetes-event-exporter-stack-220x234.png
+    keywords:
+    - alerting
+    - event exporting
+    - events
+    - kubernetes events
+    - monitoring
+    - observability
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: kubernetes-event-exporter
+    sources:
+    - https://github.com/bitnami/bitnami-docker-kubernetes-event-exporter
+    - https://github.com/opsgenie/kubernetes-event-exporter
+    urls:
+    - https://charts.bitnami.com/bitnami/kubernetes-event-exporter-1.4.14.tgz
+    version: 1.4.14
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 0.11.0
     created: "2022-06-01T14:50:06.900235838Z"
     dependencies:
     - name: common
@@ -118325,4 +118359,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-08T10:53:43.821395339Z"
+generated: "2022-06-08T10:55:29.996764154Z"
