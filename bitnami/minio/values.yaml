@@ -223,6 +223,9 @@ provisioning:
   ## @param provisioning.args Default provisioning container args (useful when using custom images). Use array form
   ##
   args: []
+  ## @param provisioning.extraCommands Optionally specify extra list of additional commands for MinIO&reg; provisioning pod
+  ##
+  extraCommands: []
   ## @param provisioning.extraVolumes Optionally specify extra list of additional volumes for MinIO&reg; provisioning pod
   ##
   extraVolumes: []
