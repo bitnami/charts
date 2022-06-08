@@ -111103,6 +111103,43 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 1.0.5
+    created: "2022-06-08T12:32:09.097743386Z"
+    dependencies:
+    - condition: wavefront.enabled
+      name: wavefront
+      repository: https://charts.bitnami.com/bitnami
+      version: 4.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Wavefront Storage Adapter is a Prometheus integration to transfer
+      metrics from Prometheus to Wavefront. It lets you save Prometheus data in Wavefront
+      without changing your existing Prometheus setup.
+    digest: sha256:36b76864b6fb6b7ad2301ebe45f21a3ea23fe81ae78b1d238d8df861837cb008
+    home: https://github.com/wavefrontHQ/prometheus-storage-adapter
+    icon: https://bitnami.com/assets/stacks/wavefront-prometheus-storage-adapter/img/wavefront-prometheus-storage-adapter-stack-220x234.png
+    keywords:
+    - alerting
+    - adapter
+    - metrics
+    - monitoring
+    - observability
+    - wavefront
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: wavefront-prometheus-storage-adapter
+    sources:
+    - https://github.com/bitnami/bitnami-docker-wavefront-prometheus-storage-adapter
+    urls:
+    - https://charts.bitnami.com/bitnami/wavefront-prometheus-storage-adapter-2.0.3.tgz
+    version: 2.0.3
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 1.0.5
     created: "2022-06-06T20:56:32.841604474Z"
     dependencies:
     - condition: wavefront.enabled
@@ -118520,4 +118557,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-08T12:30:14.828630009Z"
+generated: "2022-06-08T12:32:09.128013536Z"
