@@ -43365,6 +43365,36 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 4.2.0
+    created: "2022-06-08T10:00:26.55697835Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: kiam is a proxy that captures AWS Metadata API requests. It allows
+      AWS IAM roles to be set for Kubernetes workloads.
+    digest: sha256:3b61c7ac9a1c7a208c82493925bb3296ef2dc5448fdb771334ffb7fe41fa6841
+    home: https://github.com/uswitch/kiam
+    icon: https://bitnami.com/assets/stacks/kiam/img/kiam-stack-220x234.png
+    keywords:
+    - aws
+    - iam
+    - security
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: kiam
+    sources:
+    - https://github.com/bitnami/bitnami-docker-kiam
+    - https://github.com/uswitch/kiam
+    urls:
+    - https://charts.bitnami.com/bitnami/kiam-1.0.12.tgz
+    version: 1.0.12
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 4.2.0
     created: "2022-06-03T05:02:44.542238166Z"
     dependencies:
     - name: common
@@ -117201,4 +117231,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-08T09:58:50.615754119Z"
+generated: "2022-06-08T10:00:26.607670156Z"
