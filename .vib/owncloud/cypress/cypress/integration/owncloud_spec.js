@@ -44,15 +44,24 @@ it('checks the SMTP configuration', () => {
   cy.get('#mail_to_address').should('have.value', Cypress.env('owncloudEmail'));
 });
 
-it('allows modifying sharing settings', () => {
+it('allows sharing a file by link', () => {
   cy.login();
-  cy.visit('/index.php/settings/personal');
-  cy.contains('Sharing').click();
-  cy.get('[for="allow_share_dialog_user_enumeration_input"]').click();
-  cy.contains('General').click();
-  cy.contains('Sharing').click();
-  cy.get('#allow_share_dialog_user_enumeration_input').should('not.be.checked');
-  cy.get('[for="allow_share_dialog_user_enumeration_input"]').click();
+  cy.get('[data-file="ownCloud Manual.pdf"]').within(() => {
+    cy.get('[data-action="Share"]').click();
+  });
+  cy.get('.subtab-publicshare').click();
+  cy.get('.addLink').click();
+  cy.get('.shareDialogLinkShare').then(() => {
+    cy.fixture('links').then((link) => {
+      cy.get('[name="linkName"]')
+        .clear()
+        .type(`${link.newLinks.name}0.${random}`);
+    });
+    cy.contains('.primary', 'Share').click();
+    cy.visit('/');
+    cy.contains('Shared by link').click();
+    cy.contains('No files in here').should('not.be.visible');
+  });
 });
 
 it('allows whitelisting a domain', () => {
