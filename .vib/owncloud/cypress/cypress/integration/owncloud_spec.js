@@ -16,16 +16,18 @@ it('allows creating a folder and uploading a file ', () => {
     'cypress/fixtures/file_to_upload.json',
     { force: true }
   );
+  cy.contains('No files in here').should('not.be.visible');
 });
 
 it('allows adding a group and a user', () => {
   cy.login();
-  cy.get('#expand').click();
-  cy.contains('Users').click();
+  cy.visit('/index.php/settings/users');
   cy.contains('Add Group').click();
   cy.fixture('groups').then((group) => {
     cy.get('#newgroupname').type(`${group.newGroup.name}.${random}`);
-    cy.get('.icon-add').click();
+    cy.get('#newgroup-form').within(() => {
+      cy.get('[type="submit"]').click();
+    });
     cy.contains('.groupname', `${group.newGroup.name}.${random}`);
   });
   cy.fixture('users').then((user) => {
@@ -38,26 +40,35 @@ it('allows adding a group and a user', () => {
 
 it('checks the SMTP configuration', () => {
   cy.login();
-  cy.visit('index.php/settings/admin?sectionid=general');
+  cy.visit('/index.php/settings/admin?sectionid=general');
   cy.get('#mail_smtphost').should('have.value', Cypress.env('smtpHost'));
   cy.get('#mail_smtpname').should('have.value', Cypress.env('smtpUser'));
   cy.get('#mail_to_address').should('have.value', Cypress.env('owncloudEmail'));
 });
 
-it('allows modifying sharing settings', () => {
+it('allows sharing a file by link', () => {
   cy.login();
-  cy.visit('index.php/settings/personal');
-  cy.contains('Sharing').click();
-  cy.get('[for="allow_share_dialog_user_enumeration_input"]').click();
-  cy.contains('General').click();
-  cy.contains('Sharing').click();
-  cy.get('#allow_share_dialog_user_enumeration_input').should('not.be.checked');
-  cy.get('[for="allow_share_dialog_user_enumeration_input"]').click();
+  cy.get('[data-file="ownCloud Manual.pdf"]').within(() => {
+    cy.get('[data-action="Share"]').click();
+  });
+  cy.get('.subtab-publicshare').click();
+  cy.get('.addLink').click();
+  cy.get('.shareDialogLinkShare').then(() => {
+    cy.fixture('links').then((link) => {
+      cy.get('[name="linkName"]')
+        .clear()
+        .type(`${link.newLinks.name}0.${random}`);
+    });
+    cy.contains('.primary', 'Share').click();
+    cy.visit('/');
+    cy.contains('Shared by link').click();
+    cy.contains('No files in here').should('not.be.visible');
+  });
 });
 
 it('allows whitelisting a domain', () => {
   cy.login();
-  cy.visit('index.php/settings/personal');
+  cy.visit('/index.php/settings/personal');
   cy.contains('Security').click();
   cy.fixture('domains').then((domain) => {
     cy.get('#domain').type(`${domain.newDomain.domain}`);

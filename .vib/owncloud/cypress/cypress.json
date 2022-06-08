@@ -1,6 +1,8 @@
 {
   "pageLoadTimeout": 240000,
-  "defaultCommandTimeout": 80000,
+  "defaultCommandTimeout": 8000,
+  "viewportWidth": 1200,
+  "viewportHeight": 860,
   "env": {
     "username": "user",
     "password": "ComplicatedPassword123!4",
