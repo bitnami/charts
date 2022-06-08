@@ -7,7 +7,7 @@ ASP.NET Core is an open-source framework for web application development created
 [Overview of ASP.NET](https://github.com/dotnet/aspnetcore)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -21,7 +21,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps an [ASP.NET Core](https://github.com/bitnami/bitnami-docker-aspnet-core) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -397,7 +397,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Ingress
 
-This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik) you can utilize the ingress controller to serve your ASP.NET Core application.
+This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as nginx-ingress or traefik you can utilize the ingress controller to serve your ASP.NET Core application.
 
 To enable ingress integration, please set `ingress.enabled` to `true`.
 

@@ -186,6 +186,10 @@ spec:
               {{- end }}
               {{- end }}
 
+              {{- if .Values.provisioning.extraCommands }}
+              {{ join ";" .Values.provisioning.extraCommands | nindent 14 }};
+              {{- end }}
+
               echo "End Minio provisioning";
           {{- end }}
           {{- if .Values.provisioning.args }}

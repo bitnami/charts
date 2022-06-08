@@ -7,7 +7,7 @@ MongoDB(R) is a relational open source NoSQL database. Easy to use, it stores da
 [Overview of MongoDB&reg;](http://www.mongodb.org)
 
 Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB(R) is run and maintained by MongoDB, which is a completely separate project from Bitnami.
-                           
+
 ## TL;DR
 
 ```bash
@@ -19,7 +19,7 @@ $ helm install my-release bitnami/mongodb
 
 This chart bootstraps a [MongoDB(&reg;)](https://github.com/bitnami/bitnami-docker-mongodb) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with Fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 

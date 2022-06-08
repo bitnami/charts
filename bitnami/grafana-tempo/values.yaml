@@ -409,7 +409,7 @@ compactor:
   ## @param compactor.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param compactor.priorityClassName Compactor pods' priorityClassName
   ##
   priorityClassName: ""
@@ -668,7 +668,7 @@ distributor:
   ## @param distributor.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param distributor.priorityClassName Distributor pods' priorityClassName
   ##
   priorityClassName: ""
@@ -931,7 +931,7 @@ ingester:
   ## @param ingester.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param ingester.priorityClassName Ingester pods' priorityClassName
   ##
   priorityClassName: ""
@@ -1237,7 +1237,7 @@ querier:
   ## @param querier.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param querier.priorityClassName Querier pods' priorityClassName
   ##
   priorityClassName: ""
@@ -1500,7 +1500,7 @@ queryFrontend:
   ## @param queryFrontend.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param queryFrontend.priorityClassName queryFrontend pods' priorityClassName
   ##
   priorityClassName: ""
@@ -1935,7 +1935,7 @@ vulture:
   ## @param vulture.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param vulture.priorityClassName Vulture pods' priorityClassName
   ##
   priorityClassName: ""

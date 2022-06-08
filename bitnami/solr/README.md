@@ -7,7 +7,7 @@ Apache Solr is an extremely powerful, open source enterprise search platform bui
 [Overview of Apache Solr](http://lucene.apache.org/solr/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -19,7 +19,7 @@ $ helm install my-release bitnami/solr
 
 This chart bootstraps a [Solr](https://github.com/bitnami/bitnami-docker-solr) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -155,7 +155,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                              | Affinity settings for Solr pod assignment. Evaluated as a template                                                       | `{}`            |
 | `nodeSelector`                          | Node labels for Solr pods assignment. Evaluated as a template                                                            | `{}`            |
 | `tolerations`                           | Tolerations for Solr pods assignment. Evaluated as a template                                                            | `[]`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
 | `podManagementPolicy`                   | Management Policy for Solr StatefulSet                                                                                   | `Parallel`      |
 | `priorityClassName`                     | Solr pods' priority.                                                                                                     | `""`            |
 | `schedulerName`                         | Kubernetes pod scheduler registry                                                                                        | `""`            |
@@ -302,7 +302,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.affinity`                              | Affinity settings for Solr Prometheus exporter pod assignment. Evaluated as a template                                         | `{}`                                                                          |
 | `metrics.nodeSelector`                          | Node labels for Solr Prometheus exporter pods assignment. Evaluated as a template                                              | `{}`                                                                          |
 | `metrics.tolerations`                           | Tolerations for Solr Prometheus exporter pods assignment. Evaluated as a template                                              | `[]`                                                                          |
-| `metrics.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template       | `{}`                                                                          |
+| `metrics.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template       | `[]`                                                                          |
 | `metrics.priorityClassName`                     | Solr Prometheus exporter pods' priority.                                                                                       | `""`                                                                          |
 | `metrics.schedulerName`                         | Kubernetes pod scheduler registry                                                                                              | `""`                                                                          |
 | `metrics.hostAliases`                           | Solr Prometheus exporter pod host aliases                                                                                      | `[]`                                                                          |

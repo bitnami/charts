@@ -403,7 +403,7 @@ hub:
   ## @param hub.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param hub.priorityClassName Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
@@ -817,7 +817,7 @@ proxy:
   ## @param proxy.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param proxy.priorityClassName Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
@@ -1319,7 +1319,7 @@ imagePuller:
   ## @param imagePuller.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param imagePuller.priorityClassName Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##

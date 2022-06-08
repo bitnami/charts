@@ -7,7 +7,7 @@ Apache ZooKeeper provides a reliable, centralized register of configuration data
 [Overview of Apache ZooKeeper](https://zookeeper.apache.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -19,7 +19,7 @@ $ helm install my-release bitnami/zookeeper
 
 This chart bootstraps a [ZooKeeper](https://github.com/bitnami/bitnami-docker-zookeeper) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`            | ZooKeeper image registry                                                                                                   | `docker.io`             |
 | `image.repository`          | ZooKeeper image repository                                                                                                 | `bitnami/zookeeper`     |
-| `image.tag`                 | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.8.0-debian-10-r64`   |
+| `image.tag`                 | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.8.0-debian-11-r0`    |
 | `image.pullPolicy`          | ZooKeeper image pull policy                                                                                                | `IfNotPresent`          |
 | `image.pullSecrets`         | Specify docker-registry secret names as an array                                                                           | `[]`                    |
 | `image.debug`               | Specify if debug values should be set                                                                                      | `false`                 |
@@ -171,7 +171,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                              | Affinity for pod assignment                                                                                                                                                                       | `{}`            |
 | `nodeSelector`                          | Node labels for pod assignment                                                                                                                                                                    | `{}`            |
 | `tolerations`                           | Tolerations for pod assignment                                                                                                                                                                    | `[]`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                          | `{}`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                          | `[]`            |
 | `podManagementPolicy`                   | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: `OrderedReady` and `Parallel` | `Parallel`      |
 | `priorityClassName`                     | Name of the existing priority class to be used by ZooKeeper pods, priority class needs to be created beforehand                                                                                   | `""`            |
 | `schedulerName`                         | Kubernetes pod scheduler registry                                                                                                                                                                 | `""`            |
@@ -245,7 +245,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r431`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `11-debian-11-r0`       |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
