@@ -16,12 +16,12 @@ it('allows creating a folder and uploading a file ', () => {
     'cypress/fixtures/file_to_upload.json',
     { force: true }
   );
+  cy.contains('No files in here').should('not.be.visible');
 });
 
 it('allows adding a group and a user', () => {
   cy.login();
-  cy.get('#expand').click();
-  cy.contains('Users').click();
+  cy.visit('/index.php/settings/users');
   cy.contains('Add Group').click();
   cy.fixture('groups').then((group) => {
     cy.get('#newgroupname').type(`${group.newGroup.name}.${random}`);
@@ -38,7 +38,7 @@ it('allows adding a group and a user', () => {
 
 it('checks the SMTP configuration', () => {
   cy.login();
-  cy.visit('index.php/settings/admin?sectionid=general');
+  cy.visit('/index.php/settings/admin?sectionid=general');
   cy.get('#mail_smtphost').should('have.value', Cypress.env('smtpHost'));
   cy.get('#mail_smtpname').should('have.value', Cypress.env('smtpUser'));
   cy.get('#mail_to_address').should('have.value', Cypress.env('owncloudEmail'));
@@ -46,7 +46,7 @@ it('checks the SMTP configuration', () => {
 
 it('allows modifying sharing settings', () => {
   cy.login();
-  cy.visit('index.php/settings/personal');
+  cy.visit('/index.php/settings/personal');
   cy.contains('Sharing').click();
   cy.get('[for="allow_share_dialog_user_enumeration_input"]').click();
   cy.contains('General').click();
@@ -57,7 +57,7 @@ it('allows modifying sharing settings', () => {
 
 it('allows whitelisting a domain', () => {
   cy.login();
-  cy.visit('index.php/settings/personal');
+  cy.visit('/index.php/settings/personal');
   cy.contains('Security').click();
   cy.fixture('domains').then((domain) => {
     cy.get('#domain').type(`${domain.newDomain.domain}`);

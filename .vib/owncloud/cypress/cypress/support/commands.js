@@ -1,5 +1,5 @@
 const COMMAND_DELAY = 800;
-const BASE_URL = 'http://vmware-owncloud.my/';
+const BASE_URL = 'http://vmware-owncloud.my';
 
 for (const command of ['click']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
@@ -20,9 +20,8 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
 Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
-    cy.clearCookies();
     cy.visit('/');
-    cy.get('.v-align').should('exist').and('be.visible'); //This should is needed to ensure stability of the test
+    cy.get('.v-align');
     cy.get('#user').type(username);
     cy.get('#password').type(password);
     cy.get('#submit').click();
