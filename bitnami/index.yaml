@@ -65257,6 +65257,39 @@ entries:
       category: E-Learning
     apiVersion: v2
     appVersion: 4.0.1
+    created: "2022-06-08T10:33:31.046879869Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      version: 1.x.x
+    description: Moodle(TM) LMS is an open source online Learning Management System
+      widely used at universities, schools, and corporations. It is modular and highly
+      adaptable to any type of online learning.
+    digest: sha256:175784545b75defdeafa8bf9a80828cedccd9b71479ee2057409ae5e9f5b0c26
+    home: https://github.com/bitnami/charts/tree/master/bitnami/moodle
+    icon: https://bitnami.com/assets/stacks/moodle/img/moodle-stack-220x234.png
+    keywords:
+    - moodle
+    - learning
+    - php
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: moodle
+    sources:
+    - https://github.com/bitnami/bitnami-docker-moodle
+    - https://www.moodle.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/moodle-14.1.8.tgz
+    version: 14.1.8
+  - annotations:
+      category: E-Learning
+    apiVersion: v2
+    appVersion: 4.0.1
     created: "2022-06-04T13:54:54.035418885Z"
     dependencies:
     - condition: mariadb.enabled
@@ -117855,4 +117888,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-08T10:32:09.508041122Z"
+generated: "2022-06-08T10:33:31.098148091Z"
