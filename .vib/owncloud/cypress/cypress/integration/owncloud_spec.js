@@ -25,7 +25,9 @@ it('allows adding a group and a user', () => {
   cy.contains('Add Group').click();
   cy.fixture('groups').then((group) => {
     cy.get('#newgroupname').type(`${group.newGroup.name}.${random}`);
-    cy.get('.icon-add').click();
+    cy.get('#newgroup-form').within(() => {
+      cy.get('[type="submit"]').click();
+    });
     cy.contains('.groupname', `${group.newGroup.name}.${random}`);
   });
   cy.fixture('users').then((user) => {
