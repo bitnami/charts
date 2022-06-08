@@ -9076,6 +9076,44 @@ entries:
   - annotations:
       category: Infrastructure
     apiVersion: v2
+    appVersion: 7.8.0
+    created: "2022-06-08T10:46:52.794740308Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.X.X
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Concourse is an automation system written in Go. It is most commonly
+      used for CI/CD, and is built to scale to any kind of automation pipeline, from
+      simple to complex.
+    digest: sha256:f17bd08c985ecdc3560bf11953d8755990c603a765b027bb534af068b1030a32
+    home: https://github.com/concourse/concourse
+    icon: https://bitnami.com/assets/stacks/concourse/img/concourse-stack-220x234.png
+    keywords:
+    - concourse
+    - ci
+    - cd
+    - http
+    - web
+    - application
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: concourse
+    sources:
+    - https://github.com/bitnami/bitnami-docker-concourse
+    - https://github.com/concourse/concourse
+    urls:
+    - https://charts.bitnami.com/bitnami/concourse-1.3.4.tgz
+    version: 1.3.4
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
     appVersion: 7.7.1
     created: "2022-06-03T03:21:23.115191975Z"
     dependencies:
@@ -118147,4 +118185,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-08T10:45:07.930350534Z"
+generated: "2022-06-08T10:46:52.813069488Z"
