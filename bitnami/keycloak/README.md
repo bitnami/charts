@@ -7,7 +7,7 @@ Keycloak is a high performance Java-based identity and access management solutio
 [Overview of Keycloak](https://www.keycloak.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -21,7 +21,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [Keycloak](https://github.com/bitnami/bitnami-docker-keycloak) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | --------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                 | Keycloak image registry                                                                       | `docker.io`           |
 | `image.repository`               | Keycloak image repository                                                                     | `bitnami/keycloak`    |
-| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                           | `18.0.0-debian-10-r6` |
+| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                           | `18.0.0-debian-11-r0` |
 | `image.pullPolicy`               | Keycloak image pull policy                                                                    | `IfNotPresent`        |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                              | `[]`                  |
 | `image.debug`                    | Specify if debug logs should be enabled                                                       | `false`               |
@@ -167,7 +167,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                              | Affinity for pod assignment                                                                                              | `{}`            |
 | `nodeSelector`                          | Node labels for pod assignment                                                                                           | `{}`            |
 | `tolerations`                           | Tolerations for pod assignment                                                                                           | `[]`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
 | `podManagementPolicy`                   | Pod management policy for the Keycloak statefulset                                                                       | `Parallel`      |
 | `priorityClassName`                     | Keycloak pods' Priority Class Name                                                                                       | `""`            |
 | `schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`            |
@@ -268,7 +268,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                       | `false`                       |
 | `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                    | `docker.io`                   |
 | `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                  | `bitnami/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                         | `5.2.0-debian-10-r15`         |
+| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                         | `5.2.0-debian-11-r0`          |
 | `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                 | `IfNotPresent`                |
 | `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                | `[]`                          |
 | `keycloakConfigCli.annotations`                           | Annotations for keycloak-config-cli job                                                         | `{}`                          |

@@ -7,7 +7,7 @@ Wildfly is a lightweight, open source application server, formerly known as JBos
 [Overview of WildFly](http://www.wildfly.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -21,7 +21,7 @@ This chart bootstraps a [WildFly](https://github.com/bitnami/bitnami-docker-wild
 
 WildFly is written in Java, and implements the Java Platform, Enterprise Edition (Java EE) specification.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------- | --------------------- |
 | `image.registry`    | WildFly image registry                             | `docker.io`           |
 | `image.repository`  | WildFly image repository                           | `bitnami/wildfly`     |
-| `image.tag`         | WildFly image tag (immutable tags are recommended) | `26.1.0-debian-10-r5` |
+| `image.tag`         | WildFly image tag (immutable tags are recommended) | `26.1.1-debian-11-r0` |
 | `image.pullPolicy`  | WildFly image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | WildFly image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable image debug mode                            | `false`               |
@@ -218,7 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r400`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r0`       |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
