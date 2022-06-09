@@ -23,5 +23,5 @@ command:
     exec: nginx -t
     exit-status: 0
     stdout: 
-      - "nginx: configuration file /opt/bitnami/nginx/conf/nginx.conf test is successful"
+      - 'nginx: configuration file /opt/bitnami/nginx/conf/nginx.conf test is successful'
     stderr: []
