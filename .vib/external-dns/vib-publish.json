@@ -38,7 +38,7 @@
               "path": "/.vib/external-dns/goss"
             },
             "remote": {
-              "workload": "lb-external-dns-http"
+              "workload": "deploy-external-dns"
             }
           }
         },
