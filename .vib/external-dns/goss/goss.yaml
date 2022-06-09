@@ -1,7 +1,7 @@
 file:
   /opt/bitnami/external-dns/bin:
     mode: "0755"
-    filetype: file
+    filetype: directory
     exists: true
 command:
   user-id-test:
