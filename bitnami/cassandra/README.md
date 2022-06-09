@@ -212,15 +212,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence parameters
 
-| Name                             | Description                                                                                        | Value                |
-| -------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------- |
-| `persistence.enabled`            | Enable Cassandra data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir | `true`               |
-| `persistence.storageClass`       | PVC Storage Class for Cassandra data volume                                                        | `""`                 |
-| `persistence.commitStorageClass` | PVC Storage Class for Cassandra Commit Log volume                                                  | `""`                 |
-| `persistence.annotations`        | Persistent Volume Claim annotations                                                                | `{}`                 |
-| `persistence.accessModes`        | Persistent Volume Access Mode                                                                      | `["ReadWriteOnce"]`  |
-| `persistence.size`               | PVC Storage Request for Cassandra data volume                                                      | `8Gi`                |
-| `persistence.mountPath`          | The path the data volume will be mounted at                                                        | `/bitnami/cassandra` |
+| Name                             | Description                                                                                                                                          | Value                |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `persistence.enabled`            | Enable Cassandra data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir                                                   | `true`               |
+| `persistence.storageClass`       | PVC Storage Class for Cassandra data volume                                                                                                          | `""`                 |
+| `persistence.commitStorageClass` | PVC Storage Class for Cassandra Commit Log volume                                                                                                    | `""`                 |
+| `persistence.annotations`        | Persistent Volume Claim annotations                                                                                                                  | `{}`                 |
+| `persistence.accessModes`        | Persistent Volume Access Mode                                                                                                                        | `["ReadWriteOnce"]`  |
+| `persistence.size`               | PVC Storage Request for Cassandra data volume                                                                                                        | `8Gi`                |
+| `persistence.commitLogsize`      | PVC Storage Request for Cassandra commit log volume. Unset by default                                                                                | `2Gi`                |
+| `persistence.mountPath`          | The path the data volume will be mounted at                                                                                                          | `/bitnami/cassandra` |
+| `persistence.commitLogMountPath` | The path the commit log volume will be mounted at. Unset by default. Set it to '/bitnami/cassandra/commitlog' to enable a separate commit log volume | `""`                 |
 
 
 ### Volume Permissions parameters
