@@ -46,6 +46,17 @@
           }
         },
         {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/opencart/goss"
+            },
+            "remote": {
+              "workload": "deploy-opencart"
+            }
+          }
+        },
+        {
           "action_id": "cypress",
           "params": {
             "resources": {

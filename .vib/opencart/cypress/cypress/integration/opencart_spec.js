@@ -14,16 +14,16 @@ it('allows a user to register', () => {
   });
   cy.get('[type="checkbox"]').check();
   cy.contains('Continue').click();
-  cy.contains('Your Account Has Been Created!');
+  cy.contains('Your Account Has Been Created');
 });
 
-it('allows a user to place an order', () => {
+it('allows a user to place an order and an admin to list it', () => {
   cy.visit('/');
   cy.contains('Desktop').click();
   cy.contains('Mac').click();
   cy.contains('iMac').click();
   cy.contains('Add to Cart').click();
-  cy.contains('.alert', 'Success:');
+  cy.contains('.alert', 'Success');
   cy.get('.btn-inverse').click();
   cy.contains('Checkout').click();
   cy.contains('Guest Checkout').click();
@@ -33,7 +33,7 @@ it('allows a user to place an order', () => {
       `${guest.newGuest.firstName}.${random}`
     );
     cy.get('#input-payment-lastname').type(
-      `${guest.newGuest.firstName}.${random}`
+      `${guest.newGuest.lastName}.${random}`
     );
     cy.get('#input-payment-email').type(`${guest.newGuest.email}`);
     cy.get('#input-payment-telephone').type(guest.newGuest.phone);
