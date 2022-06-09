@@ -218,7 +218,7 @@ nodeSelector: {}
 ## @param tolerations [object] Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
-tolerations: {}
+tolerations: []
 ## @param priorityClassName Pod priorityClassName
 ##
 priorityClassName: ""

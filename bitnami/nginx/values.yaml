@@ -176,7 +176,7 @@ nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
-tolerations: {}
+tolerations: []
 ## @param priorityClassName NGINX pods' priorityClassName
 ##
 priorityClassName: ""
