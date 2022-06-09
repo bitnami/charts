@@ -387,14 +387,18 @@ spec:
           {{- else if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if and (not .Values.lifecycleHooks) (not .Values.persistence.enabled) }}
+          {{- if not .Values.lifecycleHooks }}
           lifecycle:
             preStop:
               exec:
                 command:
                   - bash
                   - -ec
+                  {{- if not .Values.persistence.enabled }}
                   - nodetool decommission
+                  {{- else }}
+                  - nodetool drain
+                  {{- end }}
           {{- else if .Values.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
