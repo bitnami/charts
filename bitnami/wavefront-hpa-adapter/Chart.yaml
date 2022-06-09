@@ -25,4 +25,4 @@ maintainers:
 name: wavefront-hpa-adapter
 sources:
   - https://github.com/bitnami/bitnami-docker-wavefront-hpa-adapter
-version: 1.2.1
+version: 1.2.2
