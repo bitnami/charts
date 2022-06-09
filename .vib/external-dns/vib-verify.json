@@ -32,6 +32,17 @@
       },
       "actions": [
         {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/external-dns/goss"
+            },
+            "remote": {
+              "workload": "lb-external-dns-http"
+            }
+          }
+        },
+        {
           "action_id": "trivy",
           "params": {
             "threshold": "CRITICAL",
