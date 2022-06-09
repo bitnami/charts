@@ -1,6 +1,12 @@
 file:
   /opt/bitnami/external-dns/bin:
-    mode: "0644"
+    mode: "0755"
     filetype: file
     exists: true
     group: root
+command:
+  user-id-test:
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+    exit-status: 0
+    stdout: []
+    stderr: []
