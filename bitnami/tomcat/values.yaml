@@ -82,6 +82,9 @@ hostAliases: []
 ## ref: https://github.com/bitnami/bitnami-docker-tomcat#creating-a-custom-user
 ##
 tomcatUsername: user
+## @param existingSecret Name of existing secret to use for Tomcat credentials. `tomcatPassword` will be ignored and picked up from this secret.
+##
+existingSecret: ""
 ## @param tomcatPassword Tomcat admin password
 ## ref: https://github.com/bitnami/bitnami-docker-tomcat#creating-a-custom-user
 ##

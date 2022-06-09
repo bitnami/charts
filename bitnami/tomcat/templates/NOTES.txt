@@ -45,11 +45,19 @@ APP VERSION: {{ .Chart.AppVersion }}
 2. Login with the following credentials
 
   echo Username: {{ .Values.tomcatUsername }}
+{{- if .Values.existingSecret }}
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ .Values.existingSecret }} -o jsonpath="{.data.tomcat-password}" | base64 -d)
+{{- else }}
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.tomcat-password}" | base64 -d)
+{{- end }}
 
 {{- include "tomcat.checkRollingTags" . }}
 {{- $passwordValidationErrors := list -}}
+{{- if .Values.existingSecret }}
 {{- $secretName := include "common.names.fullname" . -}}
+{{- else }}
+{{- $secretName := .Values.existingSecret -}}
+{{- end }}
 {{- $requiredTomcatPassword := dict "valueKey" "tomcatPassword" "secret" $secretName "field" "tomcat-password" "context" $ -}}
 {{- $requiredTomcatPasswordError := include "common.validations.values.single.empty" $requiredTomcatPassword -}}
 {{- $passwordValidationErrors = append $passwordValidationErrors $requiredTomcatPasswordError -}}
