@@ -22,4 +22,6 @@ command:
   nginx-test:
     exec: nginx -t
     exit-status: 0
+    stdout: 
+      - 'nginx: the configuration file /opt/bitnami/nginx/conf/nginx.conf syntax is ok'
     stderr: []
