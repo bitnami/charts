@@ -3,19 +3,16 @@ file:
     mode: "0644"
     filetype: file
     exists: true
-    group: root
   /opt/bitnami/nginx/conf/resolvers.conf:
     mode: "0644"
     filetype: file
     exists: true
-    group: root
   /app/index.html:
     mode: "0644"
     filetype: file
     exists: true
     contains:
-      - "Welcome to nginx!"
-    group: root     
+      - "Welcome to nginx!"   
 command:
   user-id-test:
     exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
@@ -26,5 +23,5 @@ command:
     exec: nginx -t
     exit-status: 0
     stdout: 
-      - "test is successful"
+      - "nginx: configuration file /opt/bitnami/nginx/conf/nginx.conf test is successful"
     stderr: []
