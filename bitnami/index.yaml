@@ -110275,6 +110275,43 @@ entries:
       category: Analytics
     apiVersion: v2
     appVersion: 1.11.0
+    created: "2022-06-09T15:15:45.406753004Z"
+    dependencies:
+    - condition: kube-state-metrics.enabled
+      name: kube-state-metrics
+      repository: https://charts.bitnami.com/bitnami
+      version: 3.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Wavefront is a high-performance streaming analytics platform for
+      monitoring and optimizing your environment and applications.
+    digest: sha256:9ceeb034c34c42c8d9e26a8279808e1f987ea3416520b47db7f7e4134874569b
+    home: https://www.wavefront.com
+    icon: https://bitnami.com/assets/stacks/wavefront-collector/img/wavefront-collector-stack-220x234.png
+    keywords:
+    - metric
+    - monitoring
+    - observability
+    - alerting
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: wavefront
+    sources:
+    - https://github.com/bitnami/bitnami-docker-wavefront-kubernetes-collector
+    - https://github.com/bitnami/bitnami-docker-wavefront-proxy
+    - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
+    - https://github.com/wavefrontHQ/wavefront-proxy
+    urls:
+    - https://charts.bitnami.com/bitnami/wavefront-4.0.2.tgz
+    version: 4.0.2
+  - annotations:
+      category: Analytics
+    apiVersion: v2
+    appVersion: 1.11.0
     created: "2022-06-03T15:19:45.923446275Z"
     dependencies:
     - condition: kube-state-metrics.enabled
@@ -119671,4 +119708,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-09T14:52:53.093832028Z"
+generated: "2022-06-09T15:15:45.428995101Z"
