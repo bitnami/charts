@@ -565,6 +565,7 @@ persistence:
   ##
   mountPath: /bitnami/cassandra
   ## @skip persistence.commitLogMountPath The path the commit log volume will be mounted at
+  ## Set this parameter to add separate PVCs with the prefix "commitlog" and mount the commit log on a different volume
   ##
   # commitLogMountPath: /bitnami/cassandra/commitlog
 
