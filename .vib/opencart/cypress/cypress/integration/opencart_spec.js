@@ -67,7 +67,7 @@ it('allows an admin to add a product to the catalog', () => {
     cy.contains('Data').click();
     cy.get('#input-model').type(product.newProduct.model);
     cy.get('[data-original-title="Save"]').click();
-    cy.contains('Success: You have modified products!');
+    cy.contains('Success');
     cy.visit('/');
     cy.get('.form-control').type(
       `${product.newProduct.name}.${random} {enter}`
