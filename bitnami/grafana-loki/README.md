@@ -63,6 +63,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -77,6 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployments/statefulsets                      | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployments/statefulsets                         | `["infinity"]`  |
+
 
 ### Common Grafana Loki Parameters
 
@@ -95,6 +97,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `loki.containerPorts.gossipRing`      | Loki components Gossip Ring container port                     | `7946`                  |
 | `loki.gossipRing.service.ports.http`  | Gossip Ring HTTP headless service port                         | `7946`                  |
 | `loki.gossipRing.service.annotations` | Additional custom annotations for Gossip Ring headless service | `{}`                    |
+
 
 ### Compactor Deployment Parameters
 
@@ -147,7 +150,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.affinity`                              | Affinity for Compactor pods assignment                                                              | `{}`                |
 | `compactor.nodeSelector`                          | Node labels for Compactor pods assignment                                                           | `{}`                |
 | `compactor.tolerations`                           | Tolerations for Compactor pods assignment                                                           | `[]`                |
-| `compactor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains     | `{}`                |
+| `compactor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains     | `[]`                |
 | `compactor.priorityClassName`                     | Compactor pods' priorityClassName                                                                   | `""`                |
 | `compactor.schedulerName`                         | Kubernetes pod scheduler registry                                                                   | `""`                |
 | `compactor.updateStrategy.type`                   | Compactor statefulset strategy type                                                                 | `RollingUpdate`     |
@@ -165,6 +168,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.persistence.selector`                  | Selector to match an existing Persistent Volume for Compactor's data PVC                            | `{}`                |
 | `compactor.persistence.dataSource`                | PVC data source                                                                                     | `{}`                |
 
+
 ### Compactor Traffic Exposure Parameters
 
 | Name                                         | Description                                                      | Value       |
@@ -180,6 +184,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.service.externalTrafficPolicy`    | Compactor service external traffic policy                        | `Cluster`   |
 | `compactor.service.annotations`              | Additional custom annotations for Compactor service              | `{}`        |
 | `compactor.service.extraPorts`               | Extra ports to expose in the Compactor service                   | `[]`        |
+
 
 ### Gateway Deployment Parameters
 
@@ -244,7 +249,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.affinity`                              | Affinity for Gateway pods assignment                                                              | `{}`                  |
 | `gateway.nodeSelector`                          | Node labels for Gateway pods assignment                                                           | `{}`                  |
 | `gateway.tolerations`                           | Tolerations for Gateway pods assignment                                                           | `[]`                  |
-| `gateway.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `{}`                  |
+| `gateway.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `[]`                  |
 | `gateway.priorityClassName`                     | Gateway pods' priorityClassName                                                                   | `""`                  |
 | `gateway.schedulerName`                         | Kubernetes pod scheduler registry                                                                 | `""`                  |
 | `gateway.updateStrategy.type`                   | Gateway statefulset strategy type                                                                 | `RollingUpdate`       |
@@ -253,6 +258,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Gateway container(s)             | `[]`                  |
 | `gateway.sidecars`                              | Add additional sidecar containers to the Gateway pod(s)                                           | `[]`                  |
 | `gateway.initContainers`                        | Add additional init containers to the Gateway pod(s)                                              | `[]`                  |
+
 
 ### Gateway Traffic Exposure Parameters
 
@@ -282,6 +288,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `gateway.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `gateway.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+
 
 ### index-gateway Deployment Parameters
 
@@ -335,7 +342,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexGateway.affinity`                              | Affinity for index-gateway pods assignment                                                             | `{}`            |
 | `indexGateway.nodeSelector`                          | Node labels for index-gateway pods assignment                                                          | `{}`            |
 | `indexGateway.tolerations`                           | Tolerations for index-gateway pods assignment                                                          | `[]`            |
-| `indexGateway.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains        | `{}`            |
+| `indexGateway.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains        | `[]`            |
 | `indexGateway.priorityClassName`                     | index-gateway pods' priorityClassName                                                                  | `""`            |
 | `indexGateway.schedulerName`                         | Kubernetes pod scheduler registry                                                                      | `""`            |
 | `indexGateway.updateStrategy.type`                   | index-gateway statefulset strategy type                                                                | `RollingUpdate` |
@@ -344,6 +351,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexGateway.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the index-gateway container(s)            | `[]`            |
 | `indexGateway.sidecars`                              | Add additional sidecar containers to the index-gateway pod(s)                                          | `[]`            |
 | `indexGateway.initContainers`                        | Add additional init containers to the index-gateway pod(s)                                             | `[]`            |
+
 
 ### index-gateway Traffic Exposure Parameters
 
@@ -362,6 +370,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexGateway.service.externalTrafficPolicy`    | index-gateway service external traffic policy                    | `Cluster`   |
 | `indexGateway.service.annotations`              | Additional custom annotations for index-gateway service          | `{}`        |
 | `indexGateway.service.extraPorts`               | Extra ports to expose in the index-gateway service               | `[]`        |
+
 
 ### Distributor Deployment Parameters
 
@@ -413,7 +422,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.affinity`                              | Affinity for Distributor pods assignment                                                              | `{}`            |
 | `distributor.nodeSelector`                          | Node labels for Distributor pods assignment                                                           | `{}`            |
 | `distributor.tolerations`                           | Tolerations for Distributor pods assignment                                                           | `[]`            |
-| `distributor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains       | `{}`            |
+| `distributor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains       | `[]`            |
 | `distributor.priorityClassName`                     | Distributor pods' priorityClassName                                                                   | `""`            |
 | `distributor.schedulerName`                         | Kubernetes pod scheduler registry                                                                     | `""`            |
 | `distributor.updateStrategy.type`                   | Distributor statefulset strategy type                                                                 | `RollingUpdate` |
@@ -422,6 +431,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Distributor container(s)             | `[]`            |
 | `distributor.sidecars`                              | Add additional sidecar containers to the Distributor pod(s)                                           | `[]`            |
 | `distributor.initContainers`                        | Add additional init containers to the Distributor pod(s)                                              | `[]`            |
+
 
 ### Distributor Traffic Exposure Parameters
 
@@ -440,6 +450,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.service.externalTrafficPolicy`    | Distributor service external traffic policy                      | `Cluster`   |
 | `distributor.service.annotations`              | Additional custom annotations for Distributor service            | `{}`        |
 | `distributor.service.extraPorts`               | Extra ports to expose in the Distributor service                 | `[]`        |
+
 
 ### Ingester Deployment Parameters
 
@@ -491,7 +502,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.affinity`                              | Affinity for ingester pods assignment                                                              | `{}`            |
 | `ingester.nodeSelector`                          | Node labels for Ingester pods assignment                                                           | `{}`            |
 | `ingester.tolerations`                           | Tolerations for Ingester pods assignment                                                           | `[]`            |
-| `ingester.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `{}`            |
+| `ingester.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `[]`            |
 | `ingester.podManagementPolicy`                   | podManagementPolicy to manage scaling operation                                                    | `""`            |
 | `ingester.priorityClassName`                     | Ingester pods' priorityClassName                                                                   | `""`            |
 | `ingester.schedulerName`                         | Kubernetes pod scheduler registry                                                                  | `""`            |
@@ -501,6 +512,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the ingester container(s)             | `[]`            |
 | `ingester.sidecars`                              | Add additional sidecar containers to the Ingester pod(s)                                           | `[]`            |
 | `ingester.initContainers`                        | Add additional init containers to the Ingester pod(s)                                              | `[]`            |
+
 
 ### Ingester Persistence Parameters
 
@@ -513,6 +525,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.persistence.size`         | PVC Storage Request for Memcached data volume                           | `8Gi`               |
 | `ingester.persistence.annotations`  | Additional PVC annotations                                              | `{}`                |
 | `ingester.persistence.selector`     | Selector to match an existing Persistent Volume for Ingester's data PVC | `{}`                |
+
 
 ### Ingester Traffic Exposure Parameters
 
@@ -531,6 +544,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.service.externalTrafficPolicy`    | Ingester service external traffic policy                         | `Cluster`   |
 | `ingester.service.annotations`              | Additional custom annotations for Ingester service               | `{}`        |
 | `ingester.service.extraPorts`               | Extra ports to expose in the Ingester service                    | `[]`        |
+
 
 ### Querier Deployment Parameters
 
@@ -583,7 +597,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.affinity`                              | Affinity for Querier pods assignment                                                              | `{}`            |
 | `querier.nodeSelector`                          | Node labels for Querier pods assignment                                                           | `{}`            |
 | `querier.tolerations`                           | Tolerations for Querier pods assignment                                                           | `[]`            |
-| `querier.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `{}`            |
+| `querier.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `[]`            |
 | `querier.priorityClassName`                     | Querier pods' priorityClassName                                                                   | `""`            |
 | `querier.schedulerName`                         | Kubernetes pod scheduler registry                                                                 | `""`            |
 | `querier.updateStrategy.type`                   | Querier statefulset strategy type                                                                 | `RollingUpdate` |
@@ -592,6 +606,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the querier container(s)             | `[]`            |
 | `querier.sidecars`                              | Add additional sidecar containers to the Querier pod(s)                                           | `[]`            |
 | `querier.initContainers`                        | Add additional init containers to the Querier pod(s)                                              | `[]`            |
+
 
 ### Querier Persistence Parameters
 
@@ -604,6 +619,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.persistence.size`         | PVC Storage Request for Memcached data volume                          | `8Gi`               |
 | `querier.persistence.annotations`  | Additional PVC annotations                                             | `{}`                |
 | `querier.persistence.selector`     | Selector to match an existing Persistent Volume for Querier's data PVC | `{}`                |
+
 
 ### Querier Traffic Exposure Parameters
 
@@ -622,6 +638,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.service.externalTrafficPolicy`    | Querier service external traffic policy                          | `Cluster`   |
 | `querier.service.annotations`              | Additional custom annotations for Querier service                | `{}`        |
 | `querier.service.extraPorts`               | Extra ports to expose in the Querier service                     | `[]`        |
+
 
 ### Query Frontend Deployment Parameters
 
@@ -673,7 +690,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.affinity`                              | Affinity for queryFrontend pods assignment                                                              | `{}`            |
 | `queryFrontend.nodeSelector`                          | Node labels for queryFrontend pods assignment                                                           | `{}`            |
 | `queryFrontend.tolerations`                           | Tolerations for queryFrontend pods assignment                                                           | `[]`            |
-| `queryFrontend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains         | `{}`            |
+| `queryFrontend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains         | `[]`            |
 | `queryFrontend.priorityClassName`                     | queryFrontend pods' priorityClassName                                                                   | `""`            |
 | `queryFrontend.schedulerName`                         | Kubernetes pod scheduler registry                                                                       | `""`            |
 | `queryFrontend.updateStrategy.type`                   | queryFrontend statefulset strategy type                                                                 | `RollingUpdate` |
@@ -682,6 +699,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the queryFrontend container(s)             | `[]`            |
 | `queryFrontend.sidecars`                              | Add additional sidecar containers to the queryFrontend pod(s)                                           | `[]`            |
 | `queryFrontend.initContainers`                        | Add additional init containers to the queryFrontend pod(s)                                              | `[]`            |
+
 
 ### Query Frontend Traffic Exposure Parameters
 
@@ -700,6 +718,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.service.externalTrafficPolicy`    | queryFrontend service external traffic policy                    | `Cluster`   |
 | `queryFrontend.service.annotations`              | Additional custom annotations for queryFrontend service          | `{}`        |
 | `queryFrontend.service.extraPorts`               | Extra ports to expose in the queryFrontend service               | `[]`        |
+
 
 ### Ruler Deployment Parameters
 
@@ -753,7 +772,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.affinity`                              | Affinity for ruler pods assignment                                                              | `{}`            |
 | `ruler.nodeSelector`                          | Node labels for Ruler pods assignment                                                           | `{}`            |
 | `ruler.tolerations`                           | Tolerations for Ruler pods assignment                                                           | `[]`            |
-| `ruler.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains | `{}`            |
+| `ruler.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains | `[]`            |
 | `ruler.priorityClassName`                     | Ruler pods' priorityClassName                                                                   | `""`            |
 | `ruler.schedulerName`                         | Kubernetes pod scheduler registry                                                               | `""`            |
 | `ruler.updateStrategy.type`                   | Ruler statefulset strategy type                                                                 | `RollingUpdate` |
@@ -762,6 +781,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the ruler container(s)             | `[]`            |
 | `ruler.sidecars`                              | Add additional sidecar containers to the Ruler pod(s)                                           | `[]`            |
 | `ruler.initContainers`                        | Add additional init containers to the Ruler pod(s)                                              | `[]`            |
+
 
 ### Ruler Persistence Parameters
 
@@ -774,6 +794,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.persistence.size`         | PVC Storage Request for Memcached data volume                        | `8Gi`               |
 | `ruler.persistence.annotations`  | Additional PVC annotations                                           | `{}`                |
 | `ruler.persistence.selector`     | Selector to match an existing Persistent Volume for Ruler's data PVC | `{}`                |
+
 
 ### Ruler Traffic Exposure Parameters
 
@@ -792,6 +813,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.service.externalTrafficPolicy`    | Ruler service external traffic policy                            | `Cluster`   |
 | `ruler.service.annotations`              | Additional custom annotations for Ruler service                  | `{}`        |
 | `ruler.service.extraPorts`               | Extra ports to expose in the Ruler service                       | `[]`        |
+
 
 ### table-manager Deployment Parameters
 
@@ -844,7 +866,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tableManager.affinity`                              | Affinity for table-manager pods assignment                                                             | `{}`            |
 | `tableManager.nodeSelector`                          | Node labels for table-manager pods assignment                                                          | `{}`            |
 | `tableManager.tolerations`                           | Tolerations for table-manager pods assignment                                                          | `[]`            |
-| `tableManager.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains        | `{}`            |
+| `tableManager.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains        | `[]`            |
 | `tableManager.priorityClassName`                     | table-manager pods' priorityClassName                                                                  | `""`            |
 | `tableManager.schedulerName`                         | Kubernetes pod scheduler registry                                                                      | `""`            |
 | `tableManager.updateStrategy.type`                   | table-manager statefulset strategy type                                                                | `RollingUpdate` |
@@ -853,6 +875,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tableManager.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the table-manager container(s)            | `[]`            |
 | `tableManager.sidecars`                              | Add additional sidecar containers to the table-manager pod(s)                                          | `[]`            |
 | `tableManager.initContainers`                        | Add additional init containers to the table-manager pod(s)                                             | `[]`            |
+
 
 ### table-manager Traffic Exposure Parameters
 
@@ -871,6 +894,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tableManager.service.externalTrafficPolicy`    | table-manager service external traffic policy                    | `Cluster`   |
 | `tableManager.service.annotations`              | Additional custom annotations for table-manager service          | `{}`        |
 | `tableManager.service.extraPorts`               | Extra ports to expose in the table-manager service               | `[]`        |
+
 
 ### Promtail Deployment Parameters
 
@@ -927,7 +951,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.affinity`                              | Affinity for promtail pods assignment                                                              | `{}`                 |
 | `promtail.nodeSelector`                          | Node labels for Promtail pods assignment                                                           | `{}`                 |
 | `promtail.tolerations`                           | Tolerations for Promtail pods assignment                                                           | `[]`                 |
-| `promtail.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `{}`                 |
+| `promtail.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `[]`                 |
 | `promtail.priorityClassName`                     | Promtail pods' priorityClassName                                                                   | `""`                 |
 | `promtail.schedulerName`                         | Kubernetes pod scheduler registry                                                                  | `""`                 |
 | `promtail.updateStrategy.type`                   | Promtail statefulset strategy type                                                                 | `RollingUpdate`      |
@@ -939,6 +963,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.configuration`                         | Promtail configuration                                                                             | `""`                 |
 | `promtail.existingSecret`                        | Name of a Secret that contains the Promtail configuration                                          | `""`                 |
 | `promtail.logLevel`                              | Promtail logging level                                                                             | `info`               |
+
 
 ### Promtail Traffic Exposure Parameters
 
@@ -961,6 +986,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the promtail.serviceAccount.created | `true`      |
 | `promtail.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                            | `{}`        |
 
+
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                     | Value                   |
@@ -975,6 +1001,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
 
+
 ### Other Parameters
 
 | Name                                          | Description                                                            | Value   |
@@ -983,6 +1010,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use                                  | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
+
 
 ### Metrics Parameters
 
@@ -1000,12 +1028,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                              | `false` |
 | `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.     | `""`    |
 
+
 ### External Memcached (Chunks) Parameters
 
 | Name                           | Description                                   | Value   |
 | ------------------------------ | --------------------------------------------- | ------- |
 | `externalMemcachedChunks.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcachedChunks.port` | Port of a running external memcached instance | `11211` |
+
 
 ### Memcached Sub-chart Parameters (Chunks)
 
@@ -1019,12 +1049,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedchunks.architecture`            | Memcached architecture                               | `high-availability`   |
 | `memcachedchunks.service.ports.memcached` | Memcached service port                               | `11211`               |
 
+
 ### External Memcached (Frontend) Parameters
 
 | Name                             | Description                                   | Value   |
 | -------------------------------- | --------------------------------------------- | ------- |
 | `externalMemcachedFrontend.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcachedFrontend.port` | Port of a running external memcached instance | `11211` |
+
 
 ### Memcached Sub-chart Parameters (Frontend)
 
@@ -1038,12 +1070,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedfrontend.nameOverride`            | override the subchart name                           | `""`                  |
 | `memcachedfrontend.service.ports.memcached` | Memcached service port                               | `11211`               |
 
+
 ### External Memcached (Index-Queries) Parameters
 
 | Name                                 | Description                                   | Value   |
 | ------------------------------------ | --------------------------------------------- | ------- |
 | `externalMemcachedIndexQueries.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcachedIndexQueries.port` | Port of a running external memcached instance | `11211` |
+
 
 ### Memcached Sub-chart Parameters (Index-Queries)
 
@@ -1057,12 +1091,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedindexqueries.nameOverride`            | override the subchart name                           | `""`                  |
 | `memcachedindexqueries.service.ports.memcached` | Memcached service port                               | `11211`               |
 
+
 ### External Memcached (IndexWrites) Parameters
 
 | Name                                | Description                                   | Value   |
 | ----------------------------------- | --------------------------------------------- | ------- |
 | `externalMemcachedIndexWrites.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcachedIndexWrites.port` | Port of a running external memcached instance | `11211` |
+
 
 ### Memcached Sub-chart Parameters (Index-Writes)
 
@@ -1075,6 +1111,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedindexwrites.architecture`            | Memcached architecture                               | `high-availability`   |
 | `memcachedindexwrites.nameOverride`            | override the subchart name                           | `""`                  |
 | `memcachedindexwrites.service.ports.memcached` | Memcached service port                               | `11211`               |
+
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
@@ -1105,7 +1142,6 @@ helm install my-release -f values.yaml bitnami/grafana-loki
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
 ### Loki configuration
 
 The loki configuration file `loki.yaml` is shared across the different components: `distributor`, `compactor`, `ingester`, `querier` and `queryFrontend`. This is set in the `loki.configuration` value. Check the official [Loki Grafana documentation](https://grafana.com/docs/loki/latest/configuration/) for the list of possible configurations.
