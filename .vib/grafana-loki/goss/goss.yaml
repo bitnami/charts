@@ -13,7 +13,7 @@ file:
     mode: "0644"
     filetype: file
     exists: true
-    stdout:
+    contains:
       - "Welcome to nginx!"
     group: root     
 command:

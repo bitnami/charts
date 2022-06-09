@@ -1,8 +1,0 @@
-auth:
-  erlangCookie: RjspCC3nm4kLv4LjWFNfFHW3xLxb7zTC
-  password: ComplicatedPassword123!4
-  username: user
-service:
-  ports:
-    manager: 80
-  type: LoadBalancer
