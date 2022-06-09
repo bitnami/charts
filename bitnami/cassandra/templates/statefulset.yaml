@@ -346,7 +346,7 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
-                  nodetool status
+                  nodetool info | grep "Native Transport active: true"
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
