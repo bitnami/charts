@@ -65,6 +65,9 @@ spec:
       {{- if .Values.collector.priorityClassName }}
       priorityClassName: {{ .Values.collector.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.collector.runtimeClassName }}
+      runtimeClassName: {{ .Values.collector.runtimeClassName }}
+      {{- end }}
       {{- if .Values.collector.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.collector.terminationGracePeriodSeconds }}
       {{- end }}

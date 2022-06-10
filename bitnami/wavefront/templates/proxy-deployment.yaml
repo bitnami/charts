@@ -58,6 +58,9 @@ spec:
       {{- if .Values.proxy.priorityClassName }}
       priorityClassName: {{ .Values.proxy.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.proxy.runtimeClassName }}
+      runtimeClassName: {{ .Values.proxy.runtimeClassName }}
+      {{- end }}
       {{- if .Values.proxy.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.proxy.terminationGracePeriodSeconds }}
       {{- end }}

@@ -443,6 +443,10 @@ collector:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
+  ## @param collector.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param collector.lifecycleHooks Lifecycle hooks for the Wavefront Collector container to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -651,6 +655,10 @@ proxy:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
+  ## @param proxy.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param proxy.lifecycleHooks Lifecycle hooks for the Wavefront proxy container to automate configuration before or after startup
   ##
   lifecycleHooks: {}
