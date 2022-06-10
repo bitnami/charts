@@ -63,6 +63,9 @@ spec:
       {{- if .Values.gateway.priorityClassName }}
       priorityClassName: {{ .Values.gateway.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.gateway.runtimeClassName }}
+      runtimeClassName: {{ .Values.gateway.runtimeClassName }}
+      {{- end }}
       {{- if .Values.gateway.schedulerName }}
       schedulerName: {{ .Values.gateway.schedulerName }}
       {{- end }}

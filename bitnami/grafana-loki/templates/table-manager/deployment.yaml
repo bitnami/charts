@@ -62,6 +62,9 @@ spec:
       {{- if .Values.tableManager.priorityClassName }}
       priorityClassName: {{ .Values.tableManager.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.tableManager.runtimeClassName }}
+      runtimeClassName: {{ .Values.tableManager.runtimeClassName }}
+      {{- end }}
       {{- if .Values.tableManager.schedulerName }}
       schedulerName: {{ .Values.tableManager.schedulerName }}
       {{- end }}

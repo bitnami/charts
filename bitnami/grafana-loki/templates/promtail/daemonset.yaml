@@ -61,6 +61,9 @@ spec:
       {{- if .Values.promtail.priorityClassName }}
       priorityClassName: {{ .Values.promtail.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.promtail.runtimeClassName }}
+      runtimeClassName: {{ .Values.promtail.runtimeClassName }}
+      {{- end }}
       {{- if .Values.promtail.schedulerName }}
       schedulerName: {{ .Values.promtail.schedulerName }}
       {{- end }}

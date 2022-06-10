@@ -67,6 +67,9 @@ spec:
       {{- if .Values.indexGateway.priorityClassName }}
       priorityClassName: {{ .Values.indexGateway.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.indexGateway.runtimeClassName }}
+      runtimeClassName: {{ .Values.indexGateway.runtimeClassName }}
+      {{- end }}
       {{- if .Values.indexGateway.schedulerName }}
       schedulerName: {{ .Values.indexGateway.schedulerName }}
       {{- end }}

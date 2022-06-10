@@ -63,6 +63,9 @@ spec:
       {{- if .Values.distributor.priorityClassName }}
       priorityClassName: {{ .Values.distributor.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.distributor.runtimeClassName }}
+      runtimeClassName: {{ .Values.distributor.runtimeClassName }}
+      {{- end }}
       {{- if .Values.distributor.schedulerName }}
       schedulerName: {{ .Values.distributor.schedulerName }}
       {{- end }}
