@@ -65,6 +65,9 @@ spec:
       {{- if .Values.skipper.priorityClassName }}
       priorityClassName: {{ .Values.skipper.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.skipper.runtimeClassName }}
+      runtimeClassName: {{ .Values.skipper.runtimeClassName }}
+      {{- end }}
       {{- if .Values.skipper.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.skipper.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
