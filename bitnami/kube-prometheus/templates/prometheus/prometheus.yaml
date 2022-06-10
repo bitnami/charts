@@ -389,4 +389,7 @@ spec:
   {{- if .Values.prometheus.priorityClassName }}
   priorityClassName: {{ .Values.prometheus.priorityClassName }}
   {{- end }}
+  {{- if .Values.prometheus.runtimeClassName }}
+  runtimeClassName: {{ .Values.prometheus.runtimeClassName }}
+  {{- end }}
 {{- end }}

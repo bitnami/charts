@@ -337,6 +337,10 @@ operator:
   ## @param operator.priorityClassName Priority class assigned to the Pods
   ##
   priorityClassName: ""
+  ## @param operator.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param operator.livenessProbe.enabled Turn on and off liveness probe
@@ -1000,6 +1004,10 @@ prometheus:
   ## @param prometheus.priorityClassName Priority class assigned to the Pods
   ##
   priorityClassName: ""
+  ## @param prometheus.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param prometheus.containers Containers allows injecting additional containers
   ##
   containers: []
@@ -1858,6 +1866,10 @@ alertmanager:
   ## @param alertmanager.priorityClassName Priority class assigned to the Pods
   ##
   priorityClassName: ""
+  ## @param alertmanager.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param alertmanager.additionalPeers AdditionalPeers allows injecting a set of additional Alertmanagers to peer with to form a highly available cluster
   ##
   additionalPeers: []
@@ -2206,6 +2218,10 @@ blackboxExporter:
   ## @param blackboxExporter.priorityClassName Blackbox Exporter pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param blackboxExporter.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param blackboxExporter.schedulerName Kubernetes pod scheduler registry
   ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##

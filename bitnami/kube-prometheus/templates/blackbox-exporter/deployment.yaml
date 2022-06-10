@@ -57,6 +57,9 @@ spec:
       {{- if .Values.blackboxExporter.priorityClassName }}
       priorityClassName: {{ .Values.blackboxExporter.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.blackboxExporter.runtimeClassName }}
+      runtimeClassName: {{ .Values.blackboxExporter.runtimeClassName }}
+      {{- end }}
       {{- if .Values.blackboxExporter.schedulerName }}
       schedulerName: {{ .Values.blackboxExporter.schedulerName }}
       {{- end }}

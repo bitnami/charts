@@ -185,6 +185,9 @@ spec:
   {{- if .Values.alertmanager.priorityClassName }}
   priorityClassName: {{ .Values.alertmanager.priorityClassName }}
   {{- end }}
+  {{- if .Values.alertmanager.runtimeClassName }}
+  runtimeClassName: {{ .Values.alertmanager.runtimeClassName }}
+  {{- end }}
   {{- if .Values.alertmanager.additionalPeers }}
   additionalPeers: {{ .Values.alertmanager.additionalPeers }}
   {{- end }}

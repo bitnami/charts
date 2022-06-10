@@ -36,6 +36,9 @@ spec:
       {{- if .Values.operator.priorityClassName }}
       priorityClassName: {{ .Values.operator.priorityClassName }}
       {{- end }}
+      {{- if .Values.operator.runtimeClassName }}
+      runtimeClassName: {{ .Values.operator.runtimeClassName }}
+      {{- end }}
       {{- if .Values.operator.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.operator.hostAliases "context" $) | nindent 8 }}
       {{- end }}
