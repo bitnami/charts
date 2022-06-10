@@ -53949,6 +53949,37 @@ entries:
       category: LogManagement
     apiVersion: v2
     appVersion: 8.2.2
+    created: "2022-06-10T17:23:46.718228795Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Logstash is an open source data processing engine. It ingests data
+      from multiple sources, processes it, and sends the output to final destination
+      in real-time. It is a core component of the ELK stack.
+    digest: sha256:7861cb26ac8fbd5d595d4b08f7b021c054dc28c3e2f88cbaa38c5ca5acb9fb71
+    home: https://github.com/bitnami/charts/tree/master/bitnami/logstash
+    icon: https://bitnami.com/assets/stacks/logstash/img/logstash-stack-220x234.png
+    keywords:
+    - logstash
+    - logging
+    - elk
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: logstash
+    sources:
+    - https://github.com/bitnami/bitnami-docker-logstash
+    - https://www.elastic.co/products/logstash
+    urls:
+    - https://charts.bitnami.com/bitnami/logstash-5.0.9.tgz
+    version: 5.0.9
+  - annotations:
+      category: LogManagement
+    apiVersion: v2
+    appVersion: 8.2.2
     created: "2022-06-08T10:19:25.893526263Z"
     dependencies:
     - name: common
@@ -121538,4 +121569,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-10T17:16:17.314310144Z"
+generated: "2022-06-10T17:23:46.801887757Z"
