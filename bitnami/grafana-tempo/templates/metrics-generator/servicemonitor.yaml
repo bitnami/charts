@@ -1,26 +1,24 @@
-{{- if and .Values.promtail.enabled .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+{{- if .Values.metricsGenerator.enabled }}
+{{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "grafana-loki.promtail.fullname" . }}
-  namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace | quote }}
+  name: {{ template "grafana-tempo.metrics-generator.fullname" . }}
+  {{- if .Values.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.metrics.serviceMonitor.namespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/part-of: grafana-loki
-    app.kubernetes.io/component: promtail
+    app.kubernetes.io/component: metrics-generator
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     {{- if .Values.metrics.serviceMonitor.labels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.labels "context" $ ) | nindent 4 }}
     {{- end }}
-   {{- if or .Values.commonAnnotations .Values.metrics.serviceMonitor.annotations }}
-   annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.metrics.serviceMonitor.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   {{- if .Values.metrics.serviceMonitor.jobLabel }}
@@ -31,8 +29,7 @@ spec:
       {{- if .Values.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
-      app.kubernetes.io/part-of: grafana-loki
-      app.kubernetes.io/component: promtail
+      app.kubernetes.io/component: metrics-generator
   endpoints:
     - port: http
       {{- if .Values.metrics.serviceMonitor.interval }}
@@ -52,5 +49,6 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace | quote }}
+      - {{ .Release.Namespace }}
+{{- end }}
 {{- end }}

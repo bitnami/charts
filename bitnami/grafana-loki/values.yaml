@@ -2956,6 +2956,9 @@ tableManager:
 ## @section Promtail Deployment Parameters
 ##
 promtail:
+  ## @param promtail.enabled Deploy promtail
+  ##
+  enabled: true
   ## Bitnami Promtail image
   ## ref: https://hub.docker.com/r/bitnami/grafana-promtail/tags/
   ## @param promtail.image.registry Grafana Promtail image registry
