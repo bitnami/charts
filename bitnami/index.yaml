@@ -8050,6 +8050,39 @@ entries:
       category: CertificateAuthority
     apiVersion: v2
     appVersion: 1.8.0
+    created: "2022-06-10T15:36:55.720270549Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Cert Manager is a Kubernetes add-on to automate the management and
+      issuance of TLS certificates from various issuing sources.
+    digest: sha256:e85a01e6e542f7aeba249173ce397355dde0b600fba650fdf8c5cbb3da25aa0e
+    home: https://github.com/jetstack/cert-manager
+    icon: https://bitnami.com/assets/stacks/cert-manager/img/cert-manager-stack-220x234.png
+    keywords:
+    - go
+    - security
+    - tls
+    - certificate
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: cert-manager
+    sources:
+    - https://github.com/bitnami/bitnami-docker-cert-manager
+    - https://github.com/bitnami/bitnami-docker-cert-manager-webhook
+    - https://github.com/bitnami/bitnami-docker-cainjector
+    - https://github.com/jetstack/cert-manager
+    urls:
+    - https://charts.bitnami.com/bitnami/cert-manager-0.5.8.tgz
+    version: 0.5.8
+  - annotations:
+      category: CertificateAuthority
+    apiVersion: v2
+    appVersion: 1.8.0
     created: "2022-06-08T10:05:13.66370375Z"
     dependencies:
     - name: common
@@ -120494,4 +120527,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-10T15:30:39.894343836Z"
+generated: "2022-06-10T15:36:55.736549283Z"
