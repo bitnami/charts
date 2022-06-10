@@ -60,6 +60,9 @@ spec:
       {{- if .Values.msgTopologyOperator.priorityClassName }}
       priorityClassName: {{ .Values.msgTopologyOperator.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.msgTopologyOperator.runtimeClassName }}
+      runtimeClassName: {{ .Values.msgTopologyOperator.runtimeClassName }}
+      {{- end }}
       {{- if .Values.msgTopologyOperator.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.msgTopologyOperator.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}

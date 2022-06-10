@@ -285,6 +285,10 @@ clusterOperator:
   ## @param clusterOperator.priorityClassName RabbitMQ Cluster Operator pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param clusterOperator.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param clusterOperator.lifecycleHooks for the RabbitMQ Cluster Operator container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -675,6 +679,10 @@ msgTopologyOperator:
   ## @param msgTopologyOperator.priorityClassName RabbitMQ Messaging Topology Operator pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param msgTopologyOperator.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param msgTopologyOperator.lifecycleHooks for the RabbitMQ Messaging Topology Operator container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
