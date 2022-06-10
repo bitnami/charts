@@ -29635,6 +29635,58 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 2.5.0
+    created: "2022-06-10T18:58:41.716982714Z"
+    dependencies:
+    - alias: memcachedchunks
+      condition: memcachedchunks.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.x.x
+    - alias: memcachedfrontend
+      condition: memcachedfrontend.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.x.x
+    - alias: memcachedindexqueries
+      condition: memcachedindexqueries.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.x.x
+    - alias: memcachedindexwrites
+      condition: memcachedindexwrites.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Grafana Loki is a horizontally scalable, highly available, and multi-tenant
+      log aggregation system. It provides real-time long tailing and full persistence
+      to object storage.
+    digest: 74196c44b12edba500d0a50d96304fa3294a8cb978d233122b964e773e799b9a
+    home: https://github.com/grafana/loki/
+    icon: https://bitnami.com/assets/stacks/grafana-loki/img/grafana-loki-stack-220x234.png
+    keywords:
+    - grafana
+    - tracing
+    - metrics
+    - infrastructure
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: grafana-loki
+    sources:
+    - https://github.com/bitnami/bitnami-docker-grafana-loki
+    - https://github.com/grafana/loki/
+    urls:
+    - https://charts.bitnami.com/bitnami/grafana-loki-2.1.4.tgz
+    version: 2.1.4
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 2.5.0
     created: "2022-06-09T10:10:12.973925318Z"
     dependencies:
     - alias: memcachedchunks
@@ -121827,4 +121879,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-10T18:46:23.38363182Z"
+generated: "2022-06-10T18:58:41.705247178Z"
