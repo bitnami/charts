@@ -636,6 +636,10 @@ persistence:
 ## @param priorityClassName Priority Class Name for Statefulset
 ##
 priorityClassName: ""
+## @param runtimeClassName Name of the runtime class to be used by pod(s)
+## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+##
+runtimeClassName: ""
 ## @param initContainers Additional init containers (this value is evaluated as a template)
 ## initContainers:
 ## - name: do-something
