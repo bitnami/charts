@@ -58,6 +58,9 @@ spec:
       {{- if .Values.queryFrontend.priorityClassName }}
       priorityClassName: {{ .Values.queryFrontend.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.queryFrontend.runtimeClassName }}
+      runtimeClassName: {{ .Values.queryFrontend.runtimeClassName }}
+      {{- end }}
       {{- if .Values.queryFrontend.schedulerName }}
       schedulerName: {{ .Values.queryFrontend.schedulerName }}
       {{- end }}

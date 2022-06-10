@@ -423,6 +423,10 @@ compactor:
   ## @param compactor.priorityClassName Compactor pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param compactor.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param compactor.schedulerName Kubernetes pod scheduler registry
   ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -682,6 +686,10 @@ distributor:
   ## @param distributor.priorityClassName Distributor pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param distributor.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param distributor.schedulerName Kubernetes pod scheduler registry
   ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -949,6 +957,10 @@ metricsGenerator:
   ## @param metricsGenerator.priorityClassName metricsGenerator pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param metricsGenerator.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param metricsGenerator.schedulerName Kubernetes pod scheduler registry
   ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1206,6 +1218,10 @@ ingester:
   ## @param ingester.priorityClassName Ingester pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param ingester.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param ingester.schedulerName Kubernetes pod scheduler registry
   ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1512,6 +1528,10 @@ querier:
   ## @param querier.priorityClassName Querier pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param querier.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param querier.schedulerName Kubernetes pod scheduler registry
   ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1775,6 +1795,10 @@ queryFrontend:
   ## @param queryFrontend.priorityClassName queryFrontend pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param queryFrontend.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param queryFrontend.schedulerName Kubernetes pod scheduler registry
   ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -2210,6 +2234,10 @@ vulture:
   ## @param vulture.priorityClassName Vulture pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param vulture.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param vulture.schedulerName Kubernetes pod scheduler registry
   ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##

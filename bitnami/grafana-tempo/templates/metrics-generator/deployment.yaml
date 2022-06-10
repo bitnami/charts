@@ -59,6 +59,9 @@ spec:
       {{- if .Values.metricsGenerator.priorityClassName }}
       priorityClassName: {{ .Values.metricsGenerator.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.metricsGenerator.runtimeClassName }}
+      runtimeClassName: {{ .Values.metricsGenerator.runtimeClassName }}
+      {{- end }}
       {{- if .Values.metricsGenerator.schedulerName }}
       schedulerName: {{ .Values.metricsGenerator.schedulerName }}
       {{- end }}

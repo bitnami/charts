@@ -58,6 +58,9 @@ spec:
       {{- if .Values.vulture.priorityClassName }}
       priorityClassName: {{ .Values.vulture.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.vulture.runtimeClassName }}
+      runtimeClassName: {{ .Values.vulture.runtimeClassName }}
+      {{- end }}
       {{- if .Values.vulture.schedulerName }}
       schedulerName: {{ .Values.vulture.schedulerName }}
       {{- end }}
