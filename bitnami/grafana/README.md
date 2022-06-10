@@ -19,7 +19,7 @@ $ helm install my-release bitnami/grafana
 
 This chart bootstraps a [grafana](https://github.com/bitnami/bitnami-docker-grafana) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -160,42 +160,56 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 
 ### Grafana parameters
 
-| Name                               | Description                                                                       | Value                |
-| ---------------------------------- | --------------------------------------------------------------------------------- | -------------------- |
-| `image.registry`                   | Grafana image registry                                                            | `docker.io`          |
-| `image.repository`                 | Grafana image repository                                                          | `bitnami/grafana`    |
-| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                | `8.3.4-debian-10-r0` |
-| `image.pullPolicy`                 | Grafana image pull policy                                                         | `IfNotPresent`       |
-| `image.pullSecrets`                | Grafana image pull secrets                                                        | `[]`                 |
-| `hostAliases`                      | Add deployment host aliases                                                       | `[]`                 |
-| `admin.user`                       | Grafana admin username                                                            | `admin`              |
-| `admin.password`                   | Admin password. If a password is not provided a random password will be generated | `""`                 |
-| `admin.existingSecret`             | Name of the existing secret containing admin password                             | `""`                 |
-| `admin.existingSecretPasswordKey`  | Password key on the existing secret                                               | `password`           |
-| `smtp.enabled`                     | Enable SMTP configuration                                                         | `false`              |
-| `smtp.user`                        | SMTP user                                                                         | `user`               |
-| `smtp.password`                    | SMTP password                                                                     | `password`           |
-| `smtp.host`                        | Custom host for the smtp server                                                   | `""`                 |
-| `smtp.fromAddress`                 | From address                                                                      | `""`                 |
-| `smtp.fromName`                    | From name                                                                         | `""`                 |
-| `smtp.skipVerify`                  | Enable skip verify                                                                | `false`              |
-| `smtp.existingSecret`              | Name of existing secret containing SMTP credentials (user and password)           | `""`                 |
-| `smtp.existingSecretUserKey`       | User key on the existing secret                                                   | `user`               |
-| `smtp.existingSecretPasswordKey`   | Password key on the existing secret                                               | `password`           |
-| `plugins`                          | Grafana plugins to be installed in deployment time separated by commas            | `""`                 |
-| `ldap.enabled`                     | Enable LDAP for Grafana                                                           | `false`              |
-| `ldap.allowSignUp`                 | Allows LDAP sign up for Grafana                                                   | `false`              |
-| `ldap.configuration`               | Specify content for ldap.toml configuration file                                  | `""`                 |
-| `ldap.configMapName`               | Name of the ConfigMap with the ldap.toml configuration file for Grafana           | `""`                 |
-| `ldap.secretName`                  | Name of the Secret with the ldap.toml configuration file for Grafana              | `""`                 |
-| `config.useGrafanaIniFile`         | Allows to load a `grafana.ini` file                                               | `false`              |
-| `config.grafanaIniConfigMap`       | Name of the ConfigMap containing the `grafana.ini` file                           | `""`                 |
-| `config.grafanaIniSecret`          | Name of the Secret containing the `grafana.ini` file                              | `""`                 |
-| `dashboardsProvider.enabled`       | Enable the use of a Grafana dashboard provider                                    | `false`              |
-| `dashboardsProvider.configMapName` | Name of a ConfigMap containing a custom dashboard provider                        | `""`                 |
-| `dashboardsConfigMaps`             | Array with the names of a series of ConfigMaps containing dashboards files        | `[]`                 |
-| `datasources.secretName`           | Secret name containing custom datasource files                                    | `""`                 |
-| `notifiers.configMapName`          | Name of a ConfigMap containing Grafana notifiers configuration                    | `""`                 |
+| Name                               | Description                                                                                                                                          | Value                             |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `image.registry`                   | Grafana image registry                                                                                                                               | `docker.io`                       |
+| `image.repository`                 | Grafana image repository                                                                                                                             | `bitnami/grafana`                 |
+| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                                                                                   | `8.5.4-debian-10-r0`              |
+| `image.pullPolicy`                 | Grafana image pull policy                                                                                                                            | `IfNotPresent`                    |
+| `image.pullSecrets`                | Grafana image pull secrets                                                                                                                           | `[]`                              |
+| `admin.user`                       | Grafana admin username                                                                                                                               | `admin`                           |
+| `admin.password`                   | Admin password. If a password is not provided a random password will be generated                                                                    | `""`                              |
+| `admin.existingSecret`             | Name of the existing secret containing admin password                                                                                                | `""`                              |
+| `admin.existingSecretPasswordKey`  | Password key on the existing secret                                                                                                                  | `password`                        |
+| `smtp.enabled`                     | Enable SMTP configuration                                                                                                                            | `false`                           |
+| `smtp.user`                        | SMTP user                                                                                                                                            | `user`                            |
+| `smtp.password`                    | SMTP password                                                                                                                                        | `password`                        |
+| `smtp.host`                        | Custom host for the smtp server                                                                                                                      | `""`                              |
+| `smtp.fromAddress`                 | From address                                                                                                                                         | `""`                              |
+| `smtp.fromName`                    | From name                                                                                                                                            | `""`                              |
+| `smtp.skipVerify`                  | Enable skip verify                                                                                                                                   | `false`                           |
+| `smtp.existingSecret`              | Name of existing secret containing SMTP credentials (user and password)                                                                              | `""`                              |
+| `smtp.existingSecretUserKey`       | User key on the existing secret                                                                                                                      | `user`                            |
+| `smtp.existingSecretPasswordKey`   | Password key on the existing secret                                                                                                                  | `password`                        |
+| `plugins`                          | Grafana plugins to be installed in deployment time separated by commas                                                                               | `""`                              |
+| `ldap.enabled`                     | Enable LDAP for Grafana                                                                                                                              | `false`                           |
+| `ldap.allowSignUp`                 | Allows LDAP sign up for Grafana                                                                                                                      | `false`                           |
+| `ldap.configuration`               | Specify content for ldap.toml configuration file                                                                                                     | `""`                              |
+| `ldap.configMapName`               | Name of the ConfigMap with the ldap.toml configuration file for Grafana                                                                              | `""`                              |
+| `ldap.secretName`                  | Name of the Secret with the ldap.toml configuration file for Grafana                                                                                 | `""`                              |
+| `ldap.uri`                         | Server URI, eg. ldap://ldap_server:389                                                                                                               | `""`                              |
+| `ldap.binddn`                      | DN of the account used to search in the LDAP server.                                                                                                 | `""`                              |
+| `ldap.bindpw`                      | Password for binddn account.                                                                                                                         | `""`                              |
+| `ldap.basedn`                      | Base DN path where binddn account will search for the users.                                                                                         | `""`                              |
+| `ldap.searchAttribute`             | Field used to match with the user name (uid, samAccountName, cn, etc). This value will be ignored if 'ldap.searchFilter' is set                      | `uid`                             |
+| `ldap.searchFilter`                | User search filter, for example "(cn=%s)" or "(sAMAccountName=%s)" or "(|(sAMAccountName=%s)(userPrincipalName=%s)"                                  | `""`                              |
+| `ldap.extraConfiguration`          | Extra ldap configuration.                                                                                                                            | `""`                              |
+| `ldap.tls.enabled`                 | Enabled TLS configuration.                                                                                                                           | `false`                           |
+| `ldap.tls.startTls`                | Use STARTTLS instead of LDAPS.                                                                                                                       | `false`                           |
+| `ldap.tls.skipVerify`              | Skip any SSL verification (hostanames or certificates)                                                                                               | `false`                           |
+| `ldap.tls.certificatesMountPath`   | Where LDAP certifcates are mounted.                                                                                                                  | `/opt/bitnami/grafana/conf/ldap/` |
+| `ldap.tls.certificatesSecret`      | Secret with LDAP certificates.                                                                                                                       | `""`                              |
+| `ldap.tls.CAFilename`              | CA certificate filename. Should match with the CA entry key in the ldap.tls.certificatesSecret.                                                      | `""`                              |
+| `ldap.tls.certFilename`            | Client certificate filename to authenticate against the LDAP server. Should match with certificate the entry key in the ldap.tls.certificatesSecret. | `""`                              |
+| `ldap.tls.certKeyFilename`         | Client Key filename to authenticate against the LDAP server. Should match with certificate the entry key in the ldap.tls.certificatesSecret.         | `""`                              |
+| `config.useGrafanaIniFile`         | Allows to load a `grafana.ini` file                                                                                                                  | `false`                           |
+| `config.grafanaIniConfigMap`       | Name of the ConfigMap containing the `grafana.ini` file                                                                                              | `""`                              |
+| `config.grafanaIniSecret`          | Name of the Secret containing the `grafana.ini` file                                                                                                 | `""`                              |
+| `dashboardsProvider.enabled`       | Enable the use of a Grafana dashboard provider                                                                                                       | `false`                           |
+| `dashboardsProvider.configMapName` | Name of a ConfigMap containing a custom dashboard provider                                                                                           | `""`                              |
+| `dashboardsConfigMaps`             | Array with the names of a series of ConfigMaps containing dashboards files                                                                           | `[]`                              |
+| `datasources.secretName`           | Secret name containing custom datasource files                                                                                                       | `""`                              |
+| `notifiers.configMapName`          | Name of a ConfigMap containing Grafana notifiers configuration                                                                                       | `""`                              |
 
 
 ### Grafana Deployment parameters
@@ -204,7 +218,9 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------- |
 | `grafana.replicaCount`                       | Number of Grafana nodes                                                                                 | `1`             |
 | `grafana.updateStrategy.type`                | Set up update strategy for Grafana installation.                                                        | `RollingUpdate` |
+| `grafana.hostAliases`                        | Add deployment host aliases                                                                             | `[]`            |
 | `grafana.schedulerName`                      | Alternative scheduler                                                                                   | `""`            |
+| `grafana.terminationGracePeriodSeconds`      | In seconds, time the given to the Grafana pod needs to terminate gracefully                             | `""`            |
 | `grafana.priorityClassName`                  | Priority class name                                                                                     | `""`            |
 | `grafana.podLabels`                          | Extra labels for Grafana pods                                                                           | `{}`            |
 | `grafana.podAnnotations`                     | Grafana Pod annotations                                                                                 | `{}`            |
@@ -255,11 +271,11 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                      | `{}`            |
 | `grafana.lifecycleHooks`                     | for the Grafana container(s) to automate configuration before or after startup                          | `{}`            |
 | `grafana.sidecars`                           | Attach additional sidecar containers to the Grafana pod                                                 | `[]`            |
-| `grafana.initContainers`                     | Add additional init containers to the Grafana pod(s)                                                    | `{}`            |
+| `grafana.initContainers`                     | Add additional init containers to the Grafana pod(s)                                                    | `[]`            |
 | `grafana.extraVolumes`                       | Additional volumes for the Grafana pod                                                                  | `[]`            |
 | `grafana.extraVolumeMounts`                  | Additional volume mounts for the Grafana container                                                      | `[]`            |
-| `grafana.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes                  | `""`            |
-| `grafana.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes                     | `""`            |
+| `grafana.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for Grafana nodes                                  | `""`            |
+| `grafana.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for Grafana nodes                                     | `""`            |
 | `grafana.extraEnvVars`                       | Array containing extra env vars to configure Grafana                                                    | `[]`            |
 | `grafana.extraConfigmaps`                    | Array to mount extra ConfigMaps to configure Grafana                                                    | `[]`            |
 | `grafana.command`                            | Override default container command (useful when using custom images)                                    | `[]`            |
@@ -302,6 +318,8 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `service.annotations`              | Provide any additional annotations which may be required.                                                                        | `{}`                     |
 | `service.externalTrafficPolicy`    | Grafana service external traffic policy                                                                                          | `Cluster`                |
 | `service.extraPorts`               | Extra port to expose on Redmine service                                                                                          | `[]`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
 | `ingress.pathType`                 | Ingress Path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                                         | `""`                     |
@@ -316,6 +334,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `ingress.secrets`                  | It is also possible to create and manage the certificates outside of this helm chart                                             | `[]`                     |
 | `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Metrics parameters
@@ -329,9 +348,10 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                                              | `""`    |
 | `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                                   | `""`    |
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                                       | `{}`    |
-| `metrics.serviceMonitor.metricRelabelings` | Specify Metric Relabellings to add to the scrape endpoint                                                                                 | `[]`    |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                                        | `[]`    |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                                 | `[]`    |
 | `metrics.serviceMonitor.honorLabels`       | Labels to honor to add to the scrape endpoint                                                                                             | `false` |
-| `metrics.serviceMonitor.additionalLabels`  | Additional custom labels for the ServiceMonitor                                                                                           | `{}`    |
+| `metrics.serviceMonitor.labels`            | Additional custom labels for the ServiceMonitor                                                                                           | `{}`    |
 | `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                                         | `""`    |
 | `metrics.prometheusRule.enabled`           | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false` |
 | `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`    |
@@ -341,58 +361,76 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 
 ### Grafana Image Renderer parameters
 
-| Name                                                    | Description                                                                                                                               | Value                            |
-| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| `imageRenderer.enabled`                                 | Enable using a remote rendering service to render PNG images                                                                              | `false`                          |
-| `imageRenderer.image.registry`                          | Grafana Image Renderer image registry                                                                                                     | `docker.io`                      |
-| `imageRenderer.image.repository`                        | Grafana Image Renderer image repository                                                                                                   | `bitnami/grafana-image-renderer` |
-| `imageRenderer.image.tag`                               | Grafana Image Renderer image tag (immutable tags are recommended)                                                                         | `3.3.0-debian-10-r57`            |
-| `imageRenderer.image.pullPolicy`                        | Grafana Image Renderer image pull policy                                                                                                  | `IfNotPresent`                   |
-| `imageRenderer.image.pullSecrets`                       | Grafana image Renderer pull secrets                                                                                                       | `[]`                             |
-| `imageRenderer.replicaCount`                            | Number of Grafana Image Renderer Pod replicas                                                                                             | `1`                              |
-| `imageRenderer.podAnnotations`                          | Grafana Image Renderer Pod annotations                                                                                                    | `{}`                             |
-| `imageRenderer.nodeSelector`                            | Node labels for pod assignment                                                                                                            | `{}`                             |
-| `imageRenderer.tolerations`                             | Tolerations for pod assignment                                                                                                            | `[]`                             |
-| `imageRenderer.topologySpreadConstraints`               | Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in                                   | `[]`                             |
-| `imageRenderer.podAffinityPreset`                       | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                       | `""`                             |
-| `imageRenderer.podAntiAffinityPreset`                   | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                  | `soft`                           |
-| `imageRenderer.nodeAffinityPreset.type`                 | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                 | `""`                             |
-| `imageRenderer.nodeAffinityPreset.key`                  | Node label key to match Ignored if `affinity` is set.                                                                                     | `""`                             |
-| `imageRenderer.nodeAffinityPreset.values`               | Node label values to match. Ignored if `affinity` is set.                                                                                 | `[]`                             |
-| `imageRenderer.extraEnvVars`                            | Array containing extra env vars to configure Grafana                                                                                      | `{}`                             |
-| `imageRenderer.affinity`                                | Affinity for pod assignment                                                                                                               | `{}`                             |
-| `imageRenderer.resources.limits`                        | The resources limits for Grafana containers                                                                                               | `{}`                             |
-| `imageRenderer.resources.requests`                      | The requested resources for Grafana containers                                                                                            | `{}`                             |
-| `imageRenderer.podSecurityContext.enabled`              | Enable securityContext on for Grafana Image Renderer deployment                                                                           | `true`                           |
-| `imageRenderer.podSecurityContext.fsGroup`              | Group to configure permissions for volumes                                                                                                | `1001`                           |
-| `imageRenderer.podSecurityContext.runAsUser`            | User for the security context                                                                                                             | `1001`                           |
-| `imageRenderer.podSecurityContext.runAsNonRoot`         | Run containers as non-root users                                                                                                          | `true`                           |
-| `imageRenderer.containerSecurityContext.enabled`        | Enabled Grafana Image Renderer containers' Security Context                                                                               | `true`                           |
-| `imageRenderer.containerSecurityContext.runAsUser`      | Set Grafana Image Renderer containers' Security Context runAsUser                                                                         | `1001`                           |
-| `imageRenderer.service.type`                            | Kubernetes Service type                                                                                                                   | `ClusterIP`                      |
-| `imageRenderer.service.clusterIP`                       | Grafana service Cluster IP                                                                                                                | `""`                             |
-| `imageRenderer.service.ports.imageRenderer`             | Grafana Image Renderer metrics port                                                                                                       | `8080`                           |
-| `imageRenderer.service.nodePorts.grafana`               | Specify the nodePort value for the LoadBalancer and NodePort service types                                                                | `""`                             |
-| `imageRenderer.service.loadBalancerIP`                  | loadBalancerIP if Grafana service type is `LoadBalancer` (optional, cloud specific)                                                       | `""`                             |
-| `imageRenderer.service.loadBalancerSourceRanges`        | loadBalancerSourceRanges if Grafana service type is `LoadBalancer` (optional, cloud specific)                                             | `[]`                             |
-| `imageRenderer.service.annotations`                     | Provide any additional annotations which may be required.                                                                                 | `{}`                             |
-| `imageRenderer.service.externalTrafficPolicy`           | Grafana service external traffic policy                                                                                                   | `Cluster`                        |
-| `imageRenderer.service.extraPorts`                      | Extra port to expose on Redmine service                                                                                                   | `[]`                             |
-| `imageRenderer.metrics.enabled`                         | Enable the export of Prometheus metrics                                                                                                   | `false`                          |
-| `imageRenderer.metrics.annotations`                     | Annotations for Prometheus metrics service[object] Prometheus annotations                                                                 | `{}`                             |
-| `imageRenderer.metrics.serviceMonitor.enabled`          | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                    | `false`                          |
-| `imageRenderer.metrics.serviceMonitor.namespace`        | Namespace in which Prometheus is running                                                                                                  | `""`                             |
-| `imageRenderer.metrics.serviceMonitor.interval`         | Interval at which metrics should be scraped.                                                                                              | `""`                             |
-| `imageRenderer.metrics.serviceMonitor.scrapeTimeout`    | Timeout after which the scrape is ended                                                                                                   | `""`                             |
-| `imageRenderer.metrics.prometheusRule.enabled`          | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                          |
-| `imageRenderer.metrics.prometheusRule.namespace`        | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                             |
-| `imageRenderer.metrics.prometheusRule.additionalLabels` | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`                             |
-| `imageRenderer.metrics.prometheusRule.rules`            | Prometheus Rule definitions                                                                                                               | `[]`                             |
-| `imageRenderer.initContainers`                          | Add additional init containers to the Grafana Image Renderer pod(s)                                                                       | `{}`                             |
-| `imageRenderer.extraEnvVarsCM`                          | Name of existing ConfigMap containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes                                                    | `""`                             |
-| `imageRenderer.extraEnvVarsSecret`                      | Name of existing Secret containing extra env vars for %%MAIN_CONTAINER_NAME%% nodes                                                       | `""`                             |
-| `imageRenderer.command`                                 | Override default container command (useful when using custom images)                                                                      | `[]`                             |
-| `imageRenderer.args`                                    | Override default container args (useful when using custom images)                                                                         | `[]`                             |
+| Name                                                     | Description                                                                                                                               | Value                            |
+| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| `imageRenderer.enabled`                                  | Enable using a remote rendering service to render PNG images                                                                              | `false`                          |
+| `imageRenderer.image.registry`                           | Grafana Image Renderer image registry                                                                                                     | `docker.io`                      |
+| `imageRenderer.image.repository`                         | Grafana Image Renderer image repository                                                                                                   | `bitnami/grafana-image-renderer` |
+| `imageRenderer.image.tag`                                | Grafana Image Renderer image tag (immutable tags are recommended)                                                                         | `3.4.2-debian-10-r64`            |
+| `imageRenderer.image.pullPolicy`                         | Grafana Image Renderer image pull policy                                                                                                  | `IfNotPresent`                   |
+| `imageRenderer.image.pullSecrets`                        | Grafana image Renderer pull secrets                                                                                                       | `[]`                             |
+| `imageRenderer.replicaCount`                             | Number of Grafana Image Renderer Pod replicas                                                                                             | `1`                              |
+| `imageRenderer.updateStrategy.type`                      | Grafana Image Renderer deployment strategy type.                                                                                          | `RollingUpdate`                  |
+| `imageRenderer.podAnnotations`                           | Grafana Image Renderer Pod annotations                                                                                                    | `{}`                             |
+| `imageRenderer.podLabels`                                | Extra labels for Grafana Image Renderer pods                                                                                              | `{}`                             |
+| `imageRenderer.nodeSelector`                             | Node labels for pod assignment                                                                                                            | `{}`                             |
+| `imageRenderer.hostAliases`                              | Grafana Image Renderer pods host aliases                                                                                                  | `[]`                             |
+| `imageRenderer.tolerations`                              | Tolerations for pod assignment                                                                                                            | `[]`                             |
+| `imageRenderer.priorityClassName`                        | Grafana Image Renderer pods' priorityClassName                                                                                            | `""`                             |
+| `imageRenderer.schedulerName`                            | Name of the k8s scheduler (other than default)                                                                                            | `""`                             |
+| `imageRenderer.terminationGracePeriodSeconds`            | In seconds, time the given to the Grafana Image Renderer pod needs to terminate gracefully                                                | `""`                             |
+| `imageRenderer.topologySpreadConstraints`                | Topology Spread Constraints for pod assignment                                                                                            | `[]`                             |
+| `imageRenderer.podAffinityPreset`                        | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                       | `""`                             |
+| `imageRenderer.podAntiAffinityPreset`                    | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                  | `soft`                           |
+| `imageRenderer.nodeAffinityPreset.type`                  | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                 | `""`                             |
+| `imageRenderer.nodeAffinityPreset.key`                   | Node label key to match Ignored if `affinity` is set.                                                                                     | `""`                             |
+| `imageRenderer.nodeAffinityPreset.values`                | Node label values to match. Ignored if `affinity` is set.                                                                                 | `[]`                             |
+| `imageRenderer.extraEnvVars`                             | Array containing extra env vars to configure Grafana                                                                                      | `{}`                             |
+| `imageRenderer.affinity`                                 | Affinity for pod assignment                                                                                                               | `{}`                             |
+| `imageRenderer.resources.limits`                         | The resources limits for Grafana containers                                                                                               | `{}`                             |
+| `imageRenderer.resources.requests`                       | The requested resources for Grafana containers                                                                                            | `{}`                             |
+| `imageRenderer.podSecurityContext.enabled`               | Enable securityContext on for Grafana Image Renderer deployment                                                                           | `true`                           |
+| `imageRenderer.podSecurityContext.fsGroup`               | Group to configure permissions for volumes                                                                                                | `1001`                           |
+| `imageRenderer.podSecurityContext.runAsUser`             | User for the security context                                                                                                             | `1001`                           |
+| `imageRenderer.podSecurityContext.runAsNonRoot`          | Run containers as non-root users                                                                                                          | `true`                           |
+| `imageRenderer.containerSecurityContext.enabled`         | Enabled Grafana Image Renderer containers' Security Context                                                                               | `true`                           |
+| `imageRenderer.containerSecurityContext.runAsUser`       | Set Grafana Image Renderer containers' Security Context runAsUser                                                                         | `1001`                           |
+| `imageRenderer.service.type`                             | Kubernetes Service type                                                                                                                   | `ClusterIP`                      |
+| `imageRenderer.service.clusterIP`                        | Grafana service Cluster IP                                                                                                                | `""`                             |
+| `imageRenderer.service.ports.imageRenderer`              | Grafana Image Renderer metrics port                                                                                                       | `8080`                           |
+| `imageRenderer.service.nodePorts.grafana`                | Specify the nodePort value for the LoadBalancer and NodePort service types                                                                | `""`                             |
+| `imageRenderer.service.loadBalancerIP`                   | loadBalancerIP if Grafana service type is `LoadBalancer` (optional, cloud specific)                                                       | `""`                             |
+| `imageRenderer.service.loadBalancerSourceRanges`         | loadBalancerSourceRanges if Grafana service type is `LoadBalancer` (optional, cloud specific)                                             | `[]`                             |
+| `imageRenderer.service.annotations`                      | Provide any additional annotations which may be required.                                                                                 | `{}`                             |
+| `imageRenderer.service.externalTrafficPolicy`            | Grafana service external traffic policy                                                                                                   | `Cluster`                        |
+| `imageRenderer.service.extraPorts`                       | Extra port to expose on Redmine service                                                                                                   | `[]`                             |
+| `imageRenderer.service.sessionAffinity`                  | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                      | `None`                           |
+| `imageRenderer.service.sessionAffinityConfig`            | Additional settings for the sessionAffinity                                                                                               | `{}`                             |
+| `imageRenderer.metrics.enabled`                          | Enable the export of Prometheus metrics                                                                                                   | `false`                          |
+| `imageRenderer.metrics.annotations`                      | Annotations for Prometheus metrics service[object] Prometheus annotations                                                                 | `{}`                             |
+| `imageRenderer.metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                    | `false`                          |
+| `imageRenderer.metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                                                  | `""`                             |
+| `imageRenderer.metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                                         | `""`                             |
+| `imageRenderer.metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                                              | `""`                             |
+| `imageRenderer.metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                                   | `""`                             |
+| `imageRenderer.metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                                        | `[]`                             |
+| `imageRenderer.metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                                 | `[]`                             |
+| `imageRenderer.metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                                                                            | `{}`                             |
+| `imageRenderer.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                                                       | `{}`                             |
+| `imageRenderer.metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                                                                  | `false`                          |
+| `imageRenderer.metrics.prometheusRule.enabled`           | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                          |
+| `imageRenderer.metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                             |
+| `imageRenderer.metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`                             |
+| `imageRenderer.metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                               | `[]`                             |
+| `imageRenderer.initContainers`                           | Add additional init containers to the Grafana Image Renderer pod(s)                                                                       | `[]`                             |
+| `imageRenderer.sidecars`                                 | Add additional sidecar containers to the Grafana Image Renderer pod(s)                                                                    | `[]`                             |
+| `imageRenderer.extraEnvVarsCM`                           | Name of existing ConfigMap containing extra env vars for Grafana Image Renderer nodes                                                     | `""`                             |
+| `imageRenderer.extraEnvVarsSecret`                       | Name of existing Secret containing extra env vars for Grafana Image Renderer nodes                                                        | `""`                             |
+| `imageRenderer.extraVolumes`                             | Optionally specify extra list of additional volumes for the Grafana Image Renderer pod(s)                                                 | `[]`                             |
+| `imageRenderer.extraVolumeMounts`                        | Optionally specify extra list of additional volumeMounts for the Grafana Image Renderer container(s)                                      | `[]`                             |
+| `imageRenderer.command`                                  | Override default container command (useful when using custom images)                                                                      | `[]`                             |
+| `imageRenderer.args`                                     | Override default container args (useful when using custom images)                                                                         | `[]`                             |
+| `imageRenderer.lifecycleHooks`                           | for the Grafana Image Renderer container(s) to automate configuration before or after startup                                             | `{}`                             |
 
 
 ### Volume permissions init Container Parameters
@@ -402,7 +440,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r312`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r441`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |

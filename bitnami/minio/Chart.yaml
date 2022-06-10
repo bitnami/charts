@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2022.5.8
+appVersion: 2022.6.7
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -19,10 +19,10 @@ keywords:
   - s3
   - cluster
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: minio
 sources:
   - https://github.com/bitnami/bitnami-docker-minio
   - https://min.io
-version: 11.3.4
+version: 11.7.1

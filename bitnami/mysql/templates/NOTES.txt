@@ -38,7 +38,7 @@ Services:
 Execute the following to get the administrator credentials:
 
   echo Username: root
-  MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "mysql.secretName" . }} -o jsonpath="{.data.mysql-root-password}" | base64 --decode)
+  MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ template "mysql.secretName" . }} -o jsonpath="{.data.mysql-root-password}" | base64 -d)
 
 To connect to your database:
 

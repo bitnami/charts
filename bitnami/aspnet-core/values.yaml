@@ -60,7 +60,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/aspnet-core
-  tag: 6.0.5-debian-10-r0
+  tag: 6.0.5-debian-11-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -370,7 +370,7 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/git
-      tag: 2.36.1-debian-10-r4
+      tag: 2.36.1-debian-11-r3
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -410,7 +410,7 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/dotnet-sdk
-      tag: 6.0.202-debian-10-r29
+      tag: 6.0.300-debian-11-r3
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -488,6 +488,17 @@ service:
   ## @param service.annotations Additional custom annotations for ASP.NET Core service
   ##
   annotations: {}
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 ## Configure the ingress resource that allows you to access the ASP.NET Core app
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
@@ -580,6 +591,20 @@ ingress:
   ##       -----END CERTIFICATE-----
   ##
   secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: aspnet-core.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: aspnet-core-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
 ## Health Ingress
 ##
 healthIngress:
@@ -658,6 +683,20 @@ healthIngress:
   ##       -----END CERTIFICATE-----
   ##
   secrets: []
+  ## @param healthIngress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: aspnet-core.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: aspnet-core-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
 
 ## @section RBAC parameters
 ##

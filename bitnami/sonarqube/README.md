@@ -7,7 +7,7 @@ SonarQube is an open source quality management platform that analyzes and measur
 [Overview of SonarQube](http://www.sonarqube.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -19,7 +19,7 @@ $ helm install my-release bitnami/sonarqube
 
 This chart bootstraps an [SonarQube](https://github.com/bitnami/bitnami-docker-sonarqube) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -60,6 +60,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -75,16 +76,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
+
 ### SonarQube Image parameters
 
 | Name                | Description                                          | Value                 |
 | ------------------- | ---------------------------------------------------- | --------------------- |
 | `image.registry`    | SonarQube image registry                             | `docker.io`           |
 | `image.repository`  | SonarQube image repository                           | `bitnami/sonarqube`   |
-| `image.tag`         | SonarQube image tag (immutable tags are recommended) | `9.2.4-debian-10-r21` |
+| `image.tag`         | SonarQube image tag (immutable tags are recommended) | `9.4.0-debian-10-r23` |
 | `image.pullPolicy`  | SonarQube image pull policy                          | `IfNotPresent`        |
 | `image.pullSecrets` | SonarQube image pull secrets                         | `[]`                  |
 | `image.debug`       | Enable SonarQube image debug mode                    | `false`               |
+
 
 ### SonarQube Configuration parameters
 
@@ -110,6 +113,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`         | Array with extra environment variables to add to SonarQube nodes                   | `[]`               |
 | `extraEnvVarsCM`       | Name of existing ConfigMap containing extra env vars for SonarQube nodes           | `""`               |
 | `extraEnvVarsSecret`   | Name of existing Secret containing extra env vars for SonarQube nodes              | `""`               |
+
 
 ### SonarQube deployment parameters
 
@@ -166,6 +170,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecars`                              | Add additional sidecar containers to the SonarQube pod(s)                                 | `{}`            |
 | `initContainers`                        | Add additional init containers to the SonarQube pod(s)                                    | `{}`            |
 
+
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -181,6 +186,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.externalTrafficPolicy`    | SonarQube service external traffic policy                                                                                        | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for SonarQube service                                                                              | `{}`                     |
 | `service.extraPorts`               | Extra ports to expose in SonarQube service (normally used with the `sidecars` value)                                             | `[]`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ingress.enabled`                  | Enable ingress record generation for SonarQube                                                                                   | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
@@ -194,6 +201,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+
 
 ### Persistence Parameters
 
@@ -205,15 +214,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                                     | Persistent Volume size                                                                          | `10Gi`                  |
 | `persistence.dataSource`                               | Custom PVC data source                                                                          | `{}`                    |
 | `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                              | `""`                    |
+| `persistence.annotations`                              | Persistent Volume Claim annotations                                                             | `{}`                    |
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r307`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r434`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
+
 
 ### Sysctl Image parameters
 
@@ -222,25 +233,28 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`            | Enable kernel settings modifier image                    | `true`                  |
 | `sysctl.image.registry`     | Bitnami Shell image registry                             | `docker.io`             |
 | `sysctl.image.repository`   | Bitnami Shell image repository                           | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended) | `10-debian-10-r307`     |
+| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended) | `10-debian-10-r434`     |
 | `sysctl.image.pullPolicy`   | Bitnami Shell image pull policy                          | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`  | Bitnami Shell image pull secrets                         | `[]`                    |
 | `sysctl.resources.limits`   | The resources limits for the init container              | `{}`                    |
 | `sysctl.resources.requests` | The requested resources for the init container           | `{}`                    |
 
+
 ### Other Parameters
 
-| Name                                          | Description                                                            | Value   |
-| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created                     | `false` |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true`  |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
-| `autoscaling.enabled`                         | Enable Horizontal POD autoscaling for SonarQube                        | `false` |
-| `autoscaling.minReplicas`                     | Minimum number of SonarQube replicas                                   | `1`     |
-| `autoscaling.maxReplicas`                     | Maximum number of SonarQube replicas                                   | `11`    |
-| `autoscaling.targetCPU`                       | Target CPU utilization percentage                                      | `50`    |
-| `autoscaling.targetMemory`                    | Target Memory utilization percentage                                   | `50`    |
+| Name                                          | Description                                                                                                         | Value   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                  | `false` |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`  |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true`  |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`    |
+| `autoscaling.enabled`                         | Enable Horizontal POD autoscaling for SonarQube                                                                     | `false` |
+| `autoscaling.minReplicas`                     | Minimum number of SonarQube replicas                                                                                | `1`     |
+| `autoscaling.maxReplicas`                     | Maximum number of SonarQube replicas                                                                                | `11`    |
+| `autoscaling.targetCPU`                       | Target CPU utilization percentage                                                                                   | `50`    |
+| `autoscaling.targetMemory`                    | Target Memory utilization percentage                                                                                | `50`    |
+
 
 ### Metrics parameters
 
@@ -249,7 +263,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.enabled`                               | Whether or not to expose JMX metrics to Prometheus                                                    | `false`                 |
 | `metrics.jmx.image.registry`                        | JMX exporter image registry                                                                           | `docker.io`             |
 | `metrics.jmx.image.repository`                      | JMX exporter image repository                                                                         | `bitnami/jmx-exporter`  |
-| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                               | `0.16.1-debian-10-r176` |
+| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                               | `0.16.1-debian-10-r306` |
 | `metrics.jmx.image.pullPolicy`                      | JMX exporter image pull policy                                                                        | `IfNotPresent`          |
 | `metrics.jmx.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `metrics.jmx.containerPorts.metrics`                | JMX Exporter metrics container port                                                                   | `10445`                 |
@@ -272,22 +286,24 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.relabelings`                | Specify general relabeling                                                                            | `[]`                    |
 | `metrics.serviceMonitor.selector`                   | Prometheus instance selector labels                                                                   | `{}`                    |
 
+
 ### PostgreSQL subchart settings
 
 | Name                                   | Description                                                                        | Value               |
 | -------------------------------------- | ---------------------------------------------------------------------------------- | ------------------- |
 | `postgresql.enabled`                   | Deploy PostgreSQL subchart                                                         | `true`              |
 | `postgresql.nameOverride`              | Override name of the PostgreSQL chart                                              | `""`                |
-| `postgresql.auth.existingSecret`            | Existing secret containing the password of the PostgreSQL chart                    | `""`                |
-| `postgresql.auth.password`        | Password for the postgres user of the PostgreSQL chart (auto-generated if not set) | `""`                |
-| `postgresql.auth.username`        | Username to create when deploying the PostgreSQL chart                             | `bn_sonarqube`      |
-| `postgresql.auth.database`        | Database to create when deploying the PostgreSQL chart                             | `bitnami_sonarqube` |
-| `postgresql.service.ports.postgresql`              | PostgreSQL service port                                                            | `5432`              |
+| `postgresql.auth.existingSecret`       | Existing secret containing the password of the PostgreSQL chart                    | `""`                |
+| `postgresql.auth.password`             | Password for the postgres user of the PostgreSQL chart (auto-generated if not set) | `""`                |
+| `postgresql.auth.username`             | Username to create when deploying the PostgreSQL chart                             | `bn_sonarqube`      |
+| `postgresql.auth.database`             | Database to create when deploying the PostgreSQL chart                             | `bitnami_sonarqube` |
+| `postgresql.service.ports.postgresql`  | PostgreSQL service port                                                            | `5432`              |
 | `postgresql.persistence.enabled`       | Use PVCs when deploying the PostgreSQL chart                                       | `true`              |
 | `postgresql.persistence.existingClaim` | Use an existing PVC when deploying the PostgreSQL chart                            | `""`                |
 | `postgresql.persistence.storageClass`  | storageClass of the created PVCs                                                   | `""`                |
 | `postgresql.persistence.accessMode`    | Access mode of the created PVCs                                                    | `ReadWriteOnce`     |
 | `postgresql.persistence.size`          | Size of the created PVCs                                                           | `8Gi`               |
+
 
 ### External Database settings
 
@@ -299,6 +315,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret` | Secret containing the password of an external PostgreSQL instance to connect (only if postgresql.enabled=false) | `""`        |
 | `externalDatabase.database`       | Database inside an external PostgreSQL to connect (only if postgresql.enabled=false)                            | `sonarqube` |
 | `externalDatabase.port`           | Port of an external PostgreSQL to connect (only if postgresql.enabled=false)                                    | `5432`      |
+
 
 The above parameters map to the env variables defined in [bitnami/sonarqube](https://github.com/bitnami/bitnami-docker-sonarqube). For more information please refer to the [bitnami/sonarqube](https://github.com/bitnami/bitnami-docker-sonarqube) image documentation.
 

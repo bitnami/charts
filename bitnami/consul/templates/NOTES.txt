@@ -55,12 +55,12 @@ In order to access to the Consul Web UI:
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ printf "%s-ui" (include "common.names.fullname" .) }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
-    echo "Consul URL: http://$SERVICE_IP:{{ .Values.service.port }}/"
+    echo "Consul URL: http://$SERVICE_IP:{{ .Values.service.ports.http }}/"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-ui" (include "common.names.fullname" .) }} {{ .Values.service.port }}:{{ .Values.service.port }}
-    echo "Consul URL: http://127.0.0.1:{{ .Values.service.port }}"
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-ui" (include "common.names.fullname" .) }} {{ .Values.service.ports.http }}:{{ .Values.service.ports.http }}
+    echo "Consul URL: http://127.0.0.1:{{ .Values.service.ports.http }}"
 
 {{- end }}
 {{- end }}

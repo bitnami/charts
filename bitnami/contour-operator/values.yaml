@@ -53,7 +53,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/contour-operator
-  tag: 1.20.1-scratch-r3
+  tag: 1.20.1-scratch-r5
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -78,7 +78,7 @@ image:
 contourImage:
   registry: docker.io
   repository: bitnami/contour
-  tag: 1.20.1-debian-10-r40
+  tag: 1.20.1-debian-10-r53
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-contourImage-private-registry/
@@ -98,7 +98,7 @@ contourImage:
 envoyImage:
   registry: docker.io
   repository: bitnami/envoy
-  tag: 1.21.1-debian-10-r43
+  tag: 1.21.1-debian-10-r55
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-envoyImage-private-registry/
@@ -339,18 +339,17 @@ rbac:
   create: true
 
 ## ServiceAccount configuration
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+## @param serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
 ##
 serviceAccount:
-  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
-  ##
   create: true
-  ## @param serviceAccount.name The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the common.names.fullname template
-  ##
   name: ""
-  ## @param serviceAccount.automountServiceAccountToken Automount service account token
-  ##
   automountServiceAccountToken: true
+  annotations: {}
 
 
 ## @section Metrics parameters

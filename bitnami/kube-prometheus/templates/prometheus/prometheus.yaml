@@ -3,10 +3,17 @@ apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
   name: {{ template "kube-prometheus.prometheus.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.prometheus.replicaCount }}
+  shards: {{ .Values.prometheus.shards }}
   serviceAccountName: {{ template "kube-prometheus.prometheus.serviceAccountName" . }}
   {{- if .Values.prometheus.serviceMonitorSelector }}
   serviceMonitorSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.serviceMonitorSelector "context" $) | nindent 4 }}
@@ -28,7 +35,7 @@ spec:
     {{- if .Values.prometheus.alertingEndpoints }}
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.alertingEndpoints "context" $) | nindent 6 }}
     {{- else if .Values.alertmanager.enabled }}
-      - namespace: {{ .Release.Namespace | quote }}
+      - namespace: {{ include "common.names.namespace" . | quote }}
         name: {{ template "kube-prometheus.alertmanager.fullname" . }}
         port: http
         pathPrefix: "{{ .Values.alertmanager.routePrefix }}"
@@ -53,10 +60,10 @@ spec:
   {{- end }}
   {{- if index .Values.prometheus "externalUrl" }}
   externalUrl: "{{ .Values.prometheus.externalUrl }}"
-  {{- else if and .Values.prometheus.ingress.enabled .Values.prometheus.ingress.hosts }}
-  externalUrl: {{ if .Values.prometheus.ingress.tls }}https{{ else }}http{{ end }}://{{ (index .Values.prometheus.ingress.hosts 0).name }}{{ .Values.prometheus.routePrefix }}
+  {{- else if and .Values.prometheus.ingress.enabled }}
+  externalUrl: {{ printf "%s://%s%s" (ternary "https" "http" .Values.prometheus.ingress.tls) .Values.prometheus.ingress.hostname .Values.prometheus.routePrefix }}
   {{- else }}
-  externalUrl: http://{{ template "kube-prometheus.prometheus.fullname" . }}.{{ .Release.Namespace }}:9090{{ .Values.prometheus.routePrefix }}
+  externalUrl: http://{{ template "kube-prometheus.prometheus.fullname" . }}.{{ include "common.names.namespace" . }}:9090{{ .Values.prometheus.routePrefix }}
   {{- end }}
   paused: {{ .Values.prometheus.paused }}
   logLevel: {{ .Values.prometheus.logLevel }}
@@ -135,6 +142,17 @@ spec:
   {{- else if .Values.prometheus.persistence.enabled }}
   storage:
     volumeClaimTemplate:
+      metadata:
+        annotations:
+          {{- if .Values.prometheus.persistence.annotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.persistence.annotations "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.commonAnnotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
+          {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
           {{- range .Values.prometheus.persistence.accessModes }}

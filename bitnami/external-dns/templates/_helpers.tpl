@@ -182,8 +182,8 @@ Return the name of the Secret used to store the passwords
 {{- .Values.digitalocean.secretName }}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountSecret }}
 {{- .Values.google.serviceAccountSecret }}
-{{- else if and (eq .Values.provider "hetzner") .Values.hetzner.secretName -}}
-{{- .Values.hetzner.secretName -}}
+{{- else if and (eq .Values.provider "hetzner") .Values.hetzner.secretName }}
+{{- .Values.hetzner.secretName }}
 {{- else if and (eq .Values.provider "linode") .Values.linode.secretName }}
 {{- .Values.linode.secretName }}
 {{- else if and (eq .Values.provider "oci") .Values.oci.secretName }}
@@ -794,6 +794,8 @@ Return the ExternalDNS namespace to be used
 {{- define "external-dns.namespace" -}}
 {{- if and .Values.rbac.create (not .Values.rbac.clusterRole) -}}
     {{ default .Release.Namespace .Values.namespace }}
+{{- else if .Values.watchReleaseNamespace -}}
+    {{ .Release.namespace }}
 {{- else -}}
     {{ .Values.namespace }}
 {{- end -}}

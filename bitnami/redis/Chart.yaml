@@ -8,7 +8,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
-description: Redis(TM) is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
+description: Redis(R) is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/redis
 icon: https://bitnami.com/assets/stacks/redis/img/redis-stack-220x234.png
@@ -17,11 +17,11 @@ keywords:
   - keyvalue
   - database
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
   - email: cedric@desaintmartin.fr
     name: desaintmartin
 name: redis
 sources:
   - https://github.com/bitnami/bitnami-docker-redis
-version: 16.9.3
+version: 16.12.1

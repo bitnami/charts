@@ -7,7 +7,7 @@ Apache Geode is a data management platform that provides advanced capabilities f
 [Overview of Apache Geode](https://geode.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -19,7 +19,7 @@ $ helm install my-release bitnami/geode
 
 This chart bootstraps an [Apache Geode](https://github.com/bitnami/bitnami-docker-geode) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -160,6 +160,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `locator.affinity`                              | Affinity for Locator pods assignment                                                                        | `{}`                |
 | `locator.nodeSelector`                          | Node labels for Locator pods assignment                                                                     | `{}`                |
 | `locator.tolerations`                           | Tolerations for Locator pods assignment                                                                     | `[]`                |
+| `locator.terminationGracePeriodSeconds`         | In seconds, time the given to the Locator pod needs to terminate gracefully                                 | `""`                |
 | `locator.topologySpreadConstraints`             | Topology Spread Constraints for Locator pods assignment spread across your cluster among failure-domains    | `[]`                |
 | `locator.updateStrategy.type`                   | Locator statefulset strategy type                                                                           | `RollingUpdate`     |
 | `locator.priorityClassName`                     | Locator pods' priorityClassName                                                                             | `""`                |
@@ -180,6 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `locator.service.nodePorts.locator`             | Node port for multicast                                                                                     | `""`                |
 | `locator.service.nodePorts.http`                | Node port for HTTP                                                                                          | `""`                |
 | `locator.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                            | `None`              |
+| `locator.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                 | `{}`                |
 | `locator.service.clusterIP`                     | Locator service Cluster IP                                                                                  | `""`                |
 | `locator.service.loadBalancerIP`                | Locator service Load Balancer IP                                                                            | `""`                |
 | `locator.service.loadBalancerSourceRanges`      | Locator service Load Balancer sources                                                                       | `[]`                |
@@ -253,6 +255,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.affinity`                                | Affinity for Cache server pods assignment                                                                                                   | `{}`                |
 | `server.nodeSelector`                            | Node labels for Cache server pods assignment                                                                                                | `{}`                |
 | `server.tolerations`                             | Tolerations for Cache server pods assignment                                                                                                | `[]`                |
+| `server.terminationGracePeriodSeconds`           | In seconds, time the given to the Cache server pod needs to terminate gracefully                                                            | `""`                |
 | `server.topologySpreadConstraints`               | Topology Spread Constraints for Cache server pods assignment spread across your cluster among failure-domains                               | `[]`                |
 | `server.updateStrategy.type`                     | Cache server statefulset strategy type                                                                                                      | `RollingUpdate`     |
 | `server.priorityClassName`                       | Cache server pods' priorityClassName                                                                                                        | `""`                |
@@ -279,20 +282,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                  | Description                                                                                                                      | Value                    |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `ingress.enabled`     | Enable ingress record generation for Apache Geode                                                                                | `false`                  |
-| `ingress.pathType`    | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`  | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`    | Default host for the ingress record                                                                                              | `geode.local`            |
-| `ingress.path`        | Default path for the ingress record                                                                                              | `/pulse`                 |
-| `ingress.annotations` | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`         | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
-| `ingress.selfSigned`  | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `ingress.extraHosts`  | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `ingress.extraPaths`  | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `ingress.extraTls`    | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `ingress.secrets`     | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| Name                       | Description                                                                                                                      | Value                    |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `ingress.enabled`          | Enable ingress record generation for Apache Geode                                                                                | `false`                  |
+| `ingress.ingressClassName` | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.pathType`         | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`       | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`         | Default host for the ingress record                                                                                              | `geode.local`            |
+| `ingress.path`             | Default path for the ingress record                                                                                              | `/pulse`                 |
+| `ingress.annotations`      | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`              | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.selfSigned`       | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.extraHosts`       | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`       | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`         | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`          | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.extraRules`       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Init Container Parameters
@@ -307,6 +312,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
+| `volumePermissions.containerSecurityContext.enabled`   | Enabled init container Security Context                                                         | `true`                  |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
 
 
@@ -349,17 +355,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.metricRelabelings`      | Specify additional relabeling of metrics                                         | `[]`                  |
 | `metrics.serviceMonitor.relabelings`            | Specify general relabeling                                                       | `[]`                  |
 | `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                              | `{}`                  |
+| `metrics.serviceMonitor.honorLabels`            | honorLabels chooses the metric's labels on collisions with target labels         | `false`               |
 
 
 ### Other Parameters
 
-| Name                                          | Description                                                            | Value   |
-| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true`  |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
-| `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                    | `false` |
-| `networkPolicy.allowExternal`                 | Don't require client label for connections                             | `true`  |
+| Name                                          | Description                                                                                                         | Value   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`  |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `false` |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`    |
+| `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                                                                 | `false` |
+| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                          | `true`  |
 
 
 The above parameters map to the env variables defined in [bitnami/geode](https://github.com/bitnami/bitnami-docker-geode). For more information please refer to the [bitnami/geode](https://github.com/bitnami/bitnami-docker-geode) image documentation.

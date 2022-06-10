@@ -22,7 +22,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 Wavefront HPA Adapter for Kubernetes enables Kubernetes workloads to be scaled based on Wavefront metrics.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -76,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------ |
 | `image.registry`                                  | Adapter image registry                                                                    | `docker.io`                          |
 | `image.repository`                                | Adapter image repository                                                                  | `bitnami/wavefront-hpa-adapter`      |
-| `image.tag`                                       | Adapter image tag (immutabe tags are recommended)                                         | `0.9.8-scratch-r14`                  |
+| `image.tag`                                       | Adapter image tag (immutabe tags are recommended)                                         | `0.9.8-scratch-r21`                  |
 | `image.pullPolicy`                                | Adapter image pull policy                                                                 | `IfNotPresent`                       |
 | `image.pullSecrets`                               | Adapter image pull secrets                                                                | `[]`                                 |
 | `image.debug`                                     | Enable image debug mode                                                                   | `false`                              |
@@ -148,17 +148,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                         | Value       |
-| ---------------------------------- | --------------------------------------------------- | ----------- |
-| `service.type`                     | Adapter service type                                | `ClusterIP` |
-| `service.ports.https`              | Adapter service port                                | `443`       |
-| `service.clusterIP`                | WordPress service Cluster IP                        | `""`        |
-| `service.annotations`              | Additional custom annotations for WordPress service | `{}`        |
-| `service.extraPorts`               | Extra port to expose on WordPress service           | `[]`        |
-| `service.loadBalancerIP`           | Adapter service LoadBalancer IP                     | `""`        |
-| `service.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service        | `[]`        |
-| `service.nodePorts.http`           | NodePort for the HTTP endpoint                      | `""`        |
-| `service.externalTrafficPolicy`    | External traffic policy for the service             | `Cluster`   |
+| Name                               | Description                                                          | Value       |
+| ---------------------------------- | -------------------------------------------------------------------- | ----------- |
+| `service.type`                     | Adapter service type                                                 | `ClusterIP` |
+| `service.ports.https`              | Adapter service port                                                 | `443`       |
+| `service.clusterIP`                | WordPress service Cluster IP                                         | `""`        |
+| `service.annotations`              | Additional custom annotations for WordPress service                  | `{}`        |
+| `service.extraPorts`               | Extra port to expose on WordPress service                            | `[]`        |
+| `service.loadBalancerIP`           | Adapter service LoadBalancer IP                                      | `""`        |
+| `service.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service                         | `[]`        |
+| `service.nodePorts.http`           | NodePort for the HTTP endpoint                                       | `""`        |
+| `service.externalTrafficPolicy`    | External traffic policy for the service                              | `Cluster`   |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP" | `None`      |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                          | `{}`        |
 
 
 ### RBAC parameters

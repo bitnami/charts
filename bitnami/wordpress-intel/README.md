@@ -21,7 +21,7 @@ This chart bootstraps a [WordPress Intel](https://github.com/bitnami/bitnami-doc
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the WordPress application, and the [Bitnami Memcached chart](https://github.com/bitnami/charts/tree/master/bitnami/memcached) that can be used to cache database queries.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, Fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Why use Intel optimized containers
 
@@ -70,6 +70,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -85,16 +86,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
+
 ### WordPress Image parameters
 
 | Name                | Description                                          | Value                     |
 | ------------------- | ---------------------------------------------------- | ------------------------- |
 | `image.registry`    | WordPress image registry                             | `docker.io`               |
 | `image.repository`  | WordPress image repository                           | `bitnami/wordpress-intel` |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.9.3-debian-10-r8`      |
+| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.9.3-debian-10-r51`     |
 | `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`            |
 | `image.pullSecrets` | WordPress image pull secrets                         | `[]`                      |
 | `image.debug`       | Enable image debug mode                              | `false`                   |
+
 
 ### WordPress Configuration parameters
 
@@ -129,6 +132,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                  | `""`               |
 | `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                     | `""`               |
 
+
 ### WordPress Multisite Configuration parameters
 
 | Name                            | Description                                                                                                                        | Value       |
@@ -137,6 +141,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `multisite.host`                | WordPress Multisite hostname/address. This value is mandatory when enabling Multisite mode.                                        | `""`        |
 | `multisite.networkType`         | WordPress Multisite network type to enable. Allowed values: `subfolder`, `subdirectory` or `subdomain`.                            | `subdomain` |
 | `multisite.enableNipIoRedirect` | Whether to enable IP address redirection to nip.io wildcard DNS. Useful when running on an IP address with subdomain network type. | `false`     |
+
 
 ### WordPress deployment parameters
 
@@ -187,6 +192,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                       | `{}`            |
 | `customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                      | `{}`            |
 
+
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -203,6 +209,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.externalTrafficPolicy`    | WordPress service external traffic policy                                                                                        | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for WordPress service                                                                              | `{}`                     |
 | `service.extraPorts`               | Extra port to expose on WordPress service                                                                                        | `[]`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ingress.enabled`                  | Enable ingress record generation for WordPress                                                                                   | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
@@ -215,6 +223,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+
 
 ### Persistence Parameters
 
@@ -227,15 +237,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                            | Persistent Volume size                                                                          | `10Gi`                  |
 | `persistence.dataSource`                      | Custom PVC data source                                                                          | `{}`                    |
 | `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `""`                    |
+| `persistence.annotations`                     | Persistent Volume Claim annotations                                                             | `{}`                    |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r392`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r433`     |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
+
 
 ### Other Parameters
 
@@ -250,6 +262,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `50`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage                           | `50`    |
 
+
 ### Metrics Parameters
 
 | Name                                      | Description                                                                  | Value                    |
@@ -258,7 +271,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.port`                            | NGINX Container Status Port scraped by Prometheus Exporter                   | `""`                     |
 | `metrics.image.registry`                  | NGINX Prometheus exporter image registry                                     | `docker.io`              |
 | `metrics.image.repository`                | NGINX Prometheus exporter image repository                                   | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                       | NGINX Prometheus exporter image tag (immutable tags are recommended)         | `0.10.0-debian-10-r106`  |
+| `metrics.image.tag`                       | NGINX Prometheus exporter image tag (immutable tags are recommended)         | `0.10.0-debian-10-r147`  |
 | `metrics.image.pullPolicy`                | NGINX Prometheus exporter image pull policy                                  | `IfNotPresent`           |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                             | `[]`                     |
 | `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                     |
@@ -272,6 +285,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.relabellings`     | Metrics relabellings to add to the scrape endpoint                           | `[]`                     |
 | `metrics.serviceMonitor.honorLabels`      | Labels to honor to add to the scrape endpoint                                | `false`                  |
 | `metrics.serviceMonitor.additionalLabels` | Additional custom labels for the ServiceMonitor                              | `{}`                     |
+
 
 ### NetworkPolicy parameters
 
@@ -292,6 +306,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                           | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                               | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                   | `{}`    |
+
 
 ### Database Parameters
 
@@ -317,6 +332,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcached.service.port`                   | Memcached service port                                                    | `11211`             |
 | `externalCache.host`                       | External cache server host                                                | `localhost`         |
 | `externalCache.port`                       | External cache server port                                                | `11211`             |
+
 
 The above parameters map to the env variables defined in [bitnami/wordpress-intel](https://github.com/bitnami/bitnami-docker-wordpress-intel). For more information please refer to the [bitnami/wordpress-intel](https://github.com/bitnami/bitnami-docker-wordpress-intel) image documentation.
 
@@ -394,7 +410,7 @@ externalCache.port=11211
 
 ### Ingress
 
-This chart provides support for Ingress resources. If an Ingress controller, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik), that Ingress controller can be used to serve WordPress.
+This chart provides support for Ingress resources. If an Ingress controller, such as nginx-ingress or traefik, that Ingress controller can be used to serve WordPress.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/wordpress/configuration/configure-ingress/).
 

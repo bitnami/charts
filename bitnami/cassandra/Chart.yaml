@@ -1,7 +1,7 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 4.0.3
+appVersion: 4.0.4
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -17,10 +17,10 @@ keywords:
   - database
   - nosql
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: cassandra
 sources:
   - https://github.com/bitnami/bitnami-docker-cassandra
   - http://cassandra.apache.org
-version: 9.1.19
+version: 9.2.4

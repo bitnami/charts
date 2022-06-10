@@ -7,7 +7,7 @@ Odoo is an open source ERP and CRM platform, formerly known as OpenERP, that can
 [Overview of Odoo](https://www.odoo.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -21,7 +21,7 @@ This chart bootstraps a [Odoo](https://github.com/bitnami/bitnami-docker-odoo) d
 
 Odoo Apps can be used as stand-alone applications, but they also integrate seamlessly so you get a full-featured Open Source ERP when you install several Apps.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -68,24 +68,24 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                             | Value                         |
-| ------------------------ | --------------------------------------------------------------------------------------- | ----------------------------- |
-| `kubeVersion`            | Override Kubernetes version                                                             | `""`                          |
-| `nameOverride`           | String to partially override common.names.fullname                                      | `""`                          |
-| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`                          |
-| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`                          |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`                          |
-| `clusterDomain`          | Default Kubernetes cluster domain                                                       | `cluster.local`               |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`                          |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`                       |
-| `diagnosticMode.command` | Command to override all containers in the the statefulset                               | `["sleep"]`                   |
-| `diagnosticMode.args`    | Args to override all containers in the the statefulset                                  | `["infinity"]`                |
-| `image.registry`         | Odoo image registry                                                                     | `docker.io`                   |
-| `image.repository`       | Odoo image repository                                                                   | `bitnami/odoo`                |
-| `image.tag`              | Odoo image tag (immutable tags are recommended)                                         | `15.0.20220210-debian-10-r19` |
-| `image.pullPolicy`       | Odoo image pull policy                                                                  | `IfNotPresent`                |
-| `image.pullSecrets`      | Odoo image pull secrets                                                                 | `[]`                          |
-| `image.debug`            | Enable image debug mode                                                                 | `false`                       |
+| Name                     | Description                                                                             | Value                        |
+| ------------------------ | --------------------------------------------------------------------------------------- | ---------------------------- |
+| `kubeVersion`            | Override Kubernetes version                                                             | `""`                         |
+| `nameOverride`           | String to partially override common.names.fullname                                      | `""`                         |
+| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`                         |
+| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`                         |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`                         |
+| `clusterDomain`          | Default Kubernetes cluster domain                                                       | `cluster.local`              |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`                         |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`                      |
+| `diagnosticMode.command` | Command to override all containers in the the statefulset                               | `["sleep"]`                  |
+| `diagnosticMode.args`    | Args to override all containers in the the statefulset                                  | `["infinity"]`               |
+| `image.registry`         | Odoo image registry                                                                     | `docker.io`                  |
+| `image.repository`       | Odoo image repository                                                                   | `bitnami/odoo`               |
+| `image.tag`              | Odoo image tag (immutable tags are recommended)                                         | `15.0.20220510-debian-11-r0` |
+| `image.pullPolicy`       | Odoo image pull policy                                                                  | `IfNotPresent`               |
+| `image.pullSecrets`      | Odoo image pull secrets                                                                 | `[]`                         |
+| `image.debug`            | Enable image debug mode                                                                 | `false`                      |
 
 
 ### Odoo Configuration parameters
@@ -160,8 +160,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                           | Affinity for pod assignment                                                                                              | `{}`            |
 | `nodeSelector`                       | Node labels for pod assignment                                                                                           | `{}`            |
 | `tolerations`                        | Tolerations for pod assignment                                                                                           | `[]`            |
-| `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
-| `podManagementPolicy`                | Pod management policy for the Odoo statefulset                                                                           | `Parallel`      |
+| `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
 | `priorityClassName`                  | Odoo pods' Priority Class Name                                                                                           | `""`            |
 | `schedulerName`                      | Use an alternate scheduler, e.g. "stork".                                                                                | `""`            |
 | `terminationGracePeriodSeconds`      | Seconds Odoo pod needs to terminate gracefully                                                                           | `""`            |
@@ -173,7 +172,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                     | Add additional init containers to the Odoo pods                                                                          | `[]`            |
 
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -182,6 +180,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.ports.http`               | Odoo service HTTP port                                                                                                           | `80`                     |
 | `service.nodePorts.http`           | NodePort for the Odoo HTTP endpoint                                                                                              | `""`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.clusterIP`                | Odoo service Cluster IP                                                                                                          | `""`                     |
 | `service.loadBalancerIP`           | Odoo service Load Balancer IP                                                                                                    | `""`                     |
 | `service.loadBalancerSourceRanges` | Odoo service Load Balancer sources                                                                                               | `[]`                     |
@@ -201,26 +200,28 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Persistence Parameters
 
-| Name                                                   | Description                                                                                     | Value           |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | --------------- |
-| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                               | `true`          |
-| `persistence.storageClass`                             | Persistent Volume storage class                                                                 | `""`            |
-| `persistence.accessModes`                              | Persistent Volume access modes                                                                  | `[]`            |
-| `persistence.accessMode`                               | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)               | `ReadWriteOnce` |
-| `persistence.size`                                     | Persistent Volume size                                                                          | `10Gi`          |
-| `persistence.dataSource`                               | Custom PVC data source                                                                          | `{}`            |
-| `persistence.annotations`                              | Annotations for the PVC                                                                         | `{}`            |
-| `persistence.selector`                                 | Selector to match an existing Persistent Volume (this value is evaluated as a template)         | `{}`            |
-| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                              | `""`            |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`         |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`            |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`            |
-| `volumePermissions.containerSecurityContext.enabled`   | Enable init container's Security Context                                                        | `true`          |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`             |
+| Name                                                   | Description                                                                                                                           | Value           |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                                                     | `true`          |
+| `persistence.resourcePolicy`                           | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`            |
+| `persistence.storageClass`                             | Persistent Volume storage class                                                                                                       | `""`            |
+| `persistence.accessModes`                              | Persistent Volume access modes                                                                                                        | `[]`            |
+| `persistence.accessMode`                               | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                                                     | `ReadWriteOnce` |
+| `persistence.size`                                     | Persistent Volume size                                                                                                                | `10Gi`          |
+| `persistence.dataSource`                               | Custom PVC data source                                                                                                                | `{}`            |
+| `persistence.annotations`                              | Annotations for the PVC                                                                                                               | `{}`            |
+| `persistence.selector`                                 | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                               | `{}`            |
+| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                                                                    | `""`            |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                       | `false`         |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                                           | `{}`            |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                                        | `{}`            |
+| `volumePermissions.containerSecurityContext.enabled`   | Enable init container's Security Context                                                                                              | `true`          |
+| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                                       | `0`             |
 
 
 ### RBAC Parameters
@@ -249,27 +250,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database Parameters
 
-| Name                                          | Description                                                                       | Value           |
-| --------------------------------------------- | --------------------------------------------------------------------------------- | --------------- |
-| `postgresql.enabled`                          | Deploy PostgreSQL container(s)                                                    | `true`          |
-| `postgresql.auth.username`                    | PostgreSQL username                                                               | `bn_odoo`       |
-| `postgresql.auth.password`                    | PostgreSQL password                                                               | `""`            |
-| `postgresql.auth.database`                    | PostgreSQL database                                                               | `bitnami_odoo`  |
-| `postgresql.auth.existingSecret`              | Name of existing secret object                                                    | `""`            |
-| `postgresql.persistence.enabled`              | Enable PostgreSQL persistence using PVC                                           | `true`          |
-| `postgresql.persistence.existingClaim`        | Provide an existing `PersistentVolumeClaim`, the value is evaluated as a template | `""`            |
-| `postgresql.persistence.storageClass`         | PVC Storage Class for PostgreSQL volume                                           | `""`            |
-| `postgresql.persistence.accessMode`           | PVC Access Mode for PostgreSQL volume                                             | `ReadWriteOnce` |
-| `postgresql.persistence.size`                 | PVC Storage Request for PostgreSQL volume                                         | `8Gi`           |
-| `externalDatabase.host`                       | External Database server host                                                     | `""`            |
-| `externalDatabase.port`                       | External Database server port                                                     | `5432`          |
-| `externalDatabase.user`                       | External Database username                                                        | `bn_odoo`       |
-| `externalDatabase.password`                   | External Database user password                                                   | `""`            |
-| `externalDatabase.database`                   | External Database database name                                                   | `bitnami_odoo`  |
-| `externalDatabase.create`                     | Enable PostgreSQL user and database creation (when using an external db)          | `true`          |
-| `externalDatabase.postgresqlPostgresUser`     | External Database admin username                                                  | `postgres`      |
-| `externalDatabase.postgresqlPostgresPassword` | External Database admin password                                                  | `""`            |
-| `externalDatabase.existingSecret`             | Name of existing secret object                                                    | `""`            |
+| Name                                                 | Description                                                              | Value          |
+| ---------------------------------------------------- | ------------------------------------------------------------------------ | -------------- |
+| `postgresql.enabled`                                 | Switch to enable or disable the PostgreSQL helm chart                    | `true`         |
+| `postgresql.auth.username`                           | Name for a custom user to create                                         | `bn_odoo`      |
+| `postgresql.auth.password`                           | Password for the custom user to create                                   | `""`           |
+| `postgresql.auth.database`                           | Name for a custom database to create                                     | `bitnami_odoo` |
+| `postgresql.auth.existingSecret`                     | Name of existing secret to use for PostgreSQL credentials                | `""`           |
+| `postgresql.architecture`                            | PostgreSQL architecture (`standalone` or `replication`)                  | `standalone`   |
+| `externalDatabase.host`                              | Database host                                                            | `""`           |
+| `externalDatabase.port`                              | Database port number                                                     | `5432`         |
+| `externalDatabase.user`                              | Non-root username for Keycloak                                           | `bn_odoo`      |
+| `externalDatabase.password`                          | Password for the non-root username for Keycloak                          | `""`           |
+| `externalDatabase.database`                          | Keycloak database name                                                   | `bitnami_odoo` |
+| `externalDatabase.create`                            | Enable PostgreSQL user and database creation (when using an external db) | `true`         |
+| `externalDatabase.postgresqlPostgresUser`            | External Database admin username                                         | `postgres`     |
+| `externalDatabase.postgresqlPostgresPassword`        | External Database admin password                                         | `""`           |
+| `externalDatabase.existingSecret`                    | Name of an existing secret resource containing the database credentials  | `""`           |
+| `externalDatabase.existingSecretPasswordKey`         | Name of an existing secret key containing the non-root credentials       | `""`           |
+| `externalDatabase.existingSecretPostgresPasswordKey` | Name of an existing secret key containing the admin credentials          | `""`           |
 
 
 ### NetworkPolicy parameters

@@ -17,7 +17,7 @@ Create chart name and version as used by the chart label.
 Full path to CA Cert file
 */}}
 {{- define "airflow.ldapCAFilename" }}
-{{- printf "/opt/bitnami/airflow/certs/%s" .Values.ldap.tls.CAcertificateFilename -}}
+{{- printf "%s/%s" .Values.ldap.tls.certificatesMountPath (coalesce .Values.ldap.tls.CAcertificateFilename .Values.ldap.tls.CAFilename ) }}
 {{- end -}}
 
 {{/*
@@ -125,7 +125,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Get the Redis&trade; credentials secret.
+Get the Redis&reg; credentials secret.
 */}}
 {{- define "airflow.redis.secretName" -}}
 {{- if and (.Values.redis.enabled) (not .Values.redis.auth.existingSecret) -}}

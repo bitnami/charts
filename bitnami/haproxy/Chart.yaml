@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.5.6
+appVersion: 2.6.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -17,10 +17,10 @@ keywords:
   - proxy
   - infrastructure
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: haproxy
 sources:
   - https://github.com/bitnami/bitnami-docker-haproxy
   - https://github.com/haproxytech/haproxy
-version: 0.3.16
+version: 0.3.26

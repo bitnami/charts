@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 3.9.17
+appVersion: 3.10.5
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -17,10 +17,10 @@ keywords:
   - message queue
   - AMQP
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: rabbitmq
 sources:
   - https://github.com/bitnami/bitnami-docker-rabbitmq
   - https://www.rabbitmq.com
-version: 9.0.8
+version: 10.1.6

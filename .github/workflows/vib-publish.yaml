@@ -4,6 +4,12 @@ on: # rebuild any PRs and main branch changes
     branches:
       - master
     paths:
+      - 'bitnami/grafana-loki/Chart.yaml'
+      - 'bitnami/haproxy-intel/Chart.yaml'
+      - 'bitnami/kibana/Chart.yaml'
+      - 'bitnami/mongodb/Chart.yaml'
+      - 'bitnami/sealed-secrets/Chart.yaml'
+      - 'bitnami/solr/Chart.yaml'
       - 'bitnami/wordpress/Chart.yaml'
 env:
   CSP_API_URL: https://console.cloud.vmware.com
