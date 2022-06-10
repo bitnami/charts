@@ -34,6 +34,9 @@ spec:
           {{- if .Values.mailReceiver.priorityClassName }}
           priorityClassName: {{ .Values.mailReceiver.priorityClassName | quote }}
           {{- end }}
+          {{- if .Values.mailReceiver.runtimeClassName }}
+          runtimeClassName: {{ .Values.mailReceiver.runtimeClassName }}
+          {{- end }}
           {{- if .Values.mailReceiver.podSecurityContext.enabled }}
           securityContext: {{- omit .Values.mailReceiver.podSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
