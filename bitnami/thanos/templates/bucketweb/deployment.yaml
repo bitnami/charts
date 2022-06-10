@@ -61,6 +61,9 @@ spec:
       {{- if .Values.bucketweb.priorityClassName }}
       priorityClassName: {{ .Values.bucketweb.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.bucketweb.runtimeClassName }}
+      runtimeClassName: {{ .Values.bucketweb.runtimeClassName }}
+      {{- end }}
       {{- if .Values.bucketweb.schedulerName }}
       schedulerName: {{ .Values.bucketweb.schedulerName }}
       {{- end }}

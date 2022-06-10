@@ -336,6 +336,10 @@ query:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
+  ## @param query.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param query.schedulerName Name of the k8s scheduler (other than default) for Thanos Query pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -924,6 +928,10 @@ queryFrontend:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
+  ## @param queryFrontend.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param queryFrontend.schedulerName Name of the k8s scheduler (other than default) for Thanos Query Frontend pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1348,6 +1356,10 @@ bucketweb:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
+  ## @param bucketweb.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param bucketweb.schedulerName Name of the k8s scheduler (other than default) for Thanos Bucket Web pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1750,6 +1762,10 @@ compactor:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
+  ## @param compactor.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param compactor.schedulerName Name of the k8s scheduler (other than default) for Thanos Compactor pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -2190,6 +2206,10 @@ storegateway:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
+  ## @param storegateway.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param storegateway.topologySpreadConstraints Topology Spread Constraints for Thanos Store Gateway pods assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
@@ -2798,6 +2818,10 @@ ruler:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
+  ## @param ruler.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param ruler.schedulerName Name of the k8s scheduler (other than default) for Thanos Ruler pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -3278,6 +3302,10 @@ receive:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
+  ## @param receive.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param receive.schedulerName Name of the k8s scheduler (other than default) for Thanos Receive pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -3718,6 +3746,10 @@ receiveDistributor:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
   priorityClassName: ""
+  ## @param receiveDistributor.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param receiveDistributor.schedulerName Name of the k8s scheduler (other than default) for Thanos Receive Distributor pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##

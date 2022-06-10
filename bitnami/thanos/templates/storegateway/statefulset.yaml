@@ -66,6 +66,9 @@ spec:
       {{- if .Values.storegateway.priorityClassName }}
       priorityClassName: {{ .Values.storegateway.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.storegateway.runtimeClassName }}
+      runtimeClassName: {{ .Values.storegateway.runtimeClassName }}
+      {{- end }}
       {{- if .Values.storegateway.schedulerName }}
       schedulerName: {{ .Values.storegateway.schedulerName }}
       {{- end }}
