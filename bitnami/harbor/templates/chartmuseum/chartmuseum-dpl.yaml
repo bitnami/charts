@@ -66,6 +66,9 @@ spec:
       {{- if .Values.chartmuseum.priorityClassName }}
       priorityClassName: {{ .Values.chartmuseum.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.chartmuseum.runtimeClassName }}
+      runtimeClassName: {{ .Values.chartmuseum.runtimeClassName }}
+      {{- end }}
       {{- if .Values.chartmuseum.schedulerName }}
       schedulerName: {{ .Values.chartmuseum.schedulerName }}
       {{- end }}

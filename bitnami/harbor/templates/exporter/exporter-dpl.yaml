@@ -65,6 +65,9 @@ spec:
       {{- if .Values.exporter.priorityClassName }}
       priorityClassName: {{ .Values.exporter.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.exporter.runtimeClassName }}
+      runtimeClassName: {{ .Values.exporter.runtimeClassName }}
+      {{- end }}
       {{- if .Values.exporter.schedulerName }}
       schedulerName: {{ .Values.exporter.schedulerName }}
       {{- end }}

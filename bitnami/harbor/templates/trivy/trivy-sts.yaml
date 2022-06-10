@@ -63,6 +63,9 @@ spec:
       {{- if .Values.trivy.priorityClassName }}
       priorityClassName: {{ .Values.trivy.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.trivy.runtimeClassName }}
+      runtimeClassName: {{ .Values.trivy.runtimeClassName }}
+      {{- end }}
       {{- if .Values.trivy.schedulerName }}
       schedulerName: {{ .Values.trivy.schedulerName }}
       {{- end }}

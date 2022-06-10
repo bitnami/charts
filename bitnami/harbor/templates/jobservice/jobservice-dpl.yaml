@@ -67,6 +67,9 @@ spec:
       {{- if .Values.jobservice.priorityClassName }}
       priorityClassName: {{ .Values.jobservice.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.jobservice.runtimeClassName }}
+      runtimeClassName: {{ .Values.jobservice.runtimeClassName }}
+      {{- end }}
       {{- if .Values.jobservice.schedulerName }}
       schedulerName: {{ .Values.jobservice.schedulerName }}
       {{- end }}

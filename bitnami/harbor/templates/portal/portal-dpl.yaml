@@ -62,6 +62,9 @@ spec:
       {{- if .Values.portal.priorityClassName }}
       priorityClassName: {{ .Values.portal.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.portal.runtimeClassName }}
+      runtimeClassName: {{ .Values.portal.runtimeClassName }}
+      {{- end }}
       {{- if .Values.portal.schedulerName }}
       schedulerName: {{ .Values.portal.schedulerName }}
       {{- end }}

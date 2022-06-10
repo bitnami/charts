@@ -923,6 +923,10 @@ nginx:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ""
+  ## @param nginx.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param nginx.schedulerName Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1169,6 +1173,10 @@ portal:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ""
+  ## @param portal.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param portal.schedulerName Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1458,6 +1466,10 @@ core:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ""
+  ## @param core.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param core.schedulerName Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1734,6 +1746,10 @@ jobservice:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ""
+  ## @param jobservice.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param jobservice.schedulerName Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1915,6 +1931,10 @@ registry:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ""
+  ## @param registry.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param registry.schedulerName Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -2495,6 +2515,10 @@ chartmuseum:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ""
+  ## @param chartmuseum.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param chartmuseum.schedulerName Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -2642,6 +2666,10 @@ clair:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ""
+  ## @param clair.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param clair.schedulerName Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -3170,6 +3198,10 @@ notary:
     ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
     ##
     priorityClassName: ""
+    ## @param notary.server.runtimeClassName Name of the runtime class to be used by pod(s)
+    ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+    ##
+    runtimeClassName: ""
     ## @param notary.server.schedulerName Use an alternate scheduler, e.g. "stork".
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
@@ -3405,6 +3437,10 @@ notary:
     ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
     ##
     priorityClassName: ""
+    ## @param notary.signer.runtimeClassName Name of the runtime class to be used by pod(s)
+    ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+    ##
+    runtimeClassName: ""
     ## @param notary.signer.schedulerName Use an alternate scheduler, e.g. "stork".
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
@@ -3711,6 +3747,10 @@ trivy:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ""
+  ## @param trivy.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param trivy.schedulerName Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -3952,6 +3992,10 @@ exporter:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
   priorityClassName: ""
+  ## @param exporter.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param exporter.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##

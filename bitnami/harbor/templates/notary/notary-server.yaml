@@ -62,6 +62,9 @@ spec:
       {{- if .Values.notary.server.priorityClassName }}
       priorityClassName: {{ .Values.notary.server.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.notary.server.runtimeClassName }}
+      runtimeClassName: {{ .Values.notary.server.runtimeClassName }}
+      {{- end }}
       {{- if .Values.notary.server.schedulerName }}
       schedulerName: {{ .Values.notary.server.schedulerName }}
       {{- end }}

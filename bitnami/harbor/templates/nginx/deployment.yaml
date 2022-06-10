@@ -67,6 +67,9 @@ spec:
       {{- if .Values.nginx.priorityClassName }}
       priorityClassName: {{ .Values.nginx.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.nginx.runtimeClassName }}
+      runtimeClassName: {{ .Values.nginx.runtimeClassName }}
+      {{- end }}
       {{- if .Values.nginx.schedulerName }}
       schedulerName: {{ .Values.nginx.schedulerName }}
       {{- end }}

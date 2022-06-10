@@ -64,6 +64,9 @@ spec:
       {{- if .Values.clair.priorityClassName }}
       priorityClassName: {{ .Values.clair.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.clair.runtimeClassName }}
+      runtimeClassName: {{ .Values.clair.runtimeClassName }}
+      {{- end }}
       {{- if .Values.clair.schedulerName }}
       schedulerName: {{ .Values.clair.schedulerName }}
       {{- end }}

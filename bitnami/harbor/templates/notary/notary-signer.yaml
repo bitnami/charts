@@ -61,6 +61,9 @@ spec:
       {{- if .Values.notary.signer.priorityClassName }}
       priorityClassName: {{ .Values.notary.signer.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.notary.signer.runtimeClassName }}
+      runtimeClassName: {{ .Values.notary.signer.runtimeClassName }}
+      {{- end }}
       {{- if .Values.notary.signer.schedulerName }}
       schedulerName: {{ .Values.notary.signer.schedulerName }}
       {{- end }}
