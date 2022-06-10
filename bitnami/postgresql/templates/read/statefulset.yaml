@@ -73,6 +73,9 @@ spec:
       {{- if .Values.readReplicas.priorityClassName }}
       priorityClassName: {{ .Values.readReplicas.priorityClassName }}
       {{- end }}
+      {{- if .Values.readReplicas.runtimeClassName }}
+      runtimeClassName: {{ .Values.readReplicas.runtimeClassName }}
+      {{- end }}
       {{- if .Values.readReplicas.schedulerName }}
       schedulerName: {{ .Values.readReplicas.schedulerName | quote }}
       {{- end }}
