@@ -62985,6 +62985,39 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 2022.6.7
+    created: "2022-06-10T22:44:36.633062534Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: MinIO(R) is an object storage server, compatible with Amazon S3 cloud
+      storage service, mainly used for storing unstructured data (such as photos,
+      videos, log files, etc.).
+    digest: sha256:ba7154a747f9cf4184804ab9f3031d51b951d687657bb32d0c677546a8b59ced
+    home: https://github.com/bitnami/charts/tree/master/bitnami/minio
+    icon: https://bitnami.com/assets/stacks/minio/img/minio-stack-220x234.png
+    keywords:
+    - minio
+    - storage
+    - object-storage
+    - s3
+    - cluster
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: minio
+    sources:
+    - https://github.com/bitnami/bitnami-docker-minio
+    - https://min.io
+    urls:
+    - https://charts.bitnami.com/bitnami/minio-11.7.2.tgz
+    version: 11.7.2
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 2022.6.7
     created: "2022-06-08T19:10:08.788637495Z"
     dependencies:
     - name: common
@@ -122533,4 +122566,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-10T22:41:50.143591016Z"
+generated: "2022-06-10T22:44:36.696543449Z"
