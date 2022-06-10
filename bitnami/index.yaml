@@ -100100,6 +100100,37 @@ entries:
       category: DeveloperTools
     apiVersion: v2
     appVersion: 0.18.0
+    created: "2022-06-10T09:34:37.348406486Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Sealed Secrets are "one-way" encrypted K8s Secrets that can be created
+      by anyone, but can only be decrypted by the controller running in the target
+      cluster recovering the original object.
+    digest: 47bbbe0b6551eb728f9e5d2b2d2f2163544ebc1a76322ab1c92fda4fa9c5842e
+    home: https://github.com/bitnami-labs/sealed-secrets
+    icon: https://bitnami.com/assets/stacks/sealed-secrets/img/sealed-secrets-stack-220x234.png
+    keywords:
+    - secrets
+    - sealed-secrets
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: sealed-secrets
+    sources:
+    - https://github.com/bitnami/bitnami-docker-sealed-secrets
+    - https://github.com/bitnami-labs/sealed-secrets
+    urls:
+    - https://charts.bitnami.com/bitnami/sealed-secrets-1.0.7.tgz
+    version: 1.0.7
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 0.18.0
     created: "2022-06-07T13:35:57.085087071Z"
     dependencies:
     - name: common
@@ -120053,4 +120084,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-10T07:09:43.440642653Z"
+generated: "2022-06-10T09:34:37.344177356Z"
