@@ -740,6 +740,10 @@ podLabels: {}
 ## @param priorityClassName priorityClassName
 ##
 priorityClassName: ""
+## @param runtimeClassName Name of the runtime class to be used by pod(s)
+## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+##
+runtimeClassName: ""
 ## @param secretAnnotations Additional annotations to apply to the secret
 ##
 secretAnnotations: {}
