@@ -46,6 +46,9 @@ spec:
       {{- if .Values.envoy.priorityClassName }}
       priorityClassName: {{ .Values.envoy.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.envoy.runtimeClassName }}
+      runtimeClassName: {{ .Values.envoy.runtimeClassName }}
+      {{- end }}
       {{- if .Values.envoy.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.affinity "context" $) | nindent 8 }}
       {{- else }}

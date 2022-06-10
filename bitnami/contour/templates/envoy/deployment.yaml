@@ -53,6 +53,9 @@ spec:
       {{- if .Values.envoy.priorityClassName }}
       priorityClassName: {{ .Values.envoy.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.envoy.runtimeClassName }}
+      runtimeClassName: {{ .Values.envoy.runtimeClassName }}
+      {{- end }}
       {{- if .Values.envoy.schedulerName }}
       schedulerName: {{ .Values.envoy.schedulerName | quote }}
       {{- end }}
