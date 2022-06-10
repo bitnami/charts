@@ -71,6 +71,9 @@ spec:
       {{- if .Values.coordinating.priorityClassName }}
       priorityClassName: {{ .Values.coordinating.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.coordinating.runtimeClassName }}
+      runtimeClassName: {{ .Values.coordinating.runtimeClassName }}
+      {{- end }}
       {{- if .Values.coordinating.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.coordinating.terminationGracePeriodSeconds }}
       {{- end }}

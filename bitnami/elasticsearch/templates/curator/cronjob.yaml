@@ -56,6 +56,9 @@ spec:
           {{- if .Values.curator.priorityClassName }}
           priorityClassName: {{ .Values.curator.priorityClassName | quote }}
           {{- end }}
+          {{- if .Values.curator.runtimeClassName }}
+          runtimeClassName: {{ .Values.curator.runtimeClassName }}
+          {{- end }}
           {{- if .Values.curator.schedulerName }}
           schedulerName: {{ .Values.curator.schedulerName }}
           {{- end }}

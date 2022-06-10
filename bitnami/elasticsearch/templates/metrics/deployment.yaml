@@ -53,6 +53,9 @@ spec:
       {{- if .Values.metrics.priorityClassName }}
       priorityClassName: {{ .Values.metrics.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.metrics.runtimeClassName }}
+      runtimeClassName: {{ .Values.metrics.runtimeClassName }}
+      {{- end }}
       {{- if .Values.metrics.schedulerName }}
       schedulerName: {{ .Values.metrics.schedulerName | quote }}
       {{- end }}
