@@ -161,6 +161,10 @@ controller:
   ## @param controller.priorityClassName Metallb controller pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param controller.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param controller.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -513,6 +517,10 @@ speaker:
   ## @param speaker.priorityClassName Speaker pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param speaker.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param speaker.terminationGracePeriodSeconds In seconds, time the given to the Speaker pod needs to terminate gracefully
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##

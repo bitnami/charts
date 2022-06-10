@@ -54,6 +54,9 @@ spec:
       {{- if .Values.speaker.priorityClassName }}
       priorityClassName: {{ .Values.speaker.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.speaker.runtimeClassName }}
+      runtimeClassName: {{ .Values.speaker.runtimeClassName }}
+      {{- end }}
       {{- if .Values.speaker.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.speaker.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
