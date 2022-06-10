@@ -336,6 +336,10 @@ standalone:
   ## @param standalone.priorityClassName Mxnet standalone pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param standalone.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param standalone.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -561,6 +565,10 @@ server:
   ## @param server.priorityClassName Mxnet server pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param server.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param server.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -789,6 +797,10 @@ worker:
   ## @param worker.priorityClassName Mxnet worker pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param worker.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param worker.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1019,6 +1031,10 @@ scheduler:
   ## @param scheduler.priorityClassName Mxnet scheduler pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param scheduler.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param scheduler.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
