@@ -978,7 +978,7 @@ deployer:
   nodeSelector: ""
   ## @param deployer.tolerations Streaming applications tolerations
   ##
-  tolerations: {}
+  tolerations: []
   ## @param deployer.volumeMounts Streaming applications extra volume mounts
   ##
   volumeMounts: {}

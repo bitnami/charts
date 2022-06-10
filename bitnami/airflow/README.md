@@ -164,7 +164,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.podAffinityPreset`                     | Pod affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`.                                 | `""`                 |
 | `web.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `web.affinity` is set. Allowed values: `soft` or `hard`.                            | `soft`               |
 | `web.tolerations`                           | Tolerations for Airflow web pods assignment                                                                              | `[]`                 |
-| `web.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                 |
+| `web.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                 |
 | `web.priorityClassName`                     | Priority Class Name                                                                                                      | `""`                 |
 | `web.schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                 |
 | `web.terminationGracePeriodSeconds`         | Seconds Airflow web pod needs to terminate gracefully                                                                    | `""`                 |
@@ -218,7 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `scheduler.podAffinityPreset`                     | Pod affinity preset. Ignored if `scheduler.affinity` is set. Allowed values: `soft` or `hard`.                           | `""`                        |
 | `scheduler.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `scheduler.affinity` is set. Allowed values: `soft` or `hard`.                      | `soft`                      |
 | `scheduler.tolerations`                           | Tolerations for Airflow scheduler pods assignment                                                                        | `[]`                        |
-| `scheduler.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                        |
+| `scheduler.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                        |
 | `scheduler.priorityClassName`                     | Priority Class Name                                                                                                      | `""`                        |
 | `scheduler.schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                        |
 | `scheduler.terminationGracePeriodSeconds`         | Seconds Airflow scheduler pod needs to terminate gracefully                                                              | `""`                        |
@@ -291,7 +291,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.podAffinityPreset`                     | Pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`.                              | `""`                     |
 | `worker.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`.                         | `soft`                   |
 | `worker.tolerations`                           | Tolerations for Airflow worker pods assignment                                                                           | `[]`                     |
-| `worker.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                     |
+| `worker.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                     |
 | `worker.priorityClassName`                     | Priority Class Name                                                                                                      | `""`                     |
 | `worker.schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                     |
 | `worker.terminationGracePeriodSeconds`         | Seconds Airflow worker pod needs to terminate gracefully                                                                 | `""`                     |

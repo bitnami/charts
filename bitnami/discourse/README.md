@@ -117,7 +117,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                      | Affinity for pod assignment                                                                                              | `{}`                 |
 | `nodeSelector`                  | Node labels for pod assignment.                                                                                          | `{}`                 |
 | `tolerations`                   | Tolerations for pod assignment.                                                                                          | `[]`                 |
-| `topologySpreadConstraints`     | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                 |
+| `topologySpreadConstraints`     | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                 |
 | `priorityClassName`             | Priority Class Name                                                                                                      | `""`                 |
 | `schedulerName`                 | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                 |
 | `terminationGracePeriodSeconds` | Seconds Discourse pod needs to terminate gracefully                                                                      | `""`                 |

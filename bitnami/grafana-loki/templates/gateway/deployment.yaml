@@ -36,7 +36,7 @@ spec:
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/gateway/configmap-http.yaml") . | sha256sum }}
         {{- if .Values.gateway.podAnnotations }}
-        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.gateway.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       {{- include "grafana-loki.imagePullSecrets" . | nindent 6 }}

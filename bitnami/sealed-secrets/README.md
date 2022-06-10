@@ -131,7 +131,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tolerations`                                     | Tolerations for Sealed Secret pods assignment                                                                            | `[]`                     |
 | `updateStrategy.type`                             | Sealed Secret statefulset strategy type                                                                                  | `RollingUpdate`          |
 | `priorityClassName`                               | Sealed Secret pods' priorityClassName                                                                                    | `""`                     |
-| `topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                     |
+| `topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                     |
 | `schedulerName`                                   | Name of the k8s scheduler (other than default) for Sealed Secret pods                                                    | `""`                     |
 | `terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`                     |
 | `lifecycleHooks`                                  | for the Sealed Secret container(s) to automate configuration before or after startup                                     | `{}`                     |

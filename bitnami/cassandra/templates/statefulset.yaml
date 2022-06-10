@@ -95,7 +95,7 @@ spec:
                 xargs chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
               {{- end }}
               {{- end }}
-            {{- if .Values.persistence.commitStorageClass }}
+            {{- if .Values.persistence.commitLogMountPath }}
             - /bin/sh
             - -cx
             - |
@@ -426,7 +426,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
-            {{- if .Values.persistence.commitStorageClass }}
+            {{- if .Values.persistence.commitLogMountPath }}
             - name: commitlog
               mountPath: {{ .Values.persistence.commitLogMountPath }}
             {{- end }}
