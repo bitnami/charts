@@ -47,6 +47,9 @@ spec:
       {{- if .Values.defaultBackend.priorityClassName }}
       priorityClassName: {{ .Values.defaultBackend.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.defaultBackend.runtimeClassName }}
+      runtimeClassName: {{ .Values.defaultBackend.runtimeClassName }}
+      {{- end }}
       {{- if .Values.defaultBackend.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.affinity "context" $) | nindent 8 }}
       {{- else }}
