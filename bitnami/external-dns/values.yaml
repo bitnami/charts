@@ -41,6 +41,9 @@ extraDeploy: []
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
+## @param watchReleaseNamespace Watch only namepsace used for the release
+##
+watchReleaseNamespace: false
 
 ## @section external-dns parameters
 ##

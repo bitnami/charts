@@ -23,7 +23,7 @@ Classified as a NoSQL database, MongoDB&reg; eschews the traditional table-based
 
 This chart uses the [sharding method](https://docs.mongodb.com/manual/sharding/) for distributing data across multiple machines. This is meant for deployments with very large data sets and high throughput operations.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -88,7 +88,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                     | MongoDB(&reg;) Sharded image registry                                                                                                                     | `docker.io`               |
 | `image.repository`                                   | MongoDB(&reg;) Sharded Image name                                                                                                                         | `bitnami/mongodb-sharded` |
-| `image.tag`                                          | MongoDB(&reg;) Sharded image tag (immutable tags are recommended)                                                                                         | `5.0.8-debian-10-r5`      |
+| `image.tag`                                          | MongoDB(&reg;) Sharded image tag (immutable tags are recommended)                                                                                         | `5.0.9-debian-10-r0`      |
 | `image.pullPolicy`                                   | MongoDB(&reg;) Sharded image pull policy                                                                                                                  | `IfNotPresent`            |
 | `image.pullSecrets`                                  | Specify docker-registry secret names as an array                                                                                                          | `[]`                      |
 | `image.debug`                                        | Specify if debug logs should be enabled                                                                                                                   | `false`                   |
@@ -125,7 +125,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                   |
 | `volumePermissions.image.registry`                   | Init container volume-permissions image registry                                                                                                          | `docker.io`               |
 | `volumePermissions.image.repository`                 | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`   |
-| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r410`       |
+| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r435`       |
 | `volumePermissions.image.pullPolicy`                 | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`            |
 | `volumePermissions.image.pullSecrets`                | Init container volume-permissions image pull secrets                                                                                                      | `[]`                      |
 | `volumePermissions.resources`                        | Init container resource requests/limit                                                                                                                    | `{}`                      |
@@ -152,7 +152,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configsvr.resources`                                       | Configure pod resources                                                                                                               | `{}`                                                   |
 | `configsvr.hostAliases`                                     | Deployment pod host aliases                                                                                                           | `[]`                                                   |
 | `configsvr.mongodbExtraFlags`                               | MongoDB&reg; additional command line flags                                                                                            | `[]`                                                   |
-| `configsvr.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template              | `{}`                                                   |
+| `configsvr.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template              | `[]`                                                   |
 | `configsvr.priorityClassName`                               | Pod priority class name                                                                                                               | `""`                                                   |
 | `configsvr.podAffinityPreset`                               | Config Server Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                     | `""`                                                   |
 | `configsvr.podAntiAffinityPreset`                           | Config Server Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `soft`                                                 |
@@ -236,7 +236,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongos.resources`                                       | Configure pod resources                                                                                                      | `{}`            |
 | `mongos.hostAliases`                                     | Deployment pod host aliases                                                                                                  | `[]`            |
 | `mongos.mongodbExtraFlags`                               | MongoDB&reg; additional command line flags                                                                                   | `[]`            |
-| `mongos.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template     | `{}`            |
+| `mongos.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template     | `[]`            |
 | `mongos.priorityClassName`                               | Pod priority class name                                                                                                      | `""`            |
 | `mongos.podAffinityPreset`                               | Mongos Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`            |
 | `mongos.podAntiAffinityPreset`                           | Mongos Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`          |
@@ -321,7 +321,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `shardsvr.dataNode.replicaCount`                                    | Number of nodes in each shard replica set (the first node will be primary)                                               | `1`                                                    |
 | `shardsvr.dataNode.resources`                                       | Configure pod resources                                                                                                  | `{}`                                                   |
 | `shardsvr.dataNode.mongodbExtraFlags`                               | MongoDB&reg; additional command line flags                                                                               | `[]`                                                   |
-| `shardsvr.dataNode.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                                                   |
+| `shardsvr.dataNode.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                                                   |
 | `shardsvr.dataNode.priorityClassName`                               | Pod priority class name                                                                                                  | `""`                                                   |
 | `shardsvr.dataNode.podAffinityPreset`                               | Data nodes Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                           | `""`                                                   |
 | `shardsvr.dataNode.podAntiAffinityPreset`                           | Data nodes Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                      | `soft`                                                 |
@@ -408,7 +408,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `shardsvr.arbiter.hostAliases`                                     | Deployment pod host aliases                                                                                              | `[]`            |
 | `shardsvr.arbiter.resources`                                       | Configure pod resources                                                                                                  | `{}`            |
 | `shardsvr.arbiter.mongodbExtraFlags`                               | MongoDB&reg; additional command line flags                                                                               | `[]`            |
-| `shardsvr.arbiter.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `shardsvr.arbiter.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
 | `shardsvr.arbiter.priorityClassName`                               | Pod priority class name                                                                                                  | `""`            |
 | `shardsvr.arbiter.podAffinityPreset`                               | Arbiter's Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `""`            |
 | `shardsvr.arbiter.podAntiAffinityPreset`                           | Arbiter's Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                       | `soft`          |
@@ -476,7 +476,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                         | Start a side-car prometheus exporter                                               | `false`                    |
 | `metrics.image.registry`                                  | MongoDB&reg; exporter image registry                                               | `docker.io`                |
 | `metrics.image.repository`                                | MongoDB&reg; exporter image name                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                                       | MongoDB&reg; exporter image tag                                                    | `0.32.0-debian-10-r3`      |
+| `metrics.image.tag`                                       | MongoDB&reg; exporter image tag                                                    | `0.32.0-debian-10-r28`     |
 | `metrics.image.pullPolicy`                                | MongoDB&reg; exporter image pull policy                                            | `Always`                   |
 | `metrics.image.pullSecrets`                               | MongoDB&reg; exporter image pull secrets                                           | `[]`                       |
 | `metrics.useTLS`                                          | Whether to connect to MongoDB&reg; with TLS                                        | `false`                    |

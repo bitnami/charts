@@ -33,7 +33,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingest.ingress.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "restAPI" "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "tcp-rest-api" "context" $)  | nindent 14 }}
       {{- if ne .Values.ingest.ingress.hostname "*" }}
       host: {{ .Values.ingest.ingress.hostname }}
       {{- end }}
@@ -46,7 +46,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "restAPI" "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "tcp-rest-api" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.ingest.ingress.extraRules }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.ingest.ingress.extraRules "context" $ ) | nindent 4 }}

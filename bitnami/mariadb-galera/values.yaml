@@ -573,7 +573,7 @@ tolerations: []
 ##     topologyKey: topology.kubernetes.io/zone
 ##     whenUnsatisfiable: DoNotSchedule
 ##
-topologySpreadConstraints: {}
+topologySpreadConstraints: []
 ## @param lifecycleHooks for the galera container(s) to automate configuration before or after startup
 ##
 lifecycleHooks: {}

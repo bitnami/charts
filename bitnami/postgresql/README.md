@@ -7,7 +7,7 @@ PostgreSQL (Postgres) is an open source object-relational database known for rel
 [Overview of PostgreSQL](http://www.postgresql.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -21,7 +21,7 @@ This chart bootstraps a [PostgreSQL](https://github.com/bitnami/bitnami-docker-p
 
 For HA, please see [this repo](https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha)
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -101,7 +101,7 @@ kubectl delete pvc -l release=my-release
 | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `image.registry`                         | PostgreSQL image registry                                                                                                                                                                                                                                                                                                                     | `docker.io`                |
 | `image.repository`                       | PostgreSQL image repository                                                                                                                                                                                                                                                                                                                   | `bitnami/postgresql`       |
-| `image.tag`                              | PostgreSQL image tag (immutable tags are recommended)                                                                                                                                                                                                                                                                                         | `14.3.0-debian-10-r17`     |
+| `image.tag`                              | PostgreSQL image tag (immutable tags are recommended)                                                                                                                                                                                                                                                                                         | `14.3.0-debian-11-r0`      |
 | `image.pullPolicy`                       | PostgreSQL image pull policy                                                                                                                                                                                                                                                                                                                  | `IfNotPresent`             |
 | `image.pullSecrets`                      | Specify image pull secrets                                                                                                                                                                                                                                                                                                                    | `[]`                       |
 | `image.debug`                            | Specify if debug values should be set                                                                                                                                                                                                                                                                                                         | `false`                    |
@@ -225,7 +225,7 @@ kubectl delete pvc -l release=my-release
 | `primary.affinity`                           | Affinity for PostgreSQL primary pods assignment                                                                          | `{}`                  |
 | `primary.nodeSelector`                       | Node labels for PostgreSQL primary pods assignment                                                                       | `{}`                  |
 | `primary.tolerations`                        | Tolerations for PostgreSQL primary pods assignment                                                                       | `[]`                  |
-| `primary.topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                  |
+| `primary.topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                  |
 | `primary.priorityClassName`                  | Priority Class to use for each pod (postgresql primary)                                                                  | `""`                  |
 | `primary.schedulerName`                      | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                  |
 | `primary.terminationGracePeriodSeconds`      | Seconds PostgreSQL primary pod needs to terminate gracefully                                                             | `""`                  |
@@ -313,7 +313,7 @@ kubectl delete pvc -l release=my-release
 | `readReplicas.affinity`                           | Affinity for PostgreSQL read only pods assignment                                                                        | `{}`                  |
 | `readReplicas.nodeSelector`                       | Node labels for PostgreSQL read only pods assignment                                                                     | `{}`                  |
 | `readReplicas.tolerations`                        | Tolerations for PostgreSQL read only pods assignment                                                                     | `[]`                  |
-| `readReplicas.topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                  |
+| `readReplicas.topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                  |
 | `readReplicas.priorityClassName`                  | Priority Class to use for each pod (PostgreSQL read only)                                                                | `""`                  |
 | `readReplicas.schedulerName`                      | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                  |
 | `readReplicas.terminationGracePeriodSeconds`      | Seconds PostgreSQL read only pod needs to terminate gracefully                                                           | `""`                  |
@@ -373,7 +373,7 @@ kubectl delete pvc -l release=my-release
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r439`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `11-debian-11-r0`       |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
@@ -401,7 +401,7 @@ kubectl delete pvc -l release=my-release
 | `metrics.enabled`                               | Start a prometheus exporter                                                           | `false`                     |
 | `metrics.image.registry`                        | PostgreSQL Prometheus Exporter image registry                                         | `docker.io`                 |
 | `metrics.image.repository`                      | PostgreSQL Prometheus Exporter image repository                                       | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                             | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)             | `0.10.1-debian-10-r126`     |
+| `metrics.image.tag`                             | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)             | `0.10.1-debian-11-r0`       |
 | `metrics.image.pullPolicy`                      | PostgreSQL Prometheus Exporter image pull policy                                      | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                     | Specify image pull secrets                                                            | `[]`                        |
 | `metrics.customMetrics`                         | Define additional custom metrics                                                      | `{}`                        |

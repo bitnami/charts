@@ -7,7 +7,7 @@ Apache Cassandra is an open source distributed database management system design
 [Overview of Apache Cassandra](http://cassandra.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -19,7 +19,7 @@ $ helm install my-release bitnami/cassandra
 
 This chart bootstraps an [Apache Cassandra](https://github.com/bitnami/bitnami-docker-cassandra) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`              | Cassandra image registry                                                                                               | `docker.io`          |
 | `image.repository`            | Cassandra image repository                                                                                             | `bitnami/cassandra`  |
-| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.4-debian-10-r3` |
+| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.4-debian-11-r0` |
 | `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`       |
 | `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                 |
 | `image.debug`                 | Enable image debug mode                                                                                                | `false`              |
@@ -212,15 +212,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence parameters
 
-| Name                             | Description                                                                                        | Value                |
-| -------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------- |
-| `persistence.enabled`            | Enable Cassandra data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir | `true`               |
-| `persistence.storageClass`       | PVC Storage Class for Cassandra data volume                                                        | `""`                 |
-| `persistence.commitStorageClass` | PVC Storage Class for Cassandra Commit Log volume                                                  | `""`                 |
-| `persistence.annotations`        | Persistent Volume Claim annotations                                                                | `{}`                 |
-| `persistence.accessModes`        | Persistent Volume Access Mode                                                                      | `["ReadWriteOnce"]`  |
-| `persistence.size`               | PVC Storage Request for Cassandra data volume                                                      | `8Gi`                |
-| `persistence.mountPath`          | The path the data volume will be mounted at                                                        | `/bitnami/cassandra` |
+| Name                             | Description                                                                                                                                          | Value                |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `persistence.enabled`            | Enable Cassandra data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir                                                   | `true`               |
+| `persistence.storageClass`       | PVC Storage Class for Cassandra data volume                                                                                                          | `""`                 |
+| `persistence.commitStorageClass` | PVC Storage Class for Cassandra Commit Log volume                                                                                                    | `""`                 |
+| `persistence.annotations`        | Persistent Volume Claim annotations                                                                                                                  | `{}`                 |
+| `persistence.accessModes`        | Persistent Volume Access Mode                                                                                                                        | `["ReadWriteOnce"]`  |
+| `persistence.size`               | PVC Storage Request for Cassandra data volume                                                                                                        | `8Gi`                |
+| `persistence.commitLogsize`      | PVC Storage Request for Cassandra commit log volume. Unset by default                                                                                | `2Gi`                |
+| `persistence.mountPath`          | The path the data volume will be mounted at                                                                                                          | `/bitnami/cassandra` |
+| `persistence.commitLogMountPath` | The path the commit log volume will be mounted at. Unset by default. Set it to '/bitnami/cassandra/commitlog' to enable a separate commit log volume | `""`                 |
 
 
 ### Volume Permissions parameters
@@ -230,7 +232,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume                                                           | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume                                                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume                                                           | `10-debian-10-r431`     |
+| `volumePermissions.image.tag`                 | Init container volume                                                           | `11-debian-11-r0`       |
 | `volumePermissions.image.pullPolicy`          | Init container volume                                                           | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                          | `{}`                    |
@@ -245,7 +247,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                   | `false`                      |
 | `metrics.image.registry`                   | Cassandra exporter image registry                                                                      | `docker.io`                  |
 | `metrics.image.repository`                 | Cassandra exporter image name                                                                          | `bitnami/cassandra-exporter` |
-| `metrics.image.tag`                        | Cassandra exporter image tag                                                                           | `2.3.8-debian-10-r54`        |
+| `metrics.image.tag`                        | Cassandra exporter image tag                                                                           | `2.3.8-debian-11-r0`         |
 | `metrics.image.pullPolicy`                 | image pull policy                                                                                      | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                       | `[]`                         |
 | `metrics.resources.limits`                 | The resources limits for the container                                                                 | `{}`                         |
