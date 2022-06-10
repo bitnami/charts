@@ -98217,6 +98217,50 @@ entries:
       category: ProjectManagement
     apiVersion: v2
     appVersion: 5.0.1
+    created: "2022-06-10T12:27:19.790363691Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Redmine is an open source management application. It includes a tracking
+      issue system, Gantt charts for a visual view of projects and deadlines, and
+      supports SCM integration for version control.
+    digest: sha256:58a1267c07ed604f75deeef50c59459f1558e2ea729b5b3ed74f7d55d93183d2
+    home: https://github.com/bitnami/charts/tree/master/bitnami/redmine
+    icon: https://bitnami.com/assets/stacks/redmine/img/redmine-stack-220x234.png
+    keywords:
+    - redmine
+    - project management
+    - www
+    - http
+    - web
+    - application
+    - ruby
+    - rails
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: redmine
+    sources:
+    - https://github.com/bitnami/bitnami-docker-redmine
+    - https://www.redmine.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/redmine-20.2.6.tgz
+    version: 20.2.6
+  - annotations:
+      category: ProjectManagement
+    apiVersion: v2
+    appVersion: 5.0.1
     created: "2022-06-08T10:01:53.755424882Z"
     dependencies:
     - condition: postgresql.enabled
@@ -120084,4 +120128,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-10T09:34:37.344177356Z"
+generated: "2022-06-10T12:27:19.808377766Z"
