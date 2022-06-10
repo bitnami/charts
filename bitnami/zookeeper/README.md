@@ -420,6 +420,11 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 10.0.0
+
+This new version of the chart adds support for server-server authentication.
+The chart previously supported client-server authentication, to avioud confusion, the previous parameters have been renamed from `auth.*` to `auth.client.*`.
+
 ### To 9.0.0
 
 This new version of the chart includes the new ZooKeeper major version 3.8.0. Upgrade compatibility is not guaranteed.
