@@ -59,6 +59,9 @@ spec:
       {{- if .Values.master.priorityClassName }}
       priorityClassName: {{ .Values.master.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.master.runtimeClassName }}
+      runtimeClassName: {{ .Values.master.runtimeClassName }}
+      {{- end }}
       {{- if .Values.master.schedulerName }}
       schedulerName: {{ .Values.master.schedulerName | quote }}
       {{- end }}
