@@ -558,15 +558,16 @@ persistence:
   ## @param persistence.size PVC Storage Request for Cassandra data volume
   ##
   size: 8Gi
-  ## @skip persistence.commitLogsize PVC Storage Request for Cassandra commit log volume
+  ## @param persistence.commitLogsize PVC Storage Request for Cassandra commit log volume. Unset by default
   ##
-  # commitLogsize: 2Gi
+  commitLogsize: 2Gi
   ## @param persistence.mountPath The path the data volume will be mounted at
   ##
   mountPath: /bitnami/cassandra
-  ## @skip persistence.commitLogMountPath The path the commit log volume will be mounted at
+  ## @param persistence.commitLogMountPath The path the commit log volume will be mounted at. Unset by default. Set it to '/bitnami/cassandra/commitlog' to enable a separate commit log volume
   ##
   # commitLogMountPath: /bitnami/cassandra/commitlog
+  commitLogMountPath: ""
 
 ## @section Volume Permissions parameters
 ##
