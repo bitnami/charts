@@ -456,6 +456,10 @@ topologySpreadConstraints: []
 ## @param priorityClassName MinIO&reg; pods' priorityClassName
 ##
 priorityClassName: ""
+## @param runtimeClassName Name of the runtime class to be used by pod(s)
+## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+##
+runtimeClassName: ""
 ## MinIO&reg; containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1077,6 +1081,10 @@ gateway:
   ## @param gateway.priorityClassName Pod priority class name for MinIO&reg; Gateway
   ##
   priorityClassName: ""
+  ## @param gateway.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## Gateway authentication configuration
   ##
   auth:
