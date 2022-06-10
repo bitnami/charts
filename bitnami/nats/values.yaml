@@ -286,6 +286,10 @@ schedulerName: ""
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
+## @param runtimeClassName Name of the runtime class to be used by pod(s)
+## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+##
+runtimeClassName: ""
 ## Strategy to use to update Pods
 ##
 updateStrategy:
