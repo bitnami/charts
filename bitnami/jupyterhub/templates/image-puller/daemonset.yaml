@@ -54,6 +54,9 @@ spec:
       {{- if .Values.hub.priorityClassName }}
       priorityClassName: {{ .Values.imagePuller.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.hub.runtimeClassName }}
+      runtimeClassName: {{ .Values.hub.runtimeClassName }}
+      {{- end }}
       {{- if .Values.imagePuller.schedulerName }}
       schedulerName: {{ .Values.imagePuller.schedulerName }}
       {{- end }}
