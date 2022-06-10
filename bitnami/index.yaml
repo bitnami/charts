@@ -72477,6 +72477,40 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 1.2.1
+    created: "2022-06-10T15:30:39.825929865Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: NGINX Ingress Controller is an Ingress controller that manages external
+      access to HTTP services in a Kubernetes cluster using NGINX.
+    digest: sha256:3546b9f88db693cfd8348d8e8f098bce9519ccd4cf0a0100267bcc90c2e55d8c
+    home: https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller
+    icon: https://bitnami.com/assets/stacks/nginx-ingress-controller/img/nginx-ingress-controller-stack-220x234.png
+    keywords:
+    - ingress
+    - nginx
+    - http
+    - web
+    - www
+    - reverse proxy
+    kubeVersion: '>= 1.19.0-0'
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: nginx-ingress-controller
+    sources:
+    - https://github.com/bitnami/bitnami-docker-nginx-ingress-controller
+    - https://github.com/kubernetes/ingress-nginx
+    urls:
+    - https://charts.bitnami.com/bitnami/nginx-ingress-controller-9.2.9.tgz
+    version: 9.2.9
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 1.2.1
     created: "2022-06-08T10:27:51.70484419Z"
     dependencies:
     - name: common
@@ -120460,4 +120494,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-10T15:27:40.136374381Z"
+generated: "2022-06-10T15:30:39.894343836Z"
