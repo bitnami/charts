@@ -71,6 +71,9 @@ spec:
       {{- if .Values.aggregator.priorityClassName }}
       priorityClassName: {{ .Values.aggregator.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.aggregator.runtimeClassName }}
+      runtimeClassName: {{ .Values.aggregator.runtimeClassName }}
+      {{- end }}
       {{- if .Values.aggregator.initContainers }}
       initContainers: {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.initContainers "context" $ ) | nindent 8 }}
       {{- end }}

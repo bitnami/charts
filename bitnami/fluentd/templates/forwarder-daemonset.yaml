@@ -42,7 +42,12 @@ spec:
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "fluentd.forwarder.serviceAccountName" . }}
+      {{- if .Values.forwarder.priorityClassName }}
       priorityClassName: {{ .Values.forwarder.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.forwarder.runtimeClassName }}
+      runtimeClassName: {{ .Values.forwarder.runtimeClassName }}
+      {{- end }}
       {{- if .Values.forwarder.schedulerName }}
       schedulerName: {{ .Values.forwarder.schedulerName }}
       {{- end }}
