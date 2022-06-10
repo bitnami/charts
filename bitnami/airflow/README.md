@@ -166,6 +166,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.tolerations`                           | Tolerations for Airflow web pods assignment                                                                              | `[]`                 |
 | `web.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                 |
 | `web.priorityClassName`                     | Priority Class Name                                                                                                      | `""`                 |
+| `web.runtimeClassName`                      | Name of the runtime class to be used by pod(s)                                                                           | `""`                 |
 | `web.schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                 |
 | `web.terminationGracePeriodSeconds`         | Seconds Airflow web pod needs to terminate gracefully                                                                    | `""`                 |
 | `web.updateStrategy.type`                   | Airflow web deployment strategy type                                                                                     | `RollingUpdate`      |
@@ -220,6 +221,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `scheduler.tolerations`                           | Tolerations for Airflow scheduler pods assignment                                                                        | `[]`                        |
 | `scheduler.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                        |
 | `scheduler.priorityClassName`                     | Priority Class Name                                                                                                      | `""`                        |
+| `scheduler.runtimeClassName`                      | Name of the runtime class to be used by pod(s)                                                                           | `""`                        |
 | `scheduler.schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                        |
 | `scheduler.terminationGracePeriodSeconds`         | Seconds Airflow scheduler pod needs to terminate gracefully                                                              | `""`                        |
 | `scheduler.updateStrategy.type`                   | Airflow scheduler deployment strategy type                                                                               | `RollingUpdate`             |
@@ -293,6 +295,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.tolerations`                           | Tolerations for Airflow worker pods assignment                                                                           | `[]`                     |
 | `worker.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                     |
 | `worker.priorityClassName`                     | Priority Class Name                                                                                                      | `""`                     |
+| `worker.runtimeClassName`                      | Name of the runtime class to be used by pod(s)                                                                           | `""`                     |
 | `worker.schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                     |
 | `worker.terminationGracePeriodSeconds`         | Seconds Airflow worker pod needs to terminate gracefully                                                                 | `""`                     |
 | `worker.updateStrategy.type`                   | Airflow worker deployment strategy type                                                                                  | `RollingUpdate`          |

@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `server.image.registry`                                  | server image registry                                                                                               | `docker.io`                 |
 | `server.image.repository`                                | server image repository                                                                                             | `bitnami/argo-workflow-cli` |
-| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.3.6-scratch-r0`          |
+| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.3.6-scratch-r2`          |
 | `server.image.pullPolicy`                                | server image pull policy                                                                                            | `Always`                    |
 | `server.image.pullSecrets`                               | server image pull secrets                                                                                           | `[]`                        |
 | `server.enabled`                                         | Enable server deployment                                                                                            | `true`                      |
@@ -160,6 +160,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.topologySpreadConstraints`                       | Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in             | `[]`                        |
 | `server.schedulerName`                                   | Alternate scheduler for the server deployment                                                                       | `""`                        |
 | `server.priorityClassName`                               | server pods' priorityClassName                                                                                      | `""`                        |
+| `server.runtimeClassName`                                | Name of the runtime class to be used by pod(s)                                                                      | `""`                        |
 | `server.lifecycleHooks`                                  | for the server container(s) to automate configuration before or after startup                                       | `{}`                        |
 | `server.extraEnvVars`                                    | Array with extra environment variables to add to server nodes                                                       | `[]`                        |
 | `server.extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra env vars for server nodes                                               | `""`                        |
@@ -185,7 +186,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `controller.image.registry`                                  | controller image registry                                                                                                     | `docker.io`                        |
 | `controller.image.repository`                                | controller image repository                                                                                                   | `bitnami/argo-workflow-controller` |
-| `controller.image.tag`                                       | controller image tag (immutable tags are recommended)                                                                         | `3.3.5-scratch-r0`                 |
+| `controller.image.tag`                                       | controller image tag (immutable tags are recommended)                                                                         | `3.3.6-scratch-r0`                 |
 | `controller.image.pullPolicy`                                | controller image pull policy                                                                                                  | `IfNotPresent`                     |
 | `controller.image.pullSecrets`                               | controller image pull secrets                                                                                                 | `[]`                               |
 | `controller.replicaCount`                                    | Number of controller replicas to deploy                                                                                       | `1`                                |
@@ -264,6 +265,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.topologySpreadConstraints`                       | Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in                       | `[]`                               |
 | `controller.schedulerName`                                   | Alternate scheduler for the server controller                                                                                 | `""`                               |
 | `controller.priorityClassName`                               | controller pods' priorityClassName                                                                                            | `""`                               |
+| `controller.runtimeClassName`                                | Name of the runtime class to be used by pod(s)                                                                                | `""`                               |
 | `controller.lifecycleHooks`                                  | for the controller container(s) to automate configuration before or after startup                                             | `{}`                               |
 | `controller.extraEnvVars`                                    | Array with extra environment variables to add to controller nodes                                                             | `[]`                               |
 | `controller.extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra env vars for controller nodes                                                     | `""`                               |
@@ -291,7 +293,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------------- | ------------------------------------------------------------- | ---------------------------- |
 | `executor.image.registry`                                  | executor image registry                                       | `docker.io`                  |
 | `executor.image.repository`                                | executor image repository                                     | `bitnami/argo-workflow-exec` |
-| `executor.image.tag`                                       | executor image tag (immutable tags are recommended)           | `3.3.5-debian-10-r20`        |
+| `executor.image.tag`                                       | executor image tag (immutable tags are recommended)           | `3.3.6-debian-11-r2`         |
 | `executor.image.pullPolicy`                                | executor image pull policy                                    | `Always`                     |
 | `executor.image.pullSecrets`                               | executor image pull secrets                                   | `[]`                         |
 | `executor.resources.limits`                                | The resources limits for the init container                   | `{}`                         |
