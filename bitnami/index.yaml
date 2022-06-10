@@ -37516,6 +37516,40 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 2.332.3
+    created: "2022-06-10T17:57:34.395276472Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Jenkins is an open source Continuous Integration and Continuous Delivery
+      (CI/CD) server designed to automate the building, testing, and deploying of
+      any software project.
+    digest: sha256:ede8ede605865ea6c6a9ad51d183311936e0e247e2bb5bf801e00e31683aecc9
+    home: https://github.com/bitnami/charts/tree/master/bitnami/jenkins
+    icon: https://bitnami.com/assets/stacks/jenkins/img/jenkins-stack-220x234.png
+    keywords:
+    - jenkins
+    - ci
+    - cd
+    - http
+    - web
+    - application
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: jenkins
+    sources:
+    - https://github.com/bitnami/bitnami-docker-jenkins
+    - https://jenkins.io/
+    urls:
+    - https://charts.bitnami.com/bitnami/jenkins-10.2.4.tgz
+    version: 10.2.4
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 2.332.3
     created: "2022-06-08T19:06:54.228107349Z"
     dependencies:
     - name: common
@@ -121694,4 +121728,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-10T17:54:39.293988663Z"
+generated: "2022-06-10T17:57:34.416697353Z"
