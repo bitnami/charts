@@ -48,7 +48,12 @@ spec:
       {{- if .Values.influxdb.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
+      {{- if .Values.influxdb.priorityClassName }}
       priorityClassName: {{ .Values.influxdb.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.influxdb.runtimeClassName }}
+      runtimeClassName: {{ .Values.influxdb.runtimeClassName }}
+      {{- end }}
       {{- if .Values.influxdb.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
