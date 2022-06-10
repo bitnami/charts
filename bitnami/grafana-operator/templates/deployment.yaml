@@ -32,6 +32,9 @@ spec:
       {{- if .Values.operator.priorityClassName }}
       priorityClassName: {{ .Values.operator.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.operator.runtimeClassName }}
+      runtimeClassName: {{ .Values.operator.runtimeClassName }}
+      {{- end }}
       {{- if .Values.operator.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.operator.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
