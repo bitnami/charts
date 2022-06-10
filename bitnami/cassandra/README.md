@@ -123,6 +123,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hostAliases`                           | Add deployment host aliases                                                               | `[]`            |
 | `podManagementPolicy`                   | StatefulSet pod management policy                                                         | `OrderedReady`  |
 | `priorityClassName`                     | Cassandra pods' priority.                                                                 | `""`            |
+| `runtimeClassName`                      | Name of the runtime class to be used by pod(s)                                            | `""`            |
 | `podAnnotations`                        | Additional pod annotations                                                                | `{}`            |
 | `podLabels`                             | Additional pod labels                                                                     | `{}`            |
 | `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
