@@ -271,6 +271,10 @@ minReadySeconds: 0
 ## @param priorityClassName Priority class assigned to the Pods
 ##
 priorityClassName: ""
+## @param runtimeClassName Name of the runtime class to be used by pod(s)
+## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+##
+runtimeClassName: ""
 ## @param terminationGracePeriodSeconds In seconds, time the given to the Node exporter pod needs to terminate gracefully
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
 ##
