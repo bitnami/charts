@@ -53,6 +53,9 @@ spec:
       {{- if .Values.grafana.priorityClassName }}
       priorityClassName: {{ .Values.grafana.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.grafana.runtimeClassName }}
+      runtimeClassName: {{ .Values.grafana.runtimeClassName }}
+      {{- end }}
       {{- if .Values.grafana.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.affinity "context" $) | nindent 8 }}
       {{- else }}

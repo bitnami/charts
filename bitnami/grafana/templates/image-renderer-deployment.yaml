@@ -53,6 +53,9 @@ spec:
       {{- if .Values.imageRenderer.priorityClassName }}
       priorityClassName: {{ .Values.imageRenderer.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.imageRenderer.runtimeClassName }}
+      runtimeClassName: {{ .Values.imageRenderer.runtimeClassName }}
+      {{- end }}
       {{- if .Values.imageRenderer.schedulerName }}
       schedulerName: {{ .Values.imageRenderer.schedulerName | quote }}
       {{- end }}
