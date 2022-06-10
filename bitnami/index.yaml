@@ -2240,6 +2240,40 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 2.4.54
+    created: "2022-06-10T19:45:28.634102022Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Apache HTTP Server is an open-source HTTP server. The goal of this
+      project is to provide a secure, efficient and extensible server that provides
+      HTTP services in sync with the current HTTP standards.
+    digest: sha256:4a015f682214a4a0169b397f43140038e3f730edc08fb201fc44ef5286445ab4
+    home: https://github.com/bitnami/charts/tree/master/bitnami/apache
+    icon: https://bitnami.com/assets/stacks/apache/img/apache-stack-220x234.png
+    keywords:
+    - apache
+    - http
+    - https
+    - www
+    - web
+    - reverse proxy
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: apache
+    sources:
+    - https://github.com/bitnami/bitnami-docker-apache
+    - https://httpd.apache.org
+    urls:
+    - https://charts.bitnami.com/bitnami/apache-9.1.11.tgz
+    version: 9.1.11
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 2.4.54
     created: "2022-06-08T23:41:38.406154715Z"
     dependencies:
     - name: common
@@ -121990,4 +122024,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-10T19:43:30.317991674Z"
+generated: "2022-06-10T19:45:28.650668797Z"
