@@ -76,6 +76,9 @@ spec:
       {{- if .Values.locator.priorityClassName }}
       priorityClassName: {{ .Values.locator.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.locator.runtimeClassName }}
+      runtimeClassName: {{ .Values.locator.runtimeClassName }}
+      {{- end }}
       {{- if .Values.locator.schedulerName }}
       schedulerName: {{ .Values.locator.schedulerName }}
       {{- end }}
