@@ -119,6 +119,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tolerations`                   | Tolerations for pod assignment.                                                                                          | `[]`                 |
 | `topologySpreadConstraints`     | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                 |
 | `priorityClassName`             | Priority Class Name                                                                                                      | `""`                 |
+| `runtimeClassName`              | Name of the runtime class to be used by pod(s)                                                                           | `""`                 |
 | `schedulerName`                 | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                 |
 | `terminationGracePeriodSeconds` | Seconds Discourse pod needs to terminate gracefully                                                                      | `""`                 |
 | `updateStrategy.type`           | Discourse deployment strategy type                                                                                       | `RollingUpdate`      |
