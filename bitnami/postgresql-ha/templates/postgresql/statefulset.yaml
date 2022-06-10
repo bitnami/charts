@@ -63,6 +63,9 @@ spec:
       {{- if .Values.postgresql.priorityClassName }}
       priorityClassName: {{ .Values.postgresql.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.postgresql.runtimeClassName }}
+      runtimeClassName: {{ .Values.postgresql.runtimeClassName }}
+      {{- end }}
       {{- if .Values.postgresql.schedulerName }}
       schedulerName: {{ .Values.postgresql.schedulerName }}
       {{- end }}

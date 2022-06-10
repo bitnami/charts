@@ -57,6 +57,9 @@ spec:
       {{- if .Values.pgpool.priorityClassName }}
       priorityClassName: {{ .Values.pgpool.priorityClassName }}
       {{- end }}
+      {{- if .Values.pgpool.runtimeClassName }}
+      runtimeClassName: {{ .Values.pgpool.runtimeClassName }}
+      {{- end }}
       {{- if .Values.pgpool.schedulerName }}
       schedulerName: {{ .Values.pgpool.schedulerName | quote }}
       {{- end }}
