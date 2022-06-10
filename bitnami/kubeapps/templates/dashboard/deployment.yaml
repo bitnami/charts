@@ -59,6 +59,9 @@ spec:
       {{- if .Values.dashboard.priorityClassName }}
       priorityClassName: {{ .Values.dashboard.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.dashboard.runtimeClassName }}
+      runtimeClassName: {{ .Values.dashboard.runtimeClassName }}
+      {{- end }}
       {{- if .Values.dashboard.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.dashboard.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}

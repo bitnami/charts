@@ -59,6 +59,9 @@ spec:
       {{- if .Values.kubeops.priorityClassName }}
       priorityClassName: {{ .Values.kubeops.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.kubeops.runtimeClassName }}
+      runtimeClassName: {{ .Values.kubeops.runtimeClassName }}
+      {{- end }}
       {{- if .Values.kubeops.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.kubeops.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}

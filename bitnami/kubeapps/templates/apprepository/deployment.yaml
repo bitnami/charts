@@ -59,6 +59,9 @@ spec:
       {{- if .Values.apprepository.priorityClassName }}
       priorityClassName: {{ .Values.apprepository.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.apprepository.runtimeClassName }}
+      runtimeClassName: {{ .Values.apprepository.runtimeClassName }}
+      {{- end }}
       {{- if .Values.apprepository.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.apprepository.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}

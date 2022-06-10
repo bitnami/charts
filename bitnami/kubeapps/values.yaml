@@ -410,6 +410,10 @@ frontend:
   ## @param frontend.priorityClassName Priority class name for frontend pods
   ##
   priorityClassName: ""
+  ## @param frontend.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param frontend.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -753,6 +757,10 @@ dashboard:
   ## @param dashboard.priorityClassName Priority class name for Dashboard pods
   ##
   priorityClassName: ""
+  ## @param dashboard.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param dashboard.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1060,6 +1068,10 @@ apprepository:
   ## @param apprepository.priorityClassName Priority class name for AppRepository Controller pods
   ##
   priorityClassName: ""
+  ## @param apprepository.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param apprepository.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1346,6 +1358,10 @@ kubeops:
   ## @param kubeops.priorityClassName Priority class name for Kubeops pods
   ##
   priorityClassName: ""
+  ## @param kubeops.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param kubeops.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1623,6 +1639,10 @@ assetsvc:
   ## @param assetsvc.priorityClassName Priority class name for Assetsvc pods
   ##
   priorityClassName: ""
+  ## @param assetsvc.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param assetsvc.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -2285,6 +2305,10 @@ kubeappsapis:
   ## @param kubeappsapis.priorityClassName Priority class name for KubeappsAPIs pods
   ##
   priorityClassName: ""
+  ## @param kubeappsapis.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param kubeappsapis.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##

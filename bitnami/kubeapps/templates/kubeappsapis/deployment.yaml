@@ -58,6 +58,9 @@ spec:
       {{- if .Values.kubeappsapis.priorityClassName }}
       priorityClassName: {{ .Values.kubeappsapis.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.kubeappsapis.runtimeClassName }}
+      runtimeClassName: {{ .Values.kubeappsapis.runtimeClassName }}
+      {{- end }}
       {{- if .Values.kubeappsapis.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.kubeappsapis.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
