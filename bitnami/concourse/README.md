@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                | image registry                                                                                                                         | `docker.io`          |
 | `image.repository`              | image repository                                                                                                                       | `bitnami/concourse`  |
-| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.8.0-debian-11-r0` |
+| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.8.0-debian-11-r3` |
 | `image.pullPolicy`              | image pull policy                                                                                                                      | `IfNotPresent`       |
 | `image.pullSecrets`             | image pull secrets                                                                                                                     | `[]`                 |
 | `secrets.localAuth.enabled`     | the use of local authentication (basic auth).                                                                                          | `true`               |
@@ -188,6 +188,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.tolerations`                                 | Tolerations for web pods assignment                                                                                                         | `[]`                                            |
 | `web.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                    | `[]`                                            |
 | `web.priorityClassName`                           | Priority Class to use for each pod (Concourse web)                                                                                          | `""`                                            |
+| `web.runtimeClassName`                            | Name of the runtime class to be used by pod(s)                                                                                              | `""`                                            |
 | `web.schedulerName`                               | Use an alternate scheduler, e.g. "stork".                                                                                                   | `""`                                            |
 | `web.terminationGracePeriodSeconds`               | Seconds Concourse web pod needs to terminate gracefully                                                                                     | `""`                                            |
 | `web.updateStrategy.rollingUpdate`                | Concourse web statefulset rolling update configuration parameters                                                                           | `{}`                                            |
@@ -273,6 +274,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.tolerations`                                 | Tolerations for worker pod assignment                                                                                                       | `[]`                |
 | `worker.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                    | `[]`                |
 | `worker.priorityClassName`                           | Priority Class to use for each pod (Concourse worker)                                                                                       | `""`                |
+| `worker.runtimeClassName`                            | Name of the runtime class to be used by pod(s)                                                                                              | `""`                |
 | `worker.schedulerName`                               | Use an alternate scheduler, e.g. "stork".                                                                                                   | `""`                |
 | `worker.terminationGracePeriodSeconds`               | Seconds Concourse worker pod needs to terminate gracefully                                                                                  | `""`                |
 | `worker.podManagementPolicy`                         | Statefulset Pod Management Policy Type. Allowed values: `OrderedReady` or `Parallel`                                                        | `OrderedReady`      |
@@ -361,7 +363,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `11-debian-11-r0`       |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `11-debian-11-r3`       |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
