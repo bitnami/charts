@@ -71,6 +71,9 @@ spec:
       {{- if .Values.ingest.priorityClassName }}
       priorityClassName: {{ .Values.ingest.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.ingest.runtimeClassName }}
+      runtimeClassName: {{ .Values.ingest.runtimeClassName }}
+      {{- end }}
       {{- if .Values.ingest.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.ingest.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}

@@ -550,6 +550,10 @@ master:
   ## @param master.priorityClassName master-elegible pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param master.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param master.schedulerName Name of the k8s scheduler (other than default) for master-elegible pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -839,6 +843,10 @@ data:
   ## @param data.priorityClassName data pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param data.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param data.schedulerName Name of the k8s scheduler (other than default) for data pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1128,6 +1136,10 @@ coordinating:
   ## @param coordinating.priorityClassName coordinating-only pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param coordinating.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param coordinating.schedulerName Name of the k8s scheduler (other than default) for coordinating-only pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1384,6 +1396,10 @@ ingest:
   ## @param ingest.priorityClassName ingest-only pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param ingest.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param ingest.schedulerName Name of the k8s scheduler (other than default) for ingest-only pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1839,6 +1855,10 @@ curator:
   ## @param curator.priorityClassName Curator Pods Priority Class Name
   ##
   priorityClassName: ""
+  ## @param curator.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param curator.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -2038,6 +2058,10 @@ metrics:
   ## @param metrics.priorityClassName Elasticsearch metrics exporter pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param metrics.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## Elasticsearch Prometheus exporter service type
   ##
   service:
