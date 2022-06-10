@@ -597,6 +597,10 @@ podManagementPolicy: Parallel
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
+## @param runtimeClassName Name of the runtime class to be used by pod(s)
+## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+##
+runtimeClassName: ""
 ## @param schedulerName Name of the k8s scheduler (other than default)
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
@@ -1193,6 +1197,10 @@ metrics:
     ## @param metrics.kafka.priorityClassName Kafka exporter pods' priorityClassName
     ##
     priorityClassName: ""
+    ## @param metrics.kafka.runtimeClassName Name of the runtime class to be used by pod(s)
+    ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+    ##
+    runtimeClassName: ""
     ## @param metrics.kafka.topologySpreadConstraints Topology Spread Constraints for pod assignment
     ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
     ## The value is evaluated as a template

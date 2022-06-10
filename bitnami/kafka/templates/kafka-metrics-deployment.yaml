@@ -58,6 +58,9 @@ spec:
       {{- if .Values.metrics.kafka.priorityClassName }}
       priorityClassName: {{ .Values.metrics.kafka.priorityClassName }}
       {{- end }}
+      {{- if .Values.metrics.kafka.runtimeClassName }}
+      runtimeClassName: {{ .Values.metrics.kafka.runtimeClassName }}
+      {{- end }}
       {{- if .Values.metrics.kafka.schedulerName }}
       schedulerName: {{ .Values.metrics.kafka.schedulerName }}
       {{- end }}
