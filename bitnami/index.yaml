@@ -33605,6 +33605,41 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 2.6.0
+    created: "2022-06-10T22:24:39.824940691Z"
+    dependencies:
+    - name: haproxy
+      repository: https://charts.bitnami.com/bitnami
+      version: 0.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: HAProxy is a high-performance, open-source load balancer and reverse
+      proxy for TCP and HTTP applications. This image is optimized with Intel(R) QuickAssist
+      Technology OpenSSL* Engine (QAT_Engine).
+    digest: b79fb001010cd398f5153b047cb2a13647574ef619cafb8c27a9abe751c4480f
+    home: https://www.haproxy.org/
+    icon: https://bitnami.com/assets/stacks/haproxy/img/haproxy-stack-220x234.png
+    keywords:
+    - haproxy
+    - proxy
+    - infrastructure
+    - intel
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: haproxy-intel
+    sources:
+    - https://github.com/bitnami/bitnami-docker-haproxy-intel
+    - https://github.com/haproxytech/haproxy
+    urls:
+    - https://charts.bitnami.com/bitnami/haproxy-intel-0.1.6.tgz
+    version: 0.1.6
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 2.6.0
     created: "2022-06-07T09:37:18.122164917Z"
     dependencies:
     - name: haproxy
@@ -122277,4 +122312,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-10T22:23:14.77983439Z"
+generated: "2022-06-10T22:24:39.820677439Z"
