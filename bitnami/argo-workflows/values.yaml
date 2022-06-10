@@ -365,6 +365,10 @@ server:
   ## @param server.priorityClassName server pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param server.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param server.lifecycleHooks for the server container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -851,6 +855,10 @@ controller:
   ## @param controller.priorityClassName controller pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param controller.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param controller.lifecycleHooks for the controller container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
