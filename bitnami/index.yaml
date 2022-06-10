@@ -105579,6 +105579,52 @@ entries:
       category: DeveloperTools
     apiVersion: v2
     appVersion: 2.9.4
+    created: "2022-06-10T20:25:22.828840547Z"
+    dependencies:
+    - condition: rabbitmq.enabled
+      name: rabbitmq
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.x.x
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - dataflow-database
+      version: 11.x.x
+    - condition: kafka.enabled
+      name: kafka
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Spring Cloud Data Flow is a microservices-based toolkit for building
+      streaming and batch data processing pipelines in Cloud Foundry and Kubernetes.
+    digest: sha256:4b81838a463eeb1a147208fd593e14112ed79ef1970cf664b86f875194a6bd82
+    home: https://github.com/bitnami/charts/tree/master/bitnami/spring-cloud-dataflow
+    icon: https://bitnami.com/assets/stacks/spring-cloud-dataflow/img/spring-cloud-dataflow-stack-220x234.png
+    keywords:
+    - spring-cloud
+    - dataflow
+    - skipper
+    - spring
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: spring-cloud-dataflow
+    sources:
+    - https://github.com/bitnami/bitnami-docker-spring-cloud-dataflow
+    - https://github.com/bitnami/bitnami-docker-spring-cloud-skipper
+    - https://dataflow.spring.io/
+    urls:
+    - https://charts.bitnami.com/bitnami/spring-cloud-dataflow-11.0.4.tgz
+    version: 11.0.4
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 2.9.4
     created: "2022-06-08T09:49:34.032934612Z"
     dependencies:
     - condition: rabbitmq.enabled
@@ -122058,4 +122104,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-10T19:47:31.044783618Z"
+generated: "2022-06-10T20:25:22.908002287Z"
