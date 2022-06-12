@@ -90,10 +90,12 @@ The following table lists the helpers available in the library which are scoped 
 
 ### Labels
 
-| Helper identifier           | Description                                                                 | Expected Input    |
-|-----------------------------|-----------------------------------------------------------------------------|-------------------|
-| `common.labels.standard`    | Return Kubernetes standard labels                                           | `.` Chart context |
-| `common.labels.matchLabels` | Labels to use on `deploy.spec.selector.matchLabels` and `svc.spec.selector` | `.` Chart context |
+| Helper identifier                    | Description                                                                                        | Expected Input                                    |
+|--------------------------------------|----------------------------------------------------------------------------------------------------|---------------------------------------------------|
+| `common.labels.standard`             | Return Kubernetes standard labels                                                                  | `.` Chart context                                 |
+| `common.labels.matchLabels`          | Labels to use on `deploy.spec.selector.matchLabels` and `svc.spec.selector`                        | `.` Chart context                                 |
+| `common.labels.componentMatchLabels` | Return Kubernetes standard labels for specific component                                           | `dict "name" "foo" "component" "bar" "context" .` |
+| `common.labels.component`            | Labels to use on `deploy.spec.selector.matchLabels` and `svc.spec.selector` for specific component | `dict "name" "foo" "component" "bar" "context" .` |
 
 ### Names
 
