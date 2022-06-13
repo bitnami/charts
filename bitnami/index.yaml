@@ -24240,6 +24240,38 @@ entries:
       category: Analytics
     apiVersion: v2
     appVersion: 1.14.6
+    created: "2022-06-13T11:28:03.129812699Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Fluentd collects events from various data sources and writes them
+      to files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on.
+    digest: sha256:c5bc9c8e63ba86af522558581e13b44dbc9c2b93c31c7e2cf2743ea39a4f5b25
+    home: https://github.com/bitnami/charts/tree/master/bitnami/fluentd
+    icon: https://bitnami.com/assets/stacks/fluentd/img/fluentd-stack-220x234.png
+    keywords:
+    - fluentd
+    - logging
+    - logs
+    - data
+    - collector
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: fluentd
+    sources:
+    - https://github.com/bitnami/bitnami-docker-fluentd
+    - https://www.fluentd.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/fluentd-5.1.11.tgz
+    version: 5.1.11
+  - annotations:
+      category: Analytics
+    apiVersion: v2
+    appVersion: 1.14.6
     created: "2022-06-10T17:16:17.296953776Z"
     dependencies:
     - name: common
@@ -123498,4 +123530,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-13T11:04:10.098602362Z"
+generated: "2022-06-13T11:28:03.199447329Z"
