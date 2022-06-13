@@ -76389,6 +76389,42 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 16.15.1
+    created: "2022-06-13T10:33:55.737663648Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Node.js is a runtime environment built on V8 JavaScript engine. Its
+      event-driven, non-blocking I/O model enables the development of fast, scalable,
+      and data-intensive server applications.
+    digest: sha256:064905b873078667c525bc63a520e539a0fc42554c0294b2d9aae1f136a13d7b
+    home: https://github.com/bitnami/charts/tree/master/bitnami/node
+    icon: https://bitnami.com/assets/stacks/nodejs/img/nodejs-stack-220x234.png
+    keywords:
+    - node
+    - javascript
+    - nodejs
+    - git
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: node
+    sources:
+    - https://github.com/bitnami/bitnami-docker-node
+    - http://nodejs.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/node-18.1.10.tgz
+    version: 18.1.10
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 16.15.1
     created: "2022-06-10T17:14:30.841856109Z"
     dependencies:
     - condition: mongodb.enabled
@@ -123353,4 +123389,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-13T10:32:19.731403883Z"
+generated: "2022-06-13T10:33:55.788547339Z"
