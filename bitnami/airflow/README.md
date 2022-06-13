@@ -443,6 +443,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.affinity`                              | Affinity for pod assignment                                                                         | `{}`                        |
 | `metrics.nodeSelector`                          | Node labels for pod assignment                                                                      | `{}`                        |
 | `metrics.tolerations`                           | Tolerations for pod assignment                                                                      | `[]`                        |
+| `metrics.priorityClassName`                     | Priority Class Name                                                                                 | `""`                        |
+| `metrics.runtimeClassName`                      | Name of the runtime class to be used by pod(s)                                                      | `""`                        |
 | `metrics.schedulerName`                         | Name of the k8s scheduler (other than default) for Airflow exporter                                 | `""`                        |
 | `metrics.service.ports.http`                    | Airflow exporter metrics service port                                                               | `9112`                      |
 | `metrics.service.clusterIP`                     | Static clusterIP or None for headless services                                                      | `""`                        |
