@@ -43,6 +43,17 @@
           "params": {
             "endpoint": "lb-kafka-0-external-tcp-kafka"
           }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/kafka/goss"
+            },
+            "remote": {
+              "workload": "deploy-kafka"
+            }
+          }
         }
       ]
     }

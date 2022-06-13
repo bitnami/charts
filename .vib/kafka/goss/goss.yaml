@@ -1,0 +1,15 @@
+command:
+  grafanacli:
+    exec: java -v
+    exit-status: 0
+    stderr: [ ]
+    timeout: 20000
+file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    mode: "0644"
+    filetype: folder
+    exists: true
+    group: root
+  /opt/bitnami/kafka/logs:
+    filetype: directory
+    exists: true
