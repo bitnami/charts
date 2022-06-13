@@ -9,7 +9,7 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: kafka
+    app.kubernetes.io/component: metrics
     {{- if .Values.metrics.serviceMonitor.labels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.labels "context" $ ) | nindent 4 }}
     {{- end }}
