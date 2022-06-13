@@ -3,7 +3,6 @@ CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
 {{- $servicePort := or (.Values.service.portEnabled) (not .Values.auth.tls.enabled) | ternary .Values.service.ports.amqp .Values.service.ports.amqpTls -}}
-{{- $serviceNodePort := or (.Values.service.portEnabled) (not .Values.auth.tls.enabled) | ternary .Values.service.nodePorts.amqp .Values.service.nodePorts.amqpTls -}}
 
 ** Please be patient while the chart is being deployed **
 
