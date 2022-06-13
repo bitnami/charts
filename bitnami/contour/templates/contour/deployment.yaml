@@ -103,6 +103,8 @@ spec:
             - --contour-cert-file=/certs/tls.crt
             - --contour-key-file=/certs/tls.key
             - --config-path=/config/contour.yaml
+            - --envoy-service-name={{ include "common.names.fullname" . }}-envoy
+            - --leader-election-resource-name={{ include "common.names.namespace" . }}
             {{- if .Values.contour.debug }}
             - --debug
             {{- end }}
