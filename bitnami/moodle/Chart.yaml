@@ -25,4 +25,4 @@ name: moodle
 sources:
   - https://github.com/bitnami/bitnami-docker-moodle
   - https://www.moodle.org/
-version: 14.1.7
+version: 14.1.9

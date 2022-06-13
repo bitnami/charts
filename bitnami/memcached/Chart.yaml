@@ -22,4 +22,4 @@ name: memcached
 sources:
   - https://github.com/bitnami/bitnami-docker-memcached
   - http://memcached.org/
-version: 6.1.1
+version: 6.1.4

@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.6.8-debian-10-r3
+  tag: 10.6.8-debian-11-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -573,7 +573,7 @@ tolerations: []
 ##     topologyKey: topology.kubernetes.io/zone
 ##     whenUnsatisfiable: DoNotSchedule
 ##
-topologySpreadConstraints: {}
+topologySpreadConstraints: []
 ## @param lifecycleHooks for the galera container(s) to automate configuration before or after startup
 ##
 lifecycleHooks: {}
@@ -792,7 +792,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.14.0-debian-10-r78
+    tag: 0.14.0-debian-11-r3
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

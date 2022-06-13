@@ -71,7 +71,7 @@ tempo:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo
-    tag: 1.4.1-debian-10-r17
+    tag: 1.4.1-debian-11-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -131,6 +131,7 @@ tempo:
   configuration: |
     multitenancy_enabled: false
     search_enabled: {{ .Values.tempo.search.enabled }}
+    metrics_generator_enabled: {{ .Values.metricsGenerator.enabled }}
     compactor:
       compaction:
         block_retention: 48h
@@ -192,6 +193,15 @@ tempo:
           kvstore:
             store: memberlist
         tokens_file_path: {{ .Values.tempo.dataDir }}/tokens.json
+    {{- if .Values.metricsGenerator.enabled }}
+    metrics_generator:
+      ring:
+        kvstore:
+          store: memberlist
+      storage:
+        path: {{ .Values.tempo.dataDir }}/wal
+        remote_write: {{ include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.remoteWrite "context" $) | nindent 6 }}
+    {{- end }}
     memberlist:
       abort_if_cluster_join_fails: false
       join_members:
@@ -409,7 +419,7 @@ compactor:
   ## @param compactor.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param compactor.priorityClassName Compactor pods' priorityClassName
   ##
   priorityClassName: ""
@@ -668,7 +678,7 @@ distributor:
   ## @param distributor.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param distributor.priorityClassName Distributor pods' priorityClassName
   ##
   priorityClassName: ""
@@ -768,6 +778,267 @@ distributor:
     ##
     annotations: {}
     ## @param distributor.service.extraPorts Extra ports to expose in the Distributor service
+    ##
+    extraPorts: []
+
+## @section Metrics Generator Deployment Parameters
+##
+metricsGenerator:
+  ## @param metricsGenerator.enabled enable metricsGenerator
+  ## @param metricsGenerator.remoteWrite remoteWrite configuration for metricsGenerator
+  enabled: false
+  remoteWrite: []
+  ## @param metricsGenerator.extraEnvVars Array with extra environment variables to add to metricsGenerator nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param metricsGenerator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for metricsGenerator nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param metricsGenerator.extraEnvVarsSecret Name of existing Secret containing extra env vars for metricsGenerator nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param metricsGenerator.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param metricsGenerator.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param metricsGenerator.replicaCount Number of metricsGenerator replicas to deploy
+  ##
+  replicaCount: 1
+  ## Configure extra options for metricsGenerator containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param metricsGenerator.livenessProbe.enabled Enable livenessProbe on metricsGenerator nodes
+  ## @param metricsGenerator.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metricsGenerator.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metricsGenerator.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metricsGenerator.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metricsGenerator.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param metricsGenerator.readinessProbe.enabled Enable readinessProbe on metricsGenerator nodes
+  ## @param metricsGenerator.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metricsGenerator.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metricsGenerator.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metricsGenerator.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metricsGenerator.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param metricsGenerator.startupProbe.enabled Enable startupProbe on metricsGenerator containers
+  ## @param metricsGenerator.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metricsGenerator.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metricsGenerator.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metricsGenerator.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metricsGenerator.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param metricsGenerator.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param metricsGenerator.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param metricsGenerator.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## metricsGenerator resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param metricsGenerator.resources.limits The resources limits for the metricsGenerator containers
+  ## @param metricsGenerator.resources.requests The requested resources for the metricsGenerator containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param metricsGenerator.podSecurityContext.enabled Enabled metricsGenerator pods' Security Context
+  ## @param metricsGenerator.podSecurityContext.fsGroup Set metricsGenerator pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param metricsGenerator.containerSecurityContext.enabled Enabled metricsGenerator containers' Security Context
+  ## @param metricsGenerator.containerSecurityContext.runAsUser Set metricsGenerator containers' Security Context runAsUser
+  ## @param metricsGenerator.containerSecurityContext.runAsNonRoot Set metricsGenerator containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param metricsGenerator.lifecycleHooks for the metricsGenerator container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param metricsGenerator.hostAliases metricsGenerator pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param metricsGenerator.podLabels Extra labels for metricsGenerator pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param metricsGenerator.podAnnotations Annotations for metricsGenerator pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param metricsGenerator.podAffinityPreset Pod affinity preset. Ignored if `metricsGenerator.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param metricsGenerator.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `metricsGenerator.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node metricsGenerator.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param metricsGenerator.nodeAffinityPreset.type Node affinity preset type. Ignored if `metricsGenerator.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param metricsGenerator.nodeAffinityPreset.key Node label key to match. Ignored if `metricsGenerator.affinity` is set
+    ##
+    key: ""
+    ## @param metricsGenerator.nodeAffinityPreset.values Node label values to match. Ignored if `metricsGenerator.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param metricsGenerator.affinity Affinity for metricsGenerator pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `metricsGenerator.podAffinityPreset`, `metricsGenerator.podAntiAffinityPreset`, and `metricsGenerator.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param metricsGenerator.nodeSelector Node labels for metricsGenerator pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param metricsGenerator.tolerations Tolerations for metricsGenerator pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param metricsGenerator.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: {}
+  ## @param metricsGenerator.priorityClassName metricsGenerator pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param metricsGenerator.schedulerName Kubernetes pod scheduler registry
+  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param metricsGenerator.updateStrategy.type metricsGenerator statefulset strategy type
+  ## @param metricsGenerator.updateStrategy.rollingUpdate metricsGenerator statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param metricsGenerator.extraVolumes Optionally specify extra list of additional volumes for the metricsGenerator pod(s)
+  ##
+  extraVolumes: []
+  ## @param metricsGenerator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the metricsGenerator container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param metricsGenerator.sidecars Add additional sidecar containers to the metricsGenerator pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param metricsGenerator.initContainers Add additional init containers to the metricsGenerator pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## @section Metrics Generator Traffic Exposure Parameters
+
+  ## metricsGenerator service parameters
+  ##
+  service:
+    ## @param metricsGenerator.service.type metricsGenerator service type
+    ##
+    type: ClusterIP
+    ## @param metricsGenerator.service.ports.http metricsGenerator HTTP service port
+    ## @param metricsGenerator.service.ports.grpc metricsGenerator GRPC service port
+    ##
+    ports:
+      http: 3100
+      grpc: 9095
+    ## Node ports to expose
+    ## NOTE: choose port between <30000-32767>
+    ## @param metricsGenerator.service.nodePorts.http Node port for HTTP
+    ## @param metricsGenerator.service.nodePorts.grpc Node port for GRPC
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
+    ## @param metricsGenerator.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param metricsGenerator.service.clusterIP metricsGenerator service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param metricsGenerator.service.loadBalancerIP metricsGenerator service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param metricsGenerator.service.loadBalancerSourceRanges metricsGenerator service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param metricsGenerator.service.externalTrafficPolicy metricsGenerator service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param metricsGenerator.service.annotations Additional custom annotations for metricsGenerator service
+    ##
+    annotations: {}
+    ## @param metricsGenerator.service.extraPorts Extra ports to expose in the metricsGenerator service
     ##
     extraPorts: []
 
@@ -931,7 +1202,7 @@ ingester:
   ## @param ingester.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param ingester.priorityClassName Ingester pods' priorityClassName
   ##
   priorityClassName: ""
@@ -1237,7 +1508,7 @@ querier:
   ## @param querier.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param querier.priorityClassName Querier pods' priorityClassName
   ##
   priorityClassName: ""
@@ -1500,7 +1771,7 @@ queryFrontend:
   ## @param queryFrontend.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param queryFrontend.priorityClassName queryFrontend pods' priorityClassName
   ##
   priorityClassName: ""
@@ -1557,7 +1828,7 @@ queryFrontend:
     image:
       registry: docker.io
       repository: bitnami/grafana-tempo-query
-      tag: 1.4.1-debian-10-r18
+      tag: 1.4.1-debian-11-r3
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1760,7 +2031,7 @@ vulture:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo-vulture
-    tag: 1.4.1-debian-10-r18
+    tag: 1.4.1-debian-11-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1935,7 +2206,7 @@ vulture:
   ## @param vulture.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param vulture.priorityClassName Vulture pods' priorityClassName
   ##
   priorityClassName: ""
@@ -2056,7 +2327,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r435
+    tag: 11-debian-11-r3
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

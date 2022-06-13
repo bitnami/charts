@@ -19,7 +19,7 @@ $ helm install my-release bitnami/sonarqube
 
 This chart bootstraps an [SonarQube](https://github.com/bitnami/bitnami-docker-sonarqube) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 

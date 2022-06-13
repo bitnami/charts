@@ -52,7 +52,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/phpmyadmin
-  tag: 5.2.0-debian-10-r0
+  tag: 5.2.0-debian-11-r3
   ## Specify a imagePullPolicy
   ##
   pullPolicy: IfNotPresent
@@ -546,7 +546,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-10-r155
+    tag: 0.11.0-debian-11-r3
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

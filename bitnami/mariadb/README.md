@@ -21,7 +21,7 @@ This chart bootstraps a [MariaDB](https://github.com/bitnami/bitnami-docker-mari
 
 MariaDB is developed as open source software and as a relational database it provides an SQL interface for accessing data. The latest versions of MariaDB also include GIS and JSON features.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`           | MariaDB image registry                                                                                                                                                                                                                                                        | `docker.io`           |
 | `image.repository`         | MariaDB image repository                                                                                                                                                                                                                                                      | `bitnami/mariadb`     |
-| `image.tag`                | MariaDB image tag (immutable tags are recommended)                                                                                                                                                                                                                            | `10.6.8-debian-10-r0` |
+| `image.tag`                | MariaDB image tag (immutable tags are recommended)                                                                                                                                                                                                                            | `10.6.8-debian-11-r0` |
 | `image.pullPolicy`         | MariaDB image pull policy                                                                                                                                                                                                                                                     | `IfNotPresent`        |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                                                                                                              | `[]`                  |
 | `image.debug`              | Specify if debug logs should be enabled                                                                                                                                                                                                                                       | `false`               |
@@ -128,7 +128,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.tolerations`                           | Tolerations for MariaDB primary pods assignment                                                                   | `[]`                |
 | `primary.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                    | `""`                |
 | `primary.podManagementPolicy`                   | podManagementPolicy to manage scaling operation of MariaDB primary pods                                           | `""`                |
-| `primary.topologySpreadConstraints`             | Topology Spread Constraints for MariaDB primary pods assignment                                                   | `{}`                |
+| `primary.topologySpreadConstraints`             | Topology Spread Constraints for MariaDB primary pods assignment                                                   | `[]`                |
 | `primary.priorityClassName`                     | Priority class for MariaDB primary pods assignment                                                                | `""`                |
 | `primary.podSecurityContext.enabled`            | Enable security context for MariaDB primary pods                                                                  | `true`              |
 | `primary.podSecurityContext.fsGroup`            | Group ID for the mounted volumes' filesystem                                                                      | `1001`              |
@@ -215,7 +215,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.affinity`                              | Affinity for MariaDB secondary pods assignment                                                                        | `{}`                |
 | `secondary.nodeSelector`                          | Node labels for MariaDB secondary pods assignment                                                                     | `{}`                |
 | `secondary.tolerations`                           | Tolerations for MariaDB secondary pods assignment                                                                     | `[]`                |
-| `secondary.topologySpreadConstraints`             | Topology Spread Constraints for MariaDB secondary pods assignment                                                     | `{}`                |
+| `secondary.topologySpreadConstraints`             | Topology Spread Constraints for MariaDB secondary pods assignment                                                     | `[]`                |
 | `secondary.priorityClassName`                     | Priority class for MariaDB secondary pods assignment                                                                  | `""`                |
 | `secondary.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                        | `""`                |
 | `secondary.podManagementPolicy`                   | podManagementPolicy to manage scaling operation of MariaDB secondary pods                                             | `""`                |
@@ -298,7 +298,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `10-debian-10-r431`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `11-debian-11-r0`       |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                    | `{}`                    |
@@ -312,7 +312,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                                                                                      | `false`                   |
 | `metrics.image.registry`                     | Exporter image registry                                                                                                                   | `docker.io`               |
 | `metrics.image.repository`                   | Exporter image repository                                                                                                                 | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                                       | `0.14.0-debian-10-r75`    |
+| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                                       | `0.14.0-debian-11-r0`     |
 | `metrics.image.pullPolicy`                   | Exporter image pull policy                                                                                                                | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                          | `[]`                      |
 | `metrics.annotations`                        | Annotations for the Exporter pod                                                                                                          | `{}`                      |
