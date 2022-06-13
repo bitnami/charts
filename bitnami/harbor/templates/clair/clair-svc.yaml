@@ -14,10 +14,6 @@ metadata:
   {{- end }}
 spec:
   ports:
-    - name: api
-      port: {{ .Values.clair.server.service.ports.api }}
-    - name: health
-      port: {{ .Values.clair.server.service.ports.health }}
     - name: adapter
       port: {{ ternary .Values.clair.adapter.service.ports.https .Values.clair.adapter.service.ports.http .Values.internalTLS.enabled }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
