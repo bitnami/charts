@@ -41,13 +41,10 @@
           }
         },
         {
-          "action_id": "cypress",
+          "action_id": "health-check",
           "params": {
-            "resources": {
-              "path": "/.vib/pinniped/cypress"
-            },
             "endpoint": "lb-pinniped-supervisor-https",
-            "app_protocol": "HTTPS"
+            "app_protocol": "GENERIC"
           }
         }
       ]
