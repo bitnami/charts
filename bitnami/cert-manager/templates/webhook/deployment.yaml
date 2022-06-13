@@ -47,6 +47,9 @@ spec:
       {{- if .Values.webhook.priorityClassName }}
       priorityClassName: {{ .Values.webhook.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.webhook.runtimeClassName }}
+      runtimeClassName: {{ .Values.webhook.runtimeClassName }}
+      {{- end }}
       {{- if .Values.webhook.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.affinity "context" $) | nindent 8 }}
       {{- else }}
