@@ -82,13 +82,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `image.registry`                        | Apache image registry                                                                                                    | `docker.io`           |
 | `image.repository`                      | Apache image repository                                                                                                  | `bitnami/apache`      |
-| `image.tag`                             | Apache image tag (immutable tags are recommended)                                                                        | `2.4.54-debian-11-r0` |
+| `image.tag`                             | Apache image tag (immutable tags are recommended)                                                                        | `2.4.54-debian-11-r2` |
 | `image.pullPolicy`                      | Apache image pull policy                                                                                                 | `IfNotPresent`        |
 | `image.pullSecrets`                     | Apache image pull secrets                                                                                                | `[]`                  |
 | `image.debug`                           | Enable image debug mode                                                                                                  | `false`               |
 | `git.registry`                          | Git image registry                                                                                                       | `docker.io`           |
 | `git.repository`                        | Git image name                                                                                                           | `bitnami/git`         |
-| `git.tag`                               | Git image tag                                                                                                            | `2.36.1-debian-11-r1` |
+| `git.tag`                               | Git image tag                                                                                                            | `2.36.1-debian-11-r3` |
 | `git.pullPolicy`                        | Git image pull policy                                                                                                    | `IfNotPresent`        |
 | `git.pullSecrets`                       | Specify docker-registry secret names as an array                                                                         | `[]`                  |
 | `replicaCount`                          | Number of replicas of the Apache deployment                                                                              | `1`                   |
@@ -223,7 +223,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a sidecar prometheus exporter to expose Apache metrics                                                                              | `false`                   |
 | `metrics.image.registry`                   | Apache Exporter image registry                                                                                                            | `docker.io`               |
 | `metrics.image.repository`                 | Apache Exporter image repository                                                                                                          | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                                                | `0.11.0-debian-11-r2`     |
+| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                                                | `0.11.0-debian-11-r4`     |
 | `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                                                                         | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                                                                        | `[]`                      |
 | `metrics.image.debug`                      | Apache Exporter image debug mode                                                                                                          | `false`                   |
