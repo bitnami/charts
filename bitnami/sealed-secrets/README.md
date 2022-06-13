@@ -7,7 +7,7 @@ Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone
 [Overview of Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
 
 
-
+                           
 ## TL;DR
 
 ```console
@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                  | Sealed Secrets image registry                                                                                            | `docker.io`              |
 | `image.repository`                                | Sealed Secrets image repository                                                                                          | `bitnami/sealed-secrets` |
-| `image.tag`                                       | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.18.0-scratch-r0`      |
+| `image.tag`                                       | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.18.0-scratch-r1`      |
 | `image.pullPolicy`                                | Sealed Secrets image pull policy                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                               | Sealed Secrets image pull secrets                                                                                        | `[]`                     |
 | `image.debug`                                     | Enable Sealed Secrets image debug mode                                                                                   | `false`                  |
@@ -284,3 +284,19 @@ This major release renames several values in this chart and adds missing feature
 - `service.nodePort`has been renamed as `service.nodePorts.http`
 - `containerPort`has been renamed as `containerPorts.http`
 - `certManager`has been removed. Please use `ingress.annotations` instead
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
