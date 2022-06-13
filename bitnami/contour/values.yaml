@@ -76,9 +76,6 @@ configInline:
   disablePermitInsecure: false
   tls:
     fallback-certificate: {}
-  leaderelection:
-    configmap-namespace: '{{ include "common.names.namespace" . }}'
-  envoy-service-name: '{{ include "common.names.fullname" . }}-envoy'
   accesslog-format: envoy
 
 contour:
@@ -95,7 +92,7 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.20.1-debian-11-r0
+    tag: 1.21.0-debian-11-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -443,9 +440,11 @@ contour:
   debug: false
 
   ## @param contour.kubernetesDebug Contour kubernetes debug log level, Default 0, minimum 0, maximum 9.
+  ##
   kubernetesDebug: 0
 
   ## @param contour.rootNamespaces Restrict Contour to searching these namespaces for root ingress routes.
+  ##
   rootNamespaces: ""
 
 ## @section Envoy parameters
@@ -466,7 +465,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.21.2-debian-11-r0
+    tag: 1.22.1-debian-11-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -879,7 +878,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-11-r0
+    tag: 1.21.6-debian-11-r4
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
