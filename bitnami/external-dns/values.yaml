@@ -15,6 +15,11 @@ global:
   ##
   imagePullSecrets: []
 
+  ## @param global.commonLabels Global Labels to apply to all resources
+  commonLabels: {}
+  ## e.g:
+  ## team_name: dev
+
 ## @section Common parameters
 ##
 
