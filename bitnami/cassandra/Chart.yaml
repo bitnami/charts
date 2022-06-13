@@ -24,3 +24,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-cassandra
   - http://cassandra.apache.org
 version: 9.3.0
+
