@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
 it('healthz endpoint is available', () => {
-  cy.visit('/healthz');
+  cy.request('/healthz');
   cy.contains('body', 'ok');
 });
