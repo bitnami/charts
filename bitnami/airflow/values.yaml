@@ -1046,10 +1046,10 @@ ldap:
   searchAttribute: "cn"
   binddn: "cn=admin,dc=example,dc=org"
   bindpw: ""
-  userRegistration: 'True'
+  userRegistration: "True"
   userRegistrationRole: "Public"
   rolesMapping: '{ "cn=All,ou=Groups,dc=example,dc=org": ["User"], "cn=Admins,ou=Groups,dc=example,dc=org": ["Admin"], }'
-  rolesSyncAtLogin: 'True'
+  rolesSyncAtLogin: "True"
 
   ## SSL/TLS parameters for LDAP
   ## @param ldap.tls.enabled Enabled TLS/SSL for LDAP, you must include the CA file.
@@ -1394,6 +1394,14 @@ metrics:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param metrics.priorityClassName Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
+  ## @param metrics.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param metrics.schedulerName Name of the k8s scheduler (other than default) for Airflow exporter
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
