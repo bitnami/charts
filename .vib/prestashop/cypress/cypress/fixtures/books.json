@@ -1,0 +1,37 @@
+[
+  {
+    "id" : "955-0123456789",
+    "genre" : ["fiction","fantasy"],
+    "title" : "The Great Story never told",
+    "author" : "John Doe",
+    "available" : true,
+    "price" : 9.90
+  }
+,
+  {
+    "id" : "955-9876543210",
+    "genre" : ["poetry"],
+    "title" : "As the shine reflects",
+    "author" : "Jane Jessica Doe",
+    "available" : false,
+    "price" : 13.05
+  }
+,
+  {
+    "id" : "955-0123498765",
+    "genre" : ["novel","history"],
+    "title" : "Det tredje misslyckandet",
+    "author" : "Lars Larsson",
+    "available" : true,
+    "price" : 25.99
+  }
+,
+  {
+    "id" : "955-9876501234",
+    "genre" : ["cookbook"],
+    "title" : "Descubriendo la cocina andaluza",
+    "author" : "Dario Garcia",
+    "available" : true,
+    "price" : 14.50
+  }
+]
