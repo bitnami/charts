@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`              | Cassandra image registry                                                                                               | `docker.io`          |
 | `image.repository`            | Cassandra image repository                                                                                             | `bitnami/cassandra`  |
-| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.4-debian-11-r0` |
+| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.4-debian-11-r4` |
 | `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`       |
 | `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                 |
 | `image.debug`                 | Enable image debug mode                                                                                                | `false`              |
@@ -233,7 +233,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume                                                           | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume                                                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume                                                           | `11-debian-11-r0`       |
+| `volumePermissions.image.tag`                 | Init container volume                                                           | `11-debian-11-r3`       |
 | `volumePermissions.image.pullPolicy`          | Init container volume                                                           | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                          | `{}`                    |
@@ -248,7 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                   | `false`                      |
 | `metrics.image.registry`                   | Cassandra exporter image registry                                                                      | `docker.io`                  |
 | `metrics.image.repository`                 | Cassandra exporter image name                                                                          | `bitnami/cassandra-exporter` |
-| `metrics.image.tag`                        | Cassandra exporter image tag                                                                           | `2.3.8-debian-11-r0`         |
+| `metrics.image.tag`                        | Cassandra exporter image tag                                                                           | `2.3.8-debian-11-r4`         |
 | `metrics.image.pullPolicy`                 | image pull policy                                                                                      | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                       | `[]`                         |
 | `metrics.resources.limits`                 | The resources limits for the container                                                                 | `{}`                         |
