@@ -56,6 +56,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| `global.commonLabels`     | Global Labels to apply to all resources         | `{}`  |
 
 
 ### Common parameters
