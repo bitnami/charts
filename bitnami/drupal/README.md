@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | Drupal image registry                                                                                                 | `docker.io`           |
 | `image.repository`                      | Drupal Image name                                                                                                     | `bitnami/drupal`      |
-| `image.tag`                             | Drupal Image tag                                                                                                      | `9.3.15-debian-11-r3` |
+| `image.tag`                             | Drupal Image tag                                                                                                      | `9.3.16-debian-11-r0` |
 | `image.pullPolicy`                      | Drupal image pull policy                                                                                              | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                  |
 | `image.debug`                           | Specify if debug logs should be enabled                                                                               | `false`               |
@@ -242,7 +242,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a exporter side-car                        | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                   | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                 | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                        | `0.11.0-debian-11-r3`     |
+| `metrics.image.tag`         | Apache exporter image tag                        | `0.11.0-debian-11-r4`     |
 | `metrics.image.pullPolicy`  | Image pull policy                                | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                      |
 | `metrics.resources`         | Metrics exporter resource requests and limits    | `{}`                      |
