@@ -43857,6 +43857,40 @@ entries:
       category: DeveloperTools
     apiVersion: v2
     appVersion: 18.0.0
+    created: "2022-06-13T17:40:31.699356072Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Keycloak is a high performance Java-based identity and access management
+      solution. It lets developers add an authentication layer to their applications
+      with minimum effort.
+    digest: sha256:3635121d3b02459819de1f41c1bdf34f07d935c26df9ba473afda6574e1dec97
+    home: https://www.keycloak.org
+    icon: https://bitnami.com/assets/stacks/keycloak/img/keycloak-stack-220x234.png
+    keywords:
+    - keycloak
+    - access-management
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: keycloak
+    sources:
+    - https://github.com/bitnami/bitnami-docker-keycloak
+    - https://github.com/keycloak/keycloak
+    urls:
+    - https://charts.bitnami.com/bitnami/keycloak-9.2.8.tgz
+    version: 9.2.8
+  - annotations:
+      category: DeveloperTools
+    apiVersion: v2
+    appVersion: 18.0.0
     created: "2022-06-10T19:43:30.287388443Z"
     dependencies:
     - condition: postgresql.enabled
@@ -123682,4 +123716,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-13T14:13:18.298328343Z"
+generated: "2022-06-13T17:40:31.779404987Z"
