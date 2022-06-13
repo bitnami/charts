@@ -40,6 +40,9 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- if .Values.podLabels }}
 {{ toYaml .Values.podLabels }}
 {{- end }}
+{{- if .Values.commonLabels}}
+{{ toYaml .Values.commonLabels }}
+{{- end }}
 {{- end -}}
 
 {{/* matchLabels */}}

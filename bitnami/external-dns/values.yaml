@@ -6,6 +6,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.commonLabels Global common labels for all resources
 ##
 global:
   imageRegistry: ""
@@ -14,6 +15,10 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+    
+  commonLabels: {}
+  ## e.g:
+  ## team_name: dev
 
 ## @section Common parameters
 ##
