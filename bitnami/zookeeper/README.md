@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`              | ZooKeeper image registry                                                                                                   | `docker.io`             |
 | `image.repository`            | ZooKeeper image repository                                                                                                 | `bitnami/zookeeper`     |
-| `image.tag`                   | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.8.0-debian-11-r4`    |
+| `image.tag`                   | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.8.0-debian-11-r5`    |
 | `image.pullPolicy`            | ZooKeeper image pull policy                                                                                                | `IfNotPresent`          |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                                           | `[]`                    |
 | `image.debug`                 | Specify if debug values should be set                                                                                      | `false`                 |
