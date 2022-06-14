@@ -15,10 +15,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-    
+  
+  ## E.g.
+  ## commonLabels:
+  ##   team_name: dev
+  ##
   commonLabels: {}
-  ## e.g:
-  ## team_name: dev
+
 
 ## @section Common parameters
 ##
