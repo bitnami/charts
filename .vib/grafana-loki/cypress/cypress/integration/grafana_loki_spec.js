@@ -6,9 +6,9 @@ it('shows build info endpoint', () => {
     method: 'GET',
     url: '/loki/api/v1/status/buildinfo',
     form: true,
-  }).as('buildInfo');
-  cy.get('@buildInfo').should((response) => {
+  }).then((response) => {
     expect(response.status).to.eq(200);
+
     expect(response.body).to.include.all.keys(
       'version',
       'revision',
@@ -24,9 +24,11 @@ it('allows Loki to get Grafana logs', () => {
     method: 'GET',
     url: 'loki/api/v1/query?query={app="grafana-loki"}',
     form: true,
-  }).as('grafanaLogs');
-  cy.get('@grafanaLogs').should((response) => {
+  }).then((response) => {
     expect(response.status).to.eq(200);
+    expect(response.headers['content-type']).to.eq(
+      'application/json; charset=UTF-8'
+    );
   });
 });
 
@@ -35,9 +37,11 @@ it('checks Loki range endpoint', () => {
     method: 'GET',
     url: 'loki/api/v1/query?query={job="varlogs"}',
     form: true,
-  }).as('grafanaLogs');
-  cy.get('@grafanaLogs').should((response) => {
+  }).then((response) => {
     expect(response.status).to.eq(200);
+    expect(response.headers['content-type']).to.eq(
+      'application/json; charset=UTF-8'
+    );
     expect(response.body.data.stats.summary).not.to.be.empty;
     expect(response.body.data.stats).to.include.all.keys(
       'summary',
@@ -53,9 +57,11 @@ it('can publish logs to the endpoint', () => {
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
     url: 'loki/api/v1/push',
     body: body,
-  }).as('publishBody');
-  cy.get('@publishBody').should((response) => {
+  }).then((response) => {
     expect(response.status).to.eq(204);
+    expect(response.headers['content-type']).to.eq(
+      'application/json; charset=UTF-8'
+    );
   });
 });
 
@@ -64,8 +70,7 @@ it('can get a list of series', () => {
     method: 'GET',
     url: 'loki/api/v1/series',
     form: true,
-  }).as('grafanaLogs');
-  cy.get('@grafanaLogs').should((response) => {
+  }).then((response) => {
     expect(response.status).to.eq(200);
   });
 });

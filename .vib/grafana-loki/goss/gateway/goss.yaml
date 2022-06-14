@@ -3,10 +3,6 @@ file:
     mode: "0644"
     filetype: file
     exists: true
-  /opt/bitnami/nginx/conf/resolvers.conf:
-    mode: "0644"
-    filetype: file
-    exists: true
   /app/index.html:
     mode: "0644"
     filetype: file
@@ -18,8 +14,4 @@ command:
     exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
     exit-status: 0
     stdout: []
-    stderr: []
-  nginx-test:
-    exec: nginx -t
-    exit-status: 0
     stderr: []
