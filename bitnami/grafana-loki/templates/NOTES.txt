@@ -30,7 +30,9 @@ Installed components:
   * distributor
   * querier
   * query-frontend
+  {{- if .Values.promtail.enabled }}
   * promtail
+  {{- end }}
   {{- if .Values.compactor.enabled }}
   * compactor
   {{- end }}

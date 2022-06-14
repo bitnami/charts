@@ -1,4 +1,4 @@
-{{- if .Values.promtail.rbac.create }}
+{{- if and .Values.promtail.enabled .Values.promtail.rbac.create }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
