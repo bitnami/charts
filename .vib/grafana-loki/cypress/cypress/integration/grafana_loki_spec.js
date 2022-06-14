@@ -59,9 +59,6 @@ it('can publish logs to the endpoint', () => {
     body: body,
   }).then((response) => {
     expect(response.status).to.eq(204);
-    expect(response.headers['content-type']).to.eq(
-      'application/json; charset=UTF-8'
-    );
   });
 });
 
