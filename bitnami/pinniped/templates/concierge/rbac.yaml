@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "pinniped.concierge.fullname.namespace" . }}-aggregated-api-server
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "aggregated-api-server" | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
     app.kubernetes.io/component: concierge
@@ -93,7 +93,7 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ template "pinniped.concierge.fullname.namespace" . }}-aggregated-api-server
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "aggregated-api-server" | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
     app.kubernetes.io/component: concierge
@@ -109,13 +109,13 @@ subjects:
     namespace: {{ include "common.names.namespace" . | quote }}
 roleRef:
   kind: ClusterRole
-  name: {{ template "pinniped.concierge.fullname.namespace" . }}-aggregated-api-server
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "aggregated-api-server" | trunc 63 | trimSuffix "-" }}
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "pinniped.concierge.fullname.namespace" . }}-impersonation-proxy
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "impersonation-proxy" | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
     app.kubernetes.io/component: concierge
@@ -144,7 +144,7 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ template "pinniped.concierge.fullname.namespace" . }}-impersonation-proxy
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "impersonation-proxy" | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
     app.kubernetes.io/component: concierge
@@ -160,13 +160,13 @@ subjects:
     namespace: {{ include "common.names.namespace" . | quote }}
 roleRef:
   kind: ClusterRole
-  name: {{ template "pinniped.concierge.fullname.namespace" . }}-impersonation-proxy
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "impersonation-proxy" | trunc 63 | trimSuffix "-" }}
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ template "pinniped.concierge.fullname" . }}-kube-cert-agent
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname" .) "kube-cert-agent" | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
@@ -188,7 +188,7 @@ rules:
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ template "pinniped.concierge.fullname" . }}-kube-cert-agent
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname" .) "kube-cert-agent" | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
@@ -205,13 +205,13 @@ subjects:
     namespace: {{ include "common.names.namespace" . | quote }}
 roleRef:
   kind: Role
-  name: {{ template "pinniped.concierge.fullname" . }}-kube-cert-agent
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname" .) "kube-cert-agent" | trunc 63 | trimSuffix "-" }}
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ template "pinniped.concierge.fullname" . }}-aggregated-api-server
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname" .) "aggregated-api-server" | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
@@ -305,7 +305,7 @@ rules:
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ template "pinniped.concierge.fullname" . }}-aggregated-api-server
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname" .) "aggregated-api-server" | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
@@ -322,13 +322,13 @@ subjects:
     namespace: {{ include "common.names.namespace" . | quote }}
 roleRef:
   kind: Role
-  name: {{ template "pinniped.concierge.fullname" . }}-aggregated-api-server
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname" .) "aggregated-api-server" | trunc 63 | trimSuffix "-" }}
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ template "pinniped.concierge.fullname.namespace" . }}-kube-system-pod-read
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "kube-system-pod-read" | trunc 63 | trimSuffix "-" }}
   namespace: kube-system
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
@@ -352,7 +352,7 @@ rules:
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ template "pinniped.concierge.fullname.namespace" . }}-kube-system-pod-read
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "kube-system-pod-read" | trunc 63 | trimSuffix "-" }}
   namespace: kube-system
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
@@ -369,13 +369,13 @@ subjects:
     namespace: {{ include "common.names.namespace" . | quote }}
 roleRef:
   kind: Role
-  name: {{ template "pinniped.concierge.fullname.namespace" . }}-kube-system-pod-read
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "kube-system-pod-read" | trunc 63 | trimSuffix "-" }}
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "pinniped.concierge.fullname.namespace" . }}-pre-authn-apis
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "pre-authn-apis" | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
     app.kubernetes.io/component: concierge
@@ -404,7 +404,7 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ template "pinniped.concierge.fullname.namespace" . }}-pre-authn-apis
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "pre-authn-apis" | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
     app.kubernetes.io/component: concierge
@@ -423,7 +423,7 @@ subjects:
     apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: ClusterRole
-  name: {{ template "pinniped.concierge.fullname.namespace" . }}-pre-authn-apis
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "pre-authn-apis" | trunc 63 | trimSuffix "-" }}
   apiGroup: rbac.authorization.k8s.io
 ---
 kind: ClusterRoleBinding
@@ -451,7 +451,7 @@ roleRef:
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ template "pinniped.concierge.fullname.namespace" . }}-extension-apiserver-authentication-reader
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "extension-apiserver-authentication-reader" | trunc 63 | trimSuffix "-" }}
   namespace: kube-system
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
@@ -474,7 +474,7 @@ roleRef:
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ template "pinniped.concierge.fullname.namespace" . }}-cluster-info-lister-watcher
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "cluster-info-lister-watcher" | trunc 63 | trimSuffix "-" }}
   namespace: kube-public
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
@@ -497,7 +497,7 @@ rules:
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ template "pinniped.concierge.fullname.namespace" . }}-cluster-info-lister-watcher
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "cluster-info-lister-watcher" | trunc 63 | trimSuffix "-" }}
   namespace: kube-public
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
@@ -514,6 +514,6 @@ subjects:
     namespace: {{ include "common.names.namespace" . | quote }}
 roleRef:
   kind: Role
-  name: {{ template "pinniped.concierge.fullname.namespace" . }}-cluster-info-lister-watcher
+  name: {{ printf "%s-%s" (include "pinniped.concierge.fullname.namespace" .) "cluster-info-lister-watcher" | trunc 63 | trimSuffix "-" }}
   apiGroup: rbac.authorization.k8s.io
 {{- end }}
