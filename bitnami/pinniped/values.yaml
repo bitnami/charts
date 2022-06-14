@@ -101,18 +101,18 @@ concierge:
     # aggregatedAPIServerPort may be set here, although other YAML references to the default port (10250) may also need to be updated
     # impersonationProxyServerPort may be set here, although other YAML references to the default port (8444) may also need to be updated
     names:
-      servingCertificateSecret: {{ template "pinniped.concierge.api.fullname" . }}-tls-serving-certificate
+      servingCertificateSecret: {{ printf "%s-%s" (include "pinniped.concierge.api.fullname" .) "tls-serving-certificate" | trunc 63 | trimSuffix "-" }}
       credentialIssuer: {{ template "pinniped.concierge.fullname" . }}
       apiService: {{ template "pinniped.concierge.api.fullname" . }}
-      impersonationLoadBalancerService: {{ template "pinniped.concierge.impersonation-proxy.fullname" . }}-load-balancer
-      impersonationClusterIPService: {{ template "pinniped.concierge.impersonation-proxy.fullname" . }}-cluster-ip
-      impersonationTLSCertificateSecret: {{ template "pinniped.concierge.impersonation-proxy.fullname" . }}-tls-serving-certificate
-      impersonationCACertificateSecret: {{ template "pinniped.concierge.impersonation-proxy.fullname" . }}-ca-certificate
-      impersonationSignerSecret: {{ template "pinniped.concierge.impersonation-proxy.fullname" . }}-signer-ca-certificate
+      impersonationLoadBalancerService: {{ printf "%s-%s" (include "pinniped.concierge.impersonation-proxy.fullname" .) "load-balancer" | trunc 63 | trimSuffix "-" }}
+      impersonationClusterIPService: {{ printf "%s-%s" (include "pinniped.concierge.impersonation-proxy.fullname" .) "cluster-ip" | trunc 63 | trimSuffix "-" }}
+      impersonationTLSCertificateSecret: {{ printf "%s-%s" (include "pinniped.concierge.impersonation-proxy.fullname" .) "tls-serving-certificate" | trunc 63 | trimSuffix "-" }}
+      impersonationCACertificateSecret: {{ printf "%s-%s" (include "pinniped.concierge.impersonation-proxy.fullname" .) "ca-certificate" | trunc 63 | trimSuffix "-" }}
+      impersonationSignerSecret: {{ printf "%s-%s" (include "pinniped.concierge.impersonation-proxy.fullname" .) "signer-ca-certificate" | trunc 63 | trimSuffix "-" }}
       agentServiceAccount: {{ template "pinniped.concierge.kube-cert-agent.fullname" . }}
     labels: {"app.kubernetes.io/part-of":"pinniped", "app.kubernetes.io/component": "concierge", "app.kubernetes.io/instance": "{{ .Release.Name }}"}
     kubeCertAgent:
-      namePrefix: {{ template "pinniped.concierge.fullname" . }}-kube-cert-agent-
+      namePrefix: {{ printf "%s-%s" (include "pinniped.concierge.fullname" .) "kube-cert-agent" | trunc 63 | trimSuffix "-" }}-
       image: {{ template "pinniped.image" . }}
   ## @param concierge.credentialIssuerConfig [string] Configuration for the credential issuer
   ##
@@ -453,7 +453,7 @@ supervisor:
   configuration: |
     apiGroupSuffix: pinniped.dev
     names:
-      defaultTLSCertificateSecret: {{ template "pinniped.supervisor.fullname" . }}-default-tls-certificate
+      defaultTLSCertificateSecret: {{ printf "%s-%s" (include "pinniped.supervisor.fullname" .) "default-tls-certificate" | trunc 63 | trimSuffix "-" }}
     labels: {"app.kubernetes.io/part-of":"pinniped", "app.kubernetes.io/component": "supervisor", "app.kubernetes.io/instance": "{{ .Release.Name }}"}
     insecureAcceptExternalUnencryptedHttpRequests: false
 
