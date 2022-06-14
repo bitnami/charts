@@ -794,6 +794,8 @@ Return the ExternalDNS namespace to be used
 {{- define "external-dns.namespace" -}}
 {{- if and .Values.rbac.create (not .Values.rbac.clusterRole) -}}
     {{ default .Release.Namespace .Values.namespace }}
+{{- else if .Values.watchReleaseNamespace -}}
+    {{ .Release.namespace }}
 {{- else -}}
     {{ .Values.namespace }}
 {{- end -}}
