@@ -47548,6 +47548,48 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 2.8.1
+    created: "2022-06-14T06:58:05.824776302Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      version: 1.x.x
+    - condition: cassandra.enabled
+      name: cassandra
+      repository: https://charts.bitnami.com/bitnami
+      version: 9.x.x
+    description: Kong is an open source Microservice API gateway and platform designed
+      for managing microservices requests of high-availability, fault-tolerance, and
+      distributed systems.
+    digest: sha256:863e917d2141ce4ee3f2918f8577a22b10a198596e1d8dc5038b53dac143b7d4
+    home: https://github.com/bitnami/charts/tree/master/bitnami/kong
+    icon: https://bitnami.com/assets/stacks/kong/img/kong-stack-220x234.png
+    keywords:
+    - kong
+    - ingress
+    - openresty
+    - controller
+    - http
+    - web
+    - www
+    - reverse proxy
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: kong
+    sources:
+    - https://github.com/bitnami/bitnami-docker-kong
+    - https://konghq.com/
+    urls:
+    - https://charts.bitnami.com/bitnami/kong-6.3.10.tgz
+    version: 6.3.10
+  - annotations:
+      category: Infrastructure
+    apiVersion: v2
+    appVersion: 2.8.1
     created: "2022-06-13T10:10:45.690537008Z"
     dependencies:
     - condition: postgresql.enabled
@@ -123815,4 +123857,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-7.6.0.tgz
     version: 7.6.0
-generated: "2022-06-14T06:51:19.593616662Z"
+generated: "2022-06-14T06:58:05.878375596Z"
