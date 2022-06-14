@@ -1,7 +1,8 @@
 name: 'Generate the full index archive for Bitnami Charts'
 on:
-  schedule:
-    - cron: '0 0 * * *'
+  push:
+    branches:
+      - 'full-index-archive'
 jobs:
   get-index:
     runs-on: ubuntu-latest
