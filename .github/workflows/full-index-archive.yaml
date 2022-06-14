@@ -5,7 +5,7 @@ on:
       - full-index-archive
 env:
   LAST_INDEX_URL: https://charts.bitnami.com/bitnami/index.yaml
-  SOURCE_INDEXES_DIR: source_indexes
+  INDEXES_DIR: indexes
 jobs:
   get-indexes:
     runs-on: ubuntu-latest
@@ -17,14 +17,14 @@ jobs:
       - id: get-last-indexes
         name: Get indexes
         run: |
-          mkdir $SOURCE_INDEXES_DIR
-          curl $LAST_INDEX_URL -o ./$SOURCE_INDEXES_DIR/last_index.yaml
-          cp bitnami/index.yaml ./$SOURCE_INDEXES_DIR/index.yaml
+          mkdir $INDEXES_DIR
+          curl $LAST_INDEX_URL -o ./$INDEXES_DIR/last_index.yaml
+          cp bitnami/index.yaml ./$INDEXES_DIR/index.yaml
       - id: upload-artifact
         uses: actions/upload-artifact@v3
         with:
           name: source-indexes
-          path: ./$SOURCE_INDEXES_DIR/
+          path: ./${{ env.INDEXES_DIR }}
           retention-days: 2
   merge-indexes:
     runs-on: ubuntu-latest
