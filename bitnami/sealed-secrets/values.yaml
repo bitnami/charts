@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets [array] Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -44,6 +46,7 @@ clusterDomain: cluster.local
 extraDeploy: []
 
 ## @section Sealed Secrets Parameters
+##
 
 ## Bitnami Sealed Secrets image
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
@@ -273,7 +276,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param initContainers [object] Add additional init containers to the Sealed Secret pod(s)
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
@@ -283,9 +286,10 @@ sidecars: {}
 ##    imagePullPolicy: Always
 ##    command: ['sh', '-c', 'echo "hello world"']
 ##
-initContainers: {}
+initContainers: []
 
 ## @section Traffic Exposure Parameters
+##
 
 ## Sealed Secret service parameters
 ##
@@ -433,7 +437,7 @@ ingress:
   ## - host: airflow.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: airflow-svc
   ##           port:
@@ -442,6 +446,7 @@ ingress:
   extraRules: []
 
 ## @section Other Parameters
+##
 
 ## RBAC configuration
 ##
