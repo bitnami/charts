@@ -22,5 +22,5 @@ file:
     filetype: symlink
     exists: true
     contains:
-      - {{ printf "'dbuser' => '%s'" .Env.OWNCLOUD_DATABASE_USER }}
-      - {{ printf "'dbpassword' => '%s'" .Env.OWNCLOUD_DATABASE_PASSWORD }}
+      - {{ printf "/dbuser.*%s/" .Env.OWNCLOUD_DATABASE_USER }}
+      - {{ printf "/dbpassword.*%s/" .Env.OWNCLOUD_DATABASE_PASSWORD }}
