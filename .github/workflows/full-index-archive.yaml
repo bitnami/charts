@@ -21,6 +21,7 @@ jobs:
           curl $LAST_INDEX_URL -o ./$INDEXES_DIR/last_index.yaml
           cp bitnami/index.yaml ./$INDEXES_DIR/index.yaml
       - id: upload-artifact
+        name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: indexes
@@ -33,16 +34,39 @@ jobs:
     name: Merge
     steps:
       - id: download-artifact
+        name: Download artifacts
         uses: actions/download-artifact@v3
         with:
           name: indexes
       - id: merge
-        name: merge
+        name: Merge
         run: yq eval-all '. as $item ireduce ({}; . *+ $item )' index.yaml last_index.yaml > duplicates_index.yaml
       - id: upload-artifact
+        name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: duplicates-indexe
+          name: duplicates-index
           path: duplicates_index.yaml
+          retention-days: 2
+          if-no-files-found: error
+  remove-dups:
+    runs-on: ubuntu-latest
+    needs: merge-indexes
+    name: Remove Duplicates
+    steps:
+      - id: download-artifact
+        name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: duplicates-index
+      - id: Remove
+        name: remove
+        run: yq eval '.entries[] |= unique_by(.version)' duplicates_index.yaml > index.yaml
+      - id: upload-artifact
+        name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: full-index-archive
+          path: index.yaml
           retention-days: 2
           if-no-files-found: error
