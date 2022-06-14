@@ -18,10 +18,7 @@ it('allows a user to register', () => {
 });
 
 it('allows a user to place an order and an admin to list it', () => {
-  cy.visit('/');
-  cy.contains('Desktop').click();
-  cy.contains('Mac').click();
-  cy.contains('iMac').click();
+  cy.visit('/desktops/mac');
   cy.contains('Add to Cart').click();
   cy.contains('.alert', 'Success');
   cy.get('.btn-inverse').click();
