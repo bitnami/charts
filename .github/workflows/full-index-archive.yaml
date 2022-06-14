@@ -5,20 +5,26 @@ on:
       - full-index-archive
 env:
   LAST_INDEX_URL: https://charts.bitnami.com/bitnami/index.yaml
+  SOURCE_INDEXES_DIR: source_indexes
 jobs:
-  get-index:
+  get-indexes:
     runs-on: ubuntu-latest
-    name: "Get index.yaml"
+    name: Get Indexes
     steps:
-      - id: download-index
-        name: Download last Bitnami Charts index.yaml
+      - id: checkout-full-index
+        name: Checkout current full index.yaml
+        uses: actions/checkout@v3
+      - id: get-last-indexes
+        name: Get indexes
         run: |
-          curl $LAST_INDEX_URL -o last_index.yaml
+          mkdir $SOURCE_INDEXES_DIR
+          curl $LAST_INDEX_URL -o ./$SOURCE_INDEXES_DIR/last_index.yaml
+          cp bitnami/index.yaml ./$SOURCE_INDEXES_DIR/index.yaml
       - id: upload-artifact
         uses: actions/upload-artifact@v3
         with:
-          name: last-index
-          path: last_index.yaml
+          name: source-indexes
+          path: ./$SOURCE_INDEXES_DIR/
           retention-days: 2
   merge-indexes:
     runs-on: ubuntu-latest
@@ -27,7 +33,11 @@ jobs:
       - id: download-artifact
         uses: actions/download-artifact@v3
         with:
-          name: last-index
+          name: source-indexes
+      - id: ls
+        name: ls
+        run: ls
       - id: merge
         name: merge
-        run: ls
+        run: echo "merge"
+         # yq eval-all '. as $item ireduce ({}; . *+ $item )' old_full_index.yaml reduced_index.yaml > intermediate_index.yaml
