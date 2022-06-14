@@ -7,7 +7,7 @@ process:
   mysqld:
     running: true
 file:   
-  {{ printf "/bitnami/mariadb/data/%s:" .Env.MARIADB_DATABASE }}:
+  {{ printf "/bitnami/mariadb/data/%s" .Env.MARIADB_DATABASE }}:
     mode: "2700"
     filetype: directory
     exists: true

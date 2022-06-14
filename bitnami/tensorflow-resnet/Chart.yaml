@@ -1,7 +1,7 @@
 annotations:
   category: MachineLearning
 apiVersion: v2
-appVersion: 2.8.0
+appVersion: 2.8.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -27,4 +27,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-tensorflow-serving
   - https://github.com/bitnami/bitnami-docker-tensorflow-resnet
   - https://www.tensorflow.org/serving/
-version: 3.5.13
+version: 3.5.15

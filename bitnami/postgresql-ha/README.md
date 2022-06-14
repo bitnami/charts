@@ -663,11 +663,11 @@ It's necessary to specify the existing passwords while performing a upgrade to e
 
 ```bash
 $ helm upgrade my-release bitnami/postgresql-ha \
-    --set postgresql.password=[POSTGRESQL_PASSWORD] \
+    --set postgresql.password=[POSTGRES_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD]
 ```
 
-> Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
+> Note: you need to substitute the placeholders _[POSTGRES_PASSWORD]_, and _[REPMGR_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
 > Note: As general rule, it is always wise to do a backup before the upgrading procedures.
 

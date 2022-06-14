@@ -7,7 +7,7 @@ Keycloak is a high performance Java-based identity and access management solutio
 [Overview of Keycloak](https://www.keycloak.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -402,14 +402,7 @@ The chart also facilitates the creation of TLS secrets for use with the Ingress 
 
 ### Use with ingress offloading SSL
 
-If your ingress controller has the SSL Termination, you should set `proxyAddressForwarding` to `true` or you should add the following env vars in `extraEnvVars`
-
-```yaml
-- name: KEYCLOAK_PROXY_ADDRESS_FORWARDING
-  value: "true"
-- name: KEYCLOAK_FRONTEND_URL
-  value: "https://keycloak.xxx"
-```
+If your ingress controller has the SSL Termination, you should set `proxy` to `edge`.
 
 ### Manage secrets and passwords
 

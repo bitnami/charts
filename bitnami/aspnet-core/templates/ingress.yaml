@@ -3,7 +3,6 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "aspnet-core.fullname" . }}
-  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -28,7 +27,7 @@ spec:
       http:
         paths:
           {{- if .Values.ingress.extraPaths }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.ingress.extraPaths  "context" $) | nindent 10 }}
+          {{- toYaml .Values.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.ingress.path }}
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
@@ -40,13 +39,11 @@ spec:
     - host: {{ .name }}
       http:
         paths:
-          {{- if .Values.ingress.extraPaths }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.ingress.extraPaths  "context" $) | nindent 10 }}
-          {{- end }}
           - path: {{ default "/" .path }}
-            backend:
-              serviceName: {{ include "aspnet-core.fullname" $ }}
-              servicePort: http
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "aspnet-core.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.ingress.extraRules }}
     {{- include "common.tplvalues.render" (dict "value" .Values.ingress.extraRules "context" $) | nindent 4 }}
