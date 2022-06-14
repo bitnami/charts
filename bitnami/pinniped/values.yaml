@@ -323,7 +323,7 @@ concierge:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param concierge.initContainers Add additional init containers to the Concierge pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -333,7 +333,7 @@ concierge:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## @section Concierge RBAC settings
   ##
@@ -654,7 +654,7 @@ supervisor:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param supervisor.initContainers Add additional init containers to the Supervisor pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -664,7 +664,7 @@ supervisor:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## @section Supervisor RBAC settings
   ##
