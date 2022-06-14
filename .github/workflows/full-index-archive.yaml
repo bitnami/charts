@@ -13,13 +13,13 @@ jobs:
       - id: download-index
         name: Download last Bitnami Charts index.yaml
         run: |
-          mkdir artifacts/
-          curl $LAST_INDEX_URL -o ./artifacts/last_index.yaml
+          curl $LAST_INDEX_URL -o last_index.yaml
       - id: upload-artifact
         uses: actions/upload-artifact@v3
+        retention-days: 2
         with:
-          name: last_index.yaml
-          path: ./artifacts/
+          name: last-index
+          path: last_index.yaml
   merge-indexes:
     runs-on: ubuntu-latest
     name: Merge
@@ -27,7 +27,7 @@ jobs:
       - id: download-artifact
         uses: actions/download-artifact@v3
         with:
-          name: last_index.yaml
+          name: last-index
       - id: merge
         name: merge
         run: ls
