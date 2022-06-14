@@ -1,17 +1,17 @@
-name: 'Generate the full index archive for Bitnami Charts'
+name: Generate the full index archive for Bitnami Charts
 on:
   push:
     branches:
-      - 'full-index-archive'
+      - full-index-archive
 env:
   LAST_INDEX_URL: https://charts.bitnami.com/bitnami/index.yaml
 jobs:
   get-index:
     runs-on: ubuntu-latest
-    name: "Get current Bitnami Charts index.yaml"
+    name: "Get index.yaml"
     steps:
       - id: download-index
-        name: 'Download last Bitnami Charts index.yaml'
+        name: Download last Bitnami Charts index.yaml
         run: |
           mkdir artifacts/
           curl $LAST_INDEX_URL -o ./artifacts/last_index.yaml
@@ -20,3 +20,14 @@ jobs:
         with:
           name: last_index.yaml
           path: ./artifacts/
+  merge-indexes:
+    runs-on: ubuntu-latest
+    name: Merge
+    steps:
+      - id: download-artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: last_index.yaml
+      - id: merge
+        name: merge
+        run: ls
