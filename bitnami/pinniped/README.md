@@ -147,8 +147,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for Concierge nodes                                                    | `""`            |
 | `concierge.extraVolumes`                                    | Optionally specify extra list of additional volumes for the Concierge pod(s)                                             | `[]`            |
 | `concierge.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Concierge container(s)                                  | `[]`            |
-| `concierge.sidecars`                                        | Add additional sidecar containers to the Concierge pod(s)                                                                | `{}`            |
-| `concierge.initContainers`                                  | Add additional init containers to the Concierge pod(s)                                                                   | `{}`            |
+| `concierge.sidecars`                                        | Add additional sidecar containers to the Concierge pod(s)                                                                | `[]`            |
+| `concierge.initContainers`                                  | Add additional init containers to the Concierge pod(s)                                                                   | `[]`            |
 
 
 ### Concierge RBAC settings
@@ -250,8 +250,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for Supervisor nodes                                                   | `""`            |
 | `supervisor.extraVolumes`                                    | Optionally specify extra list of additional volumes for the Supervisor pod(s)                                            | `[]`            |
 | `supervisor.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Supervisor container(s)                                 | `[]`            |
-| `supervisor.sidecars`                                        | Add additional sidecar containers to the Supervisor pod(s)                                                               | `{}`            |
-| `supervisor.initContainers`                                  | Add additional init containers to the Supervisor pod(s)                                                                  | `{}`            |
+| `supervisor.sidecars`                                        | Add additional sidecar containers to the Supervisor pod(s)                                                               | `[]`            |
+| `supervisor.initContainers`                                  | Add additional init containers to the Supervisor pod(s)                                                                  | `[]`            |
 
 
 ### Supervisor RBAC settings

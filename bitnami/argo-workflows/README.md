@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `server.image.registry`                                  | server image registry                                                                                               | `docker.io`                 |
 | `server.image.repository`                                | server image repository                                                                                             | `bitnami/argo-workflow-cli` |
-| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.3.6-scratch-r0`          |
+| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.3.6-scratch-r2`          |
 | `server.image.pullPolicy`                                | server image pull policy                                                                                            | `Always`                    |
 | `server.image.pullSecrets`                               | server image pull secrets                                                                                           | `[]`                        |
 | `server.enabled`                                         | Enable server deployment                                                                                            | `true`                      |
@@ -166,8 +166,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for server nodes                                                  | `""`                        |
 | `server.extraVolumes`                                    | Optionally specify extra list of additional volumes for the server pod(s)                                           | `[]`                        |
 | `server.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the server container(s)                                | `[]`                        |
-| `server.sidecars`                                        | Add additional sidecar containers to the server pod(s)                                                              | `{}`                        |
-| `server.initContainers`                                  | Add additional init containers to the server pod(s)                                                                 | `{}`                        |
+| `server.sidecars`                                        | Add additional sidecar containers to the server pod(s)                                                              | `[]`                        |
+| `server.initContainers`                                  | Add additional init containers to the server pod(s)                                                                 | `[]`                        |
 | `server.service.type`                                    | server service type                                                                                                 | `ClusterIP`                 |
 | `server.service.ports.http`                              | server service HTTP port                                                                                            | `80`                        |
 | `server.service.nodePorts.http`                          | Node port for HTTP                                                                                                  | `""`                        |
@@ -185,7 +185,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `controller.image.registry`                                  | controller image registry                                                                                                     | `docker.io`                        |
 | `controller.image.repository`                                | controller image repository                                                                                                   | `bitnami/argo-workflow-controller` |
-| `controller.image.tag`                                       | controller image tag (immutable tags are recommended)                                                                         | `3.3.5-scratch-r0`                 |
+| `controller.image.tag`                                       | controller image tag (immutable tags are recommended)                                                                         | `3.3.6-scratch-r0`                 |
 | `controller.image.pullPolicy`                                | controller image pull policy                                                                                                  | `IfNotPresent`                     |
 | `controller.image.pullSecrets`                               | controller image pull secrets                                                                                                 | `[]`                               |
 | `controller.replicaCount`                                    | Number of controller replicas to deploy                                                                                       | `1`                                |
@@ -270,8 +270,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for controller nodes                                                        | `""`                               |
 | `controller.extraVolumes`                                    | Optionally specify extra list of additional volumes for the controller pod(s)                                                 | `[]`                               |
 | `controller.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the controller container(s)                                      | `[]`                               |
-| `controller.sidecars`                                        | Add additional sidecar containers to the controller pod(s)                                                                    | `{}`                               |
-| `controller.initContainers`                                  | Add additional init containers to the controller pod(s)                                                                       | `{}`                               |
+| `controller.sidecars`                                        | Add additional sidecar containers to the controller pod(s)                                                                    | `[]`                               |
+| `controller.initContainers`                                  | Add additional init containers to the controller pod(s)                                                                       | `[]`                               |
 | `controller.service.type`                                    | controller service type                                                                                                       | `ClusterIP`                        |
 | `controller.service.ports.metrics`                           | Metrics port for the controller                                                                                               | `8080`                             |
 | `controller.service.ports.telemetry`                         | Telemetry port for the controller                                                                                             | `8081`                             |
@@ -291,7 +291,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------------- | ------------------------------------------------------------- | ---------------------------- |
 | `executor.image.registry`                                  | executor image registry                                       | `docker.io`                  |
 | `executor.image.repository`                                | executor image repository                                     | `bitnami/argo-workflow-exec` |
-| `executor.image.tag`                                       | executor image tag (immutable tags are recommended)           | `3.3.5-debian-10-r20`        |
+| `executor.image.tag`                                       | executor image tag (immutable tags are recommended)           | `3.3.6-debian-11-r2`         |
 | `executor.image.pullPolicy`                                | executor image pull policy                                    | `Always`                     |
 | `executor.image.pullSecrets`                               | executor image pull secrets                                   | `[]`                         |
 | `executor.resources.limits`                                | The resources limits for the init container                   | `{}`                         |
