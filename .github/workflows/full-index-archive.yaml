@@ -16,10 +16,10 @@ jobs:
           curl $LAST_INDEX_URL -o last_index.yaml
       - id: upload-artifact
         uses: actions/upload-artifact@v3
-        retention-days: 2
         with:
           name: last-index
           path: last_index.yaml
+          retention-days: 2
   merge-indexes:
     runs-on: ubuntu-latest
     name: Merge
