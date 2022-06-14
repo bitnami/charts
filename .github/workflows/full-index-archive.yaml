@@ -1,0 +1,14 @@
+name: 'Generate the full index archive for Bitnami Charts'
+on:
+  schedule:
+    - cron: '0 0 * * *'
+jobs:
+  get-index:
+    runs-on: ubuntu-latest
+    name: "Get current Bitnami Charts index.yaml"
+    steps:
+      - id: download-index
+        name: 'Download last Bitnami Charts index.yaml'
+        run: |
+          curl --version
+          yq --version
