@@ -1,3 +1,10 @@
 {
-  "body": "{\"streams\": [{ \"stream\": { \"foo\": \"bar2\" }, \"values\": [ [ \"1652957345000000000\", \"fizzbuzz\" ] ] }]}"
+  "streams": [
+    {
+      "stream": {
+        "label": "value"
+      },
+      "values": [["1655215460780999999", "value"]]
+    }
+  ]
 }

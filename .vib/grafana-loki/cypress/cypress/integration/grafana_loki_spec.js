@@ -51,7 +51,7 @@ it('checks Loki range endpoint', () => {
   });
 });
 
-it('can publish logs to the endpoint', () => {
+it('can publish and retrieve a label', () => {
   cy.request({
     method: 'POST',
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
@@ -59,6 +59,16 @@ it('can publish logs to the endpoint', () => {
     body: body,
   }).then((response) => {
     expect(response.status).to.eq(204);
+  });
+
+  cy.request({
+    method: 'GET',
+    url: 'loki/api/v1/label/label/values',
+    form: true,
+  }).then((response) => {
+    expect(response.status).to.eq(200);
+    console.log(response.body.data);
+    expect(response.body.data[1]).to.eq('value');
   });
 });
 
