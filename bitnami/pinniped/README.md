@@ -7,7 +7,7 @@ Pinniped is an identity service provider for Kubernetes. Provides a consistent, 
 [Overview of Pinniped](https://pinniped.dev/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release   | `[]`                |
 | `image.registry`    | Pinniped image registry                             | `docker.io`         |
 | `image.repository`  | Pinniped image repository                           | `bitnami/pinniped`  |
-| `image.tag`         | Pinniped image tag (immutable tags are recommended) | `0.18.0-scratch-r2` |
+| `image.tag`         | Pinniped image tag (immutable tags are recommended) | `0.18.0-scratch-r3` |
 | `image.pullPolicy`  | Pinniped image pull policy                          | `IfNotPresent`      |
 | `image.pullSecrets` | Pinniped image pull secrets                         | `[]`                |
 
