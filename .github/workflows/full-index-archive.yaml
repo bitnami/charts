@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - 'full-index-archive'
+env:
+  LAST_INDEX_URL: https://charts.bitnami.com/bitnami/index.yaml
 jobs:
   get-index:
     runs-on: ubuntu-latest
@@ -11,5 +13,10 @@ jobs:
       - id: download-index
         name: 'Download last Bitnami Charts index.yaml'
         run: |
-          curl --version
-          yq --version
+          mkdir artifacts/
+          curl $LAST_INDEX_URL -o ./artifacts/last_index.yaml
+      - id: upload-artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: last_index.yaml
+          path: ./artifacts/
