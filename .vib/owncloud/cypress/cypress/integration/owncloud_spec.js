@@ -57,7 +57,7 @@ it('allows sharing a file by link', () => {
     cy.fixture('links').then((link) => {
       cy.get('[name="linkName"]')
         .clear()
-        .type(`${link.newLinks.name}0.${random}`);
+        .type(`${link.newLink.name}0.${random}`);
     });
     cy.contains('.primary', 'Share').click();
     cy.visit('/');
