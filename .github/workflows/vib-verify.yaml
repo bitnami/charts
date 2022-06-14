@@ -135,6 +135,6 @@ jobs:
           --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
           --header 'content-type: application/json' \
           --data '{
-            "reviewers": ["carrodher", "dgomezleon", "Mauraza", "marcosbc", "mdhont", "migruiz4"]
+            "team_reviewers": ["build-maintainers"]
             }' \
           --fail
