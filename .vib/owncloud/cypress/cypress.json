@@ -11,6 +11,6 @@
     "owncloudEmail": "test@example.com"
   },
   "hosts": {
-    "vmware-owncloud.my": "127.0.0.1"
+    "vmware-owncloud.my": "{{ TARGET_IP }}"
   }
 }
