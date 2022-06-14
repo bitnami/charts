@@ -114,5 +114,5 @@ jobs:
           cd index
           # Push changes
           git config user.name "Bitnami Containers"
-          git config user.email containers@bitnami.com
+          git config user.email "bitnami-bot@vmware.com"
           git add bitnami/index.yaml && git commit -m "${chart}-${chart_version}: Update index.yaml" -s && git push
