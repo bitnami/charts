@@ -49,7 +49,7 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/grafana-loki/gateway/goss"
+              "path": "/.vib/grafana-loki/goss/gateway"
             },
             "remote": {
               "workload": "deploy-grafana-loki-gateway"
@@ -60,7 +60,7 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/grafana-loki/querier/goss"
+              "path": "/.vib/grafana-loki/goss/querier"
             },
             "remote": {
               "workload": "sts-grafana-loki-querier"
