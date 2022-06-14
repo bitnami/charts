@@ -51,18 +51,20 @@ it('allows sharing a file by link', () => {
   cy.get('[data-file="ownCloud Manual.pdf"]').within(() => {
     cy.get('[data-action="Share"]').click();
   });
-  cy.get('.subtab-publicshare').click();
-  cy.get('.addLink').click();
-  cy.get('.shareDialogLinkShare').then(() => {
-    cy.fixture('links').then((link) => {
-      cy.get('[name="linkName"]')
-        .clear()
-        .type(`${link.newLink.name}0.${random}`);
-    });
-    cy.contains('.primary', 'Share').click();
-    cy.visit('/');
-    cy.contains('Shared by link').click();
-    cy.contains('No files in here').should('not.be.visible');
+  cy.get('[class="permalink"]').click();
+  cy.get('.detailFileInfoContainer').within(() => {
+    cy.get('input')
+      .invoke('val')
+      .then((text) => {
+        const link = text;
+        cy.request({
+          method: 'GET',
+          url: link,
+          form: true,
+        }).then((response) => {
+          expect(response.status).to.eq(200);
+        });
+      });
   });
 });
 

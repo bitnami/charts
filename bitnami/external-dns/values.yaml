@@ -41,6 +41,9 @@ extraDeploy: []
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
+## @param watchReleaseNamespace Watch only namepsace used for the release
+##
+watchReleaseNamespace: false
 
 ## @section external-dns parameters
 ##
@@ -56,7 +59,7 @@ kubeVersion: ""
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.12.0-debian-11-r0
+  tag: 0.12.0-debian-11-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

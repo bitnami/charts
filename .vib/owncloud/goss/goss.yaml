@@ -23,5 +23,5 @@ file:
     exists: true
     contains:
       - dbtype
-      - dbuser
+      - {{ printf "'dbuser' => '%s'" .Env.OWNCLOUD_DATABASE_USER }}
       - dbpassword
