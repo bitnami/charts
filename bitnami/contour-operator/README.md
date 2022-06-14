@@ -212,6 +212,7 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | `tolerations`                                     | Tolerations for Contour Operator pods assignment                                                                         | `[]`                       |
 | `updateStrategy.type`                             | Contour Operator deployment strategy type                                                                                | `RollingUpdate`            |
 | `priorityClassName`                               | Contour Operator pods' priorityClassName                                                                                 | `""`                       |
+| `runtimeClassName`                                | Name of the runtime class to be used by pod(s)                                                                           | `""`                       |
 | `lifecycleHooks`                                  | for the Contour Operator container(s) to automate configuration before or after startup                                  | `{}`                       |
 | `terminationGracePeriodSeconds`                   | Termination grace period in seconds                                                                                      | `""`                       |
 | `topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                       |
