@@ -7,9 +7,9 @@ env:
   LAST_INDEX_URL: https://charts.bitnami.com/bitnami/index.yaml
   INDEXES_DIR: indexes
 jobs:
-  get-indexes:
+  get:
     runs-on: ubuntu-latest
-    name: Get Indexes
+    name: Get
     steps:
       - id: checkout-full-index
         name: Checkout current full index.yaml
@@ -40,9 +40,9 @@ jobs:
           path: ./${{ env.INDEXES_DIR }}
           retention-days: 2
           if-no-files-found: error
-  merge-indexes:
+  merge:
     runs-on: ubuntu-latest
-    needs: get-indexes
+    needs: get
     name: Merge
     steps:
       - id: download-artifact
@@ -61,10 +61,10 @@ jobs:
           path: ./duplicates_index.yaml
           retention-days: 2
           if-no-files-found: error
-  remove-dups:
+  deduplicate:
     runs-on: ubuntu-latest
-    needs: merge-indexes
-    name: Remove Duplicates
+    needs: merge
+    name: Deduplicate
     steps:
       - id: download-artifact
         name: Download artifacts
@@ -82,9 +82,9 @@ jobs:
           path: ./index.yaml
           retention-days: 2
           if-no-files-found: error
-  check-full-index:
+  checks:
     runs-on: ubuntu-latest
-    needs: remove-dups
+    needs: deduplicate
     name: Checks
     steps:
       - id: download-artifact
