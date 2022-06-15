@@ -78,7 +78,7 @@ jobs:
         name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: full-index-archive
+          name: archive-full-index
           path: ./index.yaml
           retention-days: 2
           if-no-files-found: error
@@ -91,7 +91,7 @@ jobs:
         name: Download artifacts
         uses: actions/download-artifact@v3
         with:
-          name: indexes full-index-archive
+          name: indexes archive-full-index
       - id: ls
         name: ls
         run: ls
