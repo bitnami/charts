@@ -79,7 +79,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: archive-full-index
-          path: ./*index.yaml
+          path: index.yaml
           retention-days: 2
           if-no-files-found: error
   checks:
@@ -105,4 +105,8 @@ jobs:
       - id: check-missing-releases
         name: Checks theere is not missing releases
         run: |
-          ls
+          echo "https://charts.bitnami.com/bitnami/airflow-11.1.19.tgz" >> last_index_urls
+          yq eval '.entries[][].urls' last_index.yaml | awk '{print $2}' |sort| uniq > last_index_urls
+          yq eval '.entries[][].urls' index.yaml | awk '{print $2}' |sort| uniq > index_urls
+          for i in `cat last_index_urls`; do  grep -q $i index_urls || exit 1 ; done
+          echo "No missing releases detected"
