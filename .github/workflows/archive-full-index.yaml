@@ -101,7 +101,7 @@ jobs:
         name: Checks there is not any duplicates
         run: |
           sudo apt-get install -y moreutils
-          yq eval '.entries[][].urls' duplicates_index.yaml | sort | uniq -d | ( ! grep tgz )
+          yq eval '.entries[][].urls' index.yaml | sort | uniq -d | ( ! grep tgz )
       - id: check-missing-releases
         name: Checks theere is not missing releases
         run: |
