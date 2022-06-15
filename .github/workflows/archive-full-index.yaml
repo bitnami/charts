@@ -99,7 +99,9 @@ jobs:
           name: archive-full-index
       - id: check-no-dups
         name: Checks there is not any duplicates
-        run: yq eval '.entries[][].urls' index.yaml | sort | uniq -d
+        run: |
+          sudo apt-get install -y moreutils
+          yq eval '.entries[][].urls' index.yaml| sort | uniq -d | ifne echo "[Error] There is at least one duplicate"
       - id: check-missing-releases
         name: Checks theere is not missing releases
         run: |
