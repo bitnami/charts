@@ -97,6 +97,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: archive-full-index
-      - id: ls
-        name: ls
-        run: ls
+      - id: check-no-dups
+        name: Checks there is not any duplicates
+        run: yq eval '.entries[][].urls' index.yaml | sort | uniq -d
+      - id: check-missing-releases
+        name: Checks theere is not missing releases
+        run: |
+          ls
