@@ -107,6 +107,5 @@ jobs:
         run: |
           yq eval '.entries[][].urls' last_index.yaml | awk '{print $2}' |sort| uniq > last_index_urls
           yq eval '.entries[][].urls' index.yaml | awk '{print $2}' |sort| uniq > index_urls
-          echo "https://charts.bitnami.com/bitnami/airflow-11.1.19.tgz" >> last_index_urls
           for i in `cat last_index_urls`; do  grep -q $i index_urls || exit 1 ; done
           echo "No missing releases detected"
