@@ -32,4 +32,6 @@ data:
   KEYCLOAK_CACHE_TYPE: "ispn"
   KEYCLOAK_CACHE_STACK: "kubernetes"
   JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless.%s" (include "keycloak.fullname" .) .Release.Namespace }}
+  {{- else }}
+  KEYCLOAK_CACHE_TYPE: "local"
   {{- end }}

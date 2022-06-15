@@ -47,6 +47,9 @@ spec:
       {{- if .Values.cainjector.priorityClassName }}
       priorityClassName: {{ .Values.cainjector.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.cainjector.runtimeClassName }}
+      runtimeClassName: {{ .Values.cainjector.runtimeClassName }}
+      {{- end }}
       {{- if .Values.cainjector.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.affinity "context" $) | nindent 8 }}
       {{- else }}

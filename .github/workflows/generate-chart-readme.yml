@@ -60,6 +60,6 @@ jobs:
           cd charts
           if git status -s | grep bitnami; then
             git config user.name "Bitnami Containers"
-            git config user.email "containers@bitnami.com"
+            git config user.email "bitnami-bot@vmware.com"
             git add . && git commit -am "Update README.md with readme-generator-for-helm" --signoff && git push
           fi
