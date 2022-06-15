@@ -31,8 +31,7 @@ jobs:
               level: error
             line-length: disable
           EOF
-          yamllint -c config last_index.yaml
-          yamllint -c config index.yaml
+          yamllint -c config ./$INDEXES_DIR/*index.yaml
       - id: upload-artifact
         name: Upload artifacts
         uses: actions/upload-artifact@v3
