@@ -71,8 +71,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: duplicates-index
-      - id: Remove
-        name: remove
+      - id: remove
+        name: Remove duplicates
+        # Removes duplicates per entry using 'digest' as value.
         run: yq eval '.entries[] |= unique_by(.digest)' duplicates_index.yaml > index.yaml
       - id: upload-artifact
         name: Upload artifacts
@@ -99,6 +100,7 @@ jobs:
           name: archive-full-index
       - id: index-lint
         name: Lint archive full index
+        # Lint the resulting archive full index using ignoring identation and lin-length rules.
         run: |
           cat << EOF > config
           extends: relaxed
@@ -111,10 +113,12 @@ jobs:
           yamllint -c config index.yaml
       - id: check-no-dups
         name: Checks there is not any duplicates
+        # Try to find duplicate digest attributes which would mean there are duplicates.
         run: |
           yq eval '.entries[][].digest' index.yaml | sort | uniq -d | ( ! grep sha256 )
       - id: check-missing-releases
-        name: Checks theere is not missing releases
+        name: Checks there are not missing releases
+        # Available URLs should be fine if everything went well during the merge & deduplication.
         run: |
           yq eval '.entries[][].urls' last_index.yaml | awk '{print $2}' |sort| uniq > last_index_urls
           yq eval '.entries[][].urls' index.yaml | awk '{print $2}' |sort| uniq > index_urls
