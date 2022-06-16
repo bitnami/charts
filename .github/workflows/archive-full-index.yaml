@@ -73,7 +73,7 @@ jobs:
           name: duplicates-index
       - id: Remove
         name: remove
-        run: yq eval '.entries[] |= unique_by(.version)' duplicates_index.yaml > index.yaml
+        run: yq eval '.entries[] |= unique_by(.digest)' duplicates_index.yaml > index.yaml
       - id: upload-artifact
         name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -97,11 +97,22 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: archive-full-index
+      - id: index-lint
+        name: Lint archive full index
+        run: |
+          cat << EOF > config
+          extends: relaxed
+
+          rules:
+            indentation:
+              level: error
+            line-length: disable
+          EOF
+          yamllint -c config index.yaml
       - id: check-no-dups
         name: Checks there is not any duplicates
         run: |
-          sudo apt-get install -y moreutils
-          yq eval '.entries[][].urls' index.yaml | sort | uniq -d | ( ! grep tgz )
+          yq eval '.entries[][].digest' index.yaml | sort | uniq -d | ( ! grep sha256 )
       - id: check-missing-releases
         name: Checks theere is not missing releases
         run: |
