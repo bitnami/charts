@@ -141,7 +141,7 @@ spec:
                   key: mysql-password
             {{- end }}
             {{- end }}
-            {{- if .Values.auth.database }}
+            {{- if and .Values.auth.createDatabase .Values.auth.database }}
             - name: MYSQL_DATABASE
               value: {{ .Values.auth.database | quote }}
             {{- end }}
