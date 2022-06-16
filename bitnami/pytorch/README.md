@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `image.registry`                                  | PyTorch image registry                                                                                                   | `docker.io`           |
 | `image.repository`                                | PyTorch image repository                                                                                                 | `bitnami/pytorch`     |
-| `image.tag`                                       | PyTorch image tag (immutable tags are recommended)                                                                       | `1.11.0-debian-11-r0` |
+| `image.tag`                                       | PyTorch image tag (immutable tags are recommended)                                                                       | `1.11.0-debian-11-r3` |
 | `image.pullPolicy`                                | Image pull policy                                                                                                        | `IfNotPresent`        |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                         | `[]`                  |
 | `worldSize`                                       | Number of nodes that will run the code                                                                                   | `1`                   |
@@ -153,8 +153,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for Pytorch nodes                                                      | `""`                  |
 | `extraVolumes`                                    | Optionally specify extra list of additional volumes for the Pytorch pod(s)                                               | `[]`                  |
 | `extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Pytorch container(s)                                    | `[]`                  |
-| `sidecars`                                        | Add additional sidecar containers to the Pytorch pod(s)                                                                  | `{}`                  |
-| `initContainers`                                  | Add additional init containers to the %%MAIN_CONTAINER_NAME%% pod(s)                                                     | `{}`                  |
+| `sidecars`                                        | Add additional sidecar containers to the Pytorch pod(s)                                                                  | `[]`                  |
+| `initContainers`                                  | Add additional init containers to the %%MAIN_CONTAINER_NAME%% pod(s)                                                     | `[]`                  |
 
 
 ### Traffic Exposure Parameters
@@ -180,13 +180,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `git.registry`                         | Git image registry                                                                                                                                        | `docker.io`             |
 | `git.repository`                       | Git image repository                                                                                                                                      | `bitnami/git`           |
-| `git.tag`                              | Git image tag (immutable tags are recommended)                                                                                                            | `2.36.1-debian-11-r0`   |
+| `git.tag`                              | Git image tag (immutable tags are recommended)                                                                                                            | `2.36.1-debian-11-r3`   |
 | `git.pullPolicy`                       | Git image pull policy                                                                                                                                     | `IfNotPresent`          |
 | `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r0`       |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r3`       |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
