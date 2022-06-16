@@ -262,7 +262,7 @@ spec:
                 {{- if .Values.auth.enabled }}
                 SOLR_AUTH_TYPE=basic SOLR_AUTHENTICATION_OPTS="-Dbasicauth=${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" \
                 {{- end }}
-                solr assert --timeout {{ printf "%v000" .Values.livenessProbe.timeoutSeconds | quote }} --cloud "{{ ternary "https" "http" .Values.tls.enabled }}://localhost:${SOLR_PORT_NUMBER}/solr/"
+                solr assert --timeout {{ printf "%v000" .Values.livenessProbe.timeoutSeconds | quote }} {{ ternary "--cloud" "--not-cloud" .Values.cloudEnabled }} "{{ ternary "https" "http" .Values.tls.enabled }}://localhost:${SOLR_PORT_NUMBER}/solr/"
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -281,7 +281,7 @@ spec:
                 {{- if .Values.auth.enabled }}
                 SOLR_AUTH_TYPE=basic SOLR_AUTHENTICATION_OPTS="-Dbasicauth=${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" \
                 {{- end }}
-                solr assert --timeout {{ printf "%v000" .Values.readinessProbe.timeoutSeconds | quote }} --cloud "{{ ternary "https" "http" .Values.tls.enabled }}://localhost:${SOLR_PORT_NUMBER}/solr/"
+                solr assert --timeout {{ printf "%v000" .Values.readinessProbe.timeoutSeconds | quote }} {{ ternary "--cloud" "--not-cloud" .Values.cloudEnabled }} "{{ ternary "https" "http" .Values.tls.enabled }}://localhost:${SOLR_PORT_NUMBER}/solr/"
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -300,7 +300,7 @@ spec:
                 {{- if .Values.auth.enabled }}
                 SOLR_AUTH_TYPE=basic SOLR_AUTHENTICATION_OPTS="-Dbasicauth=${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" \
                 {{- end }}
-                solr assert --timeout {{ printf "%v000" .Values.readinessProbe.timeoutSeconds | quote }} --cloud "{{ ternary "https" "http" .Values.tls.enabled }}://localhost:${SOLR_PORT_NUMBER}/solr/"
+                solr assert --timeout {{ printf "%v000" .Values.readinessProbe.timeoutSeconds | quote }} {{ ternary "--cloud" "--not-cloud" .Values.cloudEnabled }} "{{ ternary "https" "http" .Values.tls.enabled }}://localhost:${SOLR_PORT_NUMBER}/solr/"
           {{- else if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}

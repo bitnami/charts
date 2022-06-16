@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
@@ -58,6 +60,7 @@ diagnosticMode:
     - infinity
 
 ## @section Spark parameters
+##
 
 ## Bitnami Spark image version
 ## ref: https://hub.docker.com/r/bitnami/spark/tags/
@@ -95,6 +98,7 @@ image:
 hostNetwork: false
 
 ## @section Spark master parameters
+##
 
 ## Spark master specific configuration
 ##
@@ -228,8 +232,8 @@ master:
   ##    maxSurge: 25%
   ##    maxUnavailable: 25%
   ##
-  updateStrategy: 
-    type: RollingUpdate 
+  updateStrategy:
+    type: RollingUpdate
   ## @param master.priorityClassName master pods' priorityClassName
   ##
   priorityClassName: ""
@@ -268,11 +272,13 @@ master:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -340,7 +346,7 @@ master:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param master.initContainers Add initContainers to the master pods.
   ## Example:
   ## initContainers:
@@ -354,6 +360,7 @@ master:
   initContainers: []
 
 ## @section Spark worker parameters
+##
 
 ## Spark worker specific configuration
 ##
@@ -404,6 +411,7 @@ worker:
   ## extraEnvVars:
   ##  - name: SPARK_DAEMON_JAVA_OPTS
   ##    value: -Dx=y
+  ##
   extraEnvVars: []
   ## @param worker.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for worker nodes
   ##
@@ -501,8 +509,8 @@ worker:
   ##    maxSurge: 25%
   ##    maxUnavailable: 25%
   ##
-  updateStrategy: 
-    type: RollingUpdate 
+  updateStrategy:
+    type: RollingUpdate
   ## @param worker.podManagementPolicy Statefulset Pod Management Policy Type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
@@ -545,11 +553,13 @@ worker:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -617,7 +627,7 @@ worker:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param worker.initContainers Add initContainers to the worker pods.
   ## Example:
   ## initContainers:
@@ -644,6 +654,7 @@ worker:
     targetMemory: ""
 
 ## @section Security parameters
+##
 
 ## Security configuration
 ##
@@ -707,14 +718,17 @@ security:
       ## limits:
       ##    cpu: 100m
       ##    memory: 128Mi
+      ##
       limits: {}
       ## Examples:
       ## requests:
       ##    cpu: 100m
       ##    memory: 128Mi
+      ##
       requests: {}
 
 ## @section Traffic Exposure parameters
+##
 
 ## Service parameters
 ##
@@ -869,7 +883,7 @@ ingress:
   ## - host: spark.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: spark-svc
   ##           port:
@@ -878,6 +892,7 @@ ingress:
   extraRules: []
 
 ## @section Other parameters
+##
 
 ## ServiceAccount configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -898,6 +913,7 @@ serviceAccount:
   automountServiceAccountToken: true
 
 ## @section Metrics parameters
+##
 
 ## Metrics configuration
 ##
