@@ -77,31 +77,31 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Airflow common parameters
 
-| Name                     | Description                                                                                                                                    | Value                   |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `auth.username`          | Username to access web UI                                                                                                                      | `user`                  |
-| `auth.password`          | Password to access web UI                                                                                                                      | `""`                    |
-| `auth.fernetKey`         | Fernet key to secure connections                                                                                                               | `""`                    |
-| `auth.secretKey`         | Secret key to run your flask app                                                                                                               | `""`                    |
-| `auth.existingSecret`    | Name of an existing secret to use for Airflow credentials                                                                                      | `""`                    |
-| `executor`               | Airflow executor. Allowed values: `SequentialExecutor`, `LocalExecutor`, `CeleryExecutor`, `KubernetesExecutor` and `CeleryKubernetesExecutor` | `CeleryExecutor`        |
-| `loadExamples`           | Switch to load some Airflow examples                                                                                                           | `false`                 |
-| `configuration`          | Specify content for Airflow config file (auto-generated based on other env. vars otherwise)                                                    | `""`                    |
-| `existingConfigmap`      | Name of an existing ConfigMap with the Airflow config file                                                                                     | `""`                    |
-| `dags.existingConfigmap` | Name of an existing ConfigMap with all the DAGs files you want to load in Airflow                                                              | `""`                    |
-| `dags.image.registry`    | Init container load-dags image registry                                                                                                        | `docker.io`             |
-| `dags.image.repository`  | Init container load-dags image repository                                                                                                      | `bitnami/bitnami-shell` |
-| `dags.image.tag`         | Init container load-dags image tag (immutable tags are recommended)                                                                            | `11-debian-11-r0`       |
-| `dags.image.pullPolicy`  | Init container load-dags image pull policy                                                                                                     | `IfNotPresent`          |
-| `dags.image.pullSecrets` | Init container load-dags image pull secrets                                                                                                    | `[]`                    |
-| `extraEnvVars`           | Add extra environment variables for all the Airflow pods                                                                                       | `[]`                    |
-| `extraEnvVarsCM`         | ConfigMap with extra environment variables for all the Airflow pods                                                                            | `""`                    |
-| `extraEnvVarsSecret`     | Secret with extra environment variables for all the Airflow pods                                                                               | `""`                    |
-| `extraEnvVarsSecrets`    | List of secrets with extra environment variables for all the Airflow pods                                                                      | `[]`                    |
-| `sidecars`               | Add additional sidecar containers to all the Airflow pods                                                                                      | `[]`                    |
-| `initContainers`         | Add additional init containers to all the Airflow pods                                                                                         | `[]`                    |
-| `extraVolumeMounts`      | Optionally specify extra list of additional volumeMounts for all the Airflow pods                                                              | `[]`                    |
-| `extraVolumes`           | Optionally specify extra list of additional volumes for the all the Airflow pods                                                               | `[]`                    |
+| Name                     | Description                                                                                                                                                               | Value                   |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `auth.username`          | Username to access web UI                                                                                                                                                 | `user`                  |
+| `auth.password`          | Password to access web UI                                                                                                                                                 | `""`                    |
+| `auth.fernetKey`         | Fernet key to secure connections                                                                                                                                          | `""`                    |
+| `auth.secretKey`         | Secret key to run your flask app                                                                                                                                          | `""`                    |
+| `auth.existingSecret`    | Name of an existing secret to use for Airflow credentials                                                                                                                 | `""`                    |
+| `executor`               | Airflow executor. Allowed values: `SequentialExecutor`, `LocalExecutor`, `CeleryExecutor`, `KubernetesExecutor`, `CeleryKubernetesExecutor` and `LocalKubernetesExecutor` | `CeleryExecutor`        |
+| `loadExamples`           | Switch to load some Airflow examples                                                                                                                                      | `false`                 |
+| `configuration`          | Specify content for Airflow config file (auto-generated based on other env. vars otherwise)                                                                               | `""`                    |
+| `existingConfigmap`      | Name of an existing ConfigMap with the Airflow config file                                                                                                                | `""`                    |
+| `dags.existingConfigmap` | Name of an existing ConfigMap with all the DAGs files you want to load in Airflow                                                                                         | `""`                    |
+| `dags.image.registry`    | Init container load-dags image registry                                                                                                                                   | `docker.io`             |
+| `dags.image.repository`  | Init container load-dags image repository                                                                                                                                 | `bitnami/bitnami-shell` |
+| `dags.image.tag`         | Init container load-dags image tag (immutable tags are recommended)                                                                                                       | `11-debian-11-r0`       |
+| `dags.image.pullPolicy`  | Init container load-dags image pull policy                                                                                                                                | `IfNotPresent`          |
+| `dags.image.pullSecrets` | Init container load-dags image pull secrets                                                                                                                               | `[]`                    |
+| `extraEnvVars`           | Add extra environment variables for all the Airflow pods                                                                                                                  | `[]`                    |
+| `extraEnvVarsCM`         | ConfigMap with extra environment variables for all the Airflow pods                                                                                                       | `""`                    |
+| `extraEnvVarsSecret`     | Secret with extra environment variables for all the Airflow pods                                                                                                          | `""`                    |
+| `extraEnvVarsSecrets`    | List of secrets with extra environment variables for all the Airflow pods                                                                                                 | `[]`                    |
+| `sidecars`               | Add additional sidecar containers to all the Airflow pods                                                                                                                 | `[]`                    |
+| `initContainers`         | Add additional init containers to all the Airflow pods                                                                                                                    | `[]`                    |
+| `extraVolumeMounts`      | Optionally specify extra list of additional volumeMounts for all the Airflow pods                                                                                         | `[]`                    |
+| `extraVolumes`           | Optionally specify extra list of additional volumes for the all the Airflow pods                                                                                          | `[]`                    |
 
 
 ### Airflow web parameters
@@ -650,6 +650,9 @@ Local executor runs tasks by spawning processes in the Scheduler pods. To enable
 executor=LocalExecutor
 redis.enabled=false
 ```
+### LocalKubernetesExecutor
+
+The LocalKubernetesExecutor is introduced in Airflow 2.3 and is a combination of both the Local and the Kubernetes executors. Tasks will be executed in the scheduler by default, but those tasks that require it can be executed in a Kubernetes pod using the 'kubernetes' queue.
 
 #### SequentialExecutor
 
