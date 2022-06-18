@@ -1,8 +1,9 @@
-{{- if and .Values.persistence.enabled .Values.persistence.hostPath (not .Values.persistence.existingClaim) -}}
+{{- if and (include "prestashop.host" .) .Values.persistence.enabled .Values.persistence.hostPath (not .Values.persistence.existingClaim) -}}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: {{ include "common.names.fullname" . }}-prestashop
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}

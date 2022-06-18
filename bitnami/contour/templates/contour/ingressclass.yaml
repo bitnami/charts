@@ -1,0 +1,18 @@
+{{ $ingressClass := .Values.contour.ingressClass }}
+{{- if kindIs "map" $ingressClass }}
+{{- if $ingressClass.create }}
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: {{ include "contour.ingressClassName" . }}
+  annotations:
+{{- if $ingressClass.default }}
+    ingressclass.kubernetes.io/is-default-class: "true"
+{{- end }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: contour
+spec:
+  controller: {{ printf "projectcontour.io/%s/%s-contour" (include "common.names.namespace" .) (include "common.names.fullname" .) }}
+{{- end }}
+{{- end }}

@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "harbor.clair" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -13,12 +14,12 @@ metadata:
   {{- end }}
 spec:
   ports:
-    - name: clair
-      port: 6060
+    - name: api
+      port: {{ .Values.clair.server.service.ports.api }}
     - name: health
-      port: 6061
+      port: {{ .Values.clair.server.service.ports.health }}
     - name: adapter
-      port: {{ include "harbor.clairAdapter.servicePort" . }}
+      port: {{ ternary .Values.clair.adapter.service.ports.https .Values.clair.adapter.service.ports.http .Values.internalTLS.enabled }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: clair
 {{- end }}

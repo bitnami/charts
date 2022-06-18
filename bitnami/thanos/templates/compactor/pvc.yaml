@@ -3,8 +3,21 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "common.names.fullname" . }}-compactor
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: compactor
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.compactor.persistence.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.compactor.persistence.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.compactor.persistence.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
 spec:
   accessModes:
   {{- range .Values.compactor.persistence.accessModes }}

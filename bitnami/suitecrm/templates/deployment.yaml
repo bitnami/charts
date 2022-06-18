@@ -3,6 +3,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -46,6 +47,13 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
@@ -95,13 +103,11 @@ spec:
           {{- else if .Values.certificates.customCertificate.certificateSecret }}
           - sh
           - -c
-          - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
-            else apt-get update && apt-get install -y ca-certificates openssl; fi
+          - install_packages ca-certificates openssl
           {{- else }}
           - sh
           - -c
-          - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
-            else apt-get update && apt-get install -y ca-certificates openssl; fi
+          - install_packages ca-certificates openssl
             && openssl req -new -x509 -days 3650 -nodes -sha256
               -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
               -out {{ .Values.certificates.customCertificate.certificateLocation }}
@@ -170,7 +176,7 @@ spec:
                   key: mariadb-password
             - name: SUITECRM_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.suitecrmSkipInstall | quote }}
-            {{- $port:=.Values.service.port | toString }}
+            {{- $port:=(coalesce .Values.service.ports.http .Values.service.port) | toString }}
             - name: SUITECRM_HOST
               value: {{ include "suitecrm.host" . }}
             - name: SUITECRM_USERNAME

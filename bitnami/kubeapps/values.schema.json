@@ -26,9 +26,9 @@
         }
       }
     },
-    "assetsvc": {
+    "kubeappsapis": {
       "type": "object",
-      "title": "Assetsvc configuration",
+      "title": "kubeappsapis configuration",
       "form": true,
       "properties": {
         "replicaCount": {
@@ -66,16 +66,6 @@
             "value": false,
             "path": "ingress/enabled"
           }
-        },
-        "certManager": {
-          "type": "boolean",
-          "form": true,
-          "title": "Use cert-manager to auto-generate the TLS certificate",
-          "description": "Add the corresponding annotations for cert-manager to auto-generate the TLS certificate",
-          "hidden": {
-            "value": false,
-            "path": "ingress/enabled"
-          }
         }
       }
     },
@@ -93,7 +83,7 @@
           "type": "string",
           "form": true,
           "title": "Identity Provider name",
-          "description": "See https://pusher.github.io/oauth2_proxy/auth-configuration to find available providers",
+          "description": "See https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview#generating-a-cookie-secret to find available providers",
           "hidden": {
             "value": false,
             "path": "authProxy/enabled"

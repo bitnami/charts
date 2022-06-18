@@ -14,7 +14,7 @@ Params:
   {{- $dbUserPrefix := include "common.cassandra.values.key.dbUser" . -}}
   {{- $valueKeyPassword := printf "%s.password" $dbUserPrefix -}}
 
-  {{- if and (not $existingSecret) (eq $enabled "true") -}}
+  {{- if and (or (not $existingSecret) (eq $existingSecret "\"\"")) (eq $enabled "true") -}}
     {{- $requiredPasswords := list -}}
 
     {{- $requiredPassword := dict "valueKey" $valueKeyPassword "secret" .secret "field" "cassandra-password" -}}

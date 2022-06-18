@@ -2,6 +2,12 @@
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
   "properties": {
+    "serviceAccountName": {
+      "type": "string",
+      "title": "ServiceAccount name",
+      "form": true,
+      "description": "Defaults to use default if not set"
+    },
     "jenkinsUser": {
       "type": "string",
       "title": "Username",
@@ -101,19 +107,6 @@
           "form": true,
           "title": "Service Type",
           "description": "Allowed values: \"ClusterIP\", \"NodePort\" and \"LoadBalancer\""
-        }
-      }
-    },
-    "metrics": {
-      "type": "object",
-      "form": true,
-      "title": "Prometheus metrics details",
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "title": "Create Prometheus metrics exporter",
-          "description": "Create a side-car container to expose Prometheus metrics",
-          "form": true
         }
       }
     }

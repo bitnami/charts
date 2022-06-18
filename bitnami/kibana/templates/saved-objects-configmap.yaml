@@ -2,9 +2,17 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "common.names.fullname" . }}-saved-objects
+  name: {{ printf "%s-saved-objects" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
+  {{- $savedObjectsUrl := printf "localhost:%d%s/api/saved_objects/_import" (int .Values.containerPorts.http) (include "kibana.basePath" .)  }}
   import-saved-objects.sh: |
     #!/bin/bash
     echo "==> Saved objects import"
@@ -14,8 +22,8 @@ data:
     {{- range $i, $url := .Values.savedObjects.urls }}
     echo "Importing saved objects from NDJSON in url {{ add $i 1 }} out of {{ $totalURLs }}: {{ $url }}"
     download_tmp_file="$(mktemp)"
-    curl "{{$url}}" > "${download_tmp_file}.ndjson"
-    curl -s --connect-timeout 60 --max-time 60 -XPOST localhost:5601/api/saved_objects/_import -H 'kbn-xsrf:true' --form file=@${download_tmp_file}.ndjson
+    curl "{{ $url }}" > "${download_tmp_file}.ndjson"
+    curl -s --connect-timeout 60 --max-time 60 -XPOST {{ $savedObjectsUrl }} -H 'kbn-xsrf:true' --form file=@${download_tmp_file}.ndjson
     {{- end }}
     {{- end }}
     {{- if .Values.savedObjects.configmap }}
@@ -26,7 +34,7 @@ data:
         case "$f" in
             *.ndjson)
                 echo "Importing $f"
-                curl -s --connect-timeout 60 --max-time 60 -XPOST localhost:5601/api/saved_objects/_import -H 'kbn-xsrf:true' --form file=@${f}
+                curl -s --connect-timeout 60 --max-time 60 -XPOST {{ $savedObjectsUrl }} -H 'kbn-xsrf:true' --form file=@${f}
                 ;;
             *)
                 echo "Ignoring $f"

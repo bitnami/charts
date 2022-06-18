@@ -1,0 +1,50 @@
+{{- if and .Values.dex.enabled .Values.dex.metrics.enabled .Values.dex.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "argocd.dex" . }}
+  {{- if .Values.dex.metrics.serviceMonitor.namespace }}
+  namespace: {{ .Values.dex.metrics.serviceMonitor.namespace | quote }}
+  {{- else }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- end }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.dex.metrics.serviceMonitor.selector }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.dex.metrics.serviceMonitor.selector "context" $) | nindent 4 }}
+    {{- end }}
+    app.kubernetes.io/component: dex
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.dex.metrics.serviceMonitor.jobLabel | quote }}
+  endpoints:
+    - port: http-metrics
+      path: /metrics
+      {{- if .Values.dex.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.dex.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.dex.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.dex.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.dex.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.dex.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.dex.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.dex.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dex.metrics.serviceMonitor.relabelings }}
+      relabelings: {- include "common.tplvalues.render" ( dict "value" .Values.dex.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: dex
+{{- end }}
+

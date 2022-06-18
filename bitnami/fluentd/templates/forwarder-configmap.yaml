@@ -2,12 +2,19 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "fluentd.fullname" . }}-forwarder-cm
-  labels: {{- include "fluentd.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}-forwarder-cm
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: forwarder
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   {{- range $key, $value := .Values.forwarder.configMapFiles }}
   {{ $key }}: |
-    {{- include "fluentd.tplValue" (dict "value" $value "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" $value "context" $) | nindent 4 }}
   {{- end }}
 {{- end -}}

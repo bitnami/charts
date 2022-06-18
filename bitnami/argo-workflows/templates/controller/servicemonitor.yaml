@@ -1,0 +1,34 @@
+{{- if and (or .Values.controller.metrics.enabled .Values.controller.telemetry.enabled) .Values.controller.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "argo-workflows.controller.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: argo-workflows
+    app.kubernetes.io/component: controller
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  endpoints:
+  {{- if .Values.controller.metrics.enabled }}
+    - port: tcp-metrics
+      path: {{ .Values.controller.metrics.path }}
+      interval: 30s
+  {{- end }}
+  {{- if .Values.controller.telemetry.enabled }}
+    - port: tcp-telemetry
+      path: {{ .Values.controller.telemetry.path }}
+      interval: 30s
+  {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: controller
+{{- end }}

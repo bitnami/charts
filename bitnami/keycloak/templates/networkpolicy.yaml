@@ -22,7 +22,7 @@ spec:
         - port: {{ .Values.containerPorts.https }}
         {{- end }}
         {{- if .Values.metrics.enabled }}
-        - port: 9990
+        - port: {{ .Values.containerPorts.management }}
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:

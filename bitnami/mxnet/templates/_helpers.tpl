@@ -48,21 +48,43 @@ sleep infinity
   {{- end }}
 {{- end -}}
 
-{{- define "mxnet.parseEnvVars" -}}
-{{- range $env := . }}
-{{- if $env.value }}
-- name: {{ $env.name }}
-  value: {{ $env.value | quote }}
-{{- else if $env.valueFrom }}
-- name: {{ $env.name }}
-  valueFrom:
-{{ toYaml $env.valueFrom | indent 4 }}
-{{- else }} {{/* Leave this for future compatibility */}}
--
-{{ toYaml $env | indent 2}}
+{{- define "mxnet.volumes" -}}
+{{- if .Values.existingSecret }}
+- name: secret-data
+  secret:
+    secretName: {{ .Values.existingSecret }}
 {{- end }}
+{{- if .Values.configMap }}
+- name: ext-files
+  configMap:
+    name: {{ .Values.configMap }}
+{{- else if .Files.Glob "files/*" }}
+- name: local-files
+  configMap:
+    name: {{ printf "%s-files" (include "common.names.fullname" .) }}
+{{- else if .Values.cloneFilesFromGit.enabled }}
+- name: git-cloned-files
+  emptyDir: {}
 {{- end }}
+{{- end -}}
+
+{{- define "mxnet.volumeMounts" -}}
+{{- if .Values.configMap }}
+- name: ext-files
+  mountPath: /app
+{{- else if .Files.Glob "files/*" }}
+- name: local-files
+  mountPath: /app
+{{- else if .Values.cloneFilesFromGit.enabled }}
+- name: git-cloned-files
+  mountPath: /app
 {{- end }}
+{{- if .Values.existingSecret }}
+- name: secret-data
+  mountPath: /secrets
+{{- end }}
+{{- end -}}
+
 
 {{/*
 Compile all warnings into a single message, and call fail.
@@ -72,6 +94,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "mxnet.validateValues.mode" .) -}}
 {{- $messages := append $messages (include "mxnet.validateValues.workerCount" .) -}}
 {{- $messages := append $messages (include "mxnet.validateValues.serverCount" .) -}}
+{{- $messages := append $messages (include "mxnet.validateValues.extraVolumes" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -109,8 +132,18 @@ mxnet: server.replicaCount
 {{- end -}}
 {{- end -}}
 
+{{/* Validate values of Apache MXNet (Incubating) - Incorrect extra volume settings */}}
+{{- define "mxnet.validateValues.extraVolumes" -}}
+{{- if and (.Values.extraVolumes) (not (or .Values.extraVolumeMounts .Values.cloneFilesFromGit.extraVolumeMounts)) -}}
+mxnet: missing-extra-volume-mounts
+    You specified extra volumes but not mount points for them. Please set
+    the extraVolumeMounts value
+{{- end -}}
+{{- end -}}
+
 {{/* Check if there are rolling tags in the images */}}
 {{- define "mxnet.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.git }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}

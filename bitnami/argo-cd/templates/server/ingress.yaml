@@ -1,0 +1,66 @@
+{{- if .Values.server.ingress.enabled -}}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "argocd.server" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.server.ingress.annotations .Values.commonAnnotations .Values.server.ingress.certManager }}
+  annotations:
+    {{- if .Values.server.ingress.certManager }}
+    kubernetes.io/tls-acme: "true"
+    {{- end }}
+    {{- if .Values.server.ingress.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.server.ingress.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  {{- if and .Values.server.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.server.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.server.ingress.hostname }}
+    - host: {{ .Values.server.ingress.hostname }}
+      http:
+        paths:
+          {{- if .Values.server.ingress.extraPaths }}
+          {{- toYaml .Values.server.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.server.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.server.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "argocd.server" .) "servicePort" (ternary "https" "http" .Values.server.ingress.tls) "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.server.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "argocd.server" $) "servicePort" (ternary "https" "http" $.Values.server.ingress.tls) "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.server.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.server.ingress.tls .Values.server.ingress.extraTls }}
+  tls:
+    {{- if .Values.server.ingress.tls }}
+    - hosts:
+        - {{ .Values.server.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.server.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.server.ingress.extraTls }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.server.ingress.extraTls "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end -}}

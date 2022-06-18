@@ -1,4 +1,5 @@
-{{- if and .Values.agent.enabled .Values.agent.podSecurityPolicy.create }}
+{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+{{- if and $pspAvailable .Values.agent.enabled .Values.agent.podSecurityPolicy.create }}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
@@ -8,6 +9,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   name: {{ template "common.names.fullname" . }}-agent
+  namespace: {{ .Release.Namespace | quote }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -16,7 +18,7 @@ spec:
   {{- if .Values.agent.iptables }}
   allowedCapabilities:
     - "NET_ADMIN"
-  {{ end }}
+  {{- end }}
   allowPrivilegeEscalation: false
   volumes:
     - 'secret'

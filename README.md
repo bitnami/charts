@@ -1,3 +1,5 @@
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/bitnami)](https://artifacthub.io/packages/search?repo=bitnami)
+
 # The Bitnami Library for Kubernetes
 
 Popular applications, provided by [Bitnami](https://bitnami.com), ready to launch on Kubernetes using [Kubernetes Helm](https://github.com/helm/helm).
@@ -14,9 +16,10 @@ $ helm install my-release bitnami/<chart>
 
 ## Before you begin
 
-### Prerequisites
-- Kubernetes 1.12+
-- Helm 3.1.0
+### Prerequisites 
+
+- Kubernetes 1.19+
+- Helm 3.2.0+
 
 ### Setup a Kubernetes Cluster
 
@@ -29,7 +32,7 @@ The quickest way to setup a Kubernetes cluster to install Bitnami Charts is foll
 - [Get Started with Bitnami Charts using the Google Kubernetes Engine (GKE)](https://docs.bitnami.com/kubernetes/get-started-gke/)
 - [Get Started with Bitnami Charts using the IBM Cloud Kubernetes Service (IKS)](https://docs.bitnami.com/kubernetes/get-started-charts-iks/)
 
-For setting up Kubernetes on other cloud platforms or bare-metal servers refer to the Kubernetes [getting started guide](http://kubernetes.io/docs/getting-started-guides/).
+For setting up Kubernetes on other cloud platforms or bare-metal servers refer to the Kubernetes [getting started guide](https://kubernetes.io/docs/getting-started-guides/).
 
 ### Install Helm
 
@@ -56,9 +59,9 @@ Useful Helm Client Commands:
 * Install a chart: `helm install my-release bitnami/<package-name>`
 * Upgrade your application: `helm upgrade`
 
-# License
+## License
 
-Copyright (c) 2015-2021 Bitnami
+Copyright &copy; 2022 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

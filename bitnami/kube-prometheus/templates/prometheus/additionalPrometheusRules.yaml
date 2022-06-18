@@ -1,13 +1,19 @@
-{{- if and .Values.prometheus.enabled .Values.prometheus.additionalPrometheusRules}}
-  {{- range .Values.prometheus.additionalPrometheusRules }}
+{{- if and .Values.prometheus.enabled .Values.prometheus.additionalPrometheusRules }}
+{{- range .Values.prometheus.additionalPrometheusRules }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: {{ template "kube-prometheus.name" $ }}-{{ .name }}
-  namespace: {{ $.Release.Namespace }}
+  namespace: {{ include "common.names.namespace" $ | quote }}
   labels: {{ include "kube-prometheus.prometheus.labels" $ | nindent 4 }}
+    {{- if $.Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if $.Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   groups: {{- toYaml .groups | nindent 4 }}
-  {{- end }}
+{{- end }}
 {{- end }}

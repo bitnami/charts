@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 3.6.0
+appVersion: 4.2.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -17,10 +17,10 @@ keywords:
   - iam
   - security
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: kiam
 sources:
   - https://github.com/bitnami/bitnami-docker-kiam
   - https://github.com/uswitch/kiam
-version: 0.3.2
+version: 1.0.13

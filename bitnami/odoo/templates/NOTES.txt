@@ -1,15 +1,15 @@
-{{- $secretName := include "odoo.secretName" . -}}
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
 
-*******************************************************************
-*** PLEASE BE PATIENT: Odoo may take a few minutes to install   ***
-*******************************************************************
+** Please be patient while the chart is being deployed **
 
 {{- if .Values.ingress.enabled }}
 
 1. Get the Odoo URL indicated on the Ingress Rule and associate it to your cluster external IP:
 
    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-   export HOSTNAME=$(kubectl get ingress --namespace {{ .Release.Namespace }} {{ template "odoo.fullname" . }} -o jsonpath='{.spec.rules[0].host}')
+   export HOSTNAME=$(kubectl get ingress --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath='{.spec.rules[0].host}')
    echo "Odoo URL: http://$HOSTNAME/"
    echo "$CLUSTER_IP  $HOSTNAME" | sudo tee -a /etc/hosts
 
@@ -17,25 +17,25 @@
 
 1. Get the Odoo URL by running:
 
+{{- $odooPort := coalesce .Values.service.ports.http .Values.service.port | toString }}
 {{- if eq .Values.service.type "NodePort" }}
 
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "odoo.fullname" . }})
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo "Odoo URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- else if eq .Values.service.type "LoadBalancer" }}
 
-** Please ensure an external IP is associated to the {{ template "odoo.fullname" . }} service before proceeding **
-** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "odoo.fullname" . }} **
+** Please ensure an external IP is associated to the {{ template "common.names.fullname" . }} service before proceeding **
+** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }} **
 
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "odoo.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+  echo "Odoo URL: http://$SERVICE_IP{{- if ne $odooPort "80" }}:{{ $odooPort }}{{ end }}/"
 
-{{- $port:=.Values.service.port | toString }}
-  echo "Odoo URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.service.port }}{{ end }}/"
 {{- else if eq .Values.service.type "ClusterIP" }}
 
   echo "Odoo URL: http://127.0.0.1:8080/"
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "odoo.fullname" . }} 8080:{{ .Values.service.port }}
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} 8080:{{ $odooPort }}
 
 {{- end }}
 {{- end }}
@@ -43,22 +43,9 @@
 2. Obtain the login credentials
 
   export ODOO_EMAIL={{ .Values.odooEmail }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $secretName "field" "odoo-password" "context" $) }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" (include "odoo.secretName" .) "field" "odoo-password" "context" $) }}
 
   echo Email   : $ODOO_EMAIL
   echo Password: $ODOO_PASSWORD
 
 {{- include "common.warnings.rollingTag" .Values.image }}
-
-{{- $passwordValidationErrors := list -}}
-{{- if not .Values.existingSecret -}}
-    {{- $requiredOdooPassword := dict "valueKey" "odooPassword" "secret" $secretName "field" "odoo-password" "context" $ -}}
-    {{- $requiredOdooPasswordError := include "common.validations.values.single.empty" $requiredOdooPassword -}}
-    {{- $passwordValidationErrors = append $passwordValidationErrors $requiredOdooPasswordError -}}
-{{- end -}}
-
-{{- $postgresqlSecretName := include "odoo.databaseSecretName" . -}}
-{{- $postgresqlPasswordValidationErrors := include "common.validations.values.postgresql.passwords" (dict "secret" $postgresqlSecretName "subchart" true "context" $) -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $postgresqlPasswordValidationErrors -}}
-
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

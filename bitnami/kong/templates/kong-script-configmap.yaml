@@ -32,7 +32,7 @@ data:
     #!/bin/bash
 
     echo "Waiting for the Kong container to be ready"
-    if wait-for-port --timeout={{ .Values.ingressController.proxyReadyTimeout }} --host=127.0.0.1 --state=inuse 8000; then
+    if wait-for-port --timeout={{ .Values.ingressController.proxyReadyTimeout }} --host=127.0.0.1 --state=inuse {{ .Values.kong.containerPorts.proxyHttp }}; then
       echo "Kong container ready"
     else
       echo "Kong not ready after {{ .Values.ingressController.proxyReadyTimeout }} seconds"

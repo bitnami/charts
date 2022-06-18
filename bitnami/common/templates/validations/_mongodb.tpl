@@ -1,12 +1,12 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Validate MongoDB(R) required passwords are not empty.
+Validate MongoDB&reg; required passwords are not empty.
 
 Usage:
 {{ include "common.validations.values.mongodb.passwords" (dict "secret" "secretName" "subchart" false "context" $) }}
 Params:
-  - secret - String - Required. Name of the secret where MongoDB(R) values are stored, e.g: "mongodb-passwords-secret"
-  - subchart - Boolean - Optional. Whether MongoDB(R) is used as subchart or not. Default: false
+  - secret - String - Required. Name of the secret where MongoDB&reg; values are stored, e.g: "mongodb-passwords-secret"
+  - subchart - Boolean - Optional. Whether MongoDB&reg; is used as subchart or not. Default: false
 */}}
 {{- define "common.validations.values.mongodb.passwords" -}}
   {{- $existingSecret := include "common.mongodb.values.auth.existingSecret" . -}}
@@ -22,7 +22,7 @@ Params:
 
   {{- $authEnabled := include "common.utils.getValueFromKey" (dict "key" $valueKeyAuthEnabled "context" .context) -}}
 
-  {{- if and (not $existingSecret) (eq $enabled "true") (eq $authEnabled "true") -}}
+  {{- if and (or (not $existingSecret) (eq $existingSecret "\"\"")) (eq $enabled "true") (eq $authEnabled "true") -}}
     {{- $requiredPasswords := list -}}
 
     {{- $requiredRootPassword := dict "valueKey" $valueKeyRootPassword "secret" .secret "field" "mongodb-root-password" -}}
@@ -81,7 +81,7 @@ Auxiliary function to get the right value for the key auth
 Usage:
 {{ include "common.mongodb.values.key.auth" (dict "subchart" "true" "context" $) }}
 Params:
-  - subchart - Boolean - Optional. Whether MongoDB(R) is used as subchart or not. Default: false
+  - subchart - Boolean - Optional. Whether MongoDB&reg; is used as subchart or not. Default: false
 */}}
 {{- define "common.mongodb.values.key.auth" -}}
   {{- if .subchart -}}
@@ -97,7 +97,7 @@ Auxiliary function to get the right value for architecture
 Usage:
 {{ include "common.mongodb.values.architecture" (dict "subchart" "true" "context" $) }}
 Params:
-  - subchart - Boolean - Optional. Whether MariaDB is used as subchart or not. Default: false
+  - subchart - Boolean - Optional. Whether MongoDB&reg; is used as subchart or not. Default: false
 */}}
 {{- define "common.mongodb.values.architecture" -}}
   {{- if .subchart -}}

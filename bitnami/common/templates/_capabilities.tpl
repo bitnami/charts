@@ -16,6 +16,39 @@ Return the target Kubernetes version
 {{- end -}}
 
 {{/*
+Return the appropriate apiVersion for poddisruptionbudget.
+*/}}
+{{- define "common.capabilities.policy.apiVersion" -}}
+{{- if semverCompare "<1.21-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "policy/v1beta1" -}}
+{{- else -}}
+{{- print "policy/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for networkpolicy.
+*/}}
+{{- define "common.capabilities.networkPolicy.apiVersion" -}}
+{{- if semverCompare "<1.7-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "extensions/v1beta1" -}}
+{{- else -}}
+{{- print "networking.k8s.io/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for cronjob.
+*/}}
+{{- define "common.capabilities.cronjob.apiVersion" -}}
+{{- if semverCompare "<1.21-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "batch/v1beta1" -}}
+{{- else -}}
+{{- print "batch/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the appropriate apiVersion for deployment.
 */}}
 {{- define "common.capabilities.deployment.apiVersion" -}}
@@ -79,6 +112,32 @@ Return the appropriate apiVersion for CRDs.
 {{- print "apiextensions.k8s.io/v1beta1" -}}
 {{- else -}}
 {{- print "apiextensions.k8s.io/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for APIService.
+*/}}
+{{- define "common.capabilities.apiService.apiVersion" -}}
+{{- if semverCompare "<1.10-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "apiregistration.k8s.io/v1beta1" -}}
+{{- else -}}
+{{- print "apiregistration.k8s.io/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for Horizontal Pod Autoscaler.
+*/}}
+{{- define "common.capabilities.hpa.apiVersion" -}}
+{{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .context) -}}
+{{- if .beta2 -}}
+{{- print "autoscaling/v2beta2" -}}
+{{- else -}}
+{{- print "autoscaling/v2beta1" -}}
+{{- end -}}
+{{- else -}}
+{{- print "autoscaling/v2" -}}
 {{- end -}}
 {{- end -}}
 

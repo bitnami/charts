@@ -2,8 +2,15 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "fluentd.fullname" . }}
-  labels: {{- include "fluentd.labels" . | nindent 4 }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 rules:
   - apiGroups:
       - ""
@@ -14,13 +21,14 @@ rules:
       - "get"
       - "watch"
       - "list"
-  {{- if .Values.forwarder.rbac.pspEnabled }}
+  {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+  {{- if and $pspAvailable .Values.forwarder.rbac.pspEnabled }}
   - apiGroups:
       - "policy"
     resources:
       - "podsecuritypolicies"
     resourceNames:
-      - {{ include "fluentd.fullname" . }}-forwarder
+      - {{ include "common.names.fullname" . }}-forwarder
     verbs:
       - "use"
   {{- end }}

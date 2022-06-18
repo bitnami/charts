@@ -1,0 +1,56 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-metrics
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: influxdb
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.metrics.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.metrics.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.metrics.service.type }}
+  {{- if and .Values.metrics.service.clusterIP (eq .Values.metrics.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.metrics.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.metrics.service.type "LoadBalancer") (eq .Values.metrics.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.metrics.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if eq .Values.metrics.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.metrics.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if (and (eq .Values.metrics.service.type "LoadBalancer") (not (empty .Values.metrics.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.metrics.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.metrics.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.metrics.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.metrics.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.metrics.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      {{- if (and (or (eq .Values.metrics.service.type "NodePort") (eq .Values.metrics.service.type "LoadBalancer")) (not (empty .Values.metrics.service.nodePort))) }}
+      nodePort: {{ .Values.metrics.service.nodePort }}
+      {{- else if eq .Values.metrics.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.metrics.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: influxdb
+{{- end }}

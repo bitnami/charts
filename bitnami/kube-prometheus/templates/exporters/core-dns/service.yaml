@@ -4,19 +4,26 @@ kind: Service
 metadata:
   name: {{ template "kube-prometheus.fullname" . }}-coredns
   namespace: {{ .Values.coreDns.namespace }}
-  labels: {{- include "kube-prometheus.labels" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-coredns
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
+  type: ClusterIP
   clusterIP: None
   ports:
     - name: http-metrics
-      port: {{ .Values.coreDns.service.port }}
+      port: {{ .Values.coreDns.service.ports.http }}
       protocol: TCP
-      targetPort: {{ .Values.coreDns.service.targetPort }}
+      targetPort: {{ .Values.coreDns.service.targetPorts.http }}
   selector:
     {{- if .Values.coreDns.service.selector }}
-{{ toYaml .Values.coreDns.service.selector | indent 4 }}
-    {{- else}}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.coreDns.service.selector "context" $ ) | nindent 4 }}
+    {{- else }}
     k8s-app: kube-dns
-    {{- end}}
+    {{- end }}
 {{- end }}

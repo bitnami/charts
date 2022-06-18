@@ -3,6 +3,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: {{ include "common.names.fullname" . }}-suitecrm
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -12,7 +13,13 @@ metadata:
   {{- end }}
 spec:
   accessModes:
+  {{- if not (empty .Values.persistence.accessModes) }}
+  {{- range .Values.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  {{- else }}
     - {{ .Values.persistence.accessMode | quote }}
+  {{- end }}
   capacity:
     storage: {{ .Values.persistence.size | quote }}
   hostPath:

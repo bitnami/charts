@@ -1,16 +1,22 @@
-{{- if and .Values.web.podDisruptionBudget.enabled (eq .Values.executor "CeleryExecutor") }}
+{{- if .Values.web.pdb.enabled }}
 kind: PodDisruptionBudget
-apiVersion: policy/v1beta1
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 metadata:
-  name: {{ include "common.names.fullname" . }}-web
+  name: {{ printf "%s-web" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: web
     {{- if .Values.commonLabels }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
 spec:
+  {{- if .Values.web.pdb.minAvailable }}
+  minAvailable: {{ .Values.web.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.web.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.web.pdb.maxUnavailable }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: web
-  {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.podDisruptionBudget "enabled") "context" $) | nindent 2 }}
 {{- end }}

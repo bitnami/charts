@@ -12,7 +12,7 @@ Return the proper image name used for setting up Certificates
 - name: certificates
   image: {{ include "certificates.image" . }}
   imagePullPolicy: {{ .Values.certificates.image.pullPolicy }}
-  {{- if .Values.image.pullSecrets}}
+  {{- if .Values.image.pullSecrets }}
   imagePullSecrets:
   {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
     - name: {{ . }}
@@ -24,13 +24,11 @@ Return the proper image name used for setting up Certificates
     {{- else if .Values.certificates.customCertificate.certificateSecret }}
     - sh
     - -c
-    - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
-      else apt-get update && apt-get install -y ca-certificates openssl; fi
+    - install_packages ca-certificates openssl
     {{- else }}
     - sh
     - -c
-    - if command -v apk >/dev/null; then apk add --no-cache ca-certificates openssl && update-ca-certificates;
-      else apt-get update && apt-get install -y ca-certificates openssl; fi
+    - install_packages ca-certificates openssl
       && openssl req -new -x509 -days 3650 -nodes -sha256
         -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
         -out {{ .Values.certificates.customCertificate.certificateLocation }}

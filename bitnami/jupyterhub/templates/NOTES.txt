@@ -1,0 +1,63 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.proxy.ingress.enabled }}
+
+1. Get the JupyterHub URL indicated on the Ingress Rule and associate it to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   export HOSTNAME=$(kubectl get ingress --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath='{.spec.rules[0].host}')
+   echo "JupyterHub URL: http{{ if .Values.proxy.ingress.tls }}s{{ end }}://$HOSTNAME/"
+   echo "$CLUSTER_IP  $HOSTNAME" | sudo tee -a /etc/hosts
+
+{{- else }}
+
+1. Get the JupyterHub URL by running:
+
+{{- $port := coalesce .Values.proxy.service.public.ports.http .Values.proxy.service.public.port | toString }}
+{{- if eq .Values.proxy.service.public.type "NodePort" }}
+
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }}-proxy-public)
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo "JupyterHub URL: http://$NODE_IP:$NODE_PORT/"
+
+{{- else if eq .Values.proxy.service.public.type "LoadBalancer" }}
+
+** Please ensure an external IP is associated to the {{ template "common.names.fullname" . }}-proxy-public service before proceeding **
+** Watch the status using: kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}-proxy-public **
+
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-proxy-public --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+  echo "JupyterHub URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ $port }}{{ end }}/"
+
+{{- else if eq .Values.proxy.service.public.type "ClusterIP" }}
+
+  echo "JupyterHub URL: http://127.0.0.1:8080/"
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }}-proxy-public 8080:{{ $port }}
+
+{{- end }}
+{{- end }}
+
+2. Login with the following admin user below to create a Notebook:
+
+  echo Admin user: {{ .Values.hub.adminUser }}
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-hub -o jsonpath="{.data['values\.yaml']}" | base64 -d | awk -F: '/password/ {gsub(/[ \t]+/, "", $2);print $2}')
+
+{{- include "common.warnings.rollingTag" .Values.hub.image }}
+{{- include "common.warnings.rollingTag" .Values.proxy.image }}
+{{- include "common.warnings.rollingTag" .Values.singleuser.image }}
+{{- include "common.warnings.rollingTag" .Values.auxiliaryImage }}
+
+{{- $passwordValidationErrors := list -}}
+
+{{- if not .Values.hub.existingSecret -}}
+    {{- $secretName := printf "%s-hub" (include "common.names.fullname" .) -}}
+    {{- $requiredHubPassword := dict "valueKey" "hub.password" "secret" $secretName "field" "values.yaml" "context" $ -}}
+    {{- $requiredHubPasswordError := include "common.validations.values.single.empty" $requiredHubPassword -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $requiredHubPasswordError -}}
+{{- end }}
+
+{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
+{{- include "jupyterhub.validateValues" . }}

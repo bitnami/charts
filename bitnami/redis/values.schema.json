@@ -2,39 +2,31 @@
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
   "properties": {
-    "usePassword": {
-      "type": "boolean",
-      "title": "Use password authentication",
-      "form": true
-    },
-    "password": {
+    "architecture": {
       "type": "string",
-      "title": "Password",
+      "title": "Redis architecture",
       "form": true,
-      "description": "Defaults to a random 10-character alphanumeric string if not set",
-      "hidden": {
-        "value": false,
-        "path": "usePassword"
-      }
+      "description": "Allowed values: `standalone` or `replication`",
+      "enum": ["standalone", "replication"]
     },
-    "cluster": {
+    "auth": {
       "type": "object",
-      "title": "Cluster Settings",
+      "title": "Authentication configuration",
       "form": true,
       "properties": {
         "enabled": {
           "type": "boolean",
           "form": true,
-          "title": "Enable master-slave",
-          "description": "Enable master-slave architecture"
+          "title": "Use password authentication"
         },
-        "slaveCount": {
-          "type": "integer",
-          "title": "Slave Replicas",
+        "password": {
+          "type": "string",
+          "title": "Redis password",
           "form": true,
+          "description": "Defaults to a random 10-character alphanumeric string if not set",
           "hidden": {
             "value": false,
-            "path": "cluster/enabled"
+            "path": "auth/enabled"
           }
         }
       }
@@ -44,6 +36,13 @@
       "title": "Master replicas settings",
       "form": true,
       "properties": {
+        "kind": {
+          "type": "string",
+          "title": "Workload Kind",
+          "form": true,
+          "description": "Allowed values: `Deployment` or `StatefulSet`",
+          "enum": ["Deployment", "StatefulSet"]
+        },
         "persistence": {
           "type": "object",
           "title": "Persistence for master replicas",
@@ -67,31 +66,28 @@
                 "value": false,
                 "path": "master/persistence/enabled"
               }
-            },
-            "matchLabels": {
-              "type": "object",
-              "title": "Persistent Match Labels Selector"
-            },
-            "matchExpressions": {
-              "type": "object",
-              "title": "Persistent Match Expressions Selector"
             }
           }
         }
       }
     },
-    "slave": {
+    "replica": {
       "type": "object",
-      "title": "Slave replicas settings",
+      "title": "Redis replicas settings",
       "form": true,
       "hidden": {
-        "value": false,
-        "path": "cluster/enabled"
+        "value": "standalone",
+        "path": "architecture"
       },
       "properties": {
+        "replicaCount": {
+          "type": "integer",
+          "form": true,
+          "title": "Number of Redis replicas"
+        },
         "persistence": {
           "type": "object",
-          "title": "Persistence for slave replicas",
+          "title": "Persistence for Redis replicas",
           "form": true,
           "properties": {
             "enabled": {
@@ -110,16 +106,8 @@
               "sliderUnit": "Gi",
               "hidden": {
                 "value": false,
-                "path": "slave/persistence/enabled"
+                "path": "replica/persistence/enabled"
               }
-            },
-            "matchLabels": {
-              "type": "object",
-              "title": "Persistent Match Labels Selector"
-            },
-            "matchExpressions": {
-              "type": "object",
-              "title": "Persistent Match Expressions Selector"
             }
           }
         }

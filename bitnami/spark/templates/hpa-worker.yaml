@@ -1,8 +1,9 @@
 {{- if .Values.worker.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta1
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "common.names.fullname" . }}-autoscaler
+  name: {{ printf "%s-autoscaler" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: worker-autoscaler
     {{- if .Values.commonLabels }}
@@ -15,12 +16,32 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: statefulset
-    name: {{ include "common.names.fullname" . }}-worker
-  minReplicas: {{ .Values.worker.replicaCount }}
-  maxReplicas: {{ .Values.worker.autoscaling.replicasMax }}
+    name: {{ printf "%s-worker" (include "common.names.fullname" .) }}
+  minReplicas: {{ .Values.worker.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.worker.autoscaling.maxReplicas }}
   metrics:
+    {{- if .Values.worker.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.worker.autoscaling.targetMemory }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.worker.autoscaling.targetMemory }}
+        {{- end }}
+    {{- end }}
+    {{- if .Values.worker.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.worker.autoscaling.CpuTargetPercentage }}
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.worker.autoscaling.targetCPU }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.worker.autoscaling.targetCPU }}
+        {{- end }}
+    {{- end }}
 {{- end }}

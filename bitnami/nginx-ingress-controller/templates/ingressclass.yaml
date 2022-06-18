@@ -1,0 +1,21 @@
+{{- if .Values.ingressClassResource.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: controller
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  name: {{ .Values.ingressClassResource.name }}
+{{- if .Values.ingressClassResource.default }}
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+{{- end }}
+spec:
+  controller: {{ .Values.ingressClassResource.controllerClass }}
+  {{- if .Values.ingressClassResource.parameters }}
+  parameters:
+    {{- include "common.tplvalues.render" (dict "value" .Values.ingressClassResource.parameters "context" $) | nindent 4 }}
+  {{ end }}
+{{- end }}

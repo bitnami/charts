@@ -3,36 +3,50 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "kube-prometheus.operator.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
-  {{- with .Values.operator.service.annotations }}
-  annotations: {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.operator.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.operator.service.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.operator.service.type }}
-  {{- if and .Values.operator.service.loadBalancerIP (eq .Values.operator.service.type "LoadBalancer") }}
+  {{- if and (eq .Values.operator.service.type "LoadBalancer") (not (empty .Values.operator.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.operator.service.loadBalancerIP }}
   {{- end }}
-  {{- if and (eq .Values.operator.service.type "LoadBalancer") .Values.operator.service.loadBalancerSourceRanges }}
-  {{- with .Values.operator.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml . | nindent 4 }}
+  {{- if and (eq .Values.operator.service.type "LoadBalancer") (not (empty .Values.operator.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.operator.service.loadBalancerSourceRanges }}
   {{- end }}
+  {{- if or (eq .Values.operator.service.type "LoadBalancer") (eq .Values.operator.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.operator.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{- if and (eq .Values.operator.service.type "LoadBalancer") .Values.operator.service.externalTrafficPolicy }}
-  externalTrafficPolicy: {{ .Values.operator.service.externalTrafficPolicy }}
+  {{- if .Values.operator.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.operator.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.operator.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.operator.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   {{- if and (eq .Values.operator.service.type "LoadBalancer") (eq .Values.operator.service.externalTrafficPolicy "Local") .Values.operator.service.healthCheckNodePort }}
   healthCheckNodePort: {{ .Values.operator.service.healthCheckNodePort }}
   {{- end }}
-  {{- if and (eq .Values.operator.service.type "ClusterIP") .Values.operator.service.clusterIP }}
+  {{- if and .Values.operator.service.clusterIP (eq .Values.operator.service.type "ClusterIP") }}
   clusterIP: {{ .Values.operator.service.clusterIP }}
   {{- end }}
   ports:
     - name: http
-      port: {{ .Values.operator.service.port }}
+      port: {{ .Values.operator.service.ports.http }}
       targetPort: http
-      {{- if and .Values.operator.service.nodePort (or (eq .Values.operator.service.type "NodePort") (eq .Values.operator.service.type "LoadBalancer")) }}
-      nodePort: {{ .Values.operator.service.nodePort }}
+      {{- if and .Values.operator.service.nodePorts.http (or (eq .Values.operator.service.type "NodePort") (eq .Values.operator.service.type "LoadBalancer")) }}
+      nodePort: {{ .Values.operator.service.nodePorts.http }}
       {{- end }}
+    {{- if .Values.operator.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.operator.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
   selector: {{- include "kube-prometheus.operator.matchLabels" . | nindent 4 }}
 {{- end }}

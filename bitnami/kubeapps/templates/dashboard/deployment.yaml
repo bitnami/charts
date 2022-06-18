@@ -1,0 +1,185 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "kubeapps.dashboard.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: dashboard
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" . ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.dashboard.replicaCount }}
+  {{- if .Values.dashboard.updateStrategy }}
+  strategy: {{- toYaml .Values.dashboard.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: dashboard
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/dashboard/configmap.yaml") . | sha256sum }}
+        {{- if .Values.dashboard.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: dashboard
+        {{- if .Values.dashboard.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
+      {{- if .Values.dashboard.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboard.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dashboard.podAffinityPreset "component" "dashboard" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dashboard.podAntiAffinityPreset "component" "dashboard" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.dashboard.nodeAffinityPreset.type "key" .Values.dashboard.nodeAffinityPreset.key "values" .Values.dashboard.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.dashboard.schedulerName }}
+      schedulerName: {{ .Values.dashboard.schedulerName }}
+      {{- end }}
+      {{- if .Values.dashboard.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboard.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboard.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboard.priorityClassName }}
+      priorityClassName: {{ .Values.dashboard.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.dashboard.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.dashboard.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboard.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: dashboard
+          image: {{ include "kubeapps.dashboard.image" . }}
+          imagePullPolicy: {{ .Values.dashboard.image.pullPolicy | quote }}
+          {{- if .Values.dashboard.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.dashboard.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.dashboard.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.dashboard.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dashboard.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.dashboard.image.debug | quote }}
+            {{- if .Values.dashboard.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.dashboard.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.dashboard.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.dashboard.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.dashboard.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.dashboard.containerPorts.http }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.dashboard.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboard.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: http
+          {{- else if .Values.dashboard.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dashboard.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboard.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: http
+          {{- else if .Values.dashboard.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.dashboard.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboard.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- else if .Values.dashboard.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.dashboard.resources }}
+          resources: {{- toYaml .Values.dashboard.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: vhost
+              mountPath: /opt/bitnami/nginx/conf/server_blocks
+            - name: config
+              mountPath: /app/config.json
+              subPath: config.json
+            - mountPath: /app/custom-css
+              name: custom-css
+            - mountPath: /app/custom-locale
+              name: custom-locale
+            - mountPath: /app/custom-components
+              name: custom-components
+            {{- if .Values.dashboard.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.dashboard.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: vhost
+          configMap:
+            name: {{ template "kubeapps.dashboard-config.fullname" . }}
+            items:
+              - key: vhost.conf
+                path: vhost.conf
+        - name: config
+          configMap:
+            name: {{ template "kubeapps.dashboard-config.fullname" . }}
+            items:
+              - key: config.json
+                path: config.json
+        - name: custom-css
+          configMap:
+            name: {{ template "kubeapps.dashboard-config.fullname" . }}
+            items:
+              - key: custom_style.css
+                path: custom_style.css
+        - name: custom-locale
+          configMap:
+            name: {{ template "kubeapps.dashboard-config.fullname" . }}
+            items:
+              - key: custom_locale.json
+                path: custom_locale.json
+        - name: custom-components
+          configMap:
+            name: {{ template "kubeapps.dashboard-config.fullname" . }}
+            items:
+              - key: custom_components.js
+                path: custom_components.js
+        {{- if .Values.dashboard.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
