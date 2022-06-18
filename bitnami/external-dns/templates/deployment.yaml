@@ -679,11 +679,13 @@ spec:
             {{- end }}
             # Extra ConfigMap(s) mount(s)
             {{- range .Values.extraConfigMaps }}
+            {{- if .volumeMount }}
             - name: {{ .name }}
               mountPath: {{ .volumeMount.mountPath }}
               {{- if .volumeMount.subPath }}
               subPath: {{ .volumeMount.subPath }}
               {{- end }}
+            {{- end }}
             {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
@@ -774,7 +776,9 @@ spec:
         {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}
         {{- range .Values.extraConfigMaps }}
+        {{- if .volumeMount }}
         - name: {{ .name }}
           configMap:
             name: {{ .name }}
+        {{- end }}
         {{- end }}
