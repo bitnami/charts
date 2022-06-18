@@ -649,6 +649,19 @@ extraVolumes: []
 ##
 extraVolumeMounts: []
 
+## Configure extra ConfigMaps
+##
+extraConfigMaps: []
+# - name:
+#   data:
+#     multiline: |
+#       multiline
+#       example
+#     singleline: example
+#   volumeMount:
+#     mountPath: /etc/example
+#     subPath: multiline
+
 ## Configure PodDisruptionBudget
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 podDisruptionBudget: {}

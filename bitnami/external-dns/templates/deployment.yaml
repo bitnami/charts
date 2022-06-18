@@ -556,6 +556,14 @@ spec:
             # Extra volume mount(s)
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
+            # Extra ConfigMap(s) mount(s)
+            {{- range .Values.extraConfigMaps }}
+            - name: {{ .name }}
+              mountPath: {{ .volumeMount.mountPath }}
+              {{- if .volumeMount.subPath }}
+              subPath: {{ .volumeMount.subPath }}
+              {{- end }}
+            {{- end }}
       volumes:
         {{- if and (eq .Values.provider "alibabacloud") (or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName) }}
         # Alibaba Cloud volume(s)
@@ -623,4 +631,9 @@ spec:
         {{- if .Values.extraVolumes }}
         # Extra volume(s)
         {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- end }}
+        {{- range .Values.extraConfigMaps }}
+        - name: {{ .name }}
+          configMap:
+            name: {{ .name }}
         {{- end }}
