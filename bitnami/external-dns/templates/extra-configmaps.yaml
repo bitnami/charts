@@ -1,10 +1,11 @@
+{{- $labels := include "external-dns.labels" . }}
 {{- range .Values.extraConfigMaps }}
 {{- if .data }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .name }}
-  labels: {{ include "external-dns.labels" $. | nindent 4 }}
+  labels: {{ $labels | nindent 4 }}
 data: {{ toYaml .data | nindent 2 }}
 ---
 {{- end }}
