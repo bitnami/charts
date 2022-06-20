@@ -95,6 +95,7 @@ jobs:
               level: error
             line-length: disable
           EOF
+          ls
           yamllint -c config index.yaml
       - id: check-no-dups
         name: Checks there are not any duplicates
