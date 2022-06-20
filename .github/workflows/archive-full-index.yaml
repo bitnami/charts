@@ -3,8 +3,7 @@ on:
   push:
     branches:
       - archive-full-index
-  schedule:
-    - cron: '0 0 * * *'
+      - index
 
 env:
   LAST_INDEX_URL: https://charts.bitnami.com/bitnami/index.yaml
@@ -81,16 +80,9 @@ jobs:
     needs: merge
     name: Checks
     steps:
-      - id: download-artifact-indexes
+      - id: download-artifacts
         name: Download artifacts
         uses: actions/download-artifact@v3
-        with:
-          name: indexes
-      - id: download-artifact-archive-full-index
-        name: Download artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: archive-full-index
       - id: index-lint
         name: Lint archive full index
         # Lint the resulting archive full index using ignoring identation and lin-length rules.
