@@ -11,11 +11,12 @@ command:
     stdout: [ ]
     stderr: [ ]
     timeout: 40000
-  prestashop-cli-install-module:
-    exec: /opt/bitnami/php/bin/php /opt/bitnami/prestashop/bin/console prestashop:module install ps_categoryproducts
+  prestashop-cli-list-commands:
+    exec: /opt/bitnami/php/bin/php /opt/bitnami/prestashop/bin/console prestashop:list:commands-and-queries
     exit-status: 0
     stdout:
-      - /Install action.*succeeded/
+      - "Class:"
+      - "Type:"
     stderr: [ ]
     timeout: 40000
 file:
