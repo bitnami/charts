@@ -1,9 +1,0 @@
-{
-  "newUser": {
-    "firstName": "Jane Jessica",
-    "lastName": "Doe",
-    "username": "janedoe",
-    "password": "someComplicatedPass12345!",
-    "email": "testemails@email.com"
-  }
-}

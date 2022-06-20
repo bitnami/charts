@@ -1,7 +1,0 @@
-{
-  "newSMTPConfig": {
-    "email": "test@smtp.com",
-    "name": "test_smtp",
-    "user": "smtp_user"
-  }
-}
