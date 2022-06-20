@@ -26,14 +26,14 @@ it('allows to create and publish a new post', () => {
   // Step 1: Open drop-down menu
   cy.contains('Publish').click();
   // Step 2: Select the option from the menu
-  cy.get('footer[class*=publishmenu]').within(() => {
-    cy.contains('Publish').click();
+  cy.get('div[class=gh-publish-cta]').within(() => {
+    cy.contains('Continue').click();
   });
   // Step 3: Confirmation pop-up
-  cy.get('div[class*=modal-content]').within(() => {
+  cy.get('div[class=gh-publish-cta]').within(() => {
     cy.contains('Publish').click();
   });
-  cy.contains('Published').should('be.visible');
+  cy.contains('It’s out there').should('be.visible');
   cy.visit('/');
   cy.fixture('posts').then(($posts) => {
     cy.contains(`${$posts.newPost.title}-${random}`);
@@ -51,14 +51,18 @@ it('allows to create a new page', () => {
     );
     cy.get('article').type(`${$pages.newPage.content}-${random}`);
   });
-  // Publishing a page needs 2 steps
+  // Publishing a page needs 3 steps
   // Step 1: Open drop down-menu
   cy.contains('Publish').click();
   // Step 2: Select the option from the menu
-  cy.get('footer[class*=publishmenu]').within(() => {
+  cy.get('div[class=gh-publish-cta]').within(() => {
+    cy.contains('Continue').click();
+  });
+  // Step 3: Confirmation pop-up
+  cy.get('div[class=gh-publish-cta]').within(() => {
     cy.contains('Publish').click();
   });
-  cy.contains('Published').should('be.visible');
+  cy.contains('It’s out there').should('be.visible');
   cy.fixture('pages').then(($pages) => {
     cy.visit(getPageUrlFromTitle(`${$pages.newPage.title}-${random}`));
     cy.contains(`${$pages.newPage.title}-${random}`);

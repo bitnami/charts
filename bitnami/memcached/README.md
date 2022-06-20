@@ -19,7 +19,7 @@ $ helm install my-release bitnami/memcached
 
 This chart bootstraps a [Memcached](https://github.com/bitnami/bitnami-docker-memcached) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -78,23 +78,23 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached parameters
 
-| Name                 | Description                                                              | Value                  |
-| -------------------- | ------------------------------------------------------------------------ | ---------------------- |
-| `image.registry`     | Memcached image registry                                                 | `docker.io`            |
-| `image.repository`   | Memcached image repository                                               | `bitnami/memcached`    |
-| `image.tag`          | Memcached image tag (immutable tags are recommended)                     | `1.6.15-debian-10-r50` |
-| `image.pullPolicy`   | Memcached image pull policy                                              | `IfNotPresent`         |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                         | `[]`                   |
-| `image.debug`        | Specify if debug values should be set                                    | `false`                |
-| `architecture`       | Memcached architecture. Allowed values: standalone or high-availability  | `standalone`           |
-| `auth.enabled`       | Enable Memcached authentication                                          | `false`                |
-| `auth.username`      | Memcached admin user                                                     | `""`                   |
-| `auth.password`      | Memcached admin password                                                 | `""`                   |
-| `command`            | Override default container command (useful when using custom images)     | `[]`                   |
-| `args`               | Override default container args (useful when using custom images)        | `[]`                   |
-| `extraEnvVars`       | Array with extra environment variables to add to Memcached nodes         | `[]`                   |
-| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars for Memcached nodes | `""`                   |
-| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars for Memcached nodes    | `""`                   |
+| Name                 | Description                                                              | Value                 |
+| -------------------- | ------------------------------------------------------------------------ | --------------------- |
+| `image.registry`     | Memcached image registry                                                 | `docker.io`           |
+| `image.repository`   | Memcached image repository                                               | `bitnami/memcached`   |
+| `image.tag`          | Memcached image tag (immutable tags are recommended)                     | `1.6.15-debian-11-r0` |
+| `image.pullPolicy`   | Memcached image pull policy                                              | `IfNotPresent`        |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                         | `[]`                  |
+| `image.debug`        | Specify if debug values should be set                                    | `false`               |
+| `architecture`       | Memcached architecture. Allowed values: standalone or high-availability  | `standalone`          |
+| `auth.enabled`       | Enable Memcached authentication                                          | `false`               |
+| `auth.username`      | Memcached admin user                                                     | `""`                  |
+| `auth.password`      | Memcached admin password                                                 | `""`                  |
+| `command`            | Override default container command (useful when using custom images)     | `[]`                  |
+| `args`               | Override default container args (useful when using custom images)        | `[]`                  |
+| `extraEnvVars`       | Array with extra environment variables to add to Memcached nodes         | `[]`                  |
+| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars for Memcached nodes | `""`                  |
+| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars for Memcached nodes    | `""`                  |
 
 
 ### Deployment/Statefulset parameters
@@ -144,7 +144,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                              | Affinity for pod assignment                                                                                                                                                                       | `{}`            |
 | `nodeSelector`                          | Node labels for pod assignment                                                                                                                                                                    | `{}`            |
 | `tolerations`                           | Tolerations for pod assignment                                                                                                                                                                    | `[]`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                          | `{}`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                          | `[]`            |
 | `podManagementPolicy`                   | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: `OrderedReady` and `Parallel` | `Parallel`      |
 | `priorityClassName`                     | Name of the existing priority class to be used by Memcached pods, priority class needs to be created beforehand                                                                                   | `""`            |
 | `schedulerName`                         | Kubernetes pod scheduler registry                                                                                                                                                                 | `""`            |
@@ -211,7 +211,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume       | `false`                      |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                      | `docker.io`                  |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                    | `bitnami/bitnami-shell`      |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)          | `10-debian-10-r431`          |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)          | `11-debian-11-r0`            |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                   | `IfNotPresent`               |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                  | `[]`                         |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                     | `{}`                         |
@@ -220,7 +220,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                      | Start a side-car prometheus exporter                                                  | `false`                      |
 | `metrics.image.registry`                               | Memcached exporter image registry                                                     | `docker.io`                  |
 | `metrics.image.repository`                             | Memcached exporter image repository                                                   | `bitnami/memcached-exporter` |
-| `metrics.image.tag`                                    | Memcached exporter image tag (immutable tags are recommended)                         | `0.9.0-debian-10-r393`       |
+| `metrics.image.tag`                                    | Memcached exporter image tag (immutable tags are recommended)                         | `0.9.0-debian-11-r0`         |
 | `metrics.image.pullPolicy`                             | Image pull policy                                                                     | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                            | Specify docker-registry secret names as an array                                      | `[]`                         |
 | `metrics.containerPorts.metrics`                       | Memcached Prometheus Exporter container port                                          | `9150`                       |

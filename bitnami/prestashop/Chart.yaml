@@ -29,4 +29,4 @@ name: prestashop
 sources:
   - https://github.com/bitnami/bitnami-docker-prestashop
   - https://prestashop.com/
-version: 15.2.7
+version: 15.2.9

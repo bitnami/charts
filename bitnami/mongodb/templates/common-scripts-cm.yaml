@@ -74,14 +74,14 @@ data:
     IP.0 = ${MY_POD_HOST_IP}
     IP.1 = 127.0.0.1
     EOL
-    index=1
+    index=2
     for ip in "${additional_ips[@]}"; do
         cat >>/certs/openssl.cnf <<EOL
     IP.$index = $ip
     EOL
         ((index++))
     done;
-    index=6
+    index=5
     for name in "${additional_names[@]}"; do
         cat >>/certs/openssl.cnf <<EOL
     DNS.$index = $name

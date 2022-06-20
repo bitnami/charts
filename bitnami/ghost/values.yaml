@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/ghost
-  tag: 4.48.1-debian-10-r0
+  tag: 5.2.3-debian-11-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -260,7 +260,7 @@ nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
-tolerations: {}
+tolerations: []
 ## Ghost containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## @param resources.limits The resources limits for the Ghost container
@@ -564,7 +564,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r440
+    tag: 11-debian-11-r4
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -594,41 +594,41 @@ volumePermissions:
 
 ## @section Database Parameters
 
-## MariaDB chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/mariadb/values.yaml
+## MySQL chart configuration
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/mysql/values.yaml
 ##
-mariadb:
-  ## @param mariadb.enabled Deploy a MariaDB server to satisfy the applications database requirements
+mysql:
+  ## @param mysql.enabled Deploy a MySQL server to satisfy the applications database requirements
   ## To use an external database set this to false and configure the `externalDatabase.*` parameters
   ##
   enabled: true
-  ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
+  ## @param mysql.architecture MySQL architecture. Allowed values: `standalone` or `replication`
   ##
   architecture: standalone
-  ## MariaDB Authentication parameters
-  ## @param mariadb.auth.rootPassword MariaDB root password
-  ## @param mariadb.auth.database MariaDB custom database
-  ## @param mariadb.auth.username MariaDB custom user name
-  ## @param mariadb.auth.password MariaDB custom user password
-  ## @param mariadb.auth.existingSecret Existing secret with MariaDB credentials
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
-  ##      https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
-  ##      https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+  ## MySQL Authentication parameters
+  ## @param mysql.auth.rootPassword MySQL root password
+  ## @param mysql.auth.database MySQL custom database
+  ## @param mysql.auth.username MySQL custom user name
+  ## @param mysql.auth.password MySQL custom user password
+  ## @param mysql.auth.existingSecret Existing secret with MySQL credentials
+  ## ref: https://github.com/bitnami/bitnami-docker-mysql#setting-the-root-password-on-first-run
+  ##      https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#creating-a-database-on-first-run
+  ##      https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#creating-a-database-user-on-first-run
   auth:
     rootPassword: ""
     database: bitnami_ghost
     username: bn_ghost
     password: ""
     existingSecret: ""
-  ## MariaDB Primary configuration
+  ## MySQL Primary configuration
   ##
   primary:
-    ## MariaDB Primary Persistence parameters
+    ## MySQL Primary Persistence parameters
     ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
-    ## @param mariadb.primary.persistence.enabled Enable persistence on MariaDB using PVC(s)
-    ## @param mariadb.primary.persistence.storageClass Persistent Volume storage class
-    ## @param mariadb.primary.persistence.accessModes [array] Persistent Volume access modes
-    ## @param mariadb.primary.persistence.size Persistent Volume size
+    ## @param mysql.primary.persistence.enabled Enable persistence on MySQL using PVC(s)
+    ## @param mysql.primary.persistence.storageClass Persistent Volume storage class
+    ## @param mysql.primary.persistence.accessModes [array] Persistent Volume access modes
+    ## @param mysql.primary.persistence.size Persistent Volume size
     ##
     persistence:
       enabled: true
@@ -637,7 +637,7 @@ mariadb:
         - ReadWriteOnce
       size: 8Gi
 ## External Database Configuration
-## All of these values are only used if `mariadb.enabled=false`
+## All of these values are only used if `mysql.enabled=false`
 ##
 externalDatabase:
   ## @param externalDatabase.host External Database server host
@@ -656,7 +656,7 @@ externalDatabase:
   ##
   database: bitnami_ghost
   ## @param externalDatabase.existingSecret The name of an existing secret with database credentials
-  ## NOTE: Must contain key `mariadb-password`
+  ## NOTE: Must contain key `mysql-password`
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##
   existingSecret: ""
@@ -692,7 +692,7 @@ networkPolicy:
     ##   label: ingress
     ##
     namespaceSelector: {}
-  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by Ghost's pods.
+  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mysql) only accessible by Ghost's pods.
   ## @param networkPolicy.ingressRules.customBackendSelector Backend selector labels. These labels will be used to identify the backend pods.
   ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes Ghost only accessible from a particular origin
   ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access Ghost. This label will be used to identified the allowed namespace(s).
@@ -700,7 +700,7 @@ networkPolicy:
   ## @param networkPolicy.ingressRules.customRules Custom network policy ingress rule
   ##
   ingressRules:
-    ## mariadb backend only can be accessed from Ghost
+    ## mysql backend only can be accessed from Ghost
     ##
     backendOnlyAccessibleByFrontend: false
     customBackendSelector: {}

@@ -21,7 +21,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [Grafana Tempo](https://github.com/grafana/tempo) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/grafana-tempo/get-started/).
 
@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | -------------------------------------------------------------- | ----------------------------- |
 | `tempo.image.registry`                 | Grafana Tempo image registry                                   | `docker.io`                   |
 | `tempo.image.repository`               | Grafana Tempo image repository                                 | `bitnami/grafana-tempo`       |
-| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)       | `1.4.1-debian-10-r17`         |
+| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)       | `1.4.1-debian-11-r0`          |
 | `tempo.image.pullPolicy`               | Grafana Tempo image pull policy                                | `IfNotPresent`                |
 | `tempo.image.pullSecrets`              | Grafana Tempo image pull secrets                               | `[]`                          |
 | `tempo.memBallastSizeMbs`              | Tempo components memory ballast size in MB                     | `1024`                        |
@@ -162,7 +162,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.affinity`                              | Affinity for Compactor pods assignment                                                              | `{}`            |
 | `compactor.nodeSelector`                          | Node labels for Compactor pods assignment                                                           | `{}`            |
 | `compactor.tolerations`                           | Tolerations for Compactor pods assignment                                                           | `[]`            |
-| `compactor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains     | `{}`            |
+| `compactor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains     | `[]`            |
 | `compactor.priorityClassName`                     | Compactor pods' priorityClassName                                                                   | `""`            |
 | `compactor.schedulerName`                         | Kubernetes pod scheduler registry                                                                   | `""`            |
 | `compactor.updateStrategy.type`                   | Compactor statefulset strategy type                                                                 | `RollingUpdate` |
@@ -240,7 +240,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.affinity`                              | Affinity for Distributor pods assignment                                                              | `{}`            |
 | `distributor.nodeSelector`                          | Node labels for Distributor pods assignment                                                           | `{}`            |
 | `distributor.tolerations`                           | Tolerations for Distributor pods assignment                                                           | `[]`            |
-| `distributor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains       | `{}`            |
+| `distributor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains       | `[]`            |
 | `distributor.priorityClassName`                     | Distributor pods' priorityClassName                                                                   | `""`            |
 | `distributor.schedulerName`                         | Kubernetes pod scheduler registry                                                                     | `""`            |
 | `distributor.updateStrategy.type`                   | Distributor statefulset strategy type                                                                 | `RollingUpdate` |
@@ -268,6 +268,87 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.service.externalTrafficPolicy`    | Distributor service external traffic policy                      | `Cluster`   |
 | `distributor.service.annotations`              | Additional custom annotations for Distributor service            | `{}`        |
 | `distributor.service.extraPorts`               | Extra ports to expose in the Distributor service                 | `[]`        |
+
+
+### Metrics Generator Deployment Parameters
+
+| Name                                                     | Description                                                                                                | Value           |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------- |
+| `metricsGenerator.enabled`                               | enable metricsGenerator                                                                                    | `false`         |
+| `metricsGenerator.remoteWrite`                           | remoteWrite configuration for metricsGenerator                                                             | `[]`            |
+| `metricsGenerator.extraEnvVars`                          | Array with extra environment variables to add to metricsGenerator nodes                                    | `[]`            |
+| `metricsGenerator.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for metricsGenerator nodes                            | `""`            |
+| `metricsGenerator.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for metricsGenerator nodes                               | `""`            |
+| `metricsGenerator.command`                               | Override default container command (useful when using custom images)                                       | `[]`            |
+| `metricsGenerator.args`                                  | Override default container args (useful when using custom images)                                          | `[]`            |
+| `metricsGenerator.replicaCount`                          | Number of metricsGenerator replicas to deploy                                                              | `1`             |
+| `metricsGenerator.livenessProbe.enabled`                 | Enable livenessProbe on metricsGenerator nodes                                                             | `true`          |
+| `metricsGenerator.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                    | `10`            |
+| `metricsGenerator.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                           | `10`            |
+| `metricsGenerator.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                          | `1`             |
+| `metricsGenerator.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                        | `3`             |
+| `metricsGenerator.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                        | `1`             |
+| `metricsGenerator.readinessProbe.enabled`                | Enable readinessProbe on metricsGenerator nodes                                                            | `true`          |
+| `metricsGenerator.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                   | `10`            |
+| `metricsGenerator.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                          | `10`            |
+| `metricsGenerator.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                         | `1`             |
+| `metricsGenerator.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                       | `3`             |
+| `metricsGenerator.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                       | `1`             |
+| `metricsGenerator.startupProbe.enabled`                  | Enable startupProbe on metricsGenerator containers                                                         | `false`         |
+| `metricsGenerator.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                     | `30`            |
+| `metricsGenerator.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                            | `10`            |
+| `metricsGenerator.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                           | `1`             |
+| `metricsGenerator.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                         | `15`            |
+| `metricsGenerator.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                         | `1`             |
+| `metricsGenerator.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                        | `{}`            |
+| `metricsGenerator.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                       | `{}`            |
+| `metricsGenerator.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                         | `{}`            |
+| `metricsGenerator.resources.limits`                      | The resources limits for the metricsGenerator containers                                                   | `{}`            |
+| `metricsGenerator.resources.requests`                    | The requested resources for the metricsGenerator containers                                                | `{}`            |
+| `metricsGenerator.podSecurityContext.enabled`            | Enabled metricsGenerator pods' Security Context                                                            | `true`          |
+| `metricsGenerator.podSecurityContext.fsGroup`            | Set metricsGenerator pod's Security Context fsGroup                                                        | `1001`          |
+| `metricsGenerator.containerSecurityContext.enabled`      | Enabled metricsGenerator containers' Security Context                                                      | `true`          |
+| `metricsGenerator.containerSecurityContext.runAsUser`    | Set metricsGenerator containers' Security Context runAsUser                                                | `1001`          |
+| `metricsGenerator.containerSecurityContext.runAsNonRoot` | Set metricsGenerator containers' Security Context runAsNonRoot                                             | `true`          |
+| `metricsGenerator.lifecycleHooks`                        | for the metricsGenerator container(s) to automate configuration before or after startup                    | `{}`            |
+| `metricsGenerator.hostAliases`                           | metricsGenerator pods host aliases                                                                         | `[]`            |
+| `metricsGenerator.podLabels`                             | Extra labels for metricsGenerator pods                                                                     | `{}`            |
+| `metricsGenerator.podAnnotations`                        | Annotations for metricsGenerator pods                                                                      | `{}`            |
+| `metricsGenerator.podAffinityPreset`                     | Pod affinity preset. Ignored if `metricsGenerator.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `metricsGenerator.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `metricsGenerator.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `metricsGenerator.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `metricsGenerator.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `metricsGenerator.nodeAffinityPreset.key`                | Node label key to match. Ignored if `metricsGenerator.affinity` is set                                     | `""`            |
+| `metricsGenerator.nodeAffinityPreset.values`             | Node label values to match. Ignored if `metricsGenerator.affinity` is set                                  | `[]`            |
+| `metricsGenerator.affinity`                              | Affinity for metricsGenerator pods assignment                                                              | `{}`            |
+| `metricsGenerator.nodeSelector`                          | Node labels for metricsGenerator pods assignment                                                           | `{}`            |
+| `metricsGenerator.tolerations`                           | Tolerations for metricsGenerator pods assignment                                                           | `[]`            |
+| `metricsGenerator.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains            | `{}`            |
+| `metricsGenerator.priorityClassName`                     | metricsGenerator pods' priorityClassName                                                                   | `""`            |
+| `metricsGenerator.schedulerName`                         | Kubernetes pod scheduler registry                                                                          | `""`            |
+| `metricsGenerator.updateStrategy.type`                   | metricsGenerator statefulset strategy type                                                                 | `RollingUpdate` |
+| `metricsGenerator.updateStrategy.rollingUpdate`          | metricsGenerator statefulset rolling update configuration parameters                                       | `{}`            |
+| `metricsGenerator.extraVolumes`                          | Optionally specify extra list of additional volumes for the metricsGenerator pod(s)                        | `[]`            |
+| `metricsGenerator.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the metricsGenerator container(s)             | `[]`            |
+| `metricsGenerator.sidecars`                              | Add additional sidecar containers to the metricsGenerator pod(s)                                           | `[]`            |
+| `metricsGenerator.initContainers`                        | Add additional init containers to the metricsGenerator pod(s)                                              | `[]`            |
+
+
+### Metrics Generator Traffic Exposure Parameters
+
+| Name                                                | Description                                                      | Value       |
+| --------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
+| `metricsGenerator.service.type`                     | metricsGenerator service type                                    | `ClusterIP` |
+| `metricsGenerator.service.ports.http`               | metricsGenerator HTTP service port                               | `3100`      |
+| `metricsGenerator.service.ports.grpc`               | metricsGenerator GRPC service port                               | `9095`      |
+| `metricsGenerator.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
+| `metricsGenerator.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
+| `metricsGenerator.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
+| `metricsGenerator.service.clusterIP`                | metricsGenerator service Cluster IP                              | `""`        |
+| `metricsGenerator.service.loadBalancerIP`           | metricsGenerator service Load Balancer IP                        | `""`        |
+| `metricsGenerator.service.loadBalancerSourceRanges` | metricsGenerator service Load Balancer sources                   | `[]`        |
+| `metricsGenerator.service.externalTrafficPolicy`    | metricsGenerator service external traffic policy                 | `Cluster`   |
+| `metricsGenerator.service.annotations`              | Additional custom annotations for metricsGenerator service       | `{}`        |
+| `metricsGenerator.service.extraPorts`               | Extra ports to expose in the metricsGenerator service            | `[]`        |
 
 
 ### Ingester Deployment Parameters
@@ -320,7 +401,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.affinity`                              | Affinity for ingester pods assignment                                                              | `{}`            |
 | `ingester.nodeSelector`                          | Node labels for Ingester pods assignment                                                           | `{}`            |
 | `ingester.tolerations`                           | Tolerations for Ingester pods assignment                                                           | `[]`            |
-| `ingester.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `{}`            |
+| `ingester.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `[]`            |
 | `ingester.priorityClassName`                     | Ingester pods' priorityClassName                                                                   | `""`            |
 | `ingester.schedulerName`                         | Kubernetes pod scheduler registry                                                                  | `""`            |
 | `ingester.updateStrategy.type`                   | Ingester statefulset strategy type                                                                 | `RollingUpdate` |
@@ -414,7 +495,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.affinity`                              | Affinity for Querier pods assignment                                                              | `{}`            |
 | `querier.nodeSelector`                          | Node labels for Querier pods assignment                                                           | `{}`            |
 | `querier.tolerations`                           | Tolerations for Querier pods assignment                                                           | `[]`            |
-| `querier.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `{}`            |
+| `querier.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `[]`            |
 | `querier.priorityClassName`                     | Querier pods' priorityClassName                                                                   | `""`            |
 | `querier.schedulerName`                         | Kubernetes pod scheduler registry                                                                 | `""`            |
 | `querier.updateStrategy.type`                   | Querier statefulset strategy type                                                                 | `RollingUpdate` |
@@ -494,7 +575,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.affinity`                                    | Affinity for queryFrontend pods assignment                                                              | `{}`                          |
 | `queryFrontend.nodeSelector`                                | Node labels for queryFrontend pods assignment                                                           | `{}`                          |
 | `queryFrontend.tolerations`                                 | Tolerations for queryFrontend pods assignment                                                           | `[]`                          |
-| `queryFrontend.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains         | `{}`                          |
+| `queryFrontend.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains         | `[]`                          |
 | `queryFrontend.priorityClassName`                           | queryFrontend pods' priorityClassName                                                                   | `""`                          |
 | `queryFrontend.schedulerName`                               | Kubernetes pod scheduler registry                                                                       | `""`                          |
 | `queryFrontend.updateStrategy.type`                         | queryFrontend statefulset strategy type                                                                 | `RollingUpdate`               |
@@ -505,7 +586,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.initContainers`                              | Add additional init containers to the queryFrontend pod(s)                                              | `[]`                          |
 | `queryFrontend.query.image.registry`                        | Grafana Tempo Query image registry                                                                      | `docker.io`                   |
 | `queryFrontend.query.image.repository`                      | Grafana Tempo Query image repository                                                                    | `bitnami/grafana-tempo-query` |
-| `queryFrontend.query.image.tag`                             | Grafana Tempo Query image tag (immutable tags are recommended)                                          | `1.4.1-debian-10-r18`         |
+| `queryFrontend.query.image.tag`                             | Grafana Tempo Query image tag (immutable tags are recommended)                                          | `1.4.1-debian-11-r0`          |
 | `queryFrontend.query.image.pullPolicy`                      | Grafana Tempo Query image pull policy                                                                   | `IfNotPresent`                |
 | `queryFrontend.query.image.pullSecrets`                     | Grafana Tempo Query image pull secrets                                                                  | `[]`                          |
 | `queryFrontend.query.configuration`                         | Query sidecar configuration                                                                             | `""`                          |
@@ -573,7 +654,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.enabled`                               | Enable vulture deployment                                                                         | `true`                          |
 | `vulture.image.registry`                        | Grafana Vulture image registry                                                                    | `docker.io`                     |
 | `vulture.image.repository`                      | Grafana Vulture image repository                                                                  | `bitnami/grafana-tempo-vulture` |
-| `vulture.image.tag`                             | Grafana Vulture image tag (immutable tags are recommended)                                        | `1.4.1-debian-10-r18`           |
+| `vulture.image.tag`                             | Grafana Vulture image tag (immutable tags are recommended)                                        | `1.4.1-debian-11-r0`            |
 | `vulture.image.pullPolicy`                      | Grafana Vulture image pull policy                                                                 | `IfNotPresent`                  |
 | `vulture.image.pullSecrets`                     | Grafana Vulture image pull secrets                                                                | `[]`                            |
 | `vulture.extraEnvVars`                          | Array with extra environment variables to add to vulture nodes                                    | `[]`                            |
@@ -623,7 +704,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.affinity`                              | Affinity for Vulture pods assignment                                                              | `{}`                            |
 | `vulture.nodeSelector`                          | Node labels for Vulture pods assignment                                                           | `{}`                            |
 | `vulture.tolerations`                           | Tolerations for Vulture pods assignment                                                           | `[]`                            |
-| `vulture.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `{}`                            |
+| `vulture.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `[]`                            |
 | `vulture.priorityClassName`                     | Vulture pods' priorityClassName                                                                   | `""`                            |
 | `vulture.schedulerName`                         | Kubernetes pod scheduler registry                                                                 | `""`                            |
 | `vulture.updateStrategy.type`                   | Vulture statefulset strategy type                                                                 | `RollingUpdate`                 |
@@ -658,7 +739,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r435`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r0`       |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |

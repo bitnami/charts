@@ -19,7 +19,7 @@ $ helm install my-release bitnami/parse
 
 This chart bootstraps a [Parse](https://github.com/bitnami/bitnami-docker-parse) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------- |
 | `server.image.registry`                                  | Parse image registry                                                                                                     | `docker.io`          |
 | `server.image.repository`                                | Parse image repository                                                                                                   | `bitnami/parse`      |
-| `server.image.tag`                                       | Parse image tag (immutable tags are recommended)                                                                         | `5.2.1-debian-10-r4` |
+| `server.image.tag`                                       | Parse image tag (immutable tags are recommended)                                                                         | `5.2.1-debian-11-r3` |
 | `server.image.pullPolicy`                                | Image pull policy                                                                                                        | `IfNotPresent`       |
 | `server.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                         | `[]`                 |
 | `server.image.debug`                                     | Enable image debug mode                                                                                                  | `false`              |
@@ -107,8 +107,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.extraEnvVarsSecret`                              | Name of a Secret containing extra environment variables                                                                  | `""`                 |
 | `server.extraVolumes`                                    | Optionally specify extra list of additional volumes for the Parse pod(s)                                                 | `[]`                 |
 | `server.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Parse container(s)                                      | `[]`                 |
-| `server.sidecars`                                        | Add additional sidecar containers to the Parse pod(s)                                                                    | `{}`                 |
-| `server.initContainers`                                  | Add additional init containers to the Parse pod(s)                                                                       | `{}`                 |
+| `server.sidecars`                                        | Add additional sidecar containers to the Parse pod(s)                                                                    | `[]`                 |
+| `server.initContainers`                                  | Add additional init containers to the Parse pod(s)                                                                       | `[]`                 |
 | `server.enableCloudCode`                                 | Enable Parse Cloud Code                                                                                                  | `false`              |
 | `server.cloudCodeScripts`                                | Cloud Code scripts                                                                                                       | `{}`                 |
 | `server.existingCloudCodeScriptsCM`                      | ConfigMap with Cloud Code scripts (Note: Overrides `cloudCodeScripts`).                                                  | `""`                 |
@@ -144,7 +144,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.tolerations`                                     | Parse server tolerations for pod assignment                                                                              | `[]`                 |
 | `server.updateStrategy.type`                             | Parse statefulset strategy type                                                                                          | `RollingUpdate`      |
 | `server.priorityClassName`                               | Parse pods' priorityClassName                                                                                            | `""`                 |
-| `server.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                 |
+| `server.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                 |
 | `server.schedulerName`                                   | Name of the k8s scheduler (other than default) for Parse pods                                                            | `""`                 |
 | `server.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`                 |
 | `server.lifecycleHooks`                                  | for the Parse container(s) to automate configuration before or after startup                                             | `{}`                 |
@@ -168,7 +168,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.enabled`                                         | Enable parse dashboard                                                                                                   | `true`                    |
 | `dashboard.image.registry`                                  | Dashboard image registry                                                                                                 | `docker.io`               |
 | `dashboard.image.repository`                                | Dashboard image repository                                                                                               | `bitnami/parse-dashboard` |
-| `dashboard.image.tag`                                       | Dashboard image tag (immutable tags are recommended)                                                                     | `3.3.0-debian-10-r118`    |
+| `dashboard.image.tag`                                       | Dashboard image tag (immutable tags are recommended)                                                                     | `3.3.0-debian-11-r3`      |
 | `dashboard.image.pullPolicy`                                | Image pull policy                                                                                                        | `IfNotPresent`            |
 | `dashboard.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                         | `[]`                      |
 | `dashboard.image.debug`                                     | Enable Parse Dashboard image debug mode                                                                                  | `false`                   |
@@ -220,7 +220,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.tolerations`                                     | Parse dashboard tolerations for pod assignment                                                                           | `[]`                      |
 | `dashboard.updateStrategy.type`                             | Parse statefulset strategy type                                                                                          | `RollingUpdate`           |
 | `dashboard.priorityClassName`                               | Parse pods' priorityClassName                                                                                            | `""`                      |
-| `dashboard.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                      |
+| `dashboard.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                      |
 | `dashboard.schedulerName`                                   | Name of the k8s scheduler (other than default) for Parse pods                                                            | `""`                      |
 | `dashboard.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`                      |
 | `dashboard.lifecycleHooks`                                  | for the Parse container(s) to automate configuration before or after startup                                             | `{}`                      |
@@ -230,8 +230,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.extraEnvVarsSecret`                              | Name of a Secret containing extra environment variables                                                                  | `""`                      |
 | `dashboard.extraVolumes`                                    | Optionally specify extra list of additional volumes for the Parse pod(s)                                                 | `[]`                      |
 | `dashboard.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Parse container(s)                                      | `[]`                      |
-| `dashboard.sidecars`                                        | Add additional sidecar containers to the Parse pod(s)                                                                    | `{}`                      |
-| `dashboard.initContainers`                                  | Add additional init containers to the Parse pod(s)                                                                       | `{}`                      |
+| `dashboard.sidecars`                                        | Add additional sidecar containers to the Parse pod(s)                                                                    | `[]`                      |
+| `dashboard.initContainers`                                  | Add additional init containers to the Parse pod(s)                                                                       | `[]`                      |
 | `dashboard.service.type`                                    | Kubernetes Service type                                                                                                  | `LoadBalancer`            |
 | `dashboard.service.ports.http`                              | Service HTTP port (Dashboard)                                                                                            | `80`                      |
 | `dashboard.service.nodePorts.http`                          | Kubernetes HTTP node port                                                                                                | `""`                      |
@@ -290,7 +290,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r415`     |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r3`       |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
 | `volumePermissions.resources`                 | The resources for the container                                                                                                                           | `{}`                    |

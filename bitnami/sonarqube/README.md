@@ -19,7 +19,7 @@ $ helm install my-release bitnami/sonarqube
 
 This chart bootstraps an [SonarQube](https://github.com/bitnami/bitnami-docker-sonarqube) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -79,14 +79,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### SonarQube Image parameters
 
-| Name                | Description                                          | Value                 |
-| ------------------- | ---------------------------------------------------- | --------------------- |
-| `image.registry`    | SonarQube image registry                             | `docker.io`           |
-| `image.repository`  | SonarQube image repository                           | `bitnami/sonarqube`   |
-| `image.tag`         | SonarQube image tag (immutable tags are recommended) | `9.4.0-debian-10-r23` |
-| `image.pullPolicy`  | SonarQube image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | SonarQube image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable SonarQube image debug mode                    | `false`               |
+| Name                | Description                                          | Value                |
+| ------------------- | ---------------------------------------------------- | -------------------- |
+| `image.registry`    | SonarQube image registry                             | `docker.io`          |
+| `image.repository`  | SonarQube image repository                           | `bitnami/sonarqube`  |
+| `image.tag`         | SonarQube image tag (immutable tags are recommended) | `9.4.0-debian-11-r3` |
+| `image.pullPolicy`  | SonarQube image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | SonarQube image pull secrets                         | `[]`                 |
+| `image.debug`       | Enable SonarQube image debug mode                    | `false`              |
 
 
 ### SonarQube Configuration parameters
@@ -167,8 +167,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `lifecycleHooks`                        | for the SonarQube container(s) to automate configuration before or after startup          | `{}`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for the SonarQube pod(s)              | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the SonarQube container(s)   | `[]`            |
-| `sidecars`                              | Add additional sidecar containers to the SonarQube pod(s)                                 | `{}`            |
-| `initContainers`                        | Add additional init containers to the SonarQube pod(s)                                    | `{}`            |
+| `sidecars`                              | Add additional sidecar containers to the SonarQube pod(s)                                 | `[]`            |
+| `initContainers`                        | Add additional init containers to the SonarQube pod(s)                                    | `[]`            |
 
 
 ### Traffic Exposure Parameters
@@ -218,7 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r434`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r3`       |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -233,7 +233,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`            | Enable kernel settings modifier image                    | `true`                  |
 | `sysctl.image.registry`     | Bitnami Shell image registry                             | `docker.io`             |
 | `sysctl.image.repository`   | Bitnami Shell image repository                           | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended) | `10-debian-10-r434`     |
+| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended) | `11-debian-11-r3`       |
 | `sysctl.image.pullPolicy`   | Bitnami Shell image pull policy                          | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`  | Bitnami Shell image pull secrets                         | `[]`                    |
 | `sysctl.resources.limits`   | The resources limits for the init container              | `{}`                    |
@@ -258,33 +258,33 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                                | Description                                                                                           | Value                   |
-| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------- |
-| `metrics.jmx.enabled`                               | Whether or not to expose JMX metrics to Prometheus                                                    | `false`                 |
-| `metrics.jmx.image.registry`                        | JMX exporter image registry                                                                           | `docker.io`             |
-| `metrics.jmx.image.repository`                      | JMX exporter image repository                                                                         | `bitnami/jmx-exporter`  |
-| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                               | `0.16.1-debian-10-r306` |
-| `metrics.jmx.image.pullPolicy`                      | JMX exporter image pull policy                                                                        | `IfNotPresent`          |
-| `metrics.jmx.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                      | `[]`                    |
-| `metrics.jmx.containerPorts.metrics`                | JMX Exporter metrics container port                                                                   | `10445`                 |
-| `metrics.jmx.resources.limits`                      | The resources limits for the init container                                                           | `{}`                    |
-| `metrics.jmx.resources.requests`                    | The requested resources for the init container                                                        | `{}`                    |
-| `metrics.jmx.containerSecurityContext.enabled`      | Enabled JMX Exporter containers' Security Context                                                     | `true`                  |
-| `metrics.jmx.containerSecurityContext.runAsUser`    | Set JMX Exporter containers' Security Context runAsUser                                               | `1001`                  |
-| `metrics.jmx.containerSecurityContext.runAsNonRoot` | Set JMX Exporter containers' Security Context runAsNonRoot                                            | `true`                  |
-| `metrics.jmx.whitelistObjectNames`                  | Allows setting which JMX objects you want to expose to via JMX stats to JMX Exporter                  | `[]`                    |
-| `metrics.jmx.configuration`                         | Configuration file for JMX exporter                                                                   | `""`                    |
-| `metrics.jmx.service.ports.metrics`                 | JMX Exporter Prometheus port                                                                          | `10443`                 |
-| `metrics.jmx.service.annotations`                   | Annotations for the JMX Exporter Prometheus metrics service                                           | `{}`                    |
-| `metrics.serviceMonitor.enabled`                    | if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.jmx.enabled` to be `true`) | `false`                 |
-| `metrics.serviceMonitor.namespace`                  | Namespace in which Prometheus is running                                                              | `""`                    |
-| `metrics.serviceMonitor.labels`                     | Extra labels for the ServiceMonitor                                                                   | `{}`                    |
-| `metrics.serviceMonitor.jobLabel`                   | The name of the label on the target service to use as the job name in Prometheus                      | `""`                    |
-| `metrics.serviceMonitor.interval`                   | How frequently to scrape metrics                                                                      | `""`                    |
-| `metrics.serviceMonitor.scrapeTimeout`              | Timeout after which the scrape is ended                                                               | `""`                    |
-| `metrics.serviceMonitor.metricRelabelings`          | Specify additional relabeling of metrics                                                              | `[]`                    |
-| `metrics.serviceMonitor.relabelings`                | Specify general relabeling                                                                            | `[]`                    |
-| `metrics.serviceMonitor.selector`                   | Prometheus instance selector labels                                                                   | `{}`                    |
+| Name                                                | Description                                                                                           | Value                  |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------- |
+| `metrics.jmx.enabled`                               | Whether or not to expose JMX metrics to Prometheus                                                    | `false`                |
+| `metrics.jmx.image.registry`                        | JMX exporter image registry                                                                           | `docker.io`            |
+| `metrics.jmx.image.repository`                      | JMX exporter image repository                                                                         | `bitnami/jmx-exporter` |
+| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                               | `0.17.0-debian-11-r3`  |
+| `metrics.jmx.image.pullPolicy`                      | JMX exporter image pull policy                                                                        | `IfNotPresent`         |
+| `metrics.jmx.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                      | `[]`                   |
+| `metrics.jmx.containerPorts.metrics`                | JMX Exporter metrics container port                                                                   | `10445`                |
+| `metrics.jmx.resources.limits`                      | The resources limits for the init container                                                           | `{}`                   |
+| `metrics.jmx.resources.requests`                    | The requested resources for the init container                                                        | `{}`                   |
+| `metrics.jmx.containerSecurityContext.enabled`      | Enabled JMX Exporter containers' Security Context                                                     | `true`                 |
+| `metrics.jmx.containerSecurityContext.runAsUser`    | Set JMX Exporter containers' Security Context runAsUser                                               | `1001`                 |
+| `metrics.jmx.containerSecurityContext.runAsNonRoot` | Set JMX Exporter containers' Security Context runAsNonRoot                                            | `true`                 |
+| `metrics.jmx.whitelistObjectNames`                  | Allows setting which JMX objects you want to expose to via JMX stats to JMX Exporter                  | `[]`                   |
+| `metrics.jmx.configuration`                         | Configuration file for JMX exporter                                                                   | `""`                   |
+| `metrics.jmx.service.ports.metrics`                 | JMX Exporter Prometheus port                                                                          | `10443`                |
+| `metrics.jmx.service.annotations`                   | Annotations for the JMX Exporter Prometheus metrics service                                           | `{}`                   |
+| `metrics.serviceMonitor.enabled`                    | if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.jmx.enabled` to be `true`) | `false`                |
+| `metrics.serviceMonitor.namespace`                  | Namespace in which Prometheus is running                                                              | `""`                   |
+| `metrics.serviceMonitor.labels`                     | Extra labels for the ServiceMonitor                                                                   | `{}`                   |
+| `metrics.serviceMonitor.jobLabel`                   | The name of the label on the target service to use as the job name in Prometheus                      | `""`                   |
+| `metrics.serviceMonitor.interval`                   | How frequently to scrape metrics                                                                      | `""`                   |
+| `metrics.serviceMonitor.scrapeTimeout`              | Timeout after which the scrape is ended                                                               | `""`                   |
+| `metrics.serviceMonitor.metricRelabelings`          | Specify additional relabeling of metrics                                                              | `[]`                   |
+| `metrics.serviceMonitor.relabelings`                | Specify general relabeling                                                                            | `[]`                   |
+| `metrics.serviceMonitor.selector`                   | Prometheus instance selector labels                                                                   | `{}`                   |
 
 
 ### PostgreSQL subchart settings

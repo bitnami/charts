@@ -4,10 +4,14 @@ on: # rebuild any PRs and main branch changes
     branches:
       - master
     paths:
-      - 'bitnami/wordpress/Chart.yaml'
       - 'bitnami/grafana-loki/Chart.yaml'
       - 'bitnami/haproxy-intel/Chart.yaml'
+      - 'bitnami/kibana/Chart.yaml'
+      - 'bitnami/mongodb/Chart.yaml'
+      - 'bitnami/pinniped/Chart.yaml'
       - 'bitnami/sealed-secrets/Chart.yaml'
+      - 'bitnami/solr/Chart.yaml'
+      - 'bitnami/wordpress/Chart.yaml'
 env:
   CSP_API_URL: https://console.cloud.vmware.com
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
@@ -110,5 +114,5 @@ jobs:
           cd index
           # Push changes
           git config user.name "Bitnami Containers"
-          git config user.email containers@bitnami.com
+          git config user.email "bitnami-bot@vmware.com"
           git add bitnami/index.yaml && git commit -m "${chart}-${chart_version}: Update index.yaml" -s && git push

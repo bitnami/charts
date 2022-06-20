@@ -21,7 +21,7 @@ This chart bootstraps an [Apache Spark](https://github.com/bitnami/bitnami-docke
 
 Apache Spark includes APIs for Java, Python, Scala and R.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -81,15 +81,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Spark parameters
 
-| Name                | Description                                      | Value                 |
-| ------------------- | ------------------------------------------------ | --------------------- |
-| `image.registry`    | Spark image registry                             | `docker.io`           |
-| `image.repository`  | Spark image repository                           | `bitnami/spark`       |
-| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.2.1-debian-10-r85` |
-| `image.pullPolicy`  | Spark image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                  |
-| `image.debug`       | Enable image debug mode                          | `false`               |
-| `hostNetwork`       | Enable HOST Network                              | `false`               |
+| Name                | Description                                      | Value                |
+| ------------------- | ------------------------------------------------ | -------------------- |
+| `image.registry`    | Spark image registry                             | `docker.io`          |
+| `image.repository`  | Spark image repository                           | `bitnami/spark`      |
+| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.2.1-debian-11-r3` |
+| `image.pullPolicy`  | Spark image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                 |
+| `image.debug`       | Enable image debug mode                          | `false`              |
+| `hostNetwork`       | Enable HOST Network                              | `false`              |
 
 
 ### Spark master parameters
@@ -130,7 +130,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.tolerations`                                     | Spark master tolerations for pod assignment                                                                              | `[]`            |
 | `master.updateStrategy.type`                             | Master statefulset strategy type.                                                                                        | `RollingUpdate` |
 | `master.priorityClassName`                               | master pods' priorityClassName                                                                                           | `""`            |
-| `master.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `master.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
 | `master.schedulerName`                                   | Name of the k8s scheduler (other than default) for master pods                                                           | `""`            |
 | `master.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`            |
 | `master.lifecycleHooks`                                  | for the master container(s) to automate configuration before or after startup                                            | `{}`            |
@@ -159,7 +159,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
 | `master.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
 | `master.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `master.sidecars`                                        | Add additional sidecar containers to the master pod(s)                                                                   | `{}`            |
+| `master.sidecars`                                        | Add additional sidecar containers to the master pod(s)                                                                   | `[]`            |
 | `master.initContainers`                                  | Add initContainers to the master pods.                                                                                   | `[]`            |
 
 
@@ -207,7 +207,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.updateStrategy.type`                             | Worker statefulset strategy type.                                                                                        | `RollingUpdate` |
 | `worker.podManagementPolicy`                             | Statefulset Pod Management Policy Type                                                                                   | `OrderedReady`  |
 | `worker.priorityClassName`                               | worker pods' priorityClassName                                                                                           | `""`            |
-| `worker.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `worker.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
 | `worker.schedulerName`                                   | Name of the k8s scheduler (other than default) for worker pods                                                           | `""`            |
 | `worker.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`            |
 | `worker.lifecycleHooks`                                  | for the worker container(s) to automate configuration before or after startup                                            | `{}`            |
@@ -236,7 +236,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
 | `worker.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
 | `worker.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `worker.sidecars`                                        | Add additional sidecar containers to the worker pod(s)                                                                   | `{}`            |
+| `worker.sidecars`                                        | Add additional sidecar containers to the worker pod(s)                                                                   | `[]`            |
 | `worker.initContainers`                                  | Add initContainers to the worker pods.                                                                                   | `[]`            |
 | `worker.autoscaling.enabled`                             | Enable replica autoscaling depending on CPU                                                                              | `false`         |
 | `worker.autoscaling.minReplicas`                         | Minimum number of worker replicas                                                                                        | `""`            |

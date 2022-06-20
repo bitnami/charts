@@ -1,5 +1,5 @@
 # Multiple deployments pipelines are custom per asset. All single deployments pipelines are handled by vib-verify.yaml
-name: 'VIB'
+name: 'VIB extra Thanos'
 on: # rebuild any PRs and main branch changes
   pull_request_target:
     types:

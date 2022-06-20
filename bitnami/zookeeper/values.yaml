@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.8.0-debian-10-r64
+  tag: 3.8.0-debian-11-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -95,26 +95,49 @@ image:
 ## Authentication parameters
 ##
 auth:
-  ## @param auth.enabled Enable ZooKeeper auth. It uses SASL/Digest-MD5
-  ##
-  enabled: false
-  ## @param auth.clientUser User that will use ZooKeeper clients to auth
-  ##
-  clientUser: ""
-  ## @param auth.clientPassword Password that will use ZooKeeper clients to auth
-  ##
-  clientPassword: ""
-  ## @param auth.serverUsers Comma, semicolon or whitespace separated list of user to be created
-  ## Specify them as a string, for example: "user1,user2,admin"
-  ##
-  serverUsers: ""
-  ## @param auth.serverPasswords Comma, semicolon or whitespace separated list of passwords to assign to users when created
-  ## Specify them as a string, for example: "pass4user1, pass4user2, pass4admin"
-  ##
-  serverPasswords: ""
-  ## @param auth.existingSecret Use existing secret (ignores previous passwords)
-  ##
-  existingSecret: ""
+  client:
+    ## @param auth.client.enabled Enable ZooKeeper client-server authentication. It uses SASL/Digest-MD5
+    ##
+    enabled: false
+    ## @param auth.client.clientUser User that will use ZooKeeper clients to auth
+    ##
+    clientUser: ""
+    ## @param auth.client.clientPassword Password that will use ZooKeeper clients to auth
+    ##
+    clientPassword: ""
+    ## @param auth.client.serverUsers Comma, semicolon or whitespace separated list of user to be created
+    ## Specify them as a string, for example: "user1,user2,admin"
+    ##
+    serverUsers: ""
+    ## @param auth.client.serverPasswords Comma, semicolon or whitespace separated list of passwords to assign to users when created
+    ## Specify them as a string, for example: "pass4user1, pass4user2, pass4admin"
+    ##
+    serverPasswords: ""
+    ## @param auth.client.existingSecret Use existing secret (ignores previous passwords)
+    ##
+    existingSecret: ""
+  quorum:
+    ## @param auth.quorum.enabled Enable ZooKeeper server-server authentication. It uses SASL/Digest-MD5
+    ##
+    enabled: false
+    ## @param auth.quorum.learnerUser User that the ZooKeeper quorumLearner will use to authenticate to quorumServers.
+    ## Note: Make sure the user is included in auth.quorum.serverUsers
+    ##
+    learnerUser: ""
+    ## @param auth.quorum.learnerPassword Password that the ZooKeeper quorumLearner will use to authenticate to quorumServers.
+    ##
+    learnerPassword: ""
+    ## @param auth.quorum.serverUsers Comma, semicolon or whitespace separated list of users for the quorumServers.
+    ## Specify them as a string, for example: "user1,user2,admin"
+    ##
+    serverUsers: ""
+    ## @param auth.quorum.serverPasswords Comma, semicolon or whitespace separated list of passwords to assign to users when created
+    ## Specify them as a string, for example: "pass4user1, pass4user2, pass4admin"
+    ##
+    serverPasswords: ""
+    ## @param auth.quorum.existingSecret Use existing secret (ignores previous passwords)
+    ##
+    existingSecret: ""
 ## @param tickTime Basic time unit (in milliseconds) used by ZooKeeper for heartbeats
 ##
 tickTime: 2000
@@ -367,7 +390,7 @@ tolerations: []
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
-topologySpreadConstraints: {}
+topologySpreadConstraints: []
 ## @param podManagementPolicy StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: `OrderedReady` and `Parallel`
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
 ##
@@ -627,7 +650,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r431
+    tag: 11-debian-11-r4
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

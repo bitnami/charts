@@ -19,7 +19,7 @@ helm install my-release bitnami/kafka
 
 This chart bootstraps a [Kafka](https://github.com/bitnami/bitnami-docker-kafka) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `image.registry`                                  | Kafka image registry                                                                                                                                                                | `docker.io`                         |
 | `image.repository`                                | Kafka image repository                                                                                                                                                              | `bitnami/kafka`                     |
-| `image.tag`                                       | Kafka image tag (immutable tags are recommended)                                                                                                                                    | `3.2.0-debian-10-r4`                |
+| `image.tag`                                       | Kafka image tag (immutable tags are recommended)                                                                                                                                    | `3.2.0-debian-11-r3`                |
 | `image.pullPolicy`                                | Kafka image pull policy                                                                                                                                                             | `IfNotPresent`                      |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                                |
 | `image.debug`                                     | Specify if debug values should be set                                                                                                                                               | `false`                             |
@@ -212,7 +212,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                              | Affinity for pod assignment                                                                                                                                                                   | `{}`            |
 | `nodeSelector`                          | Node labels for pod assignment                                                                                                                                                                | `{}`            |
 | `tolerations`                           | Tolerations for pod assignment                                                                                                                                                                | `[]`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                      | `{}`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                      | `[]`            |
 | `terminationGracePeriodSeconds`         | Seconds the pod needs to gracefully terminate                                                                                                                                                 | `""`            |
 | `podManagementPolicy`                   | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel | `Parallel`      |
 | `priorityClassName`                     | Name of the existing priority class to be used by kafka pods                                                                                                                                  | `""`            |
@@ -252,7 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs/ports by querying the K8s API          | `false`               |
 | `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry                                                      | `docker.io`           |
 | `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image repository                                                    | `bitnami/kubectl`     |
-| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                          | `1.24.0-debian-10-r5` |
+| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                          | `1.24.1-debian-11-r4` |
 | `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy                                                   | `IfNotPresent`        |
 | `externalAccess.autoDiscovery.image.pullSecrets`  | Init container auto-discovery image pull secrets                                                  | `[]`                  |
 | `externalAccess.autoDiscovery.resources.limits`   | The resources limits for the auto-discovery init container                                        | `{}`                  |
@@ -305,7 +305,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r434`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `11-debian-11-r3`       |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
@@ -331,7 +331,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.kafka.enabled`                                     | Whether or not to create a standalone Kafka exporter to expose Kafka metrics                                                     | `false`                                                                                 |
 | `metrics.kafka.image.registry`                              | Kafka exporter image registry                                                                                                    | `docker.io`                                                                             |
 | `metrics.kafka.image.repository`                            | Kafka exporter image repository                                                                                                  | `bitnami/kafka-exporter`                                                                |
-| `metrics.kafka.image.tag`                                   | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.4.2-debian-10-r243`                                                                  |
+| `metrics.kafka.image.tag`                                   | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.4.2-debian-11-r4`                                                                    |
 | `metrics.kafka.image.pullPolicy`                            | Kafka exporter image pull policy                                                                                                 | `IfNotPresent`                                                                          |
 | `metrics.kafka.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
 | `metrics.kafka.certificatesSecret`                          | Name of the existing secret containing the optional certificate and key files                                                    | `""`                                                                                    |
@@ -378,7 +378,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.enabled`                                       | Whether or not to expose JMX metrics to Prometheus                                                                               | `false`                                                                                 |
 | `metrics.jmx.image.registry`                                | JMX exporter image registry                                                                                                      | `docker.io`                                                                             |
 | `metrics.jmx.image.repository`                              | JMX exporter image repository                                                                                                    | `bitnami/jmx-exporter`                                                                  |
-| `metrics.jmx.image.tag`                                     | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.16.1-debian-10-r306`                                                                 |
+| `metrics.jmx.image.tag`                                     | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.17.0-debian-11-r4`                                                                   |
 | `metrics.jmx.image.pullPolicy`                              | JMX exporter image pull policy                                                                                                   | `IfNotPresent`                                                                          |
 | `metrics.jmx.image.pullSecrets`                             | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
 | `metrics.jmx.containerSecurityContext.enabled`              | Enable Prometheus JMX exporter containers' Security Context                                                                      | `true`                                                                                  |
@@ -457,20 +457,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### ZooKeeper chart parameters
 
-| Name                                 | Description                                                                                                                                                             | Value               |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `zookeeper.enabled`                  | Switch to enable or disable the ZooKeeper helm chart                                                                                                                    | `true`              |
-| `zookeeper.replicaCount`             | Number of ZooKeeper nodes                                                                                                                                               | `1`                 |
-| `zookeeper.auth.enabled`             | Enable ZooKeeper auth                                                                                                                                                   | `false`             |
-| `zookeeper.auth.clientUser`          | User that will use ZooKeeper clients to auth                                                                                                                            | `""`                |
-| `zookeeper.auth.clientPassword`      | Password that will use ZooKeeper clients to auth                                                                                                                        | `""`                |
-| `zookeeper.auth.serverUsers`         | Comma, semicolon or whitespace separated list of user to be created. Specify them as a string, for example: "user1,user2,admin"                                         | `""`                |
-| `zookeeper.auth.serverPasswords`     | Comma, semicolon or whitespace separated list of passwords to assign to users when created. Specify them as a string, for example: "pass4user1, pass4user2, pass4admin" | `""`                |
-| `zookeeper.persistence.enabled`      | Enable persistence on ZooKeeper using PVC(s)                                                                                                                            | `true`              |
-| `zookeeper.persistence.storageClass` | Persistent Volume storage class                                                                                                                                         | `""`                |
-| `zookeeper.persistence.accessModes`  | Persistent Volume access modes                                                                                                                                          | `["ReadWriteOnce"]` |
-| `zookeeper.persistence.size`         | Persistent Volume size                                                                                                                                                  | `8Gi`               |
-| `externalZookeeper.servers`          | List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'.                                                                    | `[]`                |
+| Name                                    | Description                                                                                                                                                             | Value               |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `zookeeper.enabled`                     | Switch to enable or disable the ZooKeeper helm chart                                                                                                                    | `true`              |
+| `zookeeper.replicaCount`                | Number of ZooKeeper nodes                                                                                                                                               | `1`                 |
+| `zookeeper.auth.client.enabled`         | Enable ZooKeeper auth                                                                                                                                                   | `false`             |
+| `zookeeper.auth.client.clientUser`      | User that will use ZooKeeper clients to auth                                                                                                                            | `""`                |
+| `zookeeper.auth.client.clientPassword`  | Password that will use ZooKeeper clients to auth                                                                                                                        | `""`                |
+| `zookeeper.auth.client.serverUsers`     | Comma, semicolon or whitespace separated list of user to be created. Specify them as a string, for example: "user1,user2,admin"                                         | `""`                |
+| `zookeeper.auth.client.serverPasswords` | Comma, semicolon or whitespace separated list of passwords to assign to users when created. Specify them as a string, for example: "pass4user1, pass4user2, pass4admin" | `""`                |
+| `zookeeper.persistence.enabled`         | Enable persistence on ZooKeeper using PVC(s)                                                                                                                            | `true`              |
+| `zookeeper.persistence.storageClass`    | Persistent Volume storage class                                                                                                                                         | `""`                |
+| `zookeeper.persistence.accessModes`     | Persistent Volume access modes                                                                                                                                          | `["ReadWriteOnce"]` |
+| `zookeeper.persistence.size`            | Persistent Volume size                                                                                                                                                  | `8Gi`               |
+| `externalZookeeper.servers`             | List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'.                                                                    | `[]`                |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -804,6 +804,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 18.0.0
+
+This major updates the Zookeeper subchart to it newest major, 10.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-1000).
 
 ### To 16.0.0
 
