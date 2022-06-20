@@ -161,7 +161,7 @@ spec:
             httpGet:
               path: /-/ready
               port: http
-          {{- else if .Values.compactor.customReadinessProbe }}
+          {{- else if .Values.compactor.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.compactor.lifecycleHooks }}
