@@ -19,7 +19,7 @@ $ helm install my-release bitnami/cassandra
 
 This chart bootstraps an [Apache Cassandra](https://github.com/bitnami/bitnami-docker-cassandra) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`              | Cassandra image registry                                                                                               | `docker.io`          |
 | `image.repository`            | Cassandra image repository                                                                                             | `bitnami/cassandra`  |
-| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.4-debian-10-r0` |
+| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.4-debian-11-r0` |
 | `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`       |
 | `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                 |
 | `image.debug`                 | Enable image debug mode                                                                                                | `false`              |
@@ -164,6 +164,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customStartupProbe`                    | Override default startup probe                                                            | `{}`            |
 | `lifecycleHooks`                        | Override default etcd container hooks                                                     | `{}`            |
 | `schedulerName`                         | Alternative scheduler                                                                     | `""`            |
+| `terminationGracePeriodSeconds`         | In seconds, time the given to the Cassandra pod needs to terminate gracefully             | `""`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for cassandra container               | `[]`            |
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for cassandra container          | `[]`            |
 | `initContainers`                        | Add additional init containers to the cassandra pods                                      | `[]`            |
@@ -203,21 +204,25 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.clusterIP`                | Service Cluster IP                                                            | `""`        |
 | `service.externalTrafficPolicy`    | Service external traffic policy                                               | `Cluster`   |
 | `service.annotations`              | Provide any additional annotations which may be required.                     | `{}`        |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"          | `None`      |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                   | `{}`        |
 | `networkPolicy.enabled`            | Specifies whether a NetworkPolicy should be created                           | `false`     |
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                    | `true`      |
 
 
 ### Persistence parameters
 
-| Name                             | Description                                                                                        | Value                |
-| -------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------- |
-| `persistence.enabled`            | Enable Cassandra data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir | `true`               |
-| `persistence.storageClass`       | PVC Storage Class for Cassandra data volume                                                        | `""`                 |
-| `persistence.commitStorageClass` | PVC Storage Class for Cassandra Commit Log volume                                                  | `""`                 |
-| `persistence.annotations`        | Persistent Volume Claim annotations                                                                | `{}`                 |
-| `persistence.accessModes`        | Persistent Volume Access Mode                                                                      | `["ReadWriteOnce"]`  |
-| `persistence.size`               | PVC Storage Request for Cassandra data volume                                                      | `8Gi`                |
-| `persistence.mountPath`          | The path the data volume will be mounted at                                                        | `/bitnami/cassandra` |
+| Name                             | Description                                                                                                                                          | Value                |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `persistence.enabled`            | Enable Cassandra data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir                                                   | `true`               |
+| `persistence.storageClass`       | PVC Storage Class for Cassandra data volume                                                                                                          | `""`                 |
+| `persistence.commitStorageClass` | PVC Storage Class for Cassandra Commit Log volume                                                                                                    | `""`                 |
+| `persistence.annotations`        | Persistent Volume Claim annotations                                                                                                                  | `{}`                 |
+| `persistence.accessModes`        | Persistent Volume Access Mode                                                                                                                        | `["ReadWriteOnce"]`  |
+| `persistence.size`               | PVC Storage Request for Cassandra data volume                                                                                                        | `8Gi`                |
+| `persistence.commitLogsize`      | PVC Storage Request for Cassandra commit log volume. Unset by default                                                                                | `2Gi`                |
+| `persistence.mountPath`          | The path the data volume will be mounted at                                                                                                          | `/bitnami/cassandra` |
+| `persistence.commitLogMountPath` | The path the commit log volume will be mounted at. Unset by default. Set it to '/bitnami/cassandra/commitlog' to enable a separate commit log volume | `""`                 |
 
 
 ### Volume Permissions parameters
@@ -227,7 +232,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume                                                           | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume                                                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume                                                           | `10-debian-10-r410`     |
+| `volumePermissions.image.tag`                 | Init container volume                                                           | `11-debian-11-r0`       |
 | `volumePermissions.image.pullPolicy`          | Init container volume                                                           | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                          | `{}`                    |
@@ -242,7 +247,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                   | `false`                      |
 | `metrics.image.registry`                   | Cassandra exporter image registry                                                                      | `docker.io`                  |
 | `metrics.image.repository`                 | Cassandra exporter image name                                                                          | `bitnami/cassandra-exporter` |
-| `metrics.image.tag`                        | Cassandra exporter image tag                                                                           | `2.3.8-debian-10-r33`        |
+| `metrics.image.tag`                        | Cassandra exporter image tag                                                                           | `2.3.8-debian-11-r0`         |
 | `metrics.image.pullPolicy`                 | image pull policy                                                                                      | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                       | `[]`                         |
 | `metrics.resources.limits`                 | The resources limits for the container                                                                 | `{}`                         |
@@ -254,9 +259,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                | `""`                         |
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                    | `{}`                         |
 | `metrics.serviceMonitor.metricRelabelings` | Specify Metric Relabelings to add to the scrape endpoint                                               | `[]`                         |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                     | `[]`                         |
 | `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                               | `false`                      |
 | `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                      | `""`                         |
-| `metrics.serviceMonitor.additionalLabels`  | Used to pass Labels that are required by the installed Prometheus Operator                             | `{}`                         |
+| `metrics.serviceMonitor.labels`            | Used to pass Labels that are required by the installed Prometheus Operator                             | `{}`                         |
 | `metrics.containerPorts.http`              | HTTP Port on the Host and Container                                                                    | `8080`                       |
 | `metrics.containerPorts.jmx`               | JMX Port on the Host and Container                                                                     | `5555`                       |
 

@@ -6,7 +6,7 @@ dependencies:
   - condition: zookeeper.enabled
     name: zookeeper
     repository: https://charts.bitnami.com/bitnami
-    version: 9.x.x
+    version: 10.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -23,10 +23,10 @@ keywords:
   - producer
   - consumer
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: kafka
 sources:
   - https://github.com/bitnami/bitnami-docker-kafka
   - https://kafka.apache.org/
-version: 17.0.1
+version: 18.0.0

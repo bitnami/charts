@@ -186,6 +186,10 @@ spec:
               {{- end }}
               {{- end }}
 
+              {{- if .Values.provisioning.extraCommands }}
+              {{ join ";" .Values.provisioning.extraCommands | nindent 14 }};
+              {{- end }}
+
               echo "End Minio provisioning";
           {{- end }}
           {{- if .Values.provisioning.args }}
@@ -215,7 +219,7 @@ spec:
                   key: root-password
             {{- end }}
             {{- if .Values.tls.mountPath }}
-            - name: MINIO_CERTSDIR
+            - name: MINIO_CERTS_DIR
               value: {{ .Values.tls.mountPath | quote }}
             {{- end }}
           envFrom:
@@ -242,6 +246,8 @@ spec:
             {{- if .Values.tls.enabled }}
             - name: minio-certs
               mountPath: {{ default "/certs" .Values.tls.mountPath }}
+            - name: minio-client-certs
+              mountPath: /.mc/certs
             {{- end }}
             {{- range $idx, $_ := .Values.provisioning.usersExistingSecrets }}
             - name: {{ printf "users-secret-%d" $idx }}
@@ -280,6 +286,12 @@ spec:
               path: private.key
             - key: ca.crt
               path: CAs/public.crt
+        - name: minio-client-certs
+          secret:
+            secretName: {{ include "minio.tlsSecretName" . }}
+            items:
+              - key: ca.crt
+                path: CAs/public.crt
         {{- end }}
         {{- if .Values.provisioning.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.extraVolumes "context" $) | nindent 8 }}

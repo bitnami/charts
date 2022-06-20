@@ -94,3 +94,47 @@ jobs:
           VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
           # Alternative Target-Platform to be used in case of incompatibilities
           VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: ${{ secrets.VIB_ENV_ALTERNATIVE_TARGET_PLATFORM }}
+  ci-pr-review:
+    runs-on: ubuntu-latest
+    needs: vib-verify
+    if: |
+      always() &&
+      github.actor == 'bitnami-bot' &&
+      contains(github.event.pull_request.labels.*.name, 'auto-merge')
+    steps:
+      # Approves the CI's PR if the 'Verify' job succeeded
+      - name: Approval
+        if: ${{ needs.vib-verify.result == 'success' }}
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "event": "APPROVE"
+            }' \
+          --fail
+      # Removes "auto-merge" label and add related agents as reviewers if the 'Verify' job failed
+      - name: Manual review required
+        if: ${{ needs.vib-verify.result == 'failure' }}
+        run: |
+          curl --request DELETE \
+          --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels/auto-merge \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --fail
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "body": "There has been an error during the automated release process. Manual revision is now required."
+            }' \
+          --fail
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/requested_reviewers \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "team_reviewers": ["build-maintainers"]
+            }' \
+          --fail

@@ -21,7 +21,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps an [ASP.NET Core](https://github.com/bitnami/bitnami-docker-aspnet-core) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------------- | --------------------- |
 | `image.registry`     | ASP.NET Core image registry                                          | `docker.io`           |
 | `image.repository`   | ASP.NET Core image repository                                        | `bitnami/aspnet-core` |
-| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)              | `6.0.5-debian-10-r0`  |
+| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)              | `6.0.5-debian-10-r9`  |
 | `image.pullPolicy`   | ASP.NET Core image pull policy                                       | `IfNotPresent`        |
 | `image.pullSecrets`  | ASP.NET Core image pull secrets                                      | `[]`                  |
 | `image.debug`        | Enable image debug mode                                              | `false`               |
@@ -166,7 +166,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.enabled`                   | Enable to download/build ASP.NET Core app from external git repository | `true`                                                              |
 | `appFromExternalRepo.clone.image.registry`      | Git image registry                                                     | `docker.io`                                                         |
 | `appFromExternalRepo.clone.image.repository`    | Git image repository                                                   | `bitnami/git`                                                       |
-| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                         | `2.36.1-debian-10-r4`                                               |
+| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                         | `2.36.1-debian-10-r13`                                              |
 | `appFromExternalRepo.clone.image.pullPolicy`    | Git image pull policy                                                  | `IfNotPresent`                                                      |
 | `appFromExternalRepo.clone.image.pullSecrets`   | Git image pull secrets                                                 | `[]`                                                                |
 | `appFromExternalRepo.clone.repository`          | Git repository to clone                                                | `https://github.com/dotnet/AspNetCore.Docs.git`                     |
@@ -174,7 +174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.clone.extraVolumeMounts`   | Add extra volume mounts for the GIT container                          | `[]`                                                                |
 | `appFromExternalRepo.publish.image.registry`    | .NET SDK image registry                                                | `docker.io`                                                         |
 | `appFromExternalRepo.publish.image.repository`  | .NET SDK image repository                                              | `bitnami/dotnet-sdk`                                                |
-| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                    | `6.0.202-debian-10-r29`                                             |
+| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                    | `6.0.300-debian-10-r9`                                              |
 | `appFromExternalRepo.publish.image.pullPolicy`  | .NET SDK image pull policy                                             | `IfNotPresent`                                                      |
 | `appFromExternalRepo.publish.image.pullSecrets` | .NET SDK image pull secrets                                            | `[]`                                                                |
 | `appFromExternalRepo.publish.subFolder`         | Sub folder under the Git repository containing the ASP.NET Core app    | `aspnetcore/fundamentals/servers/kestrel/samples/6.x/KestrelSample` |
@@ -197,6 +197,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.loadBalancerSourceRanges` | ASP.NET Core service Load Balancer sources                                                                                       | `[]`                     |
 | `service.externalTrafficPolicy`    | ASP.NET Core service external traffic policy                                                                                     | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for ASP.NET Core service                                                                           | `{}`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ingress.enabled`                  | Enable ingress record generation for ASP.NET Core                                                                                | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
@@ -395,7 +397,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Ingress
 
-This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik) you can utilize the ingress controller to serve your ASP.NET Core application.
+This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as nginx-ingress or traefik you can utilize the ingress controller to serve your ASP.NET Core application.
 
 To enable ingress integration, please set `ingress.enabled` to `true`.
 

@@ -21,11 +21,17 @@ spec:
   {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
-  {{- if .Values.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{ toYaml .Values.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.service.loadBalancerSourceRanges }}
   {{- end }}
-  {{- if .Values.service.clusterIP }}
+  {{- if and .Values.service.clusterIP (eq .Values.service.type "ClusterIP") }}
   clusterIP: {{ .Values.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   {{- if or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}

@@ -19,7 +19,7 @@ $ helm install my-release bitnami/fluentd
 
 This chart bootstraps a [Fluentd](https://github.com/bitnami/bitnami-docker-fluentd) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
 | `image.registry`                                               | Fluentd image registry                                                                                                                                             | `docker.io`                                                |
 | `image.repository`                                             | Fluentd image repository                                                                                                                                           | `bitnami/fluentd`                                          |
-| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                                                                                 | `1.14.6-debian-10-r26`                                     |
+| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                                                                                 | `1.14.6-debian-10-r49`                                     |
 | `image.pullPolicy`                                             | Fluentd image pull policy                                                                                                                                          | `IfNotPresent`                                             |
 | `image.pullSecrets`                                            | Fluentd image pull secrets                                                                                                                                         | `[]`                                                       |
 | `image.debug`                                                  | Enable image debug mode                                                                                                                                            | `false`                                                    |
@@ -496,7 +496,7 @@ Affected values:
 - `aggregator.securityContext` and `forwarder.securityContext` have been renamed as `aggregator.podSecurityContext` and `forwarder.podSecurityContext` respectively.
 - `rbac.*` and `serviceAccount.*` have been definitely removed. Deprecation warning will no longer show.
 
-Additionally also updates the Redis&trade; subchart to it newest major, 14.0.0, which contains similar changes.
+Additionally also updates the Redis&reg; subchart to it newest major, 14.0.0, which contains similar changes.
 
 ### To 4.0.0
 

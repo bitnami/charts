@@ -11,8 +11,8 @@ metadata:
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: proxy
-    {{- if .Values.proxy.metrics.serviceMonitor.additionalLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.proxy.metrics.serviceMonitor.additionalLabels "context" $) | nindent 4 }}
+    {{- if .Values.proxy.metrics.serviceMonitor.labels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.proxy.metrics.serviceMonitor.labels "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}

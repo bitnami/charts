@@ -21,7 +21,7 @@ This chart bootstraps a [Drupal](https://github.com/bitnami/bitnami-docker-drupa
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment as a database for the Drupal application.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -440,9 +440,9 @@ To upgrade to `9.0.0`, you have two alternatives:
 Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
 
 ```console
-export DRUPAL_PASSWORD=$(kubectl get secret --namespace default drupal -o jsonpath="{.data.drupal-password}" | base64 --decode)
-export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default drupal-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-export MARIADB_PASSWORD=$(kubectl get secret --namespace default drupal-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export DRUPAL_PASSWORD=$(kubectl get secret --namespace default drupal -o jsonpath="{.data.drupal-password}" | base64 -d)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default drupal-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default drupal-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=drupal -o jsonpath="{.items[0].metadata.name}")
 ```
 

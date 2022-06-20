@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets [array] Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -44,6 +46,7 @@ clusterDomain: cluster.local
 extraDeploy: []
 
 ## @section Sealed Secrets Parameters
+##
 
 ## Bitnami Sealed Secrets image
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
@@ -57,7 +60,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/sealed-secrets
-  tag: 0.17.5-scratch-r3
+  tag: 0.18.0-scratch-r1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -232,7 +235,7 @@ priorityClassName: ""
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
-topologySpreadConstraints: {}
+topologySpreadConstraints: []
 ## @param schedulerName Name of the k8s scheduler (other than default) for Sealed Secret pods
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
@@ -273,7 +276,7 @@ extraVolumeMounts: []
 ##       - name: portname
 ##         containerPort: 1234
 ##
-sidecars: {}
+sidecars: []
 ## @param initContainers [object] Add additional init containers to the Sealed Secret pod(s)
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
@@ -283,9 +286,10 @@ sidecars: {}
 ##    imagePullPolicy: Always
 ##    command: ['sh', '-c', 'echo "hello world"']
 ##
-initContainers: {}
+initContainers: []
 
 ## @section Traffic Exposure Parameters
+##
 
 ## Sealed Secret service parameters
 ##
@@ -433,7 +437,7 @@ ingress:
   ## - host: airflow.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: airflow-svc
   ##           port:
@@ -442,6 +446,7 @@ ingress:
   extraRules: []
 
 ## @section Other Parameters
+##
 
 ## RBAC configuration
 ##

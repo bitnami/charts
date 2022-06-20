@@ -19,7 +19,7 @@ helm install my-release bitnami/jenkins
 
 This chart bootstraps a [Jenkins](https://github.com/bitnami/bitnami-docker-jenkins) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -80,14 +80,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Jenkins Image parameters
 
-| Name                | Description                                        | Value                   |
-| ------------------- | -------------------------------------------------- | ----------------------- |
-| `image.registry`    | Jenkins image registry                             | `docker.io`             |
-| `image.repository`  | Jenkins image repository                           | `bitnami/jenkins`       |
-| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.332.2-debian-10-r26` |
-| `image.pullPolicy`  | Jenkins image pull policy                          | `IfNotPresent`          |
-| `image.pullSecrets` | Jenkins image pull secrets                         | `[]`                    |
-| `image.debug`       | Enable image debug mode                            | `false`                 |
+| Name                | Description                                        | Value                  |
+| ------------------- | -------------------------------------------------- | ---------------------- |
+| `image.registry`    | Jenkins image registry                             | `docker.io`            |
+| `image.repository`  | Jenkins image repository                           | `bitnami/jenkins`      |
+| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.332.3-debian-11-r0` |
+| `image.pullPolicy`  | Jenkins image pull policy                          | `IfNotPresent`         |
+| `image.pullSecrets` | Jenkins image pull secrets                         | `[]`                   |
+| `image.debug`       | Enable image debug mode                            | `false`                |
 
 
 ### Jenkins Configuration parameters
@@ -131,7 +131,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
 | `affinity`                              | Affinity for pod assignment                                                               | `{}`            |
 | `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment                                                            | `{}`            |
+| `tolerations`                           | Tolerations for pod assignment                                                            | `[]`            |
 | `resources.limits`                      | The resources limits for the Jenkins container                                            | `{}`            |
 | `resources.requests`                    | The requested resources for the Jenkins container                                         | `{}`            |
 | `containerPorts.http`                   | Jenkins HTTP container port                                                               | `8080`          |
@@ -178,6 +178,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.loadBalancerSourceRanges` | Jenkins service Load Balancer sources                                                                                            | `[]`                     |
 | `service.externalTrafficPolicy`    | Jenkins service external traffic policy                                                                                          | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for Jenkins service                                                                                | `{}`                     |
+| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ingress.enabled`                  | Enable ingress record generation for Jenkins                                                                                     | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
@@ -208,7 +211,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r422`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r0`       |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -320,7 +323,7 @@ Upgrading from version `7.x.x` should be possible following the workaround below
 - Remove Jenkins deployment:
 
 ```console
-$ export JENKINS_PASSWORD=$(kubectl get secret --namespace default jenkins -o jsonpath="{.data.jenkins-password}" | base64 --decode)
+$ export JENKINS_PASSWORD=$(kubectl get secret --namespace default jenkins -o jsonpath="{.data.jenkins-password}" | base64 -d)
 $ kubectl delete deployments.apps jenkins
 ```
 
@@ -340,7 +343,7 @@ Consequences:
 - Backwards compatibility is not guaranteed. However, you can easily workaround this issue by removing Jenkins deployment before upgrading (the following example assumes that the release name is `jenkins`):
 
 ```console
-$ export JENKINS_PASSWORD=$(kubectl get secret --namespace default jenkins -o jsonpath="{.data.jenkins-password}" | base64 --decode)
+$ export JENKINS_PASSWORD=$(kubectl get secret --namespace default jenkins -o jsonpath="{.data.jenkins-password}" | base64 -d)
 $ kubectl delete deployments.apps jenkins
 $ helm upgrade jenkins bitnami/jenkins --set jenkinsPassword=$JENKINS_PASSWORD
 ```

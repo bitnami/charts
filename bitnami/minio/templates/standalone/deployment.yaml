@@ -64,6 +64,9 @@ spec:
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if or .Values.initContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
       initContainers:
         {{- if .Values.initContainers }}
@@ -138,7 +141,7 @@ spec:
             - name: MINIO_CONSOLE_PORT_NUMBER
               value: {{ .Values.containerPorts.console | quote }}
             {{- if .Values.tls.mountPath }}
-            - name: MINIO_CERTSDIR
+            - name: MINIO_CERTS_DIR
               value: {{ .Values.tls.mountPath | quote }}
             {{- end }}
             {{- if .Values.extraEnvVars }}

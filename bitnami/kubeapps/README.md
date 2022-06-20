@@ -20,7 +20,7 @@ helm install kubeapps --namespace kubeapps bitnami/kubeapps
 
 ## Introduction
 
-This chart bootstraps a [Kubeapps](https://kubeapps.com) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Kubeapps](https://kubeapps.dev) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 With Kubeapps you can:
 
@@ -120,7 +120,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | ------------------------------------------------ | ----------------------------------------------------------------------------------------- | ----------------------- |
 | `frontend.image.registry`                        | NGINX image registry                                                                      | `docker.io`             |
 | `frontend.image.repository`                      | NGINX image repository                                                                    | `bitnami/nginx`         |
-| `frontend.image.tag`                             | NGINX image tag (immutable tags are recommended)                                          | `1.21.6-debian-10-r110` |
+| `frontend.image.tag`                             | NGINX image tag (immutable tags are recommended)                                          | `1.21.6-debian-10-r117` |
 | `frontend.image.pullPolicy`                      | NGINX image pull policy                                                                   | `IfNotPresent`          |
 | `frontend.image.pullSecrets`                     | NGINX image pull secrets                                                                  | `[]`                    |
 | `frontend.image.debug`                           | Enable image debug mode                                                                   | `false`                 |
@@ -203,7 +203,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | ------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------- |
 | `dashboard.image.registry`                        | Dashboard image registry                                                                     | `docker.io`                  |
 | `dashboard.image.repository`                      | Dashboard image repository                                                                   | `bitnami/kubeapps-dashboard` |
-| `dashboard.image.tag`                             | Dashboard image tag (immutable tags are recommended)                                         | `2.4.5-debian-10-r19`        |
+| `dashboard.image.tag`                             | Dashboard image tag (immutable tags are recommended)                                         | `2.4.5-debian-10-r26`        |
 | `dashboard.image.pullPolicy`                      | Dashboard image pull policy                                                                  | `IfNotPresent`               |
 | `dashboard.image.pullSecrets`                     | Dashboard image pull secrets                                                                 | `[]`                         |
 | `dashboard.image.debug`                           | Enable image debug mode                                                                      | `false`                      |
@@ -501,7 +501,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `authProxy.enabled`                               | Specifies whether Kubeapps should configure OAuth login/logout                           | `false`                |
 | `authProxy.image.registry`                        | OAuth2 Proxy image registry                                                              | `docker.io`            |
 | `authProxy.image.repository`                      | OAuth2 Proxy image repository                                                            | `bitnami/oauth2-proxy` |
-| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                                  | `7.2.1-debian-10-r142` |
+| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                                  | `7.2.1-debian-10-r149` |
 | `authProxy.image.pullPolicy`                      | OAuth2 Proxy image pull policy                                                           | `IfNotPresent`         |
 | `authProxy.image.pullSecrets`                     | OAuth2 Proxy image pull secrets                                                          | `[]`                   |
 | `authProxy.external`                              | Use an external Auth Proxy instead of deploying its own one                              | `false`                |
@@ -540,7 +540,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `pinnipedProxy.enabled`                               | Specifies whether Kubeapps should configure Pinniped Proxy                                   | `false`                           |
 | `pinnipedProxy.image.registry`                        | Pinniped Proxy image registry                                                                | `docker.io`                       |
 | `pinnipedProxy.image.repository`                      | Pinniped Proxy image repository                                                              | `bitnami/kubeapps-pinniped-proxy` |
-| `pinnipedProxy.image.tag`                             | Pinniped Proxy image tag (immutable tags are recommended)                                    | `2.4.5-debian-10-r19`             |
+| `pinnipedProxy.image.tag`                             | Pinniped Proxy image tag (immutable tags are recommended)                                    | `2.4.5-debian-10-r25`             |
 | `pinnipedProxy.image.pullPolicy`                      | Pinniped Proxy image pull policy                                                             | `IfNotPresent`                    |
 | `pinnipedProxy.image.pullSecrets`                     | Pinniped Proxy image pull secrets                                                            | `[]`                              |
 | `pinnipedProxy.defaultPinnipedNamespace`              | Specify the (default) namespace in which pinniped concierge is installed                     | `pinniped-concierge`              |
@@ -576,7 +576,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `rbac.create`             | Specifies whether RBAC resources should be created                            | `true`                  |
 | `testImage.registry`      | NGINX image registry                                                          | `docker.io`             |
 | `testImage.repository`    | NGINX image repository                                                        | `bitnami/nginx`         |
-| `testImage.tag`           | NGINX image tag (immutable tags are recommended)                              | `1.21.6-debian-10-r110` |
+| `testImage.tag`           | NGINX image tag (immutable tags are recommended)                              | `1.21.6-debian-10-r117` |
 | `testImage.pullPolicy`    | NGINX image pull policy                                                       | `IfNotPresent`          |
 | `testImage.pullSecrets`   | NGINX image pull secrets                                                      | `[]`                    |
 
@@ -610,7 +610,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `kubeappsapis.pluginConfig.kappController.packages.v1alpha1.defaultAllowDowngrades`             | Default policy for allowing applications to be downgraded to previous versions                                      | `false`                 |
 | `kubeappsapis.image.registry`                                                                   | Kubeapps-APIs image registry                                                                                        | `docker.io`             |
 | `kubeappsapis.image.repository`                                                                 | Kubeapps-APIs image repository                                                                                      | `bitnami/kubeapps-apis` |
-| `kubeappsapis.image.tag`                                                                        | Kubeapps-APIs image tag (immutable tags are recommended)                                                            | `2.4.5-debian-10-r18`   |
+| `kubeappsapis.image.tag`                                                                        | Kubeapps-APIs image tag (immutable tags are recommended)                                                            | `2.4.5-debian-10-r25`   |
 | `kubeappsapis.image.pullPolicy`                                                                 | Kubeapps-APIs image pull policy                                                                                     | `IfNotPresent`          |
 | `kubeappsapis.image.pullSecrets`                                                                | Kubeapps-APIs image pull secrets                                                                                    | `[]`                    |
 | `kubeappsapis.replicaCount`                                                                     | Number of frontend replicas to deploy                                                                               | `2`                     |
@@ -682,18 +682,18 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `kubeappsapis.serviceAccount.annotations`                                                       | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`                    |
 
 
-### Redis&trade; chart configuration
+### Redis&reg; chart configuration
 
-| Name                            | Description                                                        | Value                                                    |
-| ------------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------- |
-| `redis.auth.enabled`            | Enable password authentication                                     | `true`                                                   |
-| `redis.auth.password`           | Redis&trade; password                                              | `""`                                                     |
-| `redis.auth.existingSecret`     | The name of an existing secret with Redis&trade; credentials       | `""`                                                     |
-| `redis.master.extraFlags`       | Array with additional command line flags for Redis&trade; master   | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
-| `redis.master.disableCommands`  | Array with commands to deactivate on Redis&trade                   | `[]`                                                     |
-| `redis.replica.replicaCount`    | Number of Redis&trade; replicas to deploy                          | `1`                                                      |
-| `redis.replica.extraFlags`      | Array with additional command line flags for Redis&trade; replicas | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
-| `redis.replica.disableCommands` | Array with commands to deactivate on Redis&trade                   | `[]`                                                     |
+| Name                            | Description                                                      | Value                                                    |
+| ------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------- |
+| `redis.auth.enabled`            | Enable password authentication                                   | `true`                                                   |
+| `redis.auth.password`           | Redis&reg; password                                              | `""`                                                     |
+| `redis.auth.existingSecret`     | The name of an existing secret with Redis&reg; credentials       | `""`                                                     |
+| `redis.master.extraFlags`       | Array with additional command line flags for Redis&reg; master   | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
+| `redis.master.disableCommands`  | Array with commands to deactivate on Redis&trade                 | `[]`                                                     |
+| `redis.replica.replicaCount`    | Number of Redis&reg; replicas to deploy                          | `1`                                                      |
+| `redis.replica.extraFlags`      | Array with additional command line flags for Redis&reg; replicas | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
+| `redis.replica.disableCommands` | Array with commands to deactivate on Redis&trade                 | `[]`                                                     |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -738,7 +738,7 @@ kubectl get services --namespace kubeapps --watch
 
 #### Ingress
 
-This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress](https://hub.kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://hub.kubeapps.com/charts/stable/traefik) you can utilize the ingress controller to expose Kubeapps.
+This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as nginx-ingress or traefik you can utilize the ingress controller to expose Kubeapps.
 
 To enable ingress integration, please set `ingress.enabled` to `true`
 
@@ -1079,7 +1079,7 @@ PASSWORDS ERROR: you must provide your current passwords when upgrade the releas
 The error gives you generic instructions for retrieving the PostgreSQL password, but if you have installed a Kubeapps version prior to 2.3.1, the name of the secret will differ. Run the following command:
 
 ```console
-export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "kubeapps" kubeapps-db -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "kubeapps" kubeapps-db -o jsonpath="{.data.postgresql-password}" | base64 -d)
 ```
 
 > NOTE: Replace the namespace in the command with the namespace in which you have deployed Kubeapps.

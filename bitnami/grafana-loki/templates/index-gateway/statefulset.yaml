@@ -52,7 +52,7 @@ spec:
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.indexGateway.podAffinityPreset "component" "indexGateway" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.indexGateway.podAntiAffinityPreset "component" "indexGateway" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.indexGateway.podAntiAffinityPreset "component" "index-gateway" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.indexGateway.nodeAffinityPreset.type "key" .Values.indexGateway.nodeAffinityPreset.key "values" .Values.indexGateway.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.indexGateway.nodeSelector }}

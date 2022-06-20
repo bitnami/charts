@@ -21,7 +21,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [OAuth2 Proxy](https://github.com/oauth2-proxy/oauth2-proxy) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -117,7 +117,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------- | ---------------------- |
 | `image.registry`    | OAuth2 Proxy image registry                             | `docker.io`            |
 | `image.repository`  | OAuth2 Proxy image repository                           | `bitnami/oauth2-proxy` |
-| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.2.1-debian-10-r122` |
+| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended) | `7.3.0-debian-10-r0`   |
 | `image.pullPolicy`  | OAuth2 Proxy image pull policy                          | `IfNotPresent`         |
 | `image.pullSecrets` | OAuth2 Proxy image pull secrets                         | `[]`                   |
 
@@ -213,32 +213,32 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`            |
 
 
-### External Redis&trade; parameters
+### External Redis&reg; parameters
 
-| Name                           | Description                                                  | Value  |
-| ------------------------------ | ------------------------------------------------------------ | ------ |
-| `externalRedis.host`           | External Redis&trade; server host                            | `""`   |
-| `externalRedis.password`       | External Redis&trade; user password                          | `""`   |
-| `externalRedis.port`           | External Redis&trade; server port                            | `6379` |
-| `externalRedis.existingSecret` | The name of an existing secret with Redis&trade; credentials | `""`   |
+| Name                           | Description                                                | Value  |
+| ------------------------------ | ---------------------------------------------------------- | ------ |
+| `externalRedis.host`           | External Redis&reg; server host                            | `""`   |
+| `externalRedis.password`       | External Redis&reg; user password                          | `""`   |
+| `externalRedis.port`           | External Redis&reg; server port                            | `6379` |
+| `externalRedis.existingSecret` | The name of an existing secret with Redis&reg; credentials | `""`   |
 
 
-### Redis&trade; sub-chart parameters
+### Redis&reg; sub-chart parameters
 
-| Name                                   | Description                                                  | Value        |
-| -------------------------------------- | ------------------------------------------------------------ | ------------ |
-| `redis.enabled`                        | Deploy Redis&trade; sub-chart                                | `true`       |
-| `redis.architecture`                   | Redis&trade; architecture                                    | `standalone` |
-| `redis.master.service.port`            | Redis&trade; (without Sentinel) service port                 | `6379`       |
-| `redis.replica.replicaCount`           | Number of Redis&trade; replicas                              | `3`          |
-| `redis.auth.enabled`                   | Enable Redis&trade; authentication                           | `true`       |
-| `redis.auth.existingSecret`            | Secret with Redis&trade; credentials                         | `""`         |
-| `redis.auth.existingSecretPasswordKey` | Key inside the existing secret with Redis&trade; credentials | `""`         |
-| `redis.auth.sentinel`                  | Enable authentication in the Sentinel nodes                  | `true`       |
-| `redis.sentinel.enabled`               | Enable Redis&trade; sentinel in the deployment               | `false`      |
-| `redis.sentinel.masterSet`             | Name of the Redis&trade; Sentinel master set                 | `mymaster`   |
-| `redis.sentinel.service.port`          | Redis&trade; (with Sentinel) service port                    | `6379`       |
-| `redis.sentinel.service.sentinelPort`  | Redis&trade; (with Sentinel) sentinel service port           | `26379`      |
+| Name                                   | Description                                                | Value        |
+| -------------------------------------- | ---------------------------------------------------------- | ------------ |
+| `redis.enabled`                        | Deploy Redis&reg; sub-chart                                | `true`       |
+| `redis.architecture`                   | Redis&reg; architecture                                    | `standalone` |
+| `redis.master.service.port`            | Redis&reg; (without Sentinel) service port                 | `6379`       |
+| `redis.replica.replicaCount`           | Number of Redis&reg; replicas                              | `3`          |
+| `redis.auth.enabled`                   | Enable Redis&reg; authentication                           | `true`       |
+| `redis.auth.existingSecret`            | Secret with Redis&reg; credentials                         | `""`         |
+| `redis.auth.existingSecretPasswordKey` | Key inside the existing secret with Redis&reg; credentials | `""`         |
+| `redis.auth.sentinel`                  | Enable authentication in the Sentinel nodes                | `true`       |
+| `redis.sentinel.enabled`               | Enable Redis&reg; sentinel in the deployment               | `false`      |
+| `redis.sentinel.masterSet`             | Name of the Redis&reg; Sentinel master set                 | `mymaster`   |
+| `redis.sentinel.service.port`          | Redis&reg; (with Sentinel) service port                    | `6379`       |
+| `redis.sentinel.service.sentinelPort`  | Redis&reg; (with Sentinel) sentinel service port           | `26379`      |
 
 
 See https://github.com/bitnami-labs/readmenator to create the table
@@ -275,7 +275,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Ingress
 
-This chart provides support for Ingress resources. If an Ingress controller, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik), that Ingress controller can be used to serve OAuth2 Proxy.
+This chart provides support for Ingress resources. If an Ingress controller, such as nginx-ingress or traefik, that Ingress controller can be used to serve OAuth2 Proxy.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host.
 
@@ -317,13 +317,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 2.0.0
 
-This major update the Redis&trade; subchart to its newest major, 16.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1600) you can find more info about the specific changes.
+This major update the Redis&reg; subchart to its newest major, 16.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1600) you can find more info about the specific changes.
 
 Additionally, this chart has been standardised adding features from other charts.
 
 ### To 1.0.0
 
-This major update the Redis&trade; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
+This major update the Redis&reg; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
 
 ## License
 

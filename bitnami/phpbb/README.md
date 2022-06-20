@@ -21,7 +21,7 @@ This chart bootstraps a [phpBB](https://github.com/bitnami/bitnami-docker-phpbb)
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the phpBB application.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -415,9 +415,9 @@ To upgrade to `9.0.0`, it should be done reusing the PVCs used to hold both the 
 Obtain the credentials and the names of the PVCs used to hold both the MariaDB and phpBB data on your current release:
 
 ```console
-export PHPBB_PASSWORD=$(kubectl get secret --namespace default phpbb -o jsonpath="{.data.phpbb-password}" | base64 --decode)
-export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phpbb-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-export MARIADB_PASSWORD=$(kubectl get secret --namespace default phpbb-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export PHPBB_PASSWORD=$(kubectl get secret --namespace default phpbb -o jsonpath="{.data.phpbb-password}" | base64 -d)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phpbb-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default phpbb-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=phpbb -o jsonpath="{.items[0].metadata.name}")
 ```
 

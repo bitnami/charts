@@ -133,7 +133,7 @@ externaldb:
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 16.15.0-debian-10-r26
+  tag: 16.15.1-debian-11-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -206,7 +206,7 @@ nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
-tolerations: {}
+tolerations: []
 ## @param podAnnotations Additional pod annotations
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
@@ -298,7 +298,7 @@ customStartupProbe: {}
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
-topologySpreadConstraints: {}
+topologySpreadConstraints: []
 ## @param priorityClassName Node priorityClassName
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
@@ -415,7 +415,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.36.1-debian-10-r15
+    tag: 2.36.1-debian-11-r4
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -469,7 +469,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r434
+    tag: 11-debian-11-r4
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

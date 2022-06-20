@@ -21,7 +21,7 @@ This chart bootstraps a [WordPress](https://github.com/bitnami/bitnami-docker-wo
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the WordPress application, and the [Bitnami Memcached chart](https://github.com/bitnami/charts/tree/master/bitnami/memcached) that can be used to cache database queries.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, Fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -81,14 +81,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WordPress Image parameters
 
-| Name                | Description                                          | Value                 |
-| ------------------- | ---------------------------------------------------- | --------------------- |
-| `image.registry`    | WordPress image registry                             | `docker.io`           |
-| `image.repository`  | WordPress image repository                           | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.9.3-debian-10-r52` |
-| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                  |
-| `image.debug`       | Specify if debug values should be set                | `false`               |
+| Name                | Description                                          | Value                |
+| ------------------- | ---------------------------------------------------- | -------------------- |
+| `image.registry`    | WordPress image registry                             | `docker.io`          |
+| `image.repository`  | WordPress image repository                           | `bitnami/wordpress`  |
+| `image.tag`         | WordPress image tag (immutable tags are recommended) | `6.0.0-debian-11-r2` |
+| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                 |
+| `image.debug`       | Specify if debug values should be set                | `false`              |
 
 
 ### WordPress Configuration parameters
@@ -149,7 +149,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `updateStrategy.type`                   | WordPress deployment strategy type                                                                                       | `RollingUpdate` |
 | `updateStrategy.rollingUpdate`          | WordPress deployment rolling update configuration parameters                                                             | `{}`            |
 | `schedulerName`                         | Alternate scheduler                                                                                                      | `""`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
 | `priorityClassName`                     | Name of the existing priority class to be used by WordPress pods, priority class needs to be created beforehand          | `""`            |
 | `hostAliases`                           | WordPress pod host aliases                                                                                               | `[]`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for WordPress pods                                                   | `[]`            |
@@ -212,6 +212,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
 | `service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.clusterIP`                | WordPress service Cluster IP                                                                                                     | `""`                     |
 | `service.loadBalancerIP`           | WordPress service Load Balancer IP                                                                                               | `""`                     |
 | `service.loadBalancerSourceRanges` | WordPress service Load Balancer sources                                                                                          | `[]`                     |
@@ -250,7 +251,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r434`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r5`       |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -283,7 +284,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose metrics                                 | `false`                   |
 | `metrics.image.registry`                     | Apache exporter image registry                                                        | `docker.io`               |
 | `metrics.image.repository`                   | Apache exporter image repository                                                      | `bitnami/apache-exporter` |
-| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                            | `0.11.0-debian-10-r154`   |
+| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                            | `0.11.0-debian-11-r6`     |
 | `metrics.image.pullPolicy`                   | Apache exporter image pull policy                                                     | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Apache exporter image pull secrets                                                    | `[]`                      |
 | `metrics.containerPorts.metrics`             | Prometheus exporter container port                                                    | `9117`                    |
@@ -450,7 +451,7 @@ externalCache.port=11211
 
 ### Ingress
 
-This chart provides support for Ingress resources. If an Ingress controller, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik), that Ingress controller can be used to serve WordPress.
+This chart provides support for Ingress resources. If an Ingress controller, such as nginx-ingress or traefik, that Ingress controller can be used to serve WordPress.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/wordpress/configuration/configure-ingress/).
 
@@ -563,9 +564,9 @@ Compatibility is not guaranteed due to the amount of involved changes, however n
 Obtain the credentials and the name of the PVC used to hold the MariaDB data on your current release:
 
 ```console
-$ export WORDPRESS_PASSWORD=$(kubectl get secret --namespace default wordpress -o jsonpath="{.data.wordpress-password}" | base64 --decode)
-$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default wordpress-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default wordpress-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+$ export WORDPRESS_PASSWORD=$(kubectl get secret --namespace default wordpress -o jsonpath="{.data.wordpress-password}" | base64 -d)
+$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default wordpress-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default wordpress-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 $ export MARIADB_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=wordpress,app.kubernetes.io/name=mariadb,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
 ```
 

@@ -146,7 +146,7 @@ spec:
             httpGet:
               path: /-/ready
               port: http
-          {{- else if .Values.bucketweb.customReadinessProbe }}
+          {{- else if .Values.bucketweb.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.bucketweb.lifecycleHooks }}

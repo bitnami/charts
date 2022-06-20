@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 5.0.9-debian-10-r0
+  tag: 5.0.9-debian-10-r10
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -242,7 +242,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r435
+    tag: 11-debian-11-r4
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -342,7 +342,7 @@ configsvr:
   ## @param configsvr.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param configsvr.priorityClassName Pod priority class name
   ## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
@@ -656,7 +656,7 @@ mongos:
   ## @param mongos.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param mongos.priorityClassName Pod priority class name
   ## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
@@ -976,7 +976,7 @@ shardsvr:
     ## @param shardsvr.dataNode.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
     ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
     ##
-    topologySpreadConstraints: {}
+    topologySpreadConstraints: []
     ## @param shardsvr.dataNode.priorityClassName Pod priority class name
     ## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
     ##
@@ -1295,7 +1295,7 @@ shardsvr:
     ## @param shardsvr.arbiter.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
     ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
     ##
-    topologySpreadConstraints: {}
+    topologySpreadConstraints: []
     ## @param shardsvr.arbiter.priorityClassName Pod priority class name
     ## https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
     ##
@@ -1537,7 +1537,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.32.0-debian-10-r28
+    tag: 0.32.0-debian-11-r5
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

@@ -1,0 +1,29 @@
+command:
+  postgresql-connect:
+    exec: PGPASSWORD="$POSTGRES_PASSWORD" psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"
+    exit-status: 0
+    stderr: [ ]
+    timeout: 20000
+  postgresql-create-table:
+    exec: PGPASSWORD="$POSTGRES_PASSWORD" psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c 'CREATE TABLE new_table_created (id int, first_name VARCHAR(50));'
+    exit-status: 0
+    stdout:
+      - 'CREATE TABLE'
+    stderr: [ ]
+    timeout: 2000
+  postgresql-check-connectivity-and-port:
+    exec: pg_isready -d "$POSTGRES_DB" -h localhost -p "$POSTGRESQL_PORT_NUMBER" -U "$POSTGRES_USER" 
+    exit-status: 0
+    stdout:
+      - {{ printf "localhost:%s - accepting connections" .Env.POSTGRESQL_PORT_NUMBER | quote }}
+    stderr: [ ]
+    timeout: 2000
+  user-id-test:
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+    exit-status: 0
+    stdout: []
+    stderr: []  
+file:
+  /bitnami/postgresql/data:
+    filetype: directory
+    exists: true

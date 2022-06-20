@@ -19,7 +19,7 @@ $ helm install my-release bitnami/logstash
 
 This chart bootstraps a [logstash](https://github.com/bitnami/bitnami-docker-logstash) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`                              | Logstash image registry                                                                                                          | `docker.io`              |
 | `image.repository`                            | Logstash image repository                                                                                                        | `bitnami/logstash`       |
-| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                              | `8.2.0-debian-10-r0`     |
+| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                              | `8.2.1-debian-10-r0`     |
 | `image.pullPolicy`                            | Logstash image pull policy                                                                                                       | `IfNotPresent`           |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                 | `[]`                     |
 | `image.debug`                                 | Specify if debug logs should be enabled                                                                                          | `false`                  |
@@ -162,6 +162,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.externalTrafficPolicy`               | External traffic policy, configure to Local to preserve client source IP when using an external loadBalancer                     | `""`                     |
 | `service.clusterIP`                           | Static clusterIP or None for headless services                                                                                   | `""`                     |
 | `service.annotations`                         | Annotations for Logstash service                                                                                                 | `{}`                     |
+| `service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `persistence.enabled`                         | Enable Logstash data persistence using PVC                                                                                       | `false`                  |
 | `persistence.existingClaim`                   | A manually managed Persistent Volume and Claim                                                                                   | `""`                     |
 | `persistence.storageClass`                    | PVC Storage Class for Logstash data volume                                                                                       | `""`                     |
@@ -169,11 +171,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                            | PVC Storage Request for Logstash data volume                                                                                     | `2Gi`                    |
 | `persistence.annotations`                     | Annotations for the PVC                                                                                                          | `{}`                     |
 | `persistence.mountPath`                       | Mount path of the Logstash data volume                                                                                           | `/bitnami/logstash/data` |
+| `persistence.selector`                        | Selector to match an existing Persistent Volume for WordPress data PVC                                                           | `{}`                     |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`             | `false`                  |
 | `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions init container                                                                                 | `0`                      |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                 | `docker.io`              |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                               | `bitnami/bitnami-shell`  |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                     | `10-debian-10-r414`      |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                     | `10-debian-10-r434`      |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                              | `IfNotPresent`           |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                 | `[]`                     |
 | `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                                                                | `{}`                     |

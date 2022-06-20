@@ -21,7 +21,7 @@ This chart bootstraps a [kong](https://github.com/bitnami/bitnami-docker-kong) d
 
 Extra functionalities beyond the Kong core are extended through plugins. Kong is built on top of reliable technologies like NGINX and provides an easy-to-use RESTful API to operate and configure the system.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -79,15 +79,15 @@ To uninstall/delete the `my-release` deployment:
 
 ### Kong common parameters
 
-| Name                | Description                                                                     | Value                 |
-| ------------------- | ------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | kong image registry                                                             | `docker.io`           |
-| `image.repository`  | kong image repository                                                           | `bitnami/kong`        |
-| `image.tag`         | kong image tag (immutable tags are recommended)                                 | `2.8.1-debian-10-r28` |
-| `image.pullPolicy`  | kong image pull policy                                                          | `IfNotPresent`        |
-| `image.pullSecrets` | Specify docker-registry secret names as an array                                | `[]`                  |
-| `image.debug`       | Enable image debug mode                                                         | `false`               |
-| `database`          | Select which database backend Kong will use. Can be 'postgresql' or 'cassandra' | `postgresql`          |
+| Name                | Description                                                                     | Value                |
+| ------------------- | ------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | kong image registry                                                             | `docker.io`          |
+| `image.repository`  | kong image repository                                                           | `bitnami/kong`       |
+| `image.tag`         | kong image tag (immutable tags are recommended)                                 | `2.8.1-debian-11-r0` |
+| `image.pullPolicy`  | kong image pull policy                                                          | `IfNotPresent`       |
+| `image.pullSecrets` | Specify docker-registry secret names as an array                                | `[]`                 |
+| `image.debug`       | Enable image debug mode                                                         | `false`              |
+| `database`          | Select which database backend Kong will use. Can be 'postgresql' or 'cassandra' | `postgresql`         |
 
 
 ### Kong deployment / daemonset parameters
@@ -104,7 +104,7 @@ To uninstall/delete the `my-release` deployment:
 | `updateStrategy.type`                   | Kong update strategy                                                                                                               | `RollingUpdate` |
 | `updateStrategy.rollingUpdate`          | Kong deployment rolling update configuration parameters                                                                            | `{}`            |
 | `hostAliases`                           | Add deployment host aliases                                                                                                        | `[]`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template           | `{}`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template           | `[]`            |
 | `priorityClassName`                     | Priority Class Name                                                                                                                | `""`            |
 | `schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                          | `""`            |
 | `terminationGracePeriodSeconds`         | Seconds Kong pod needs to terminate gracefully                                                                                     | `""`            |
@@ -188,6 +188,7 @@ To uninstall/delete the `my-release` deployment:
 | `service.nodePorts.adminHttp`      | NodePort for the Kong admin HTTP endpoint                                                                                        | `""`                     |
 | `service.nodePorts.adminHttps`     | NodePort for the Kong admin HTTPS endpoint                                                                                       | `""`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.clusterIP`                | Cluster internal IP of the service                                                                                               | `""`                     |
 | `service.externalTrafficPolicy`    | external traffic policy managing client source IP preservation                                                                   | `""`                     |
 | `service.loadBalancerIP`           | loadBalancerIP if kong service type is `LoadBalancer`                                                                            | `""`                     |
@@ -217,7 +218,7 @@ To uninstall/delete the `my-release` deployment:
 | `ingressController.enabled`                                     | Enable/disable the Kong Ingress Controller                                                                                                    | `true`                            |
 | `ingressController.image.registry`                              | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
 | `ingressController.image.repository`                            | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
-| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.3.1-debian-10-r25`             |
+| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.3.1-debian-11-r0`              |
 | `ingressController.image.pullPolicy`                            | Kong Ingress Controller image pull policy                                                                                                     | `IfNotPresent`                    |
 | `ingressController.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                              | `[]`                              |
 | `ingressController.proxyReadyTimeout`                           | Maximum time (in seconds) to wait for the Kong container to be ready                                                                          | `300`                             |
@@ -281,26 +282,26 @@ To uninstall/delete the `my-release` deployment:
 
 ### PostgreSQL Parameters
 
-| Name                                            | Description                                                             | Value                   |
-| ----------------------------------------------- | ----------------------------------------------------------------------- | ----------------------- |
-| `postgresql.enabled`                            | Switch to enable or disable the PostgreSQL helm chart                   | `true`                  |
-| `postgresql.auth.postgresPassword`              | Password for the "postgres" admin user                                  | `""`                    |
-| `postgresql.auth.username`                      | Name for a custom user to create                                        | `kong`                  |
-| `postgresql.auth.password`                      | Password for the custom user to create                                  | `""`                    |
-| `postgresql.auth.database`                      | Name for a custom database to create                                    | `kong`                  |
-| `postgresql.auth.existingSecret`                | Name of existing secret to use for PostgreSQL credentials               | `""`                    |
-| `postgresql.auth.usePasswordFiles`              | Mount credentials as a files instead of using an environment variable   | `false`                 |
-| `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                 | `standalone`            |
-| `postgresql.image.registry`                     | PostgreSQL image registry                                               | `docker.io`             |
-| `postgresql.image.repository`                   | PostgreSQL image repository                                             | `bitnami/postgresql`    |
-| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                   | `11.15.0-debian-10-r84` |
-| `postgresql.external.host`                      | Database host                                                           | `""`                    |
-| `postgresql.external.port`                      | Database port number                                                    | `5432`                  |
-| `postgresql.external.user`                      | Non-root username for Kong                                              | `kong`                  |
-| `postgresql.external.password`                  | Password for the non-root username for Kong                             | `""`                    |
-| `postgresql.external.database`                  | Kong database name                                                      | `kong`                  |
-| `postgresql.external.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`                    |
-| `postgresql.external.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`                    |
+| Name                                            | Description                                                             | Value                  |
+| ----------------------------------------------- | ----------------------------------------------------------------------- | ---------------------- |
+| `postgresql.enabled`                            | Switch to enable or disable the PostgreSQL helm chart                   | `true`                 |
+| `postgresql.auth.postgresPassword`              | Password for the "postgres" admin user                                  | `""`                   |
+| `postgresql.auth.username`                      | Name for a custom user to create                                        | `kong`                 |
+| `postgresql.auth.password`                      | Password for the custom user to create                                  | `""`                   |
+| `postgresql.auth.database`                      | Name for a custom database to create                                    | `kong`                 |
+| `postgresql.auth.existingSecret`                | Name of existing secret to use for PostgreSQL credentials               | `""`                   |
+| `postgresql.auth.usePasswordFiles`              | Mount credentials as a files instead of using an environment variable   | `false`                |
+| `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                 | `standalone`           |
+| `postgresql.image.registry`                     | PostgreSQL image registry                                               | `docker.io`            |
+| `postgresql.image.repository`                   | PostgreSQL image repository                                             | `bitnami/postgresql`   |
+| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                   | `11.16.0-debian-11-r0` |
+| `postgresql.external.host`                      | Database host                                                           | `""`                   |
+| `postgresql.external.port`                      | Database port number                                                    | `5432`                 |
+| `postgresql.external.user`                      | Non-root username for Kong                                              | `kong`                 |
+| `postgresql.external.password`                  | Password for the non-root username for Kong                             | `""`                   |
+| `postgresql.external.database`                  | Kong database name                                                      | `kong`                 |
+| `postgresql.external.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`                   |
+| `postgresql.external.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`                   |
 
 
 ### Cassandra Parameters
@@ -563,7 +564,7 @@ Kong Ingress Controller version was bumped to new major version, `1.x.x`. The as
 ##### Export secrets and required values to update
 
 ```console
-$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default kong-postgresql -o jsonpath="{.data.password}" | base64 --decode)
+$ export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default kong-postgresql -o jsonpath="{.data.password}" | base64 -d)
 $ export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=kong,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
 ```
 
