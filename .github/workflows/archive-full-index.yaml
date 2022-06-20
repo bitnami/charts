@@ -1,7 +1,11 @@
 name: Generate the full index archive for Bitnami Charts
 on:
+  push:
+    branches:
+      - archive-full-index
   schedule:
     - cron: '0 0 * * *'
+
 env:
   LAST_INDEX_URL: https://charts.bitnami.com/bitnami/index.yaml
   INDEXES_DIR: indexes
@@ -52,24 +56,6 @@ jobs:
       - id: merge
         name: Merge
         run: yq eval-all '. as $item ireduce ({}; . *+ $item )' old_index.yaml last_index.yaml > duplicates_index.yaml
-      - id: upload-artifact
-        name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: duplicates-index
-          path: duplicates_index.yaml
-          retention-days: 2
-          if-no-files-found: error
-  deduplicate:
-    runs-on: ubuntu-latest
-    needs: merge
-    name: Deduplicate
-    steps:
-      - id: download-artifact
-        name: Download artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: duplicates-index
       - id: remove
         name: Remove duplicates
         # Removes duplicates per entry using 'digest' as value.
@@ -84,7 +70,7 @@ jobs:
           if-no-files-found: error
   checks:
     runs-on: ubuntu-latest
-    needs: deduplicate
+    needs: merge
     name: Checks
     steps:
       - id: download-artifact-indexes
