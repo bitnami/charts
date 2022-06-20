@@ -1,0 +1,27 @@
+command:
+  create-kafka-topic:
+    exec: kafka-topics.sh --create --topic quickstart-events$RANDOM --bootstrap-server localhost:9092
+    exit-status: 0
+    stderr: [ ]
+    stdout: 
+      - Created topic quickstart-events
+    timeout: 20000
+  list-kafka-topics:
+    exec: kafka-topics.sh --bootstrap-server localhost:9092 --list
+    exit-status: 0
+    stderr: [ ]
+    timeout: 20000
+  user-id-test:
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+    exit-status: 0
+    stdout: []
+    stderr: []
+file:
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    mode: "3777"
+    filetype: directory
+    exists: true
+  /opt/bitnami/kafka/logs:
+    mode: "2777"
+    filetype: directory
+    exists: true
