@@ -8,7 +8,6 @@ it('shows build info endpoint', () => {
     form: true,
   }).then((response) => {
     expect(response.status).to.eq(200);
-
     expect(response.body).to.include.all.keys(
       'version',
       'revision',
