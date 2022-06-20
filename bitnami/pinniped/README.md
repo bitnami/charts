@@ -7,7 +7,7 @@ Pinniped is an identity service provider for Kubernetes. Provides a consistent, 
 [Overview of Pinniped](https://pinniped.dev/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release   | `[]`                |
 | `image.registry`    | Pinniped image registry                             | `docker.io`         |
 | `image.repository`  | Pinniped image repository                           | `bitnami/pinniped`  |
-| `image.tag`         | Pinniped image tag (immutable tags are recommended) | `0.18.0-scratch-r2` |
+| `image.tag`         | Pinniped image tag (immutable tags are recommended) | `0.18.0-scratch-r3` |
 | `image.pullPolicy`  | Pinniped image pull policy                          | `IfNotPresent`      |
 | `image.pullSecrets` | Pinniped image pull secrets                         | `[]`                |
 
@@ -147,8 +147,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for Concierge nodes                                                    | `""`            |
 | `concierge.extraVolumes`                                    | Optionally specify extra list of additional volumes for the Concierge pod(s)                                             | `[]`            |
 | `concierge.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Concierge container(s)                                  | `[]`            |
-| `concierge.sidecars`                                        | Add additional sidecar containers to the Concierge pod(s)                                                                | `{}`            |
-| `concierge.initContainers`                                  | Add additional init containers to the Concierge pod(s)                                                                   | `{}`            |
+| `concierge.sidecars`                                        | Add additional sidecar containers to the Concierge pod(s)                                                                | `[]`            |
+| `concierge.initContainers`                                  | Add additional init containers to the Concierge pod(s)                                                                   | `[]`            |
 
 
 ### Concierge RBAC settings
@@ -250,8 +250,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for Supervisor nodes                                                   | `""`            |
 | `supervisor.extraVolumes`                                    | Optionally specify extra list of additional volumes for the Supervisor pod(s)                                            | `[]`            |
 | `supervisor.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Supervisor container(s)                                 | `[]`            |
-| `supervisor.sidecars`                                        | Add additional sidecar containers to the Supervisor pod(s)                                                               | `{}`            |
-| `supervisor.initContainers`                                  | Add additional init containers to the Supervisor pod(s)                                                                  | `{}`            |
+| `supervisor.sidecars`                                        | Add additional sidecar containers to the Supervisor pod(s)                                                               | `[]`            |
+| `supervisor.initContainers`                                  | Add additional init containers to the Supervisor pod(s)                                                                  | `[]`            |
 
 
 ### Supervisor RBAC settings
