@@ -1,0 +1,8 @@
+command:
+  mysql-env:
+    exec: env
+    exit-status: 0
+    stdout:
+      - "BITNAMI_APP_NAME=mysql"
+    stderr: [ ]
+    timeout: 40000
