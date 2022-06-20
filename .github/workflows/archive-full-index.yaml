@@ -14,13 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     name: Get
     steps:
-      - id: checkout-repo
+      - id: checkout-repo-index-branch
         name: Checkout repo
         uses: actions/checkout@v3
         with:
           ref: index
           path: index_branch
-      - id: checkout-repo
+      - id: checkout-repo-full-index-branch
         name: Checkout repo
         uses: actions/checkout@v3
         with:
