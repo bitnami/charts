@@ -17,14 +17,36 @@
       ]
     },
     "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/mysql"
+        },
+        "runtime_parameters": "YXV0aDogCiAgcm9vdFBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzNAo=",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "M4"
+          }
+        }
+      },
       "actions": [
         {
           "action_id": "trivy",
           "params": {
             "threshold": "CRITICAL",
-            "vuln_type": [
-              "OS"
-            ]
+            "vuln_type": ["OS"]
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/mysql/goss"
+            },
+            "remote": {
+              "workload": "sts-mysql"
+            }
           }
         }
       ]

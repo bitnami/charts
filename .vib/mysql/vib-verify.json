@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/mysql"
         },
-        "runtime_parameters": "YXV0aDogCiAgdXNlcm5hbWU6IHVzZXIKICBwYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0Cg==",
+        "runtime_parameters": "YXV0aDogCiAgcm9vdFBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzNAo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
