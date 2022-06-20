@@ -55,8 +55,8 @@ it('allows sharing a file by link', () => {
   cy.get('.detailFileInfoContainer').within(() => {
     cy.get('input')
       .invoke('val')
-      .then((text) => {
-        const link = text;
+      .should('contain', 'vmware')
+      .then((link) => {
         cy.request({
           method: 'GET',
           url: link,
