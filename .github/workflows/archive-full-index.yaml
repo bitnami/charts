@@ -2,9 +2,7 @@ name: Generate the full index archive for Bitnami Charts
 on:
   push:
     branches:
-      - archive-full-index
       - index
-
 env:
   LAST_INDEX_URL: https://charts.bitnami.com/bitnami/index.yaml
   INDEXES_DIR: indexes
