@@ -22,7 +22,7 @@ command:
     stderr: []   
 file:
   {{ printf "/bitnami/mysql/data/%s" .Env.MYSQL_DATABASE }}:
-    mode: "0750"
+    mode: "2750"
     filetype: directory
     exists: true
   /opt/bitnami/mysql/conf/my.cnf:
