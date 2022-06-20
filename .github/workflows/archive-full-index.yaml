@@ -95,8 +95,7 @@ jobs:
               level: error
             line-length: disable
           EOF
-          ls
-          yamllint -c config index.yaml
+          yamllint -c config archive-full-index/index.yaml
       - id: check-no-dups
         name: Checks there are not any duplicates
         # Try to find duplicate digest attributes which would mean there are duplicates.
