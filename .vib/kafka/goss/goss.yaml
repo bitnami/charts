@@ -1,13 +1,13 @@
 command:
   create-kafka-topic:
-    exec: /opt/bitnami/kafka/bin/kafka-topics.sh --create --topic quickstart-events$RANDOM --bootstrap-server localhost:9092 
+    exec: kafka-topics.sh --create --topic quickstart-events$RANDOM --bootstrap-server localhost:9092
     exit-status: 0
     stderr: [ ]
     stdout: 
       - Created topic quickstart-events
     timeout: 20000
   list-kafka-topics:
-    exec: /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+    exec: kafka-topics.sh --bootstrap-server localhost:9092 --list
     exit-status: 0
     stderr: [ ]
     timeout: 20000
