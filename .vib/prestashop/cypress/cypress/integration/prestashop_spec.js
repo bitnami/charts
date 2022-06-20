@@ -5,13 +5,41 @@ import { random } from './utils';
 // PrestaShop requires to provide a token within the URL or else
 // a security warning page is shown.
 
-it('allows login in and out', () => {
-  cy.login();
-  cy.contains('Activity overview');
-
-  cy.get('#header_employee_box').click();
-  cy.contains('Sign out').click();
-  cy.get('form#login_form');
+it('allows a user to place an order and an admin to list it', () => {
+  cy.visit('/');
+  cy.get('div.product').first().click();
+  cy.contains('Add to cart').click();
+  cy.visit('/order');
+  cy.fixture('customers').then((customers) => {
+    cy.get('form#customer-form').within(() => {
+      cy.get('input#field-id_gender-1').check();
+      cy.get('input#field-firstname').type(customers.shopper.firstName);
+      cy.get('input#field-lastname').type(customers.shopper.firstName);
+      cy.get('input#field-email').type(`${random}${customers.shopper.email}`);
+      cy.get('input[name="customer_privacy"]').check();
+      cy.get('input[name="psgdpr"]').check();
+      cy.contains('button', 'Continue').click();
+    });
+    cy.get('div.js-address-form').within(() => {
+      cy.get('input#field-address1').type(customers.shopper.address.street);
+      cy.get('input#field-city').type(customers.shopper.address.city);
+      cy.get('select#field-id_state').select(customers.shopper.address.state);
+      cy.get('input#field-postcode').type(customers.shopper.address.zipcode);
+      cy.contains('button', 'Continue').click();
+    });
+    cy.get('form#js-delivery').within(() => {
+      cy.contains('button', 'Continue').click();
+    });
+    cy.get('input#payment-option-1').click();
+    cy.get('input[id*="conditions_to_approve"]').click();
+    cy.contains('button', 'Place order').click();
+    cy.contains('order is confirmed');
+    cy.login();
+    cy.contains('a[href*="sell/orders"]', 'Orders').click();
+    cy.contains('li#subtab-AdminOrders', 'Orders').click();
+    cy.get('td[class*="column-reference"]').first().click();
+    cy.contains(`${random}${customers.shopper.email}`);
+  });
 });
 
 it('allows registering a new product', () => {
