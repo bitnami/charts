@@ -1,9 +1,0 @@
-dependencies:
-- name: kube-state-metrics
-  repository: https://charts.bitnami.com/bitnami
-  version: 3.0.4
-- name: common
-  repository: https://charts.bitnami.com/bitnami
-  version: 1.16.0
-digest: sha256:cded27aa1ac9f547cce6d4525ec9fd1c659611ce8c0aba22c099c88321157793
-generated: "2022-06-09T13:04:15.422088205Z"
