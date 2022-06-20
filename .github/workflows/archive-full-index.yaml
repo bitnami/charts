@@ -17,12 +17,20 @@ jobs:
       - id: checkout-repo
         name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          ref: index
+          path: index_branch
+      - id: checkout-repo
+        name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          ref: archive-full-index
+          path: archive-full-index_branch
       - id: get-last-indexes
         name: Get indexes
         run: |
-          mkdir $INDEXES_DIR
-          curl $LAST_INDEX_URL -o ./$INDEXES_DIR/last_index.yaml
-          cp bitnami/index.yaml ./$INDEXES_DIR/old_index.yaml
+          cp index_branch/bitnami/index.yaml ./last_index.yaml
+          cp archive-full-index_branch/bitnami/index.yaml ./old_index.yaml
       - id: indexes-lint
         name: Lint indexes
         run: |
@@ -34,13 +42,13 @@ jobs:
               level: error
             line-length: disable
           EOF
-          yamllint -c config ./$INDEXES_DIR/*index.yaml
+          yamllint -c config ./*index.yaml
       - id: upload-artifact
         name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: indexes
-          path: ./${{ env.INDEXES_DIR }}
+          path: ./*index.yaml
           retention-days: 2
           if-no-files-found: error
   merge:
