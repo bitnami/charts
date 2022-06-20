@@ -58,6 +58,7 @@ it('can publish and retrieve a label', () => {
     url: 'loki/api/v1/push',
     body: body,
   }).then((response) => {
+    Cypress.log(response);
     expect(response.status).to.eq(204);
   });
 
@@ -68,7 +69,7 @@ it('can publish and retrieve a label', () => {
   }).then((response) => {
     expect(response.status).to.eq(200);
     console.log(response.body.data);
-    expect(response.body.data[1]).to.eq('value');
+    expect(response.body.data).to.contain('value');
   });
 });
 
