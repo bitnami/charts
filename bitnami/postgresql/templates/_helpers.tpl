@@ -108,6 +108,8 @@ Get the replication-password key.
         {{- printf "%s" (tpl .Values.global.postgresql.auth.secretKeys.replicationPasswordKey $) -}}
     {{- else if .Values.auth.secretKeys.replicationPasswordKey -}}
         {{- printf "%s" (tpl .Values.auth.secretKeys.replicationPasswordKey $) -}}
+    {{- else -}}
+        {{- "replication-password" -}}
     {{- end -}}
 {{- else -}}
     {{- "replication-password" -}}
