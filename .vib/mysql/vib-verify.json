@@ -45,7 +45,7 @@
               "path": "/.vib/mysql/goss"
             },
             "remote": {
-              "workload": "deploy-mysql"
+              "workload": "sts-mysql"
             }
           }
         }
