@@ -949,3 +949,12 @@ externalDatabase:
 ##
 cache:
   enabled: false
+
+## @section Keycloak Logging parameters
+
+## Keycloak logging configuration
+## ref: https://www.keycloak.org/server/logging
+## @param logging.output Alternates between the default log output format or json format
+##
+logging:
+  output: default
