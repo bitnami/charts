@@ -35,7 +35,7 @@ it('allows a user to place an order and an admin to list it', () => {
     cy.contains('button', 'Place order').click();
     cy.contains('order is confirmed');
     cy.login();
-    cy.contains('a[href*="sell/orders"]', 'Orders').click();
+    cy.contains('[href*="sell/orders"]', 'Orders').click();
     cy.contains('li#subtab-AdminOrders', 'Orders').click();
     cy.get('td[class*="column-reference"]').first().click();
     cy.contains(`${random}${customers.shopper.email}`);
@@ -44,10 +44,10 @@ it('allows a user to place an order and an admin to list it', () => {
 
 it('allows registering a new product', () => {
   cy.login();
-  cy.contains('a[href*="catalog/products"]', 'Catalog').click();
-  cy.contains('a[href*="catalog/products"]', 'Products').click();
+  cy.contains('[href*="catalog/products"]', 'Catalog').click();
+  cy.contains('[href*="catalog/products"]', 'Products').click();
   cy.get('div.header-toolbar').within(() => {
-    cy.contains('a[href*="catalog/products/new"]', 'New product').click();
+    cy.contains('[href*="catalog/products/new"]', 'New product').click();
   });
 
   cy.fixture('products').then((products) => {
@@ -62,17 +62,17 @@ it('allows registering a new product', () => {
     cy.contains('input#submit', 'Save').click();
     cy.contains('Settings updated');
 
-    cy.contains('a[href*="catalog/products"]', 'Products').click();
+    cy.contains('[href*="catalog/products"]', 'Products').click();
     cy.contains(`${products.newProduct.name} ${random}`);
   });
 });
 
 it('allows registering a new customer', () => {
   cy.login();
-  cy.contains('a[href*="sell/customers"]', 'Customers').click();
+  cy.contains('[href*="sell/customers"]', 'Customers').click();
   cy.contains('li#subtab-AdminCustomers', 'Customers').click();
   cy.get('div.header-toolbar').within(() => {
-    cy.contains('a[href*="customers/new"]', 'Add new customer').click();
+    cy.contains('[href*="customers/new"]', 'Add new customer').click();
   });
 
   cy.fixture('customers').then((customers) => {
@@ -92,8 +92,8 @@ it('allows registering a new customer', () => {
 
 it('has payments activated', () => {
   cy.login();
-  cy.contains('a[href*="payment/payment_methods"]', 'Payment').click();
-  cy.contains('a[href*="payment/payment_methods"]', 'Payment Methods').click();
+  cy.contains('[href*="payment/payment_methods"]', 'Payment').click();
+  cy.contains('[href*="payment/payment_methods"]', 'Payment Methods').click();
   const DEFAULT_ACTIVE_PAY_METHODS = ['Bank transfer', 'Payments by check'];
 
   cy.contains('div.card', 'Active payment').within(() => {
@@ -106,10 +106,10 @@ it('has payments activated', () => {
 it('allows performing backups', () => {
   cy.login();
   cy.contains(
-    'a[href*="configure/advanced/system-information"]',
+    '[href*="configure/advanced/system-information"]',
     'Advanced Parameters'
   ).click();
-  cy.contains('a[href*="configure/advanced/sql-requests"]', 'Database').click();
+  cy.contains('[href*="configure/advanced/sql-requests"]', 'Database').click();
   cy.contains('#subtab-AdminBackup', 'DB Backup').click();
 
   cy.contains('button', 'create a new backup').click();
