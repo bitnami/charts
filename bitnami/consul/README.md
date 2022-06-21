@@ -7,7 +7,7 @@ HashiCorp Consul is a tool for discovering and configuring services in your infr
 [Overview of HashiCorp Consul](https://consul.io)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -47,6 +47,7 @@ To uninstall/delete the `my-release` deployment:
 ```console
 $ helm delete my-release
 ```
+
 The command removes all the Kubernetes components associated with the chart and deletes the release. Remove also the chart using `--purge` option:
 
 ```console
@@ -63,7 +64,6 @@ $ helm delete --purge my-release
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -78,7 +78,6 @@ $ helm delete --purge my-release
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
-
 
 ### HashiCorp Consul parameters
 
@@ -115,7 +114,6 @@ $ helm delete --purge my-release
 | `containerPorts.rpcServer`      | Port to open for RPC Server in Consul                                                        | `8300`                |
 | `containerPorts.serfLAN`        | Port to open for Serf LAN in Consul                                                          | `8301`                |
 | `lifecycleHooks`                | Add lifecycle hooks to the deployment                                                        | `{}`                  |
-
 
 ### Statefulset parameters
 
@@ -169,7 +167,6 @@ $ helm delete --purge my-release
 | `pdb.minAvailable`                      | Minimum number of pods that must still be available after the eviction                    | `1`             |
 | `pdb.maxUnavailable`                    | Max number of pods that can be unavailable after the eviction                             | `""`            |
 
-
 ### Exposure parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -202,7 +199,6 @@ $ helm delete --purge my-release
 | `ingress.existingSecret`           | It is you own the certificate as secret.                                                                                         | `""`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Persistence parameters
 
 | Name                       | Description                                                                                               | Value               |
@@ -212,7 +208,6 @@ $ helm delete --purge my-release
 | `persistence.annotations`  | Persistent Volume Claim annotations                                                                       | `{}`                |
 | `persistence.accessModes`  | Persistent Volume Access Mode                                                                             | `["ReadWriteOnce"]` |
 | `persistence.size`         | PVC Storage Request for HashiCorp Consul data volume                                                      | `8Gi`               |
-
 
 ### Volume Permissions parameters
 
@@ -226,7 +221,6 @@ $ helm delete --purge my-release
 | `volumePermissions.image.pullSecrets`  | Bitnami Shell image pull secrets                                                | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                          | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                       | `{}`                    |
-
 
 ### Metrics parameters
 
@@ -257,7 +251,6 @@ $ helm delete --purge my-release
 | `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                           | `""`                      |
 | `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                              | `{}`                      |
 | `metrics.serviceMonitor.labels`                 | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with       | `{}`                      |
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -309,13 +302,13 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ### TLS Secrets
 
-This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required.  There are three common use cases:
+This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are three common use cases:
 
 - Helm generates/manages certificate secrets
 - User generates/manages certificates separately
 - An additional tool (like cert-manager) manages the secrets for the application
 
-In the first two cases, one will need a certificate and a key.  We would expect them to look like this:
+In the first two cases, one will need a certificate and a key. We would expect them to look like this:
 
 - certificate files should look like (and there can be more than one certificate if there is a certificate chain)
 
@@ -441,6 +434,7 @@ Affected values:
 - `service.port` renamed as `service.port.http`.
 - `service.nodePort` renamed as `service.nodePorts.http`.
 - `updateStrategy` changed from String type (previously default to 'rollingUpdate') to Object type, allowing users to configure other updateStrategy parameters, similar to other charts.
+
 ### To 9.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
@@ -448,9 +442,9 @@ Affected values:
 **What changes were introduced in this major version?**
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
-- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
+- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
 **Considerations when upgrading to this version**
 
@@ -526,4 +520,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.
+limitations under the License
