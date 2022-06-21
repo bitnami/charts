@@ -14,7 +14,7 @@ it('allows a user to place an order and an admin to list it', () => {
     cy.get('form#customer-form').within(() => {
       cy.get('input#field-id_gender-1').check();
       cy.get('input#field-firstname').type(customers.shopper.firstName);
-      cy.get('input#field-lastname').type(customers.shopper.firstName);
+      cy.get('input#field-lastname').type(customers.shopper.lastName);
       cy.get('input#field-email').type(`${random}${customers.shopper.email}`);
       cy.get('input[name="customer_privacy"]').check();
       cy.get('input[name="psgdpr"]').check();
