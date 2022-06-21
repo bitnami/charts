@@ -3,43 +3,28 @@ on:
   push:
     branches:
       - index
-env:
-  LAST_INDEX_URL: https://charts.bitnami.com/bitnami/index.yaml
-  INDEXES_DIR: indexes
 jobs:
   get:
     runs-on: ubuntu-latest
     name: Get
     steps:
-      - id: checkout-repo-index-branch
+      - id: checkout-repo-index
         name: Checkout repo
         uses: actions/checkout@v3
         with:
           ref: index
-          path: index_branch
-      - id: checkout-repo-full-index-branch
+          path: index
+      - id: checkout-repo-full-index
         name: Checkout repo
         uses: actions/checkout@v3
         with:
-          ref: archive-full-index
-          path: archive-full-index_branch
+          ref: full-index
+          path: full-index
       - id: get-last-indexes
         name: Get indexes
         run: |
-          cp index_branch/bitnami/index.yaml ./last_index.yaml
-          cp archive-full-index_branch/bitnami/index.yaml ./old_index.yaml
-      - id: indexes-lint
-        name: Lint indexes
-        run: |
-          cat << EOF > config
-          extends: relaxed
-
-          rules:
-            indentation:
-              level: error
-            line-length: disable
-          EOF
-          yamllint -c config ./*index.yaml
+          cp index/bitnami/index.yaml ./last_index.yaml
+          cp full-index/bitnami/index.yaml ./previous_index.yaml
       - id: upload-artifact
         name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -60,7 +45,7 @@ jobs:
           name: indexes
       - id: merge
         name: Merge
-        run: yq eval-all '. as $item ireduce ({}; . *+ $item )' old_index.yaml last_index.yaml > duplicates_index.yaml
+        run: yq eval-all '. as $item ireduce ({}; . *+ $item )' previous_index.yaml last_index.yaml > duplicates_index.yaml
       - id: remove
         name: Remove duplicates
         # Removes duplicates per entry using 'digest' as value.
@@ -119,6 +104,8 @@ jobs:
       - id: checkout-repo
         name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          ref: archive-full-index
       - id: download-artifact-archive-full-index
         name: Download artifacts
         uses: actions/download-artifact@v3
@@ -131,4 +118,4 @@ jobs:
           git config user.name "Bitnami Containers"
           git config user.email "bitnami-bot@vmware.com"
           git checkout archive-full-index
-          git add bitnami/index.yaml && git commit -m "[bitnami/index]: Update index.yaml" -s && git push
+          git add bitnami/index.yaml && git commit -m "[bitnami/index]: Update the full index archive" -s && git push
