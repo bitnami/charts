@@ -1,0 +1,8 @@
+{
+  "baseUrl": "http://localhost",
+  "pageLoadTimeout": 240000,
+  "defaultCommandTimeout": 6000,
+  "env": {
+    "datacenterName": "datacenter1"
+  }
+}
