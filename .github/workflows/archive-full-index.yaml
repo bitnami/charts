@@ -103,8 +103,8 @@ jobs:
         name: Checks there are not missing releases
         # Available URLs should be fine if everything went well during the merge & deduplication.
         run: |
-          yq eval '.entries[][].urls' last_index.yaml | awk '{print $2}' |sort| uniq > last_index_urls
-          yq eval '.entries[][].urls' index.yaml | awk '{print $2}' |sort| uniq > index_urls
+          yq eval '.entries[][].urls[]' last_index.yaml |sort| uniq > last_index_urls
+          yq eval '.entries[][].urls[]' index.yaml | sort| uniq > index_urls
           for i in `cat last_index_urls`; do  grep -q $i index_urls || exit 1 ; done
           echo "No missing releases detected"
   update:
