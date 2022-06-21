@@ -29,7 +29,7 @@ Params:
 {{- end -}}
 {{- end -}}
 
-{{- printf "%s" $name -}}
+{{- printf "%s" (include "common.tplvalues.render" ( dict "value" $name "context" .context ) ) -}}
 {{- end -}}
 
 {{/*
