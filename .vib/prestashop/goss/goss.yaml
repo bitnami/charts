@@ -29,5 +29,5 @@ file:
     filetype: file
     exists: true
     contains:
-      - /database_name.*bitnami_prestashop/
-      - /database_user.*bn_prestashop/
+      - {{ printf "/database_name.*%s/" .Env.PRESTASHOP_DATABASE_NAME }}
+      - {{ printf "/database_user.*%s/" .Env.PRESTASHOP_DATABASE_USER }}
