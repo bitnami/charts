@@ -105,7 +105,11 @@ jobs:
         run: |
           yq eval '.entries[][].urls[]' last_index.yaml |sort| uniq > last_index_urls
           yq eval '.entries[][].urls[]' index.yaml | sort| uniq > index_urls
-          for i in `cat last_index_urls`; do  grep -q $i index_urls || exit 1 ; done
+          missing_urls="$(comm -13 index_urls last_index_urls)"
+          if [ -n "${missing_urls}" ]; then
+              echo "Found missing URLs:\n${missing_urls}"
+              exit 1
+          fi
           echo "No missing releases detected"
   update:
     runs-on: ubuntu-latest
