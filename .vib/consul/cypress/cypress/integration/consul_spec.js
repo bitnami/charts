@@ -3,7 +3,7 @@
 import { random } from './utils';
 
 it('shows all instances of services', () => {
-  cy.visit('/');
+  cy.visit('/ui/datacenter1/services');
   cy.contains('Services');
   cy.get('.linkable').contains('consul');
   cy.get('.detail span').contains('3 instances');
@@ -16,8 +16,7 @@ it('shows all instances of services', () => {
 });
 
 it('shows the cluster overview ', () => {
-  cy.visit('/');
-  cy.contains('Overview').click();
+  cy.visit('/ui/datacenter1/overview/server-status');
   cy.get('.consul-server-list').within(() => {
     cy.get('li').should('have.length', 3);
   });
@@ -49,7 +48,7 @@ it('shows configured data center', () => {
 });
 
 it('is able to display all of the nodes', () => {
-  cy.visit('ui/datacenter1/nodes');
+  cy.visit('/ui/datacenter1/nodes');
   cy.get('.ember-view').within(() => {
     cy.get('.passing').should('have.length', 3);
     cy.get('.passing').first().click();
