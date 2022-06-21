@@ -117,5 +117,4 @@ jobs:
           cp index.yaml bitnami/index.yaml
           git config user.name "Bitnami Containers"
           git config user.email "bitnami-bot@vmware.com"
-          git checkout archive-full-index
           git add bitnami/index.yaml && git commit -m "[bitnami/index]: Update the full index archive" -s && git push
