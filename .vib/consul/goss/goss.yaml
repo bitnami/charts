@@ -1,0 +1,44 @@
+port:
+  tcp6:8400:
+    listening: true
+    ip:
+    - '::'
+file:   
+  /opt/bitnami/consul/conf/consul.json:
+    mode: "0644"
+    filetype: file
+    contains: 
+      - "8500"
+      - "8600"
+      - "8400"
+      - "8301"
+    exists: true
+command:
+  user-id-test:
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+    exit-status: 0
+    stdout: []
+    stderr: []
+  check-env:
+    exec: env
+    exit-status: 0
+    stdout: 
+      - "HOSTNAME=consul-0"
+      - "CONSUL_DATACENTER=datacenter1"
+    stderr: [] 
+  consul-cli:
+    exec: consul members
+    exit-status: 0
+    stdout: 
+      - "consul-0"
+      - "consul-1"
+      - "consul-2"
+    stderr: []    
+  consul-info:
+    exec: consul info
+    exit-status: 0
+    stdout: 
+      - "agent"
+      - "raft"
+      - "build"
+    stderr: []
