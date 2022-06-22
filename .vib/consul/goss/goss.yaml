@@ -1,17 +1,17 @@
 port:
-  tcp6:8400:
+  {{ printf "tcp6:%s" .Env.CONSUL_HTTP_PORT_NUMBER  }}:  
     listening: true
     ip:
     - '::'
 file:   
-  /opt/bitnami/consul/conf/consul.json:
+ /opt/bitnami/consul/conf/consul.json:
     mode: "0644"
     filetype: file
     contains: 
-      - "8500"
-      - "8600"
-      - "8400"
-      - "8301"
+     - {{ printf "/http.*%s/" .Env.CONSUL_HTTP_PORT_NUMBER }}
+     - {{ printf "/dns.*%s/" .Env.CONSUL_DNS_PORT_NUMBER }}
+     - {{ printf "/serf_lan.*%s/" .Env.CONSUL_SERF_LAN_PORT_NUMBER }}
+     - {{ printf "/server.*%s/" .Env.CONSUL_RPC_PORT_NUMBER  }}
     exists: true
 command:
   user-id-test:
@@ -19,12 +19,11 @@ command:
     exit-status: 0
     stdout: []
     stderr: []
-  check-env:
-    exec: env
+  consul-kv-put:
+    exec: consul kv put test test
     exit-status: 0
     stdout: 
-      - "HOSTNAME=consul-0"
-      - "CONSUL_DATACENTER=datacenter1"
+      - "Success! Data written to: test"
     stderr: [] 
   consul-cli:
     exec: consul members
