@@ -108,7 +108,7 @@ odooSkipInstall: false
 ##
 loadDemoData: false
 ## @param customPostInitScripts Custom post-init.d user scripts
-## ref: https://github.com/bitnami/bitnami-docker-odoo/tree/master/14.0/debian-10/rootfs/post-init.d
+## ref: https://github.com/bitnami/bitnami-docker-odoo
 ## NOTE: supported formats are `.sh`, `.sql` or `.php`
 ## NOTE: scripts are exclusively executed during the 1st boot of the container
 ## e.g:
