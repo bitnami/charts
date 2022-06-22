@@ -1,0 +1,31 @@
+file:
+  /opt/bitnami/nginx/conf/nginx.conf:
+    exists: true
+    filetype: directory
+    mode: "0775"
+    owner: daemon
+    group: root
+command:
+  user-id-test:
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+    exit-status: 0
+    stdout: []
+    stderr: []
+  curl-landing-page:
+    exec: curl nginx.default.svc.cluster.local
+    exit-status: 0
+    stdout: []
+    stderr: []  
+  nginx-config-files:
+    exec: nginx -t 
+    exit-status: 0
+    stdout: 
+      - "/opt/bitnami/nginx/conf/nginx.conf syntax is ok"
+      - "/opt/bitnami/nginx/conf/nginx.conf test is successful"
+    stderr: []  
+  nginx-version:
+    exec: nginx -s reload
+    exit-status: 0
+    stdout: 
+      - "signal process started"
+    stderr: []   

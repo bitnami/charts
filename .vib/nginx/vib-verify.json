@@ -44,6 +44,17 @@
             "endpoint": "lb-nginx-http",
             "app_protocol": "HTTP"
           }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/nginx/goss"
+            },
+            "remote": {
+              "workload": "deploy-nginx"
+            }
+          }
         }
       ]
     }
