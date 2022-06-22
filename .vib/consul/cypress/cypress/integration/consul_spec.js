@@ -47,7 +47,6 @@ it('allows the creation of key-value pairs', () => {
 it('shows configured data center', () => {
   cy.visit('/');
   cy.get('[role="banner"]').contains(Cypress.env('datacenterName'));
-  cy.contains(Cypress.env('datacenterName'));
 });
 
 it('is able to display all of the nodes', () => {
