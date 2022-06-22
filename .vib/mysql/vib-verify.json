@@ -41,7 +41,7 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-mysql-http",
+            "endpoint": "lb-mysql-mysql",
             "app_protocol": "HTTP"
           }
         },
