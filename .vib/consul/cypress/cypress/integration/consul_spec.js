@@ -4,7 +4,7 @@ import { random } from './utils';
 
 const DATACENTER_NAME = Cypress.env('datacenterName');
 const REPLICA_COUNT = Cypress.env('replicaCount');
-const CONTAINER_PORT = Cypress.env('containerPorts');
+const CONTAINER_PORT = Cypress.env('containerRpcPort');
 
 it('shows all instances of services', () => {
   cy.visit(`/ui/${DATACENTER_NAME}/services`);

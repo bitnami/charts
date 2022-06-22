@@ -5,6 +5,6 @@
   "env": {
     "datacenterName": "datacenter1",
     "replicaCount": "3",
-    "containerPorts": "8400"
+    "containerRpcPort": "8400"
   }
 }
