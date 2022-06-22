@@ -3,11 +3,11 @@ command:
     exec: env
     exit-status: 0
     stdout:
-      - "MYSQL_DATABASE=my_database"
+      - "MYSQL_DATABASE=important_db"
     stderr: [ ]
     timeout: 40000  
   mysql-create:
-    exec: mysql -h localhost -u root -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" -e 'DROP TABLE IF EXISTS TEST; create table TEST( test_id int auto_increment, test_value int, primary key(test_id)); INSERT INTO TEST (TEST_VALUE) VALUES (1993);SELECT * FROM TEST'
+    exec: mysql -h localhost -u "$MYSQL_ROOT_USER" -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" -e 'DROP TABLE IF EXISTS TEST; create table TEST( test_id int auto_increment, test_value int, primary key(test_id)); INSERT INTO TEST (TEST_VALUE) VALUES (1993);SELECT * FROM TEST'
     exit-status: 0
     stdout:
       - "test_id"

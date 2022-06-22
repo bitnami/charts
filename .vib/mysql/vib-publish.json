@@ -22,11 +22,11 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/mysql"
         },
-        "runtime_parameters": "YXV0aDogCiAgcm9vdFBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzNAo=",
+        "runtime_parameters": "YXV0aDogCiAgcm9vdFBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzNAogIGRhdGFiYXNlOiBpbXBvcnRhbnRfZGIK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "M4"
+            "name": "S4"
           }
         }
       },
@@ -36,6 +36,13 @@
           "params": {
             "threshold": "CRITICAL",
             "vuln_type": ["OS"]
+          }
+        },
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-mysql-http",
+            "app_protocol": "HTTP"
           }
         },
         {
