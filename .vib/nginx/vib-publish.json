@@ -26,7 +26,7 @@
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "M4"
+            "name": "S4"
           }
         }
       },
@@ -41,7 +41,7 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-airflow-http",
+            "endpoint": "lb-nginx-http",
             "app_protocol": "HTTP"
           }
         },
@@ -49,10 +49,10 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/airflow/goss"
+              "path": "/.vib/nginx/goss"
             },
             "remote": {
-              "workload": "deploy-airflow-web"
+              "workload": "deploy-nginx"
             }
           }
         }
