@@ -4,6 +4,7 @@ import { random } from './utils';
 
 const DATACENTER_NAME = Cypress.env('datacenterName');
 const REPLICA_COUNT = Cypress.env('replicaCount');
+const CONTAINER_PORT = Cypress.env('containerPorts');
 
 it('shows all instances of services', () => {
   cy.visit(`/ui/${DATACENTER_NAME}/services`);
@@ -58,7 +59,7 @@ it('is able to display all of the nodes', () => {
   cy.contains('Agent alive and reachable');
   cy.contains('Service Instances').click();
   cy.get('.ember-view').within(() => {
-    cy.get('.address').contains('8400');
+    cy.get('.address').contains(CONTAINER_PORT);
   });
   cy.contains('Round Trip Time').click();
   cy.contains('Minimum');

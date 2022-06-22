@@ -4,6 +4,7 @@
   "defaultCommandTimeout": 60000,
   "env": {
     "datacenterName": "datacenter1",
-    "replicaCount": "3"
+    "replicaCount": "3",
+    "containerPorts": "8400"
   }
 }
