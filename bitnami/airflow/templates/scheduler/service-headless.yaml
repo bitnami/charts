@@ -1,4 +1,4 @@
-{{- if (or (eq .Values.executor "LocalExecutor") (eq .Values.executor "SequentialExecutor")) }}
+{{- if (or (eq .Values.executor "LocalExecutor") (eq .Values.executor "LocalKubernetesExecutor") (eq .Values.executor "SequentialExecutor")) }}
 kind: Service
 apiVersion: v1
 metadata:

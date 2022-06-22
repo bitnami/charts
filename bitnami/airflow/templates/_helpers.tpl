@@ -338,7 +338,7 @@ Add environment variables to configure database values
 Add environment variables to configure redis values
 */}}
 {{- define "airflow.configure.redis" -}}
-{{- if (not (eq .Values.executor "KubernetesExecutor" )) }}
+{{- if (not (or (eq .Values.executor "KubernetesExecutor" ) (eq .Values.executor "LocalKubernetesExecutor" ))) }}
 - name: REDIS_HOST
   value: {{ ternary (include "airflow.redis.fullname" .) .Values.externalRedis.host .Values.redis.enabled | quote }}
 - name: REDIS_PORT_NUMBER
@@ -383,7 +383,7 @@ Add environment variables to configure airflow common values
 Add environment variables to configure airflow kubernetes executor
 */}}
 {{- define "airflow.configure.airflow.kubernetesExecutor" -}}
-{{- if or (eq .Values.executor "KubernetesExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+{{- if (contains .Values.executor "KubernetesExecutor") }}
 - name: AIRFLOW__KUBERNETES__NAMESPACE
   value: {{ .Release.Namespace }}
 - name: AIRFLOW__KUBERNETES__WORKER_CONTAINER_REPOSITORY

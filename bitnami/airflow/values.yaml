@@ -81,7 +81,7 @@ auth:
   ## The value is evaluated as a template
   ##
   existingSecret: ""
-## @param executor Airflow executor. Allowed values: `SequentialExecutor`, `LocalExecutor`, `CeleryExecutor`, `KubernetesExecutor` and `CeleryKubernetesExecutor`
+## @param executor Airflow executor. Allowed values: `SequentialExecutor`, `LocalExecutor`, `CeleryExecutor`, `KubernetesExecutor`, `CeleryKubernetesExecutor` and `LocalKubernetesExecutor`
 ## ref: http://airflow.apache.org/docs/stable/executor/index.html
 ##
 executor: CeleryExecutor
