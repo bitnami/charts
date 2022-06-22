@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/consul"
         },
-        "runtime_parameters": "c2VydmljZToKICBwb3J0czoKICAgIGh0dHA6IDgwCiAgdHlwZTogTG9hZEJhbGFuY2VyCmRhdGFjZW50ZXJOYW1lOiBkYXRhY2VudGVyMQo=",
+        "runtime_parameters": "c2VydmljZToKICBwb3J0czoKICAgIGh0dHA6IDgwCiAgdHlwZTogTG9hZEJhbGFuY2VyCmRhdGFjZW50ZXJOYW1lOiBkYXRhY2VudGVyMQpyZXBsaWNhQ291bnQ6IDMK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
