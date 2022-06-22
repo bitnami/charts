@@ -19,7 +19,7 @@ command:
     exit-status: 0
     stdout: []
     stderr: []
-  prestashop-version-ok:
+  joomla-version-ok:
     exec: cat /opt/bitnami/joomla/administrator/language/en-GB/install.xml | grep --quiet $(echo $APP_VERSION | tr "-" ".")
     exit-status: 0
     stdout: []
