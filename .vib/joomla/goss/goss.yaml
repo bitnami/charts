@@ -12,7 +12,7 @@ file:
     filetype: file
     mode: "0664"
     contains:
-      - {{ printf "$db = '%s'" .Env.JOOMLA_DATABASE_NAME }}
+      - {{ printf "/db.*%s/" .Env.JOOMLA_DATABASE_NAME }}
 command:
   user-id-test:
     exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi

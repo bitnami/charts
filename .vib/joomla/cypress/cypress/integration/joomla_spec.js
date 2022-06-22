@@ -3,13 +3,44 @@ import { random } from './utils';
 
 it('allows user to log in and log out', () => {
   cy.login();
-  cy.contains('Username and password do not match').should('not.exist');
+  cy.get('joomla-alert[type="warning"]').should('not.exist');
   cy.contains('User Menu').click();
   cy.contains('Log out').click();
   cy.get("[name='username']");
+  cy.get("[name='passwd']");
 });
 
-it('allows creating an article', () => {
+it('allows creating a new user and login in', () => {
+  cy.login();
+  cy.visit('/administrator/index.php?option=com_users&view=users');
+  cy.get('.button-new').click();
+  cy.fixture('users').then((user) => {
+    cy.get('#jform_name').type(`${user.newUser.name}`, { force: true });
+    cy.get('#jform_username').type(`${random}.${user.newUser.username}`, {
+      force: true,
+    });
+    cy.get('#jform_password').type(`${user.newUser.password}`, { force: true });
+    cy.get('#jform_password2').type(`${user.newUser.password}`, {
+      force: true,
+    });
+    cy.get('#jform_email').type(`${random}.${user.newUser.email}`, {
+      force: true,
+    });
+    cy.contains('Save & Close').click();
+    cy.contains('User saved');
+    cy.contains('User Menu').click();
+    cy.contains('Log out').click();
+
+    cy.visit('/');
+    cy.get("[name='username']").type(`${random}.${user.newUser.username}`);
+    cy.get("[name='password']").type(`${user.newUser.password}`);
+    cy.contains('Log in').click();
+    cy.get('joomla-alert[type="warning"]').should('not.exist');
+    cy.contains(`Hi ${user.newUser.name}`);
+  });
+});
+
+it('allows creating an article and accessing it publicly', () => {
   cy.login();
   cy.visit('/administrator/index.php?option=com_content&view=articles');
   cy.get('.button-new').click();
@@ -19,9 +50,13 @@ it('allows creating an article', () => {
       .type(`${article.newArticle.title} ${random}`, {
         force: true,
       });
+    cy.contains('Content').click({ force: true });
+    cy.get('.switcher > [id="jform_featured1"]').click({ force: true });
+    cy.contains('Save').click();
+    cy.contains('Article saved');
+    cy.visit('/index.php');
+    cy.contains(`${article.newArticle.title} ${random}`);
   });
-  cy.contains('Save & Close').click();
-  cy.contains('Article saved');
 });
 
 it('allows updating an image', () => {
@@ -35,19 +70,6 @@ it('allows updating an image', () => {
   cy.contains('Item uploaded');
 });
 
-it('allows modifying site settings', () => {
-  cy.login();
-  cy.visit('/administrator/index.php?option=com_config');
-  cy.fixture('site-settings').then((siteSettings) => {
-    cy.get('#jform_sitename')
-      .scrollIntoView()
-      .clear({ force: true })
-      .type(`${siteSettings.newSiteSetting.sitename} ${random}`);
-  });
-  cy.contains('Save & Close').click();
-  cy.contains('Configuration saved');
-});
-
 it('checks plugin management and API operabilty', () => {
   cy.login();
   cy.contains('User Menu').click();
@@ -55,7 +77,6 @@ it('checks plugin management and API operabilty', () => {
   cy.contains('API Token').click({ force: true });
   cy.get('#jform_joomlatoken_token')
     .invoke('attr', 'value')
-    .as('APIToken')
     .then((APIToken) => {
       cy.request({
         method: 'GET',
