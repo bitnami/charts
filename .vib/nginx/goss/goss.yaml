@@ -1,9 +1,9 @@
 file:
   /opt/bitnami/nginx/conf/nginx.conf:
     exists: true
-    filetype: directory
-    mode: "0775"
-    owner: daemon
+    filetype: file
+    mode: "0664"
+    owner: root
     group: root
 command:
   user-id-test:
@@ -19,13 +19,13 @@ command:
   nginx-config-files:
     exec: nginx -t 
     exit-status: 0
-    stdout: 
-      - "/opt/bitnami/nginx/conf/nginx.conf syntax is ok"
-      - "/opt/bitnami/nginx/conf/nginx.conf test is successful"
-    stderr: []  
-  nginx-version:
+    stdout: []
+    stderr: 
+      - "nginx.conf syntax is ok"
+      - "nginx.conf test is successful"  
+  nginx-reload:
     exec: nginx -s reload
     exit-status: 0
-    stdout: 
+    stdout: []
+    stderr: 
       - "signal process started"
-    stderr: []   
