@@ -109,7 +109,7 @@ dokuwikiFullName: User Name
 ##
 dokuwikiWikiName: My Wiki
 ## @param customPostInitScripts Custom post-init.d user scripts
-## ref: https://github.com/bitnami/bitnami-docker-dokuwiki/tree/master/20200729/debian-10/rootfs/post-init.d
+## ref: https://github.com/bitnami/bitnami-docker-dokuwiki
 ## NOTE: supported formats are `.sh` or `.php`
 ## NOTE: scripts are exclusively executed during the 1st boot of the container
 ## e.g:

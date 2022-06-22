@@ -1,4 +1,4 @@
-{{- $kube := or (eq .Values.executor "KubernetesExecutor") (eq .Values.executor "CeleryKubernetesExecutor") -}}
+{{- $kube := (contains .Values.executor "KubernetesExecutor") -}}
 {{- if or .Values.configuration $kube }}
 apiVersion: v1
 kind: ConfigMap
@@ -20,7 +20,7 @@ data:
   {{- if $kube }}
   pod_template.yaml: |-
   {{- if .Values.worker.podTemplate }}
-    {{ .Values.worker.podTemplate | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.worker.podTemplate "context" $) | nindent 4 }}
   {{- else }}
     apiVersion: v1
     kind: Pod

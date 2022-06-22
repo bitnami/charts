@@ -16,7 +16,7 @@ $ helm install my-release bitnami/<chart>
 
 ## Before you begin
 
-### Prerequisites 
+### Prerequisites
 
 - Kubernetes 1.19+
 - Helm 3.2.0+
@@ -47,6 +47,12 @@ The following command allows you to download and install all the charts from thi
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 ```
+
+> **_NOTE:_** It is important to note that the above mentioned repo is truncated so it only contains entries for the releases produced in the last 6 months. In case you need a full index, you can use it from the [archive-full-index branch](https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami/index.yaml) in the bitnami/charts Github repository.
+> 
+> This full index is updated every time the [truncated index file](https://raw.githubusercontent.com/bitnami/charts/index/bitnami/index.yaml) is updated. Take into account that this full index is under the [Github's rate limits](https://docs.github.com/en/developers/apps/building-github-apps/rate-limits-for-github-apps).
+>
+> You can find more information in the [Bitnami index FAQ](https://github.com/bitnami/charts/issues/10833) pinned issue.
 
 ### Using Helm
 

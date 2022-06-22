@@ -166,7 +166,7 @@ spec:
             httpGet:
               path: /-/ready
               port: http
-          {{- else if .Values.receiveDistributor.customReadinessProbe }}
+          {{- else if .Values.receiveDistributor.customStartupProbe  }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receiveDistributor.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.receiveDistributor.lifecycleHooks }}

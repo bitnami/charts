@@ -7,7 +7,7 @@ Apache Spark is a high-performance engine for large-scale computing tasks, such 
 [Overview of Apache Spark](https://spark.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | -------------------- |
 | `image.registry`    | Spark image registry                             | `docker.io`          |
 | `image.repository`  | Spark image repository                           | `bitnami/spark`      |
-| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.2.1-debian-11-r0` |
+| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.2.1-debian-11-r3` |
 | `image.pullPolicy`  | Spark image pull policy                          | `IfNotPresent`       |
 | `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                 |
 | `image.debug`       | Enable image debug mode                          | `false`              |
@@ -159,7 +159,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
 | `master.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
 | `master.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `master.sidecars`                                        | Add additional sidecar containers to the master pod(s)                                                                   | `{}`            |
+| `master.sidecars`                                        | Add additional sidecar containers to the master pod(s)                                                                   | `[]`            |
 | `master.initContainers`                                  | Add initContainers to the master pods.                                                                                   | `[]`            |
 
 
@@ -236,7 +236,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
 | `worker.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
 | `worker.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `worker.sidecars`                                        | Add additional sidecar containers to the worker pod(s)                                                                   | `{}`            |
+| `worker.sidecars`                                        | Add additional sidecar containers to the worker pod(s)                                                                   | `[]`            |
 | `worker.initContainers`                                  | Add initContainers to the worker pods.                                                                                   | `[]`            |
 | `worker.autoscaling.enabled`                             | Enable replica autoscaling depending on CPU                                                                              | `false`         |
 | `worker.autoscaling.minReplicas`                         | Minimum number of worker replicas                                                                                        | `""`            |

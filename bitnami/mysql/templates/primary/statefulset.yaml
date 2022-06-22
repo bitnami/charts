@@ -141,8 +141,10 @@ spec:
                   key: mysql-password
             {{- end }}
             {{- end }}
+            {{- if and .Values.auth.createDatabase .Values.auth.database }}
             - name: MYSQL_DATABASE
               value: {{ .Values.auth.database | quote }}
+            {{- end }}
             {{- if eq .Values.architecture "replication" }}
             - name: MYSQL_REPLICATION_MODE
               value: "master"
