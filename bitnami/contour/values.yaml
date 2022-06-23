@@ -567,7 +567,6 @@ envoy:
   ##
   updateStrategy:
     type: RollingUpdate
-
   ## @param envoy.minReadySeconds The minimum number of seconds for which a newly created Pod should be ready
   ##
   minReadySeconds: 0
