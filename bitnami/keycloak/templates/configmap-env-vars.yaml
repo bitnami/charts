@@ -12,7 +12,6 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  KEYCLOAK_CREATE_ADMIN_USER: {{ ternary "true" "false" .Values.auth.createAdminUser | quote }}
   KEYCLOAK_ADMIN_USER: {{ .Values.auth.adminUser | quote }}
   KEYCLOAK_MANAGEMENT_USER: {{ .Values.auth.managementUser | quote }}
   KEYCLOAK_HTTP_PORT: {{ .Values.containerPorts.http | quote }}

@@ -91,9 +91,6 @@ image:
 ## ref: https://github.com/bitnami/bitnami-docker-keycloak#admin-credentials
 ##
 auth:
-  ## @param auth.createAdminUser Create administrator user on boot
-  ##
-  createAdminUser: true
   ## @param auth.adminUser Keycloak administrator user
   ##
   adminUser: user
