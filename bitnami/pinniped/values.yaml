@@ -56,7 +56,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.18.0-scratch-r2
+  tag: 0.18.0-scratch-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -323,7 +323,7 @@ concierge:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param concierge.initContainers Add additional init containers to the Concierge pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -333,7 +333,7 @@ concierge:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## @section Concierge RBAC settings
   ##
@@ -654,7 +654,7 @@ supervisor:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param supervisor.initContainers Add additional init containers to the Supervisor pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -664,7 +664,7 @@ supervisor:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## @section Supervisor RBAC settings
   ##

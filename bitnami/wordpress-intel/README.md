@@ -93,7 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ---------------------------------------------------- | ------------------------- |
 | `image.registry`    | WordPress image registry                             | `docker.io`               |
 | `image.repository`  | WordPress image repository                           | `bitnami/wordpress-intel` |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.9.3-debian-10-r51`     |
+| `image.tag`         | WordPress image tag (immutable tags are recommended) | `6.0.0-debian-11-r4`      |
 | `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`            |
 | `image.pullSecrets` | WordPress image pull secrets                         | `[]`                      |
 | `image.debug`       | Enable image debug mode                              | `false`                   |
@@ -241,7 +241,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r433`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r6`       |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -271,7 +271,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.port`                            | NGINX Container Status Port scraped by Prometheus Exporter                   | `""`                     |
 | `metrics.image.registry`                  | NGINX Prometheus exporter image registry                                     | `docker.io`              |
 | `metrics.image.repository`                | NGINX Prometheus exporter image repository                                   | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                       | NGINX Prometheus exporter image tag (immutable tags are recommended)         | `0.10.0-debian-10-r147`  |
+| `metrics.image.tag`                       | NGINX Prometheus exporter image tag (immutable tags are recommended)         | `0.10.0-debian-11-r7`    |
 | `metrics.image.pullPolicy`                | NGINX Prometheus exporter image pull policy                                  | `IfNotPresent`           |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                             | `[]`                     |
 | `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                     |

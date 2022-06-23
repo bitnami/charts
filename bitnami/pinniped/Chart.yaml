@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 0.17.0
+appVersion: 0.18.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -16,10 +16,10 @@ keywords:
   - identity
   - infrastructure
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: pinniped
 sources:
   - https://github.com/bitnami/bitnami-docker-pinniped
   - https://github.com/vmware-tanzu/pinniped/
-version: 0.1.1
+version: 0.1.4
