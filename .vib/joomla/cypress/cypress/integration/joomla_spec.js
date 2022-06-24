@@ -6,8 +6,7 @@ it('allows user to log in and log out', () => {
   cy.get('joomla-alert[type="warning"]').should('not.exist');
   cy.contains('User Menu').click();
   cy.contains('Log out').click();
-  cy.get("[name='username']");
-  cy.get("[name='passwd']");
+  cy.contains('Login Form');
 });
 
 it('allows creating a new user and login in', () => {
