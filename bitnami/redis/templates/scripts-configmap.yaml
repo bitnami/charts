@@ -200,7 +200,7 @@ data:
     {{- end }}
 
     if [[ "$REDIS_REPLICATION_MODE" = "slave" ]]; then
-        ARGS+=("--slaveof" "${REDIS_MASTER_HOST}" "${REDIS_MASTER_PORT_NUMBER}")
+        ARGS+=("--replicaof" "${REDIS_MASTER_HOST}" "${REDIS_MASTER_PORT_NUMBER}")
     fi
 
     {{- if .Values.auth.enabled }}
@@ -601,7 +601,7 @@ data:
     {{- else }}
     ARGS=("--port" "${REDIS_PORT}")
     {{- end }}
-    ARGS+=("--slaveof" "${REDIS_MASTER_HOST}" "${REDIS_MASTER_PORT_NUMBER}")
+    ARGS+=("--replicaof" "${REDIS_MASTER_HOST}" "${REDIS_MASTER_PORT_NUMBER}")
     {{- if .Values.auth.enabled }}
     ARGS+=("--requirepass" "${REDIS_PASSWORD}")
     ARGS+=("--masterauth" "${REDIS_MASTER_PASSWORD}")
