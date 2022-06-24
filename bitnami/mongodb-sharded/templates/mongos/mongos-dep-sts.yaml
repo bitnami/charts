@@ -186,7 +186,7 @@ spec:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.mongos.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if .Values.mongos.extraEnvVarsSecret }}
-            - configMapRef:
+            - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.mongos.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
