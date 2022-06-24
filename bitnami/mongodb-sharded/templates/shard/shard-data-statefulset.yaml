@@ -201,19 +201,19 @@ spec:
           envFrom:
             {{- if $.Values.common.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraEnvVarsCM "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" $.Values.common.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if $.Values.common.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraEnvVarsSecret "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" $.Values.common.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
             {{- if $.Values.shardsvr.dataNode.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.extraEnvVarsCM "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.dataNode.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if $.Values.shardsvr.dataNode.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.extraEnvVarsSecret "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.dataNode.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
           {{- if $.Values.diagnosticMode.enabled }}
