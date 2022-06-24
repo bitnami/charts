@@ -7,7 +7,7 @@ Keycloak is a high performance Java-based identity and access management solutio
 [Overview of Keycloak](https://www.keycloak.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -317,6 +317,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name            | Description                                                               | Value   |
 | --------------- | ------------------------------------------------------------------------- | ------- |
 | `cache.enabled` | Switch to enable or disable the keycloak distributed cache for kubernetes | `false` |
+
+
+### Keycloak Logging parameters
+
+| Name             | Description                                                     | Value     |
+| ---------------- | --------------------------------------------------------------- | --------- |
+| `logging.output` | Alternates between the default log output format or json format | `default` |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

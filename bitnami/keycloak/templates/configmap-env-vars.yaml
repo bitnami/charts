@@ -34,3 +34,7 @@ data:
   {{- else }}
   KEYCLOAK_CACHE_TYPE: "local"
   {{- end }}
+  {{- if .Values.logging }}
+  KEYCLOAK_LOG_OUTPUT: {{ .Values.logging.output | quote }}
+  {{- end }}
+
