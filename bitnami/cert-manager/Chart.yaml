@@ -1,7 +1,7 @@
 annotations:
   category: CertificateAuthority
 apiVersion: v2
-appVersion: 1.8.1
+appVersion: 1.8.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -26,4 +26,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-cert-manager-webhook
   - https://github.com/bitnami/bitnami-docker-cainjector
   - https://github.com/jetstack/cert-manager
-version: 0.6.1
+version: 0.6.2
