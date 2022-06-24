@@ -86,7 +86,7 @@ $ helm delete --purge my-release
 | ------------------------------- | -------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                | HashiCorp Consul image registry                                                              | `docker.io`           |
 | `image.repository`              | HashiCorp Consul image repository                                                            | `bitnami/consul`      |
-| `image.tag`                     | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.12.1-debian-10-r0` |
+| `image.tag`                     | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.12.2-debian-11-r4` |
 | `image.pullPolicy`              | HashiCorp Consul image pull policy                                                           | `IfNotPresent`        |
 | `image.pullSecrets`             | HashiCorp Consul image pull secrets                                                          | `[]`                  |
 | `image.debug`                   | Enable image debug mode                                                                      | `false`               |
@@ -101,6 +101,7 @@ $ helm delete --purge my-release
 | `localConfig`                   | Extra configuration that will be added to the default one                                    | `""`                  |
 | `podLabels`                     | Pod labels                                                                                   | `{}`                  |
 | `priorityClassName`             | Priority class assigned to the Pods                                                          | `""`                  |
+| `runtimeClassName`              | Name of the runtime class to be used by pod(s)                                               | `""`                  |
 | `schedulerName`                 | Alternative scheduler                                                                        | `""`                  |
 | `terminationGracePeriodSeconds` | In seconds, time the given to the Consul pod needs to terminate gracefully                   | `""`                  |
 | `topologySpreadConstraints`     | Topology Spread Constraints for pod assignment                                               | `[]`                  |
@@ -221,7 +222,7 @@ $ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`     | Bitnami Shell image registry                                                    | `docker.io`             |
 | `volumePermissions.image.repository`   | Bitnami Shell image repository                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `10-debian-10-r435`     |
+| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `11-debian-11-r4`       |
 | `volumePermissions.image.pullPolicy`   | Bitnami Shell image pull policy                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Bitnami Shell image pull secrets                                                | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                          | `{}`                    |
@@ -235,7 +236,7 @@ $ helm delete --purge my-release
 | `metrics.enabled`                               | Start a side-car prometheus exporter                                                                                        | `false`                   |
 | `metrics.image.registry`                        | HashiCorp Consul Prometheus Exporter image registry                                                                         | `docker.io`               |
 | `metrics.image.repository`                      | HashiCorp Consul Prometheus Exporter image repository                                                                       | `bitnami/consul-exporter` |
-| `metrics.image.tag`                             | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.8.0-debian-10-r99`     |
+| `metrics.image.tag`                             | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.8.0-debian-11-r4`      |
 | `metrics.image.pullPolicy`                      | HashiCorp Consul Prometheus Exporter image pull policy                                                                      | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                     | HashiCorp Consul Prometheus Exporter image pull secrets                                                                     | `[]`                      |
 | `metrics.containerSecurityContext.enabled`      | HashiCorp Consul Prometheus Exporter securityContext                                                                        | `true`                    |
