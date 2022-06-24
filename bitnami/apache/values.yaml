@@ -208,11 +208,13 @@ podSecurityContext:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param containerSecurityContext.enabled Enabled Apache Server containers' Security Context
 ## @param containerSecurityContext.runAsUser Set Apache Server containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set Apache Server containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
 ## @param command Override default container command (useful when using custom images)
 ##

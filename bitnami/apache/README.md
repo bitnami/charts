@@ -122,6 +122,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.fsGroup`            | Set Apache Server pod's Security Context fsGroup                                                                         | `1001`                 |
 | `containerSecurityContext.enabled`      | Enabled Apache Server containers' Security Context                                                                       | `true`                 |
 | `containerSecurityContext.runAsUser`    | Set Apache Server containers' Security Context runAsUser                                                                 | `1001`                 |
+| `containerSecurityContext.runAsGroup`    | Set Apache Server containers' Security Context runAsGroup                                                                 | `1001`                 |
 | `containerSecurityContext.runAsNonRoot` | Set Controller container's Security Context runAsNonRoot                                                                 | `true`                 |
 | `command`                               | Override default container command (useful when using custom images)                                                     | `[]`                   |
 | `args`                                  | Override default container args (useful when using custom images)                                                        | `[]`                   |
