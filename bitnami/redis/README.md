@@ -706,6 +706,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an incompatible breaking change needing manual actions.
 
+### To 17.0.0
+
+This major version updates the Redis&reg; docker image version used from `6.2` to `7.0`, the new stable version. There are no major changes in the chart, even though there are breaking changes in Redis&reg;. For more information, please refer to [Redis&reg; 7.0 release notes](https://raw.githubusercontent.com/redis/redis/7.0/00-RELEASENOTES).
+
 ### To 16.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
