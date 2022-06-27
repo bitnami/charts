@@ -969,6 +969,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                             | Description                                                                                        | Value                |
 | ------------------------------------------------ | -------------------------------------------------------------------------------------------------- | -------------------- |
+| `promtail.enabled`                               | Deploy promtail                                                                                    | `true`               |
 | `promtail.image.registry`                        | Grafana Promtail image registry                                                                    | `docker.io`          |
 | `promtail.image.repository`                      | Grafana Promtail image repository                                                                  | `bitnami/promtail`   |
 | `promtail.image.tag`                             | Grafana Promtail image tag (immutable tags are recommended)                                        | `2.5.0-debian-11-r3` |

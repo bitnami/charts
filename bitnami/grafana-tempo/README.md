@@ -7,7 +7,7 @@ Grafana Tempo is a distributed tracing system that has out-of-the-box integratio
 [Overview of Grafana Tempo](https://github.com/grafana/tempo)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -268,6 +268,87 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.service.externalTrafficPolicy`    | Distributor service external traffic policy                      | `Cluster`   |
 | `distributor.service.annotations`              | Additional custom annotations for Distributor service            | `{}`        |
 | `distributor.service.extraPorts`               | Extra ports to expose in the Distributor service                 | `[]`        |
+
+
+### Metrics Generator Deployment Parameters
+
+| Name                                                     | Description                                                                                                | Value           |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------- |
+| `metricsGenerator.enabled`                               | enable metricsGenerator                                                                                    | `false`         |
+| `metricsGenerator.remoteWrite`                           | remoteWrite configuration for metricsGenerator                                                             | `[]`            |
+| `metricsGenerator.extraEnvVars`                          | Array with extra environment variables to add to metricsGenerator nodes                                    | `[]`            |
+| `metricsGenerator.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for metricsGenerator nodes                            | `""`            |
+| `metricsGenerator.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for metricsGenerator nodes                               | `""`            |
+| `metricsGenerator.command`                               | Override default container command (useful when using custom images)                                       | `[]`            |
+| `metricsGenerator.args`                                  | Override default container args (useful when using custom images)                                          | `[]`            |
+| `metricsGenerator.replicaCount`                          | Number of metricsGenerator replicas to deploy                                                              | `1`             |
+| `metricsGenerator.livenessProbe.enabled`                 | Enable livenessProbe on metricsGenerator nodes                                                             | `true`          |
+| `metricsGenerator.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                    | `10`            |
+| `metricsGenerator.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                           | `10`            |
+| `metricsGenerator.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                          | `1`             |
+| `metricsGenerator.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                        | `3`             |
+| `metricsGenerator.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                        | `1`             |
+| `metricsGenerator.readinessProbe.enabled`                | Enable readinessProbe on metricsGenerator nodes                                                            | `true`          |
+| `metricsGenerator.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                   | `10`            |
+| `metricsGenerator.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                          | `10`            |
+| `metricsGenerator.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                         | `1`             |
+| `metricsGenerator.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                       | `3`             |
+| `metricsGenerator.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                       | `1`             |
+| `metricsGenerator.startupProbe.enabled`                  | Enable startupProbe on metricsGenerator containers                                                         | `false`         |
+| `metricsGenerator.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                     | `30`            |
+| `metricsGenerator.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                            | `10`            |
+| `metricsGenerator.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                           | `1`             |
+| `metricsGenerator.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                         | `15`            |
+| `metricsGenerator.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                         | `1`             |
+| `metricsGenerator.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                        | `{}`            |
+| `metricsGenerator.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                       | `{}`            |
+| `metricsGenerator.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                         | `{}`            |
+| `metricsGenerator.resources.limits`                      | The resources limits for the metricsGenerator containers                                                   | `{}`            |
+| `metricsGenerator.resources.requests`                    | The requested resources for the metricsGenerator containers                                                | `{}`            |
+| `metricsGenerator.podSecurityContext.enabled`            | Enabled metricsGenerator pods' Security Context                                                            | `true`          |
+| `metricsGenerator.podSecurityContext.fsGroup`            | Set metricsGenerator pod's Security Context fsGroup                                                        | `1001`          |
+| `metricsGenerator.containerSecurityContext.enabled`      | Enabled metricsGenerator containers' Security Context                                                      | `true`          |
+| `metricsGenerator.containerSecurityContext.runAsUser`    | Set metricsGenerator containers' Security Context runAsUser                                                | `1001`          |
+| `metricsGenerator.containerSecurityContext.runAsNonRoot` | Set metricsGenerator containers' Security Context runAsNonRoot                                             | `true`          |
+| `metricsGenerator.lifecycleHooks`                        | for the metricsGenerator container(s) to automate configuration before or after startup                    | `{}`            |
+| `metricsGenerator.hostAliases`                           | metricsGenerator pods host aliases                                                                         | `[]`            |
+| `metricsGenerator.podLabels`                             | Extra labels for metricsGenerator pods                                                                     | `{}`            |
+| `metricsGenerator.podAnnotations`                        | Annotations for metricsGenerator pods                                                                      | `{}`            |
+| `metricsGenerator.podAffinityPreset`                     | Pod affinity preset. Ignored if `metricsGenerator.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `metricsGenerator.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `metricsGenerator.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `metricsGenerator.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `metricsGenerator.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `metricsGenerator.nodeAffinityPreset.key`                | Node label key to match. Ignored if `metricsGenerator.affinity` is set                                     | `""`            |
+| `metricsGenerator.nodeAffinityPreset.values`             | Node label values to match. Ignored if `metricsGenerator.affinity` is set                                  | `[]`            |
+| `metricsGenerator.affinity`                              | Affinity for metricsGenerator pods assignment                                                              | `{}`            |
+| `metricsGenerator.nodeSelector`                          | Node labels for metricsGenerator pods assignment                                                           | `{}`            |
+| `metricsGenerator.tolerations`                           | Tolerations for metricsGenerator pods assignment                                                           | `[]`            |
+| `metricsGenerator.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains            | `{}`            |
+| `metricsGenerator.priorityClassName`                     | metricsGenerator pods' priorityClassName                                                                   | `""`            |
+| `metricsGenerator.schedulerName`                         | Kubernetes pod scheduler registry                                                                          | `""`            |
+| `metricsGenerator.updateStrategy.type`                   | metricsGenerator statefulset strategy type                                                                 | `RollingUpdate` |
+| `metricsGenerator.updateStrategy.rollingUpdate`          | metricsGenerator statefulset rolling update configuration parameters                                       | `{}`            |
+| `metricsGenerator.extraVolumes`                          | Optionally specify extra list of additional volumes for the metricsGenerator pod(s)                        | `[]`            |
+| `metricsGenerator.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the metricsGenerator container(s)             | `[]`            |
+| `metricsGenerator.sidecars`                              | Add additional sidecar containers to the metricsGenerator pod(s)                                           | `[]`            |
+| `metricsGenerator.initContainers`                        | Add additional init containers to the metricsGenerator pod(s)                                              | `[]`            |
+
+
+### Metrics Generator Traffic Exposure Parameters
+
+| Name                                                | Description                                                      | Value       |
+| --------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
+| `metricsGenerator.service.type`                     | metricsGenerator service type                                    | `ClusterIP` |
+| `metricsGenerator.service.ports.http`               | metricsGenerator HTTP service port                               | `3100`      |
+| `metricsGenerator.service.ports.grpc`               | metricsGenerator GRPC service port                               | `9095`      |
+| `metricsGenerator.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
+| `metricsGenerator.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
+| `metricsGenerator.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
+| `metricsGenerator.service.clusterIP`                | metricsGenerator service Cluster IP                              | `""`        |
+| `metricsGenerator.service.loadBalancerIP`           | metricsGenerator service Load Balancer IP                        | `""`        |
+| `metricsGenerator.service.loadBalancerSourceRanges` | metricsGenerator service Load Balancer sources                   | `[]`        |
+| `metricsGenerator.service.externalTrafficPolicy`    | metricsGenerator service external traffic policy                 | `Cluster`   |
+| `metricsGenerator.service.annotations`              | Additional custom annotations for metricsGenerator service       | `{}`        |
+| `metricsGenerator.service.extraPorts`               | Extra ports to expose in the metricsGenerator service            | `[]`        |
 
 
 ### Ingester Deployment Parameters

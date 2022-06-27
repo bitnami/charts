@@ -250,7 +250,7 @@ spec:
                   key: inter-broker-password
             {{- end }}
             {{- end }}
-            {{- if and .Values.zookeeper.auth.enabled .Values.auth.sasl.jaas.zookeeperUser }}
+            {{- if and .Values.zookeeper.auth.client.enabled .Values.auth.sasl.jaas.zookeeperUser }}
             - name: KAFKA_ZOOKEEPER_USER
               value: {{ .Values.auth.sasl.jaas.zookeeperUser | quote }}
             - name: KAFKA_ZOOKEEPER_PASSWORD

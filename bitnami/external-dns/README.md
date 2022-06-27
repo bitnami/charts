@@ -7,7 +7,7 @@ ExternalDNS is a Kubernetes addon that configures public DNS servers with inform
 [Overview of ExternalDNS](https://github.com/kubernetes-incubator/external-dns)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -60,15 +60,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                                                                  | Value           |
-| ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`      | String to partially override external-dns.fullname template (will maintain the release name) | `""`            |
-| `fullnameOverride`  | String to fully override external-dns.fullname template                                      | `""`            |
-| `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
-| `commonLabels`      | Labels to add to all deployed objects                                                        | `{}`            |
-| `commonAnnotations` | Annotations to add to all deployed objects                                                   | `{}`            |
-| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                 | `[]`            |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
+| Name                    | Description                                                                                  | Value           |
+| ----------------------- | -------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`          | String to partially override external-dns.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`      | String to fully override external-dns.fullname template                                      | `""`            |
+| `clusterDomain`         | Kubernetes Cluster Domain                                                                    | `cluster.local` |
+| `commonLabels`          | Labels to add to all deployed objects                                                        | `{}`            |
+| `commonAnnotations`     | Annotations to add to all deployed objects                                                   | `{}`            |
+| `extraDeploy`           | Array of extra objects to deploy with the release (evaluated as a template).                 | `[]`            |
+| `kubeVersion`           | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
+| `watchReleaseNamespace` | Watch only namepsace used for the release                                                    | `false`         |
 
 
 ### external-dns parameters
@@ -77,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                              | ExternalDNS image registry                                                                                                                                                   | `docker.io`               |
 | `image.repository`                            | ExternalDNS image repository                                                                                                                                                 | `bitnami/external-dns`    |
-| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.12.0-debian-10-r0`     |
+| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.12.0-debian-11-r0`     |
 | `image.pullPolicy`                            | ExternalDNS image pull policy                                                                                                                                                | `IfNotPresent`            |
 | `image.pullSecrets`                           | ExternalDNS image pull secrets                                                                                                                                               | `[]`                      |
 | `hostAliases`                                 | Deployment pod host aliases                                                                                                                                                  | `[]`                      |

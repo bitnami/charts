@@ -271,6 +271,10 @@ updateStrategy:
 ## @param priorityClassName Contour Operator pods' priorityClassName
 ##
 priorityClassName: ""
+## @param runtimeClassName Name of the runtime class to be used by pod(s)
+## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+##
+runtimeClassName: ""
 ## @param lifecycleHooks for the Contour Operator container(s) to automate configuration before or after startup
 ##
 lifecycleHooks: {}
