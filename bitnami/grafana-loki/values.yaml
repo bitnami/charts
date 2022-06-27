@@ -2375,7 +2375,7 @@ queryFrontend:
     ## @param queryFrontend.service.extraPorts Extra ports to expose in the queryFrontend service
     ##
     extraPorts: []
-## @section Query Frontend Deployment Parameters
+## @section Query Scheduler Deployment Parameters
 ##
 queryScheduler:
   ## @param queryScheduler.extraEnvVars Array with extra environment variables to add to queryScheduler nodes
