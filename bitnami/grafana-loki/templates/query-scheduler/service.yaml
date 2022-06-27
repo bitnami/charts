@@ -1,6 +1,7 @@
 {{- if .Values.queryScheduler.enabled }}
 apiVersion: v1
 kind: Service
+metadata:
   name: {{ template "grafana-loki.query-scheduler.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
