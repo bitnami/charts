@@ -883,6 +883,10 @@ persistence:
   ## @param persistence.existingClaim Name of an existing PVC to use (only in `standalone` mode)
   ##
   existingClaim: ""
+  ## @param persistence.selector Selector to match an existing Persistent Volume for Minio data PVC.
+  ## If defined, the PVC can't have a PV dynamically provisioned for it
+  ##
+  selector: {}
 
 ## @section Volume Permissions parameters
 
