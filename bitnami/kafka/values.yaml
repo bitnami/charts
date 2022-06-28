@@ -886,76 +886,129 @@ networkPolicy:
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
-  ## @param persistence.enabled Enable Kafka data persistence using PVC, note that ZooKeeper persistence is unaffected
+  ## @param persistence.type identifies what type of persistence will be used, note that ZooKeeper persistence is unaffected
+  ## Supported options:
+  ## EphemeralVolume. In this case will be used Kubernetes ephemeralVolumes, by default it is emptyDir
+  ## ExistingVolume. In this case will be used one of existing volumes, specified via .Values.persistence.existingVolume.claimName
+  ## VolumeTemplate. In this case will be created empty volumeTemplate for statefulset
   ##
-  enabled: true
-  ## @param persistence.existingClaim A manually managed Persistent Volume and Claim
-  ## If defined, PVC must be created manually before volume will be bound
-  ## The value is evaluated as a template
+  type: VolumeTemplate
+
+  ## @param persistence.ephemeralVolume used only when persistence equal to EphemeralVolume
   ##
-  existingClaim: ""
-  ## @param persistence.storageClass PVC Storage Class for Kafka data volume
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ## set, choosing the default provisioner.
+  ephemeralVolume:
+    ## @param persistence.ephemeralVolume.template inroduce ability to define volume template for ephemeral volue
+    ## If not set, emptyDir will be used
+    ##
+    template:
+      ## ephemeral:
+      ##   volumeClaimTemplate:
+      ##     spec:
+      ##       accessModes: ['ReadWriteOnce']
+      ##       resources:
+      ##         requests:
+      ##           storage: '8Gi'
+
+  ## @param persistence.existingVolume used only when persistence equal to ExistingVolume
   ##
-  storageClass: ""
-  ## @param persistence.accessModes Persistent Volume Access Modes
+  existingVolume:
+    ## @param persistence.existingVolume.claimName A manually managed Persistent Volume and Claim
+    ## If defined, PVC must be created manually before volume will be bound
+    ## The value is evaluated as a template
+    ##
+    claimName: ""
+
+  ## @param persistence.volumeTemplate used only when persistence equal to VolumeTemplate
   ##
-  accessModes:
-    - ReadWriteOnce
-  ## @param persistence.size PVC Storage Request for Kafka data volume
-  ##
-  size: 8Gi
-  ## @param persistence.annotations Annotations for the PVC
-  ##
-  annotations: {}
-  ## @param persistence.selector Selector to match an existing Persistent Volume for Kafka data PVC. If set, the PVC can't have a PV dynamically provisioned for it
-  ## selector:
-  ##   matchLabels:
-  ##     app: my-app
-  ##
-  selector: {}
+  volumeTemplate:
+    ## @param persistence.volumeTemplate.storageClass PVC Storage Class for Kafka data volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ## set, choosing the default provisioner.
+    ##
+    storageClass: ""
+    ## @param persistence.volumeTemplate.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param persistence.volumeTemplate.size PVC Storage Request for Kafka data volume
+    ##
+    size: 8Gi
+    ## @param persistence.volumeTemplate.annotations Annotations for the PVC
+    ##
+    annotations: {}
+    ## @param persistence.volumeTemplate.selector Selector to match an existing Persistent Volume for Kafka data PVC. If set, the PVC can't have a PV dynamically provisioned for it
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+
   ## @param persistence.mountPath Mount path of the Kafka data volume
   ##
   mountPath: /bitnami/kafka
 ## Log Persistence parameters
 ##
 logPersistence:
-  ## @param logPersistence.enabled Enable Kafka logs persistence using PVC, note that ZooKeeper persistence is unaffected
+  ## @param logPersistence.type identifies what type of persistence will be used, note that ZooKeeper persistence is unaffected
+  ## Supported options:
+  ## EphemeralVolume. In this case will be used Kubernetes ephemeralVolumes, by default it is emptyDir
+  ## ExistingVolume. In this case will be used one of existing volumes, specified via .Values.persistence.existingVolume.claimName
+  ## VolumeTemplate. In this case will be created empty volumeTemplate for statefulset
   ##
-  enabled: false
-  ## @param logPersistence.existingClaim A manually managed Persistent Volume and Claim
-  ## If defined, PVC must be created manually before volume will be bound
-  ## The value is evaluated as a template
+  type: EphemeralVolume
+
+  ## @param logPersistence.ephemeralVolume used only when persistence equal to EphemeralVolume
   ##
-  existingClaim: ""
-  ## @param logPersistence.storageClass PVC Storage Class for Kafka logs volume
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ## set, choosing the default provisioner.
+  ephemeralVolume:
+    ## @param logPersistence.ephemeralVolume.template inroduce ability to define custom template for ephemeral volue
+    ## If not set, emptyDir will be used
+    ##
+    template:
+      ## ephemeral:
+      ##   volumeClaimTemplate:
+      ##     spec:
+      ##       accessModes: ['ReadWriteOnce']
+      ##       resources:
+      ##         requests:
+      ##           storage: '8Gi'
+
+  ## @param persistence.existingVolume used only when persistence equal to ExistingVolume
   ##
-  storageClass: ""
-  ## @param logPersistence.accessModes Persistent Volume Access Modes
+  existingVolume:
+    ## @param logPersistence.existingClaim.claimName A manually managed Persistent Volume and Claim
+    ## If defined, PVC must be created manually before volume will be bound
+    ## The value is evaluated as a template
+    ##
+    claimName: ""
+
+  ## @param persistence.volumeTemplate used only when persistence equal to VolumeTemplate
   ##
-  accessModes:
-    - ReadWriteOnce
-  ## @param logPersistence.size PVC Storage Request for Kafka logs volume
-  ##
-  size: 8Gi
-  ## @param logPersistence.annotations Annotations for the PVC
-  ##
-  annotations: {}
-  ## @param logPersistence.selector Selector to match an existing Persistent Volume for Kafka log data PVC. If set, the PVC can't have a PV dynamically provisioned for it
-  ## selector:
-  ##   matchLabels:
-  ##     app: my-app
-  ##
-  selector: {}
-  ## @param logPersistence.mountPath Mount path of the Kafka logs volume
-  ##
+  volumeTemplate:
+    ## @param logPersistence.volumeTemplate.storageClass PVC Storage Class for Kafka logs volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ## set, choosing the default provisioner.
+    ##
+    storageClass: ""
+    ## @param logPersistence.volumeTemplate.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param logPersistence.volumeTemplate.size PVC Storage Request for Kafka logs volume
+    ##
+    size: 8Gi
+    ## @param logPersistence.volumeTemplate.annotations Annotations for the PVC
+    ##
+    annotations: {}
+    ## @param logPersistence.volumeTemplate.selector Selector to match an existing Persistent Volume for Kafka log data PVC. If set, the PVC can't have a PV dynamically provisioned for it
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
   mountPath: /opt/bitnami/kafka/logs
 
 ## @section Volume Permissions parameters
