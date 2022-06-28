@@ -575,11 +575,6 @@ postgresql:
     ## @param postgresql.tls.certKeyFilename Certificate key filename
     ##
     certKeyFilename: ""
-    ## @param postgresql.tls.certCAFilename CA Certificate filename
-    ## If provided, PgPool will authenticate TLS/SSL clients by requesting them a certificate
-    ## ref: https://www.pgpool.net/docs/latest/en/html/runtime-ssl.html
-    ##
-    certCAFilename: ""
 
 ## @section Pgpool parameters
 
