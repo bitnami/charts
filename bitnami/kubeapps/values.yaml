@@ -204,7 +204,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-11-r3
+    tag: 1.21.6-debian-11-r9
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -520,7 +520,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.4.5-debian-11-r3
+    tag: 2.4.6-debian-11-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -820,7 +820,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.4.5-scratch-r1
+    tag: 2.4.6-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -845,7 +845,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.4.5-scratch-r1
+    tag: 2.4.6-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1127,7 +1127,7 @@ kubeops:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-kubeops
-    tag: 2.4.5-scratch-r1
+    tag: 2.4.6-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1403,271 +1403,6 @@ kubeops:
     automountServiceAccountToken: true
     annotations: {}
 
-## @section Assetsvc parameters
-
-## Assetsvc parameters
-## @deprecated
-assetsvc:
-  ## @param assetsvc.enabled Specifies whether this deprecated component should be installed.
-  ## As per Kubeapps v2.4.0 it is no longer used in the UI.
-  ## In future releases, this service will get entirely removed.
-  ##
-  enabled: false
-  ## Bitnami Kubeapps Assetsvc image
-  ## ref: https://hub.docker.com/r/bitnami/kubeapps-assetsvc/tags/
-  ## @param assetsvc.image.registry Kubeapps Assetsvc image registry
-  ## @param assetsvc.image.repository Kubeapps Assetsvc image repository
-  ## @param assetsvc.image.tag Kubeapps Assetsvc image tag (immutable tags are recommended)
-  ## @param assetsvc.image.pullPolicy Kubeapps Assetsvc image pull policy
-  ## @param assetsvc.image.pullSecrets Kubeapps Assetsvc image pull secrets
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/kubeapps-assetsvc
-    tag: 2.4.5-scratch-r1
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-  ## @param assetsvc.extraFlags Additional command line flags for Assetsvc
-  ##
-  extraFlags: []
-  ## @param assetsvc.replicaCount Number of Assetsvc replicas to deploy
-  ##
-  replicaCount: 1
-  ## @param assetsvc.updateStrategy.type Assetsvc deployment strategy type.
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-  ## e.g:
-  ## updateStrategy:
-  ##  type: RollingUpdate
-  ##  rollingUpdate:
-  ##    maxSurge: 25%
-  ##    maxUnavailable: 25%
-  ##
-  updateStrategy:
-    type: RollingUpdate
-  ## @param assetsvc.lifecycleHooks Custom lifecycle hooks for Assetsvc containers
-  ##
-  lifecycleHooks: {}
-  ## @param assetsvc.command Override default container command (useful when using custom images)
-  ##
-  command: []
-  ## @param assetsvc.args Override default container args (useful when using custom images)
-  ##
-  args: []
-  ## @param assetsvc.extraEnvVars Array with extra environment variables to add to the Assetsvc container
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param assetsvc.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the Assetsvc container
-  ##
-  extraEnvVarsCM: ""
-  ## @param assetsvc.extraEnvVarsSecret Name of existing Secret containing extra env vars for the Assetsvc container
-  ##
-  extraEnvVarsSecret: ""
-  ## @param assetsvc.extraVolumes Optionally specify extra list of additional volumes for the Assetsvc pod(s)
-  ##
-  extraVolumes: []
-  ## @param assetsvc.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Assetsvc container(s)
-  ##
-  extraVolumeMounts: []
-  ## @param assetsvc.containerPorts.http Assetsvc HTTP container port
-  ##
-  containerPorts:
-    http: 8080
-  ## Assetsvc containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param assetsvc.resources.limits.cpu The CPU limits for the Assetsvc container
-  ## @param assetsvc.resources.limits.memory The memory limits for the Assetsvc container
-  ## @param assetsvc.resources.requests.cpu The requested CPU for the Assetsvc container
-  ## @param assetsvc.resources.requests.memory The requested memory for the Assetsvc container
-  ##
-  resources:
-    limits:
-      cpu: 250m
-      memory: 128Mi
-    requests:
-      cpu: 25m
-      memory: 32Mi
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param assetsvc.podSecurityContext.enabled Enabled Assetsvc pods' Security Context
-  ## @param assetsvc.podSecurityContext.fsGroup Set Assetsvc pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1001
-  ## Configure Container Security Context (only main container)
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param assetsvc.containerSecurityContext.enabled Enabled Assetsvc containers' Security Context
-  ## @param assetsvc.containerSecurityContext.runAsUser Set Assetsvc container's Security Context runAsUser
-  ## @param assetsvc.containerSecurityContext.runAsNonRoot Set Assetsvc container's Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1001
-    runAsNonRoot: true
-  ## Configure extra options for Assetsvc containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param assetsvc.livenessProbe.enabled Enable livenessProbe
-  ## @param assetsvc.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param assetsvc.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param assetsvc.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param assetsvc.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param assetsvc.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## Assetsvc containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 60
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  ## @param assetsvc.readinessProbe.enabled Enable readinessProbe
-  ## @param assetsvc.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param assetsvc.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param assetsvc.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param assetsvc.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param assetsvc.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 0
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  ## @param assetsvc.startupProbe.enabled Enable startupProbe
-  ## @param assetsvc.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param assetsvc.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param assetsvc.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param assetsvc.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param assetsvc.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 0
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  ## @param assetsvc.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param assetsvc.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param assetsvc.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-  ## @param assetsvc.podLabels Extra labels for Assetsvc pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param assetsvc.podAnnotations Annotations for Assetsvc pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-  ## @param assetsvc.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param assetsvc.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: soft
-  ## nodeAffinityPreset Node affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param assetsvc.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param assetsvc.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
-    ##
-    key: ""
-    ## @param assetsvc.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param assetsvc.affinity Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: assetsvc.podAffinityPreset, assetsvc.podAntiAffinityPreset, and assetsvc.nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param assetsvc.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-  ## @param assetsvc.tolerations Tolerations for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param assetsvc.priorityClassName Priority class name for Assetsvc pods
-  ##
-  priorityClassName: ""
-  ## @param assetsvc.schedulerName Name of the k8s scheduler (other than default)
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param assetsvc.topologySpreadConstraints Topology Spread Constraints for pod assignment
-  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
-  ## The value is evaluated as a template
-  ##
-  topologySpreadConstraints: []
-  ## @param assetsvc.hostAliases Custom host aliases for Assetsvc pods
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param assetsvc.sidecars Add additional sidecar containers to the Assetsvc pod(s)
-  ## e.g:
-  ## sidecars:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  sidecars: []
-  ## @param assetsvc.initContainers Add additional init containers to the Assetsvc pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: []
-  ## Assetsvc service parameters
-  ##
-  service:
-    ## @param assetsvc.service.ports.http Assetsvc service HTTP port
-    ##
-    ports:
-      http: 8080
-    ## @param assetsvc.service.annotations Additional custom annotations for Assetsvc service
-    ##
-    annotations: {}
-
 ## @section Auth Proxy parameters
 
 ## Auth Proxy configuration for OIDC support
@@ -1688,7 +1423,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.3.0-debian-11-r2
+    tag: 7.3.0-debian-11-r8
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1820,7 +1555,7 @@ pinnipedProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.4.5-debian-11-r3
+    tag: 2.4.6-debian-11-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1974,7 +1709,7 @@ rbac:
 testImage:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.21.6-debian-11-r3
+  tag: 1.21.6-debian-11-r9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2065,6 +1800,14 @@ kubeappsapis:
           ## @param kubeappsapis.pluginConfig.kappController.packages.v1alpha1.defaultAllowDowngrades Default policy for allowing applications to be downgraded to previous versions
           ## ref: https://carvel.dev/kapp-controller/docs/latest/package-consumer-concepts/#downgrading
           defaultAllowDowngrades: false
+    flux:
+      packages:
+        v1alpha1:
+          ## @param kubeappsapis.pluginConfig.flux.packages.v1alpha1.defaultUpgradePolicy Default upgrade policy generating version constraints
+          ## enum: [ "major", "minor", "patch", "none" ]
+          defaultUpgradePolicy: none
+            ## @param kubeappsapis.pluginConfig.flux.packages.v1alpha1.userManagedSecrets Default policy for handling repository secrets, either managed by the user or by kubeapps-apis
+          userManagedSecrets: false
   ## Bitnami Kubeapps-APIs image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-apis/tags/
   ## @param kubeappsapis.image.registry Kubeapps-APIs image registry
@@ -2076,7 +1819,7 @@ kubeappsapis:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.4.5-debian-11-r3
+    tag: 2.4.6-debian-11-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

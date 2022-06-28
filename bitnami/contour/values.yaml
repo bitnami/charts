@@ -557,12 +557,16 @@ envoy:
   ##
   lifecycleHooks: {}
   ## @param envoy.updateStrategy [object] Strategy to use to update Pods
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## e.g:
+  ## updateStrategy:
+  ##  type: RollingUpdate
+  ##  rollingUpdate:
+  ##    maxSurge: 25%
+  ##    maxUnavailable: 25%
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 10%
   ## @param envoy.minReadySeconds The minimum number of seconds for which a newly created Pod should be ready
   ##
   minReadySeconds: 0
