@@ -168,6 +168,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `updateStrategy.rollingUpdate`       | Odoo deployment rolling update configuration parameters                                                                  | `{}`            |
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for Odoo pods                                                        | `[]`            |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Odoo container(s)                                           | `[]`            |
+| `extraContainerPorts`                | Optionally specify extra list of additional ports for Odoo container(s)                                                  | `[]`            |
 | `sidecars`                           | Add additional sidecar containers to the Odoo pod                                                                        | `[]`            |
 | `initContainers`                     | Add additional init containers to the Odoo pods                                                                          | `[]`            |
 
