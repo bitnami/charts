@@ -45,7 +45,7 @@ jobs:
           num_charts_changed="$(echo "$charts_dirs_changed" | grep -c "bitnami" || true)"
           num_version_bumps="$(echo "$files_changed_data" | jq -r '[.[] | select(.filename|endswith("Chart.yaml")) | select(.patch|contains("+version")) ] | length' )"
 
-          if [[ ${{ github.actor }} = "bitnami-bot" && "$latest_commit_message" == *"readme-generator-for-helm"*  ]]; then
+          if [[ ${{ github.event.action }} = "synchronize" && ${{ github.actor }} = "bitnami-bot" && "$latest_commit_message" == *"readme-generator-for-helm"*  ]]; then
             echo "::set-output name=result::skip"
           elif [[ "$num_charts_changed" -ne "$num_version_bumps" ]]; then
             # Changes done in charts but version not bumped -> ERROR
