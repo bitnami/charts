@@ -235,14 +235,14 @@ controller:
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param controller.extraArgs Extra arguments to pass to the Webhook container
+  ## @param controller.extraArgs Extra arguments to pass to the Controller container
   ## E.g:
   ## extraArgs:
   ##   - name: FOO
   ##     value: "bar"
   ##
-  extraArgs: [ ]
-  ## @param controller.extraEnvVars Add extra environment variables to the Controller pod
+  extraArgs: []
+  ## @param controller.extraEnvVars Add extra environment variables to the Controller container
   ## E.g:
   ## extraEnvVars:
   ##   - name: FOO
@@ -503,7 +503,7 @@ webhook:
   ##   - name: FOO
   ##     value: "bar"
   ##
-  extraArgs: [ ]
+  extraArgs: []
   ## @param webhook.extraEnvVars Add extra environment variables to the Webhook container
   ## E.g:
   ## extraEnvVars:
@@ -712,7 +712,7 @@ cainjector:
   ##   - name: FOO
   ##     value: "bar"
   ##
-  extraArgs: [ ]
+  extraArgs: []
   ## @param cainjector.extraEnvVars Add extra environment variables to the CAInjector container
   ## E.g:
   ## extraEnvVars:
