@@ -266,7 +266,7 @@ $ helm uninstall my-release
 | `envoy.logLevel`                                    | Envoy log level                                                                                                       | `info`                |
 | `envoy.service.targetPorts`                         | Map the controller service HTTP/HTTPS port                                                                            | `{}`                  |
 | `envoy.service.type`                                | Type of Envoy service to create                                                                                       | `LoadBalancer`        |
-| `envoy.service.externalTrafficPolicy`               | Envoy Service external cluster policy. If `envoy.service.type` is NodePort or LoadBalancer                            | `Local`               |
+| `envoy.service.externalTrafficPolicy`               | Envoy Service external cluster policy. If `envoy.service.type` is NodePort or LoadBalancer                            | `""`                  |
 | `envoy.service.labels`                              | Labels to add to te envoy service                                                                                     | `{}`                  |
 | `envoy.service.clusterIP`                           | Internal envoy cluster service IP                                                                                     | `""`                  |
 | `envoy.service.externalIPs`                         | Envoy service external IP addresses                                                                                   | `[]`                  |
