@@ -1,7 +1,7 @@
 annotations:
   category: CMS
 apiVersion: v2
-appVersion: 9.3.15
+appVersion: 9.3.16
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -31,4 +31,4 @@ name: drupal
 sources:
   - https://github.com/bitnami/bitnami-docker-drupal
   - https://www.drupal.org/
-version: 12.2.8
+version: 12.2.11

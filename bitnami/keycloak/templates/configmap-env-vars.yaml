@@ -12,7 +12,6 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  KEYCLOAK_CREATE_ADMIN_USER: {{ ternary "true" "false" .Values.auth.createAdminUser | quote }}
   KEYCLOAK_ADMIN_USER: {{ .Values.auth.adminUser | quote }}
   KEYCLOAK_MANAGEMENT_USER: {{ .Values.auth.managementUser | quote }}
   KEYCLOAK_HTTP_PORT: {{ .Values.containerPorts.http | quote }}
@@ -32,4 +31,10 @@ data:
   KEYCLOAK_CACHE_TYPE: "ispn"
   KEYCLOAK_CACHE_STACK: "kubernetes"
   JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless.%s" (include "keycloak.fullname" .) .Release.Namespace }}
+  {{- else }}
+  KEYCLOAK_CACHE_TYPE: "local"
   {{- end }}
+  {{- if .Values.logging }}
+  KEYCLOAK_LOG_OUTPUT: {{ .Values.logging.output | quote }}
+  {{- end }}
+

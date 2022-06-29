@@ -23,4 +23,5 @@ name: consul
 sources:
   - https://github.com/bitnami/bitnami-docker-consul
   - https://www.consul.io/
-version: 10.6.3
+version: 10.7.0
+

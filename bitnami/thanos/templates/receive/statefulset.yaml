@@ -202,7 +202,7 @@ spec:
             httpGet:
               path: /-/ready
               port: http
-          {{- else if .Values.receive.customReadinessProbe }}
+          {{- else if .Values.receive.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.receive.lifecycleHooks }}

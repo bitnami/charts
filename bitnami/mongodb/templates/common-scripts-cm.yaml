@@ -29,7 +29,7 @@ data:
     VERSION_MAJOR="$(get_sematic_version "$VERSION" 1)"
     VERSION_MINOR="$(get_sematic_version "$VERSION" 2)"
     VERSION_PATCH="$(get_sematic_version "$VERSION" 3)"
-    if [[ "$VERSION_MAJOR" -ge 5 ]] || [[ "$VERSION_MAJOR" -ge 4 ]] && [[ "$VERSION_MINOR" -ge 4 ]] && [[ "$VERSION_PATCH" -ge 2 ]]; then
+    if [[ ( "$VERSION_MAJOR" -ge 5 ) || ( "$VERSION_MAJOR" -ge 4 && "$VERSION_MINOR" -ge 4 && "$VERSION_PATCH" -ge 2 ) ]]; then
         mongosh $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
     else
         mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.isMaster().ismaster || db.isMaster().secondary' | grep -q 'true'
