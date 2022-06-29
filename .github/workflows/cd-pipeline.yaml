@@ -1,4 +1,4 @@
-name: 'VIB Publish'
+name: 'CD Pipeline'
 on: # rebuild any PRs and main branch changes
   push:
     branches:
@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: get-chart
     if: ${{ needs.get-chart.outputs.result == 'ok' }}
-    name: Publish
+    name: VIB Publish
     steps:
       - uses: actions/checkout@v2
         name: Checkout Repository
