@@ -7,7 +7,7 @@ Elasticsearch is a distributed search and analytics engine. It is used for web s
 [Overview of Elasticsearch](https://www.elastic.co/products/elasticsearch)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -67,6 +67,7 @@ $ helm delete --purge my-release
 | `global.elasticsearch.service.ports.restAPI` | Elasticsearch service restAPI port to be used in the Kibana subchart (ignored if kibanaEnabled=false) | `9200`          |
 | `global.kibanaEnabled`                       | Whether or not to enable Kibana                                                                       | `false`         |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -82,6 +83,7 @@ $ helm delete --purge my-release
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
+
 
 ### Elasticsearch cluster Parameters
 
@@ -132,6 +134,7 @@ $ helm delete --purge my-release
 | `security.tls.secretTruststoreKey`         | Name of the secret key containing the Truststore password                                                                                           | `""`                           |
 | `security.tls.secretKey`                   | Name of the secret key containing the PEM key password                                                                                              | `""`                           |
 
+
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -163,6 +166,7 @@ $ helm delete --purge my-release
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+
 
 ### Master-elegible nodes parameters
 
@@ -246,6 +250,7 @@ $ helm delete --purge my-release
 | `master.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                                                      | `""`                |
 | `master.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                                                   | `""`                |
 
+
 ### Data-only nodes parameters
 
 | Name                                               | Description                                                                                                                                      | Value               |
@@ -327,6 +332,7 @@ $ helm delete --purge my-release
 | `data.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                                                    | `""`                |
 | `data.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                                                 | `""`                |
 
+
 ### Coordinating-only nodes parameters
 
 | Name                                                       | Description                                                                                                               | Value           |
@@ -399,6 +405,7 @@ $ helm delete --purge my-release
 | `coordinating.autoscaling.maxReplicas`                     | Configure a maximum amount of pods                                                                                        | `11`            |
 | `coordinating.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                             | `""`            |
 | `coordinating.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                          | `""`            |
+
 
 ### Ingest-only nodes parameters
 
@@ -503,6 +510,7 @@ $ helm delete --purge my-release
 | `ingest.ingress.secrets`                             | Custom TLS certificates as secrets                                                                                               | `[]`                         |
 | `ingest.ingress.extraRules`                          | Additional rules to be covered with this ingress record                                                                          | `[]`                         |
 
+
 ### Elasticsearch curator parameters
 
 | Name                                                  | Description                                                                                                                                 | Value                           |
@@ -568,6 +576,7 @@ $ helm delete --purge my-release
 | `curator.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                      | `true`                          |
 | `curator.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`                            |
 | `curator.psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`                         |
+
 
 ### Metrics parameters
 
@@ -651,6 +660,7 @@ $ helm delete --purge my-release
 | `metrics.prometheusRule.additionalLabels`       | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                          | `{}`                             |
 | `metrics.prometheusRule.rules`                  | Prometheus Rule definitions                                                                                                    | `[]`                             |
 
+
 ### Init Container Parameters
 
 | Name                                   | Description                                                                                                                                               | Value                   |
@@ -672,12 +682,14 @@ $ helm delete --purge my-release
 | `sysctlImage.resources.limits`         | The resources limits for the container                                                                                                                    | `{}`                    |
 | `sysctlImage.resources.requests`       | The requested resources for the container                                                                                                                 | `{}`                    |
 
+
 ### Kibana Parameters
 
 | Name                         | Description                                                               | Value                                                   |
 | ---------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `kibana.elasticsearch.hosts` | Array containing hostnames for the ES instances. Used to generate the URL | `[]`                                                    |
 | `kibana.elasticsearch.port`  | Port to connect Kibana and ES instance. Used to generate the URL          | `{{ include "elasticsearch.service.ports.restAPI" . }}` |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -734,7 +746,7 @@ When enabling elasticsearch' rest endpoint encryption you will also need to set 
 security:
   enabled: true
   # PASSWORD must be the same value passed to elasticsearch to get an "out of the box" experience
-  elasticPassword: '<PASSWORD>'
+  elasticPassword: "<PASSWORD>"
   tls:
     # AutoGenerate TLS certs for elastic
     autoGenerated: true
@@ -745,8 +757,8 @@ kibana:
       auth:
         enabled: true
         # default in the elasticsearch chart is elastic
-        kibanaUsername: '<USERNAME>'
-        kibanaPassword: '<PASSWORD>'
+        kibanaUsername: "<USERNAME>"
+        kibanaPassword: "<PASSWORD>"
       tls:
         # Instruct kibana to connect to elastic over https
         enabled: true
@@ -807,12 +819,13 @@ extraVolumes:
 extraVolumeMounts:
   - name: snapshot-repository
     mountPath: /snapshots
-snapshotRepoPath: '/snapshots'
+snapshotRepoPath: "/snapshots"
 ```
 
 ### Sidecars and Init Containers
 
 If you have a need for additional containers to run within the same pod as Elasticsearch components (e.g. an additional metrics or logging exporter), you can do so via the `XXX.sidecars` parameter(s), where XXX is placeholder you need to replace with the actual component(s). Simply define your container according to the Kubernetes container spec.
+
 
 ```yaml
 sidecars:
@@ -872,9 +885,9 @@ This major release refactors the bitnami/elasticsearch chart, adding some organi
 - Renamed several values to be in line with the rest of the catalog.
 
 This major release also upgrades Elasticsearch to its version 8.x.x and the updates Kibana subchart.
-
 - Upgrade to Elasticsearch 8
 - Upgrade Kibana subchart.
+
 
 In addition, several modifications have been performed adding missing features and renaming values, in order to get aligned with the rest of the assets in the Bitnami charts repository.
 
@@ -928,9 +941,9 @@ This version standardizes the way of defining Ingress rules in the Kibana subcha
 **What changes were introduced in this major version?**
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
-- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
-- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
 **Considerations when upgrading to this version**
 
@@ -1015,4 +1028,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License
+limitations under the License.
