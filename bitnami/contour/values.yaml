@@ -743,8 +743,10 @@ envoy:
     ##
     type: LoadBalancer
     ## @param envoy.service.externalTrafficPolicy Envoy Service external cluster policy. If `envoy.service.type` is NodePort or LoadBalancer
-    ##
-    externalTrafficPolicy: Local
+    ## e.g.:
+    ## externalTrafficPolicy: Local
+    #
+    externalTrafficPolicy: ""
     ## @param envoy.service.labels Labels to add to te envoy service
     ##
     labels: {}
