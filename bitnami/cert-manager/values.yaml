@@ -235,7 +235,7 @@ controller:
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param extraArgs Extra arguments to pass to the Webhook container
+  ## @param controller.extraArgs Extra arguments to pass to the Webhook container
   ## E.g:
   ## extraArgs:
   ##   - name: FOO
@@ -497,7 +497,7 @@ webhook:
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param extraArgs Extra arguments to pass to the Webhook container
+  ## @param webhook.extraArgs Extra arguments to pass to the Webhook container
   ## E.g:
   ## extraArgs:
   ##   - name: FOO
@@ -706,7 +706,7 @@ cainjector:
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param extraArgs Extra arguments to pass to the CAInjector container
+  ## @param cainjector.extraArgs Extra arguments to pass to the CAInjector container
   ## E.g:
   ## extraArgs:
   ##   - name: FOO
