@@ -78,8 +78,6 @@ adminPassword: ""
 ## the "domain" should be the LoadBalancer IP
 ##
 externalURL: https://core.harbor.domain
-## The proxy settings for updating clair vulnerabilities from the Internet and replicating
-## artifacts from/to the registries that cannot be reached directly
 ## Note: If Harbor is exposed via Ingress, the NGINX server will not be used
 ## @param proxy.httpProxy The URL of the HTTP proxy server
 ## @param proxy.httpsProxy The URL of the HTTPS proxy server
@@ -93,7 +91,6 @@ proxy:
   components:
     - core
     - jobservice
-    - clair
     - trivy
 ## @param logLevel The log level used for Harbor services. Allowed values are [ fatal \| error \| warn \| info \| debug \| trace ]
 ##
@@ -102,10 +99,10 @@ logLevel: debug
 ## Note: TLS cert files need to provided in each components in advance.
 ##
 internalTLS:
-  ## @param internalTLS.enabled Use TLS in all the supported containers: chartmuseum, clair, core, jobservice, portal, registry and trivy
+  ## @param internalTLS.enabled Use TLS in all the supported containers: chartmuseum, core, jobservice, portal, registry and trivy
   ##
   enabled: false
-  ## @param internalTLS.caBundleSecret Name of an existing secret with a custom CA that will be injected into the trust store for chartmuseum, clair, core, jobservice, registry, trivy components
+  ## @param internalTLS.caBundleSecret Name of an existing secret with a custom CA that will be injected into the trust store for chartmuseum, core, jobservice, registry, trivy components
   ## The secret must contain the key "ca.crt"
   ##
   caBundleSecret: ""
@@ -665,7 +662,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r440
+    tag: 11-debian-11-r7
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -709,7 +706,7 @@ nginx:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-10-r122
+    tag: 1.21.6-debian-11-r8
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -918,7 +915,7 @@ nginx:
   ## @param nginx.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param nginx.priorityClassName Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
@@ -972,7 +969,7 @@ portal:
   image:
     registry: docker.io
     repository: bitnami/harbor-portal
-    tag: 2.5.1-debian-10-r0
+    tag: 2.5.1-debian-11-r7
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1164,7 +1161,7 @@ portal:
   ## @param portal.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param portal.priorityClassName Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
@@ -1230,7 +1227,7 @@ core:
   image:
     registry: docker.io
     repository: bitnami/harbor-core
-    tag: 2.5.1-debian-10-r0
+    tag: 2.5.1-debian-11-r7
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1453,7 +1450,7 @@ core:
   ## @param core.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param core.priorityClassName Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
@@ -1521,7 +1518,7 @@ jobservice:
   image:
     registry: docker.io
     repository: bitnami/harbor-jobservice
-    tag: 2.5.1-debian-10-r0
+    tag: 2.5.1-debian-11-r7
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1729,7 +1726,7 @@ jobservice:
   ## @param jobservice.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param jobservice.priorityClassName Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
@@ -1910,7 +1907,7 @@ registry:
   ## @param registry.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param registry.priorityClassName Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
@@ -1962,7 +1959,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registry
-      tag: 2.5.1-debian-10-r0
+      tag: 2.5.1-debian-11-r7
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2107,7 +2104,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registryctl
-      tag: 2.5.1-debian-10-r0
+      tag: 2.5.1-debian-11-r7
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2248,7 +2245,7 @@ chartmuseum:
   image:
     registry: docker.io
     repository: bitnami/chartmuseum
-    tag: 0.14.0-debian-10-r115
+    tag: 0.14.0-debian-11-r7
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2490,7 +2487,7 @@ chartmuseum:
   ## @param chartmuseum.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param chartmuseum.priorityClassName Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
@@ -2540,419 +2537,6 @@ chartmuseum:
       http: 80
       https: 443
 
-## @section Clair Parameters
-##
-
-clair:
-  ## @param clair.enabled Enable Clair scanner. Add it as an additional interrogation service by following https://goharbor.io/docs/latest/administration/vulnerability-scanning/pluggable-scanners
-  ##
-  enabled: false
-  ## The http(s) proxy used to update vulnerabilities database from internet
-  ## @param clair.httpProxy The http proxy used to update vulnerabilities database from internet
-  ## @param clair.httpsProxy The https proxy used to update vulnerabilities database from internet
-  ##
-  httpProxy: ""
-  httpsProxy: ""
-  ## @param clair.updatersInterval The interval of clair updaters (hours), set to 0 to disable
-  ## disable the updaters
-  ##
-  updatersInterval: 12
-  ## Use TLS in the container
-  ##
-  tls:
-    ## @param clair.tls.existingSecret Name of an existing secret with the certificates for internal TLS access
-    ## Requires `internalTLS.enabled` to be set to `true``
-    ## Self-signed TLS certificates will be used otherwise
-    ##
-    existingSecret: ""
-  ## @param clair.replicaCount Number of Clair replicas
-  ##
-  replicaCount: 1
-  ## Configure Clair pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param clair.podSecurityContext.enabled Enabled Clair pods' Security Context
-  ## @param clair.podSecurityContext.fsGroup Set Clair pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1001
-  ## @param clair.updateStrategy.type Clair deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
-  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
-  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
-  ##
-  updateStrategy:
-    type: RollingUpdate
-  ## @param clair.hostAliases Clair pods host aliases
-  ##
-  hostAliases: []
-  ## @param clair.podLabels Add additional labels to the Clair pods (evaluated as a template)
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param clair.podAnnotations Annotations to add to the Clair pods (evaluated as a template)
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-  ## @param clair.podAffinityPreset Clair Pod affinity preset. Ignored if `clair.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param clair.podAntiAffinityPreset Clair Pod anti-affinity preset. Ignored if `clair.affinity` is set. Allowed values: `soft` or `hard`
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: soft
-  ## Node affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param clair.nodeAffinityPreset.type Clair Node affinity preset type. Ignored if `clair.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param clair.nodeAffinityPreset.key Clair Node label key to match Ignored if `clair.affinity` is set.
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
-    ##
-    key: ""
-    ## @param clair.nodeAffinityPreset.values Clair Node label values to match. Ignored if `clair.affinity` is set.
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param clair.affinity Clair Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: clair.podAffinityPreset, clair.podAntiAffinityPreset, and clair.nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param clair.nodeSelector Clair Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-  ## @param clair.tolerations Clair Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param clair.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
-  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
-  ##
-  topologySpreadConstraints: {}
-  ## @param clair.priorityClassName Priority Class Name
-  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
-  ##
-  priorityClassName: ""
-  ## @param clair.schedulerName Use an alternate scheduler, e.g. "stork".
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param clair.sidecars Add additional sidecar containers to the Clair pods
-  ## Example:
-  ## sidecars:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  sidecars: []
-  ## @param clair.initContainers Add additional init containers to the Clair pods
-  ## Example:
-  ## initContainers:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  initContainers: []
-  ## @param clair.extraVolumes Optionally specify extra list of additional volumes for the Clair pods
-  ##
-  extraVolumes: []
-  ## @param clair.automountServiceAccountToken Automount service account token
-  ##
-  automountServiceAccountToken: false
-  ## Harbor needs Clair adapter to communicate with Clair API.
-  ##
-  adapter:
-    ## Bitnami Harbor Adapter for Clair image
-    ## ref: https://hub.docker.com/r/bitnami/harbor-adapter-clair/tags/
-    ## @param clair.adapter.image.registry Harbor Adapter for Clair image registry
-    ## @param clair.adapter.image.repository Harbor Adapter for Clair image repository
-    ## @param clair.adapter.image.tag Harbor Adapter for Clair image tag (immutable tags are recommended)
-    ## @param clair.adapter.image.pullPolicy Harbor Adapter for Clair image pull policy
-    ## @param clair.adapter.image.pullSecrets Harbor Adapter for Clair image pull secrets
-    ## @param clair.adapter.image.debug Enable Harbor Adapter for Clair image debug mode
-    ##
-    image:
-      registry: docker.io
-      repository: bitnami/harbor-adapter-clair
-      tag: 2.5.1-debian-10-r0
-      ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-      ##
-      pullPolicy: IfNotPresent
-      ## Optionally specify an array of imagePullSecrets.
-      ## Secrets must be manually created in the namespace.
-      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-      ## e.g:
-      ## pullSecrets:
-      ##   - myRegistryKeySecretName
-      ##
-      pullSecrets: []
-      ## Enable debug mode
-      ##
-      debug: false
-    ## @param clair.adapter.command Override default container command (useful when using custom images)
-    ##
-    command: []
-    ## @param clair.adapter.args Override default container args (useful when using custom images)
-    ##
-    args: []
-    ## @param clair.adapter.extraEnvVars Array with extra environment variables to add Harbor Adapter for Clair containers
-    ##
-    extraEnvVars: []
-    ## @param clair.adapter.extraEnvVarsCM ConfigMap containing extra environment variables for Harbor Adapter for Clair containers
-    ##
-    extraEnvVarsCM: ""
-    ## @param clair.adapter.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Harbor Adapter for Clair containers
-    ##
-    extraEnvVarsSecret: ""
-    ## @param clair.adapter.containerPorts.http Harbor Adapter for Clair HTTP container port
-    ## @param clair.adapter.containerPorts.https Harbor Adapter for Clair HTTPS container port
-    ##
-    containerPorts:
-      http: 8080
-      https: 8443
-    ## Configure extra options for Harbor Adapter for Clair containers' liveness, readiness and startup probes
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-    ## @param clair.adapter.livenessProbe.enabled Enable livenessProbe on Harbor Adapter for Clair containers
-    ## @param clair.adapter.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-    ## @param clair.adapter.livenessProbe.periodSeconds Period seconds for livenessProbe
-    ## @param clair.adapter.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-    ## @param clair.adapter.livenessProbe.failureThreshold Failure threshold for livenessProbe
-    ## @param clair.adapter.livenessProbe.successThreshold Success threshold for livenessProbe
-    ##
-    livenessProbe:
-      enabled: true
-      initialDelaySeconds: 20
-      periodSeconds: 10
-      timeoutSeconds: 5
-      failureThreshold: 6
-      successThreshold: 1
-    ## @param clair.adapter.readinessProbe.enabled Enable readinessProbe on Harbor Adapter for Clair containers
-    ## @param clair.adapter.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-    ## @param clair.adapter.readinessProbe.periodSeconds Period seconds for readinessProbe
-    ## @param clair.adapter.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-    ## @param clair.adapter.readinessProbe.failureThreshold Failure threshold for readinessProbe
-    ## @param clair.adapter.readinessProbe.successThreshold Success threshold for readinessProbe
-    ##
-    readinessProbe:
-      enabled: true
-      initialDelaySeconds: 20
-      periodSeconds: 10
-      timeoutSeconds: 5
-      failureThreshold: 6
-      successThreshold: 1
-    ## @param clair.adapter.startupProbe.enabled Enable startupProbe on Harbor Adapter for Clair containers
-    ## @param clair.adapter.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-    ## @param clair.adapter.startupProbe.periodSeconds Period seconds for startupProbe
-    ## @param clair.adapter.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-    ## @param clair.adapter.startupProbe.failureThreshold Failure threshold for startupProbe
-    ## @param clair.adapter.startupProbe.successThreshold Success threshold for startupProbe
-    ##
-    startupProbe:
-      enabled: false
-      initialDelaySeconds: 5
-      periodSeconds: 10
-      timeoutSeconds: 1
-      failureThreshold: 15
-      successThreshold: 1
-    ## @param clair.adapter.customLivenessProbe Custom livenessProbe that overrides the default one
-    ##
-    customLivenessProbe: {}
-    ## @param clair.adapter.customReadinessProbe Custom readinessProbe that overrides the default one
-    ##
-    customReadinessProbe: {}
-    ## @param clair.adapter.customStartupProbe Custom startupProbe that overrides the default one
-    ##
-    customStartupProbe: {}
-    ## Harbor Adapter for Clair resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-    ## @param clair.adapter.resources.limits The resources limits for the Harbor Adapter for Clair containers
-    ## @param clair.adapter.resources.requests The requested resources for the Harbor Adapter for Clair containers
-    ##
-    resources:
-      limits: {}
-      requests: {}
-    ## Configure Harbor Adapter for Clair containers (only main one) Security Context
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param clair.adapter.containerSecurityContext.enabled Enabled Harbor Adapter for Clair containers' Security Context
-    ## @param clair.adapter.containerSecurityContext.runAsUser Set Harbor Adapter for Clair containers' Security Context runAsUser
-    ## @param clair.adapter.containerSecurityContext.runAsNonRoot Set Harbor Adapter for Clair containers' Security Context runAsNonRoot
-    ##
-    containerSecurityContext:
-      enabled: true
-      runAsUser: 1001
-      runAsNonRoot: true
-    ## @param clair.adapter.lifecycleHooks LifecycleHook for the Harbor Adapter for Clair container(s) to automate configuration before or after startup
-    ##
-    lifecycleHooks: {}
-    ## @param clair.adapter.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Harbor Adapter for Clair pods
-    ##
-    extraVolumeMounts: []
-    ## Harbor Adapter for Clair service configuration
-    ##
-    service:
-      ## @param clair.adapter.service.ports.http Harbor Adapter for Clair HTTP service port
-      ## @param clair.adapter.service.ports.https Harbor Adapter for Clair HTTPS service port
-      ##
-      ports:
-        http: 8080
-        https: 8443
-  ## Clair main container properties
-  ##
-  server:
-    ## Bitnami Harbor Clair image
-    ## ref: https://hub.docker.com/r/bitnami/harbor-clair/tags/
-    ## @param clair.server.image.registry Harbor Clair image registry
-    ## @param clair.server.image.repository Harbor Clair image repository
-    ## @param clair.server.image.tag Harbor Clair image tag (immutable tags are recommended)
-    ## @param clair.server.image.pullPolicy Harbor Clair image pull policy
-    ## @param clair.server.image.pullSecrets Harbor Clair image pull secrets
-    ## @param clair.server.image.debug Enable Harbor Clair image debug mode
-    ##
-    image:
-      registry: docker.io
-      repository: bitnami/harbor-clair
-      tag: 2.5.1-debian-10-r0
-      ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-      ##
-      pullPolicy: IfNotPresent
-      ## Optionally specify an array of imagePullSecrets.
-      ## Secrets must be manually created in the namespace.
-      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-      ## e.g:
-      ## pullSecrets:
-      ##   - myRegistryKeySecretName
-      ##
-      pullSecrets: []
-      ## Enable debug mode
-      ##
-      debug: false
-    ## @param clair.server.command Override default container command (useful when using custom images)
-    ##
-    command: []
-    ## @param clair.server.args Override default container args (useful when using custom images)
-    ##
-    args: []
-    ## @param clair.server.extraEnvVars Array with extra environment variables to add Harbor Clair containers
-    ##
-    extraEnvVars: []
-    ## @param clair.server.extraEnvVarsCM ConfigMap containing extra environment variables for Harbor Clair containers
-    ##
-    extraEnvVarsCM: ""
-    ## @param clair.server.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Harbor Clair containers
-    ##
-    extraEnvVarsSecret: ""
-    ## @param clair.server.containerPorts.api Harbor Clair API container port
-    ## @param clair.server.containerPorts.health Harbor Clair health container port
-    ##
-    containerPorts:
-      api: 6060
-      health: 6061
-    ## Configure extra options for Harbor Clair containers' liveness, readiness and startup probes
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-    ## @param clair.server.livenessProbe.enabled Enable livenessProbe on Harbor Clair containers
-    ## @param clair.server.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-    ## @param clair.server.livenessProbe.periodSeconds Period seconds for livenessProbe
-    ## @param clair.server.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-    ## @param clair.server.livenessProbe.failureThreshold Failure threshold for livenessProbe
-    ## @param clair.server.livenessProbe.successThreshold Success threshold for livenessProbe
-    ##
-    livenessProbe:
-      enabled: true
-      initialDelaySeconds: 20
-      periodSeconds: 10
-      timeoutSeconds: 5
-      failureThreshold: 6
-      successThreshold: 1
-    ## @param clair.server.readinessProbe.enabled Enable readinessProbe on Harbor Clair containers
-    ## @param clair.server.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-    ## @param clair.server.readinessProbe.periodSeconds Period seconds for readinessProbe
-    ## @param clair.server.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-    ## @param clair.server.readinessProbe.failureThreshold Failure threshold for readinessProbe
-    ## @param clair.server.readinessProbe.successThreshold Success threshold for readinessProbe
-    ##
-    readinessProbe:
-      enabled: true
-      initialDelaySeconds: 20
-      periodSeconds: 10
-      timeoutSeconds: 5
-      failureThreshold: 6
-      successThreshold: 1
-    ## @param clair.server.startupProbe.enabled Enable startupProbe on Harbor Clair containers
-    ## @param clair.server.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-    ## @param clair.server.startupProbe.periodSeconds Period seconds for startupProbe
-    ## @param clair.server.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-    ## @param clair.server.startupProbe.failureThreshold Failure threshold for startupProbe
-    ## @param clair.server.startupProbe.successThreshold Success threshold for startupProbe
-    ##
-    startupProbe:
-      enabled: false
-      initialDelaySeconds: 5
-      periodSeconds: 10
-      timeoutSeconds: 1
-      failureThreshold: 15
-      successThreshold: 1
-    ## @param clair.server.customLivenessProbe Custom livenessProbe that overrides the default one
-    ##
-    customLivenessProbe: {}
-    ## @param clair.server.customReadinessProbe Custom readinessProbe that overrides the default one
-    ##
-    customReadinessProbe: {}
-    ## @param clair.server.customStartupProbe Custom startupProbe that overrides the default one
-    ##
-    customStartupProbe: {}
-    ## Harbor Clair resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-    ## @param clair.server.resources.limits The resources limits for the Harbor Clair containers
-    ## @param clair.server.resources.requests The requested resources for the Harbor Clair containers
-    ##
-    resources:
-      limits: {}
-      requests: {}
-    ## Configure Harbor Clair containers (only main one) Security Context
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param clair.server.containerSecurityContext.enabled Enabled Harbor Clair containers' Security Context
-    ## @param clair.server.containerSecurityContext.runAsUser Set Harbor Clair containers' Security Context runAsUser
-    ## @param clair.server.containerSecurityContext.runAsNonRoot Set Harbor Clair containers' Security Context runAsNonRoot
-    ##
-    containerSecurityContext:
-      enabled: true
-      runAsUser: 1001
-      runAsNonRoot: true
-    ## @param clair.server.lifecycleHooks LifecycleHook for the Harbor Clair container(s) to automate configuration before or after startup
-    ##
-    lifecycleHooks: {}
-    ## @param clair.server.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Harbor Clair pods
-    ##
-    extraVolumeMounts: []
-    ## Harbor Clair service configuration
-    ##
-    service:
-      ## @param clair.server.service.ports.api Harbor Clair API service port
-      ## @param clair.server.service.ports.health Harbor Clair health service port
-      ##
-      ports:
-        api: 6060
-        health: 6061
-
 ## @section Notary Parameters
 ##
 
@@ -2983,7 +2567,7 @@ notary:
     image:
       registry: docker.io
       repository: bitnami/harbor-notary-server
-      tag: 2.5.1-debian-10-r0
+      tag: 2.5.1-debian-11-r7
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3165,7 +2749,7 @@ notary:
     ## @param notary.server.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
     ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
     ##
-    topologySpreadConstraints: {}
+    topologySpreadConstraints: []
     ## @param notary.server.priorityClassName Priority Class Name
     ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
     ##
@@ -3218,7 +2802,7 @@ notary:
     image:
       registry: docker.io
       repository: bitnami/harbor-notary-signer
-      tag: 2.5.1-debian-10-r0
+      tag: 2.5.1-debian-11-r7
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3400,7 +2984,7 @@ notary:
     ## @param notary.signer.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
     ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
     ##
-    topologySpreadConstraints: {}
+    topologySpreadConstraints: []
     ## @param notary.signer.priorityClassName Priority Class Name
     ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
     ##
@@ -3466,7 +3050,7 @@ trivy:
   image:
     registry: docker.io
     repository: bitnami/harbor-adapter-trivy
-    tag: 2.5.0-debian-10-r48
+    tag: 2.5.1-debian-11-r7
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3706,7 +3290,7 @@ trivy:
   ## @param trivy.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param trivy.priorityClassName Priority Class Name
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   ##
@@ -3772,7 +3356,7 @@ exporter:
   image:
     registry: docker.io
     repository: bitnami/harbor-exporter
-    tag: 2.5.1-debian-10-r0
+    tag: 2.5.1-debian-11-r7
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3971,7 +3555,7 @@ exporter:
   ## @param exporter.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param exporter.initContainers Add additional init containers to the pod (evaluated as a template)
   ##
   initContainers: []
@@ -4019,7 +3603,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 13.7.0-debian-10-r16
+    tag: 13.7.0-debian-11-r7
   auth:
     enablePostgresUser: true
     postgresPassword: not-secure-database-password
@@ -4052,9 +3636,6 @@ postgresql:
 ## @param externalDatabase.password Password for the non-root username for Harbor
 ## @param externalDatabase.sslmode External database ssl mode
 ## @param externalDatabase.coreDatabase External database name for core
-## @param externalDatabase.clairDatabase External database name for clair
-## @param externalDatabase.clairUsername External database username for clair
-## @param externalDatabase.clairPassword External database password for clair
 ## @param externalDatabase.notaryServerDatabase External database name for notary server
 ## @param externalDatabase.notaryServerUsername External database username for notary server
 ## @param externalDatabase.notaryServerPassword External database password for notary server
@@ -4069,9 +3650,6 @@ externalDatabase:
   password: ""
   sslmode: disable
   coreDatabase: ""
-  clairDatabase: ""
-  clairUsername: ""
-  clairPassword: ""
   notaryServerDatabase: ""
   notaryServerUsername: ""
   notaryServerPassword: ""
@@ -4112,7 +3690,6 @@ redis:
 ## @param externalRedis.jobserviceDatabaseIndex Index for jobservice database
 ## @param externalRedis.registryDatabaseIndex Index for registry database
 ## @param externalRedis.chartmuseumDatabaseIndex Index for chartmuseum database
-## @param externalRedis.clairAdapterDatabaseIndex Index for chartmuseum database
 ## @param externalRedis.trivyAdapterDatabaseIndex Index for chartmuseum database
 ##
 externalRedis:
@@ -4123,7 +3700,6 @@ externalRedis:
   jobserviceDatabaseIndex: '1'
   registryDatabaseIndex: '2'
   chartmuseumDatabaseIndex: '3'
-  clairAdapterDatabaseIndex: '4'
   trivyAdapterDatabaseIndex: '5'
   ## Redis&reg; sentinel configuration
   ## @param externalRedis.sentinel.enabled If external redis with sentinal is used, set it to `true`

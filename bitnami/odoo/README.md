@@ -21,7 +21,7 @@ This chart bootstraps a [Odoo](https://github.com/bitnami/bitnami-docker-odoo) d
 
 Odoo Apps can be used as stand-alone applications, but they also integrate seamlessly so you get a full-featured Open Source ERP when you install several Apps.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -68,24 +68,24 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                             | Value                         |
-| ------------------------ | --------------------------------------------------------------------------------------- | ----------------------------- |
-| `kubeVersion`            | Override Kubernetes version                                                             | `""`                          |
-| `nameOverride`           | String to partially override common.names.fullname                                      | `""`                          |
-| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`                          |
-| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`                          |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`                          |
-| `clusterDomain`          | Default Kubernetes cluster domain                                                       | `cluster.local`               |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`                          |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`                       |
-| `diagnosticMode.command` | Command to override all containers in the the statefulset                               | `["sleep"]`                   |
-| `diagnosticMode.args`    | Args to override all containers in the the statefulset                                  | `["infinity"]`                |
-| `image.registry`         | Odoo image registry                                                                     | `docker.io`                   |
-| `image.repository`       | Odoo image repository                                                                   | `bitnami/odoo`                |
-| `image.tag`              | Odoo image tag (immutable tags are recommended)                                         | `15.0.20220510-debian-10-r12` |
-| `image.pullPolicy`       | Odoo image pull policy                                                                  | `IfNotPresent`                |
-| `image.pullSecrets`      | Odoo image pull secrets                                                                 | `[]`                          |
-| `image.debug`            | Enable image debug mode                                                                 | `false`                       |
+| Name                     | Description                                                                             | Value                        |
+| ------------------------ | --------------------------------------------------------------------------------------- | ---------------------------- |
+| `kubeVersion`            | Override Kubernetes version                                                             | `""`                         |
+| `nameOverride`           | String to partially override common.names.fullname                                      | `""`                         |
+| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`                         |
+| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`                         |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`                         |
+| `clusterDomain`          | Default Kubernetes cluster domain                                                       | `cluster.local`              |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`                         |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`                      |
+| `diagnosticMode.command` | Command to override all containers in the the statefulset                               | `["sleep"]`                  |
+| `diagnosticMode.args`    | Args to override all containers in the the statefulset                                  | `["infinity"]`               |
+| `image.registry`         | Odoo image registry                                                                     | `docker.io`                  |
+| `image.repository`       | Odoo image repository                                                                   | `bitnami/odoo`               |
+| `image.tag`              | Odoo image tag (immutable tags are recommended)                                         | `15.0.20220610-debian-11-r0` |
+| `image.pullPolicy`       | Odoo image pull policy                                                                  | `IfNotPresent`               |
+| `image.pullSecrets`      | Odoo image pull secrets                                                                 | `[]`                         |
+| `image.debug`            | Enable image debug mode                                                                 | `false`                      |
 
 
 ### Odoo Configuration parameters
@@ -160,7 +160,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                           | Affinity for pod assignment                                                                                              | `{}`            |
 | `nodeSelector`                       | Node labels for pod assignment                                                                                           | `{}`            |
 | `tolerations`                        | Tolerations for pod assignment                                                                                           | `[]`            |
-| `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
 | `priorityClassName`                  | Odoo pods' Priority Class Name                                                                                           | `""`            |
 | `schedulerName`                      | Use an alternate scheduler, e.g. "stork".                                                                                | `""`            |
 | `terminationGracePeriodSeconds`      | Seconds Odoo pod needs to terminate gracefully                                                                           | `""`            |

@@ -47,7 +47,7 @@ To access Keycloak from outside the cluster execute the following commands:
 {{- end }}
 
 2. Access Keycloak using the obtained URL.
-{{- if .Values.auth.createAdminUser }}
+{{- if and .Values.auth.adminUser .Values.auth.adminPassword }}
 3. Access the Administration Console using the following credentials:
 
   echo Username: {{ .Values.auth.adminUser }}

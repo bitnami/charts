@@ -95,7 +95,7 @@ spec:
                 xargs chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
               {{- end }}
               {{- end }}
-            {{- if .Values.persistence.commitStorageClass }}
+            {{- if .Values.persistence.commitLogMountPath }}
             - /bin/sh
             - -cx
             - |
@@ -346,7 +346,7 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
-                  nodetool status
+                  nodetool info | grep "Native Transport active: true"
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -387,14 +387,18 @@ spec:
           {{- else if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if and (not .Values.lifecycleHooks) (not .Values.persistence.enabled) }}
+          {{- if not .Values.lifecycleHooks }}
           lifecycle:
             preStop:
               exec:
                 command:
                   - bash
                   - -ec
+                  {{- if not .Values.persistence.enabled }}
                   - nodetool decommission
+                  {{- else }}
+                  - nodetool drain
+                  {{- end }}
           {{- else if .Values.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
@@ -426,7 +430,7 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
-            {{- if .Values.persistence.commitStorageClass }}
+            {{- if .Values.persistence.commitLogMountPath }}
             - name: commitlog
               mountPath: {{ .Values.persistence.commitLogMountPath }}
             {{- end }}

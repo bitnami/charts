@@ -71,7 +71,7 @@ loki:
   image:
     registry: docker.io
     repository: bitnami/grafana-loki
-    tag: 2.5.0-debian-10-r12
+    tag: 2.5.0-debian-11-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -417,7 +417,7 @@ compactor:
   ## @param compactor.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param compactor.priorityClassName Compactor pods' priorityClassName
   ##
   priorityClassName: ""
@@ -576,7 +576,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-10-r117
+    tag: 1.21.6-debian-11-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -766,7 +766,7 @@ gateway:
   ## @param gateway.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param gateway.priorityClassName Gateway pods' priorityClassName
   ##
   priorityClassName: ""
@@ -1127,7 +1127,7 @@ indexGateway:
   ## @param indexGateway.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param indexGateway.priorityClassName index-gateway pods' priorityClassName
   ##
   priorityClassName: ""
@@ -1391,7 +1391,7 @@ distributor:
   ## @param distributor.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param distributor.priorityClassName Distributor pods' priorityClassName
   ##
   priorityClassName: ""
@@ -1655,7 +1655,7 @@ ingester:
   ## @param ingester.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param ingester.podManagementPolicy podManagementPolicy to manage scaling operation
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
@@ -1967,7 +1967,7 @@ querier:
   ## @param querier.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param querier.priorityClassName Querier pods' priorityClassName
   ##
   priorityClassName: ""
@@ -2271,7 +2271,7 @@ queryFrontend:
   ## @param queryFrontend.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param queryFrontend.priorityClassName queryFrontend pods' priorityClassName
   ##
   priorityClassName: ""
@@ -2542,7 +2542,7 @@ ruler:
   ## @param ruler.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param ruler.priorityClassName Ruler pods' priorityClassName
   ##
   priorityClassName: ""
@@ -2849,7 +2849,7 @@ tableManager:
   ## @param tableManager.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param tableManager.priorityClassName table-manager pods' priorityClassName
   ##
   priorityClassName: ""
@@ -2956,6 +2956,9 @@ tableManager:
 ## @section Promtail Deployment Parameters
 ##
 promtail:
+  ## @param promtail.enabled Deploy promtail
+  ##
+  enabled: true
   ## Bitnami Promtail image
   ## ref: https://hub.docker.com/r/bitnami/grafana-promtail/tags/
   ## @param promtail.image.registry Grafana Promtail image registry
@@ -2967,7 +2970,7 @@ promtail:
   image:
     registry: docker.io
     repository: bitnami/promtail
-    tag: 2.5.0-debian-10-r11
+    tag: 2.5.0-debian-11-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3142,7 +3145,7 @@ promtail:
   ## @param promtail.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param promtail.priorityClassName Promtail pods' priorityClassName
   ##
   priorityClassName: ""
@@ -3380,7 +3383,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r434
+    tag: 11-debian-11-r3
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -3500,7 +3503,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.15-debian-10-r53
+    tag: 1.6.15-debian-11-r2
 
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -3540,7 +3543,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.15-debian-10-r53
+    tag: 1.6.15-debian-11-r2
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
   architecture: high-availability
@@ -3580,7 +3583,7 @@ memcachedindexqueries:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.15-debian-10-r53
+    tag: 1.6.15-debian-11-r2
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
   architecture: high-availability
@@ -3619,7 +3622,7 @@ memcachedindexwrites:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.15-debian-10-r53
+    tag: 1.6.15-debian-11-r2
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##
   architecture: high-availability

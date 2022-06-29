@@ -19,13 +19,13 @@ $ helm install my-release bitnami/redis
 
 This chart bootstraps a [Redis&reg;](https://github.com/bitnami/bitnami-docker-redis) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ### Choose between Redis&reg; Helm Chart and Redis&reg; Cluster Helm Chart
 
 You can choose any of the two Redis&reg; Helm charts for deploying a Redis&reg; cluster.
 
-1. [Redis&reg; Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) will deploy a master-slave cluster, with the [option](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-sentinel-configuration-parameters) of enabling using Redis&reg; Sentinel.
+1. [Redis&reg; Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) will deploy a master-replica cluster, with the [option](https://github.com/bitnami/charts/tree/master/bitnami/redis#redis-sentinel-configuration-parameters) of enabling using Redis&reg; Sentinel.
 2. [Redis&reg; Cluster Helm Chart](https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster) will deploy a Redis&reg; Cluster topology with sharding.
 
 The main features of each chart are the following:
@@ -95,14 +95,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&reg; Image parameters
 
-| Name                | Description                                           | Value                 |
-| ------------------- | ----------------------------------------------------- | --------------------- |
-| `image.registry`    | Redis&reg; image registry                             | `docker.io`           |
-| `image.repository`  | Redis&reg; image repository                           | `bitnami/redis`       |
-| `image.tag`         | Redis&reg; image tag (immutable tags are recommended) | `6.2.7-debian-10-r23` |
-| `image.pullPolicy`  | Redis&reg; image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | Redis&reg; image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable image debug mode                               | `false`               |
+| Name                | Description                                           | Value                |
+| ------------------- | ----------------------------------------------------- | -------------------- |
+| `image.registry`    | Redis&reg; image registry                             | `docker.io`          |
+| `image.repository`  | Redis&reg; image repository                           | `bitnami/redis`      |
+| `image.tag`         | Redis&reg; image tag (immutable tags are recommended) | `6.2.7-debian-11-r0` |
+| `image.pullPolicy`  | Redis&reg; image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets` | Redis&reg; image pull secrets                         | `[]`                 |
+| `image.debug`       | Enable image debug mode                               | `false`              |
 
 
 ### Redis&reg; common configuration parameters
@@ -124,6 +124,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                        | Description                                                                                           | Value                    |
 | ------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
+| `master.count`                              | Number of Redis&reg; master instances to deploy (experimental, requires additional configuration)     | `1`                      |
 | `master.configuration`                      | Configuration for Redis&reg; master nodes                                                             | `""`                     |
 | `master.disableCommands`                    | Array with Redis&reg; commands to disable on master nodes                                             | `["FLUSHDB","FLUSHALL"]` |
 | `master.command`                            | Override default container command (useful when using custom images)                                  | `[]`                     |
@@ -320,7 +321,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.enabled`                            | Use Redis&reg; Sentinel on Redis&reg; pods.                                                                                                 | `false`                  |
 | `sentinel.image.registry`                     | Redis&reg; Sentinel image registry                                                                                                          | `docker.io`              |
 | `sentinel.image.repository`                   | Redis&reg; Sentinel image repository                                                                                                        | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                          | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `6.2.7-debian-10-r23`    |
+| `sentinel.image.tag`                          | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `6.2.7-debian-11-r0`     |
 | `sentinel.image.pullPolicy`                   | Redis&reg; Sentinel image pull policy                                                                                                       | `IfNotPresent`           |
 | `sentinel.image.pullSecrets`                  | Redis&reg; Sentinel image pull secrets                                                                                                      | `[]`                     |
 | `sentinel.image.debug`                        | Enable image debug mode                                                                                                                     | `false`                  |
@@ -433,7 +434,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Redis&reg; metrics                                 | `false`                  |
 | `metrics.image.registry`                     | Redis&reg; Exporter image registry                                                               | `docker.io`              |
 | `metrics.image.repository`                   | Redis&reg; Exporter image repository                                                             | `bitnami/redis-exporter` |
-| `metrics.image.tag`                          | Redis&reg; Redis&reg; Exporter image tag (immutable tags are recommended)                        | `1.37.0-debian-10-r63`   |
+| `metrics.image.tag`                          | Redis&reg; Redis&reg; Exporter image tag (immutable tags are recommended)                        | `1.39.0-debian-11-r0`    |
 | `metrics.image.pullPolicy`                   | Redis&reg; Exporter image pull policy                                                            | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                  | Redis&reg; Exporter image pull secrets                                                           | `[]`                     |
 | `metrics.command`                            | Override default metrics container init command (useful when using custom images)                | `[]`                     |
@@ -476,7 +477,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r432`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r0`       |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -485,7 +486,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                 | `false`                 |
 | `sysctl.image.registry`                                | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `sysctl.image.repository`                              | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r432`     |
+| `sysctl.image.tag`                                     | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r0`       |
 | `sysctl.image.pullPolicy`                              | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `sysctl.image.pullSecrets`                             | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `sysctl.command`                                       | Override default init-sysctl container command (useful when using custom images)                | `[]`                    |
@@ -585,16 +586,16 @@ See the [official ExternalDNS documentation](https://github.com/kubernetes-sigs/
 
 #### Default: Master-Replicas
 
-When installing the chart with `architecture=replication`, it will deploy a Redis&reg; master StatefulSet (only one master node allowed) and a Redis&reg; replicas StatefulSet. The replicas will be read-replicas of the master. Two services will be exposed:
+When installing the chart with `architecture=replication`, it will deploy a Redis&reg; master StatefulSet and a Redis&reg; replicas StatefulSet. The replicas will be read-replicas of the master. Two services will be exposed:
 
 - Redis&reg; Master service: Points to the master, where read-write operations can be performed
-- Redis&reg; Replicas service: Points to the replicas, where only read operations are allowed.
+- Redis&reg; Replicas service: Points to the replicas, where only read operations are allowed by default.
 
 In case the master crashes, the replicas will wait until the master node is respawned again by the Kubernetes Controller Manager.
 
 #### Standalone
 
-When installing the chart with `architecture=standalone`, it will deploy a standalone Redis&reg; StatefulSet (only one node allowed). A single service will be exposed:
+When installing the chart with `architecture=standalone`, it will deploy a standalone Redis&reg; StatefulSet. A single service will be exposed:
 
 - Redis&reg; Master service: Points to the master, where read-write operations can be performed
 
@@ -613,6 +614,21 @@ SENTINEL get-master-addr-by-name <name of your MasterSet. e.g: mymaster>
 This command will return the address of the current master, which can be accessed from inside the cluster.
 
 In case the current master crashes, the Sentinel containers will elect a new master node.
+
+`master.count` greater than `1` is not designed for use when `sentinel.enabled=true`.
+
+### Multiple masters (experimental)
+
+When `master.count` is greater than `1`, special care must be taken to create a consistent setup.
+
+An example of use case is the creation of a redundant set of standalone masters or master-replicas per Kubernetes node where you must ensure:
+- No more than `1` master can be deployed per Kubernetes node
+- Replicas and writers can only see the single master of their own Kubernetes node
+
+One way of achieving this is by setting `master.service.internalTrafficPolicy=Local` in combination with a `master.affinity.podAntiAffinity` spec to never schedule more than one master per Kubernetes node.
+
+It's recommended to only change `master.count` if you know what you are doing.  
+`master.count` greater than `1` is not designed for use when `sentinel.enabled=true`.
 
 ### Using a password file
 

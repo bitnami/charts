@@ -19,7 +19,7 @@ $ helm install my-release bitnami/consul
 
 This chart bootstraps a [HashiCorp Consul](https://github.com/bitnami/bitnami-docker-consul) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -86,7 +86,7 @@ $ helm delete --purge my-release
 | ------------------------------- | -------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                | HashiCorp Consul image registry                                                              | `docker.io`           |
 | `image.repository`              | HashiCorp Consul image repository                                                            | `bitnami/consul`      |
-| `image.tag`                     | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.12.1-debian-10-r0` |
+| `image.tag`                     | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.12.2-debian-11-r4` |
 | `image.pullPolicy`              | HashiCorp Consul image pull policy                                                           | `IfNotPresent`        |
 | `image.pullSecrets`             | HashiCorp Consul image pull secrets                                                          | `[]`                  |
 | `image.debug`                   | Enable image debug mode                                                                      | `false`               |
@@ -101,6 +101,7 @@ $ helm delete --purge my-release
 | `localConfig`                   | Extra configuration that will be added to the default one                                    | `""`                  |
 | `podLabels`                     | Pod labels                                                                                   | `{}`                  |
 | `priorityClassName`             | Priority class assigned to the Pods                                                          | `""`                  |
+| `runtimeClassName`              | Name of the runtime class to be used by pod(s)                                               | `""`                  |
 | `schedulerName`                 | Alternative scheduler                                                                        | `""`                  |
 | `terminationGracePeriodSeconds` | In seconds, time the given to the Consul pod needs to terminate gracefully                   | `""`                  |
 | `topologySpreadConstraints`     | Topology Spread Constraints for pod assignment                                               | `[]`                  |
@@ -221,7 +222,7 @@ $ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`     | Bitnami Shell image registry                                                    | `docker.io`             |
 | `volumePermissions.image.repository`   | Bitnami Shell image repository                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `10-debian-10-r435`     |
+| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `11-debian-11-r4`       |
 | `volumePermissions.image.pullPolicy`   | Bitnami Shell image pull policy                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Bitnami Shell image pull secrets                                                | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                          | `{}`                    |
@@ -235,7 +236,7 @@ $ helm delete --purge my-release
 | `metrics.enabled`                               | Start a side-car prometheus exporter                                                                                        | `false`                   |
 | `metrics.image.registry`                        | HashiCorp Consul Prometheus Exporter image registry                                                                         | `docker.io`               |
 | `metrics.image.repository`                      | HashiCorp Consul Prometheus Exporter image repository                                                                       | `bitnami/consul-exporter` |
-| `metrics.image.tag`                             | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.8.0-debian-10-r99`     |
+| `metrics.image.tag`                             | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                             | `0.8.0-debian-11-r4`      |
 | `metrics.image.pullPolicy`                      | HashiCorp Consul Prometheus Exporter image pull policy                                                                      | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                     | HashiCorp Consul Prometheus Exporter image pull secrets                                                                     | `[]`                      |
 | `metrics.containerSecurityContext.enabled`      | HashiCorp Consul Prometheus Exporter securityContext                                                                        | `true`                    |
@@ -295,7 +296,7 @@ In addition to this option, you can also set an external ConfigMap with all the 
 
 ### Ingress
 
-This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik) you can utilize the ingress controller to serve your ASP.NET Core application.
+This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as nginx-ingress or traefik you can utilize the ingress controller to serve your ASP.NET Core application.
 
 To enable ingress integration, please set `ingress.enabled` to `true`.
 
@@ -313,7 +314,7 @@ This chart will facilitate the creation of TLS secrets for use with the ingress 
 
 - Helm generates/manages certificate secrets
 - User generates/manages certificates separately
-- An additional tool (like [kube-lego](https://kubeapps.com/charts/stable/kube-lego)) manages the secrets for the application
+- An additional tool (like cert-manager) manages the secrets for the application
 
 In the first two cases, one will need a certificate and a key.  We would expect them to look like this:
 

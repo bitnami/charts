@@ -21,7 +21,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [HAProxy](https://github.com/haproxytech/haproxy) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/haproxy/get-started/).
 
@@ -69,7 +69,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------- | -------------------------------------------------- | ----------------------- |
 | `haproxy.image.registry`    | HAProxy image registry                             | `docker.io`             |
 | `haproxy.image.repository`  | HAProxy image repository                           | `bitnami/haproxy-intel` |
-| `haproxy.image.tag`         | HAProxy image tag (immutable tags are recommended) | `2.6.0-debian-10-r0`    |
+| `haproxy.image.tag`         | HAProxy image tag (immutable tags are recommended) | `2.6.1-debian-11-r0`    |
 | `haproxy.image.pullPolicy`  | HAProxy image pull policy                          | `IfNotPresent`          |
 | `haproxy.image.pullSecrets` | HAProxy image pull secrets                         | `[]`                    |
 

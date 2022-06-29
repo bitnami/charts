@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common Parameters
+##
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -55,6 +57,7 @@ diagnosticMode:
     - infinity
 
 ## @section Parse server parameters
+##
 
 ## loadBalancerIP for the Parse Service (optional, cloud specific)
 ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
@@ -72,7 +75,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/parse
-    tag: 5.2.1-debian-10-r28
+    tag: 5.2.3-debian-11-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -174,7 +177,7 @@ server:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param server.initContainers Add additional init containers to the Parse pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -184,7 +187,7 @@ server:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## @param server.enableCloudCode Enable Parse Cloud Code
   ## ref: https://github.com/bitnami/bitnami-docker-parse#how-to-deploy-your-cloud-functions-with-parse-cloud-code
@@ -319,7 +322,7 @@ server:
   ## @param server.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param server.schedulerName Name of the k8s scheduler (other than default) for Parse pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -387,6 +390,7 @@ server:
     sessionAffinityConfig: {}
 
 ## @section Dashboard Parameters
+##
 
 dashboard:
   ## @param dashboard.enabled Enable parse dashboard
@@ -404,7 +408,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 3.3.0-debian-10-r141
+    tag: 3.3.0-debian-11-r5
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -594,7 +598,7 @@ dashboard:
   ## @param dashboard.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param dashboard.schedulerName Name of the k8s scheduler (other than default) for Parse pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -639,7 +643,7 @@ dashboard:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param dashboard.initContainers Add additional init containers to the Parse pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -649,7 +653,7 @@ dashboard:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
     ## Kubernetes service for Parse Server Deployment
   ## ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
   ##
@@ -706,6 +710,7 @@ dashboard:
     sessionAffinityConfig: {}
 
 ## @section Traffic Exposure Parameters
+##
 
 ## Configure the ingress resource that allows you to access the Parse installation.
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -821,7 +826,7 @@ ingress:
   ## - host: parse.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: parse-svc
   ##           port:
@@ -830,6 +835,7 @@ ingress:
   extraRules: []
 
 ## @section Persistence Parameters
+##
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -872,6 +878,7 @@ persistence:
   annotations: {}
 
 ## @section Volume Permissions parameters
+##
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -889,7 +896,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r439
+    tag: 11-debian-11-r5
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -921,6 +928,7 @@ serviceAccount:
   automountServiceAccountToken: true
 
 ## @section MongoDB&reg; Parameters
+##
 
 ## MongoDB&reg; chart configuration
 ## https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml

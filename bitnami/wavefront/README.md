@@ -7,7 +7,7 @@ Wavefront is a high-performance streaming analytics platform for monitoring and 
 [Overview of Wavefront](https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes)
 
 
-
+                           
 ## TL;DR
 
 ```console
@@ -24,7 +24,7 @@ This chart will deploy the Wavefront Collector for Kubernetes and Wavefront Prox
 
 You can learn more about the Wavefront and Kubernetes integration [in the official documentation](https://docs.wavefront.com/wavefront_kubernetes.html)
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 

@@ -21,7 +21,7 @@ This chart bootstraps a [Ghost](https://github.com/bitnami/bitnami-docker-ghost)
 
 It also packages the [Bitnami MySQL chart](https://github.com/bitnami/charts/tree/master/bitnami/mysql) which is required for bootstrapping a MySQL deployment for the database requirements of the Ghost application.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | -------------------- |
 | `image.registry`    | Ghost image registry                             | `docker.io`          |
 | `image.repository`  | Ghost image repository                           | `bitnami/ghost`      |
-| `image.tag`         | Ghost image tag (immutable tags are recommended) | `5.2.2-debian-10-r0` |
+| `image.tag`         | Ghost image tag (immutable tags are recommended) | `5.2.2-debian-11-r0` |
 | `image.pullPolicy`  | Ghost image pull policy                          | `IfNotPresent`       |
 | `image.pullSecrets` | Ghost image pull secrets                         | `[]`                 |
 | `image.debug`       | Enable image debug mode                          | `false`              |
@@ -140,7 +140,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
 | `affinity`                              | Affinity for pod assignment                                                               | `{}`            |
 | `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment                                                            | `{}`            |
+| `tolerations`                           | Tolerations for pod assignment                                                            | `[]`            |
 | `resources.limits`                      | The resources limits for the Ghost container                                              | `{}`            |
 | `resources.requests`                    | The requested resources for the Ghost container                                           | `{}`            |
 | `containerPorts.http`                   | Ghost HTTP container port                                                                 | `2368`          |
@@ -219,7 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r444`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r0`       |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |

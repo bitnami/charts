@@ -7,7 +7,7 @@ Apache Solr is an extremely powerful, open source enterprise search platform bui
 [Overview of Apache Solr](http://lucene.apache.org/solr/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -19,7 +19,7 @@ $ helm install my-release bitnami/solr
 
 This chart bootstraps a [Solr](https://github.com/bitnami/bitnami-docker-solr) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ------------------------------------------------------------- | ----------------------- |
 | `image.registry`                 | Solr image registry                                           | `docker.io`             |
 | `image.repository`               | Solr image repository                                         | `bitnami/solr`          |
-| `image.tag`                      | Solr image tag (immutable tags are recommended)               | `9.0.0-debian-10-r4`    |
+| `image.tag`                      | Solr image tag (immutable tags are recommended)               | `9.0.0-debian-11-r4`    |
 | `image.pullPolicy`               | image pull policy                                             | `IfNotPresent`          |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array              | `[]`                    |
 | `image.debug`                    | Specify if debug values should be set                         | `false`                 |
@@ -155,7 +155,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                              | Affinity settings for Solr pod assignment. Evaluated as a template                                                       | `{}`            |
 | `nodeSelector`                          | Node labels for Solr pods assignment. Evaluated as a template                                                            | `{}`            |
 | `tolerations`                           | Tolerations for Solr pods assignment. Evaluated as a template                                                            | `[]`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
 | `podManagementPolicy`                   | Management Policy for Solr StatefulSet                                                                                   | `Parallel`      |
 | `priorityClassName`                     | Solr pods' priority.                                                                                                     | `""`            |
 | `schedulerName`                         | Kubernetes pod scheduler registry                                                                                        | `""`            |
@@ -219,7 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r434`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `11-debian-11-r3`       |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
@@ -302,7 +302,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.affinity`                              | Affinity settings for Solr Prometheus exporter pod assignment. Evaluated as a template                                         | `{}`                                                                          |
 | `metrics.nodeSelector`                          | Node labels for Solr Prometheus exporter pods assignment. Evaluated as a template                                              | `{}`                                                                          |
 | `metrics.tolerations`                           | Tolerations for Solr Prometheus exporter pods assignment. Evaluated as a template                                              | `[]`                                                                          |
-| `metrics.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template       | `{}`                                                                          |
+| `metrics.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template       | `[]`                                                                          |
 | `metrics.priorityClassName`                     | Solr Prometheus exporter pods' priority.                                                                                       | `""`                                                                          |
 | `metrics.schedulerName`                         | Kubernetes pod scheduler registry                                                                                              | `""`                                                                          |
 | `metrics.hostAliases`                           | Solr Prometheus exporter pod host aliases                                                                                      | `[]`                                                                          |
@@ -424,6 +424,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 6.0.0
+
+This major updates the Zookeeper subchart to it newest major, 10.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-1000).
 
 ### To 4.0.0
 

@@ -1,0 +1,26 @@
+file:
+  /opt/bitnami/joomla:
+    filetype: symlink
+    linked-to: /bitnami/joomla
+    exists: true
+  /bitnami/joomla/logs:
+    exists: true
+    filetype: directory
+    mode: "0775"
+  /bitnami/joomla/configuration.php:
+    exists: true
+    filetype: file
+    mode: "0664"
+    contains:
+      - {{ printf "/db.*%s/" .Env.JOOMLA_DATABASE_NAME }}
+command:
+  user-id-test:
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+    exit-status: 0
+    stdout: []
+    stderr: []
+  joomla-version-ok:
+    exec: cat /opt/bitnami/joomla/administrator/language/en-GB/install.xml | grep --quiet $(echo $APP_VERSION | tr "-" ".")
+    exit-status: 0
+    stdout: []
+    stderr: []

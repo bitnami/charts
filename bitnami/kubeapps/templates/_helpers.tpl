@@ -4,7 +4,7 @@
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kubeapps.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.frontend.image .Values.dashboard.image .Values.apprepository.image .Values.apprepository.syncImage .Values.assetsvc.image .Values.kubeops.image .Values.authProxy.image .Values.pinnipedProxy.image .Values.kubeappsapis.image .Values.testImage) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.frontend.image .Values.dashboard.image .Values.apprepository.image .Values.apprepository.syncImage .Values.kubeops.image .Values.authProxy.image .Values.pinnipedProxy.image .Values.kubeappsapis.image .Values.testImage) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -19,13 +19,6 @@ Return the proper apprepository-controller sync image name
 */}}
 {{- define "kubeapps.apprepository.syncImage" -}}
 {{- include "common.images.image" (dict "imageRoot" .Values.apprepository.syncImage "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
-Return the proper assetsvc image name
-*/}}
-{{- define "kubeapps.assetsvc.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.assetsvc.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -117,13 +110,6 @@ Create name for the apprepository-controller based on the fullname
 */}}
 {{- define "kubeapps.apprepository.fullname" -}}
 {{- printf "%s-internal-apprepository-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create name for the assetsvc based on the fullname
-*/}}
-{{- define "kubeapps.assetsvc.fullname" -}}
-{{- printf "%s-internal-assetsvc" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -383,7 +369,6 @@ Check if there are rolling tags in the images
 {{- include "common.warnings.rollingTag" .Values.frontend.image }}
 {{- include "common.warnings.rollingTag" .Values.dashboard.image }}
 {{- include "common.warnings.rollingTag" .Values.apprepository.image }}
-{{- include "common.warnings.rollingTag" .Values.assetsvc.image }}
 {{- include "common.warnings.rollingTag" .Values.kubeops.image }}
 {{- include "common.warnings.rollingTag" .Values.authProxy.image }}
 {{- include "common.warnings.rollingTag" .Values.pinnipedProxy.image }}
