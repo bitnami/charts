@@ -125,8 +125,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.lifecycleHooks`                              | Add lifecycle hooks to the Controller deployment                                                     | `{}`                   |
 | `controller.updateStrategy.type`                         | Controller deployment update strategy                                                                | `RollingUpdate`        |
 | `controller.updateStrategy.rollingUpdate`                | Controller deployment rolling update configuration parameters                                        | `{}`                   |
-| `controller.extraArgs`                                   | Extra arguments to pass to the Webhook container                                                     | `[]`                   |
-| `controller.extraEnvVars`                                | Add extra environment variables to the Controller pod                                                | `[]`                   |
+| `controller.extraArgs`                                   | Extra arguments to pass to the Controller container                                                  | `[]`                   |
+| `controller.extraEnvVars`                                | Add extra environment variables to the Controller container                                          | `[]`                   |
 | `controller.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars                                                 | `""`                   |
 | `controller.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars                                                    | `""`                   |
 | `controller.extraVolumes`                                | Optionally specify extra list of additional volumes for Controller pods                              | `[]`                   |
