@@ -141,3 +141,42 @@ jobs:
           git config user.name "Bitnami Containers"
           git config user.email "bitnami-bot@vmware.com"
           git add bitnami/index.yaml && git commit -m "${chart}-${chart_version}: Update index.yaml" -s && git push
+  # If the VIB Publish failed we should notifiy the responsible agents
+  slack-notif:
+    runs-on: ubuntu-latest
+    needs: [get-chart, vib-publish]
+    name: Notify failed CD run
+    if: always()
+    steps:
+      - name: Notify in Slack channel
+        if: ${{ needs.vib-publish.result == 'failure' }}
+        uses: slackapi/slack-github-action@v1.19.0
+        with:
+          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          payload: |
+            {
+              "attachments": [
+                {
+                  "color": "#CC0000",
+                  "fallback": "Failed bitnami/charts/${{ needs.get-chart.outputs.chart }} CD pipeline",
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Failed `bitnami/charts/${{ needs.get-chart.outputs.chart }}` CD pipeline*"
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "The CD pipeline for <${{ github.event.head_commit.url }}|bitnami/charts@${{ github.event.head_commit.id }}> has failed. Check the related <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|action run> for more information."
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
