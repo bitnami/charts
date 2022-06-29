@@ -1,16 +1,41 @@
-name: 'VIB Publish'
+name: 'CD Pipeline'
 on: # rebuild any PRs and main branch changes
   push:
     branches:
       - master
     paths:
+      - 'bitnami/airflow/Chart.yaml'
+      - 'bitnami/consul/Chart.yaml'
+      - 'bitnami/discourse/Chart.yaml'
+      - 'bitnami/dokuwiki/Chart.yaml'
+      - 'bitnami/ghost/Chart.yaml'
       - 'bitnami/grafana-loki/Chart.yaml'
+      - 'bitnami/grafana/Chart.yaml'
       - 'bitnami/haproxy-intel/Chart.yaml'
+      - 'bitnami/harbor/Chart.yaml'
+      - 'bitnami/jenkins/Chart.yaml'
+      - 'bitnami/kafka/Chart.yaml'
+      - 'bitnami/keycloak/Chart.yaml'
       - 'bitnami/kibana/Chart.yaml'
+      - 'bitnami/mariadb/Chart.yaml'
+      - 'bitnami/mediawiki/Chart.yaml'
+      - 'bitnami/minio/Chart.yaml'
       - 'bitnami/mongodb/Chart.yaml'
+      - 'bitnami/mysql/Chart.yaml'
+      - 'bitnami/opencart/Chart.yaml'
+      - 'bitnami/owncloud/Chart.yaml'
+      - 'bitnami/phpmyadmin/Chart.yaml'
       - 'bitnami/pinniped/Chart.yaml'
+      - 'bitnami/postgresql/Chart.yaml'
+      - 'bitnami/prestashop/Chart.yaml'
+      - 'bitnami/rabbitmq/Chart.yaml'
+      - 'bitnami/redis-cluster/Chart.yaml'
+      - 'bitnami/redis/Chart.yaml'
+      - 'bitnami/redmine/Chart.yaml'
       - 'bitnami/sealed-secrets/Chart.yaml'
       - 'bitnami/solr/Chart.yaml'
+      - 'bitnami/spring-cloud-dataflow/Chart.yaml'
+      - 'bitnami/suitecrm/Chart.yaml'
       - 'bitnami/wordpress/Chart.yaml'
 env:
   CSP_API_URL: https://console.cloud.vmware.com
@@ -65,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: get-chart
     if: ${{ needs.get-chart.outputs.result == 'ok' }}
-    name: Publish
+    name: VIB Publish
     steps:
       - uses: actions/checkout@v2
         name: Checkout Repository
