@@ -1,9 +1,9 @@
 /// <reference types="cypress" />
-import { random, getPageUrlFromTitle, confirmLogOut } from './utils';
+import { random } from './utils';
 
 it('allows to log in and out', () => {
   cy.login();
-  cy.get('a[href*="logout"]').click();
+  cy.get('a[href*="logout"]').first().click();
   cy.contains('Sign in');
 });
 
@@ -20,7 +20,7 @@ it('allows to create user', () => {
     );
     cy.get('#user_email').type(`${random}_${user.newUser.email}`);
   });
-  cy.contains('input', 'Create user').click();
+  cy.get('input[value*="Create user"]').click();
   cy.contains('changes have been saved');
 });
 
@@ -32,7 +32,7 @@ it('allows to create a new website', () => {
   cy.get('button[title*="A website"]').click();
   cy.fixture('websites').then((site) => {
     // The name input has no attribute "name" or "id"
-    cy.get('input[placeholder="Name"]').type(`${site.newSite.name}`, { force: true });
+    cy.get('input[placeholder="Name"]').type(`${site.newSite.name} ${random}`, { force: true });
     cy.get('textarea[name="urls"]').type(`${site.newSite.url}`, { force: true });
   });
   cy.get('input[type="submit"]').click();
@@ -43,29 +43,25 @@ it('allows to use the API', () => {
   cy.login();
   cy.visit('/index.php?module=UsersManager&action=addNewToken');
   cy.get('#login_form_password').type(Cypress.env('password'));
+  cy.get('input[type="submit"]').click();
   cy.get('#description').type(random);
   cy.get('input[type="submit"]').click();
   cy.contains('Token successfully generated');
   cy.get('code').invoke('text').then((apiToken) => {
-    cy.visit(
+    cy.request(
       '/index.php?module=API&method=API.getMatomoVersion'
-      + `'&format=JSON&token_auth=${apiToken}`);
-    // The output should be "value: <VERSION>"
-    cy.contains('"value": "');
+      + `&format=JSON&token_auth=${apiToken}`).then((response) => {
+        const bodyString = JSON.stringify(response.body);
+        expect(response.status).to.eq(200);
+        expect(bodyString).to.contain('"value":');
+    });
   });
 });
 
 it('allows to change users settings', () => {
   cy.login();
   cy.visit('/index.php?module=UsersManager&action=userSettings');
-  cy.fixture('users').then((user) => {
-    cy.get('#email')
-      .clear({ force: true })
-      .type(`${random}_${Cypress.env('email')}`);
-  });
-  cy.contains('button', 'Save').should('not.be.disabled').click();
-  cy.get('#currentPassword').type(Cypress.env('password'));
-  cy.contains('a', 'Ok').click();
-
+  cy.contains('Last 7 days').click();
+  cy.get('input[value*="Save"]').first().click();
   cy.contains('Settings updated');
 });
