@@ -590,7 +590,7 @@ In more complex scenarios, we may have the following tree of dependencies
 The three charts below depend on the parent chart Chart 1. However, subcharts 1 and 2 may need to connect to PostgreSQL as well. In order to do so, subcharts 1 and 2 need to know the PostgreSQL credentials, so one option for deploying could be deploy Chart 1 with the following parameters:
 
 ```
-postgresql.auth.password=testuser
+postgresql.auth.username=testuser
 subchart1.postgresql.auth.username=testuser
 subchart2.postgresql.auth.username=testuser
 postgresql.auth.password=testpass
