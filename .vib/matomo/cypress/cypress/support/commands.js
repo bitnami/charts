@@ -1,5 +1,5 @@
 const COMMAND_DELAY = 500;
-const BASE_URL = 'http://bitnami-mediawiki.my';
+const BASE_URL = 'http://bitnami-matomo.my';
 
 for (const command of ['click']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
