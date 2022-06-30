@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/{{ .Values.rbac.apiVersion }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ printf "%s-%s" (include "common.names.fullname.namespace" .) "external-dns" }}
+  name: {{ template "common.names.fullname.namespace" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{ include "external-dns.labels" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -14,7 +14,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ printf "%s-%s" (include "common.names.fullname.namespace" .) "external-dns" }}
+  name: {{ template "common.names.fullname.namespace" . }}
 subjects:
   - kind: ServiceAccount
     name: {{ template "external-dns.serviceAccountName" . }}
