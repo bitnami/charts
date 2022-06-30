@@ -5,6 +5,12 @@ file:
     mode: "0664"
     owner: root
     group: root
+  /opt/bitnami/nginx/html/index.html:
+    exists: true
+    filetype: file
+    mode: "0644"
+    owner: root
+    group: root  
 command:
   user-id-test:
     exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
@@ -24,9 +30,9 @@ command:
     stdout: []
     stderr: 
       - "signal process started"
-  nginx-home:
-    exec: cat /opt/bitnami/nginx/html/index.html
+  nginx-curl:
+    exec: curl nginx.default.svc.cluster.local
     exit-status: 0
     stdout: 
-      - "If you see this page, the nginx web server is successfully installed"
-    stderr: 
+       - "If you see this page, the nginx web server is successfully installed"
+    stderr: []
