@@ -16,7 +16,7 @@ env:
   VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
 jobs:
   vib-verify-bucketweb:
-    # Given permormance issues of the action feature on GH's side, we need to be very restrictive in the job's triggers:
+    # Given performance issues of the action feature on GH's side, we need to be very restrictive in the job's triggers:
     # -> The pipeline was triggered due to a label addition and said label was the 'verify' one OR
     # -> The pipeline was NOT triggered due to a label addition but the PR already contains the 'verify' one
     if: |
