@@ -273,6 +273,26 @@ spec:
           volumeMounts:
             - name: matomo-data
               mountPath: /bitnami/matomo
+            {{- if .Values.certificates.customCertificate.certificateSecret }}
+            - name: custom-certificate
+              mountPath: {{ .Values.certificates.customCertificate.certificateLocation }}
+              subPath: tls.crt
+              readOnly: true
+            - name: custom-certificate
+              mountPath: {{ .Values.certificates.customCertificate.keyLocation }}
+              subPath: tls.key
+              readOnly: true
+            {{- if .Values.certificates.customCertificate.chainSecret }}
+            - name: custom-certificate-chain
+              mountPath: {{ .Values.certificates.customCertificate.chainLocation }}
+              subPath: {{ .Values.certificates.customCertificate.chainSecret.key }}
+              readOnly: true
+            {{- end }}
+            {{- end }}
+            {{- if .Values.customPostInitScripts }}
+            - mountPath: /docker-entrypoint-init.d
+              name: custom-postinit
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -302,6 +322,32 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        {{- if .Values.certificates.customCAs }}
+        - name: etc-ssl-certs
+          emptyDir:
+            medium: "Memory"
+        - name: etc-ssl-private
+          emptyDir:
+            medium: "Memory"
+        - name: custom-ca-certificates
+          projected:
+            defaultMode: 0400
+            sources:
+            {{- range $index, $customCA := .Values.certificates.customCAs }}
+            - secret:
+                name: {{ $customCA.secret }}
+            {{- end }}
+        {{- end }}
+        {{- if .Values.certificates.customCertificate.certificateSecret }}
+        - name: custom-certificate
+          secret:
+            secretName: {{ .Values.certificates.customCertificate.certificateSecret }}
+        {{- if .Values.certificates.customCertificate.chainSecret }}
+        - name: custom-certificate-chain
+          secret:
+            secretName: {{ .Values.certificates.customCertificate.chainSecret.name }}
+        {{- end }}
+        {{- end }}
         - name: matomo-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
