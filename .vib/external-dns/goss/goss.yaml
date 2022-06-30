@@ -1,3 +1,8 @@
+port:
+  tcp6:7979:
+    listening: true
+    ip:
+    - '::'
 file:
   /opt/bitnami/external-dns/bin:
     mode: "0755"
@@ -9,3 +14,14 @@ command:
     exit-status: 0
     stdout: []
     stderr: []
+  external-dns-version:
+    exec: external-dns --version
+    exit-status: 0
+    stdout: []
+    stderr: []
+  external-dns-process:
+    exec: ps aux | grep external-dns
+    exit-status: 0
+    stdout: 
+      - /external-dns/
+    stderr: []  
