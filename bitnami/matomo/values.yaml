@@ -420,7 +420,7 @@ service:
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## @param service.clusterIP %%MAIN_CONTAINER_NAME%% service Cluster IP
+  ## @param service.clusterIP Matomo service Cluster IP
   ## e.g.:
   ## clusterIP: None
   ##
@@ -428,7 +428,7 @@ service:
   ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
   ##
   extraPorts: []
-  ## @param service.annotations Additional custom annotations for %%MAIN_CONTAINER_NAME%% service
+  ## @param service.annotations Additional custom annotations for Matomo service
   ##
   annotations: {}
   ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
