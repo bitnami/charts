@@ -87,7 +87,16 @@ jobs:
   vib-verify:
     runs-on: ubuntu-latest
     needs: get-chart
-    if: ${{ needs.get-chart.outputs.result == 'ok' && contains(github.event.pull_request.labels.*.name, 'verify') }}
+    # Given performance issues of the action feature on GH's side, we need to be very restrictive in the job's triggers:
+    # -> The 'Get modified charts' job suceededs AND
+    # -> The event action is different from opened AND
+    # -> The pipeline was triggered due to a label addition and said label was the 'verify' one OR
+    # -> The pipeline was NOT triggered due to a label addition but the PR already contains the 'verify' one
+    if: |
+        needs.get-chart.outputs.result == 'ok' &&
+        github.event.action != 'opened' &&
+        github.event.action == 'labeled' && github.event.label.name == 'verify' ||
+        github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'verify')
     name: VIB Verify
     steps:
       - uses: actions/checkout@v2
@@ -114,6 +123,7 @@ jobs:
       contains(github.event.pull_request.labels.*.name, 'auto-merge')
     steps:
       # Approves the CI's PR if the 'VIB Verify' job succeeded
+      # Approved by the 'github-actions' user. A PR can't be approved by its author
       - name: Approval
         if: ${{ needs.vib-verify.result == 'success' }}
         run: |
@@ -131,11 +141,11 @@ jobs:
         run: |
           curl --request DELETE \
           --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels/auto-merge \
-          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'authorization: Bearer ${{ secrets.BITNAMI_BOT_TOKEN }}' \
           --fail
           curl --request POST \
           --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments \
-          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'authorization: Bearer ${{ secrets.BITNAMI_BOT_TOKEN }}' \
           --header 'content-type: application/json' \
           --data '{
             "body": "There has been an error during the automated release process. Manual revision is now required."
@@ -143,7 +153,7 @@ jobs:
           --fail
           curl --request POST \
           --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/requested_reviewers \
-          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'authorization: Bearer ${{ secrets.BITNAMI_BOT_TOKEN }}' \
           --header 'content-type: application/json' \
           --data '{
             "team_reviewers": ["build-maintainers"]
