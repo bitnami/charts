@@ -18,7 +18,6 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/keycloak/Chart.yaml'
       - 'bitnami/kibana/Chart.yaml'
       - 'bitnami/mariadb/Chart.yaml'
-      - 'bitnami/matomo/Chart.yaml'
       - 'bitnami/mediawiki/Chart.yaml'
       - 'bitnami/minio/Chart.yaml'
       - 'bitnami/mongodb/Chart.yaml'
