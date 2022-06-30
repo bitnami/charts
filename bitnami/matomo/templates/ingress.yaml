@@ -36,7 +36,7 @@ spec:
           {{- toYaml .Values.ingress.extraPaths | nindent 10 }}
           {{- end }}
     {{- end }}
-    {{- range (coalesce .Values.ingress.extraHosts .Values.ingress.hosts) }}
+    {{- range (coalesce .Values.ingress.extraHosts) }}
     - host: {{ .name | quote }}
       http:
         paths:
