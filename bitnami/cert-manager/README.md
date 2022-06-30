@@ -85,13 +85,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.replicaCount`                                | Number of Controller replicas                                                                        | `1`                    |
 | `controller.image.registry`                              | Controller image registry                                                                            | `docker.io`            |
 | `controller.image.repository`                            | Controller image repository                                                                          | `bitnami/cert-manager` |
-| `controller.image.tag`                                   | Controller image tag (immutable tags are recommended)                                                | `1.8.0-debian-11-r3`   |
+| `controller.image.tag`                                   | Controller image tag (immutable tags are recommended)                                                | `1.8.2-debian-11-r0`   |
 | `controller.image.pullPolicy`                            | Controller image pull policy                                                                         | `IfNotPresent`         |
 | `controller.image.pullSecrets`                           | Controller image pull secrets                                                                        | `[]`                   |
 | `controller.image.debug`                                 | Controller image debug mode                                                                          | `false`                |
 | `controller.acmesolver.image.registry`                   | Controller image registry                                                                            | `docker.io`            |
 | `controller.acmesolver.image.repository`                 | Controller image repository                                                                          | `bitnami/acmesolver`   |
-| `controller.acmesolver.image.tag`                        | Controller image tag (immutable tags are recommended)                                                | `1.8.0-debian-11-r3`   |
+| `controller.acmesolver.image.tag`                        | Controller image tag (immutable tags are recommended)                                                | `1.8.1-debian-11-r2`   |
 | `controller.acmesolver.image.pullPolicy`                 | Controller image pull policy                                                                         | `IfNotPresent`         |
 | `controller.acmesolver.image.pullSecrets`                | Controller image pull secrets                                                                        | `[]`                   |
 | `controller.acmesolver.image.debug`                      | Controller image debug mode                                                                          | `false`                |
@@ -125,6 +125,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.lifecycleHooks`                              | Add lifecycle hooks to the Controller deployment                                                     | `{}`                   |
 | `controller.updateStrategy.type`                         | Controller deployment update strategy                                                                | `RollingUpdate`        |
 | `controller.updateStrategy.rollingUpdate`                | Controller deployment rolling update configuration parameters                                        | `{}`                   |
+| `controller.extraArgs`                                   | Extra arguments to pass to the Controller container                                                  | `[]`                   |
 | `controller.extraEnvVars`                                | Add extra environment variables to the Controller container                                          | `[]`                   |
 | `controller.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars                                                 | `""`                   |
 | `controller.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars                                                    | `""`                   |
@@ -145,7 +146,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.replicaCount`                                | Number of Webhook replicas                                                                        | `1`                            |
 | `webhook.image.registry`                              | Webhook image registry                                                                            | `docker.io`                    |
 | `webhook.image.repository`                            | Webhook image repository                                                                          | `bitnami/cert-manager-webhook` |
-| `webhook.image.tag`                                   | Webhook image tag (immutable tags are recommended)                                                | `1.8.0-debian-11-r3`           |
+| `webhook.image.tag`                                   | Webhook image tag (immutable tags are recommended)                                                | `1.8.1-debian-11-r2`           |
 | `webhook.image.pullPolicy`                            | Webhook image pull policy                                                                         | `IfNotPresent`                 |
 | `webhook.image.pullSecrets`                           | Webhook image pull secrets                                                                        | `[]`                           |
 | `webhook.image.debug`                                 | Webhook image debug mode                                                                          | `false`                        |
@@ -195,6 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.lifecycleHooks`                              | Add lifecycle hooks to the Webhook deployment                                                     | `{}`                           |
 | `webhook.updateStrategy.type`                         | Webhook deployment update strategy                                                                | `RollingUpdate`                |
 | `webhook.updateStrategy.rollingUpdate`                | Controller deployment rolling update configuration parameters                                     | `{}`                           |
+| `webhook.extraArgs`                                   | Extra arguments to pass to the Webhook container                                                  | `[]`                           |
 | `webhook.extraEnvVars`                                | Add extra environment variables to the Webhook container                                          | `[]`                           |
 | `webhook.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars                                              | `""`                           |
 | `webhook.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars                                                 | `""`                           |
@@ -215,7 +217,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.replicaCount`                                | Number of CAInjector replicas                                                                        | `1`                  |
 | `cainjector.image.registry`                              | CAInjector image registry                                                                            | `docker.io`          |
 | `cainjector.image.repository`                            | CAInjector image repository                                                                          | `bitnami/cainjector` |
-| `cainjector.image.tag`                                   | CAInjector image tag (immutable tags are recommended)                                                | `1.8.0-debian-11-r3` |
+| `cainjector.image.tag`                                   | CAInjector image tag (immutable tags are recommended)                                                | `1.8.1-debian-11-r2` |
 | `cainjector.image.pullPolicy`                            | CAInjector image pull policy                                                                         | `IfNotPresent`       |
 | `cainjector.image.pullSecrets`                           | CAInjector image pull secrets                                                                        | `[]`                 |
 | `cainjector.image.debug`                                 | CAInjector image debug mode                                                                          | `false`              |
@@ -246,6 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.lifecycleHooks`                              | Add lifecycle hooks to the CAInjector deployment                                                     | `{}`                 |
 | `cainjector.updateStrategy.type`                         | Controller deployment update strategy                                                                | `RollingUpdate`      |
 | `cainjector.updateStrategy.rollingUpdate`                | Controller deployment rolling update configuration parameters                                        | `{}`                 |
+| `cainjector.extraArgs`                                   | Extra arguments to pass to the CAInjector container                                                  | `[]`                 |
 | `cainjector.extraEnvVars`                                | Add extra environment variables to the CAInjector container                                          | `[]`                 |
 | `cainjector.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars                                                 | `""`                 |
 | `cainjector.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars                                                    | `""`                 |
