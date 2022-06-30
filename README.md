@@ -1,4 +1,5 @@
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/bitnami)](https://artifacthub.io/packages/search?repo=bitnami)
+[![CD Pipeline](https://github.com/bitnami/charts/actions/workflows/cd-pipeline.yaml/badge.svg)](https://github.com/bitnami/charts/actions/workflows/cd-pipeline.yaml)
 
 # The Bitnami Library for Kubernetes
 
