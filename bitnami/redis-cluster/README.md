@@ -282,7 +282,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                                                                               | `false`                  |
 | `metrics.image.registry`                     | Redis&reg; exporter image registry                                                                                                 | `docker.io`              |
 | `metrics.image.repository`                   | Redis&reg; exporter image name                                                                                                     | `bitnami/redis-exporter` |
-| `metrics.image.tag`                          | Redis&reg; exporter image tag                                                                                                      | `1.40.0-debian-11-r0`    |
+| `metrics.image.tag`                          | Redis&reg; exporter image tag                                                                                                      | `1.43.0-debian-11-r3`    |
 | `metrics.image.pullPolicy`                   | Redis&reg; exporter image pull policy                                                                                              | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                   | `[]`                     |
 | `metrics.resources`                          | Metrics exporter resource requests and limits                                                                                      | `{}`                     |
