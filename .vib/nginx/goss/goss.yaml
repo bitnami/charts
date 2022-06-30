@@ -5,6 +5,8 @@ file:
     mode: "0664"
     owner: root
     group: root
+    contains:
+      - /listen\s+8080/
   /opt/bitnami/nginx/html/index.html:
     exists: true
     filetype: file
