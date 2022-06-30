@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random, randomNumber } from './utils';
+import { random } from './utils';
 import body from '../fixtures/documents.json';
 
 it('can get cluster info', () => {
@@ -62,7 +62,7 @@ it('can index a document and retrieve it', () => {
   cy.request({
     method: 'POST',
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
-    url: `favorite_dj/_create/${randomNumber}`,
+    url: `favorite_dj/_create/${random}`,
     body: body,
   }).then((response) => {
     expect(response.status).to.eq(201);
@@ -72,7 +72,7 @@ it('can index a document and retrieve it', () => {
 
   cy.request({
     method: 'GET',
-    url: 'favorite_dj/_doc/' + randomNumber,
+    url: 'favorite_dj/_doc/' + random,
     form: true,
   }).then((response) => {
     expect(response.status).to.eq(200);
