@@ -72,9 +72,11 @@ it('can index a document and retrieve it', () => {
 
   cy.request({
     method: 'GET',
-    url: 'favorite_dj/_doc/' + random,
+    url: 'favorite_dj/_source/' + random,
     form: true,
   }).then((response) => {
     expect(response.status).to.eq(200);
+    expect(response.body.name).to.eq(body.name);
+    expect(response.body.origin).to.eq(body.origin);
   });
 });
