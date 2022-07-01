@@ -1,0 +1,10 @@
+{
+  "env": {
+    "username": "user",
+    "password": "ComplicatedPassword123!4"
+  },
+  "hosts": {
+    "vmware-magento.my": "127.0.0.1"
+  },
+  "defaultCommandTimeout": 30000
+}
