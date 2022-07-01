@@ -33,8 +33,6 @@ command:
     stderr: 
       - "signal process started"
   nginx-curl:
-    exec: curl localhost:8080
+    exec: diff <(curl --silent localhost:8080) /opt/bitnami/nginx/html/index.html
     exit-status: 0
-    stdout: 
-       - "If you see this page, the nginx web server is successfully installed"
     stderr: []
