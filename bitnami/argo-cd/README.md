@@ -60,6 +60,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                | Description                                        | Value           |
@@ -72,16 +73,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
 
+
 ### Argo CD image parameters
 
 | Name                | Description                                        | Value                |
 | ------------------- | -------------------------------------------------- | -------------------- |
 | `image.registry`    | Argo CD image registry                             | `docker.io`          |
 | `image.repository`  | Argo CD image repository                           | `bitnami/argo-cd`    |
-| `image.tag`         | Argo CD image tag (immutable tags are recommended) | `2.3.4-debian-11-r0` |
+| `image.tag`         | Argo CD image tag (immutable tags are recommended) | `2.4.3-debian-11-r0` |
 | `image.pullPolicy`  | Argo CD image pull policy                          | `IfNotPresent`       |
 | `image.pullSecrets` | Argo CD image pull secrets                         | `[]`                 |
 | `image.debug`       | Enable Argo CD image debug mode                    | `false`              |
+
 
 ### Argo CD application controller parameters
 
@@ -196,6 +199,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Argo CD container(s)                | `[]`            |
 | `controller.sidecars`                                          | Add additional sidecar containers to the Argo CD pod(s)                                              | `[]`            |
 | `controller.initContainers`                                    | Add additional init containers to the Argo CD pod(s)                                                 | `[]`            |
+
 
 ### Argo CD server Parameters
 
@@ -340,6 +344,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                  | `true`                   |
 | `server.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                      | `{}`                     |
 
+
 ### Argo CD repo server Parameters
 
 | Name                                                           | Description                                                                                          | Value           |
@@ -448,13 +453,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.sidecars`                                          | Add additional sidecar containers to the Argo CD repo server pod(s)                                  | `[]`            |
 | `repoServer.initContainers`                                    | Add additional init containers to the Argo CD repo server pod(s)                                     | `[]`            |
 
+
 ### Dex Parameters
 
 | Name                                                    | Description                                                                                   | Value                 |
 | ------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------- |
 | `dex.image.registry`                                    | Dex image registry                                                                            | `docker.io`           |
 | `dex.image.repository`                                  | Dex image repository                                                                          | `bitnami/dex`         |
-| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                | `2.31.2-debian-11-r0` |
+| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                | `2.32.0-debian-11-r7` |
 | `dex.image.pullPolicy`                                  | Dex image pull policy                                                                         | `IfNotPresent`        |
 | `dex.image.pullSecrets`                                 | Dex image pull secrets                                                                        | `[]`                  |
 | `dex.image.debug`                                       | Enable Dex image debug mode                                                                   | `false`               |
@@ -558,6 +564,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.sidecars`                                          | Add additional sidecar containers to the Dex pod(s)                                           | `[]`                  |
 | `dex.initContainers`                                    | Add additional init containers to the Dex pod(s)                                              | `[]`                  |
 
+
 ### Shared config for Argo CD components
 
 | Name                                           | Description                                                                                           | Value  |
@@ -583,6 +590,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `config.secret.repositoryCredentials`          | Repository credentials to add to the Argo CD server confgi secret                                     | `{}`   |
 | `config.clusterCredentials`                    | Configure external cluster credentials                                                                | `[]`   |
 
+
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                     | Value                   |
@@ -590,12 +598,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r0`       |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r9`       |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
+
 
 ### Other Parameters
 
@@ -604,7 +613,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`                             | Specifies whether RBAC resources should be created                          | `true`               |
 | `redis.image.registry`                    | Argo CD controller image registry                                           | `docker.io`          |
 | `redis.image.repository`                  | Argo CD controller image repository                                         | `bitnami/redis`      |
-| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `6.2.7-debian-11-r0` |
+| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `6.2.7-debian-11-r9` |
 | `redis.image.pullPolicy`                  | Argo CD controller image pull policy                                        | `IfNotPresent`       |
 | `redis.image.pullSecrets`                 | Argo CD controller image pull secrets                                       | `[]`                 |
 | `redis.enabled`                           | Enable Redis dependency                                                     | `true`               |
@@ -619,6 +628,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.password`                  | External Redis password                                                     | `""`                 |
 | `externalRedis.existingSecret`            | Existing secret for the external redis                                      | `""`                 |
 | `externalRedis.existingSecretPasswordKey` | Password key for the existing secret containing the external redis password | `redis-password`     |
+
 
 The above parameters map to the env variables defined in [bitnami/argo-cd](https://github.com/bitnami/bitnami-docker-argo-cd). For more information please refer to the [bitnami/argo-cd](https://github.com/bitnami/bitnami-docker-argo-cd) image documentation.
 
