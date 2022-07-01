@@ -93,7 +93,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | ----------------------- | ---------------------------------------------------------------------- | -------------------- |
 | `image.registry`        | Redmine image registry                                                 | `docker.io`          |
 | `image.repository`      | Redmine image repository                                               | `bitnami/redmine`    |
-| `image.tag`             | Redmine image tag (immutable tags are recommended)                     | `5.0.1-debian-11-r0` |
+| `image.tag`             | Redmine image tag (immutable tags are recommended)                     | `5.0.2-debian-11-r2` |
 | `image.pullPolicy`      | Redmine image pull policy                                              | `IfNotPresent`       |
 | `image.pullSecrets`     | Redmine image pull secrets                                             | `[]`                 |
 | `image.debug`           | Enable image debug mode                                                | `false`              |
@@ -346,7 +346,7 @@ helm install my-release bitnami/redmine --set databaseType=postgresql
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store | `[]`                                     |
 | `certificates.image.registry`                        | Redmine image registry                                             | `docker.io`                              |
 | `certificates.image.repository`                      | Redmine image repository                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `11-debian-11-r0`                        |
+| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                 | `11-debian-11-r8`                        |
 | `certificates.image.pullPolicy`                      | Redmine image pull policy                                          | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                         | `[]`                                     |
 | `certificates.extraEnvVars`                          | Container sidecar extra environment variables (e.g. proxy)         | `[]`                                     |

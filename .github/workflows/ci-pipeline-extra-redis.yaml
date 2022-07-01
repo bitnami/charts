@@ -1,9 +1,8 @@
-# Multiple deployments pipelines are custom per asset. All single deployments pipelines are handled by vib-verify.yaml
-name: 'VIB extra Redis'
+# Multiple deployments pipelines are custom per asset. All single deployments pipelines are handled by ci-pipeline.yaml
+name: 'CI Pipeline extra Redis'
 on: # rebuild any PRs and main branch changes
   pull_request_target:
     types:
-      - opened
       - reopened
       - synchronize
       - labeled
@@ -17,7 +16,12 @@ env:
   VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
 jobs:
   vib-verify-sentinel:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'verify') }}
+    # Given performance issues of the action feature on GH's side, we need to be very restrictive in the job's triggers:
+    # -> The pipeline was triggered due to a label addition and said label was the 'verify' one OR
+    # -> The pipeline was NOT triggered due to a label addition but the PR already contains the 'verify' one
+    if: |
+        github.event.action == 'labeled' && github.event.label.name == 'verify' ||
+        github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'verify')
     runs-on: ubuntu-latest
     name: Verify Redis Sentinel on Tanzu Kubernetes Grid
     steps:
@@ -32,7 +36,9 @@ jobs:
           VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
 
   vib-verify-replica:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'verify') }}
+    if: |
+        github.event.action == 'labeled' && github.event.label.name == 'verify' ||
+        github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'verify')
     runs-on: ubuntu-latest
     name: Verify Redis Replica on Tanzu Kubernetes Grid
     steps:
