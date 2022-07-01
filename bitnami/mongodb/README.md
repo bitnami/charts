@@ -95,7 +95,7 @@ Refer to the [chart documentation for more information on each of these architec
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `image.registry`         | MongoDB(&reg;) image registry                                                                                                                                | `docker.io`           |
 | `image.repository`       | MongoDB(&reg;) image registry                                                                                                                                | `bitnami/mongodb`     |
-| `image.tag`              | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                                                    | `5.0.9-debian-10-r15` |
+| `image.tag`              | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                                                    | `5.0.9-debian-10-r19` |
 | `image.pullPolicy`       | MongoDB(&reg;) image pull policy                                                                                                                             | `IfNotPresent`        |
 | `image.pullSecrets`      | Specify docker-registry secret names as an array                                                                                                             | `[]`                  |
 | `image.debug`            | Set to true if you would like to see extra information on logs                                                                                               | `false`               |
@@ -120,7 +120,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `tls.caKey`              | CA certificate private key (base64 encoded)                                                                                                                  | `""`                  |
 | `tls.image.registry`     | Init container TLS certs setup image registry                                                                                                                | `docker.io`           |
 | `tls.image.repository`   | Init container TLS certs setup image repository                                                                                                              | `bitnami/nginx`       |
-| `tls.image.tag`          | Init container TLS certs setup image tag (immutable tags are recommended)                                                                                    | `1.21.6-debian-11-r5` |
+| `tls.image.tag`          | Init container TLS certs setup image tag (immutable tags are recommended)                                                                                    | `1.21.6-debian-11-r9` |
 | `tls.image.pullPolicy`   | Init container TLS certs setup image pull policy                                                                                                             | `IfNotPresent`        |
 | `tls.image.pullSecrets`  | Init container TLS certs specify docker-registry secret names as an array                                                                                    | `[]`                  |
 | `tls.extraDnsNames`      | Add extra dns names to the CA, can solve x509 auth issue for pod clients                                                                                     | `[]`                  |
@@ -241,7 +241,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `externalAccess.autoDiscovery.enabled`                   | Enable using an init container to auto-detect external IPs by querying the K8s API                                                              | `false`               |
 | `externalAccess.autoDiscovery.image.registry`            | Init container auto-discovery image registry                                                                                                    | `docker.io`           |
 | `externalAccess.autoDiscovery.image.repository`          | Init container auto-discovery image repository                                                                                                  | `bitnami/kubectl`     |
-| `externalAccess.autoDiscovery.image.tag`                 | Init container auto-discovery image tag (immutable tags are recommended)                                                                        | `1.24.1-debian-11-r5` |
+| `externalAccess.autoDiscovery.image.tag`                 | Init container auto-discovery image tag (immutable tags are recommended)                                                                        | `1.24.2-debian-11-r1` |
 | `externalAccess.autoDiscovery.image.pullPolicy`          | Init container auto-discovery image pull policy                                                                                                 | `IfNotPresent`        |
 | `externalAccess.autoDiscovery.image.pullSecrets`         | Init container auto-discovery image pull secrets                                                                                                | `[]`                  |
 | `externalAccess.autoDiscovery.resources.limits`          | Init container auto-discovery resource limits                                                                                                   | `{}`                  |
@@ -315,7 +315,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                         | `11-debian-11-r4`       |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                         | `11-debian-11-r8`       |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                                                    | `{}`                    |
@@ -496,7 +496,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.enabled`                            | Enable using a sidecar Prometheus exporter                                                                            | `false`                    |
 | `metrics.image.registry`                     | MongoDB(&reg;) Prometheus exporter image registry                                                                     | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB(&reg;) Prometheus exporter image repository                                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                         | `0.32.0-debian-11-r5`      |
+| `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                         | `0.32.0-debian-11-r9`      |
 | `metrics.image.pullPolicy`                   | MongoDB(&reg;) Prometheus exporter image pull policy                                                                  | `IfNotPresent`             |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                       |
 | `metrics.username`                           | String with username for the metrics exporter                                                                         | `""`                       |
