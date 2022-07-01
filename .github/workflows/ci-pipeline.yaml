@@ -46,7 +46,7 @@ jobs:
           num_version_bumps="$(echo "$files_changed_data" | jq -r '[.[] | select(.filename|endswith("Chart.yaml")) | select(.patch|contains("+version")) ] | length' )"
           non_readme_files=$(echo "$files_changed" | grep -vc "\.md" || true)
 
-          if [[ ${{ github.event.action }} = "synchronize" && ${{ github.actor }} = "bitnami-bot" && "$latest_commit_message" == *"readme-generator-for-helm"*  ]]; then
+          if [[ ${{ github.event.action }} == "synchronize" && ${{ github.actor }} == "bitnami-bot" && "$latest_commit_message" == *"readme-generator-for-helm"*  ]]; then
             echo "::set-output name=result::skip"
           elif [[ "$non_readme_files" -le "0" ]]; then
             # The only changes are .md files -> SKIP
@@ -90,13 +90,13 @@ jobs:
     # Given performance issues of the action feature on GH's side, we need to be very restrictive in the job's triggers:
     # -> The 'Get modified charts' job suceededs AND
     # -> The event action is different from opened AND
-    # -> The pipeline was triggered due to a label addition and said label was the 'verify' one OR
-    # -> The pipeline was NOT triggered due to a label addition but the PR already contains the 'verify' one
+    #  ( ---> The pipeline was triggered due to a label addition and said label was the 'verify' one OR
+    #    ---> The pipeline was NOT triggered due to a label addition but the PR already contains the 'verify' one )
     if: |
         needs.get-chart.outputs.result == 'ok' &&
         github.event.action != 'opened' &&
-        github.event.action == 'labeled' && github.event.label.name == 'verify' ||
-        github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'verify')
+        (github.event.action == 'labeled' && github.event.label.name == 'verify' ||
+        github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'verify'))
     name: VIB Verify
     steps:
       - uses: actions/checkout@v2
