@@ -1,4 +1,4 @@
-{{- $kube := (contains .Values.executor "KubernetesExecutor") -}}
+{{- $kube := (contains "KubernetesExecutor" .Values.executor) -}}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:

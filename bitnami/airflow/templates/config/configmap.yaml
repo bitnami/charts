@@ -1,4 +1,4 @@
-{{- $kube := (contains .Values.executor "KubernetesExecutor") -}}
+{{- $kube := (contains "KubernetesExecutor" .Values.executor) -}}
 {{- if or .Values.configuration $kube }}
 apiVersion: v1
 kind: ConfigMap
