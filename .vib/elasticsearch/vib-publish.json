@@ -44,6 +44,27 @@
             "endpoint": "lb-elasticsearch-tcp-rest-api",
             "app_protocol": "HTTP"
           }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/elasticsearch/goss"
+            },
+            "remote": {
+              "workload": "sts-elasticsearch-master"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/elasticsearch/cypress"
+            },
+            "endpoint": "lb-elasticsearch-tcp-rest-api",
+            "app_protocol": "HTTP"
+          }
         }
       ]
     },

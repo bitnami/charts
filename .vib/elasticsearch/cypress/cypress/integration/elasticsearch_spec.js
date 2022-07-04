@@ -15,6 +15,7 @@ it('can get cluster info', () => {
 });
 
 it('can check cluster health', () => {
+  const NODE_NUMBER = Cypress.env('nodeNumber');
   cy.request({
     method: 'GET',
     url: '/_cluster/health',
@@ -22,7 +23,7 @@ it('can check cluster health', () => {
   }).then((response) => {
     expect(response.status).to.eq(200);
     expect(response.body.status).to.contain('green');
-    expect(response.body.number_of_nodes).to.eq(4);
+    expect(response.body.number_of_nodes).to.eq(NODE_NUMBER);
   });
 });
 
