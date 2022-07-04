@@ -11,6 +11,10 @@ file:
     mode: "0644"
     filetype: file
     exists: true
+    contains:
+      - {{ printf "/dbname.*%s/" .Env.MATOMO_DATABASE_NAME }}
+      - {{ printf "/username.*%s/" .Env.MATOMO_DATABASE_USER }}
+      - {{ printf "/host.*%s/" .Env.MATOMO_DATABASE_HOST }}
 # Checks the user running the container is non-root
 command:
   user-id-test:
@@ -23,4 +27,10 @@ command:
     exit-status: 0
     stdout:
     - "/opt/bitnami/php/bin/php"
+    stderr: []
+  ps-aux-apache:
+    exec: ps aux
+    exit-status: 0
+    stdout:
+    - "/opt/bitnami/apache/bin/httpd"
     stderr: []
