@@ -55,7 +55,7 @@ host. To configure Concourse with the URL of your service:
   {{- if .Values.postgresql.enabled }}
 
     {{- if and .Values.secrets.localAuth.enabled }}
-    {{ include "common.utils.secret.getvalue" (dict "secret" $concourseWebSecretName "field" "local-users" "context" $) }}
+    {{ include "common.utils.secret.getvalue" (dict "secret" $concourseWebSecretName "field" "local_users" "context" $) }}
     {{- end }}
     helm upgrade --namespace {{ $releaseNamespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
       {{- if and .Values.secrets.localAuth.enabled }}
@@ -104,7 +104,7 @@ Get your Concourse login credentials by running:
 
     echo "Username : Password
 -------------------
-$(kubectl get secret --namespace {{ $releaseNamespace }} {{ $concourseWebSecretName }} -o jsonpath="{.data.local-users}" | base64 --decode)"
+$(kubectl get secret --namespace {{ $releaseNamespace }} {{ $concourseWebSecretName }} -o jsonpath="{.data.local_users}" | base64 -d)"
 
 Concourse can be accessed via port {{ .Values.web.containerPorts.http }}: on the following DNS name from within your cluster:
 
@@ -153,13 +153,16 @@ To connect to Concourse from outside the cluster, perform the following steps:
 {{- end }}
 
 {{- include "concourse.validateValues" . }}
+{{- if .Values.web.conjur.enabled -}}
+{{- include "concourse.web.conjur.validateValues" . }}
+{{- end }}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 
 {{- $passwordValidationErrors := list -}}
 {{- if and .Values.secrets.localAuth.enabled (not .Values.web.existingSecret) -}}
     {{- $secretName := include "concourse.web.secretName" . -}}
-    {{- $requiredWebPassword := dict "valueKey" "secrets.localUsers" "secret" $secretName "field" "local-users" "context" $ -}}
+    {{- $requiredWebPassword := dict "valueKey" "secrets.localUsers" "secret" $secretName "field" "local_users" "context" $ -}}
     {{- $requiredWebPasswordError := include "common.validations.values.single.empty" $requiredWebPassword -}}
     {{- $passwordValidationErrors = append $passwordValidationErrors $requiredWebPasswordError -}}
 {{- end }}

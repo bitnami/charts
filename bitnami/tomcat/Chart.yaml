@@ -1,7 +1,7 @@
 annotations:
   category: ApplicationServer
 apiVersion: v2
-appVersion: 10.0.20
+appVersion: 10.0.22
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -20,10 +20,10 @@ keywords:
   - application server
   - jsp
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: tomcat
 sources:
   - https://github.com/bitnami/bitnami-docker-tomcat
   - http://tomcat.apache.org
-version: 10.1.22
+version: 10.3.9

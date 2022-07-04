@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
@@ -58,6 +60,7 @@ diagnosticMode:
     - infinity
 
 ## @section Spark parameters
+##
 
 ## Bitnami Spark image version
 ## ref: https://hub.docker.com/r/bitnami/spark/tags/
@@ -71,7 +74,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/spark
-  tag: 3.2.1-debian-10-r85
+  tag: 3.3.0-debian-11-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -95,6 +98,7 @@ image:
 hostNetwork: false
 
 ## @section Spark master parameters
+##
 
 ## Spark master specific configuration
 ##
@@ -228,15 +232,15 @@ master:
   ##    maxSurge: 25%
   ##    maxUnavailable: 25%
   ##
-  updateStrategy: 
-    type: RollingUpdate 
+  updateStrategy:
+    type: RollingUpdate
   ## @param master.priorityClassName master pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param master.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param master.schedulerName Name of the k8s scheduler (other than default) for master pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -268,11 +272,13 @@ master:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -340,7 +346,7 @@ master:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param master.initContainers Add initContainers to the master pods.
   ## Example:
   ## initContainers:
@@ -354,6 +360,7 @@ master:
   initContainers: []
 
 ## @section Spark worker parameters
+##
 
 ## Spark worker specific configuration
 ##
@@ -404,6 +411,7 @@ worker:
   ## extraEnvVars:
   ##  - name: SPARK_DAEMON_JAVA_OPTS
   ##    value: -Dx=y
+  ##
   extraEnvVars: []
   ## @param worker.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for worker nodes
   ##
@@ -501,8 +509,8 @@ worker:
   ##    maxSurge: 25%
   ##    maxUnavailable: 25%
   ##
-  updateStrategy: 
-    type: RollingUpdate 
+  updateStrategy:
+    type: RollingUpdate
   ## @param worker.podManagementPolicy Statefulset Pod Management Policy Type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
@@ -513,7 +521,7 @@ worker:
   ## @param worker.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param worker.schedulerName Name of the k8s scheduler (other than default) for worker pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -545,11 +553,13 @@ worker:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -617,7 +627,7 @@ worker:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param worker.initContainers Add initContainers to the worker pods.
   ## Example:
   ## initContainers:
@@ -644,6 +654,7 @@ worker:
     targetMemory: ""
 
 ## @section Security parameters
+##
 
 ## Security configuration
 ##
@@ -707,14 +718,17 @@ security:
       ## limits:
       ##    cpu: 100m
       ##    memory: 128Mi
+      ##
       limits: {}
       ## Examples:
       ## requests:
       ##    cpu: 100m
       ##    memory: 128Mi
+      ##
       requests: {}
 
 ## @section Traffic Exposure parameters
+##
 
 ## Service parameters
 ##
@@ -817,7 +831,7 @@ ingress:
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-  ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+  ## You can use the ingress.secrets parameter to create this TLS secret or rely on cert-manager to create it
   ##
   tls: false
   ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
@@ -862,8 +876,23 @@ ingress:
   ##   certificate:
   ##
   secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: spark.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: spark-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
 
 ## @section Other parameters
+##
 
 ## ServiceAccount configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -884,6 +913,7 @@ serviceAccount:
   automountServiceAccountToken: true
 
 ## @section Metrics parameters
+##
 
 ## Metrics configuration
 ##

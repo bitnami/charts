@@ -79,8 +79,8 @@ spec:
           {{- if .Values.curator.topologySpreadConstraints }}
           topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.curator.topologySpreadConstraints "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.curator.podSecurityContext }}
-          securityContext: {{- toYaml .Values.curator.podSecurityContext | nindent 12 }}
+          {{- if .Values.curator.podSecurityContext.enabled }}
+          securityContext: {{- omit .Values.curator.podSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.curator.initContainers }}
           initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.curator.initContainers "context" $) | nindent 12 }}
@@ -90,7 +90,7 @@ spec:
               image: {{ template "elasticsearch.curator.image" . }}
               imagePullPolicy: {{ .Values.curator.image.pullPolicy | quote }}
               {{- if .Values.curator.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.curator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+              securityContext: {{- omit .Values.curator.containerSecurityContext "enabled" | toYaml | nindent 16 }}
               {{- end }}
               {{- if .Values.curator.command }}
               command: {{- include "common.tplvalues.render" (dict "value" .Values.curator.command "context" $) | nindent 16 }}
@@ -104,7 +104,7 @@ spec:
                 {{- end }}
                 - "--config"
                 - "/etc/es-curator/config.yml"
-                - "/etc/es-curator/action_file.yml" ]
+                - "/etc/es-curator/action_file.yml"
               {{- end }}
               env:
                 {{- if .Values.curator.extraEnvVars }}

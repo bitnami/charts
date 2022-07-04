@@ -1,6 +1,4 @@
 {{- if or .Release.IsUpgrade (ne .Values.sentinel.service.type "NodePort") .Values.sentinel.service.nodePorts.redis -}}
-
----
 {{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled }}
 {{ $portsmap := (lookup "v1" "ConfigMap" $.Release.Namespace (printf "%s-%s" ( include "common.names.fullname" . ) "ports-configmap")).data }}
 
@@ -33,17 +31,23 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.sentinel.service.type }}
-  {{- if eq .Values.sentinel.service.type "LoadBalancer" }}
-  externalTrafficPolicy: {{ .Values.sentinel.service.externalTrafficPolicy }}
+  {{- if or (eq .Values.sentinel.service.type "LoadBalancer") (eq .Values.sentinel.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.sentinel.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{- if and (eq .Values.sentinel.service.type "LoadBalancer") .Values.sentinel.service.loadBalancerIP }}
+  {{- if and (eq .Values.sentinel.service.type "LoadBalancer") (not (empty .Values.sentinel.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.sentinel.service.loadBalancerIP }}
   {{- end }}
-  {{- if and (eq .Values.sentinel.service.type "LoadBalancer") .Values.sentinel.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml .Values.sentinel.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- if and (eq .Values.sentinel.service.type "LoadBalancer") (not (empty .Values.sentinel.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.sentinel.service.loadBalancerSourceRanges }}
   {{- end }}
-  {{- if and (eq .Values.sentinel.service.type "ClusterIP") .Values.sentinel.service.clusterIP }}
+  {{- if and .Values.sentinel.service.clusterIP (eq .Values.sentinel.service.type "ClusterIP") }}
   clusterIP: {{ .Values.sentinel.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.sentinel.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.sentinel.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.sentinel.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
     - name: tcp-redis
@@ -89,6 +93,9 @@ spec:
       port: {{ .Values.replica.containerPorts.redis }}
       protocol: TCP
       targetPort: {{ .Values.replica.containerPorts.redis }}
+    {{- end }}
+    {{- if .Values.sentinel.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: node

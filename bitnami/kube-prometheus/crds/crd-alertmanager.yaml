@@ -1,11 +1,9 @@
-# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.55.0/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml
-
----
+# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.57.0/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.6.2
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: alertmanagers.monitoring.coreos.com
 spec:
@@ -16,6 +14,8 @@ spec:
     kind: Alertmanager
     listKind: AlertmanagerList
     plural: alertmanagers
+    shortNames:
+    - am
     singular: alertmanager
   scope: Namespaced
   versions:
@@ -976,14 +976,14 @@ spec:
               alertmanagerConfiguration:
                 description: 'EXPERIMENTAL: alertmanagerConfiguration specifies the
                   global Alertmanager configuration. If defined, it takes precedence
-                  over the `configSecret` field. This field may change in future releases.
-                  The specified global alertmanager config will not force add a namespace
-                  label in routes and inhibitRules.'
+                  over the `configSecret` field. This field may change in future releases.'
                 properties:
                   name:
                     description: The name of the AlertmanagerConfig resource which
-                      holds the global configuration. It must be in the same namespace
-                      as the Alertmanager.
+                      is used to generate the global configuration. It must be defined
+                      in the same namespace as the Alertmanager object. The operator
+                      will not enforce a `namespace` label for routes and inhibition
+                      rules.
                     minLength: 1
                     type: string
                 type: object
@@ -1013,10 +1013,15 @@ spec:
                   type: string
                 type: array
               configSecret:
-                description: ConfigSecret is the name of a Kubernetes Secret in the
-                  same namespace as the Alertmanager object, which contains configuration
-                  for this Alertmanager instance. Defaults to 'alertmanager-<alertmanager-name>'
-                  The secret is mounted into /etc/alertmanager/config.
+                description: "ConfigSecret is the name of a Kubernetes Secret in the
+                  same namespace as the Alertmanager object, which contains the configuration
+                  for this Alertmanager instance. If empty, it defaults to 'alertmanager-<alertmanager-name>'.
+                  \n The Alertmanager configuration should be available under the
+                  `alertmanager.yaml` key. Additional keys from the original secret
+                  are copied to the generated secret. \n If either the secret or the
+                  `alertmanager.yaml` key is missing, the operator provisions an Alertmanager
+                  configuration with one empty receiver (effectively dropping alert
+                  notifications)."
                 type: string
               containers:
                 description: 'Containers allows injecting additional containers. This
@@ -2253,6 +2258,28 @@ spec:
                   Use case is e.g. spanning an Alertmanager cluster across Kubernetes
                   clusters with a single replica in each.
                 type: boolean
+              hostAliases:
+                description: Pods' hostAliases configuration
+                items:
+                  description: HostAlias holds the mapping between IP and hostnames
+                    that will be injected as an entry in the pod's hosts file.
+                  properties:
+                    hostnames:
+                      description: Hostnames for the above IP address.
+                      items:
+                        type: string
+                      type: array
+                    ip:
+                      description: IP address of the host file entry.
+                      type: string
+                  required:
+                  - hostnames
+                  - ip
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - ip
+                x-kubernetes-list-type: map
               image:
                 description: Image if specified has precedence over baseImage, tag
                   and sha combinations. Specifying the version is still necessary
@@ -3505,9 +3532,19 @@ spec:
                 type: boolean
               logFormat:
                 description: Log format for Alertmanager to be configured with.
+                enum:
+                - ""
+                - logfmt
+                - json
                 type: string
               logLevel:
                 description: Log level for Alertmanager to be configured with.
+                enum:
+                - ""
+                - debug
+                - info
+                - warn
+                - error
                 type: string
               minReadySeconds:
                 description: Minimum number of seconds for which a newly created pod
@@ -3910,13 +3947,13 @@ spec:
                                   automatically if one of them is empty and the other
                                   is non-empty. There are two important differences
                                   between DataSource and DataSourceRef: * While DataSource
-                                  only allows two specific types of objects, DataSourceRef   allows
-                                  any non-core object, as well as PersistentVolumeClaim
+                                  only allows two specific types of objects, DataSourceRef
+                                  allows any non-core object, as well as PersistentVolumeClaim
                                   objects. * While DataSource ignores disallowed values
-                                  (dropping them), DataSourceRef   preserves all values,
-                                  and generates an error if a disallowed value is   specified.
-                                  (Alpha) Using this field requires the AnyVolumeDataSource
-                                  feature gate to be enabled.'
+                                  (dropping them), DataSourceRef preserves all values,
+                                  and generates an error if a disallowed value is
+                                  specified. (Alpha) Using this field requires the
+                                  AnyVolumeDataSource feature gate to be enabled.'
                                 properties:
                                   apiGroup:
                                     description: APIGroup is the group for the resource
@@ -4133,11 +4170,11 @@ spec:
                               and the other is non-empty. There are two important
                               differences between DataSource and DataSourceRef: *
                               While DataSource only allows two specific types of objects,
-                              DataSourceRef   allows any non-core object, as well
-                              as PersistentVolumeClaim objects. * While DataSource
-                              ignores disallowed values (dropping them), DataSourceRef   preserves
+                              DataSourceRef allows any non-core object, as well as
+                              PersistentVolumeClaim objects. * While DataSource ignores
+                              disallowed values (dropping them), DataSourceRef preserves
                               all values, and generates an error if a disallowed value
-                              is   specified. (Alpha) Using this field requires the
+                              is specified. (Alpha) Using this field requires the
                               AnyVolumeDataSource feature gate to be enabled.'
                             properties:
                               apiGroup:
@@ -4467,10 +4504,10 @@ spec:
                       description: 'WhenUnsatisfiable indicates how to deal with a
                         pod if it doesn''t satisfy the spread constraint. - DoNotSchedule
                         (default) tells the scheduler not to schedule it. - ScheduleAnyway
-                        tells the scheduler to schedule the pod in any location,   but
+                        tells the scheduler to schedule the pod in any location, but
                         giving higher precedence to topologies that would help reduce
-                        the   skew. A constraint is considered "Unsatisfiable" for
-                        an incoming pod if and only if every possible node assignment
+                        the skew. A constraint is considered "Unsatisfiable" for an
+                        incoming pod if and only if every possible node assignment
                         for that pod would violate "MaxSkew" on some topology. For
                         example, in a 3-zone cluster, MaxSkew is set to 1, and pods
                         with the same labelSelector spread as 3/1/1: | zone1 | zone2
@@ -4922,18 +4959,17 @@ spec:
                         pod starts, and deleted when the pod is removed. \n Use this
                         if: a) the volume is only needed while the pod runs, b) features
                         of normal volumes like restoring from snapshot or capacity
-                        \   tracking are needed, c) the storage driver is specified
-                        through a storage class, and d) the storage driver supports
-                        dynamic volume provisioning through    a PersistentVolumeClaim
-                        (see EphemeralVolumeSource for more    information on the
-                        connection between this volume type    and PersistentVolumeClaim).
-                        \n Use PersistentVolumeClaim or one of the vendor-specific
-                        APIs for volumes that persist for longer than the lifecycle
-                        of an individual pod. \n Use CSI for light-weight local ephemeral
-                        volumes if the CSI driver is meant to be used that way - see
-                        the documentation of the driver for more information. \n A
-                        pod can use both types of ephemeral volumes and persistent
-                        volumes at the same time."
+                        tracking are needed, c) the storage driver is specified through
+                        a storage class, and d) the storage driver supports dynamic
+                        volume provisioning through a PersistentVolumeClaim (see EphemeralVolumeSource
+                        for more information on the connection between this volume
+                        type and PersistentVolumeClaim). \n Use PersistentVolumeClaim
+                        or one of the vendor-specific APIs for volumes that persist
+                        for longer than the lifecycle of an individual pod. \n Use
+                        CSI for light-weight local ephemeral volumes if the CSI driver
+                        is meant to be used that way - see the documentation of the
+                        driver for more information. \n A pod can use both types of
+                        ephemeral volumes and persistent volumes at the same time."
                       properties:
                         volumeClaimTemplate:
                           description: "Will be used to create a stand-alone PVC to
@@ -5021,13 +5057,13 @@ spec:
                                     other is non-empty. There are two important differences
                                     between DataSource and DataSourceRef: * While
                                     DataSource only allows two specific types of objects,
-                                    DataSourceRef   allows any non-core object, as
-                                    well as PersistentVolumeClaim objects. * While
-                                    DataSource ignores disallowed values (dropping
-                                    them), DataSourceRef   preserves all values, and
-                                    generates an error if a disallowed value is   specified.
-                                    (Alpha) Using this field requires the AnyVolumeDataSource
-                                    feature gate to be enabled.'
+                                    DataSourceRef allows any non-core object, as well
+                                    as PersistentVolumeClaim objects. * While DataSource
+                                    ignores disallowed values (dropping them), DataSourceRef
+                                    preserves all values, and generates an error if
+                                    a disallowed value is specified. (Alpha) Using
+                                    this field requires the AnyVolumeDataSource feature
+                                    gate to be enabled.'
                                   properties:
                                     apiGroup:
                                       description: APIGroup is the group for the resource

@@ -19,7 +19,7 @@ $ helm install my-release bitnami/etcd
 
 This chart bootstraps a [etcd](https://github.com/bitnami/bitnami-docker-etcd) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                       | etcd image registry                                                                             | `docker.io`          |
 | `image.repository`                     | etcd image name                                                                                 | `bitnami/etcd`       |
-| `image.tag`                            | etcd image tag                                                                                  | `3.5.4-debian-10-r0` |
+| `image.tag`                            | etcd image tag                                                                                  | `3.5.4-debian-11-r3` |
 | `image.pullPolicy`                     | etcd image pull policy                                                                          | `IfNotPresent`       |
 | `image.pullSecrets`                    | etcd image pull secrets                                                                         | `[]`                 |
 | `image.debug`                          | Enable image debug mode                                                                         | `false`              |
@@ -181,6 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `terminationGracePeriodSeconds`                    | Seconds the pod needs to gracefully terminate                                             | `""`            |
 | `schedulerName`                                    | Name of the k8s scheduler (other than default)                                            | `""`            |
 | `priorityClassName`                                | Name of the priority class to be used by etcd pods                                        | `""`            |
+| `runtimeClassName`                                 | Name of the runtime class to be used by pod(s)                                            | `""`            |
 | `topologySpreadConstraints`                        | Topology Spread Constraints for pod assignment                                            | `[]`            |
 | `persistentVolumeClaimRetentionPolicy.enabled`     | Controls if and how PVCs are deleted during the lifecycle of a StatefulSet                | `false`         |
 | `persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced            | `Retain`        |
@@ -229,7 +230,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                         | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `10-debian-10-r405`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                          | `11-debian-11-r3`       |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                   | `{}`                    |
@@ -250,18 +251,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                  | Description                                                                        | Value        |
-| ------------------------------------- | ---------------------------------------------------------------------------------- | ------------ |
-| `metrics.enabled`                     | Expose etcd metrics                                                                | `false`      |
-| `metrics.podAnnotations`              | Annotations for the Prometheus metrics on etcd pods                                | `{}`         |
-| `metrics.podMonitor.enabled`          | Create PodMonitor Resource for scraping metrics using PrometheusOperator           | `false`      |
-| `metrics.podMonitor.namespace`        | Namespace in which Prometheus is running                                           | `monitoring` |
-| `metrics.podMonitor.interval`         | Specify the interval at which metrics should be scraped                            | `30s`        |
-| `metrics.podMonitor.scrapeTimeout`    | Specify the timeout after which the scrape is ended                                | `30s`        |
-| `metrics.podMonitor.additionalLabels` | Additional labels that can be used so PodMonitors will be discovered by Prometheus | `{}`         |
-| `metrics.podMonitor.scheme`           | Scheme to use for scraping                                                         | `http`       |
-| `metrics.podMonitor.tlsConfig`        | TLS configuration used for scrape endpoints used by Prometheus                     | `{}`         |
-| `metrics.podMonitor.relabelings`      | Prometheus relabeling rules                                                        | `[]`         |
+| Name                                      | Description                                                                                                                   | Value        |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `metrics.enabled`                         | Expose etcd metrics                                                                                                           | `false`      |
+| `metrics.podAnnotations`                  | Annotations for the Prometheus metrics on etcd pods                                                                           | `{}`         |
+| `metrics.podMonitor.enabled`              | Create PodMonitor Resource for scraping metrics using PrometheusOperator                                                      | `false`      |
+| `metrics.podMonitor.namespace`            | Namespace in which Prometheus is running                                                                                      | `monitoring` |
+| `metrics.podMonitor.interval`             | Specify the interval at which metrics should be scraped                                                                       | `30s`        |
+| `metrics.podMonitor.scrapeTimeout`        | Specify the timeout after which the scrape is ended                                                                           | `30s`        |
+| `metrics.podMonitor.additionalLabels`     | Additional labels that can be used so PodMonitors will be discovered by Prometheus                                            | `{}`         |
+| `metrics.podMonitor.scheme`               | Scheme to use for scraping                                                                                                    | `http`       |
+| `metrics.podMonitor.tlsConfig`            | TLS configuration used for scrape endpoints used by Prometheus                                                                | `{}`         |
+| `metrics.podMonitor.relabelings`          | Prometheus relabeling rules                                                                                                   | `[]`         |
+| `metrics.prometheusRule.enabled`          | Create a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`      |
+| `metrics.prometheusRule.namespace`        | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                 | `""`         |
+| `metrics.prometheusRule.additionalLabels` | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                         | `{}`         |
+| `metrics.prometheusRule.rules`            | Prometheus Rule definitions                                                                                                   | `[]`         |
 
 
 ### Snapshotting parameters

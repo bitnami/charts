@@ -200,7 +200,7 @@ data:
     {{- end }}
 
     if [[ "$REDIS_REPLICATION_MODE" = "slave" ]]; then
-        ARGS+=("--slaveof" "${REDIS_MASTER_HOST}" "${REDIS_MASTER_PORT_NUMBER}")
+        ARGS+=("--replicaof" "${REDIS_MASTER_HOST}" "${REDIS_MASTER_PORT_NUMBER}")
     fi
 
     {{- if .Values.auth.enabled }}
@@ -433,9 +433,11 @@ data:
 
     REDIS_SERVICE="{{ include "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
 
+    {{ if .Values.auth.sentinel -}}
     # redis-cli automatically consumes credentials from the REDISCLI_AUTH variable
     [[ -n "$REDIS_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_PASSWORD"
     [[ -f "$REDIS_PASSWORD_FILE" ]] && export REDISCLI_AUTH="$(< "${REDIS_PASSWORD_FILE}")"
+    {{- end }}
 
     if ! failover_finished; then
         echo "I am the master pod and you are stopping me. Starting sentinel failover"
@@ -599,7 +601,7 @@ data:
     {{- else }}
     ARGS=("--port" "${REDIS_PORT}")
     {{- end }}
-    ARGS+=("--slaveof" "${REDIS_MASTER_HOST}" "${REDIS_MASTER_PORT_NUMBER}")
+    ARGS+=("--replicaof" "${REDIS_MASTER_HOST}" "${REDIS_MASTER_PORT_NUMBER}")
     {{- if .Values.auth.enabled }}
     ARGS+=("--requirepass" "${REDIS_PASSWORD}")
     ARGS+=("--masterauth" "${REDIS_MASTER_PASSWORD}")

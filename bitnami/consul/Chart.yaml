@@ -1,7 +1,7 @@
 annotations:
   category: DeveloperTools
 apiVersion: v2
-appVersion: 1.12.0
+appVersion: 1.12.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -17,10 +17,11 @@ keywords:
   - configuring
   - services
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: consul
 sources:
   - https://github.com/bitnami/bitnami-docker-consul
   - https://www.consul.io/
-version: 10.4.0
+version: 10.7.1
+

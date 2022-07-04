@@ -19,7 +19,7 @@ $ helm install my-release bitnami/nats
 
 This chart bootstraps a [NATS](https://github.com/bitnami/bitnami-docker-nats) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------ | ----------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`         | NATS image registry                                                                                   | `docker.io`          |
 | `image.repository`       | NATS image repository                                                                                 | `bitnami/nats`       |
-| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.8.2-debian-10-r0` |
+| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.8.3-debian-10-r0` |
 | `image.pullPolicy`       | NATS image pull policy                                                                                | `IfNotPresent`       |
 | `image.pullSecrets`      | NATS image pull secrets                                                                               | `[]`                 |
 | `image.debug`            | Enable NATS image debug mode                                                                          | `false`              |
@@ -184,6 +184,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.nodePorts.cluster`        | Node port for clustering                                                                                                         | `""`                     |
 | `service.nodePorts.monitoring`     | Node port for monitoring                                                                                                         | `""`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.clusterIP`                | NATS service Cluster IP                                                                                                          | `""`                     |
 | `service.loadBalancerIP`           | NATS service Load Balancer IP                                                                                                    | `""`                     |
 | `service.loadBalancerSourceRanges` | NATS service Load Balancer sources                                                                                               | `[]`                     |
@@ -203,6 +204,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 | `networkPolicy.enabled`            | Enable creation of NetworkPolicy resources                                                                                       | `false`                  |
 | `networkPolicy.allowExternal`      | The Policy model to apply                                                                                                        | `true`                   |
 | `networkPolicy.additionalRules`    | Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.                                             | `{}`                     |
@@ -215,7 +217,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Enable Prometheus metrics via exporter side-car                                  | `false`                 |
 | `metrics.image.registry`                   | Prometheus metrics exporter image registry                                       | `docker.io`             |
 | `metrics.image.repository`                 | Prometheus metrics exporter image repository                                     | `bitnami/nats-exporter` |
-| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)           | `0.9.2-debian-10-r28`   |
+| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)           | `0.9.3-debian-10-r0`    |
 | `metrics.image.pullPolicy`                 | Prometheus metrics image pull policy                                             | `IfNotPresent`          |
 | `metrics.image.pullSecrets`                | Prometheus metrics image pull secrets                                            | `[]`                    |
 | `metrics.resources`                        | Metrics exporter resource requests and limits                                    | `{}`                    |

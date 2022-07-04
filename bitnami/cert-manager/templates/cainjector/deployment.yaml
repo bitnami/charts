@@ -47,6 +47,9 @@ spec:
       {{- if .Values.cainjector.priorityClassName }}
       priorityClassName: {{ .Values.cainjector.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.cainjector.runtimeClassName }}
+      runtimeClassName: {{ .Values.cainjector.runtimeClassName }}
+      {{- end }}
       {{- if .Values.cainjector.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -82,6 +85,9 @@ spec:
           args:
             - --v={{ .Values.logLevel }}
             - --leader-election-namespace={{ .Values.leaderElection.namespace }}
+            {{- if .Values.cainjector.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
           {{- end }}
           {{- if .Values.cainjector.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.cainjector.containerSecurityContext "enabled" | toYaml | nindent 12 }}

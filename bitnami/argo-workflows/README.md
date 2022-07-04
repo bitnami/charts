@@ -19,7 +19,7 @@ $ helm install my-release bitnami/argo-workflows
 
 This chart bootstraps a [Argo Workflows](https://argoproj.github.io/workflows) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -78,104 +78,105 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Argo Workflows Server configuration parameters
 
-| Name                                                     | Description                                                                                             | Value                       |
-| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `server.image.registry`                                  | server image registry                                                                                   | `docker.io`                 |
-| `server.image.repository`                                | server image repository                                                                                 | `bitnami/argo-workflow-cli` |
-| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                       | `3.3.5-scratch-r0`          |
-| `server.image.pullPolicy`                                | server image pull policy                                                                                | `Always`                    |
-| `server.image.pullSecrets`                               | server image pull secrets                                                                               | `[]`                        |
-| `server.enabled`                                         | Enable server deployment                                                                                | `true`                      |
-| `server.replicaCount`                                    | Number of server replicas to deploy                                                                     | `1`                         |
-| `server.livenessProbe.enabled`                           | Enable livenessProbe on server nodes                                                                    | `true`                      |
-| `server.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                 | `10`                        |
-| `server.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                        | `20`                        |
-| `server.livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                                       | `1`                         |
-| `server.livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                                     | `3`                         |
-| `server.livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                                     | `1`                         |
-| `server.readinessProbe.enabled`                          | Enable readinessProbe on server nodes                                                                   | `true`                      |
-| `server.readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                                | `10`                        |
-| `server.readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                       | `20`                        |
-| `server.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                      | `1`                         |
-| `server.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                    | `3`                         |
-| `server.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                    | `1`                         |
-| `server.startupProbe.enabled`                            | Enable startupProbe                                                                                     | `false`                     |
-| `server.startupProbe.path`                               | Path to check for startupProbe                                                                          | `/`                         |
-| `server.startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                  | `300`                       |
-| `server.startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                         | `10`                        |
-| `server.startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                        | `5`                         |
-| `server.startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                      | `6`                         |
-| `server.startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                      | `1`                         |
-| `server.customLivenessProbe`                             | Server custom livenessProbe that overrides the default one                                              | `{}`                        |
-| `server.customReadinessProbe`                            | Server custom readinessProbe that overrides the default one                                             | `{}`                        |
-| `server.customStartupProbe`                              | Server custom startupProbe that overrides the default one                                               | `{}`                        |
-| `server.resources.limits`                                | The resources limits for the server containers                                                          | `{}`                        |
-| `server.resources.requests`                              | The requested resources for the server containers                                                       | `{}`                        |
-| `server.podSecurityContext.enabled`                      | Enabled server pods' Security Context                                                                   | `true`                      |
-| `server.podSecurityContext.fsGroup`                      | Set server pod's Security Context fsGroup                                                               | `1001`                      |
-| `server.containerSecurityContext.enabled`                | Enabled server containers' Security Context                                                             | `true`                      |
-| `server.containerSecurityContext.runAsUser`              | Set server containers' Security Context runAsUser                                                       | `1001`                      |
-| `server.containerSecurityContext.runAsNonRoot`           | Set server containers' Security Context runAsNonRoot                                                    | `true`                      |
-| `server.containerSecurityContext.readOnlyRootFilesystem` | Set read only root file system pod's Security Conte                                                     | `true`                      |
-| `server.rbac.create`                                     | Create RBAC resources for the Argo workflows server                                                     | `true`                      |
-| `server.extraArgs`                                       | Extra arguments for the server command line                                                             | `""`                        |
-| `server.auth.enabled`                                    | Enable authentication                                                                                   | `true`                      |
-| `server.auth.mode`                                       | Set authentication mode. Either `server`, `client` or `sso`.                                            | `client`                    |
-| `server.auth.sso.enabled`                                | Enable SSO configuration for the server auth mode                                                       | `false`                     |
-| `server.auth.sso.issuer`                                 | Root URL for the OIDC identity provider                                                                 | `""`                        |
-| `server.auth.sso.clientId.name`                          | Name of the secret containing the OIDC client ID                                                        | `""`                        |
-| `server.auth.sso.clientId.key`                           | Key in the secret to obtain the OIDC client ID                                                          | `""`                        |
-| `server.auth.sso.clientSecret.name`                      | Name of the secret containing the OIDC client secret                                                    | `""`                        |
-| `server.auth.sso.clientSecret.key`                       | Key in the secret to obtain the OIDC client secret                                                      | `""`                        |
-| `server.auth.sso.redirectUrl`                            | The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.                           | `""`                        |
-| `server.auth.sso.rbac.enabled`                           | Create RBAC resources for SSO                                                                           | `true`                      |
-| `server.auth.sso.rbac.secretWhitelist`                   | Restricts the secrets that the server can read                                                          | `[]`                        |
-| `server.auth.sso.scopes`                                 | Scopes requested from the SSO ID provider                                                               | `[]`                        |
-| `server.clusterWorkflowTemplates.enabled`                | Create ClusterRole and CRB for the controoler to access ClusterWorkflowTemplates                        | `true`                      |
-| `server.clusterWorkflowTemplates.enableEditing`          | Give the server permissions to edit ClusterWorkflowTemplates                                            | `true`                      |
-| `server.pdb.enabled`                                     | Create Pod Disruption Budget for the server component                                                   | `false`                     |
-| `server.pdb.minAvailable`                                | Sets the min number of pods availables for the Pod Disruption Budget                                    | `1`                         |
-| `server.pdb.maxUnavailable`                              | Sets the max number of pods unavailable for the Pod Disruption Budget                                   | `1`                         |
-| `server.secure`                                          | Run Argo server in secure mode                                                                          | `false`                     |
-| `server.baseHref`                                        | Base href of the Argo Workflows deployment                                                              | `/`                         |
-| `server.containerPorts.web`                              | argo Server container port                                                                              | `2746`                      |
-| `server.serviceAccount.create`                           | Specifies whether a ServiceAccount should be created                                                    | `true`                      |
-| `server.serviceAccount.name`                             | The name of the ServiceAccount to use.                                                                  | `""`                        |
-| `server.serviceAccount.automountServiceAccountToken`     | Automount service account token for the server service account                                          | `true`                      |
-| `server.command`                                         | Override default container command (useful when using custom images)                                    | `[]`                        |
-| `server.args`                                            | Override default container args (useful when using custom images)                                       | `[]`                        |
-| `server.hostAliases`                                     | server pods host aliases                                                                                | `[]`                        |
-| `server.podLabels`                                       | Extra labels for server pods                                                                            | `{}`                        |
-| `server.podAnnotations`                                  | Annotations for server pods                                                                             | `{}`                        |
-| `server.podAffinityPreset`                               | Pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`              | `""`                        |
-| `server.podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`         | `soft`                      |
-| `server.nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`        | `""`                        |
-| `server.nodeAffinityPreset.key`                          | Node label key to match. Ignored if `server.affinity` is set                                            | `""`                        |
-| `server.nodeAffinityPreset.values`                       | Node label values to match. Ignored if `server.affinity` is set                                         | `[]`                        |
-| `server.affinity`                                        | Affinity for server pods assignment                                                                     | `{}`                        |
-| `server.nodeSelector`                                    | Node labels for server pods assignment                                                                  | `{}`                        |
-| `server.tolerations`                                     | Tolerations for server pods assignment                                                                  | `[]`                        |
-| `server.updateStrategy.type`                             | server statefulset strategy type                                                                        | `RollingUpdate`             |
-| `server.topologySpreadConstraints`                       | Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in | `[]`                        |
-| `server.schedulerName`                                   | Alternate scheduler for the server deployment                                                           | `""`                        |
-| `server.priorityClassName`                               | server pods' priorityClassName                                                                          | `""`                        |
-| `server.lifecycleHooks`                                  | for the server container(s) to automate configuration before or after startup                           | `{}`                        |
-| `server.extraEnvVars`                                    | Array with extra environment variables to add to server nodes                                           | `[]`                        |
-| `server.extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra env vars for server nodes                                   | `""`                        |
-| `server.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for server nodes                                      | `""`                        |
-| `server.extraVolumes`                                    | Optionally specify extra list of additional volumes for the server pod(s)                               | `[]`                        |
-| `server.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the server container(s)                    | `[]`                        |
-| `server.sidecars`                                        | Add additional sidecar containers to the server pod(s)                                                  | `{}`                        |
-| `server.initContainers`                                  | Add additional init containers to the server pod(s)                                                     | `{}`                        |
-| `server.service.type`                                    | server service type                                                                                     | `ClusterIP`                 |
-| `server.service.ports.http`                              | server service HTTP port                                                                                | `80`                        |
-| `server.service.nodePorts.http`                          | Node port for HTTP                                                                                      | `""`                        |
-| `server.service.clusterIP`                               | server service Cluster IP                                                                               | `""`                        |
-| `server.service.loadBalancerIP`                          | server service Load Balancer IP                                                                         | `""`                        |
-| `server.service.loadBalancerSourceRanges`                | server service Load Balancer sources                                                                    | `[]`                        |
-| `server.service.externalTrafficPolicy`                   | server service external traffic policy                                                                  | `Cluster`                   |
-| `server.service.annotations`                             | Additional custom annotations for server service                                                        | `{}`                        |
-| `server.service.extraPorts`                              | Extra port to expose on the server service                                                              | `[]`                        |
+| Name                                                     | Description                                                                                                         | Value                       |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `server.image.registry`                                  | server image registry                                                                                               | `docker.io`                 |
+| `server.image.repository`                                | server image repository                                                                                             | `bitnami/argo-workflow-cli` |
+| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.3.6-scratch-r2`          |
+| `server.image.pullPolicy`                                | server image pull policy                                                                                            | `Always`                    |
+| `server.image.pullSecrets`                               | server image pull secrets                                                                                           | `[]`                        |
+| `server.enabled`                                         | Enable server deployment                                                                                            | `true`                      |
+| `server.replicaCount`                                    | Number of server replicas to deploy                                                                                 | `1`                         |
+| `server.livenessProbe.enabled`                           | Enable livenessProbe on server nodes                                                                                | `true`                      |
+| `server.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                             | `10`                        |
+| `server.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                                    | `20`                        |
+| `server.livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                                                   | `1`                         |
+| `server.livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                                                 | `3`                         |
+| `server.livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                                                 | `1`                         |
+| `server.readinessProbe.enabled`                          | Enable readinessProbe on server nodes                                                                               | `true`                      |
+| `server.readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                                            | `10`                        |
+| `server.readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                                   | `20`                        |
+| `server.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                                  | `1`                         |
+| `server.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                | `3`                         |
+| `server.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                                | `1`                         |
+| `server.startupProbe.enabled`                            | Enable startupProbe                                                                                                 | `false`                     |
+| `server.startupProbe.path`                               | Path to check for startupProbe                                                                                      | `/`                         |
+| `server.startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                              | `300`                       |
+| `server.startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                                     | `10`                        |
+| `server.startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                                    | `5`                         |
+| `server.startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                                  | `6`                         |
+| `server.startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                                  | `1`                         |
+| `server.customLivenessProbe`                             | Server custom livenessProbe that overrides the default one                                                          | `{}`                        |
+| `server.customReadinessProbe`                            | Server custom readinessProbe that overrides the default one                                                         | `{}`                        |
+| `server.customStartupProbe`                              | Server custom startupProbe that overrides the default one                                                           | `{}`                        |
+| `server.resources.limits`                                | The resources limits for the server containers                                                                      | `{}`                        |
+| `server.resources.requests`                              | The requested resources for the server containers                                                                   | `{}`                        |
+| `server.podSecurityContext.enabled`                      | Enabled server pods' Security Context                                                                               | `true`                      |
+| `server.podSecurityContext.fsGroup`                      | Set server pod's Security Context fsGroup                                                                           | `1001`                      |
+| `server.containerSecurityContext.enabled`                | Enabled server containers' Security Context                                                                         | `true`                      |
+| `server.containerSecurityContext.runAsUser`              | Set server containers' Security Context runAsUser                                                                   | `1001`                      |
+| `server.containerSecurityContext.runAsNonRoot`           | Set server containers' Security Context runAsNonRoot                                                                | `true`                      |
+| `server.containerSecurityContext.readOnlyRootFilesystem` | Set read only root file system pod's Security Conte                                                                 | `true`                      |
+| `server.rbac.create`                                     | Create RBAC resources for the Argo workflows server                                                                 | `true`                      |
+| `server.extraArgs`                                       | Extra arguments for the server command line                                                                         | `""`                        |
+| `server.auth.enabled`                                    | Enable authentication                                                                                               | `true`                      |
+| `server.auth.mode`                                       | Set authentication mode. Either `server`, `client` or `sso`.                                                        | `client`                    |
+| `server.auth.sso.enabled`                                | Enable SSO configuration for the server auth mode                                                                   | `false`                     |
+| `server.auth.sso.issuer`                                 | Root URL for the OIDC identity provider                                                                             | `""`                        |
+| `server.auth.sso.clientId.name`                          | Name of the secret containing the OIDC client ID                                                                    | `""`                        |
+| `server.auth.sso.clientId.key`                           | Key in the secret to obtain the OIDC client ID                                                                      | `""`                        |
+| `server.auth.sso.clientSecret.name`                      | Name of the secret containing the OIDC client secret                                                                | `""`                        |
+| `server.auth.sso.clientSecret.key`                       | Key in the secret to obtain the OIDC client secret                                                                  | `""`                        |
+| `server.auth.sso.redirectUrl`                            | The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.                                       | `""`                        |
+| `server.auth.sso.rbac.enabled`                           | Create RBAC resources for SSO                                                                                       | `true`                      |
+| `server.auth.sso.rbac.secretWhitelist`                   | Restricts the secrets that the server can read                                                                      | `[]`                        |
+| `server.auth.sso.scopes`                                 | Scopes requested from the SSO ID provider                                                                           | `[]`                        |
+| `server.clusterWorkflowTemplates.enabled`                | Create ClusterRole and CRB for the controoler to access ClusterWorkflowTemplates                                    | `true`                      |
+| `server.clusterWorkflowTemplates.enableEditing`          | Give the server permissions to edit ClusterWorkflowTemplates                                                        | `true`                      |
+| `server.pdb.enabled`                                     | Create Pod Disruption Budget for the server component                                                               | `false`                     |
+| `server.pdb.minAvailable`                                | Sets the min number of pods availables for the Pod Disruption Budget                                                | `1`                         |
+| `server.pdb.maxUnavailable`                              | Sets the max number of pods unavailable for the Pod Disruption Budget                                               | `1`                         |
+| `server.secure`                                          | Run Argo server in secure mode                                                                                      | `false`                     |
+| `server.baseHref`                                        | Base href of the Argo Workflows deployment                                                                          | `/`                         |
+| `server.containerPorts.web`                              | argo Server container port                                                                                          | `2746`                      |
+| `server.serviceAccount.create`                           | Specifies whether a ServiceAccount should be created                                                                | `true`                      |
+| `server.serviceAccount.name`                             | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`                        |
+| `server.serviceAccount.automountServiceAccountToken`     | Automount service account token for the server service account                                                      | `true`                      |
+| `server.serviceAccount.annotations`                      | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`                        |
+| `server.command`                                         | Override default container command (useful when using custom images)                                                | `[]`                        |
+| `server.args`                                            | Override default container args (useful when using custom images)                                                   | `[]`                        |
+| `server.hostAliases`                                     | server pods host aliases                                                                                            | `[]`                        |
+| `server.podLabels`                                       | Extra labels for server pods                                                                                        | `{}`                        |
+| `server.podAnnotations`                                  | Annotations for server pods                                                                                         | `{}`                        |
+| `server.podAffinityPreset`                               | Pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                          | `""`                        |
+| `server.podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                     | `soft`                      |
+| `server.nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                    | `""`                        |
+| `server.nodeAffinityPreset.key`                          | Node label key to match. Ignored if `server.affinity` is set                                                        | `""`                        |
+| `server.nodeAffinityPreset.values`                       | Node label values to match. Ignored if `server.affinity` is set                                                     | `[]`                        |
+| `server.affinity`                                        | Affinity for server pods assignment                                                                                 | `{}`                        |
+| `server.nodeSelector`                                    | Node labels for server pods assignment                                                                              | `{}`                        |
+| `server.tolerations`                                     | Tolerations for server pods assignment                                                                              | `[]`                        |
+| `server.updateStrategy.type`                             | server statefulset strategy type                                                                                    | `RollingUpdate`             |
+| `server.topologySpreadConstraints`                       | Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in             | `[]`                        |
+| `server.schedulerName`                                   | Alternate scheduler for the server deployment                                                                       | `""`                        |
+| `server.priorityClassName`                               | server pods' priorityClassName                                                                                      | `""`                        |
+| `server.lifecycleHooks`                                  | for the server container(s) to automate configuration before or after startup                                       | `{}`                        |
+| `server.extraEnvVars`                                    | Array with extra environment variables to add to server nodes                                                       | `[]`                        |
+| `server.extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra env vars for server nodes                                               | `""`                        |
+| `server.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for server nodes                                                  | `""`                        |
+| `server.extraVolumes`                                    | Optionally specify extra list of additional volumes for the server pod(s)                                           | `[]`                        |
+| `server.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the server container(s)                                | `[]`                        |
+| `server.sidecars`                                        | Add additional sidecar containers to the server pod(s)                                                              | `[]`                        |
+| `server.initContainers`                                  | Add additional init containers to the server pod(s)                                                                 | `[]`                        |
+| `server.service.type`                                    | server service type                                                                                                 | `ClusterIP`                 |
+| `server.service.ports.http`                              | server service HTTP port                                                                                            | `80`                        |
+| `server.service.nodePorts.http`                          | Node port for HTTP                                                                                                  | `""`                        |
+| `server.service.clusterIP`                               | server service Cluster IP                                                                                           | `""`                        |
+| `server.service.loadBalancerIP`                          | server service Load Balancer IP                                                                                     | `""`                        |
+| `server.service.loadBalancerSourceRanges`                | server service Load Balancer sources                                                                                | `[]`                        |
+| `server.service.externalTrafficPolicy`                   | server service external traffic policy                                                                              | `Cluster`                   |
+| `server.service.annotations`                             | Additional custom annotations for server service                                                                    | `{}`                        |
+| `server.service.extraPorts`                              | Extra port to expose on the server service                                                                          | `[]`                        |
 
 
 ### Argo Workflows Controller configuration parameters
@@ -184,7 +185,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `controller.image.registry`                                  | controller image registry                                                                                                     | `docker.io`                        |
 | `controller.image.repository`                                | controller image repository                                                                                                   | `bitnami/argo-workflow-controller` |
-| `controller.image.tag`                                       | controller image tag (immutable tags are recommended)                                                                         | `3.3.5-scratch-r0`                 |
+| `controller.image.tag`                                       | controller image tag (immutable tags are recommended)                                                                         | `3.3.6-scratch-r0`                 |
 | `controller.image.pullPolicy`                                | controller image pull policy                                                                                                  | `IfNotPresent`                     |
 | `controller.image.pullSecrets`                               | controller image pull secrets                                                                                                 | `[]`                               |
 | `controller.replicaCount`                                    | Number of controller replicas to deploy                                                                                       | `1`                                |
@@ -236,14 +237,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.telemetry.path`                                  | Path to expose telemetry information                                                                                          | `/telemetry`                       |
 | `controller.workflowWorkers`                                 | Number of workflow workers to deploy                                                                                          | `32`                               |
 | `controller.workflowNamespaces`                              | Namespaces allowed to run workflows                                                                                           | `["default"]`                      |
+| `controller.workflowDefaults`                                | Default Workflow Values                                                                                                       | `{}`                               |
 | `controller.logging.level`                                   | Level for the controller logging                                                                                              | `info`                             |
 | `controller.logging.globalLevel`                             | Global logging level for the controller                                                                                       | `0`                                |
 | `controller.pdb.enabled`                                     | Create Pod Disruption Budget for the controller component                                                                     | `false`                            |
 | `controller.pdb.minAvailable`                                | Sets the min number of pods availables for the Pod Disruption Budget                                                          | `1`                                |
 | `controller.pdb.maxUnavailable`                              | Sets the max number of pods unavailable for the Pod Disruption Budget                                                         | `1`                                |
 | `controller.serviceAccount.create`                           | Specifies whether a ServiceAccount should be created                                                                          | `true`                             |
-| `controller.serviceAccount.name`                             | Name for the service account                                                                                                  | `""`                               |
-| `controller.serviceAccount.automountServiceAccountToken`     | Automount service account token for the controller service account                                                            | `true`                             |
+| `controller.serviceAccount.name`                             | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.           | `""`                               |
+| `controller.serviceAccount.automountServiceAccountToken`     | Automount service account token for the server service account                                                                | `true`                             |
+| `controller.serviceAccount.annotations`                      | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                    | `{}`                               |
 | `controller.command`                                         | Override default container command (useful when using custom images)                                                          | `[]`                               |
 | `controller.args`                                            | Override default container args (useful when using custom images)                                                             | `[]`                               |
 | `controller.hostAliases`                                     | controller pods host aliases                                                                                                  | `[]`                               |
@@ -267,8 +270,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars for controller nodes                                                        | `""`                               |
 | `controller.extraVolumes`                                    | Optionally specify extra list of additional volumes for the controller pod(s)                                                 | `[]`                               |
 | `controller.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the controller container(s)                                      | `[]`                               |
-| `controller.sidecars`                                        | Add additional sidecar containers to the controller pod(s)                                                                    | `{}`                               |
-| `controller.initContainers`                                  | Add additional init containers to the controller pod(s)                                                                       | `{}`                               |
+| `controller.sidecars`                                        | Add additional sidecar containers to the controller pod(s)                                                                    | `[]`                               |
+| `controller.initContainers`                                  | Add additional init containers to the controller pod(s)                                                                       | `[]`                               |
 | `controller.service.type`                                    | controller service type                                                                                                       | `ClusterIP`                        |
 | `controller.service.ports.metrics`                           | Metrics port for the controller                                                                                               | `8080`                             |
 | `controller.service.ports.telemetry`                         | Telemetry port for the controller                                                                                             | `8081`                             |
@@ -288,7 +291,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------------- | ------------------------------------------------------------- | ---------------------------- |
 | `executor.image.registry`                                  | executor image registry                                       | `docker.io`                  |
 | `executor.image.repository`                                | executor image repository                                     | `bitnami/argo-workflow-exec` |
-| `executor.image.tag`                                       | executor image tag (immutable tags are recommended)           | `3.3.4-debian-10-r4`         |
+| `executor.image.tag`                                       | executor image tag (immutable tags are recommended)           | `3.3.6-debian-11-r2`         |
 | `executor.image.pullPolicy`                                | executor image pull policy                                    | `Always`                     |
 | `executor.image.pullSecrets`                               | executor image pull secrets                                   | `[]`                         |
 | `executor.resources.limits`                                | The resources limits for the init container                   | `{}`                         |
@@ -316,16 +319,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`       | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `ingress.extraTls`         | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`          | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.extraRules`       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Workflows configuration
 
-| Name                                                    | Description                                                       | Value   |
-| ------------------------------------------------------- | ----------------------------------------------------------------- | ------- |
-| `workflows.serviceAccount.create`                       | Whether to create a service account to run workflows              | `false` |
-| `workflows.serviceAccount.name`                         | Service account name to run workflows                             | `""`    |
-| `workflows.serviceAccount.automountServiceAccountToken` | Automount service account token for the workflows service account | `true`  |
-| `workflows.rbac.create`                                 | Whether to create RBAC resource to run workflows                  | `true`  |
+| Name                                                    | Description                                                                                | Value   |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------- |
+| `workflows.serviceAccount.create`                       | Whether to create a service account to run workflows                                       | `false` |
+| `workflows.serviceAccount.name`                         | Service account name to run workflows                                                      | `""`    |
+| `workflows.serviceAccount.automountServiceAccountToken` | Automount service account token for the workflows service account                          | `true`  |
+| `workflows.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`    |
+| `workflows.rbac.create`                                 | Whether to create RBAC resource to run workflows                                           | `true`  |
 
 
 ### PostgreSQL subchart
@@ -341,13 +346,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### MySQL subchart
 
-| Name                  | Description                                                  | Value               |
-| --------------------- | ------------------------------------------------------------ | ------------------- |
-| `mysql.enabled`       | Enable MySQL subchart and controller persistence using MySQL | `false`             |
-| `mysql.service.port`  | MySQL port                                                   | `3306`              |
-| `mysql.auth.username` | MySQL username                                               | `mysql`             |
-| `mysql.auth.database` | MySQL database name                                          | `bn_argo_workflows` |
-| `mysql.auth.password` | MySQL database password                                      | `""`                |
+| Name                        | Description                                                  | Value               |
+| --------------------------- | ------------------------------------------------------------ | ------------------- |
+| `mysql.enabled`             | Enable MySQL subchart and controller persistence using MySQL | `false`             |
+| `mysql.service.ports.mysql` | MySQL port                                                   | `3306`              |
+| `mysql.auth.username`       | MySQL username                                               | `mysql`             |
+| `mysql.auth.database`       | MySQL database name                                          | `bn_argo_workflows` |
+| `mysql.auth.password`       | MySQL database password                                      | `""`                |
 
 
 ### External Database configuration

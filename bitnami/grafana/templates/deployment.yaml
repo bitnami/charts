@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -35,6 +35,9 @@ spec:
         {{- end }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         checksum/dashboard-provider: {{ include (print $.Template.BasePath "/dashboard-provider.yaml") . | sha256sum }}
+        {{- if and .Values.ldap.enabled (or (not (empty .Values.ldap.configuration)) (not (empty .Values.ldap.uri))) (empty .Values.ldap.configMapName) (empty .Values.ldap.secretName) }}
+        checksum/ldap: {{ include (print $.Template.BasePath "/ldap-secret.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.grafana.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.grafana.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -68,10 +71,10 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.grafana.podSecurityContext.enabled }}
-      securityContext:
-        runAsUser: {{ .Values.grafana.podSecurityContext.runAsUser }}
-        fsGroup: {{ .Values.grafana.podSecurityContext.fsGroup }}
-        runAsNonRoot: {{ .Values.grafana.podSecurityContext.runAsNonRoot }}
+      securityContext: {{- omit .Values.grafana.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.grafana.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.grafana.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
         {{- if .Values.volumePermissions.enabled }}
@@ -199,6 +202,10 @@ spec:
               mountPath: /opt/bitnami/grafana/conf/ldap.toml
               subPath: ldap.toml
             {{- end }}
+            {{- if and .Values.ldap.tls.enabled .Values.ldap.tls.certificatesSecret }}
+            - name: ldap-tls
+              mountPath: {{ .Values.ldap.tls.certificatesMountPath }}
+            {{- end }}
             {{- range .Values.grafana.extraConfigmaps }}
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
@@ -315,6 +322,11 @@ spec:
           secret:
             secretName: {{ .Values.config.grafanaIniSecret }}
           {{- end }}
+        {{- end }}
+        {{- if and .Values.ldap.tls.enabled .Values.ldap.tls.certificatesSecret }}
+        - name: ldap-tls
+          secret:
+            secretName: {{ .Values.ldap.tls.certificatesSecret }}
         {{- end }}
         {{- range .Values.grafana.extraConfigmaps }}
         - name: {{ .name }}

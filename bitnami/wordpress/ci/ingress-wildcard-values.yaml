@@ -1,8 +1,0 @@
-service:
-  type: ClusterIP
-ingress:
-  enabled: true
-  tls: true
-  extraHosts:
-    - name: "*.domain.tld"
-      path: /

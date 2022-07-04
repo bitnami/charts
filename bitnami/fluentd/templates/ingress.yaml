@@ -4,6 +4,7 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}-aggregator
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
     app: aggregator
@@ -47,6 +48,9 @@ spec:
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" $serviceName "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.aggregator.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.ingress.extraRules "context" $) | nindent 4 }}
     {{- end }}
   {{- if or .Values.aggregator.ingress.tls .Values.aggregator.ingress.extraTls }}
   tls:

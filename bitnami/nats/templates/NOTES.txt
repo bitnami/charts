@@ -52,8 +52,8 @@ NATS can be accessed via port {{ .Values.service.ports.client }} on the followin
 
 To get the authentication credentials, run:
 
-    export NATS_USER=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.data.*}' | base64 --decode | grep -m 1 user | awk '{print $2}' | tr -d '"')
-    export NATS_PASS=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.data.*}' | base64 --decode | grep -m 1 password | awk '{print $2}' | tr -d '"')
+    export NATS_USER=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.data.*}' | base64 -d | grep -m 1 user | awk '{print $2}' | tr -d '"')
+    export NATS_PASS=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.data.*}' | base64 -d | grep -m 1 password | awk '{print $2}' | tr -d '"')
     echo -e "Client credentials:\n\tUser: $NATS_USER\n\tPassword: $NATS_PASS"
 
 {{- end }}

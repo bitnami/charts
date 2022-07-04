@@ -186,7 +186,7 @@ spec:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.mongos.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if .Values.mongos.extraEnvVarsSecret }}
-            - configMapRef:
+            - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.mongos.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
@@ -210,7 +210,7 @@ spec:
                 - /bin/sh 
                 - -c 
                 - mongosh --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
-          {{- else if .Value.mongos.customLivenessProbe }}
+          {{- else if .Values.mongos.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.mongos.readinessProbe.enabled }}
@@ -220,7 +220,7 @@ spec:
                 - /bin/sh 
                 - -c 
                 - mongosh --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
-          {{- else if .Value.mongos.customReadinessProbe }}
+          {{- else if .Values.mongos.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.mongos.startupProbe.enabled }}

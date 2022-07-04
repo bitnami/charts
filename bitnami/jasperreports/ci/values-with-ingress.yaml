@@ -1,6 +1,0 @@
-service:
-  type: ClusterIP
-ingress:
-  enabled: true
-  tls: true
-  hostname: jasperreports.local

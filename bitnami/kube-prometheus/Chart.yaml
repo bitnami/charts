@@ -1,16 +1,16 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 0.56.2
+appVersion: 0.57.0
 dependencies:
   - condition: exporters.enabled,exporters.node-exporter.enabled
     name: node-exporter
     repository: https://charts.bitnami.com/bitnami
-    version: 2.x.x
+    version: 3.x.x
   - condition: exporters.enabled,exporters.kube-state-metrics.enabled
     name: kube-state-metrics
     repository: https://charts.bitnami.com/bitnami
-    version: 2.x.x
+    version: 3.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -27,12 +27,12 @@ keywords:
   - monitoring
 kubeVersion: '>= 1.16.0-0'
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: kube-prometheus
 sources:
   - https://github.com/bitnami/bitnami-docker-prometheus-operator
   - https://github.com/bitnami/bitnami-docker-prometheus
   - https://github.com/bitnami/bitnami-docker-alertmanager
   - https://github.com/prometheus-operator/kube-prometheus
-version: 6.10.4
+version: 8.0.9

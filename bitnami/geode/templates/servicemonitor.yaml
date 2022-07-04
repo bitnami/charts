@@ -20,7 +20,7 @@ metadata:
   {{- end }}
 spec:
   {{- if .Values.metrics.serviceMonitor.jobLabel }}
-  jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel }}
+  jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel | quote }}
   {{- end }}
   namespaceSelector:
     matchNames:
@@ -33,6 +33,9 @@ spec:
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.scrapeTimeout }}
       scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
       metricRelabelings: {{ toYaml .Values.metrics.serviceMonitor.metricRelabelings | nindent 8 }}

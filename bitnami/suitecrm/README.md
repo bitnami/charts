@@ -23,7 +23,7 @@ SuiteCRM is a software fork of the popular customer relationship management (CRM
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the SuiteCRM application.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -64,6 +64,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                | Description                                                                                                  | Value |
@@ -75,89 +76,91 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonAnnotations` | Common annotations to add to all SuiteCRM resources (sub-charts are not considered). Evaluated as a template | `{}`  |
 | `commonLabels`      | Common labels to add to all SuiteCRM resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
 
+
 ### SuiteCRM parameters
 
-| Name                                    | Description                                                                               | Value                  |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`                        | SuiteCRM image registry                                                                   | `docker.io`            |
-| `image.repository`                      | SuiteCRM image repository                                                                 | `bitnami/suitecrm`     |
-| `image.tag`                             | SuiteCRM image tag (immutable tags are recommended)                                       | `7.12.2-debian-10-r24` |
-| `image.pullPolicy`                      | SuiteCRM image pull policy                                                                | `IfNotPresent`         |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                          | `[]`                   |
-| `image.debug`                           | Specify if debug logs should be enabled                                                   | `false`                |
-| `replicaCount`                          | Number of replicas (requires ReadWriteMany PVC support)                                   | `1`                    |
-| `suitecrmSkipInstall`                   | Skip SuiteCRM installation wizard. Useful for migrations and restoring from SQL dump      | `false`                |
-| `suitecrmValidateUserIP`                | Whether to validate the user IP address or not                                            | `false`                |
-| `suitecrmHost`                          | SuiteCRM host to create application URLs                                                  | `""`                   |
-| `suitecrmUsername`                      | User of the application                                                                   | `user`                 |
-| `suitecrmPassword`                      | Application password                                                                      | `""`                   |
-| `suitecrmEmail`                         | Admin email                                                                               | `user@example.com`     |
-| `allowEmptyPassword`                    | Allow DB blank passwords                                                                  | `false`                |
-| `command`                               | Override default container command (useful when using custom images)                      | `[]`                   |
-| `args`                                  | Override default container args (useful when using custom images)                         | `[]`                   |
-| `hostAliases`                           | Deployment pod host aliases                                                               | `[]`                   |
-| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached            | `RollingUpdate`        |
-| `extraEnvVars`                          | An array to add extra environment variables                                               | `[]`                   |
-| `extraEnvVarsCM`                        | ConfigMap containing extra environment variables                                          | `""`                   |
-| `extraEnvVarsSecret`                    | Secret containing extra environment variables                                             | `""`                   |
-| `extraVolumes`                          | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`              | `[]`                   |
-| `extraVolumeMounts`                     | Extra volume mounts to add to the container. Requires setting `extraVolumeMounts          | `[]`                   |
-| `initContainers`                        | Extra init containers to add to the deployment                                            | `[]`                   |
-| `sidecars`                              | Extra sidecar containers to add to the deployment                                         | `[]`                   |
-| `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`                   |
-| `priorityClassName`                     | SuiteCRM pods' priorityClassName                                                          | `""`                   |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`                   |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`                   |
-| `existingSecret`                        | Name of a secret with the application password                                            | `""`                   |
-| `suitecrmSmtpHost`                      | SMTP host                                                                                 | `""`                   |
-| `suitecrmSmtpPort`                      | SMTP port                                                                                 | `""`                   |
-| `suitecrmSmtpUser`                      | SMTP user                                                                                 | `""`                   |
-| `suitecrmSmtpPassword`                  | SMTP password                                                                             | `""`                   |
-| `suitecrmSmtpProtocol`                  | SMTP protocol [`ssl`, `tls`]                                                              | `""`                   |
-| `suitecrmNotifyAddress`                 | SuiteCRM notify address                                                                   | `""`                   |
-| `suitecrmNotifyName`                    | SuiteCRM notify name                                                                      | `""`                   |
-| `containerPorts`                        | Container ports                                                                           | `{}`                   |
-| `sessionAffinity`                       | Control where client requests go, to the same pod or round-robin                          | `None`                 |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                   |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                 |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                   |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                     | `""`                   |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                   |
-| `affinity`                              | Affinity for pod assignment                                                               | `{}`                   |
-| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                   |
-| `resources.requests`                    | The requested resources for the container                                                 | `{}`                   |
-| `podSecurityContext.enabled`            | Enable SuiteCRM pods' Security Context                                                    | `true`                 |
-| `podSecurityContext.fsGroup`            | SuiteCRM pods' group ID                                                                   | `1001`                 |
-| `containerSecurityContext.enabled`      | Enable SuiteCRM containers' Security Context                                              | `true`                 |
-| `containerSecurityContext.runAsUser`    | SuiteCRM containers' Security Context runAsUser                                           | `1001`                 |
-| `containerSecurityContext.runAsNonRoot` | SuiteCRM containers' Security Context runAsNonRoot                                        | `true`                 |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`                 |
-| `livenessProbe.path`                    | Request path for livenessProbe                                                            | `/index.php`           |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `600`                  |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`                   |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`                    |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`                    |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`                    |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`                 |
-| `readinessProbe.path`                   | Request path for readinessProbe                                                           | `/index.php`           |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `30`                   |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `5`                    |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `3`                    |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `6`                    |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                    |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`                |
-| `startupProbe.path`                     | Request path for startupProbe                                                             | `/index.php`           |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `0`                    |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`                   |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `3`                    |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `60`                   |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`                    |
-| `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`                   |
-| `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`                   |
-| `customStartupProbe`                    | Override default startup probe                                                            | `{}`                   |
-| `lifecycleHooks`                        | lifecycleHooks for the container to automate configuration before or after startup        | `{}`                   |
-| `podAnnotations`                        | Pod annotations                                                                           | `{}`                   |
-| `podLabels`                             | Pod extra labels                                                                          | `{}`                   |
+| Name                                    | Description                                                                               | Value                 |
+| --------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`                        | SuiteCRM image registry                                                                   | `docker.io`           |
+| `image.repository`                      | SuiteCRM image repository                                                                 | `bitnami/suitecrm`    |
+| `image.tag`                             | SuiteCRM image tag (immutable tags are recommended)                                       | `7.12.6-debian-11-r8` |
+| `image.pullPolicy`                      | SuiteCRM image pull policy                                                                | `IfNotPresent`        |
+| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                          | `[]`                  |
+| `image.debug`                           | Specify if debug logs should be enabled                                                   | `false`               |
+| `replicaCount`                          | Number of replicas (requires ReadWriteMany PVC support)                                   | `1`                   |
+| `suitecrmSkipInstall`                   | Skip SuiteCRM installation wizard. Useful for migrations and restoring from SQL dump      | `false`               |
+| `suitecrmValidateUserIP`                | Whether to validate the user IP address or not                                            | `false`               |
+| `suitecrmHost`                          | SuiteCRM host to create application URLs                                                  | `""`                  |
+| `suitecrmUsername`                      | User of the application                                                                   | `user`                |
+| `suitecrmPassword`                      | Application password                                                                      | `""`                  |
+| `suitecrmEmail`                         | Admin email                                                                               | `user@example.com`    |
+| `allowEmptyPassword`                    | Allow DB blank passwords                                                                  | `false`               |
+| `command`                               | Override default container command (useful when using custom images)                      | `[]`                  |
+| `args`                                  | Override default container args (useful when using custom images)                         | `[]`                  |
+| `hostAliases`                           | Deployment pod host aliases                                                               | `[]`                  |
+| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached            | `RollingUpdate`       |
+| `extraEnvVars`                          | An array to add extra environment variables                                               | `[]`                  |
+| `extraEnvVarsCM`                        | ConfigMap containing extra environment variables                                          | `""`                  |
+| `extraEnvVarsSecret`                    | Secret containing extra environment variables                                             | `""`                  |
+| `extraVolumes`                          | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`              | `[]`                  |
+| `extraVolumeMounts`                     | Extra volume mounts to add to the container. Requires setting `extraVolumeMounts          | `[]`                  |
+| `initContainers`                        | Extra init containers to add to the deployment                                            | `[]`                  |
+| `sidecars`                              | Extra sidecar containers to add to the deployment                                         | `[]`                  |
+| `tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                  | `[]`                  |
+| `priorityClassName`                     | SuiteCRM pods' priorityClassName                                                          | `""`                  |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                            | `""`                  |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`                  |
+| `existingSecret`                        | Name of a secret with the application password                                            | `""`                  |
+| `suitecrmSmtpHost`                      | SMTP host                                                                                 | `""`                  |
+| `suitecrmSmtpPort`                      | SMTP port                                                                                 | `""`                  |
+| `suitecrmSmtpUser`                      | SMTP user                                                                                 | `""`                  |
+| `suitecrmSmtpPassword`                  | SMTP password                                                                             | `""`                  |
+| `suitecrmSmtpProtocol`                  | SMTP protocol [`ssl`, `tls`]                                                              | `""`                  |
+| `suitecrmNotifyAddress`                 | SuiteCRM notify address                                                                   | `""`                  |
+| `suitecrmNotifyName`                    | SuiteCRM notify name                                                                      | `""`                  |
+| `containerPorts`                        | Container ports                                                                           | `{}`                  |
+| `sessionAffinity`                       | Control where client requests go, to the same pod or round-robin                          | `None`                |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                  |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                  |
+| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                     | `""`                  |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                 | `[]`                  |
+| `affinity`                              | Affinity for pod assignment                                                               | `{}`                  |
+| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                  | `{}`                  |
+| `resources.requests`                    | The requested resources for the container                                                 | `{}`                  |
+| `podSecurityContext.enabled`            | Enable SuiteCRM pods' Security Context                                                    | `true`                |
+| `podSecurityContext.fsGroup`            | SuiteCRM pods' group ID                                                                   | `1001`                |
+| `containerSecurityContext.enabled`      | Enable SuiteCRM containers' Security Context                                              | `true`                |
+| `containerSecurityContext.runAsUser`    | SuiteCRM containers' Security Context runAsUser                                           | `1001`                |
+| `containerSecurityContext.runAsNonRoot` | SuiteCRM containers' Security Context runAsNonRoot                                        | `true`                |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`                |
+| `livenessProbe.path`                    | Request path for livenessProbe                                                            | `/index.php`          |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `600`                 |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`                  |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `5`                   |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `6`                   |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`                   |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`                |
+| `readinessProbe.path`                   | Request path for readinessProbe                                                           | `/index.php`          |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `30`                  |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `5`                   |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `3`                   |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `6`                   |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                   |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`               |
+| `startupProbe.path`                     | Request path for startupProbe                                                             | `/index.php`          |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `0`                   |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`                  |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `3`                   |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `60`                  |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`                   |
+| `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`                  |
+| `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`                  |
+| `customStartupProbe`                    | Override default startup probe                                                            | `{}`                  |
+| `lifecycleHooks`                        | lifecycleHooks for the container to automate configuration before or after startup        | `{}`                  |
+| `podAnnotations`                        | Pod annotations                                                                           | `{}`                  |
+| `podLabels`                             | Pod extra labels                                                                          | `{}`                  |
+
 
 ### Database parameters
 
@@ -182,6 +185,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_suitecrm`  |
 | `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                           | `""`                |
 
+
 ### Persistence parameters
 
 | Name                        | Description                              | Value               |
@@ -194,6 +198,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.hostPath`      | Host mount path for SuiteCRM volume      | `""`                |
 | `persistence.annotations`   | Persistent Volume Claim annotations      | `{}`                |
 
+
 ### Volume Permissions parameters
 
 | Name                                   | Description                                                                                                                                               | Value                   |
@@ -201,11 +206,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r305`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r8`       |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
+
 
 ### Traffic Exposure Parameters
 
@@ -236,6 +242,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+
 
 ### Metrics parameters
 
@@ -244,7 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                 | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                       | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                     | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)           | `0.11.0-debian-10-r23`    |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)           | `0.11.0-debian-11-r9`     |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                    | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                     | `[]`                      |
 | `metrics.resources`                        | Metrics exporter resource requests and limits                        | `{}`                      |
@@ -258,6 +266,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.externalTrafficPolicy`    | SuiteCRM service external traffic policy                             | `Cluster`                 |
 | `metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP" | `None`                    |
 | `metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                          | `{}`                      |
+
 
 ### Certificate injection parameters
 
@@ -277,9 +286,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra environment variables (in case of sensitive data) | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image repository                                        | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)              | `10-debian-10-r305`                      |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)              | `11-debian-11-r8`                        |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                       | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                      | `[]`                                     |
+
 
 ### NetworkPolicy parameters
 
@@ -300,6 +310,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                           | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                               | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                   | `{}`    |
+
 
 The above parameters map to the env variables defined in [bitnami/suitecrm](https://github.com/bitnami/bitnami-docker-suitecrm). For more information please refer to the [bitnami/suitecrm](https://github.com/bitnami/bitnami-docker-suitecrm) image documentation.
 
@@ -483,9 +494,9 @@ Obtain the credentials and the names of the PVCs used to hold both the MariaDB a
 
 ```console
 export SUITECRM_HOST=$(kubectl get svc --namespace default suitecrm --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
-export SUITECRM_PASSWORD=$(kubectl get secret --namespace default suitecrm -o jsonpath="{.data.suitecrm-password}" | base64 --decode)
-export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-export MARIADB_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export SUITECRM_PASSWORD=$(kubectl get secret --namespace default suitecrm -o jsonpath="{.data.suitecrm-password}" | base64 -d)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=suitecrm -o jsonpath="{.items[0].metadata.name}")
 \```
 

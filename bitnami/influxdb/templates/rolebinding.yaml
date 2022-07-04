@@ -8,13 +8,13 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
 roleRef:
   kind: Role
   name: {{ template "common.names.fullname" . }}
   apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount
-    name: {{ default (include "common.names.fullname" . ) .Values.serviceAccount.name }}
-    namespace: {{ .Release.Namespace }}
+    name: {{ include "influxdb.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace | quote }}
 {{- end }}

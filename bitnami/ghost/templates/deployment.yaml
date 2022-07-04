@@ -53,9 +53,7 @@ spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.serviceAccount.name }}
-      serviceAccountName: {{ .Values.serviceAccount.name }}
-      {{- end }}
+      serviceAccountName: {{ include "ghost.serviceAccountName" . }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName }}
       {{- end }}
@@ -130,8 +128,8 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "ghost.databaseSecretName" . }}
-                  key: mariadb-password
-            {{- if (and (not .Values.mariadb.enabled) .Values.externalDatabase.ssl) }}
+                  key: mysql-password
+            {{- if (and (not .Values.mysql.enabled) .Values.externalDatabase.ssl) }}
             - name: GHOST_DATABASE_ENABLE_SSL
               value: {{ .Values.externalDatabase.ssl | quote }}
             - name: MYSQL_CLIENT_ENABLE_SSL

@@ -250,9 +250,7 @@ spec:
                   key: inter-broker-password
             {{- end }}
             {{- end }}
-            {{- if and .Values.zookeeper.auth.enabled .Values.auth.sasl.jaas.zookeeperUser }}
-            - name: KAFKA_ZOOKEEPER_PROTOCOL
-              value: "SASL"
+            {{- if and .Values.zookeeper.auth.client.enabled .Values.auth.sasl.jaas.zookeeperUser }}
             - name: KAFKA_ZOOKEEPER_USER
               value: {{ .Values.auth.sasl.jaas.zookeeperUser | quote }}
             - name: KAFKA_ZOOKEEPER_PASSWORD
@@ -260,6 +258,26 @@ spec:
                 secretKeyRef:
                   name: {{ include "kafka.jaasSecretName" . }}
                   key: zookeeper-password
+            {{- end }}
+            - name: KAFKA_ZOOKEEPER_PROTOCOL
+              value: {{ include "kafka.zookeeper.protocol" . }}
+            {{- if .Values.auth.zookeeper.tls.enabled }}
+            - name: KAFKA_ZOOKEEPER_TLS_TYPE
+              value: {{ upper .Values.auth.zookeeper.tls.type | quote }}
+            - name: KAFKA_ZOOKEEPER_TLS_VERIFY_HOSTNAME
+              value: {{ .Values.auth.zookeeper.tls.verifyHostname | quote }}
+            {{- if .Values.auth.zookeeper.tls.passwordsSecret }}
+            - name: KAFKA_ZOOKEEPER_TLS_KEYSTORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.auth.zookeeper.tls.passwordsSecret }}
+                  key: {{ .Values.auth.zookeeper.tls.passwordsSecretKeystoreKey | quote }}
+            - name: KAFKA_ZOOKEEPER_TLS_TRUSTSTORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.auth.zookeeper.tls.passwordsSecret }}
+                  key: {{ .Values.auth.zookeeper.tls.passwordsSecretTruststoreKey | quote }}
+            {{- end }}
             {{- end }}
             {{- if (include "kafka.tlsEncryption" .) }}
             - name: KAFKA_TLS_TYPE
@@ -426,6 +444,11 @@ spec:
               readOnly: true
             {{- end }}
             {{- end }}
+            {{- if and .Values.auth.zookeeper.tls.enabled .Values.auth.zookeeper.tls.existingSecret }}
+            - name: kafka-zookeeper-cert
+              mountPath: /kafka-zookeeper-cert
+              readOnly: true
+            {{- end }}
             {{- if .Values.auth.tls.jksTruststoreSecret }}
             - name: kafka-truststore
               mountPath: /truststore
@@ -510,6 +533,12 @@ spec:
             secretName: {{ printf "%s-%d-tls" (include "common.names.fullname" $) $index }}
             defaultMode: 256
         {{- end }}
+        {{- end }}
+        {{- if and .Values.auth.zookeeper.tls.enabled .Values.auth.zookeeper.tls.existingSecret }}
+        - name: kafka-zookeeper-cert
+          secret:
+            secretName: {{ .Values.auth.zookeeper.tls.existingSecret }}
+            defaultMode: 256
         {{- end }}
         {{- if .Values.auth.tls.jksTruststoreSecret }}
         - name: kafka-truststore

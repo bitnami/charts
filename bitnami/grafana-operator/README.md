@@ -21,7 +21,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [Grafana Operator](https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md) Deployment [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -75,13 +75,16 @@ For more information, refer to the [documentation on the differences between the
 
 ### Common parameters
 
-| Name                | Description                                                                                               | Value |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`      | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`  |
-| `fullnameOverride`  | String to fully override common.names.fullname template with a string                                     | `""`  |
-| `extraDeploy`       | Array of extra objects to deploy with the release                                                         | `[]`  |
-| `commonLabels`      | Common Labels which are applied to every resource deployed                                                | `{}`  |
-| `commonAnnotations` | Common Annotations which are applied to every ressource deployed                                          | `{}`  |
+| Name                | Description                                                                                               | Value           |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname template with a string                                     | `""`            |
+| `namespaceOverride` | String to fully override common.names.namespace                                                           | `""`            |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                                         | `[]`            |
+| `commonLabels`      | Common Labels which are applied to every resource deployed                                                | `{}`            |
+| `commonAnnotations` | Common Annotations which are applied to every ressource deployed                                          | `{}`            |
+| `clusterDomain`     | Kubernetes cluster domain name                                                                            | `cluster.local` |
 
 
 ### Grafana Operator parameters
@@ -103,10 +106,12 @@ For more information, refer to the [documentation on the differences between the
 | `operator.sidecars`                                          | Add additional sidecar containers to the etcd pods                                                                                        | `[]`                       |
 | `operator.watchNamespace`                                    | Override the namespace to watch                                                                                                           | `""`                       |
 | `operator.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                            | `[]`                       |
+| `operator.priorityClassName`                                 | %%MAIN_CONTAINER_NAME%% pods' priorityClassName                                                                                           | `""`                       |
+| `operator.terminationGracePeriodSeconds`                     | In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully                                               | `""`                       |
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                                                 | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                                           | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                                               | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.3.0-debian-10-r0`       |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.4.1-debian-10-r10`      |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                                        | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                                       | `[]`                       |
 | `operator.leaderElect`                                       | Enables or disables the operator leader Election.                                                                                         | `true`                     |
@@ -157,8 +162,12 @@ For more information, refer to the [documentation on the differences between the
 | `operator.prometheus.serviceMonitor.namespace`               | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                                             | `""`                       |
 | `operator.prometheus.serviceMonitor.jobLabel`                | Specify the jobLabel to use for the prometheus-operator                                                                                   | `app.kubernetes.io/name`   |
 | `operator.prometheus.serviceMonitor.interval`                | Scrape interval. If not set, the Prometheus default scrape interval is used                                                               | `""`                       |
+| `operator.prometheus.serviceMonitor.scrapeTimeout`           | Timeout after which the scrape is ended                                                                                                   | `""`                       |
 | `operator.prometheus.serviceMonitor.metricRelabelings`       | Specify additional relabeling of metrics                                                                                                  | `[]`                       |
 | `operator.prometheus.serviceMonitor.relabelings`             | Specify general relabeling                                                                                                                | `[]`                       |
+| `operator.prometheus.serviceMonitor.selector`                | ServiceMonitor selector labels                                                                                                            | `{}`                       |
+| `operator.prometheus.serviceMonitor.labels`                  | Extra labels for the ServiceMonitor                                                                                                       | `{}`                       |
+| `operator.prometheus.serviceMonitor.honorLabels`             | honorLabels chooses the metric's labels on collisions with target labels                                                                  | `false`                    |
 | `operator.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                      | `true`                     |
 | `operator.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                   | `10`                       |
 | `operator.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                          | `10`                       |
@@ -186,7 +195,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                                          | `true`                   |
 | `grafana.image.registry`                                    | Grafana image registry                                                                                     | `docker.io`              |
 | `grafana.image.repository`                                  | Grafana image name                                                                                         | `bitnami/grafana`        |
-| `grafana.image.tag`                                         | Grafana image tag                                                                                          | `8.5.0-debian-10-r5`     |
+| `grafana.image.tag`                                         | Grafana image tag                                                                                          | `8.5.3-debian-10-r0`     |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                                 | `[]`                     |
 | `grafana.pluginsInitContainerImage.registry`                | Grafana Plugins image registry                                                                             | `""`                     |
 | `grafana.pluginsInitContainerImage.repository`              | Grafana Plugins image name                                                                                 | `""`                     |
