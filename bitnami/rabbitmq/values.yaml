@@ -424,7 +424,7 @@ ldap:
   ## @param ldap.port LDAP servers port. This is valid only if ldap.uri is not set
   ##
   port: ""
- 
+
   ## DEPRECATED ldap.user_dn_pattern it will removed in a future, please use userDnPattern instead
   ## Pattern used to translate the provided username into a value to be used for the LDAP bind
   ## @param ldap.userDnPattern Pattern used to translate the provided username into a value to be used for the LDAP bind.
@@ -1275,3 +1275,10 @@ volumePermissions:
     ##    memory: 128Mi
     ##
     requests: {}
+  ## Init container' Security Context
+  ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
+  ## and not the below volumePermissions.containerSecurityContext.runAsUser
+  ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
+  ##
+  containerSecurityContext:
+    runAsUser: 0
