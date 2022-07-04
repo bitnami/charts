@@ -1,6 +1,3 @@
-process:
-  java:
-    running: true
 file:   
  /opt/bitnami/elasticsearch/config/elasticsearch.yml:
     mode: "0644"
@@ -16,10 +13,16 @@ file:
     exists: true  
 command:
   user-id-test:
+    exec: curl localhost:{{ .Env.ELASTICSEARCH_HTTP_PORT_NUMBER }}
+    exit-status: 0
+    stdout: 
+      - You Know, for Search
+    stderr: []
+  networking-test:
     exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
     exit-status: 0
     stdout: []
-    stderr: []
+    stderr: []  
   elasticsearch-process:
     exec: ps aux | grep elasticsearch
     exit-status: 0
