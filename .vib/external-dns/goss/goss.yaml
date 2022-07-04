@@ -15,7 +15,7 @@ command:
     stdout: []
     stderr: []
   external-dns-version:
-    exec: external-dns --version
+    exec: external-dns --version 2>&1 | grep --quiet "$APP_VERSION"
     exit-status: 0
     stdout: []
     stderr: []
