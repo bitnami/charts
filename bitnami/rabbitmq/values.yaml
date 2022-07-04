@@ -303,7 +303,7 @@ initScripts: {}
 ## Note: This will override initScripts
 ##
 initScriptsCM: ""
-## @param aggregator.initScriptsSecret Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.
+## @param initScriptsSecret Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.
 ##
 initScriptsSecret: ""
 ## @param extraContainerPorts Extra ports to be included in container spec, primarily informational
