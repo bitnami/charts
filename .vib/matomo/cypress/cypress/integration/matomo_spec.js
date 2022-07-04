@@ -19,9 +19,11 @@ it('allows to create user', () => {
       `${user.newUser.password}-${random}`
     );
     cy.get('#user_email').type(`${random}_${user.newUser.email}`);
+    cy.get('input[value*="Create user"]').click();
+    cy.contains('changes have been saved');
+    cy.visit('/index.php?module=UsersManager');
+    cy.contains('#userLogin', `${user.newUser.username}-${random}`);
   });
-  cy.get('input[value*="Create user"]').click();
-  cy.contains('changes have been saved');
 });
 
 it('allows to create a new website', () => {
@@ -39,6 +41,8 @@ it('allows to create a new website', () => {
   cy.contains('Website created');
 });
 
+// The Matomo API allows checking the site analytics and tracking metrics
+// Source: https://matomo.org/guide/apis/analytics-api/
 it('allows to use the API', () => {
   cy.login();
   cy.visit('/index.php?module=UsersManager&action=addNewToken');
