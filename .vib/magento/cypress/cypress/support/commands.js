@@ -1,4 +1,4 @@
-const COMMAND_DELAY = 500;
+const COMMAND_DELAY = 1000;
 const BASE_URL = 'http://vmware-magento.my';
 
 for (const command of ['click']) {
@@ -25,20 +25,21 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
 Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
-    cy.clearCookies();
     cy.visit('/admin');
     cy.get('.admin__legend');
     cy.get('#username').type(username);
     cy.get('#login').type(password);
     cy.get('.action-login').click();
-    cy.contains('Average Order');
-    cy.get('.modal-header');
-    cy.get('body').then(($body) => {
-      if ($body.text().includes('Allow Adobe to collect usage data')) {
-        cy.get('.modal-header').should('be.visible');
-        cy.contains('.action-primary', 'Allow').click();
-      }
-    });
     cy.get('.page-title').should('have.text', 'Dashboard');
   }
 );
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+  // we expect a 3rd party library error with message 'list not defined'
+  // and don't want to fail the test so we return false
+  if (err.message.includes('renderingLocks')) {
+    return false;
+  }
+  // we still want to ensure there are no other unexpected
+  // errors, so we let them fail the test
+});

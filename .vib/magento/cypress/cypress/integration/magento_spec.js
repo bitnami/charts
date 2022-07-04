@@ -1,8 +1,12 @@
 /// <reference types="cypress" />
-import { random } from './utils';
+import { random, allowDataUsage } from './utils';
+
+before(() => {
+  cy.login();
+  allowDataUsage();
+});
 
 it('allows admin to add a product to the store', () => {
-  cy.login();
   cy.get('#menu-magento-catalog-catalog').click();
   cy.get('.item-catalog-products').click();
   cy.contains("We couldn't find any records.");
