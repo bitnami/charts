@@ -31,6 +31,8 @@ Cypress.Commands.add(
     cy.get('#username').type(username);
     cy.get('#login').type(password);
     cy.get('.action-login').click();
+    cy.contains('Average Order');
+    cy.get('.modal-header');
     cy.get('body').then(($body) => {
       if ($body.text().includes('Allow Adobe to collect usage data')) {
         cy.get('.modal-header').should('be.visible');
