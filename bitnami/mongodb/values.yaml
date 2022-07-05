@@ -105,7 +105,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 5.0.9-debian-11-r0
+  tag: 5.0.9-debian-11-r1
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
