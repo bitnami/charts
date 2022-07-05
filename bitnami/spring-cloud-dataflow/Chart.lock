@@ -1,7 +1,7 @@
 dependencies:
 - name: rabbitmq
   repository: https://charts.bitnami.com/bitnami
-  version: 10.1.7
+  version: 10.1.10
 - name: mariadb
   repository: https://charts.bitnami.com/bitnami
   version: 11.0.13
@@ -11,5 +11,5 @@ dependencies:
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 1.16.0
-digest: sha256:333d060b3c761f56a6ea1040c0de581f85cc5a39a44c8c9e65a1a281dac16a2c
-generated: "2022-06-15T18:25:29.398516+02:00"
+digest: sha256:31d6d813df98b95f460143160e8f96bf469de7cd53f31356e5bc5426b6e3bd1d
+generated: "2022-06-30T02:57:41.258743419Z"

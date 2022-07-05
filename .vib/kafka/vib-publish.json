@@ -51,7 +51,7 @@
               "path": "/.vib/kafka/goss"
             },
             "remote": {
-              "workload": "deploy-kafka"
+              "workload": "sts-kafka"
             }
           }
         }
