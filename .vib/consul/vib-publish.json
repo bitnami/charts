@@ -63,7 +63,7 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/cypress/goss"
+              "path": "/.vib/consul/goss"
             },
             "remote": {
               "workload": "sts-consul"
