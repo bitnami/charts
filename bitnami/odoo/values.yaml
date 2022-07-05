@@ -351,6 +351,13 @@ extraVolumes: []
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Odoo container(s)
 ##
 extraVolumeMounts: []
+## @param extraContainerPorts Optionally specify extra list of additional ports for Odoo container(s)
+## e.g:
+## extraContainerPorts:
+##   - name: longpolling
+##     containerPort: 8072
+##
+extraContainerPorts: []
 ## @param sidecars Add additional sidecar containers to the Odoo pod
 ## e.g:
 ## sidecars:
