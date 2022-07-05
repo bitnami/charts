@@ -92,7 +92,7 @@ it('allows customizing the home page', () => {
   cy.get('[data-role="grid-wrapper"]').within(() => {
     cy.contains('td', 'home').siblings().last().click();
     cy.get('[class="action-menu _active"]').within(() => {
-      cy.contains('Edit').click();
+      cy.contains('Edit').click({ force: true });
     });
   });
   cy.fixture('pages.json').then((page) => {
