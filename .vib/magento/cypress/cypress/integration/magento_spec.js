@@ -49,9 +49,9 @@ it('allows user to create a customer account', () => {
 
 it('allows admin to add a discount', () => {
   cy.login();
-  cy.get('#menu-magento-backend-marketing').click();
-  cy.get('.item-promo-catalog').click();
-  cy.get('#add').click();
+  cy.get('#menu-magento-backend-marketing').click({ force: true });
+  cy.get('.item-promo-catalog').click({ force: true });
+  cy.get('#add').click({ force: true });
   cy.fixture('discounts.json').then((discount) => {
     cy.get('[name="name"]').type(`${discount.newDiscount.ruleName}.${random}`);
     cy.get('.admin__actions-switch-text').click({ force: true });
