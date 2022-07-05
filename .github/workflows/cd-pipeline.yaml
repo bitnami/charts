@@ -37,6 +37,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/spring-cloud-dataflow/**'
       - 'bitnami/suitecrm/**'
       - 'bitnami/wordpress/**'
+      - '!**.md'
 env:
   CSP_API_URL: https://console.cloud.vmware.com
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
