@@ -457,6 +457,9 @@ master:
   ## @param master.fullnameOverride String to fully override elasticsearch.master.fullname
   ##
   fullnameOverride: ""
+  ## @param master.annotations [object] Annotations for the master statefulset
+  ##
+  annotations: {}
   ## @param master.updateStrategy.type Master-elegible nodes statefulset stategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -746,6 +749,9 @@ data:
   ## @param data.fullnameOverride String to fully override elasticsearch.data.fullname
   ##
   fullnameOverride: ""
+  ## @param data.annotations [object] Annotations for the data statefulset
+  ##
+  annotations: {}
   ## @param data.updateStrategy.type Data-only nodes statefulset stategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -1035,6 +1041,9 @@ coordinating:
   ## @param coordinating.fullnameOverride String to fully override elasticsearch.coordinating.fullname
   ##
   fullnameOverride: ""
+  ## @param coordinating.annotations [object] Annotations for the coordinating-only statefulset
+  ##
+  annotations: {}
   ## @param coordinating.updateStrategy.type Coordinating-only nodes statefulset stategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -1285,6 +1294,9 @@ ingest:
   ## @param ingest.fullnameOverride String to fully override elasticsearch.ingest.fullname
   ##
   fullnameOverride: ""
+  ## @param ingest.annotations [object] Annotations for the ingest statefulset
+  ##
+  annotations: {}
   ## @param ingest.containerPorts.restAPI Elasticsearch REST API port
   ## @param ingest.containerPorts.transport Elasticsearch Transport port
   ##
