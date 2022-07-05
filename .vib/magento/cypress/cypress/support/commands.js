@@ -44,6 +44,7 @@ Cypress.Commands.add(
     cy.get('#login').type(password);
     cy.get('.action-login').click();
     cy.get('.page-title').should('have.text', 'Dashboard');
+    cy.reload();
   }
 );
 
