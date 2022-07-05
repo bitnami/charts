@@ -199,7 +199,7 @@ spec:
             {{- if .Values.aggregator.initScriptsSecret }}
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
-            {{- end }}            
+            {{- end }}
             {{- if .Values.aggregator.extraVolumeMounts }}
             {{- toYaml .Values.aggregator.extraVolumeMounts | nindent 12 }}
             {{- end }}
@@ -239,7 +239,6 @@ spec:
             secretName: {{ template ".Values.initScriptsSecret" . }}
             defaultMode: 0755
         {{- end }}
-        
 
   {{- if or .Values.aggregator.persistence.enabled .Values.aggregator.extraVolumeClaimTemplates }}
   volumeClaimTemplates:

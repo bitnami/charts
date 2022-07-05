@@ -193,7 +193,7 @@ spec:
             {{- if .Values.forwarder.initScriptsSecret }}
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
-            {{- end }}      
+            {{- end }}
             - name: varlog
               mountPath: /var/log
             - name: varlibdockercontainers
@@ -230,7 +230,7 @@ spec:
           secret:
             secretName: {{ template ".Values.initScriptsSecret" . }}
             defaultMode: 0755
-        {{- end }}     
+        {{- end }}
         - name: fluentd-config
           configMap:
             name: {{ template "fluentd.forwarder.configMap" . }}

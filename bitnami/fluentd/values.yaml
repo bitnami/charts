@@ -1227,7 +1227,6 @@ aggregator:
   ## @param aggregator.extraVolumeClaimTemplates Optionally specify extra list of additional volume claim templates for the Fluentd Aggregator pods in StatefulSet
   ##
   extraVolumeClaimTemplates: []
-  
   ## @param aggregator.initScripts Dictionary of init scripts. Evaluated as a template.
   ## Specify dictionary of scripts to be run at first boot
   ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
