@@ -32,6 +32,13 @@
       },
       "actions": [
         {
+          "action_id": "trivy",
+          "params": {
+            "threshold": "CRITICAL",
+            "vuln_type": ["OS"]
+          }
+        },
+        {
           "action_id": "goss",
           "params": {
             "resources": {
@@ -40,13 +47,6 @@
             "remote": {
               "workload": "deploy-external-dns"
             }
-          }
-        },
-        {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
           }
         },
         {
