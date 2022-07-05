@@ -9,7 +9,7 @@ before(() => {
 it('allows admin to add a product to the store', () => {
   cy.get('#menu-magento-catalog-catalog').click();
   cy.get('.item-catalog-products').click();
-  cy.contains("We couldn't find any records.");
+  cy.contains('Salable Quantity');
   cy.get('#add_new_product-button').click();
   cy.fixture('products.json').then((product) => {
     cy.get('[name="product[name]"]').type(
