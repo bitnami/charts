@@ -41,15 +41,6 @@ spec:
       {{- else if eq $query.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - port: {{ if $query.service.grpc }}{{ coalesce $query.service.ports.grpc $query.service.grpc.port }}{{ else }}{{ $query.service.ports.grpc }}{{ end }}
-      targetPort: grpc
-      protocol: TCP
-      name: grpc
-      {{- if and (or (eq $query.service.type "NodePort") (eq $query.service.type "LoadBalancer")) $query.service.nodePorts.grpc }}
-      nodePort: {{ $query.service.nodePorts.grpc }}
-      {{- else if eq $query.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
     {{- if $query.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" $query.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
