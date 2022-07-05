@@ -17,5 +17,5 @@ rules:
   resources: ['podsecuritypolicies']
   verbs:     ['use']
   resourceNames:
-  - {{ printf "%s-%s" (include "common.names.fullname.namespace" .) "psp" }}
+  - - {{ template "common.names.fullname.namespace" . }}
 {{- end }}
