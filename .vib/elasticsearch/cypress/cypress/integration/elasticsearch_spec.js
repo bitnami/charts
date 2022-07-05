@@ -2,6 +2,8 @@
 import { random } from './utils';
 import body from '../fixtures/documents.json';
 
+const NODE_NUMBER = Cypress.env('nodeNumber');
+
 it('can get cluster info', () => {
   cy.request({
     method: 'GET',
@@ -15,7 +17,6 @@ it('can get cluster info', () => {
 });
 
 it('can check cluster health', () => {
-  const NODE_NUMBER = Cypress.env('nodeNumber');
   cy.request({
     method: 'GET',
     url: '/_cluster/health',
@@ -34,7 +35,7 @@ it('can get nodes stats', () => {
     form: true,
   }).then((response) => {
     expect(response.status).to.eq(200);
-    expect(response.body._nodes.successful).to.eq(4);
+    expect(response.body._nodes.successful).to.eq(NODE_NUMBER);
   });
 });
 
