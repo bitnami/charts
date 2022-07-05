@@ -3,7 +3,6 @@ file:
     mode: "0644"
     filetype: file
     contains: 
-     - {{ printf "/port.*%s/" .Env.ELASTICSEARCH_HTTP_PORT_NUMBER }}
      - {{ printf "/port.*%s/" .Env.ELASTICSEARCH_TRANSPORT_PORT_NUMBER }}
     exists: true
 /bitnami/elasticsearch/data:
@@ -16,7 +15,7 @@ command:
     exec: curl localhost:{{ .Env.ELASTICSEARCH_HTTP_PORT_NUMBER }}
     exit-status: 0
     stdout: 
-      - You Know, for Search
+      - {{ printf "/number.*%s/" .Env.APP_VERSION }}
     stderr: []
   user-id-test:
     exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
