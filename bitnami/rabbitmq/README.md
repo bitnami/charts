@@ -468,6 +468,22 @@ To enable extra plugins, set the `extraPlugins` parameter with the list of plugi
 
 Refer to the chart documentation for [more information on using RabbitMQ plugins](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq/configuration/use-plugins/).
 
+### Advanced logging
+
+In case you want to configure RabbitMQ logging set `logs` value to false and set the log config in extraConfiguration following the [official documentation](https://www.rabbitmq.com/logging.html#log-file-location).
+
+An example:
+
+```yaml
+logs: false # custom logging
+extraConfiguration: |
+  log.default.level = warning
+  log.file = false
+  log.console = true
+  log.console.level = warning
+  log.console.formatter = json
+```
+
 ### Recover the cluster from complete shutdown
 
 > IMPORTANT: Some of these procedures can lead to data loss. Always make a backup beforehand.
