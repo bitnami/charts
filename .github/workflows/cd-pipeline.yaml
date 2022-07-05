@@ -8,6 +8,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/consul/Chart.yaml'
       - 'bitnami/discourse/Chart.yaml'
       - 'bitnami/dokuwiki/Chart.yaml'
+      - 'bitnami/external-dns/Chart.yaml'
       - 'bitnami/ghost/Chart.yaml'
       - 'bitnami/grafana-loki/Chart.yaml'
       - 'bitnami/grafana/Chart.yaml'
