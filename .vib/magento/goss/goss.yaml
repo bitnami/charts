@@ -12,7 +12,7 @@ command:
     stderr: []
     timeout: 0 
   apache-running:
-    exec: php aux | grep apache
+    exec: ps aux | grep apache
     exit-status: 0
     stdout:
       - /opt/bitnami/apache/bin/httpd
@@ -23,7 +23,7 @@ file:
     filetype: symlink
     linked-to: /bitnami/magento
     exists: true
-  /opt/bitnami/magento/package.json.sammple:
+  /opt/bitnami/magento/package.json.sample:
     filetype: symlink
     exists: true
     contains: 
