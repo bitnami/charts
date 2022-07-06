@@ -90,8 +90,9 @@ it('allows customizing the home page', () => {
   cy.get('.item-cms-page').click();
   cy.get('.page-main-actions');
   cy.get('[data-role="grid-wrapper"]').within(() => {
+    cy.reload();
+    cy.get('.admin__form-loading-mask').should('not.exist');
     cy.contains('td', 'home').siblings().last().click();
-    cy.get('.admin__form-loading-mask').should('not.be.visible');
     cy.get('[class="action-menu _active"]').within(() => {
       cy.contains('Edit').click({ force: true });
     });
