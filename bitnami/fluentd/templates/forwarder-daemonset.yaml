@@ -218,7 +218,7 @@ spec:
         {{- if .Values.forwarder.initScripts }}
         - name: custom-init-scripts
           configMap:
-            name: {{ template "fluentd.initScripts" . }}
+            name: {{ template "fluentd.forwarder.initScripts" . }}
         {{- end }}
         {{- if .Values.forwarder.initScriptsCM }}
         - name: custom-init-scripts-cm

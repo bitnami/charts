@@ -226,7 +226,7 @@ spec:
         {{- if .Values.aggregator.initScripts }}
         - name: custom-init-scripts
           configMap:
-            name: {{ template "fluentd.initScripts" . }}
+            name: {{ template "fluentd.aggregator.initScripts" . }}
         {{- end }}
         {{- if .Values.aggregator.initScriptsCM }}
         - name: custom-init-scripts-cm
