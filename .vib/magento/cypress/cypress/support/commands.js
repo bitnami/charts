@@ -1,5 +1,5 @@
-const CLICK_DELAY = 1000;
-const GET_DELAY = 1000;
+const CLICK_DELAY = 0;
+const GET_DELAY = 500;
 const BASE_URL = 'http://vmware-magento.my';
 
 for (const command of ['click']) {
