@@ -116,6 +116,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `smtpUser`                              | SMTP user                                                                                                             | `""`                   |
 | `smtpPassword`                          | SMTP password                                                                                                         | `""`                   |
 | `smtpProtocol`                          | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `""`                   |
+| `smtpExistingSecret`                    | The name of an existing secret with SMTP credentials                                                                  | `""`                   |
 | `containerPorts`                        | Container ports                                                                                                       | `{}`                   |
 | `sessionAffinity`                       | Control where client requests go, to the same pod or round-robin. Values: ClientIP or None                            | `None`                 |
 | `persistence.enabled`                   | Enable persistence using PVC                                                                                          | `true`                 |
