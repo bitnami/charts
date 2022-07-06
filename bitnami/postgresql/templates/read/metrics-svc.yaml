@@ -1,11 +1,11 @@
-{{- if .Values.metrics.enabled }}
+{{- if and .Values.metrics.enabled (eq .Values.architecture "replication") }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ printf "%s-metrics" (include "postgresql.readReplica.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: metrics
+    app.kubernetes.io/component: metrics-read
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
