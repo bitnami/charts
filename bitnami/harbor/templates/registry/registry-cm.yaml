@@ -168,7 +168,14 @@ data:
       # set via environment variable
       # secret: placeholder
       debug:
+        {{- if .Values.metrics.enabled}}
+        addr: :{{ .Values.registry.server.containerPorts.metrics }}
+        prometheus:
+          enabled: true
+          path: {{ .Values.metrics.path }}
+      {{- else }}
         addr: localhost:{{ .Values.registry.server.containerPorts.debug }}
+      {{- end }}
     auth:
       htpasswd:
         realm: harbor-registry-basic-realm

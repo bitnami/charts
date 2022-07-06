@@ -2,8 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "external-dns.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{ include "external-dns.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -181,6 +184,9 @@ spec:
             {{- if .Values.aws.batchChangeSize }}
             - --aws-batch-change-size={{ .Values.aws.batchChangeSize }}
             {{- end }}
+            {{- end }}
+            {{- if .Values.aws.zonesCacheDuration }}
+            - --aws-zones-cache-duration={{ .Values.aws.zonesCacheDuration }}
             {{- end }}
             {{- range .Values.aws.zoneTags }}
             - --aws-zone-tags={{ . }}
@@ -534,6 +540,16 @@ spec:
               {{- if .Values.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
               {{- end }}
+            {{- if eq .Values.provider "ns1" }}
+            # NS1 environment variables
+            {{- if or (.Values.ns1.apiKey) (.Values.ns1.secretName) }}
+            - name: NS1_APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.secretName" . }}
+                  key: ns1-api-key
+            {{- end }}
+            {{- end }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
@@ -628,6 +644,10 @@ spec:
             - name: google-service-account
               mountPath: /etc/secrets/service-account/
             {{- end }}
+            {{- if eq .Values.provider "oci" }}
+            - name: oci-config-file
+              mountPath: /etc/kubernetes/
+            {{- end }}
             {{- if eq .Values.provider "designate" }}
             # Designate mountPath(s)
             {{- if and (.Values.designate.customCAHostPath) (.Values.designate.customCA.enabled) }}
@@ -687,6 +707,11 @@ spec:
             path: /etc/kubernetes/azure.json
             type: File
           {{- end }}
+        {{- end }}
+        {{- if (eq .Values.provider "oci")}}
+        - name: oci-config-file
+          secret:
+            secretName: {{ template "external-dns.secretName" . }}
         {{- end }}
         {{- if and (eq .Values.provider "coredns") (.Values.coredns.etcdTLS.enabled) }}
         # CoreDNS volume(s)

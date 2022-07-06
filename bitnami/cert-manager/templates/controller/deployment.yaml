@@ -50,6 +50,9 @@ spec:
       {{- if .Values.controller.priorityClassName }}
       priorityClassName: {{ .Values.controller.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.controller.runtimeClassName }}
+      runtimeClassName: {{ .Values.controller.runtimeClassName }}
+      {{- end }}
       {{- if .Values.controller.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.controller.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -84,6 +87,9 @@ spec:
           {{- else }}
           args:
             - --v={{ .Values.logLevel }}
+            {{- if .Values.controller.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.clusterResourceNamespace }}
             - --cluster-resource-namespace={{ .Values.clusterResourceNamespace }}
           {{- else }}

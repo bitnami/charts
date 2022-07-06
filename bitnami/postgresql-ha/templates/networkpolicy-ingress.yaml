@@ -3,6 +3,7 @@ kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ printf "%s-ingress" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -19,7 +20,7 @@ spec:
   ingress:
     # Allow inbound connections
     - ports:
-        - port: {{ .Values.service.port }}
+        - port: {{ .Values.service.ports.postgresql }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
@@ -30,5 +31,5 @@ spec:
       {{- end }}
     # Allow prometheus scrapes
     - ports:
-        - port: {{ .Values.metrics.service.port }}
+        - port: {{ .Values.metrics.service.ports.metrics }}
 {{- end }}

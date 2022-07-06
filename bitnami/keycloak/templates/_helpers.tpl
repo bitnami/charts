@@ -101,7 +101,11 @@ Return true if a configmap object should be created
 Return the Database hostname
 */}}
 {{- define "keycloak.databaseHost" -}}
+{{- if eq .Values.postgresql.architecture "replication" }}
+{{- ternary (include "keycloak.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled -}}-primary
+{{- else -}}
 {{- ternary (include "keycloak.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -168,7 +172,7 @@ Return the Database encrypted password
         {{- default (include "keycloak.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
     {{- end -}}
 {{- else -}}
-    {{- default (tpl .Values.auth.existingSecret $) (tpl .Values.externalDatabase.existingSecret $) -}}
+    {{- default (include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecret "context" $)) (tpl .Values.externalDatabase.existingSecret $) -}}
 {{- end -}}
 {{- end -}}
 
@@ -228,7 +232,6 @@ Compile all warnings into a single message.
 */}}
 {{- define "keycloak.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "keycloak.validateValues.replicaCount" .) -}}
 {{- $messages := append $messages (include "keycloak.validateValues.database" .) -}}
 {{- $messages := append $messages (include "keycloak.validateValues.auth.tls" .) -}}
 {{- $messages := without $messages "" -}}
@@ -236,18 +239,6 @@ Compile all warnings into a single message.
 
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
-{{- end -}}
-{{- end -}}
-
-{{/* Validate values of Keycloak - number of replicas */}}
-{{- define "keycloak.validateValues.replicaCount" -}}
-{{- $replicaCount := int .Values.replicaCount }}
-{{- if and (not .Values.serviceDiscovery.enabled) (gt $replicaCount 1) -}}
-keycloak: replicaCount
-    You need to configure the ServiceDiscovery settings to run more than 1 replica.
-    Enable the Service Discovery (--set serviceDiscovery.enabled=true) and
-    set the Service Discovery protocol (--set serviceDiscovery.protocol="FOO") and
-    the Service Discovery properties (--set serviceDiscovery.properties[0]="BAR") if needed.
 {{- end -}}
 {{- end -}}
 

@@ -1,7 +1,7 @@
 annotations:
   category: ProjectManagement
 apiVersion: v2
-appVersion: 4.2.4
+appVersion: 5.0.2
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -10,7 +10,7 @@ dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -30,10 +30,10 @@ keywords:
   - ruby
   - rails
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: redmine
 sources:
   - https://github.com/bitnami/bitnami-docker-redmine
   - https://www.redmine.org/
-version: 18.0.3
+version: 20.2.11

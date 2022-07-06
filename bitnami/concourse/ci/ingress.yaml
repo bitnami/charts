@@ -1,7 +1,0 @@
-service:
-  web:
-    type: ClusterIP
-ingress:
-  enabled: true
-  tls: true
-  selfSigned: true

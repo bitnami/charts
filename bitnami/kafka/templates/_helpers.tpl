@@ -211,6 +211,21 @@ SASL_PLAINTEXT
 {{- end -}}
 
 {{/*
+Return the protocol used with zookeeper
+*/}}
+{{- define "kafka.zookeeper.protocol" -}}
+{{- if and .Values.auth.zookeeper.tls.enabled .Values.zookeeper.auth.client.enabled .Values.auth.sasl.jaas.zookeeperUser -}}
+SASL_SSL
+{{- else if and .Values.auth.zookeeper.tls.enabled -}}
+SSL
+{{- else if and .Values.zookeeper.auth.client.enabled .Values.auth.sasl.jaas.zookeeperUser -}}
+SASL
+{{- else -}}
+PLAINTEXT
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Kafka JAAS credentials secret
 */}}
 {{- define "kafka.jaasSecretName" -}}
@@ -227,7 +242,7 @@ Return true if a JAAS credentials secret object should be created
 */}}
 {{- define "kafka.createJaasSecret" -}}
 {{- $secretName := .Values.auth.sasl.jaas.existingSecret -}}
-{{- if and (or (include "kafka.client.saslAuthentication" .) (include "kafka.interBroker.saslAuthentication" .) (and .Values.zookeeper.auth.enabled .Values.auth.sasl.jaas.zookeeperUser)) (empty $secretName) -}}
+{{- if and (or (include "kafka.client.saslAuthentication" .) (include "kafka.interBroker.saslAuthentication" .) (and .Values.zookeeper.auth.client.enabled .Values.auth.sasl.jaas.zookeeperUser)) (empty $secretName) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -249,6 +264,18 @@ Return the Kafka configuration configmap
     {{- printf "%s" (tpl .Values.existingConfigmap $) -}}
 {{- else -}}
     {{- printf "%s-configuration" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+
+{{/*
+Returns the secret name for the Kafka Provisioning client
+*/}}
+{{- define "kafka.client.passwordsSecretName" -}}
+{{- if .Values.provisioning.auth.tls.passwordsSecret -}}
+    {{- printf "%s" (tpl .Values.provisioning.auth.tls.passwordsSecret $) -}}
+{{- else -}}
+    {{- printf "%s-client-secret" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -343,6 +370,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "kafka.validateValues.saslMechanisms" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.tlsSecrets" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.tlsSecrets.length" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.tlsPasswords" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -414,7 +442,7 @@ kafka: externalAccess.service.{{ .element }}
 
 {{/* Validate values of Kafka - SASL mechanisms must be provided when using SASL */}}
 {{- define "kafka.validateValues.saslMechanisms" -}}
-{{- if and (or (.Values.auth.clientProtocol | regexFind "sasl") (.Values.auth.interBrokerProtocol | regexFind "sasl") (and .Values.zookeeper.auth.enabled .Values.auth.sasl.jaas.zookeeperUser)) (not .Values.auth.sasl.mechanisms) }}
+{{- if and (or (.Values.auth.clientProtocol | regexFind "sasl") (.Values.auth.interBrokerProtocol | regexFind "sasl") (and .Values.zookeeper.auth.client.enabled .Values.auth.sasl.jaas.zookeeperUser)) (not .Values.auth.sasl.mechanisms) }}
 kafka: auth.sasl.mechanisms
     The SASL mechanisms are required when either auth.clientProtocol or auth.interBrokerProtocol use SASL or Zookeeper user is provided.
 {{- end }}
@@ -445,6 +473,17 @@ kafka: auth.tls.existingSecrets
 {{- if ne $replicaCount $existingSecretsLength }}
 kafka: .Values.auth.tls.existingSecrets
     Number of replicas and existingSecrets array length must be the same. Currently: replicaCount = {{ $replicaCount }} and existingSecrets = {{ $existingSecretsLength }}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Kafka provisioning - keyPasswordSecretKey, keystorePasswordSecretKey or truststorePasswordSecretKey must not be used without passwordsSecret */}}
+{{- define "kafka.validateValues.tlsPasswords" -}}
+{{- if and (include "kafka.client.tlsEncryption" .) (not .Values.auth.tls.passwordsSecret) }}
+{{- if or .Values.auth.tls.keyPasswordSecretKey .Values.auth.tls.keystorePasswordSecretKey .Values.auth.tls.truststorePasswordSecretKey }}
+kafka: auth.tls.keyPasswordSecretKey,auth.tls.keystorePasswordSecretKey,auth.tls.truststorePasswordSecretKey
+    auth.tls.keyPasswordSecretKey,auth.tls.keystorePasswordSecretKey,auth.tls.truststorePasswordSecretKey
+    must not be used without passwordsSecret setted.
 {{- end -}}
 {{- end -}}
 {{- end -}}

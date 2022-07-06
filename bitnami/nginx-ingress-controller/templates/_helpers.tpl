@@ -73,3 +73,12 @@ Return the appropriate apiGroup for PodSecurityPolicy.
 {{- print "extensions" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Require extensions API group based on Kubernetes version
+*/}}
+{{- define "nginx-ingress-controller.role.extensions.apiGroup" -}}
+{{- if semverCompare "<1.16-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "- extensions" -}}
+{{- end -}}
+{{- end -}}

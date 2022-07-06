@@ -3,7 +3,14 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
   name: {{ template "kube-prometheus.operator.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 rules:
   - apiGroups:
       - apiextensions.k8s.io
@@ -33,6 +40,7 @@ rules:
       - alertmanagers/finalizers
       - alertmanagerconfigs
       - prometheuses
+      - prometheuses/status
       - prometheuses/finalizers
       - thanosrulers
       - thanosrulers/finalizers

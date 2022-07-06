@@ -3,19 +3,22 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "mongodb.fullname" . }}
-  namespace: {{ include "mongodb.namespace" . }}
+  namespace: {{ include "mongodb.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: mongodb
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.persistence.annotations  .Values.commonAnnotations }}
+  {{- if or .Values.persistence.annotations  .Values.commonAnnotations .Values.persistence.resourcePolicy }}
   annotations:
   {{- if .Values.commonAnnotations }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
   {{- if .Values.persistence.annotations }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.persistence.annotations "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.persistence.resourcePolicy }}
+    helm.sh/resource-policy: {{ .Values.persistence.resourcePolicy | quote }}
   {{- end }}
   {{- end }}
 spec:

@@ -44,6 +44,7 @@ spec:
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceAccount.name" (dict "component" "ruler" "context" $) }}
+      automountServiceAccountToken: {{ .Values.ruler.automountServiceAccountToken }}
       {{- if .Values.ruler.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -187,7 +188,7 @@ spec:
             httpGet:
               path: /-/ready
               port: http
-          {{- else if .Values.ruler.customReadinessProbe }}
+          {{- else if .Values.ruler.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.ruler.lifecycleHooks }}

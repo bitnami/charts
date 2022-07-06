@@ -1,0 +1,9 @@
+{
+  "databaseName": "testDatabaseName",
+  "tableName":"testTableName",
+  "columnNumber":"1",
+  "columnName":"columnName",
+  "username":"test_user",
+  "password":"test_password",
+  "importedDatabaseName":"authors"
+}

@@ -116,6 +116,32 @@ Return the appropriate apiVersion for CRDs.
 {{- end -}}
 
 {{/*
+Return the appropriate apiVersion for APIService.
+*/}}
+{{- define "common.capabilities.apiService.apiVersion" -}}
+{{- if semverCompare "<1.10-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "apiregistration.k8s.io/v1beta1" -}}
+{{- else -}}
+{{- print "apiregistration.k8s.io/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for Horizontal Pod Autoscaler.
+*/}}
+{{- define "common.capabilities.hpa.apiVersion" -}}
+{{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .context) -}}
+{{- if .beta2 -}}
+{{- print "autoscaling/v2beta2" -}}
+{{- else -}}
+{{- print "autoscaling/v2beta1" -}}
+{{- end -}}
+{{- else -}}
+{{- print "autoscaling/v2" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Returns true if the used Helm version is 3.3+.
 A way to check the used Helm version was not introduced until version 3.3.0 with .Capabilities.HelmVersion, which contains an additional "{}}"  structure.
 This check is introduced as a regexMatch instead of {{ if .Capabilities.HelmVersion }} because checking for the key HelmVersion in <3.3 results in a "interface not found" error.

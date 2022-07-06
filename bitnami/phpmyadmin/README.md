@@ -21,7 +21,7 @@ This chart bootstraps a [phpMyAdmin](https://github.com/bitnami/bitnami-docker-p
 
 As a portable web application written primarily in PHP, phpMyAdmin has become one of the most popular MySQL administration tools, especially for web hosting services.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -75,20 +75,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### phpMyAdmin parameters
 
-| Name                 | Description                                                                       | Value                  |
-| -------------------- | --------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`     | phpMyAdmin image registry                                                         | `docker.io`            |
-| `image.repository`   | phpMyAdmin image repository                                                       | `bitnami/phpmyadmin`   |
-| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                             | `5.1.1-debian-10-r201` |
-| `image.pullPolicy`   | Image pull policy                                                                 | `IfNotPresent`         |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                                  | `[]`                   |
-| `image.debug`        | Enable phpmyadmin image debug mode                                                | `false`                |
-| `command`            | Override default container command (useful when using custom images)              | `[]`                   |
-| `args`               | Override default container args (useful when using custom images)                 | `[]`                   |
-| `lifecycleHooks`     | for the phpmyadmin container(s) to automate configuration before or after startup | `{}`                   |
-| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container                     | `[]`                   |
-| `extraEnvVarsCM`     | Name of a existing ConfigMap containing extra env vars                            | `""`                   |
-| `extraEnvVarsSecret` | Name of a existing Secret containing extra env vars                               | `""`                   |
+| Name                 | Description                                                                       | Value                 |
+| -------------------- | --------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`     | phpMyAdmin image registry                                                         | `docker.io`           |
+| `image.repository`   | phpMyAdmin image repository                                                       | `bitnami/phpmyadmin`  |
+| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                             | `5.2.0-debian-11-r12` |
+| `image.pullPolicy`   | Image pull policy                                                                 | `IfNotPresent`        |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                                  | `[]`                  |
+| `image.debug`        | Enable phpmyadmin image debug mode                                                | `false`               |
+| `command`            | Override default container command (useful when using custom images)              | `[]`                  |
+| `args`               | Override default container args (useful when using custom images)                 | `[]`                  |
+| `lifecycleHooks`     | for the phpmyadmin container(s) to automate configuration before or after startup | `{}`                  |
+| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container                     | `[]`                  |
+| `extraEnvVarsCM`     | Name of a existing ConfigMap containing extra env vars                            | `""`                  |
+| `extraEnvVarsSecret` | Name of a existing Secret containing extra env vars                               | `""`                  |
 
 
 ### phpMyAdmin deployment parameters
@@ -181,6 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Database parameters
@@ -208,7 +209,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                              | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                    | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                  | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                        | `0.11.0-debian-10-r26`    |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                        | `0.11.0-debian-11-r12`    |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                 | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                  | `[]`                      |
 | `metrics.resources`                        | Metrics exporter resource requests and limits                                     | `{}`                      |
@@ -383,6 +384,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 10.0.0
+
+This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-105-to-mariadb-106/) for upgrading from MariaDB 10.5 to 10.6. No major issues are expected during the upgrade.
+
 ### To 9.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
@@ -404,8 +409,8 @@ Consequences:
 - Backwards compatibility is not guaranteed. However, you can easily workaround this issue by removing PhpMyAdmin deployment before upgrading (the following example assumes that the release name is `phpmyadmin`):
 
 ```console
-$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+$ export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+$ export MARIADB_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 $ kubectl delete deployments.apps phpmyadmin
 $ helm upgrade phpmyadmin bitnami/phpmyadmin --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
 ```
@@ -453,8 +458,8 @@ To upgrade to `7.0.0`, it should be done reusing the PVCs used to hold both the 
 Obtain the credentials and the names of the PVCs used to hold both the MariaDB and phpMyAdmin data on your current release:
 
 ```console
-export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-export MARIADB_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=phpmyadmin -o jsonpath="{.items[0].metadata.name}")
 ```
 

@@ -3,14 +3,21 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ template "external-dns.fullname" . }}-psp
+  name: {{ printf "%s-%s" (include "common.names.fullname.namespace" .) "psp" }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{ include "external-dns.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ template "external-dns.fullname" . }}-psp
+  name: {{ printf "%s-%s" (include "common.names.fullname.namespace" .) "psp" }}
 subjects:
   - kind: ServiceAccount
     name: {{ template "external-dns.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace }}
+    namespace: {{ .Release.Namespace | quote }}
 {{- end }}

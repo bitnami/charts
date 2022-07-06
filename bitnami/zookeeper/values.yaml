@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/zookeeper
-  tag: 3.7.0-debian-10-r303
+  tag: 3.8.0-debian-11-r11
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -95,26 +95,49 @@ image:
 ## Authentication parameters
 ##
 auth:
-  ## @param auth.enabled Enable ZooKeeper auth. It uses SASL/Digest-MD5
-  ##
-  enabled: false
-  ## @param auth.clientUser User that will use ZooKeeper clients to auth
-  ##
-  clientUser: ""
-  ## @param auth.clientPassword Password that will use ZooKeeper clients to auth
-  ##
-  clientPassword: ""
-  ## @param auth.serverUsers Comma, semicolon or whitespace separated list of user to be created
-  ## Specify them as a string, for example: "user1,user2,admin"
-  ##
-  serverUsers: ""
-  ## @param auth.serverPasswords Comma, semicolon or whitespace separated list of passwords to assign to users when created
-  ## Specify them as a string, for example: "pass4user1, pass4user2, pass4admin"
-  ##
-  serverPasswords: ""
-  ## @param auth.existingSecret Use existing secret (ignores previous passwords)
-  ##
-  existingSecret: ""
+  client:
+    ## @param auth.client.enabled Enable ZooKeeper client-server authentication. It uses SASL/Digest-MD5
+    ##
+    enabled: false
+    ## @param auth.client.clientUser User that will use ZooKeeper clients to auth
+    ##
+    clientUser: ""
+    ## @param auth.client.clientPassword Password that will use ZooKeeper clients to auth
+    ##
+    clientPassword: ""
+    ## @param auth.client.serverUsers Comma, semicolon or whitespace separated list of user to be created
+    ## Specify them as a string, for example: "user1,user2,admin"
+    ##
+    serverUsers: ""
+    ## @param auth.client.serverPasswords Comma, semicolon or whitespace separated list of passwords to assign to users when created
+    ## Specify them as a string, for example: "pass4user1, pass4user2, pass4admin"
+    ##
+    serverPasswords: ""
+    ## @param auth.client.existingSecret Use existing secret (ignores previous passwords)
+    ##
+    existingSecret: ""
+  quorum:
+    ## @param auth.quorum.enabled Enable ZooKeeper server-server authentication. It uses SASL/Digest-MD5
+    ##
+    enabled: false
+    ## @param auth.quorum.learnerUser User that the ZooKeeper quorumLearner will use to authenticate to quorumServers.
+    ## Note: Make sure the user is included in auth.quorum.serverUsers
+    ##
+    learnerUser: ""
+    ## @param auth.quorum.learnerPassword Password that the ZooKeeper quorumLearner will use to authenticate to quorumServers.
+    ##
+    learnerPassword: ""
+    ## @param auth.quorum.serverUsers Comma, semicolon or whitespace separated list of users for the quorumServers.
+    ## Specify them as a string, for example: "user1,user2,admin"
+    ##
+    serverUsers: ""
+    ## @param auth.quorum.serverPasswords Comma, semicolon or whitespace separated list of passwords to assign to users when created
+    ## Specify them as a string, for example: "pass4user1, pass4user2, pass4admin"
+    ##
+    serverPasswords: ""
+    ## @param auth.quorum.existingSecret Use existing secret (ignores previous passwords)
+    ##
+    existingSecret: ""
 ## @param tickTime Basic time unit (in milliseconds) used by ZooKeeper for heartbeats
 ##
 tickTime: 2000
@@ -367,7 +390,7 @@ tolerations: []
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
-topologySpreadConstraints: {}
+topologySpreadConstraints: []
 ## @param podManagementPolicy StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: `OrderedReady` and `Parallel`
 ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
 ##
@@ -478,6 +501,12 @@ service:
   ## ref: https://kubernetes.io/docs/user-guide/services/
   ##
   sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
   ## @param service.clusterIP ZooKeeper service Cluster IP
   ## e.g.:
   ## clusterIP: None
@@ -518,7 +547,7 @@ networkPolicy:
   ##
   enabled: false
   ## @param networkPolicy.allowExternal Don't require client label for connections
-  ## When set to false, only pods with the correct client label will have network access to the port Redis&trade; is
+  ## When set to false, only pods with the correct client label will have network access to the port Redis&reg; is
   ## listening on. When true, zookeeper accept connections from any source (with the correct destination port).
   ##
   allowExternal: true
@@ -621,7 +650,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r349
+    tag: 11-debian-11-r10
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -750,6 +779,9 @@ tls:
     ## @param tls.client.enabled Enable TLS for client connections
     ##
     enabled: false
+    ## @param tls.client.auth SSL Client auth. Can be "none", "want" or "need".
+    ##
+    auth: "none"
     ## @param tls.client.autoGenerated Generate automatically self-signed TLS certificates for ZooKeeper client communications
     ## Currently only supports PEM certificates
     ##
@@ -757,6 +789,12 @@ tls:
     ## @param tls.client.existingSecret Name of the existing secret containing the TLS certificates for ZooKeeper client communications
     ##
     existingSecret: ""
+    ## @param tls.client.existingSecretKeystoreKey The secret key from the tls.client.existingSecret containing the Keystore.
+    ##
+    existingSecretKeystoreKey: ""
+    ## @param tls.client.existingSecretTruststoreKey The secret key from the tls.client.existingSecret containing the Truststore.
+    ##
+    existingSecretTruststoreKey: ""
     ## @param tls.client.keystorePath Location of the KeyStore file used for Client connections
     ##
     keystorePath: /opt/bitnami/zookeeper/config/certs/client/zookeeper.keystore.jks
@@ -766,6 +804,12 @@ tls:
     ## @param tls.client.passwordsSecretName Existing secret containing Keystore and truststore passwords
     ##
     passwordsSecretName: ""
+    ## @param tls.client.passwordsSecretKeystoreKey The secret key from the tls.client.passwordsSecretName containing the password for the Keystore.
+    ##
+    passwordsSecretKeystoreKey: ""
+    ## @param tls.client.passwordsSecretTruststoreKey The secret key from the tls.client.passwordsSecretName containing the password for the Truststore.
+    ##
+    passwordsSecretTruststoreKey: ""
     ## @param tls.client.keystorePassword Password to access KeyStore if needed
     ##
     keystorePassword: ""
@@ -776,12 +820,21 @@ tls:
     ## @param tls.quorum.enabled Enable TLS for quorum protocol
     ##
     enabled: false
+    ## @param tls.quorum.auth SSL Quorum Client auth. Can be "none", "want" or "need".
+    ##
+    auth: "none"
     ## @param tls.quorum.autoGenerated Create self-signed TLS certificates. Currently only supports PEM certificates.
     ##
     autoGenerated: false
     ## @param tls.quorum.existingSecret Name of the existing secret containing the TLS certificates for ZooKeeper quorum protocol
     ##
     existingSecret: ""
+    ## @param tls.quorum.existingSecretKeystoreKey The secret key from the tls.quorum.existingSecret containing the Keystore.
+    ##
+    existingSecretKeystoreKey: ""
+    ## @param tls.quorum.existingSecretTruststoreKey The secret key from the tls.quorum.existingSecret containing the Truststore.
+    ##
+    existingSecretTruststoreKey: ""
     ## @param tls.quorum.keystorePath Location of the KeyStore file used for Quorum protocol
     ##
     keystorePath: /opt/bitnami/zookeeper/config/certs/quorum/zookeeper.keystore.jks
@@ -791,6 +844,12 @@ tls:
     ## @param tls.quorum.passwordsSecretName Existing secret containing Keystore and truststore passwords
     ##
     passwordsSecretName: ""
+    ## @param tls.quorum.passwordsSecretKeystoreKey The secret key from the tls.quorum.passwordsSecretName containing the password for the Keystore.
+    ##
+    passwordsSecretKeystoreKey: ""
+    ## @param tls.quorum.passwordsSecretTruststoreKey The secret key from the tls.quorum.passwordsSecretName containing the password for the Truststore.
+    ##
+    passwordsSecretTruststoreKey: ""
     ## @param tls.quorum.keystorePassword Password to access KeyStore if needed
     ##
     keystorePassword: ""

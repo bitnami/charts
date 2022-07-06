@@ -1,18 +1,34 @@
 {{- if and .Values.mongos.useStatefulSet .Values.mongos.servicePerReplica.enabled }}
-{{- range $i := until (.Values.mongos.replicas | int) }}
+{{- range $i := until (.Values.mongos.replicaCount | int) }}
 {{- $context := deepCopy $ | merge (dict "index" $i) }}
----
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "mongodb-sharded.serviceName" $ }}-{{ $i }}
+  name: {{ printf "%s-%d" (include "mongodb-sharded.serviceName" $) $i }}
+  namespace: {{ include "common.names.namespace" $ | quote }}
   labels: {{ include "common.labels.standard" $ | nindent 4 }}
     app.kubernetes.io/component: mongos
+    {{- if $.Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $context ) | nindent 4 }}
+    {{- end }}
   annotations: {{- include "common.tplvalues.render" (dict "value" $.Values.mongos.servicePerReplica.annotations "context" $context) | nindent 4 }}
+    {{- if $.Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $context ) | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ $.Values.mongos.servicePerReplica.type }}
-  {{- if and $.Values.mongos.servicePerReplica.loadBalancerIP (eq $.Values.mongos.servicePerReplica.type "LoadBalancer") }}
-  loadBalancerIP: {{ $.Values.mongos.servicePerReplica.loadBalancerIP }}
+  sessionAffinity: {{ default "None" $.Values.mongos.servicePerReplica.sessionAffinity }}
+  {{- if $.Values.mongos.servicePerReplica.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.servicePerReplica.sessionAffinityConfig "context" $context) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq $.Values.mongos.servicePerReplica.type "LoadBalancer") (eq $.Values.mongos.servicePerReplica.type "NodePort") }}
+  externalTrafficPolicy: {{ $.Values.mongos.servicePerReplica.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if $.Values.mongos.servicePerReplica.externalIPs }}
+  externalIPs: {{- toYaml $.Values.mongos.servicePerReplica.externalIPs | nindent 4 }}
+  {{- end }}
+  {{- if and $.Values.mongos.servicePerReplica.loadBalancerIPs (eq $.Values.mongos.servicePerReplica.type "LoadBalancer") }}
+  loadBalancerIP: {{ index $.Values.mongos.servicePerReplica.loadBalancerIPs $i }}
   {{- end }}
   {{- if and (eq $.Values.mongos.servicePerReplica.type "LoadBalancer") $.Values.mongos.servicePerReplica.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
@@ -20,15 +36,15 @@ spec:
   {{ include "common.tplvalues.render" . | nindent 4 }}
   {{- end }}
   {{- end }}
-  {{- if and (eq $.Values.mongos.servicePerReplica.type "ClusterIP") $.Values.mongos.servicePerReplica.clusterIP }}
-  clusterIP: {{ $.Values.mongos.servicePerReplica.clusterIP }}
+  {{- if and (eq $.Values.mongos.servicePerReplica.type "ClusterIP") $.Values.mongos.servicePerReplica.clusterIPs }}
+  clusterIP: {{ index $.Values.mongos.servicePerReplica.clusterIPs $i }}
   {{- end }}
   ports:
     - name: mongodb
       port: {{ $.Values.mongos.servicePerReplica.port }}
       targetPort: mongodb
-      {{- if $.Values.mongos.servicePerReplica.nodePort }}
-      nodePort: {{ $.Values.mongos.servicePerReplica.nodePort }}
+      {{- if $.Values.mongos.servicePerReplica.nodePorts }}
+      nodePort: {{ index $.Values.mongos.servicePerReplica.nodePorts $i }}
       {{- else if eq $.Values.mongos.servicePerReplica.type "ClusterIP" }}
       nodePort: null
       {{- end }}
@@ -42,7 +58,7 @@ spec:
     {{- end }}
   selector: {{ include "common.labels.matchLabels" $ | nindent 4 }}
     app.kubernetes.io/component: mongos
-    statefulset.kubernetes.io/pod-name: {{ include "common.names.fullname" $ }}-mongos-{{ $i }}
-  sessionAffinity: {{ default "None" $.Values.mongos.servicePerReplica.sessionAffinity }}
+    statefulset.kubernetes.io/pod-name: {{ printf "%s-mongos-%d" (include "common.names.fullname" $) $i }}
+---
 {{- end }}
 {{- end }}

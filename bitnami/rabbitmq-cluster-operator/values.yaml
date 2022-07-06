@@ -41,6 +41,12 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## Enable diagnostic mode in the deployment(s)/statefulset(s)
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled)
+  ##
+  enabled: false
 
 ## @section RabbitMQ Cluster Operator Parameters
 ##
@@ -55,7 +61,7 @@ extraDeploy: []
 rabbitmqImage:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.8.27-debian-10-r49
+  tag: 3.10.5-debian-11-r11
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-rabbitmqImage-private-registry/
@@ -75,7 +81,7 @@ rabbitmqImage:
 credentialUpdaterImage:
   registry: docker.io
   repository: bitnami/rmq-default-credential-updater
-  tag: 1.0.2-scratch-r0
+  tag: 1.0.2-scratch-r3
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-credentialUpdaterImage-private-registry/
@@ -97,7 +103,7 @@ clusterOperator:
   image:
     registry: docker.io
     repository: bitnami/rabbitmq-cluster-operator
-    tag: 1.12.1-scratch-r0
+    tag: 1.14.0-scratch-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -123,6 +129,10 @@ clusterOperator:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param clusterOperator.terminationGracePeriodSeconds In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
   ## Configure extra options for RabbitMQ Cluster Operator containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param clusterOperator.livenessProbe.enabled Enable livenessProbe on RabbitMQ Cluster Operator nodes
@@ -200,11 +210,13 @@ clusterOperator:
   ## @param clusterOperator.containerSecurityContext.enabled Enabled RabbitMQ Cluster Operator containers' Security Context
   ## @param clusterOperator.containerSecurityContext.runAsUser Set RabbitMQ Cluster Operator containers' Security Context runAsUser
   ## @param clusterOperator.containerSecurityContext.runAsNonRoot Force running the container as non root
+  ## @param clusterOperator.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on cluster operator containers
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    readOnlyRootFilesystem: true
 
   ## @param clusterOperator.command Override default container command (useful when using custom images)
   ##
@@ -397,10 +409,26 @@ clusterOperator:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "{{ .Values.clusterOperator.metrics.service.ports.http }}"
+      ## @param clusterOperator.metrics.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+      ## If "ClientIP", consecutive client requests will be directed to the same Pod
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+      ##
+      sessionAffinity: None
+      ## @param clusterOperator.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
     serviceMonitor:
       ## @param clusterOperator.metrics.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator
       ##
       enabled: false
+      ## @param clusterOperator.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
       ## @param clusterOperator.metrics.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
       ##
       jobLabel: app.kubernetes.io/name
@@ -424,16 +452,20 @@ clusterOperator:
       ## @param clusterOperator.metrics.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used
       ##
       interval: ""
-      ## @param clusterOperator.metrics.serviceMonitor.additionalLabels Used to pass Labels that are required by the installed Prometheus Operator
-      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
-      ##
-      additionalLabels: {}
+
+      ## DEPRECATED: Use clusterOperator.metrics.serviceMonitor.labels instead
+      ## This value will be removed in a future release
+      ## additionalLabels: {}
+
       ## @param clusterOperator.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
       ##
       metricRelabelings: []
       ## @param clusterOperator.metrics.serviceMonitor.relabelings Specify general relabeling
       ##
       relabelings: []
+      ## @param clusterOperator.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
 
 ## @section RabbitMQ Messaging Topology Operator Parameters
 ##
@@ -449,7 +481,7 @@ msgTopologyOperator:
   image:
     registry: docker.io
     repository: bitnami/rmq-messaging-topology-operator
-    tag: 1.4.1-scratch-r0
+    tag: 1.7.1-scratch-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -475,6 +507,10 @@ msgTopologyOperator:
   ## @param msgTopologyOperator.schedulerName Alternative scheduler
   ##
   schedulerName: ""
+  ## @param msgTopologyOperator.terminationGracePeriodSeconds In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
   ## Configure extra options for RabbitMQ Messaging Topology Operator containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param msgTopologyOperator.livenessProbe.enabled Enable livenessProbe on RabbitMQ Messaging Topology Operator nodes
@@ -560,11 +596,13 @@ msgTopologyOperator:
   ## @param msgTopologyOperator.containerSecurityContext.enabled Enabled RabbitMQ Messaging Topology Operator containers' Security Context
   ## @param msgTopologyOperator.containerSecurityContext.runAsUser Set RabbitMQ Messaging Topology Operator containers' Security Context runAsUser
   ## @param msgTopologyOperator.containerSecurityContext.runAsNonRoot Force running the container as non root
+  ## @param msgTopologyOperator.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on Messaging Topology Operator
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    readOnlyRootFilesystem: true
 
   ## @param msgTopologyOperator.fullnameOverride String to fully override rmqco.msgTopologyOperator.fullname template
   ##
@@ -729,6 +767,17 @@ msgTopologyOperator:
     ## @param msgTopologyOperator.service.annotations Additional custom annotations for RabbitMQ Messaging Topology Operator webhook service
     ##
     annotations: {}
+    ## @param msgTopologyOperator.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param msgTopologyOperator.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
 
   ## RBAC configuration
   ##
@@ -804,17 +853,34 @@ msgTopologyOperator:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "{{ .Values.msgTopologyOperator.metrics.service.ports.http }}"
+      ## @param msgTopologyOperator.metrics.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+      ## If "ClientIP", consecutive client requests will be directed to the same Pod
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+      ##
+      sessionAffinity: None
+      ## @param msgTopologyOperator.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
     serviceMonitor:
       ## @param msgTopologyOperator.metrics.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator
       ##
       enabled: false
+      ## @param msgTopologyOperator.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+      ## e.g:
+      ## namespace: monitoring
+      ##
+      namespace: ""
       ## @param msgTopologyOperator.metrics.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
       ##
       jobLabel: app.kubernetes.io/name
-      ## @param msgTopologyOperator.metrics.serviceMonitor.additionalLabels Used to pass Labels that are required by the installed Prometheus Operator
-      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
-      ##
-      additionalLabels: {}
+
+      ## DEPRECATED: Use msgTopologyOperator.metrics.serviceMonitor.labels instead.
+      ## This value will be removed in a future release
+      ## additionalLabels: {}
+
       ## @param msgTopologyOperator.metrics.serviceMonitor.selector Prometheus instance selector labels
       ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
       ## e.g:
@@ -841,6 +907,9 @@ msgTopologyOperator:
       ## @param msgTopologyOperator.metrics.serviceMonitor.relabelings Specify general relabeling
       ##
       relabelings: []
+      ## @param msgTopologyOperator.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
 
 ## @section cert-manager parameters
 ##

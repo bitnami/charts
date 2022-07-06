@@ -23,7 +23,7 @@ SuiteCRM is a software fork of the popular customer relationship management (CRM
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the SuiteCRM application.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                        | SuiteCRM image registry                                                                   | `docker.io`            |
 | `image.repository`                      | SuiteCRM image repository                                                                 | `bitnami/suitecrm`     |
-| `image.tag`                             | SuiteCRM image tag (immutable tags are recommended)                                       | `7.12.2-debian-10-r24` |
+| `image.tag`                             | SuiteCRM image tag (immutable tags are recommended)                                       | `7.12.6-debian-11-r11` |
 | `image.pullPolicy`                      | SuiteCRM image pull policy                                                                | `IfNotPresent`         |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                          | `[]`                   |
 | `image.debug`                           | Specify if debug logs should be enabled                                                   | `false`                |
@@ -206,7 +206,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r305`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r11`      |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -242,6 +242,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Metrics parameters
@@ -251,7 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                 | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                       | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                     | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)           | `0.11.0-debian-10-r23`    |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)           | `0.11.0-debian-11-r11`    |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                    | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                     | `[]`                      |
 | `metrics.resources`                        | Metrics exporter resource requests and limits                        | `{}`                      |
@@ -285,7 +286,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra environment variables (in case of sensitive data) | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image repository                                        | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)              | `10-debian-10-r305`                      |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)              | `11-debian-11-r11`                       |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                       | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                      | `[]`                                     |
 
@@ -421,6 +422,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 11.0.0
+
+This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-105-to-mariadb-106/) for upgrading from MariaDB 10.5 to 10.6. No major issues are expected during the upgrade.
+
 ### To 10.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
@@ -430,7 +435,6 @@ Affected values:
 - `service.port` was deprecated. We recommend using `service.ports.http` instead.
 - `service.httpsPort` was deprecated. We recommend using `service.ports.https` instead.
 - `ingress.hosts` was renamed as `ingress.extraHosts`.
-
 
 Additionally updates the MariaDB subchart to it newest major, 10.0.0, which contains similar changes. Check [MariaDB Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/mariadb#to-1000) for more information.
 
@@ -490,9 +494,9 @@ Obtain the credentials and the names of the PVCs used to hold both the MariaDB a
 
 ```console
 export SUITECRM_HOST=$(kubectl get svc --namespace default suitecrm --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
-export SUITECRM_PASSWORD=$(kubectl get secret --namespace default suitecrm -o jsonpath="{.data.suitecrm-password}" | base64 --decode)
-export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
-export MARIADB_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-password}" | base64 --decode)
+export SUITECRM_PASSWORD=$(kubectl get secret --namespace default suitecrm -o jsonpath="{.data.suitecrm-password}" | base64 -d)
+export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
+export MARIADB_PASSWORD=$(kubectl get secret --namespace default suitecrm-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=suitecrm -o jsonpath="{.items[0].metadata.name}")
 \```
 

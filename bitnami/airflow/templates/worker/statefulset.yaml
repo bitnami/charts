@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ printf "%s-worker" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: worker
     {{- if .Values.commonLabels }}
@@ -52,6 +52,9 @@ spec:
       {{- if .Values.worker.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.worker.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.worker.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.worker.terminationGracePeriodSeconds }} 
+      {{- end }}
       {{- if .Values.worker.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.worker.tolerations "context" $) | nindent 8 }}
       {{- end }}
@@ -72,6 +75,9 @@ spec:
         {{- include "airflow.git.containers.clone" (dict "securityContext" .Values.worker.containerSecurityContext "context" $) | trim | nindent 8 }}
         {{- if .Values.dags.existingConfigmap }}
         {{- include "airflow.loadDAGsInitContainer" (dict "component" "worker" "context" . ) | trim | nindent 8 }}
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
         {{- end }}
         {{- if .Values.worker.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.initContainers "context" $) | trim | nindent 8 }}
@@ -104,11 +110,22 @@ spec:
               value: {{ include "common.names.fullname" . }}
             - name: AIRFLOW_WEBSERVER_PORT_NUMBER
               value: {{ .Values.service.ports.http | quote }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
             {{- if .Values.worker.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.worker.extraEnvVarsCM .Values.worker.extraEnvVarsSecret }}
+          {{- if or .Values.worker.extraEnvVarsCM .Values.worker.extraEnvVarsSecret .Values.worker.extraEnvVarsSecrets .Values.extraEnvVarsCM .Values.extraEnvVarsSecret .Values.extraEnvVarsSecrets }}
           envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.extraEnvVarsSecret }}
+            {{- end }}
             {{- if .Values.worker.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ .Values.worker.extraEnvVarsCM }}
@@ -116,6 +133,18 @@ spec:
             {{- if .Values.worker.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ .Values.worker.extraEnvVarsSecret }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecrets }}
+            {{- range .Values.extraEnvVarsSecrets }}
+            - secretRef:
+                name: {{ . }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.worker.extraEnvVarsSecrets }}
+            {{- range .Values.worker.extraEnvVarsSecrets }}
+            - secretRef:
+                name: {{ . }}
+            {{- end }}
             {{- end }}
           {{- end }}
           ports:
@@ -165,9 +194,15 @@ spec:
               subPath: airflow.cfg
             {{- end }}
             {{- include "airflow.git.maincontainer.volumeMounts" . | trim | nindent 12 }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
             {{- if .Values.worker.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}
+        {{- end }}
         {{- if .Values.worker.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.sidecars "context" $) | trim | nindent 8 }}
         {{- end }}
@@ -183,6 +218,9 @@ spec:
         - name: custom-configuration-file
           configMap:
             name: {{ include "airflow.configMapName"  . }}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
         {{- if .Values.worker.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumes "context" $) | nindent 8 }}

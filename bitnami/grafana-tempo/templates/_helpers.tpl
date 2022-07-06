@@ -20,6 +20,13 @@ Return the proper Grafana Tempo distributor fullname
 {{- end -}}
 
 {{/*
+Return the proper Grafana Tempo metrics-generator fullname
+*/}}
+{{- define "grafana-tempo.metrics-generator.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "metrics-generator" -}}
+{{- end -}}
+
+{{/*
 Return the proper Grafana Tempo ingester fullname
 */}}
 {{- define "grafana-tempo.ingester.fullname" -}}

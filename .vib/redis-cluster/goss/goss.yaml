@@ -1,0 +1,39 @@
+command:
+  redis-version:
+    exec: redis-server --version | grep --quiet "$APP_VERSION"
+    exit-status: 0
+    stdout: [ ]
+    stderr: [ ]
+    timeout: 20000
+  redis-auth:
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli
+    exit-status: 0
+    stderr: [ ]
+    timeout: 20000
+  redis-setuser:
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ACL SETUSER bitware on +GET allkeys
+    exit-status: 0
+    stdout:
+      - "OK"
+    stderr: [ ]
+    timeout: 20000
+  redis-node-info:
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli INFO
+    exit-status: 0
+    stdout:
+      - "redis_mode:cluster"
+    stderr: [ ]
+    timeout: 20000
+  redis-cluster-info:
+    exec: REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli CLUSTER INFO
+    exit-status: 0
+    stdout:
+      - "cluster_state:ok"
+      - "cluster_known_nodes:6"
+      - "cluster_size:3"
+    stderr: [ ]
+    timeout: 20000
+file:
+  /bitnami/redis/data:
+    filetype: directory
+    exists: true

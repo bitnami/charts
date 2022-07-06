@@ -9,7 +9,7 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: kafka
+    app.kubernetes.io/component: metrics
     {{- if .Values.metrics.serviceMonitor.labels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.labels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -28,7 +28,7 @@ spec:
       {{- if .Values.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
-      app.kubernetes.io/component: kafka
+      app.kubernetes.io/component: metrics
   endpoints:
     - port: http-metrics
       path: "/"

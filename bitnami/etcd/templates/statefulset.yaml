@@ -67,6 +67,9 @@ spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
+      {{- if .Values.runtimeClassName }}
+      runtimeClassName: {{ .Values.runtimeClassName }}
+      {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
@@ -131,6 +134,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: MY_STS_NAME
+              value: {{ include "common.names.fullname" . | quote }}
             - name: ETCDCTL_API
               value: "3"
             - name: ETCD_ON_K8S
@@ -191,9 +196,9 @@ spec:
             {{- end }}
             - name: ETCD_INITIAL_CLUSTER
               value: {{ join "," $initialCluster | quote }}
+            {{- end }}
             - name: ETCD_CLUSTER_DOMAIN
               value: {{ printf "%s.%s.svc.%s" $etcdHeadlessServiceName $releaseNamespace $clusterDomain | quote }}
-            {{- end }}
             {{- if and .Values.auth.client.secureTransport .Values.auth.client.useAutoTLS }}
             - name: ETCD_AUTO_TLS
               value: "true"
@@ -385,6 +390,11 @@ spec:
         - name: data
           emptyDir: {}
   {{- else }}
+  {{- if .Values.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: data

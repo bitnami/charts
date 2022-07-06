@@ -2,8 +2,7 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
-{{- if contains .Values.service.type "LoadBalancer" }}
-{{- if not .Values.auth.clientPassword }}
+{{- if and (not .Values.auth.client.enabled) (eq .Values.service.type "LoadBalancer") }}
 -------------------------------------------------------------------------------
  WARNING
 
@@ -16,7 +15,6 @@ APP VERSION: {{ .Chart.AppVersion }}
     "auth.clientPassword" parameter.
 
 -------------------------------------------------------------------------------
-{{- end }}
 {{- end }}
 
 ** Please be patient while the chart is being deployed **
@@ -52,13 +50,13 @@ To connect to your ZooKeeper server run the following commands:
 
 To connect to your ZooKeeper server from outside the cluster execute the following commands:
 
-{{- if contains "NodePort" .Values.service.type }}
+{{- if eq .Values.service.type "NodePort" }}
 
     export NODE_IP=$(kubectl get nodes --namespace {{ template "zookeeper.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
     export NODE_PORT=$(kubectl get --namespace {{ template "zookeeper.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
     zkCli.sh $NODE_IP:$NODE_PORT
 
-{{- else if contains "LoadBalancer" .Values.service.type }}
+{{- else if eq .Values.service.type "LoadBalancer" }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status with: 'kubectl get svc --namespace {{ template "zookeeper.namespace" . }} -w {{ template "common.names.fullname" . }}'
@@ -66,9 +64,9 @@ To connect to your ZooKeeper server from outside the cluster execute the followi
     export SERVICE_IP=$(kubectl get svc --namespace {{ template "zookeeper.namespace" . }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     zkCli.sh $SERVICE_IP:{{ .Values.service.ports.client }}
 
-{{- else if contains "ClusterIP" .Values.service.type }}
+{{- else if eq .Values.service.type "ClusterIP" }}
 
-    kubectl port-forward --namespace {{ template "zookeeper.namespace" . }} svc/{{ template "common.names.fullname" . }} {{ .Values.service.ports.client }}:{{ .Values.containerPort }} &
+    kubectl port-forward --namespace {{ template "zookeeper.namespace" . }} svc/{{ template "common.names.fullname" . }} {{ .Values.service.ports.client }}:{{ .Values.containerPorts.client }} &
     zkCli.sh 127.0.0.1:{{ .Values.service.ports.client }}
 
 {{- end }}

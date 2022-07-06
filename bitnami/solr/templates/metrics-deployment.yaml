@@ -86,7 +86,7 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.command "context" $) | nindent 12 }}
           {{- else }}
           command:
-            - /opt/bitnami/solr/contrib/prometheus-exporter/bin/solr-exporter
+            - solr-exporter
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}

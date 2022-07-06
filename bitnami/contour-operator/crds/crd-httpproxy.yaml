@@ -1,9 +1,9 @@
-# CRDs source: https://github.com/projectcontour/contour-operator/tree/v1.19.1/config/crd
+# CRDs source: https://github.com/projectcontour/contour-operator/tree/v1.20.1/config/crd
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.6.0
+    controller-gen.kubebuilder.io/version: v0.6.2
   creationTimestamp: null
   name: httpproxies.projectcontour.io
 spec:
@@ -332,6 +332,12 @@ spec:
                             description: RequestHashPolicy contains configuration
                               for an individual hash policy on a request attribute.
                             properties:
+                              hashSourceIP:
+                                description: HashSourceIP should be set to true when
+                                  request source IP hash based load balancing is desired.
+                                  It must be the only hash option field set, otherwise
+                                  this request hash policy object will be ignored.
+                                type: boolean
                               headerHashOptions:
                                 description: HeaderHashOptions should be set when
                                   request header hash based load balancing is desired.
@@ -661,6 +667,56 @@ spec:
                             type: object
                           type: array
                       type: object
+                    requestRedirectPolicy:
+                      description: RequestRedirectPolicy defines an HTTP redirection.
+                      properties:
+                        hostname:
+                          description: Hostname is the precise hostname to be used
+                            in the value of the `Location` header in the response.
+                            When empty, the hostname of the request is used. No wildcards
+                            are allowed.
+                          maxLength: 253
+                          minLength: 1
+                          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                          type: string
+                        path:
+                          description: "Path allows for redirection to a different
+                            path from the original on the request. The path must start
+                            with a leading slash. \n Note: Only one of Path or Prefix
+                            can be defined."
+                          pattern: ^\/.*$
+                          type: string
+                        port:
+                          description: Port is the port to be used in the value of
+                            the `Location` header in the response. When empty, port
+                            (if specified) of the request is used.
+                          format: int32
+                          maximum: 65535
+                          minimum: 1
+                          type: integer
+                        prefix:
+                          description: "Prefix defines the value to swap the matched
+                            prefix or path with. The prefix must start with a leading
+                            slash. \n Note: Only one of Path or Prefix can be defined."
+                          pattern: ^\/.*$
+                          type: string
+                        scheme:
+                          description: Scheme is the scheme to be used in the value
+                            of the `Location` header in the response. When empty,
+                            the scheme of the request is used.
+                          enum:
+                          - http
+                          - https
+                          type: string
+                        statusCode:
+                          default: 302
+                          description: StatusCode is the HTTP status code to be used
+                            in response.
+                          enum:
+                          - 301
+                          - 302
+                          type: integer
+                      type: object
                     responseHeadersPolicy:
                       description: The policy for managing response headers during
                         proxying. Rewriting the 'Host' header is not supported.
@@ -937,7 +993,6 @@ spec:
                         - name
                         - port
                         type: object
-                      minItems: 1
                       type: array
                     timeoutPolicy:
                       description: The timeout policy for this route.
@@ -959,8 +1014,6 @@ spec:
                           pattern: ^(((\d*(\.\d*)?h)|(\d*(\.\d*)?m)|(\d*(\.\d*)?s)|(\d*(\.\d*)?ms)|(\d*(\.\d*)?us)|(\d*(\.\d*)?µs)|(\d*(\.\d*)?ns))+|infinity|infinite)$
                           type: string
                       type: object
-                  required:
-                  - services
                   type: object
                 type: array
               tcpproxy:
@@ -1036,6 +1089,12 @@ spec:
                           description: RequestHashPolicy contains configuration for
                             an individual hash policy on a request attribute.
                           properties:
+                            hashSourceIP:
+                              description: HashSourceIP should be set to true when
+                                request source IP hash based load balancing is desired.
+                                It must be the only hash option field set, otherwise
+                                this request hash policy object will be ignored.
+                              type: boolean
                             headerHashOptions:
                               description: HeaderHashOptions should be set when request
                                 header hash based load balancing is desired. It must
@@ -1323,6 +1382,26 @@ spec:
                           no timeout.
                         pattern: ^(((\d*(\.\d*)?h)|(\d*(\.\d*)?m)|(\d*(\.\d*)?s)|(\d*(\.\d*)?ms)|(\d*(\.\d*)?us)|(\d*(\.\d*)?µs)|(\d*(\.\d*)?ns))+|infinity|infinite)$
                         type: string
+                      withRequestBody:
+                        description: WithRequestBody specifies configuration for sending
+                          the client request's body to authorization server.
+                        properties:
+                          allowPartialMessage:
+                            description: If AllowPartialMessage is true, then Envoy
+                              will buffer the body until MaxRequestBytes are reached.
+                            type: boolean
+                          maxRequestBytes:
+                            default: 1024
+                            description: MaxRequestBytes sets the maximum size of
+                              message body ExtAuthz filter will hold in-memory.
+                            format: int32
+                            minimum: 1
+                            type: integer
+                          packAsBytes:
+                            description: If PackAsBytes is true, the body sent to
+                              Authorization Server is in raw bytes.
+                            type: boolean
+                        type: object
                     required:
                     - extensionRef
                     type: object
@@ -1383,7 +1462,7 @@ spec:
                     description: The fully qualified domain name of the root of the
                       ingress tree all leaves of the DAG rooted at this object relate
                       to the fqdn.
-                    pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                    pattern: ^(\*\.)?[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
                     type: string
                   rateLimitPolicy:
                     description: The policy for rate limiting on the virtual host.
@@ -1669,6 +1748,9 @@ spec:
                 type: object
             type: object
           status:
+            default:
+              currentStatus: NotReconciled
+              description: Waiting for controller
             description: Status is a container for computed information about the
               HTTPProxy.
             properties:

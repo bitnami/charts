@@ -52,3 +52,10 @@ data:
   HTTPS_PROXY: {{ .Values.proxy.httpsProxy | quote }}
   NO_PROXY: {{ include "harbor.noProxy" . | quote }}
   {{- end }}
+  {{- if .Values.metrics.enabled}}
+  METRIC_ENABLE: "true"
+  METRIC_PATH: {{ .Values.metrics.path | quote }}
+  METRIC_PORT: {{ .Values.core.containerPorts.metrics | quote }}
+  METRIC_NAMESPACE: harbor
+  METRIC_SUBSYSTEM: core
+  {{- end }}

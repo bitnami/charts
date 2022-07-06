@@ -9,6 +9,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   name: {{ template "common.names.fullname" . }}-agent-metrics
+  namespace: {{ .Release.Namespace | quote }}
   annotations:
   {{- if .Values.commonAnnotations }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -29,7 +30,7 @@ spec:
   {{- end }}
   {{- if eq .Values.agent.service.type "LoadBalancer" }}
   loadBalancerSourceRanges: {{ .Values.agent.service.loadBalancerSourceRanges }}
-  {{ end }}
+  {{- end }}
   {{- if (and (eq .Values.agent.service.type "LoadBalancer") (not (empty .Values.agent.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.agent.service.loadBalancerIP }}
   {{- end }}
@@ -49,8 +50,8 @@ spec:
       {{- else if eq .Values.agent.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- if .Values.service.agent.extraPorts }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
+    {{- if .Values.agent.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.agent.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: agent

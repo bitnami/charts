@@ -20,17 +20,26 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.master.service.type }}
-  {{ if eq .Values.master.service.type "LoadBalancer" }}
-  externalTrafficPolicy: {{ .Values.master.service.externalTrafficPolicy }}
+  {{- if or (eq .Values.master.service.type "LoadBalancer") (eq .Values.master.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.master.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{- if and (eq .Values.master.service.type "LoadBalancer") .Values.master.service.loadBalancerIP }}
+  {{- if (semverCompare ">=1.22-0" (include "common.capabilities.kubeVersion" .)) }}
+  internalTrafficPolicy: {{ .Values.master.service.internalTrafficPolicy }}
+  {{- end }}
+  {{- if and (eq .Values.master.service.type "LoadBalancer") (not (empty .Values.master.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.master.service.loadBalancerIP }}
   {{- end }}
-  {{- if and (eq .Values.master.service.type "LoadBalancer") .Values.master.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml .Values.master.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- if and (eq .Values.master.service.type "LoadBalancer") (not (empty .Values.master.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.master.service.loadBalancerSourceRanges }}
   {{- end }}
-  {{- if and (eq .Values.master.service.type "ClusterIP") .Values.master.service.clusterIP }}
+  {{- if and .Values.master.service.clusterIP (eq .Values.master.service.type "ClusterIP") }}
   clusterIP: {{ .Values.master.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.master.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.master.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.master.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.master.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
     - name: tcp-redis

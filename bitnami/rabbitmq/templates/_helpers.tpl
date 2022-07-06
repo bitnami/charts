@@ -1,19 +1,4 @@
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "rabbitmq.name" -}}
-{{- include "common.names.name" . -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "rabbitmq.fullname" -}}
-{{- include "common.names.fullname" . -}}
-{{- end -}}
 
 {{/*
 Return the proper RabbitMQ image name
@@ -37,23 +22,11 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Return podAnnotations
-*/}}
-{{- define "rabbitmq.podAnnotations" -}}
-{{- if .Values.podAnnotations }}
-{{ include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) }}
-{{- end }}
-{{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
-{{ include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) }}
-{{- end }}
-{{- end -}}
-
-{{/*
  Create the name of the service account to use
  */}}
 {{- define "rabbitmq.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "rabbitmq.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
@@ -66,7 +39,7 @@ Get the password secret.
     {{- if .Values.auth.existingPasswordSecret -}}
         {{- printf "%s" (tpl .Values.auth.existingPasswordSecret $) -}}
     {{- else -}}
-        {{- printf "%s" (include "rabbitmq.fullname" .) -}}
+        {{- printf "%s" (include "common.names.fullname" .) -}}
     {{- end -}}
 {{- end -}}
 
@@ -77,7 +50,7 @@ Get the erlang secret.
     {{- if .Values.auth.existingErlangSecret -}}
         {{- printf "%s" (tpl .Values.auth.existingErlangSecret $) -}}
     {{- else -}}
-        {{- printf "%s" (include "rabbitmq.fullname" .) -}}
+        {{- printf "%s" (include "common.names.fullname" .) -}}
     {{- end -}}
 {{- end -}}
 
@@ -88,7 +61,7 @@ Get the TLS secret.
     {{- if .Values.auth.tls.existingSecret -}}
         {{- printf "%s" (tpl .Values.auth.tls.existingSecret $) -}}
     {{- else -}}
-        {{- printf "%s-certs" (include "rabbitmq.fullname" .) -}}
+        {{- printf "%s-certs" (include "common.names.fullname" .) -}}
     {{- end -}}
 {{- end -}}
 
@@ -174,16 +147,16 @@ Validate values of rabbitmq - LDAP support
 {{- define "rabbitmq.validateValues.ldap" -}}
 {{- if .Values.ldap.enabled }}
 {{- $serversListLength := len .Values.ldap.servers }}
-{{- if or (not (gt $serversListLength 0)) (not (and .Values.ldap.port .Values.ldap.user_dn_pattern)) }}
+{{- $userDnPattern := coalesce .Values.ldap.user_dn_pattern .Values.ldap.userDnPattern }}
+{{- if or (and (not (gt $serversListLength 0)) (empty .Values.ldap.uri)) (and (not $userDnPattern) (not .Values.ldap.basedn)) }}
 rabbitmq: LDAP
-    Invalid LDAP configuration. When enabling LDAP support, the parameters "ldap.servers",
-    "ldap.port", and "ldap. user_dn_pattern" are mandatory. Please provide them:
-
+    Invalid LDAP configuration. When enabling LDAP support, the parameters "ldap.servers" or "ldap.uri" are mandatory
+    to configure the connection and "ldap.userDnPattern" or "ldap.basedn" are necessary to lookup the users. Please provide them:
     $ helm install {{ .Release.Name }} bitnami/rabbitmq \
       --set ldap.enabled=true \
-      --set ldap.servers[0]="lmy-ldap-server" \
+      --set ldap.servers[0]=my-ldap-server" \
       --set ldap.port="389" \
-      --set user_dn_pattern="cn=${username},dc=example,dc=org"
+      --set ldap.userDnPattern="cn=${username},dc=example,dc=org"
 {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -227,8 +200,8 @@ rabbitmq: ingress.tls
     to be used by the Ingress Controller.
     Please use any of these alternatives:
       - Use the `ingress.extraTls` and `ingress.secrets` parameters to provide your custom TLS certificates.
-      - Relay on cert-manager to create it by setting the corresponding annotations
-      - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+      - Rely on cert-manager to create it by setting the corresponding annotations
+      - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
 {{- end -}}
 {{- end -}}
 

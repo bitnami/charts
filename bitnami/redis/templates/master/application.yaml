@@ -13,7 +13,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.master.count }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: master
@@ -84,6 +84,12 @@ spec:
       {{- end }}
       {{- if .Values.master.schedulerName }}
       schedulerName: {{ .Values.master.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.master.dnsPolicy }}
+      dnsPolicy: {{ .Values.master.dnsPolicy }}
+      {{- end }}
+      {{- if .Values.master.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.master.dnsConfig "context" $) | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.master.terminationGracePeriodSeconds }}
       containers:
@@ -287,6 +293,9 @@ spec:
             - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
               value: {{ template "redis.tlsCACert" . }}
             {{- end }}
+            {{- if .Values.metrics.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: metrics
               containerPort: 9121
@@ -389,17 +398,21 @@ spec:
         {{- end }}
         - name: redis-tmp-conf
           {{- if .Values.master.persistence.medium }}
-          emptyDir: {
+          emptyDir:
             medium: {{ .Values.master.persistence.medium | quote }}
-          }
+            {{- if .Values.master.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.master.persistence.sizeLimit | quote }}
+            {{- end }}
           {{- else }}
           emptyDir: {}
           {{- end }}
         - name: tmp
           {{- if .Values.master.persistence.medium }}
-          emptyDir: {
+          emptyDir:
             medium: {{ .Values.master.persistence.medium | quote }}
-          }
+            {{- if .Values.master.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.master.persistence.sizeLimit | quote }}
+            {{- end }}
           {{- else }}
           emptyDir: {}
           {{- end }}

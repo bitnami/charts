@@ -43,6 +43,7 @@ spec:
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceAccount.name" (dict "component" "receive" "context" $) }}
+      automountServiceAccountToken: {{ .Values.receiveDistributor.automountServiceAccountToken }}
       {{- if .Values.receiveDistributor.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.receiveDistributor.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -101,6 +102,7 @@ spec:
             - --label={{ .Values.receiveDistributor.replicaLabel }}="$(NAME)"
             - --label=receive="true"
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
+            - --receive.replication-factor={{ .Values.receiveDistributor.replicationFactor }}
             {{- if .Values.receiveDistributor.extraFlags }}
             {{- .Values.receiveDistributor.extraFlags | toYaml | nindent 12 }}
             {{- end }}
@@ -164,7 +166,7 @@ spec:
             httpGet:
               path: /-/ready
               port: http
-          {{- else if .Values.receiveDistributor.customReadinessProbe }}
+          {{- else if .Values.receiveDistributor.customStartupProbe  }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receiveDistributor.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.receiveDistributor.lifecycleHooks }}

@@ -100,7 +100,10 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.core" .) "servicePort" (ternary "https" "http" .Values.internalTLS.enabled) "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.core" $) "servicePort" (ternary "https" "http" $.Values.internalTLS.enabled) "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.ingress.core.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ingress.core.extraRules "context" $) | nindent 4 }}
     {{- end }}
   {{- if or (and .Values.ingress.core.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.core.annotations )) .Values.ingress.core.selfSigned)) .Values.ingress.core.extraTls }}
   tls:

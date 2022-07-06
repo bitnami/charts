@@ -2,7 +2,7 @@
 
 # Jenkins packaged by Bitnami
 
-Jenkins is an open source Continuous Integration and Continuous Delivery (CI/CD) server designed to automate the building, testing, and deploying of any software project. 
+Jenkins is an open source Continuous Integration and Continuous Delivery (CI/CD) server designed to automate the building, testing, and deploying of any software project.
 
 [Overview of Jenkins](http://jenkins-ci.org/)
 
@@ -19,7 +19,7 @@ helm install my-release bitnami/jenkins
 
 This chart bootstraps a [Jenkins](https://github.com/bitnami/bitnami-docker-jenkins) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------- | ---------------------- |
 | `image.registry`    | Jenkins image registry                             | `docker.io`            |
 | `image.repository`  | Jenkins image repository                           | `bitnami/jenkins`      |
-| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.319.3-debian-10-r3` |
+| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.332.3-debian-11-r0` |
 | `image.pullPolicy`  | Jenkins image pull policy                          | `IfNotPresent`         |
 | `image.pullSecrets` | Jenkins image pull secrets                         | `[]`                   |
 | `image.debug`       | Enable image debug mode                            | `false`                |
@@ -131,7 +131,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
 | `affinity`                              | Affinity for pod assignment                                                               | `{}`            |
 | `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`            |
-| `tolerations`                           | Tolerations for pod assignment                                                            | `{}`            |
+| `tolerations`                           | Tolerations for pod assignment                                                            | `[]`            |
 | `resources.limits`                      | The resources limits for the Jenkins container                                            | `{}`            |
 | `resources.requests`                    | The requested resources for the Jenkins container                                         | `{}`            |
 | `containerPorts.http`                   | Jenkins HTTP container port                                                               | `8080`          |
@@ -178,6 +178,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.loadBalancerSourceRanges` | Jenkins service Load Balancer sources                                                                                            | `[]`                     |
 | `service.externalTrafficPolicy`    | Jenkins service external traffic policy                                                                                          | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for Jenkins service                                                                                | `{}`                     |
+| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ingress.enabled`                  | Enable ingress record generation for Jenkins                                                                                     | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
@@ -191,6 +194,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Persistence Parameters
@@ -207,45 +211,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r337`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r0`       |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
-
-
-### Metrics Parameters
-
-| Name                                         | Description                                                                       | Value                         |
-| -------------------------------------------- | --------------------------------------------------------------------------------- | ----------------------------- |
-| `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Jenkins metrics                     | `false`                       |
-| `metrics.image.registry`                     | Jenkins Exporter image registry                                                   | `docker.io`                   |
-| `metrics.image.repository`                   | Jenkins Exporter image repository                                                 | `bitnami/jenkins-exporter`    |
-| `metrics.image.tag`                          | Jenkins Jenkins Exporter image tag (immutable tags are recommended)               | `0.20171225.0-debian-10-r701` |
-| `metrics.image.pullPolicy`                   | Jenkins Exporter image pull policy                                                | `IfNotPresent`                |
-| `metrics.image.pullSecrets`                  | Jenkins Exporter image pull secrets                                               | `[]`                          |
-| `metrics.containerSecurityContext.enabled`   | Enabled Jenkins exporter containers' Security Context                             | `true`                        |
-| `metrics.containerSecurityContext.runAsUser` | Set Jenkins exporter containers' Security Context runAsUser                       | `1001`                        |
-| `metrics.resources.limits`                   | The resources limits for the Jenkins exporter container                           | `{}`                          |
-| `metrics.resources.requests`                 | The requested resources for the Jenkins exporter container                        | `{}`                          |
-| `metrics.service.type`                       | Jenkins exporter service type                                                     | `ClusterIP`                   |
-| `metrics.service.port`                       | Jenkins exporter service port                                                     | `9122`                        |
-| `metrics.service.nodePort`                   | Node port for exporter                                                            | `""`                          |
-| `metrics.service.externalTrafficPolicy`      | Jenkins exporter service external traffic policy                                  | `Cluster`                     |
-| `metrics.service.loadBalancerIP`             | Jenkins exporter service Load Balancer IP                                         | `""`                          |
-| `metrics.service.loadBalancerSourceRanges`   | Jenkins exporter service Load Balancer sources                                    | `[]`                          |
-| `metrics.service.annotations`                | Additional custom annotations for Jenkins exporter service                        | `{}`                          |
-| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator   | `false`                       |
-| `metrics.serviceMonitor.namespace`           | The namespace in which the ServiceMonitor will be created                         | `""`                          |
-| `metrics.serviceMonitor.interval`            | The interval at which metrics should be scraped                                   | `30s`                         |
-| `metrics.serviceMonitor.scrapeTimeout`       | The timeout after which the scrape is ended                                       | `""`                          |
-| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus. | `""`                          |
-| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping                                | `[]`                          |
-| `metrics.serviceMonitor.metricRelabelings`   | MetricRelabelConfigs to apply to samples before ingestion                         | `[]`                          |
-| `metrics.serviceMonitor.selector`            | ServiceMonitor selector labels                                                    | `{}`                          |
-| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                          | `false`                       |
-| `metrics.serviceMonitor.labels`              | Extra labels for the ServiceMonitor                                               | `{}`                          |
 
 
 The above parameters map to the env variables defined in [bitnami/jenkins](https://github.com/bitnami/bitnami-docker-jenkins). For more information please refer to the [bitnami/jenkins](https://github.com/bitnami/bitnami-docker-jenkins) image documentation.
@@ -329,6 +300,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 10.0.0
+
+This major release is no longer contains the metrics section because the container `bitnami/enkins-exporter` has been deprecated due to the upstream project is not maintained.
+
 ### To 9.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
@@ -348,7 +323,7 @@ Upgrading from version `7.x.x` should be possible following the workaround below
 - Remove Jenkins deployment:
 
 ```console
-$ export JENKINS_PASSWORD=$(kubectl get secret --namespace default jenkins -o jsonpath="{.data.jenkins-password}" | base64 --decode)
+$ export JENKINS_PASSWORD=$(kubectl get secret --namespace default jenkins -o jsonpath="{.data.jenkins-password}" | base64 -d)
 $ kubectl delete deployments.apps jenkins
 ```
 
@@ -368,7 +343,7 @@ Consequences:
 - Backwards compatibility is not guaranteed. However, you can easily workaround this issue by removing Jenkins deployment before upgrading (the following example assumes that the release name is `jenkins`):
 
 ```console
-$ export JENKINS_PASSWORD=$(kubectl get secret --namespace default jenkins -o jsonpath="{.data.jenkins-password}" | base64 --decode)
+$ export JENKINS_PASSWORD=$(kubectl get secret --namespace default jenkins -o jsonpath="{.data.jenkins-password}" | base64 -d)
 $ kubectl delete deployments.apps jenkins
 $ helm upgrade jenkins bitnami/jenkins --set jenkinsPassword=$JENKINS_PASSWORD
 ```

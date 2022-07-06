@@ -1,7 +1,7 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 2.1.1
+appVersion: 2.3.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -18,10 +18,10 @@ keywords:
   - database
   - timeseries
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: influxdb
 sources:
   - https://github.com/bitnami/bitnami-docker-influxdb
   - https://www.influxdata.com/products/influxdb-overview/
-version: 4.0.0
+version: 5.3.7

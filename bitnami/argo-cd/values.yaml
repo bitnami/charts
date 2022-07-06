@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.3.0-debian-10-r0
+  tag: 2.4.3-debian-11-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -153,11 +153,19 @@ controller:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.containerSecurityContext.enabled Enabled Argo CD containers' Security Context
   ## @param controller.containerSecurityContext.runAsUser Set Argo CD containers' Security Context runAsUser
+  ## @param controller.containerSecurityContext.allowPrivilegeEscalation Set Argo CD containers' Security Context allowPrivilegeEscalation
+  ## @param controller.containerSecurityContext.capabilities.drop Set Argo CD containers' Security Context capabilities to be dropped
+  ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' Security Context readOnlyRootFilesystem
   ## @param controller.containerSecurityContext.runAsNonRoot Set Argo CD container's Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - all
+    readOnlyRootFilesystem: false
     runAsNonRoot: true
 
   ## ServiceAccount configuration for the Argo CD application controller
@@ -488,6 +496,10 @@ controller:
   ## @param controller.priorityClassName Argo CD pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param controller.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param controller.lifecycleHooks for the Argo CD container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -614,11 +626,19 @@ server:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.containerSecurityContext.enabled Enabled Argo CD server containers' Security Context
   ## @param server.containerSecurityContext.runAsUser Set Argo CD server containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set Argo CD server containers' Security Context allowPrivilegeEscalation
+  ## @param server.containerSecurityContext.capabilities.drop Set Argo CD containers' server Security Context capabilities to be dropped
+  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' server Security Context readOnlyRootFilesystem
   ## @param server.containerSecurityContext.runAsNonRoot Set Argo CD server containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - all
+    readOnlyRootFilesystem: false
     runAsNonRoot: true
 
   ## Argo CD server deployment autoscaling
@@ -770,7 +790,7 @@ server:
 
     ## Enable TLS configuration for the hostname defined at ingress.hostname parameter
     ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
-    ## You can use the ingress.secrets parameter to create this TLS secret or relay on cert-manager to create it
+    ## You can use the ingress.secrets parameter to create this TLS secret or rely on cert-manager to create it
     ##
     tls: false
 
@@ -818,6 +838,20 @@ server:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
+    ## @param server.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend: 
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
 
   ## Metrics configuration for Argo CD server
   ##
@@ -832,7 +866,7 @@ server:
       type: ClusterIP
       ## @param server.metrics.service.port Argo CD server metrics service port
       ##
-      port: 8084
+      port: 8083
 
       ## Node ports to expose
       ## @param server.metrics.service.nodePort Node port for Argo CD server metrics service
@@ -1023,6 +1057,20 @@ server:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
+    ## @param server.ingressGrpc.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.server.local
+    ##     http:
+    ##       path: /
+    ##       backend: 
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
 
   ## Argo CD server container port
   ## @param server.containerPorts.http Argo CD server HTTP container port
@@ -1171,6 +1219,10 @@ server:
   ## @param server.priorityClassName Argo CD server pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param server.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param server.lifecycleHooks for the Argo CD server container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1313,11 +1365,19 @@ repoServer:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param repoServer.containerSecurityContext.enabled Enabled Argo CD repo server containers' Security Context
   ## @param repoServer.containerSecurityContext.runAsUser Set Argo CD repo server containers' Security Context runAsUser
+  ## @param repoServer.containerSecurityContext.allowPrivilegeEscalation Set Argo CD repo server containers' Security Context allowPrivilegeEscalation
+  ## @param repoServer.containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
+  ## @param repoServer.containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' repo server Security Context readOnlyRootFilesystem
   ## @param repoServer.containerSecurityContext.runAsNonRoot Set Argo CD repo server containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - all
+    readOnlyRootFilesystem: false
     runAsNonRoot: true
 
   ## Repo server service parameters
@@ -1387,7 +1447,7 @@ repoServer:
   ##
   containerPorts:
     repoServer: 8081
-    metrics: ""
+    metrics: 8084
 
   ## Metrics configuration for Argo CD repo server
   ##
@@ -1595,6 +1655,10 @@ repoServer:
   ## @param repoServer.priorityClassName Argo CD repo server pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param repoServer.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param repoServer.lifecycleHooks for the Argo CD repo server container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1656,7 +1720,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.31.0-debian-10-r22
+    tag: 2.32.0-debian-11-r7
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1754,11 +1818,15 @@ dex:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dex.containerSecurityContext.enabled Enabled Dex containers' Security Context
   ## @param dex.containerSecurityContext.runAsUser Set Dex containers' Security Context runAsUser
+  ## @param dex.containerSecurityContext.allowPrivilegeEscalation Set Dex containers' Security Context allowPrivilegeEscalation
+  ## @param dex.containerSecurityContext.readOnlyRootFilesystem Set Dex containers' server Security Context readOnlyRootFilesystem
   ## @param dex.containerSecurityContext.runAsNonRoot Set Dex containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
     runAsNonRoot: true
 
   ## Dex service parameters
@@ -2022,6 +2090,10 @@ dex:
   ## @param dex.priorityClassName Dex pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param dex.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
   ## @param dex.lifecycleHooks for the Dex container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -2239,7 +2311,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r358
+    tag: 11-debian-11-r9
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -2290,7 +2362,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 6.2.6-debian-10-r148
+    tag: 6.2.7-debian-11-r9
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2328,29 +2400,29 @@ redis:
     ##
     existingSecret: ""
     ##
-    ## Password key to be retrieved from Redis&trade; secret
+    ## Password key to be retrieved from Redis&reg; secret
     ##
     existingSecretPasswordKey: 'redis-password'
 
   ## Cluster settings
-  ## @param redis.architecture Redis&trade; architecture. Allowed values: `standalone` or `replication`
+  ## @param redis.architecture Redis&reg; architecture. Allowed values: `standalone` or `replication`
   ## TODO(miguelaeh): We need to test the chart with redis sentinel, it seems to be supported at: https://github.com/argoproj/argo-cd/blob/2a410187565e15633b6f2a8c8d8da22cf02b257d/util/cache/cache.go#L40
   ##
   architecture: standalone
 
 ##
-## External Redis&trade;
+## External Redis&reg;
 ##
 externalRedis:
-  ## Redis&trade; host
+  ## Redis&reg; host
   ## @param externalRedis.host External Redis host
   ##
   host: ""
-  ## Redis&trade; port
+  ## Redis&reg; port
   ## @param externalRedis.port External Redis port
   ##
   port: 6379
-  ## Redis&trade; password for authentication
+  ## Redis&reg; password for authentication
   ## Ignored if existingSecret is set
   ## @param externalRedis.password External Redis password
   ##
@@ -2359,7 +2431,7 @@ externalRedis:
   ## @param externalRedis.existingSecret Existing secret for the external redis
   ##
   existingSecret: ""
-  ## Password key to be retrieved from Redis&trade; secret
+  ## Password key to be retrieved from Redis&reg; secret
   ## @param externalRedis.existingSecretPasswordKey Password key for the existing secret containing the external redis password
   ##
   existingSecretPasswordKey: 'redis-password'

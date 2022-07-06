@@ -53,9 +53,7 @@ spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.serviceAccount.name }}
-      serviceAccountName: {{ .Values.serviceAccount.name }}
-      {{- end }}
+      serviceAccountName: {{ include "ghost.serviceAccountName" . }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName }}
       {{- end }}
@@ -89,6 +87,9 @@ spec:
           volumeMounts:
             - name: ghost-data
               mountPath: /bitnami/ghost
+              {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+              {{- end }}
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -127,8 +128,8 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "ghost.databaseSecretName" . }}
-                  key: mariadb-password
-            {{- if (and (not .Values.mariadb.enabled) .Values.externalDatabase.ssl) }}
+                  key: mysql-password
+            {{- if (and (not .Values.mysql.enabled) .Values.externalDatabase.ssl) }}
             - name: GHOST_DATABASE_ENABLE_SSL
               value: {{ .Values.externalDatabase.ssl | quote }}
             - name: MYSQL_CLIENT_ENABLE_SSL
@@ -181,6 +182,10 @@ spec:
             {{- if .Values.smtpService }}
             - name: GHOST_SMTP_SERVICE
               value: {{ .Values.smtpService | quote }}
+            {{- end }}
+            {{- if .Values.smtpProtocol }}
+            - name: GHOST_SMTP_PROTOCOL
+              value: {{ .Values.smtpProtocol | quote }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 12 }}
@@ -269,6 +274,9 @@ spec:
           volumeMounts:
             - name: ghost-data
               mountPath: /bitnami/ghost
+            {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}

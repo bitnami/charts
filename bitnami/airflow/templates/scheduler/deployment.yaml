@@ -1,9 +1,9 @@
-{{- $kube := or (eq .Values.executor "KubernetesExecutor") (eq .Values.executor "CeleryKubernetesExecutor") -}}
+{{- $kube := (contains "KubernetesExecutor" .Values.executor) -}}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ printf "%s-scheduler" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: scheduler
     {{- if .Values.commonLabels }}
@@ -48,6 +48,9 @@ spec:
       {{- if .Values.scheduler.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.scheduler.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.scheduler.terminationGracePeriodSeconds }} 
+      {{- end }}
       {{- if .Values.scheduler.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.tolerations "context" $) | nindent 8 }}
       {{- end }}
@@ -68,6 +71,9 @@ spec:
         {{- include "airflow.git.containers.clone" (dict "securityContext" .Values.scheduler.containerSecurityContext "context" $) | trim | nindent 8 }}
         {{- if .Values.dags.existingConfigmap }}
         {{- include "airflow.loadDAGsInitContainer" (dict "component" "scheduler" "context" . ) | trim | nindent 8 }}
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
         {{- end }}
         {{- if .Values.scheduler.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.initContainers "context" $) | trim | nindent 8 }}
@@ -101,11 +107,22 @@ spec:
               value: {{ include "common.names.fullname" . }}
             - name: AIRFLOW_WEBSERVER_PORT_NUMBER
               value: {{ .Values.service.ports.http | quote }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
             {{- if .Values.scheduler.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.scheduler.extraEnvVarsCM .Values.scheduler.extraEnvVarsSecret }}
+          {{- if or .Values.scheduler.extraEnvVarsCM .Values.scheduler.extraEnvVarsSecret .Values.scheduler.extraEnvVarsSecret .Values.extraEnvVarsCM .Values.extraEnvVarsSecret .Values.extraEnvVarsSecrets }}
           envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.extraEnvVarsSecret }}
+            {{- end }}
             {{- if .Values.scheduler.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ .Values.scheduler.extraEnvVarsCM }}
@@ -113,6 +130,18 @@ spec:
             {{- if .Values.scheduler.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ .Values.scheduler.extraEnvVarsSecret }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecrets }}
+            {{- range .Values.extraEnvVarsSecrets }}
+            - secretRef:
+                name: {{ . }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.scheduler.extraEnvVarsSecrets }}
+            {{- range .Values.scheduler.extraEnvVarsSecrets }}
+            - secretRef:
+                name: {{ . }}
+            {{- end }}
             {{- end }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
@@ -133,45 +162,54 @@ spec:
           resources: {{- toYaml .Values.scheduler.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-          {{- if .Files.Glob "files/dags/*.py" }}
+            {{- if .Files.Glob "files/dags/*.py" }}
             - name: local-dag-files
               mountPath: /opt/bitnami/airflow/dags/local
-          {{- end }}
-          {{- if .Values.dags.existingConfigmap }}
+            {{- end }}
+            {{- if .Values.dags.existingConfigmap }}
             - name: external-dag-files
               mountPath: /opt/bitnami/airflow/dags/external
-          {{- end }}
-          {{- if or .Values.configuration .Values.existingConfigmap }}
+            {{- end }}
+            {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: custom-configuration-file
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: airflow.cfg
-          {{- end }}
-          {{- if $kube }}
+            {{- end }}
+            {{- if $kube }}
             - name: custom-configuration-file
               mountPath: /opt/bitnami/airflow/pod_template.yaml
               subPath: pod_template.yaml
-          {{- end }}
-          {{- if .Values.scheduler.extraVolumeMounts }}
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.scheduler.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            {{- end }}
             {{- include "airflow.git.maincontainer.volumeMounts" . | trim | nindent 12 }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | trim | nindent 8 }}
+        {{- end }}
         {{- if .Values.scheduler.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.sidecars "context" $) | trim | nindent 8 }}
         {{- end }}
       volumes:
-      {{- if .Values.dags.existingConfigmap }}
+        {{- if .Values.dags.existingConfigmap }}
         - name: load-external-dag-files
           configMap:
             name: {{ tpl .Values.dags.existingConfigmap $ }}
         - name: external-dag-files
           emptyDir: {}
-      {{- end }}
-      {{- if or .Values.configuration .Values.existingConfigmap $kube }}
+        {{- end }}
+        {{- if or .Values.configuration .Values.existingConfigmap $kube }}
         - name: custom-configuration-file
           configMap:
             name: {{ include "airflow.configMapName"  . }}
-      {{- end }}
-      {{- if .Values.scheduler.extraVolumes }}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.scheduler.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+        {{- end }}
         {{- include "airflow.git.volumes" . | trim | nindent 8 }}

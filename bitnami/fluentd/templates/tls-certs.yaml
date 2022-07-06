@@ -4,7 +4,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: {{ .name }}
-  namespace: {{ $.Release.Namespace }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     {{- if $.Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
@@ -33,6 +33,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: {{ include "common.names.fullname" . }}-agg-crt
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -45,16 +46,17 @@ data:
   ca.crt: {{ $ca.Cert | b64enc | quote }}
   tls.crt: {{ $crt.Cert | b64enc | quote }}
   tls.key: {{ $crt.Key | b64enc | quote }}
----
 {{- end }}
 {{- if .Values.forwarder.enabled }}
 {{- $forwarderServiceName := printf "%s-forwarder" ( include "common.names.fullname" . ) }}
 {{- $altNames := list (printf "*.%s.%s.svc.%s" $forwarderServiceName $releaseNamespace $clusterDomain) (printf "%s.%s.svc.%s" $forwarderServiceName $releaseNamespace $clusterDomain) $fullname }}
 {{- $crt := genSignedCert $fullname nil $altNames 365 $ca }}
+---
 apiVersion: v1
 kind: Secret
 metadata:
   name: {{ include "common.names.fullname" . }}-fwd-crt
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}

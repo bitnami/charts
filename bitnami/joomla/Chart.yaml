@@ -1,12 +1,12 @@
 annotations:
   category: CMS
 apiVersion: v2
-appVersion: 4.1.0
+appVersion: 4.1.5
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     version: 1.x.x
@@ -21,10 +21,10 @@ keywords:
   - http
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: joomla
 sources:
   - https://github.com/bitnami/bitnami-docker-joomla
   - https://www.joomla.org/
-version: 12.0.8
+version: 13.2.12

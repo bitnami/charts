@@ -8,6 +8,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   name: {{ template "common.names.fullname" . }}-server
+  namespace: {{ .Release.Namespace | quote }}
   annotations:
   {{- if .Values.commonAnnotations }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -28,7 +29,7 @@ spec:
   {{- end }}
   {{- if eq .Values.server.service.type "LoadBalancer" }}
   loadBalancerSourceRanges: {{ .Values.server.service.loadBalancerSourceRanges }}
-  {{ end }}
+  {{- end }}
   {{- if (and (eq .Values.server.service.type "LoadBalancer") (not (empty .Values.server.service.loadBalancerIP))) }}
   loadBalancerIP: {{ .Values.server.service.loadBalancerIP }}
   {{- end }}

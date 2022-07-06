@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "concourse.web.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: web
     {{- if .Values.commonLabels }}
@@ -20,19 +20,22 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.service.web.type }}
+  {{- if .Values.service.web.sessionAffinity }}
   sessionAffinity: {{ .Values.service.web.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.service.web.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.service.web.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
   {{- if and .Values.service.web.clusterIP (eq .Values.service.web.type "ClusterIP") }}
   clusterIP: {{ .Values.service.web.clusterIP }}
   {{- end }}
-  {{- if (or (eq .Values.service.web.type "LoadBalancer") (eq .Values.service.web.type "NodePort")) }}
+  {{- if or (eq .Values.service.web.type "LoadBalancer") (eq .Values.service.web.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.service.web.externalTrafficPolicy | quote }}
   {{- end }}
-  {{- if (and (eq .Values.service.web.type "LoadBalancer") .Values.service.web.loadBalancerSourceRanges) }}
-  {{- with .Values.service.web.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml . | nindent 4 }}
+  {{- if and (eq .Values.service.web.type "LoadBalancer") (not (empty .Values.service.web.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.service.web.loadBalancerSourceRanges }}
   {{- end }}
-  {{- end }}
-  {{- if (and (eq .Values.service.web.type "LoadBalancer") (not (empty .Values.service.web.loadBalancerIP))) }}
+  {{- if and (eq .Values.service.web.type "LoadBalancer") (not (empty .Values.service.web.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.service.web.loadBalancerIP }}
   {{- end }}
   ports:

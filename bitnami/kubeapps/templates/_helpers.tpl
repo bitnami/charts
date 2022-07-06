@@ -4,7 +4,63 @@
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kubeapps.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.frontend.image .Values.dashboard.image .Values.apprepository.image .Values.apprepository.syncImage .Values.assetsvc.image .Values.kubeops.image .Values.authProxy.image .Values.pinnipedProxy.image .Values.kubeappsapis.image .Values.testImage) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.frontend.image .Values.dashboard.image .Values.apprepository.image .Values.apprepository.syncImage .Values.kubeops.image .Values.authProxy.image .Values.pinnipedProxy.image .Values.kubeappsapis.image .Values.testImage) "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper Kubeapps apprepository-controller image name
+*/}}
+{{- define "kubeapps.apprepository.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.apprepository.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Return the proper apprepository-controller sync image name
+*/}}
+{{- define "kubeapps.apprepository.syncImage" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.apprepository.syncImage "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Return the proper dashboard image name
+*/}}
+{{- define "kubeapps.dashboard.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.dashboard.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Return the proper frontend image name
+*/}}
+{{- define "kubeapps.frontend.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.frontend.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Return the proper auth proxy image name
+*/}}
+{{- define "kubeapps.authProxy.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.authProxy.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Return the proper pinniped proxy image name
+*/}}
+{{- define "kubeapps.pinnipedProxy.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.pinnipedProxy.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Return the proper kubeappsapis image name
+*/}}
+{{- define "kubeapps.kubeappsapis.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.kubeappsapis.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Return the proper kubeops image name
+*/}}
+{{- define "kubeapps.kubeops.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.kubeops.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -12,8 +68,33 @@ Create a default fully qualified app name for PostgreSQL dependency.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "kubeapps.postgresql.fullname" -}}
-{{- $name := default "postgresql" .Values.postgresql.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "postgresql" "chartValues" .Values.postgresql "context" $) -}}
+{{- end -}}
+
+{{/*
+Return the Postgresql Hostname
+*/}}
+{{- define "kubeapps.postgresql.host" -}}
+{{- if .Values.postgresql.enabled }}
+  {{- if eq .Values.postgresql.architecture "replication" }}
+      {{- printf "%s-primary" (include "kubeapps.postgresql.fullname" .) | trunc 63 | trimSuffix "-" -}}
+  {{- else -}}
+      {{- printf "%s" (include "kubeapps.postgresql.fullname" .) -}}
+  {{- end -}}
+{{- else -}}
+  {{- printf "%s" .Values.externalDatabase.host -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Postgresql Port
+*/}}
+{{- define "kubeapps.postgresql.port" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- print "5432" -}}
+{{- else -}}
+    {{- printf "%d" (int .Values.externalDatabase.port) -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -21,8 +102,7 @@ Create a default fully qualified app name for Redis dependency.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "kubeapps.redis.fullname" -}}
-{{- $name := default "redis" .Values.redis.nameOverride -}}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "redis" "chartValues" .Values.redis "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -30,13 +110,6 @@ Create name for the apprepository-controller based on the fullname
 */}}
 {{- define "kubeapps.apprepository.fullname" -}}
 {{- printf "%s-internal-apprepository-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create name for the assetsvc based on the fullname
-*/}}
-{{- define "kubeapps.assetsvc.fullname" -}}
-{{- printf "%s-internal-assetsvc" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -61,6 +134,13 @@ Create name for the frontend config based on the fullname
 {{- end -}}
 
 {{/*
+Create name for kubeappsapis based on the fullname
+*/}}
+{{- define "kubeapps.kubeappsapis.fullname" -}}
+{{- printf "%s-internal-kubeappsapis" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Create name for kubeops based on the fullname
 */}}
 {{- define "kubeapps.kubeops.fullname" -}}
@@ -75,24 +155,50 @@ Create name for the clusters config based on the fullname
 {{- end -}}
 
 {{/*
+Create the name of the apprepository-controller service account to use
+*/}}
+{{- define "kubeapps.apprepository.serviceAccountName" -}}
+{{- if .Values.apprepository.serviceAccount.create -}}
+    {{- default (include "kubeapps.apprepository.fullname" .) .Values.apprepository.serviceAccount.name -}}
+{{- else -}}
+    {{- default "default" .Values.apprepository.serviceAccount.name -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the kubeappsapis service account to use
+*/}}
+{{- define "kubeapps.kubeappsapis.serviceAccountName" -}}
+{{- if .Values.kubeappsapis.serviceAccount.create -}}
+    {{- default (include "kubeapps.kubeappsapis.fullname" .) .Values.kubeappsapis.serviceAccount.name -}}
+{{- else -}}
+    {{- default "default" .Values.kubeappsapis.serviceAccount.name -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the kubeops service account to use
+*/}}
+{{- define "kubeapps.kubeops.serviceAccountName" -}}
+{{- if .Values.kubeops.serviceAccount.create -}}
+    {{- default (include "kubeapps.kubeops.fullname" .) .Values.kubeops.serviceAccount.name -}}
+{{- else -}}
+    {{- default "default" .Values.kubeops.serviceAccount.name -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create proxy_pass for the frontend config
 */}}
 {{- define "kubeapps.frontend-config.proxy_pass" -}}
-http://{{ include "kubeapps.kubeops.fullname" . }}:{{ .Values.kubeops.service.port }}
+{{- printf "http://%s:%d" (include "kubeapps.kubeops.fullname" .) (int .Values.kubeops.service.ports.http) -}}
 {{- end -}}
 
 {{/*
 Create proxy_pass for the kubeappsapis
 */}}
 {{- define "kubeapps.kubeappsapis.proxy_pass" -}}
-http://{{ include "kubeapps.kubeappsapis.fullname" . }}:{{ .Values.kubeappsapis.service.port }}
-{{- end -}}
-
-{{/*
-Create name for kubeappsapis based on the fullname
-*/}}
-{{- define "kubeapps.kubeappsapis.fullname" -}}
-{{- printf "%s-internal-kubeappsapis" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- printf "http://%s:%d" (include "kubeapps.kubeappsapis.fullname" .) (int .Values.kubeappsapis.service.ports.http) -}}
 {{- end -}}
 
 {{/*
@@ -116,7 +222,7 @@ Repositories that include a caCert or an authorizationHeader
 {{- define "kubeapps.repos-with-orphan-secrets" -}}
 {{- range .Values.apprepository.initialRepos }}
 {{- if or .caCert .authorizationHeader }}
-.name
+{{- print "%s" .name -}}
 {{- end }}
 {{- end }}
 {{- end -}}
@@ -126,9 +232,9 @@ Frontend service port number
 */}}
 {{- define "kubeapps.frontend-port-number" -}}
 {{- if .Values.authProxy.enabled -}}
-{{ .Values.authProxy.containerPort | int }}
+{{ .Values.authProxy.containerPorts.proxy | int }}
 {{- else -}}
-{{ .Values.frontend.containerPort | int }}
+{{ .Values.frontend.containerPorts.http | int }}
 {{- end -}}
 {{- end -}}
 
@@ -165,11 +271,18 @@ Returns a JSON list of cluster names only (without sensitive tokens etc.)
 {{- end -}}
 
 {{/*
+Returns the name of the globalRepos namespace
+*/}}
+{{- define "kubeapps.globalReposNamespace" -}}
+{{- printf "%s%s" .Release.Namespace .Values.apprepository.globalReposNamespaceSuffix -}}
+{{- end -}}
+
+{{/*
 Return the Postgresql secret name
 */}}
 {{- define "kubeapps.postgresql.secretName" -}}
-  {{- if .Values.postgresql.existingSecret }}
-      {{- printf "%s" .Values.postgresql.existingSecret -}}
+  {{- if .Values.postgresql.auth.existingSecret }}
+      {{- printf "%s" .Values.postgresql.auth.existingSecret -}}
   {{- else -}}
       {{- printf "%s" (include "kubeapps.postgresql.fullname" .) -}}
   {{- end -}}
@@ -179,8 +292,8 @@ Return the Postgresql secret name
 Return the Redis secret name
 */}}
 {{- define "kubeapps.redis.secretName" -}}
-  {{- if .Values.redis.existingSecret }}
-      {{- printf "%s" .Values.redis.existingSecret -}}
+  {{- if .Values.redis.auth.existingSecret }}
+      {{- printf "%s" .Values.redis.auth.existingSecret -}}
   {{- else -}}
       {{- printf "%s" (include "kubeapps.redis.fullname" .) -}}
   {{- end -}}
@@ -211,8 +324,8 @@ kubeapps: ingress.tls
     to be used by the Ingress Controller.
     Please use any of these alternatives:
       - Use the `ingress.extraTls` and `ingress.secrets` parameters to provide your custom TLS certificates.
-      - Relay on cert-manager to create it by adding its supported annotations in `ingress.annotations`
-      - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+      - Rely on cert-manager to create it by adding its supported annotations in `ingress.annotations`
+      - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
 {{- end -}}
 {{- end -}}
 
@@ -230,11 +343,11 @@ kubeapps: ingress.tls
       {{- range $plugin, $options := .Values.packaging }}
         {{- if $options.enabled }}
           {{- if eq $plugin "carvel" }}
-            {{- $enabledPlugins = append $enabledPlugins "kapp-controller" }}
+            {{- $enabledPlugins = append $enabledPlugins "kapp-controller-packages" }}
           {{- else if eq $plugin "flux" }}
-            {{- $enabledPlugins = append $enabledPlugins "fluxv2" }}
+            {{- $enabledPlugins = append $enabledPlugins "fluxv2-packages" }}
           {{- else if eq $plugin "helm" }}
-            {{- $enabledPlugins = append $enabledPlugins "helm" }}
+            {{- $enabledPlugins = append $enabledPlugins "helm-packages" }}
           {{- else }}
             {{ $msg := printf "packaging: Unsupported packaging option: %s" $plugin }}
             {{- fail $msg }}
@@ -256,7 +369,6 @@ Check if there are rolling tags in the images
 {{- include "common.warnings.rollingTag" .Values.frontend.image }}
 {{- include "common.warnings.rollingTag" .Values.dashboard.image }}
 {{- include "common.warnings.rollingTag" .Values.apprepository.image }}
-{{- include "common.warnings.rollingTag" .Values.assetsvc.image }}
 {{- include "common.warnings.rollingTag" .Values.kubeops.image }}
 {{- include "common.warnings.rollingTag" .Values.authProxy.image }}
 {{- include "common.warnings.rollingTag" .Values.pinnipedProxy.image }}

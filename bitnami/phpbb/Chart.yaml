@@ -1,12 +1,12 @@
 annotations:
   category: Forum
 apiVersion: v2
-appVersion: 3.3.5
+appVersion: 3.3.8
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     version: 1.x.x
@@ -20,10 +20,10 @@ keywords:
   - http
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: phpbb
 sources:
   - https://github.com/bitnami/bitnami-docker-phpbb
   - https://www.phpbb.com/
-version: 11.0.9
+version: 12.2.11

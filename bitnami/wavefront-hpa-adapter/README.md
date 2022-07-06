@@ -22,7 +22,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 Wavefront HPA Adapter for Kubernetes enables Kubernetes workloads to be scaled based on Wavefront metrics.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -72,92 +72,95 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Wavefront HPA Adapter for Kubernetes deployment parameters
 
-| Name                                    | Description                                                                               | Value                                |
-| --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------ |
-| `image.registry`                        | Adapter image registry                                                                    | `docker.io`                          |
-| `image.repository`                      | Adapter image repository                                                                  | `bitnami/wavefront-hpa-adapter`      |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                         | `0.9.8-scratch-r9`                   |
-| `image.pullPolicy`                      | Adapter image pull policy                                                                 | `IfNotPresent`                       |
-| `image.pullSecrets`                     | Adapter image pull secrets                                                                | `[]`                                 |
-| `image.debug`                           | Enable image debug mode                                                                   | `false`                              |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                      | `true`                               |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                   | `10`                                 |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                          | `10`                                 |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                         | `1`                                  |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                       | `3`                                  |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                       | `1`                                  |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                     | `true`                               |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                  | `10`                                 |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                         | `10`                                 |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                        | `1`                                  |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                      | `3`                                  |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                      | `1`                                  |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                       | `false`                              |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                    | `10`                                 |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                           | `10`                                 |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                          | `1`                                  |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                        | `3`                                  |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                        | `1`                                  |
-| `command`                               | Override default container command (useful when using custom images)                      | `[]`                                 |
-| `args`                                  | Override default container args (useful when using custom images)                         | `[]`                                 |
-| `hostAliases`                           | Add deployment host aliases                                                               | `[]`                                 |
-| `resources.limits`                      | The resources limits for the Adapter container                                            | `{}`                                 |
-| `resources.requests`                    | The requested resourcesc for the Adapter container                                        | `{}`                                 |
-| `containerSecurityContext.enabled`      | Enabled Adapter containers' Security Context                                              | `true`                               |
-| `containerSecurityContext.runAsUser`    | Set Adapter container's Security Context runAsUser                                        | `1001`                               |
-| `containerSecurityContext.runAsNonRoot` | Set Adapter container's Security Context runAsNonRoot                                     | `true`                               |
-| `podSecurityContext.enabled`            | Enabled Adapter pods' Security Context                                                    | `true`                               |
-| `podSecurityContext.fsGroup`            | Set Adapter pod's Security Context fsGroup                                                | `1001`                               |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                 |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                               |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                 |
-| `nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                     | `""`                                 |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                  | `[]`                                 |
-| `affinity`                              | Affinity for pod assignment                                                               | `{}`                                 |
-| `nodeSelector`                          | Node labels for pod assignment                                                            | `{}`                                 |
-| `tolerations`                           | Tolerations for pod assignment                                                            | `[]`                                 |
-| `podLabels`                             | Extra labels for Adapter pods                                                             | `{}`                                 |
-| `podAnnotations`                        | Annotations for Adapter pods                                                              | `{}`                                 |
-| `priorityClassName`                     | Adapter pod priority                                                                      | `""`                                 |
-| `lifecycleHooks`                        | Add lifecycle hooks to the Adapter deployment                                             | `{}`                                 |
-| `schedulerName`                         | Alternative scheduler                                                                     | `""`                                 |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                            | `[]`                                 |
-| `customLivenessProbe`                   | Override default liveness probe                                                           | `{}`                                 |
-| `customReadinessProbe`                  | Override default readiness probe                                                          | `{}`                                 |
-| `customStartupProbe`                    | Override default startup probe                                                            | `{}`                                 |
-| `updateStrategy.type`                   | Adapter deployment update strategy                                                        | `RollingUpdate`                      |
-| `containerPorts.https`                  | Adapter container port                                                                    | `6443`                               |
-| `extraEnvVars`                          | Add extra environment variables to the Adapter container                                  | `[]`                                 |
-| `extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                      | `""`                                 |
-| `extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                         | `""`                                 |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes for Adapter pods                      | `[]`                                 |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Adapter container(s)         | `[]`                                 |
-| `initContainers`                        | Add additional init containers to the Adapter pods                                        | `[]`                                 |
-| `sidecars`                              | Add additional sidecar containers to the Adapter pod                                      | `[]`                                 |
-| `adapterMetricPrefix`                   | Adapter metric `prefix` parameter                                                         | `kubernetes`                         |
-| `adapterAPIClientTimeout`               | Adapter API timeout                                                                       | `10s`                                |
-| `adapterMetricRelistInterval`           | Adapter metric relist interval                                                            | `10m`                                |
-| `adapterLogLevel`                       | Adapter log level                                                                         | `info`                               |
-| `adapterRules`                          | Adapter array of rules                                                                    | `[]`                                 |
-| `adapterSSLCertDir`                     | Adapter SSL Certs directory                                                               | `/etc/ssl/certs`                     |
-| `adapterSSLCertsSecret`                 | Adapter SSL Certs secret (will use autogenerated if empty)                                | `""`                                 |
-| `wavefront.url`                         | External Wavefront URL                                                                    | `https://YOUR_CLUSTER.wavefront.com` |
-| `wavefront.token`                       | External Wavefront Token                                                                  | `YOUR_API_TOKEN`                     |
+| Name                                              | Description                                                                               | Value                                |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------ |
+| `image.registry`                                  | Adapter image registry                                                                    | `docker.io`                          |
+| `image.repository`                                | Adapter image repository                                                                  | `bitnami/wavefront-hpa-adapter`      |
+| `image.tag`                                       | Adapter image tag (immutabe tags are recommended)                                         | `0.9.8-scratch-r21`                  |
+| `image.pullPolicy`                                | Adapter image pull policy                                                                 | `IfNotPresent`                       |
+| `image.pullSecrets`                               | Adapter image pull secrets                                                                | `[]`                                 |
+| `image.debug`                                     | Enable image debug mode                                                                   | `false`                              |
+| `livenessProbe.enabled`                           | Enable livenessProbe                                                                      | `true`                               |
+| `livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                   | `10`                                 |
+| `livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                          | `10`                                 |
+| `livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                         | `1`                                  |
+| `livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                       | `3`                                  |
+| `livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                       | `1`                                  |
+| `readinessProbe.enabled`                          | Enable readinessProbe                                                                     | `true`                               |
+| `readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                  | `10`                                 |
+| `readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                         | `10`                                 |
+| `readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                        | `1`                                  |
+| `readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                      | `3`                                  |
+| `readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                      | `1`                                  |
+| `startupProbe.enabled`                            | Enable startupProbe                                                                       | `false`                              |
+| `startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                    | `10`                                 |
+| `startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                           | `10`                                 |
+| `startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                          | `1`                                  |
+| `startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                        | `3`                                  |
+| `startupProbe.successThreshold`                   | Success threshold for startupProbe                                                        | `1`                                  |
+| `command`                                         | Override default container command (useful when using custom images)                      | `[]`                                 |
+| `args`                                            | Override default container args (useful when using custom images)                         | `[]`                                 |
+| `hostAliases`                                     | Add deployment host aliases                                                               | `[]`                                 |
+| `resources.limits`                                | The resources limits for the Adapter container                                            | `{}`                                 |
+| `resources.requests`                              | The requested resourcesc for the Adapter container                                        | `{}`                                 |
+| `containerSecurityContext.enabled`                | Enabled Adapter containers' Security Context                                              | `true`                               |
+| `containerSecurityContext.runAsUser`              | Set Adapter container's Security Context runAsUser                                        | `1001`                               |
+| `containerSecurityContext.runAsNonRoot`           | Set Adapter container's Security Context runAsNonRoot                                     | `true`                               |
+| `containerSecurityContext.readOnlyRootFilesystem` | mount / (root) as a readonly filesystem on Adapter container                              | `true`                               |
+| `podSecurityContext.enabled`                      | Enabled Adapter pods' Security Context                                                    | `true`                               |
+| `podSecurityContext.fsGroup`                      | Set Adapter pod's Security Context fsGroup                                                | `1001`                               |
+| `podAffinityPreset`                               | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`                                 |
+| `podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`                               |
+| `nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`                                 |
+| `nodeAffinityPreset.key`                          | Node label key to match. Ignored if `affinity` is set                                     | `""`                                 |
+| `nodeAffinityPreset.values`                       | Node label values to match. Ignored if `affinity` is set                                  | `[]`                                 |
+| `affinity`                                        | Affinity for pod assignment                                                               | `{}`                                 |
+| `nodeSelector`                                    | Node labels for pod assignment                                                            | `{}`                                 |
+| `tolerations`                                     | Tolerations for pod assignment                                                            | `[]`                                 |
+| `podLabels`                                       | Extra labels for Adapter pods                                                             | `{}`                                 |
+| `podAnnotations`                                  | Annotations for Adapter pods                                                              | `{}`                                 |
+| `priorityClassName`                               | Adapter pod priority                                                                      | `""`                                 |
+| `lifecycleHooks`                                  | Add lifecycle hooks to the Adapter deployment                                             | `{}`                                 |
+| `schedulerName`                                   | Alternative scheduler                                                                     | `""`                                 |
+| `topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment                                            | `[]`                                 |
+| `customLivenessProbe`                             | Override default liveness probe                                                           | `{}`                                 |
+| `customReadinessProbe`                            | Override default readiness probe                                                          | `{}`                                 |
+| `customStartupProbe`                              | Override default startup probe                                                            | `{}`                                 |
+| `updateStrategy.type`                             | Adapter deployment update strategy                                                        | `RollingUpdate`                      |
+| `containerPorts.https`                            | Adapter container port                                                                    | `6443`                               |
+| `extraEnvVars`                                    | Add extra environment variables to the Adapter container                                  | `[]`                                 |
+| `extraEnvVarsCM`                                  | Name of existing ConfigMap containing extra env vars                                      | `""`                                 |
+| `extraEnvVarsSecret`                              | Name of existing Secret containing extra env vars                                         | `""`                                 |
+| `extraVolumes`                                    | Optionally specify extra list of additional volumes for Adapter pods                      | `[]`                                 |
+| `extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for Adapter container(s)         | `[]`                                 |
+| `initContainers`                                  | Add additional init containers to the Adapter pods                                        | `[]`                                 |
+| `sidecars`                                        | Add additional sidecar containers to the Adapter pod                                      | `[]`                                 |
+| `adapterMetricPrefix`                             | Adapter metric `prefix` parameter                                                         | `kubernetes`                         |
+| `adapterAPIClientTimeout`                         | Adapter API timeout                                                                       | `10s`                                |
+| `adapterMetricRelistInterval`                     | Adapter metric relist interval                                                            | `10m`                                |
+| `adapterLogLevel`                                 | Adapter log level                                                                         | `info`                               |
+| `adapterRules`                                    | Adapter array of rules                                                                    | `[]`                                 |
+| `adapterSSLCertDir`                               | Adapter SSL Certs directory                                                               | `/etc/ssl/certs`                     |
+| `adapterSSLCertsSecret`                           | Adapter SSL Certs secret (will use autogenerated if empty)                                | `""`                                 |
+| `wavefront.url`                                   | External Wavefront URL                                                                    | `https://YOUR_CLUSTER.wavefront.com` |
+| `wavefront.token`                                 | External Wavefront Token                                                                  | `YOUR_API_TOKEN`                     |
 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                         | Value       |
-| ---------------------------------- | --------------------------------------------------- | ----------- |
-| `service.type`                     | Adapter service type                                | `ClusterIP` |
-| `service.ports.https`              | Adapter service port                                | `443`       |
-| `service.clusterIP`                | WordPress service Cluster IP                        | `""`        |
-| `service.annotations`              | Additional custom annotations for WordPress service | `{}`        |
-| `service.extraPorts`               | Extra port to expose on WordPress service           | `[]`        |
-| `service.loadBalancerIP`           | Adapter service LoadBalancer IP                     | `""`        |
-| `service.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service        | `[]`        |
-| `service.nodePorts.http`           | NodePort for the HTTP endpoint                      | `""`        |
-| `service.externalTrafficPolicy`    | External traffic policy for the service             | `Cluster`   |
+| Name                               | Description                                                          | Value       |
+| ---------------------------------- | -------------------------------------------------------------------- | ----------- |
+| `service.type`                     | Adapter service type                                                 | `ClusterIP` |
+| `service.ports.https`              | Adapter service port                                                 | `443`       |
+| `service.clusterIP`                | WordPress service Cluster IP                                         | `""`        |
+| `service.annotations`              | Additional custom annotations for WordPress service                  | `{}`        |
+| `service.extraPorts`               | Extra port to expose on WordPress service                            | `[]`        |
+| `service.loadBalancerIP`           | Adapter service LoadBalancer IP                                      | `""`        |
+| `service.loadBalancerSourceRanges` | loadBalancerIP source ranges for the Service                         | `[]`        |
+| `service.nodePorts.http`           | NodePort for the HTTP endpoint                                       | `""`        |
+| `service.externalTrafficPolicy`    | External traffic policy for the service                              | `Cluster`   |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP" | `None`      |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                          | `{}`        |
 
 
 ### RBAC parameters

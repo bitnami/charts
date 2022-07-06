@@ -3,6 +3,7 @@ apiVersion: integreatly.org/v1alpha1
 kind: Grafana
 metadata:
   name: {{ include "common.names.fullname" . }}-grafana
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -47,10 +48,20 @@ spec:
       {{- if .Values.grafana.labels }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.labels "context" $ ) | nindent 6 }}
       {{- end }}
-    {{- if .Values.commonAnnotations }}
-    annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
+    {{- if or .Values.commonAnnotations .Values.grafana.service.annotations }}
+    annotations:
+      {{- if .Values.grafana.service.annotations }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.service.annotations "context" $) | nindent 6 }}
+      {{- end }}
+      {{- if .Values.commonAnnotations }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
+      {{- end }}
     {{- end }}
-  {{- $imagePullSecrets := include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.grafana.image) "global" .Values.global) }}
+    type: {{ .Values.grafana.service.type }}
+    {{- if .Values.grafana.service.extraPorts }}
+    ports: {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.service.extraPorts "context" $) | nindent 6 }}
+    {{- end }}
+  {{- $imagePullSecrets := include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.grafana.image .Values.grafana.pluginsInitContainerImage) "global" .Values.global) }}
   {{- if (not (empty ($imagePullSecrets))) | or .Values.grafana.serviceAccount }}
   serviceAccount:
   {{- with .Values.grafana.serviceAccount }}
@@ -139,7 +150,9 @@ spec:
     {{- if and .Values.grafana.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
     ingressClassName: {{ .Values.grafana.ingress.ingressClassName | quote }}
     {{- end }}
+    {{- if .Values.grafana.ingress.hostname }}
     hostname: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.hostname "context" $) }}
+    {{- end }}
     tlsEnabled: {{ .Values.grafana.ingress.tls }}
     tlsSecretName: {{ .Values.grafana.ingress.tlsSecret }}
     {{- if or .Values.commonLabels .Values.grafana.ingress.labels }}

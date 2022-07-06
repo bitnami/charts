@@ -30,7 +30,7 @@ In order to replicate the container startup scripts, check the /opt/bitnami/scri
     /opt/bitnami/scripts/pgpool/entrypoint.sh /opt/bitnami/scripts/pgpool/run.sh
 
 {{- else }}
-PostgreSQL can be accessed through Pgpool via port {{ .Values.service.port }} on the following DNS name from within your cluster:
+PostgreSQL can be accessed through Pgpool via port {{ .Values.service.ports.postgresql }} on the following DNS name from within your cluster:
 
     {{ include "postgresql-ha.pgpool" . }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}
 
@@ -38,16 +38,16 @@ Pgpool acts as a load balancer for PostgreSQL and forward read/write connections
 
 To get the password for {{ (include "postgresql-ha.postgresqlUsername" .) | quote }} run:
 
-    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql-ha.postgresqlSecretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql-ha.postgresqlSecretName" . }} -o jsonpath="{.data.postgresql-password}" | base64 -d)
 
 To get the password for {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) | quote }} run:
 
-    export REPMGR_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql-ha.postgresqlSecretName" . }} -o jsonpath="{.data.repmgr-password}" | base64 --decode)
+    export REPMGR_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql-ha.postgresqlSecretName" . }} -o jsonpath="{.data.repmgr-password}" | base64 -d)
 
 To connect to your database run the following command:
 
-    kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ include "postgresql-ha.postgresqlImage" . }} --env="PGPASSWORD=$POSTGRES_PASSWORD" {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "common.names.fullname" . }}-client=true" {{- end }} \
-        --command -- psql -h {{ include "postgresql-ha.pgpool" . }} -p {{ .Values.service.port }} -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
+    kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ include "postgresql-ha.postgresql.image" . }} --env="PGPASSWORD=$POSTGRES_PASSWORD" {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "common.names.fullname" . }}-client=true" {{- end }} \
+        --command -- psql -h {{ include "postgresql-ha.pgpool" . }} -p {{ .Values.service.ports.postgresql }} -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
 
 {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
 
@@ -69,12 +69,12 @@ To connect to your database from outside the cluster execute the following comma
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "postgresql-ha.pgpool" . }}
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "postgresql-ha.pgpool" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-    PGPASSWORD="$POSTGRES_PASSWORD" psql -h $SERVICE_IP -p {{ .Values.service.port }}  -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
+    PGPASSWORD="$POSTGRES_PASSWORD" psql -h $SERVICE_IP -p {{ .Values.service.ports.postgresql }}  -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "postgresql-ha.pgpool" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
-    psql -h 127.0.0.1 -p {{ .Values.service.port }} -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "postgresql-ha.pgpool" . }} {{ .Values.service.ports.postgresql }}:{{ .Values.service.ports.postgresql }} &
+    psql -h 127.0.0.1 -p {{ .Values.service.ports.postgresql }} -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
 
 {{- end }}
 {{- end }}

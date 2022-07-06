@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 7.2.1
+appVersion: 7.3.0
 dependencies:
   - name: redis
     repository: https://charts.bitnami.com/bitnami
@@ -24,10 +24,10 @@ keywords:
   - google
   - github
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: oauth2-proxy
 sources:
   - https://github.com/bitnami/bitnami-docker-oauth2-proxy
   - https://github.com/oauth2-proxy/oauth2-proxy
-version: 2.0.8
+version: 2.1.10

@@ -155,6 +155,10 @@ spec:
               name: registry
             - containerPort: {{ .Values.registry.server.containerPorts.debug }}
               name: debug
+            {{- if .Values.metrics.enabled }}
+            - containerPort: {{ .Values.registry.server.containerPorts.metrics }}
+              name: metrics
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.registry.server.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.registry.server.startupProbe "enabled") "context" $) | nindent 12 }}

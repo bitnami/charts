@@ -47,7 +47,10 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "argocd.server" .) "servicePort" (ternary "https" "http" .Values.server.ingress.tls) "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "argocd.server" $) "servicePort" (ternary "https" "http" $.Values.server.ingress.tls) "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.server.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.ingress.extraRules "context" $) | nindent 4 }}
     {{- end }}
   {{- if or .Values.server.ingress.tls .Values.server.ingress.extraTls }}
   tls:

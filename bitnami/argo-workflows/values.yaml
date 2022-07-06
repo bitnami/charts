@@ -64,7 +64,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-cli
-    tag: 3.2.9-scratch-r0
+    tag: 3.3.8-scratch-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -161,11 +161,13 @@ server:
   ## @param server.containerSecurityContext.enabled Enabled server containers' Security Context
   ## @param server.containerSecurityContext.runAsUser Set server containers' Security Context runAsUser
   ## @param server.containerSecurityContext.runAsNonRoot Set server containers' Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    readOnlyRootFilesystem: true
 
   ## Create RBAC resources for the Argo workflows server
   ## @param server.rbac.create Create RBAC resources for the Argo workflows server
@@ -270,19 +272,18 @@ server:
   containerPorts:
     web: 2746
 
-  ## ServiceAccount configuration
+  ## Server Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param server.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param server.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param server.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
-    ## @param server.serviceAccount.create Specifies whether a ServiceAccount should be created
-    ##
     create: true
-    ## @param server.serviceAccount.name The name of the ServiceAccount to use.
-    ## If not set and create is true, a name is generated using the common.names.fullname template
-    ##
     name: ""
-    ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
-    ##
     automountServiceAccountToken: true
+    annotations: {}
 
   ## @param server.command Override default container command (useful when using custom images)
   ##
@@ -396,7 +397,7 @@ server:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param server.initContainers Add additional init containers to the server pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -406,7 +407,7 @@ server:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## Server service parameters
   ##
@@ -469,7 +470,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-controller
-    tag: 3.2.9-scratch-r0
+    tag: 3.3.8-scratch-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -563,11 +564,13 @@ controller:
   ## @param controller.containerSecurityContext.enabled Enabled controller containers' Security Context
   ## @param controller.containerSecurityContext.runAsUser Set controller containers' Security Context runAsUser
   ## @param controller.containerSecurityContext.runAsNonRoot Set controller containers' Security Context runAsNonRoot
+  ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    readOnlyRootFilesystem: true
 
   ## Server container port
   ## @param controller.containerPorts.metrics Port to expose controller metrics
@@ -638,10 +641,10 @@ controller:
     ##  configuration: {}
     ##
     {{- if .Values.controller.metrics.enabled }}
-    metricsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.metrics "context" $) | nindent 4 }}
+    metricsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.metrics "context" $) | nindent 2 }}
     {{- end }}
     {{- if .Values.controller.telemetry.enabled }}
-    telemetryConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.telemetry "context" $) | nindent 4 }}
+    telemetryConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.telemetry "context" $) | nindent 2 }}
     {{- end }}
     {{- if (include "argo-workflows.controller.persistence.enabled" .) }}
     persistence:
@@ -668,12 +671,11 @@ controller:
           name: {{ include "argo-workflows.controller.database.password.secret" . }}
           key: {{ include "argo-workflows.controller.database.password.secret.key" . }}
     {{- end }}
-    ## Uncomment to set workflowDefaults
-    ## Ref: https://argoproj.github.io/argo-workflows/default-workflow-specs/#setting-default-workflow-values
-    ## workflowDefaults: {}
-    ##
+    {{- if .Values.controller.workflowDefaults }}
+    workflowDefaults: {{- include "common.tplvalues.render" (dict "value" .Values.controller.workflowDefaults "context" $) | nindent 2 }}
+    {{- end }}
     {{- if and .Values.server.auth.enabled .Values.server.auth.sso.enabled }}
-    sso: {{- include "common.tplvalues.render" (dict "value" .Values.server.auth.sso "context" $) | nindent 4 }}
+    sso: {{- include "common.tplvalues.render" (dict "value" .Values.server.auth.sso "context" $) | nindent 2 }}
     {{- end }}
     ## Uncomment to set workflowRestrictions
     ## Ref: https://argoproj.github.io/argo-workflows/workflow-restrictions/
@@ -729,16 +731,17 @@ controller:
   ## @param controller.workflowWorkers Number of workflow workers to deploy
   ##
   workflowWorkers: 32
-  ## Number of pod workers to deploy
-  ## @param controller.podWorkers Number of pod workers to deploy
-  ##
-  podWorkers: 32
 
   ## Namespaces allowed to run workflows
   ## @param controller.workflowNamespaces Namespaces allowed to run workflows
   ##
   workflowNamespaces:
     - default
+  ## Default Workflow Values
+  ## Ref: https://argoproj.github.io/argo-workflows/default-workflow-specs/#setting-default-workflow-values
+  ## @param controller.workflowDefaults Default Workflow Values
+  ##
+  workflowDefaults: {}
   ## Logging level for the controller
   ## @param controller.logging.level Level for the controller logging
   ## @param controller.logging.globalLevel Global logging level for the controller
@@ -756,18 +759,18 @@ controller:
     enabled: false
     minAvailable: 1
     maxUnavailable: 1
-  ## Service Account configuration
+  ## Controller Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ## @param controller.serviceAccount.create Specifies whether a ServiceAccount should be created
-  ## @param controller.serviceAccount.name Name for the service account
+  ## @param controller.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param controller.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
     create: true
-    ## If not set and create is true, a name is generated using the common.names.fullname template
-    ##
     name: ""
-    ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the controller service account
-    ##
     automountServiceAccountToken: true
+    annotations: {}
 
   ## @param controller.command Override default container command (useful when using custom images)
   ##
@@ -881,7 +884,7 @@ controller:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param controller.initContainers Add additional init containers to the controller pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -891,7 +894,7 @@ controller:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## Controller service parameters
   ##
@@ -956,7 +959,7 @@ executor:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-exec
-    tag: 3.2.8-debian-10-r24
+    tag: 3.3.8-debian-11-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -989,10 +992,12 @@ executor:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param executor.containerSecurityContext.enabled Enabled executor pods' Security Context
   ## @param executor.containerSecurityContext.fsGroup Set executor pod's Security Context fsGroup
+  ## @param executor.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Context
   ##
   containerSecurityContext:
     enabled: true
     fsGroup: 1001
+    readOnlyRootFilesystem: true
 
 ## @section Traffic Exposure Parameters
 ##
@@ -1038,8 +1043,8 @@ ingress:
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
   ## You can:
   ##   - Use the `ingress.secrets` parameter to create this TLS secret
-  ##   - Relay on cert-manager to create it by setting the corresponding annotations
-  ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
   ##
   tls: false
   ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
@@ -1094,6 +1099,20 @@ ingress:
   ##       -----END CERTIFICATE-----
   ##
   secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: server.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: server-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
 
 ## @section Workflows configuration
 ##
@@ -1103,11 +1122,13 @@ workflows:
   ## @param workflows.serviceAccount.create Whether to create a service account to run workflows
   ## @param workflows.serviceAccount.name Service account name to run workflows
   ## @param workflows.serviceAccount.automountServiceAccountToken Automount service account token for the workflows service account
+  ## @param workflows.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
     create: false
     name: ""
     automountServiceAccountToken: true
+    annotations: {}
   ## Create RBAC resources to run workflows.
   ## A Role and Role Bindding are created per namespace in controller.workflowNamespaces
   ## @param workflows.rbac.create Whether to create RBAC resource to run workflows
@@ -1140,7 +1161,7 @@ postgresql:
 
 ## Mysql subchart configuration
 ## @param mysql.enabled Enable MySQL subchart and controller persistence using MySQL
-## @param mysql.service.port MySQL port
+## @param mysql.service.ports.mysql MySQL port
 ## @param mysql.auth.username MySQL username
 ## @param mysql.auth.database MySQL database name
 ## @param mysql.auth.password MySQL database password
@@ -1148,7 +1169,8 @@ postgresql:
 mysql:
   enabled: false
   service:
-    port: 3306
+    ports:
+      mysql: 3306
   auth:
     username: mysql
     database: bn_argo_workflows

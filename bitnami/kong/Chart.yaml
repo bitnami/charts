@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.7.1
+appVersion: 2.8.1
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -28,10 +28,10 @@ keywords:
   - www
   - reverse proxy
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: kong
 sources:
   - https://github.com/bitnami/bitnami-docker-kong
   - https://konghq.com/
-version: 6.0.2
+version: 6.3.16

@@ -6,14 +6,16 @@ metadata:
   {{- if .Values.metrics.prometheusRule.namespace }}
   namespace: {{ .Values.metrics.prometheusRule.namespace }}
   {{- else }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: metrics
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+    {{- if .Values.metrics.prometheusRule.additionalLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.prometheusRule.additionalLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}

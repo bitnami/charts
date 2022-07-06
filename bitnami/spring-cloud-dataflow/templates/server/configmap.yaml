@@ -67,14 +67,17 @@ data:
                     {{- if .Values.deployer.volumes }}
                     volumes: {{- toYaml .Values.deployer.volumes | nindent 22 }}
                     {{- end }}
-                    {{- if .Values.deployer.podSecurityContext }}
-                    podSecurityContext: {{- toYaml .Values.deployer.podSecurityContext | nindent 22 }}
+                    {{- if .Values.deployer.podSecurityContext.enabled }}
+                    podSecurityContext: {{- omit .Values.deployer.podSecurityContext "enabled" | toYaml | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.imagePullSecrets }}
                     imagePullSecrets: {{- toYaml .Values.deployer.imagePullSecrets | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.secretRefs }}
                     secretRefs: {{- toYaml .Values.deployer.secretRefs | nindent 22 }}
+                    {{- end }}
+                    {{- if .Values.deployer.entryPointStyle }}
+                    entryPointStyle: {{ .Values.deployer.entryPointStyle }}
                     {{- end }}
           {{- end }}
           {{- if .Values.server.configuration.containerRegistries }}

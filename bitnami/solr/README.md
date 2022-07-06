@@ -19,7 +19,7 @@ $ helm install my-release bitnami/solr
 
 This chart bootstraps a [Solr](https://github.com/bitnami/bitnami-docker-solr) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ------------------------------------------------------------- | ----------------------- |
 | `image.registry`                 | Solr image registry                                           | `docker.io`             |
 | `image.repository`               | Solr image repository                                         | `bitnami/solr`          |
-| `image.tag`                      | Solr image tag (immutable tags are recommended)               | `8.11.1-debian-10-r60`  |
+| `image.tag`                      | Solr image tag (immutable tags are recommended)               | `9.0.0-debian-11-r10`   |
 | `image.pullPolicy`               | image pull policy                                             | `IfNotPresent`          |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array              | `[]`                    |
 | `image.debug`                    | Specify if debug values should be set                         | `false`                 |
@@ -116,21 +116,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                          | Number of solr replicas                                                                                                  | `3`             |
 | `containerPorts.http`                   | Solr HTTP container port                                                                                                 | `8983`          |
 | `livenessProbe.enabled`                 | Enable livenessProbe on Solr containers                                                                                  | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                  | `30`            |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                  | `40`            |
 | `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                         | `10`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                        | `5`             |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                        | `15`            |
 | `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                      | `6`             |
 | `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                      | `1`             |
 | `readinessProbe.enabled`                | Enable readinessProbe on Solr containers                                                                                 | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `5`             |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `60`            |
 | `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                        | `10`            |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `5`             |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `15`            |
 | `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                     | `6`             |
 | `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                     | `1`             |
 | `startupProbe.enabled`                  | Enable startupProbe on Solr containers                                                                                   | `false`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `30`            |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `40`            |
 | `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                          | `10`            |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                         | `1`             |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                         | `15`            |
 | `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                       | `15`            |
 | `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                       | `1`             |
 | `customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
@@ -155,7 +155,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                              | Affinity settings for Solr pod assignment. Evaluated as a template                                                       | `{}`            |
 | `nodeSelector`                          | Node labels for Solr pods assignment. Evaluated as a template                                                            | `{}`            |
 | `tolerations`                           | Tolerations for Solr pods assignment. Evaluated as a template                                                            | `[]`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
 | `podManagementPolicy`                   | Management Policy for Solr StatefulSet                                                                                   | `Parallel`      |
 | `priorityClassName`                     | Solr pods' priority.                                                                                                     | `""`            |
 | `schedulerName`                         | Kubernetes pod scheduler registry                                                                                        | `""`            |
@@ -175,6 +175,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.ports.http`               | Solr HTTP service port                                                                                                           | `8983`                   |
 | `service.nodePorts.http`           | Node port for the HTTP service                                                                                                   | `""`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.clusterIP`                | Solr service Cluster IP                                                                                                          | `""`                     |
 | `service.loadBalancerIP`           | Solr service Load Balancer IP                                                                                                    | `""`                     |
 | `service.loadBalancerSourceRanges` | Solr service Load Balancer sources                                                                                               | `[]`                     |
@@ -194,19 +195,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Persistence parameters
 
-| Name                        | Description                                    | Value               |
-| --------------------------- | ---------------------------------------------- | ------------------- |
-| `persistence.enabled`       | Use a PVC to persist data.                     | `true`              |
-| `persistence.existingClaim` | A manually managed Persistent Volume and Claim | `""`                |
-| `persistence.storageClass`  | Storage class of backing PVC                   | `""`                |
-| `persistence.accessModes`   | Persistent Volume Access Modes                 | `["ReadWriteOnce"]` |
-| `persistence.size`          | Size of data volume                            | `8Gi`               |
-| `persistence.annotations`   | Persistence annotations for Solr               | `{}`                |
-| `persistence.mountPath`     | Persistence mount path for Solr                | `/bitnami/solr`     |
+| Name                        | Description                                                            | Value               |
+| --------------------------- | ---------------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`       | Use a PVC to persist data.                                             | `true`              |
+| `persistence.existingClaim` | A manually managed Persistent Volume and Claim                         | `""`                |
+| `persistence.storageClass`  | Storage class of backing PVC                                           | `""`                |
+| `persistence.accessModes`   | Persistent Volume Access Modes                                         | `["ReadWriteOnce"]` |
+| `persistence.size`          | Size of data volume                                                    | `8Gi`               |
+| `persistence.annotations`   | Persistence annotations for Solr                                       | `{}`                |
+| `persistence.mountPath`     | Persistence mount path for Solr                                        | `/bitnami/solr`     |
+| `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC | `{}`                |
 
 
 ### Volume Permissions parameters
@@ -216,7 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `10-debian-10-r340`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `11-debian-11-r10`      |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
@@ -260,7 +263,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.extraEnvVars`                          | Additional environment variables to set                                                                                        | `[]`                                                                          |
 | `metrics.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                                     | `""`                                                                          |
 | `metrics.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                                        | `""`                                                                          |
-| `metrics.containerPorts.http`                   | Solr Prometheus exporter HTTP container port                                                                                   | `9983`                                                                        |
+| `metrics.containerPorts.http`                   | Solr Prometheus exporter HTTP container port                                                                                   | `9231`                                                                        |
 | `metrics.livenessProbe.enabled`                 | Enable livenessProbe on Solr Prometheus exporter containers                                                                    | `true`                                                                        |
 | `metrics.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                        | `10`                                                                          |
 | `metrics.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                               | `5`                                                                           |
@@ -299,8 +302,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.affinity`                              | Affinity settings for Solr Prometheus exporter pod assignment. Evaluated as a template                                         | `{}`                                                                          |
 | `metrics.nodeSelector`                          | Node labels for Solr Prometheus exporter pods assignment. Evaluated as a template                                              | `{}`                                                                          |
 | `metrics.tolerations`                           | Tolerations for Solr Prometheus exporter pods assignment. Evaluated as a template                                              | `[]`                                                                          |
-| `metrics.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template       | `{}`                                                                          |
-| `metrics.podManagementPolicy`                   | Management Policy for Solr Prometheus exporter deployment                                                                      | `Parallel`                                                                    |
+| `metrics.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template       | `[]`                                                                          |
 | `metrics.priorityClassName`                     | Solr Prometheus exporter pods' priority.                                                                                       | `""`                                                                          |
 | `metrics.schedulerName`                         | Kubernetes pod scheduler registry                                                                                              | `""`                                                                          |
 | `metrics.hostAliases`                           | Solr Prometheus exporter pod host aliases                                                                                      | `[]`                                                                          |
@@ -310,7 +312,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Solr Prometheus exporter container(s)                         | `[]`                                                                          |
 | `metrics.initContainers`                        | Add init containers to the Solr Prometheus exporter pod(s)                                                                     | `[]`                                                                          |
 | `metrics.sidecars`                              | Add sidecars to the Solr Prometheus exporter pod(s)                                                                            | `[]`                                                                          |
-| `metrics.service.ports.http`                    | Solr Prometheus exporter HTTP service port                                                                                     | `8983`                                                                        |
+| `metrics.service.type`                          | Kubernetes Service type                                                                                                        | `ClusterIP`                                                                   |
+| `metrics.service.ports.http`                    | Solr Prometheus exporter HTTP service port                                                                                     | `9231`                                                                        |
 | `metrics.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                               | `None`                                                                        |
 | `metrics.service.clusterIP`                     | Solr Prometheus exporter service Cluster IP                                                                                    | `""`                                                                          |
 | `metrics.service.annotations`                   | annotations for Solr Prometheus exporter service                                                                               | `{}`                                                                          |
@@ -421,6 +424,14 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 6.0.0
+
+This major updates the Zookeeper subchart to it newest major, 10.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-1000).
+
+### To 4.0.0
+
+This major updates the Zookeeper subchart to it newest major, 9.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/zookeeper#to-900).
 
 ### To 3.0.0
 

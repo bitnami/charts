@@ -1,11 +1,9 @@
-# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.52.0/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml
-
----
+# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.57.0/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.6.2
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: podmonitors.monitoring.coreos.com
 spec:
@@ -16,6 +14,8 @@ spec:
     kind: PodMonitor
     listKind: PodMonitorList
     plural: podmonitors
+    shortNames:
+    - pmon
     singular: podmonitor
   scope: Namespaced
   versions:
@@ -40,6 +40,15 @@ spec:
             description: Specification of desired Pod selection for target discovery
               by Prometheus.
             properties:
+              attachMetadata:
+                description: 'Attaches node metadata to discovered targets. Only valid
+                  for role: pod. Only valid in Prometheus versions 2.35.0 and newer.'
+                properties:
+                  node:
+                    description: When set to true, Prometheus must have permissions
+                      to get Nodes.
+                    type: boolean
+                type: object
               jobLabel:
                 description: The label to use to retrieve the job name from.
                 type: string
@@ -69,7 +78,7 @@ spec:
                       in contrast to a list restricting them.
                     type: boolean
                   matchNames:
-                    description: List of namespace names.
+                    description: List of namespace names to select from.
                     items:
                       type: string
                     type: array
@@ -170,6 +179,10 @@ spec:
                       required:
                       - key
                       type: object
+                    followRedirects:
+                      description: FollowRedirects configures whether scrape requests
+                        follow HTTP 3xx redirects.
+                      type: boolean
                     honorLabels:
                       description: HonorLabels chooses the metric's labels on collisions
                         with target labels.
@@ -179,7 +192,9 @@ spec:
                         the timestamps present in scraped data.
                       type: boolean
                     interval:
-                      description: Interval at which metrics should be scraped
+                      description: Interval at which metrics should be scraped If
+                        not specified Prometheus' global scrape interval is used.
+                      pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
                       type: string
                     metricRelabelings:
                       description: MetricRelabelConfigs to apply to samples before
@@ -191,8 +206,17 @@ spec:
                           configuration. More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs'
                         properties:
                           action:
+                            default: replace
                             description: Action to perform based on regex matching.
                               Default is 'replace'
+                            enum:
+                            - replace
+                            - keep
+                            - drop
+                            - hashmod
+                            - labelmap
+                            - labeldrop
+                            - labelkeep
                             type: string
                           modulus:
                             description: Modulus to take of the hash of the source
@@ -218,6 +242,10 @@ spec:
                               separator and matched against the configured regular
                               expression for the replace, keep, and drop actions.
                             items:
+                              description: LabelName is a valid Prometheus label name
+                                which may only contain ASCII letters, numbers, as
+                                well as underscores.
+                              pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
                               type: string
                             type: array
                           targetLabel:
@@ -332,8 +360,9 @@ spec:
                     relabelings:
                       description: 'RelabelConfigs to apply to samples before scraping.
                         Prometheus Operator automatically adds relabelings for a few
-                        standard Kubernetes fields and replaces original scrape job
-                        name with __tmp_prometheus_job_name. More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config'
+                        standard Kubernetes fields. The original scrape job''s name
+                        is available via the `__tmp_prometheus_job_name` label. More
+                        info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config'
                       items:
                         description: 'RelabelConfig allows dynamic rewriting of the
                           label set, being applied to samples before ingestion. It
@@ -341,8 +370,17 @@ spec:
                           configuration. More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs'
                         properties:
                           action:
+                            default: replace
                             description: Action to perform based on regex matching.
                               Default is 'replace'
+                            enum:
+                            - replace
+                            - keep
+                            - drop
+                            - hashmod
+                            - labelmap
+                            - labeldrop
+                            - labelkeep
                             type: string
                           modulus:
                             description: Modulus to take of the hash of the source
@@ -368,6 +406,10 @@ spec:
                               separator and matched against the configured regular
                               expression for the replace, keep, and drop actions.
                             items:
+                              description: LabelName is a valid Prometheus label name
+                                which may only contain ASCII letters, numbers, as
+                                well as underscores.
+                              pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
                               type: string
                             type: array
                           targetLabel:
@@ -381,7 +423,9 @@ spec:
                       description: HTTP scheme to use for scraping.
                       type: string
                     scrapeTimeout:
-                      description: Timeout after which the scrape is ended
+                      description: Timeout after which the scrape is ended If not
+                        specified, the Prometheus global scrape interval is used.
+                      pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
                       type: string
                     targetPort:
                       anyOf:

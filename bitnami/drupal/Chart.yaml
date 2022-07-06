@@ -1,12 +1,12 @@
 annotations:
   category: CMS
 apiVersion: v2
-appVersion: 9.3.7
+appVersion: 9.4.1
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -25,10 +25,10 @@ keywords:
   - application
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: drupal
 sources:
   - https://github.com/bitnami/bitnami-docker-drupal
   - https://www.drupal.org/
-version: 11.0.18
+version: 12.2.12

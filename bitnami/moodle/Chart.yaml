@@ -1,12 +1,12 @@
 annotations:
   category: E-Learning
 apiVersion: v2
-appVersion: 3.11.5
+appVersion: 4.0.1
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
-    version: 10.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     version: 1.x.x
@@ -19,10 +19,10 @@ keywords:
   - learning
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: moodle
 sources:
   - https://github.com/bitnami/bitnami-docker-moodle
   - https://www.moodle.org/
-version: 12.1.10
+version: 14.1.10

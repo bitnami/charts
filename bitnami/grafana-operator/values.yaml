@@ -18,12 +18,18 @@ global:
 ## @section Common parameters
 ##
 
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
 ## @param nameOverride String to partially override common.names.fullname template with a string (will prepend the release name)
 ##
 nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template with a string
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
@@ -33,6 +39,9 @@ commonLabels: {}
 ## @param commonAnnotations Common Annotations which are applied to every ressource deployed
 ##
 commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
 
 ## @section Grafana Operator parameters
 ##
@@ -106,6 +115,13 @@ operator:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param operator.priorityClassName %%MAIN_CONTAINER_NAME%% pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param operator.terminationGracePeriodSeconds In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
   ## @param operator.updateStrategy.type Set up update strategy for Grafana Operator installation.
   ## Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to make sure the pods is destroyed first.
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -127,7 +143,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 4.2.0-debian-10-r4
+    tag: 4.4.1-debian-11-r9
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## Ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -307,21 +323,41 @@ operator:
     ## Prometheus Operator service monitors
     ##
     serviceMonitor:
-      ## @param operator.prometheus.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator
+      ## @param operator.prometheus.serviceMonitor.enabled Specify if a ServiceMonitor will be deployed for prometheus-operator
       ##
       enabled: false
+      ## @param operator.prometheus.serviceMonitor.namespace Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)
+      ##
+      namespace: ""
       ## @param operator.prometheus.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
       ##
       jobLabel: app.kubernetes.io/name
       ## @param operator.prometheus.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used
       ##
       interval: ""
+      ## @param operator.prometheus.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      scrapeTimeout: ""
       ## @param operator.prometheus.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
       ##
       metricRelabelings: []
       ## @param operator.prometheus.serviceMonitor.relabelings Specify general relabeling
       ##
       relabelings: []
+      ## @param operator.prometheus.serviceMonitor.selector ServiceMonitor selector labels
+      ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+      ##
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+      ## @param operator.prometheus.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param operator.prometheus.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
   ## Liveness probe value
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param operator.livenessProbe.enabled Enable livenessProbe
@@ -386,7 +422,24 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 8.4.2-debian-10-r2
+    tag: 8.5.6-debian-11-r4
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Grafana Plugins init container image attributes. If omitted values from `grafana.image` will be used
+  ## @param grafana.pluginsInitContainerImage.registry Grafana Plugins image registry
+  ## @param grafana.pluginsInitContainerImage.repository Grafana Plugins image name
+  ## @param grafana.pluginsInitContainerImage.tag Grafana Plugins image tag
+  ## @param grafana.pluginsInitContainerImage.pullSecrets Grafana Plugins image pull secrets
+  pluginsInitContainerImage:
+    registry: ""
+    repository: ""
+    tag: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -532,6 +585,23 @@ grafana:
   ## @param grafana.labels Add additional labels to the grafana deployment, service and ingress resources
   ##
   labels: {}
+  ## Configure the Service resource
+  ## Ref: https://github.com/grafana-operator/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-service
+  ##
+  service:
+    ## @param grafana.service.type Kubernetes Service type
+    ##
+    type: ClusterIP
+    ## @param grafana.service.annotations Additional custom annotations for Grafana service
+    ##
+    annotations: {}
+    ## @param grafana.service.extraPorts Extra ports to expose in the Grafana service
+    ## extraPorts:
+    ##   - name: grafana-proxy
+    ##     port: 9091
+    ##     protocol: TCP
+    ##     targetPort: grafana-http
+    extraPorts: []
   ## Configure the ingress resource that allows you to access the
   ## Grafana web. Set up the URL
   ## Ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -546,7 +616,7 @@ grafana:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
-    ## @param grafana.ingress.hostname The hostname under which the grafana instance should be reachable
+    ## @param grafana.ingress.hostname The hostname under which the grafana instance should be reachable. If empty the parameter will not be set.
     ##
     hostname: grafana.local
     ## @param grafana.ingress.path The path for the ingress instance to forward to the grafana app
@@ -623,7 +693,6 @@ grafana:
       reporting_enabled: false
       check_for_updates: false
     security:
-      disable_gravatar: false
       # ## Grafana Admin credentials, if omitted they will be admin:<random_pass>
       # admin_user:
       # admin_password:
@@ -646,6 +715,7 @@ grafana:
       #   # role_attribute_path: contains(groups[*], 'platform-readonly') && 'Viewer' || contains(groups[*], 'platform-admin') && 'Admin' || contains(groups[*], 'platform-emergency') && 'Admin' || contains(groups[*], 'customer-poweruser') && 'Admin' || contains(groups[*], 'customer-collaborator') && 'Editor' || contains(groups[*], 'customer-readonly') && 'Viewer'
       #   # allowed_domains: example.com
       #   allow_sign_up: True
+      disable_gravatar: false
   ## @param grafana.configMaps Extra configMaps to mount into the grafana pod
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/extra_files.md
   ## e.g:
@@ -677,10 +747,10 @@ grafana:
   ## Ref: https://github.com/grafana-operator/grafana-operator/blob/master/documentation/multi_namespace_support.md#2-dashboardnamespaceselector
   ## e.g:
   ## dashboardNamespaceSelector:
-  ##   - matchLabels:
+  ##   matchLabels:
   ##     key: value
   ##
-  dashboardNamespaceSelector: []
+  dashboardNamespaceSelector: {}
   ## Grafana containers' liveness probe
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param grafana.livenessProbe.enabled Enable livenessProbe

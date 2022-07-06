@@ -22,7 +22,7 @@ spec:
     metadata:
       annotations:
         {{- if .Values.hub.podAnnotations }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.hub.podAnnotations "context" $ ) | nindent 4 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.hub.podAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if empty .Values.hub.existingConfigmap }}
         checksum/hub-config: {{ include (print $.Template.BasePath "/hub/configmap.yaml") . | sha256sum }}

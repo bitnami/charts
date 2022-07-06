@@ -57,7 +57,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.9.2-debian-10-r35
+    tag: 2.9.4-debian-11-r9
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -87,7 +87,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/spring-cloud-dataflow-composed-task-runner
-      tag: 2.9.2-debian-10-r36
+      tag: 2.9.4-debian-11-r10
   ## Spring Cloud Dataflow Server configuration parameters
   ##
   configuration:
@@ -464,6 +464,20 @@ server:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
+    ## @param server.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend: 
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
   ## @param server.initContainers Add init containers to the Dataflow Server pods
   ## Example:
   ## initContainers:
@@ -574,7 +588,7 @@ skipper:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.8.2-debian-10-r42
+    tag: 2.8.4-debian-11-r9
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -964,7 +978,7 @@ deployer:
   nodeSelector: ""
   ## @param deployer.tolerations Streaming applications tolerations
   ##
-  tolerations: {}
+  tolerations: []
   ## @param deployer.volumeMounts Streaming applications extra volume mounts
   ##
   volumeMounts: {}
@@ -982,17 +996,23 @@ deployer:
   environmentVariables: []
   ## Streams containers' Security Context. This security context will be use in every deployed stream.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param deployer.podSecurityContext.enabled Enabled pods' Security Context of the deployed pods batch or stream pods
   ## @param deployer.podSecurityContext.runAsUser Set Dataflow Streams container's Security Context runAsUser
-  ##
   podSecurityContext:
+    enabled: true
     runAsUser: 1001
   ## @param deployer.imagePullSecrets Streaming applications imagePullSecrets
   ##
   imagePullSecrets: []
-
   ## @param deployer.secretRefs Streaming applications secretRefs
   ##
   secretRefs: []
+  ## @param deployer.entryPointStyle An entry point style affects how application properties are passed to the container to be deployed. Allowed values: exec (default), shell, boot
+  ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#_entry_point_style
+  entryPointStyle: exec
+  ## @param deployer.imagePullPolicy An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never
+  ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#_image_pull_policy
+  imagePullPolicy: IfNotPresent
 
 ## @section RBAC parameters
 
@@ -1037,7 +1057,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.4.0-debian-10-r2
+    tag: 1.4.0-debian-11-r9
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -1370,7 +1390,7 @@ waitForBackends:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.23.4-debian-10-r7
+    tag: 1.24.2-debian-11-r2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

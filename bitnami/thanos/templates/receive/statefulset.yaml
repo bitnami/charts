@@ -45,6 +45,7 @@ spec:
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceAccount.name" (dict "component" "receive" "context" $) }}
+      automountServiceAccountToken: {{ .Values.receive.automountServiceAccountToken }}
       {{- if .Values.receive.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.receive.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -119,7 +120,6 @@ spec:
             - --grpc-address=0.0.0.0:10901
             - --http-address=0.0.0.0:10902
             - --remote-write.address=0.0.0.0:19291
-            - --receive.replication-factor={{ .Values.receive.replicationFactor }}
             - --objstore.config=$(OBJSTORE_CONFIG)
             - --tsdb.path=/var/thanos/receive
             - --label={{ .Values.receive.replicaLabel }}="$(NAME)"
@@ -132,6 +132,7 @@ spec:
             {{- end }}
             {{- if eq .Values.receive.mode "standalone" }}
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
+            - --receive.replication-factor={{ .Values.receive.replicationFactor }}
             {{- end }}
             {{- if .Values.receive.grpc.server.tls.enabled }}
             - --grpc-server-tls-cert=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "key" "tls-cert") }}
@@ -201,7 +202,7 @@ spec:
             httpGet:
               path: /-/ready
               port: http
-          {{- else if .Values.receive.customReadinessProbe }}
+          {{- else if .Values.receive.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receive.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.receive.lifecycleHooks }}

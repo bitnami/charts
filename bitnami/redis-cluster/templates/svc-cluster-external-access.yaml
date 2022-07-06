@@ -6,8 +6,6 @@
 {{- range $i, $e := until $nodesCount }}
 {{- $targetPod := printf "%s-%d" (printf "%s" $fullName) $i }}
 {{- $_ := set $ "targetPod" $targetPod }}
-
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -29,6 +27,9 @@ spec:
   type: {{ $root.Values.cluster.externalAccess.service.type }}
   {{- if $root.Values.cluster.externalAccess.service.loadBalancerIP }}
   loadBalancerIP: {{ index $root.Values.cluster.externalAccess.service.loadBalancerIP $i }}
+  {{- end }}
+  {{- if and (eq $root.Values.cluster.externalAccess.service.type "LoadBalancer") $root.Values.cluster.externalAccess.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml $root.Values.cluster.externalAccess.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
     - name: tcp-redis

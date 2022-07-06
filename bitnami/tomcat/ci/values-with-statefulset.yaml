@@ -1,3 +1,0 @@
-# Test values file for generating the statefulset yaml
-deployment:
-  type: statefulset

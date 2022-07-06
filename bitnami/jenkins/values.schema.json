@@ -109,19 +109,6 @@
           "description": "Allowed values: \"ClusterIP\", \"NodePort\" and \"LoadBalancer\""
         }
       }
-    },
-    "metrics": {
-      "type": "object",
-      "form": true,
-      "title": "Prometheus metrics details",
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "title": "Create Prometheus metrics exporter",
-          "description": "Create a side-car container to expose Prometheus metrics",
-          "form": true
-        }
-      }
     }
   }
 }

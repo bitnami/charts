@@ -7,7 +7,7 @@ A [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm) for gro
 ```yaml
 dependencies:
   - name: common
-    version: 0.x.x
+    version: 1.x.x
     repository: https://charts.bitnami.com/bitnami
 ```
 
@@ -28,7 +28,7 @@ data:
 
 This chart provides a common template helpers which can be used to develop new charts using [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -43,10 +43,10 @@ The following table lists the helpers available in the library which are scoped 
 
 | Helper identifier             | Description                                          | Expected Input                                 |
 |-------------------------------|------------------------------------------------------|------------------------------------------------|
-| `common.affinities.node.soft` | Return a soft nodeAffinity definition                | `dict "key" "FOO" "values" (list "BAR" "BAZ")` |
-| `common.affinities.node.hard` | Return a hard nodeAffinity definition                | `dict "key" "FOO" "values" (list "BAR" "BAZ")` |
-| `common.affinities.pod.soft`  | Return a soft podAffinity/podAntiAffinity definition | `dict "component" "FOO" "context" $`           |
-| `common.affinities.pod.hard`  | Return a hard podAffinity/podAntiAffinity definition | `dict "component" "FOO" "context" $`           |
+| `common.affinities.nodes.soft` | Return a soft nodeAffinity definition                | `dict "key" "FOO" "values" (list "BAR" "BAZ")` |
+| `common.affinities.nodes.hard` | Return a hard nodeAffinity definition                | `dict "key" "FOO" "values" (list "BAR" "BAZ")` |
+| `common.affinities.pods.soft`  | Return a soft podAffinity/podAntiAffinity definition | `dict "component" "FOO" "context" $`           |
+| `common.affinities.pods.hard`  | Return a hard podAffinity/podAntiAffinity definition | `dict "component" "FOO" "context" $`           |
 
 ### Capabilities
 
@@ -61,6 +61,8 @@ The following table lists the helpers available in the library which are scoped 
 | `common.capabilities.crd.apiVersion`           | Return the appropriate apiVersion for CRDs.                                                    | `.` Chart context |
 | `common.capabilities.policy.apiVersion`        | Return the appropriate apiVersion for podsecuritypolicy.                                       | `.` Chart context |
 | `common.capabilities.networkPolicy.apiVersion` | Return the appropriate apiVersion for networkpolicy.                                           | `.` Chart context |
+| `common.capabilities.apiService.apiVersion`    | Return the appropriate apiVersion for APIService.                                              | `.` Chart context |
+| `common.capabilities.hpa.apiVersion`           | Return the appropriate apiVersion for Horizontal Pod Autoscaler                                | `.` Chart context |
 | `common.capabilities.supportsHelmVersion`      | Returns true if the used Helm version is 3.3+                                                  | `.` Chart context |
 
 ### Errors
@@ -95,11 +97,13 @@ The following table lists the helpers available in the library which are scoped 
 
 ### Names
 
-| Helper identifier       | Description                                                | Expected Input   |
-|-------------------------|------------------------------------------------------------|-------------------|
-| `common.names.name`     | Expand the name of the chart or use `.Values.nameOverride` | `.` Chart context |
-| `common.names.fullname` | Create a default fully qualified app name.                 | `.` Chart context |
-| `common.names.chart`    | Chart name plus version                                    | `.` Chart context |
+| Helper identifier                 | Description                                                           | Expected Input    |
+|-----------------------------------|-----------------------------------------------------------------------|-------------------|
+| `common.names.name`               | Expand the name of the chart or use `.Values.nameOverride`            | `.` Chart context |
+| `common.names.fullname`           | Create a default fully qualified app name.                            | `.` Chart context |
+| `common.names.namespace`          | Allow the release namespace to be overridden                          | `.` Chart context |
+| `common.names.fullname.namespace` | Create a fully qualified app name adding the installation's namespace | `.` Chart context |
+| `common.names.chart`              | Chart name plus version                                               | `.` Chart context |
 
 ### Secrets
 
@@ -138,8 +142,9 @@ The following table lists the helpers available in the library which are scoped 
 | `common.validations.values.single.empty`         | Validate a value must not be empty.                                                                                           | `dict "valueKey" "path.to.value" "secret" "secret.name" "field" "my-password" "subchart" "subchart" "context" $` secret, field and subchart are optional. In case they are given, the helper will generate a how to get instruction. See [ValidateValue](#validatevalue) |
 | `common.validations.values.multiple.empty`       | Validate a multiple values must not be empty. It returns a shared error for all the values.                                   | `dict "required" (list $validateValueConf00 $validateValueConf01) "context" $`. See [ValidateValue](#validatevalue)                                                                                                                                                      |
 | `common.validations.values.mariadb.passwords`    | This helper will ensure required password for MariaDB are not empty. It returns a shared error for all the values.            | `dict "secret" "mariadb-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use mariadb chart and the helper.                                                                                      |
+| `common.validations.values.mysql.passwords`      | This helper will ensure required password for MySQL are not empty. It returns a shared error for all the values.              | `dict "secret" "mysql-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use mysql chart and the helper.                                                                                      |
 | `common.validations.values.postgresql.passwords` | This helper will ensure required password for PostgreSQL are not empty. It returns a shared error for all the values.         | `dict "secret" "postgresql-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use postgresql chart and the helper.                                                                                |
-| `common.validations.values.redis.passwords`      | This helper will ensure required password for Redis&trade; are not empty. It returns a shared error for all the values. | `dict "secret" "redis-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use redis chart and the helper.                                                                                          |
+| `common.validations.values.redis.passwords`      | This helper will ensure required password for Redis&reg; are not empty. It returns a shared error for all the values. | `dict "secret" "redis-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use redis chart and the helper.                                                                                          |
 | `common.validations.values.cassandra.passwords`  | This helper will ensure required password for Cassandra are not empty. It returns a shared error for all the values.          | `dict "secret" "cassandra-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use cassandra chart and the helper.                                                                                  |
 | `common.validations.values.mongodb.passwords`    | This helper will ensure required password for MongoDB&reg; are not empty. It returns a shared error for all the values.            | `dict "secret" "mongodb-secret" "subchart" "true" "context" $` subchart field is optional and could be true or false it depends on where you will use mongodb chart and the helper.                                                                                      |
 
@@ -297,11 +302,11 @@ If we force those values to be empty we will see some alerts
 $ helm install test mychart --set path.to.value00="",path.to.value01=""
     'path.to.value00' must not be empty, please add '--set path.to.value00=$PASSWORD_00' to the command. To get the current value:
 
-        export PASSWORD_00=$(kubectl get secret --namespace default secretName -o jsonpath="{.data.password-00}" | base64 --decode)
+        export PASSWORD_00=$(kubectl get secret --namespace default secretName -o jsonpath="{.data.password-00}" | base64 -d)
 
     'path.to.value01' must not be empty, please add '--set path.to.value01=$PASSWORD_01' to the command. To get the current value:
 
-        export PASSWORD_01=$(kubectl get secret --namespace default secretName -o jsonpath="{.data.password-01}" | base64 --decode)
+        export PASSWORD_01=$(kubectl get secret --namespace default secretName -o jsonpath="{.data.password-01}" | base64 -d)
 ```
 
 ## Upgrading

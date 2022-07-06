@@ -42,6 +42,7 @@ spec:
       {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
       {{- end }}
     spec:
+      hostNetwork: {{ .Values.redis.hostNetwork }}
       {{- if semverCompare ">= 1.13" (include "common.capabilities.kubeVersion" .) }}
       enableServiceLinks: false
       {{- end }}

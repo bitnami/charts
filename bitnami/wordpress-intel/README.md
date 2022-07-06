@@ -21,7 +21,7 @@ This chart bootstraps a [WordPress Intel](https://github.com/bitnami/bitnami-doc
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the WordPress application, and the [Bitnami Memcached chart](https://github.com/bitnami/charts/tree/master/bitnami/memcached) that can be used to cache database queries.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, Fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Why use Intel optimized containers
 
@@ -89,14 +89,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WordPress Image parameters
 
-| Name                | Description                                          | Value                 |
-| ------------------- | ---------------------------------------------------- | --------------------- |
-| `image.registry`    | WordPress image registry                             | `docker.io`           |
-| `image.repository`  | WordPress image repository                           | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `5.8.2-debian-10-r34` |
-| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                  |
-| `image.debug`       | Enable image debug mode                              | `false`               |
+| Name                | Description                                          | Value                     |
+| ------------------- | ---------------------------------------------------- | ------------------------- |
+| `image.registry`    | WordPress image registry                             | `docker.io`               |
+| `image.repository`  | WordPress image repository                           | `bitnami/wordpress-intel` |
+| `image.tag`         | WordPress image tag (immutable tags are recommended) | `6.0.0-debian-11-r4`      |
+| `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`            |
+| `image.pullSecrets` | WordPress image pull secrets                         | `[]`                      |
+| `image.debug`       | Enable image debug mode                              | `false`                   |
 
 
 ### WordPress Configuration parameters
@@ -117,7 +117,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `wordpressConfiguration`               | The content for your custom wp-config.php file (advanced feature)                     | `""`               |
 | `existingWordPressConfigurationSecret` | The name of an existing secret with your custom wp-config.php file (advanced feature) | `""`               |
 | `wordpressConfigureCache`              | Enable W3 Total Cache plugin and configure cache settings                             | `false`            |
-| `wordpressAutoUpdateLevel`             | Level of auto-updates to allow. Allowed values: `major`, `minor` or `none`.           | `none`             |
 | `wordpressPlugins`                     | Array of plugins to install and activate. Can be specified as `all` or `none`.        | `none`             |
 | `customPostInitScripts`                | Custom post-init.d user scripts                                                       | `{}`               |
 | `smtpHost`                             | SMTP server host                                                                      | `""`               |
@@ -210,6 +209,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.externalTrafficPolicy`    | WordPress service external traffic policy                                                                                        | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for WordPress service                                                                              | `{}`                     |
 | `service.extraPorts`               | Extra port to expose on WordPress service                                                                                        | `[]`                     |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ingress.enabled`                  | Enable ingress record generation for WordPress                                                                                   | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
@@ -222,6 +223,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 
 ### Persistence Parameters
@@ -235,10 +237,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                            | Persistent Volume size                                                                          | `10Gi`                  |
 | `persistence.dataSource`                      | Custom PVC data source                                                                          | `{}`                    |
 | `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                              | `""`                    |
+| `persistence.annotations`                     | Persistent Volume Claim annotations                                                             | `{}`                    |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r280`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r6`       |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -268,7 +271,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.port`                            | NGINX Container Status Port scraped by Prometheus Exporter                   | `""`                     |
 | `metrics.image.registry`                  | NGINX Prometheus exporter image registry                                     | `docker.io`              |
 | `metrics.image.repository`                | NGINX Prometheus exporter image repository                                   | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                       | NGINX Prometheus exporter image tag (immutable tags are recommended)         | `0.9.0-debian-10-r235`   |
+| `metrics.image.tag`                       | NGINX Prometheus exporter image tag (immutable tags are recommended)         | `0.10.0-debian-11-r7`    |
 | `metrics.image.pullPolicy`                | NGINX Prometheus exporter image pull policy                                  | `IfNotPresent`           |
 | `metrics.image.pullSecrets`               | Specify docker-registry secret names as an array                             | `[]`                     |
 | `metrics.resources.limits`                | The resources limits for the Prometheus exporter container                   | `{}`                     |
@@ -309,7 +312,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                       | Description                                                               | Value               |
 | ------------------------------------------ | ------------------------------------------------------------------------- | ------------------- |
-| `mariadb.enabled`           :               | Deploy a MariaDB server to satisfy the applications database requirements | `true`              |
+| `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements | `true`              |
 | `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`       | `standalone`        |
 | `mariadb.auth.rootPassword`                | MariaDB root password                                                     | `""`                |
 | `mariadb.auth.database`                    | MariaDB custom database                                                   | `bitnami_wordpress` |
@@ -407,7 +410,7 @@ externalCache.port=11211
 
 ### Ingress
 
-This chart provides support for Ingress resources. If an Ingress controller, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik), that Ingress controller can be used to serve WordPress.
+This chart provides support for Ingress resources. If an Ingress controller, such as nginx-ingress or traefik, that Ingress controller can be used to serve WordPress.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/wordpress/configuration/configure-ingress/).
 
@@ -447,6 +450,16 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Notable changes
+
+### 1.0.0
+
+This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-105-to-mariadb-106/) for upgrading from MariaDB 10.5 to 10.6. No major issues are expected during the upgrade.
+
+### 0.2.0
+
+Removed support for limiting auto-updates to WordPress core via the `wordpressAutoUpdateLevel` option. To update WordPress core, we recommend you use the `helm upgrade` command to update your deployment instead of using the built-in update functionality.
 
 ## Bitnami Kubernetes Documentation
 

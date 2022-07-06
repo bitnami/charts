@@ -3,8 +3,14 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "kube-prometheus.operator.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   replicas: 1
   selector:
@@ -12,11 +18,15 @@ spec:
   template:
     metadata:
       labels: {{- include "kube-prometheus.operator.labels" . | nindent 8 }}
+        {{- if .Values.operator.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.operator.podLabels "context" $) | nindent 8 }}
+        {{- end }}
       {{- if .Values.operator.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.operator.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
       serviceAccountName: {{ template "kube-prometheus.operator.serviceAccountName" . }}
+      {{- include "kube-prometheus.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.operator.schedulerName }}
       schedulerName: {{ .Values.operator.schedulerName | quote }}
       {{- end }}
@@ -43,16 +53,28 @@ spec:
       {{- if .Values.operator.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.operator.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.operator.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.operator.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.operator.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.operator.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.operator.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.operator.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       containers:
         - name: prometheus-operator
           image: {{ template "kube-prometheus.image" . }}
           imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
-          env:
-            - name: PROMETHEUS_CONFIG_RELOADER
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ template "kube-prometheus.operator.fullname" . }}
-                  key: prometheus-config-reloader
+          {{- if .Values.operator.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.operator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.operator.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.operator.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.operator.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.operator.args "context" $) | nindent 12 }}
+          {{- else }}
           args:
             {{- if .Values.operator.kubeletService.enabled }}
             - --kubelet-service={{ .Values.operator.kubeletService.namespace }}/{{ template "kube-prometheus.fullname" . }}-kubelet
@@ -84,40 +106,69 @@ spec:
             {{- if .Values.operator.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraArgs "context" $) | nindent 12 }}
             {{- end }}
+          {{- end }}
+          {{- if .Values.operator.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.operator.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: PROMETHEUS_CONFIG_RELOADER
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ template "kube-prometheus.operator.fullname" . }}
+                  key: prometheus-config-reloader
+            {{- if .Values.operator.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.operator.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.operator.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.operator.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.operator.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
           {{- if .Values.operator.livenessProbe.enabled }}
-          livenessProbe:
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.operator.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: {{ .Values.operator.livenessProbe.path }}
+              path: /metrics
               port: http
               scheme: HTTP
-            initialDelaySeconds: {{ .Values.operator.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.operator.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.operator.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.operator.livenessProbe.failureThreshold }}
-            successThreshold: {{ .Values.operator.livenessProbe.successThreshold }}
+          {{- else if .Values.operator.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.operator.readinessProbe.enabled }}
-          readinessProbe:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.operator.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: {{ .Values.operator.readinessProbe.path }}
+              path: /metrics
               port: http
               scheme: HTTP
-            initialDelaySeconds: {{ .Values.operator.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.operator.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.operator.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.operator.readinessProbe.failureThreshold }}
-            successThreshold: {{ .Values.operator.readinessProbe.successThreshold }}
+          {{- else if .Values.operator.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.operator.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.operator.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /metrics
+              port: http
+              scheme: HTTP
+          {{- else if .Values.operator.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.operator.containerSecurityContext.enabled }}
-          # yamllint disable rule:indentation
-          securityContext: {{- omit .Values.operator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          # yamllint enable rule:indentation
+          {{- if .Values.operator.extraVolumeMounts }}
+          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
+        {{- if .Values.operator.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.operator.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      {{- if .Values.operator.extraVolumes }}
+      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}
 {{- end }}

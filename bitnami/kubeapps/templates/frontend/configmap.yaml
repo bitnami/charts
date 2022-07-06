@@ -22,7 +22,7 @@ data:
     # Keep the connection open with the API server even if idle (the default is 60 seconds)
     # Setting it to 1 hour which should be enough for our current use case of deploying/upgrading apps
     # If we enable other use-cases in the future we might need to bump this value
-    # More info here https://github.com/kubeapps/kubeapps/issues/766
+    # More info here https://github.com/vmware-tanzu/kubeapps/issues/766
     proxy_read_timeout 1h;
 
     {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
@@ -31,7 +31,7 @@ data:
     {{- end }}
 {{- range .Values.clusters }}
   {{- if .certificateAuthorityData }}
-  {{ .name }}-ca.pem: {{ .certificateAuthorityData }}
+  {{ printf "%s-ca.pem" .name }}: {{ .certificateAuthorityData }}
   {{- end }}
 {{- end }}
   vhost.conf: |-
@@ -46,12 +46,12 @@ data:
     proxy_set_header Connection $connection_upgrade;
 
     server {
-      listen {{ .Values.frontend.containerPort }};
+      listen {{ .Values.frontend.containerPorts.http }};
     {{- if .Values.frontend.largeClientHeaderBuffers }}
       large_client_header_buffers {{ .Values.frontend.largeClientHeaderBuffers }};
     {{- end }}
     {{- if .Values.enableIPv6 }}
-      listen [::]:{{ .Values.frontend.containerPort }};
+      listen [::]:{{ .Values.frontend.containerPorts.http }};
     {{- end }}
       server_name _;
 
@@ -95,12 +95,12 @@ data:
     {{- if .certificateAuthorityData }}
         proxy_set_header PINNIPED_PROXY_API_SERVER_CERT {{ .certificateAuthorityData }};
     {{- end }}
-        proxy_pass http://{{ template "kubeapps.pinniped-proxy.fullname" $ }}.{{ $.Release.Namespace }}:{{ $.Values.pinnipedProxy.containerPort }};
+        proxy_pass {{ printf "http://%s.%s:%d" (include "kubeapps.pinniped-proxy.fullname" $) $.Release.Namespace (int $.Values.pinnipedProxy.service.ports.pinnipedProxy) }};
     {{- else }}
         # Otherwise we route directly through to the clusters with existing credentials.
         proxy_pass {{ $apiServiceBaseURL }};
     {{- if .certificateAuthorityData }}
-        proxy_ssl_trusted_certificate "./server_blocks/{{ .name }}-ca.pem";
+        proxy_ssl_trusted_certificate {{ printf "./server_blocks/%s-ca.pem" .name | quote }};
     {{- end }}
     {{- end }}
         include "./server_blocks/k8s-api-proxy.conf";
@@ -124,29 +124,6 @@ data:
 
         proxy_pass {{ include "kubeapps.kubeappsapis.proxy_pass" . -}};
       }
-
-  {{- if .Values.assetsvc.enabled }}
-      # Forward '/api/assetsvc' to '/assetsvc'
-      # but preserving the encoding (eg. '%2F' is not converted to '/')
-      # see https://serverfault.com/a/906479
-      # Ex: from "/api/assetsvc/what$2Fever?param=value"
-      #     it matches as $1="/what$2Fever" and $args="param=value"
-      #     downstream services will receive "/assetsvc/what$2Fever?param=value"
-      location ~* /api/assetsvc {
-        rewrite ^ $request_uri; # pass the encoded url downstream as is,
-        rewrite /api/assetsvc([^?]*) /assetsvc$1?$args break;
-
-    {{- if .Values.frontend.proxypassExtraSetHeader }}
-        proxy_set_header {{ .Values.frontend.proxypassExtraSetHeader }};
-    {{- end }}
-
-    {{- if .Values.frontend.proxypassAccessTokenAsBearer }}
-        # Google Kubernetes Engine requires the access_token as the Bearer when talking to the k8s api server.
-        proxy_set_header Authorization "Bearer $http_x_forwarded_access_token";
-    {{- end }}
-        proxy_pass {{ include "kubeapps.frontend-config.proxy_pass" . -}};
-      }
-  {{- end }}
 
   {{- if .Values.kubeops.enabled }}
       location ~* /api/kubeops {
@@ -190,6 +167,6 @@ data:
         # Add the Authorization header if exists
         add_header Authorization $http_authorization;
 
-        proxy_pass http://{{ template "kubeapps.dashboard.fullname" . }}:{{ .Values.dashboard.service.port }};
+        proxy_pass {{ printf "http://%s:%d" (include "kubeapps.dashboard.fullname" .) (int .Values.dashboard.service.ports.http) }};
       }
     }

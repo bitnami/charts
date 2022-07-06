@@ -39,17 +39,17 @@ PostgreSQL can be accessed via port {{ include "postgresql.service.port" . }} on
 
 To get the password for "postgres" run:
 
-    export POSTGRES_ADMIN_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.postgres-password}" | base64 --decode)
+    export POSTGRES_ADMIN_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.postgres-password}" | base64 -d)
 
 To get the password for "{{ $customUser }}" run:
 
-    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.password}" | base64 --decode)
+    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.password}" | base64 -d)
 
 {{- else }}
 
 To get the password for "{{ default "postgres" $customUser }}" run:
 
-    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.{{ ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres")) }}}" | base64 --decode)
+    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.{{ ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres")) }}}" | base64 -d)
 
 {{- end }}
 
@@ -58,7 +58,7 @@ To connect to your database run the following command:
     kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ include "postgresql.image" . }} --env="PGPASSWORD=$POSTGRES_PASSWORD" \
       --command -- psql --host {{ include "postgresql.primary.fullname" . }} -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.database" . }} {{ include "postgresql.database" . }}{{- else }} postgres{{- end }} -p {{ include "postgresql.service.port" . }}
 
-    > NOTE: If you access the container using bash, make sure that you execute "/opt/bitnami/scripts/entrypoint.sh /bin/bash" in order to avoid the error "psql: local user with ID {{ .Values.primary.containerSecurityContext.runAsUser }}} does not exist"
+    > NOTE: If you access the container using bash, make sure that you execute "/opt/bitnami/scripts/postgresql/entrypoint.sh /bin/bash" in order to avoid the error "psql: local user with ID {{ .Values.primary.containerSecurityContext.runAsUser }}} does not exist"
 
 To connect to your database from outside the cluster execute the following commands:
 

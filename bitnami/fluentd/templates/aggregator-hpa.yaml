@@ -1,8 +1,9 @@
 {{- if .Values.aggregator.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta2
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "beta2" "true" "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "common.names.fullname" . }}-aggregator-hpa
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: aggregator
     {{- if .Values.commonLabels }}

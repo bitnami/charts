@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}-api
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -42,6 +42,9 @@ spec:
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "minio-api" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.apiIngress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.apiIngress.extraRules "context" $) | nindent 4 }}
     {{- end }}
   {{- if or (and .Values.apiIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.apiIngress.annotations )) .Values.apiIngress.selfSigned)) .Values.apiIngress.extraTls }}
   tls:

@@ -2,7 +2,6 @@ kind: ClusterRoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: %%COMPONENT_NAME%%
     {{- if .Values.commonLabels }}
@@ -18,4 +17,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "%%TEMPLATE_NAME%%.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace }}
+    namespace: {{ include "common.names.namespace" . | quote }}

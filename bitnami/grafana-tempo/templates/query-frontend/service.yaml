@@ -19,17 +19,22 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.queryFrontend.service.type }}
+  {{- if .Values.queryFrontend.service.sessionAffinity }}
   sessionAffinity: {{ .Values.queryFrontend.service.sessionAffinity }}
-  {{- if .Values.queryFrontend.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.queryFrontend.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if and .Values.queryFrontend.service.clusterIP (eq .Values.queryFrontend.service.type "ClusterIP") }}
   clusterIP: {{ .Values.queryFrontend.service.clusterIP }}
   {{- end }}
-  {{- if (or (eq .Values.queryFrontend.service.type "LoadBalancer") (eq .Values.queryFrontend.service.type "NodePort")) }}
+  {{- if or (eq .Values.queryFrontend.service.type "LoadBalancer") (eq .Values.queryFrontend.service.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.queryFrontend.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{ if eq .Values.queryFrontend.service.type "LoadBalancer" }}
+  {{- if and (eq .Values.queryFrontend.service.type "LoadBalancer") (not (empty .Values.queryFrontend.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.queryFrontend.service.loadBalancerSourceRanges }}
-  {{ end }}
-  {{- if (and (eq .Values.queryFrontend.service.type "LoadBalancer") (not (empty .Values.queryFrontend.service.loadBalancerIP))) }}
+  {{- end }}
+  {{- if and (eq .Values.queryFrontend.service.type "LoadBalancer") (not (empty .Values.queryFrontend.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.queryFrontend.service.loadBalancerIP }}
   {{- end }}
   publishNotReadyAddresses: true
@@ -47,6 +52,11 @@ spec:
       port: {{ .Values.queryFrontend.service.ports.grpc }}
       targetPort: grpc
       protocol: TCP
+      {{- if (and (or (eq .Values.queryFrontend.service.type "NodePort") (eq .Values.queryFrontend.service.type "LoadBalancer")) (not (empty .Values.queryFrontend.service.nodePorts.grpc))) }}
+      nodePort: {{ .Values.queryFrontend.service.nodePorts.grpc }}
+      {{- else if eq .Values.queryFrontend.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     {{- if .Values.queryFrontend.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

@@ -1,14 +1,14 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 10.9.1
+appVersion: 10.10.0
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: https://charts.bitnami.com/bitnami
     tags:
       - owncloud-database
-    version: 10.x.x
+    version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -25,10 +25,10 @@ keywords:
   - web
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: owncloud
 sources:
   - https://github.com/bitnami/bitnami-docker-owncloud
   - https://owncloud.org/
-version: 11.0.13
+version: 12.1.10

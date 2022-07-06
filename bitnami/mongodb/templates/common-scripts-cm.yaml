@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-common-scripts" (include "mongodb.fullname" .) }}
+  namespace: {{ include "mongodb.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: mongodb
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  startup-probe.sh: |
+    #!/bin/bash
+    {{- if .Values.tls.enabled }}
+    TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert'
+    {{- end }}
+    mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
+  readiness-probe.sh: |
+    #!/bin/bash
+    {{- if .Values.tls.enabled }}
+    TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert'
+    {{- end }}
+    # Run the proper check depending on the version
+    [[ $(mongod -version | grep "db version") =~ ([0-9]+\.[0-9]+\.[0-9]+) ]] && VERSION=${BASH_REMATCH[1]}
+    . /opt/bitnami/scripts/libversion.sh
+    VERSION_MAJOR="$(get_sematic_version "$VERSION" 1)"
+    VERSION_MINOR="$(get_sematic_version "$VERSION" 2)"
+    VERSION_PATCH="$(get_sematic_version "$VERSION" 3)"
+    if [[ ( "$VERSION_MAJOR" -ge 5 ) || ( "$VERSION_MAJOR" -ge 4 && "$VERSION_MINOR" -ge 4 && "$VERSION_PATCH" -ge 2 ) ]]; then
+        mongosh $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
+    else
+        mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.isMaster().ismaster || db.isMaster().secondary' | grep -q 'true'
+    fi
+  ping-mongodb.sh: |
+    #!/bin/bash
+    {{- if .Values.tls.enabled }}
+    TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert'
+    {{- end }}
+    mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
+  {{- if .Values.tls.enabled }}
+  generate-certs.sh: |
+    #!/bin/bash
+    additional_ips=()
+    additional_names=()
+    while getopts "i:n:s:" flag
+    do
+        case "${flag}" in
+            i) read -a additional_ips <<< ${OPTARG//,/ } ;;
+            n) read -a additional_names <<< ${OPTARG//,/ } ;;
+            s) svc=${OPTARG// /} ;;
+            \?) exit 1 ;;
+        esac
+    done
+
+    my_hostname=$(hostname)
+    cp /certs/CAs/* /certs/
+    cat >/certs/openssl.cnf <<EOL
+    [req]
+    req_extensions = v3_req
+    distinguished_name = req_distinguished_name
+    [req_distinguished_name]
+    [ v3_req ]
+    basicConstraints = CA:FALSE
+    keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+    subjectAltName = @alt_names
+    [alt_names]
+    DNS.1 = $svc
+    DNS.2 = $my_hostname
+    DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.cluster.local
+    DNS.4 = localhost
+    IP.0 = ${MY_POD_HOST_IP}
+    IP.1 = 127.0.0.1
+    EOL
+    index=2
+    for ip in "${additional_ips[@]}"; do
+        cat >>/certs/openssl.cnf <<EOL
+    IP.$index = $ip
+    EOL
+        ((index++))
+    done;
+    index=5
+    for name in "${additional_names[@]}"; do
+        cat >>/certs/openssl.cnf <<EOL
+    DNS.$index = $name
+    EOL
+        ((index++))
+    done;
+
+    export RANDFILE=/certs/.rnd && openssl genrsa -out /certs/mongo.key 2048
+    #Create the client/server cert
+    openssl req -new -key /certs/mongo.key -out /certs/mongo.csr -subj "/C=US/O=My Organisations/OU=IT/CN=$my_hostname" -config /certs/openssl.cnf
+    #Signing the server cert with the CA cert and key
+    openssl x509 -req -in /certs/mongo.csr -CA /certs/mongodb-ca-cert -CAkey /certs/mongodb-ca-key -CAcreateserial -out /certs/mongo.crt -days 3650 -extensions v3_req -extfile /certs/openssl.cnf
+    rm /certs/mongo.csr
+    #Concatenate to a pem file for use as the client PEM file which can be used for both member and client authentication.
+    cat /certs/mongo.crt /certs/mongo.key > /certs/mongodb.pem
+    cd /certs/
+    shopt -s extglob
+    rm -rf !(mongodb-ca-cert|mongodb.pem|CAs|openssl.cnf)
+    chmod 0600 mongodb-ca-cert mongodb.pem
+  {{- end }}

@@ -3,14 +3,17 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ template "kube-prometheus.prometheus.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
-  annotations:
-    {{- if .Values.prometheus.ingress.certManager }}
-    kubernetes.io/tls-acme: "true"
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- range $key, $value := .Values.prometheus.ingress.annotations }}
-    {{ $key }}: {{ $value | quote }}
+  annotations:
+    {{- if .Values.prometheus.ingress.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.prometheus.ingress.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
   {{- if and .Values.prometheus.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
@@ -40,9 +43,12 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.prometheus.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
-  {{- if or .Values.prometheus.ingress.tls .Values.prometheus.ingress.extraTls }}
+    {{- if .Values.prometheus.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.prometheus.ingress.extraTls (and .Values.prometheus.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.prometheus.ingress.annotations )) .Values.prometheus.ingress.selfSigned)) }}
   tls:
-    {{- if .Values.prometheus.ingress.tls }}
+    {{- if and .Values.prometheus.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.prometheus.ingress.annotations )) .Values.prometheus.ingress.selfSigned) }}
     - hosts:
         - {{ .Values.prometheus.ingress.hostname }}
       secretName: {{ printf "%s-tls" .Values.prometheus.ingress.hostname }}

@@ -44,6 +44,7 @@ spec:
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccount: {{ include "thanos.serviceAccount.name" (dict "component" "query" "context" $) }}
+      automountServiceAccountToken: {{ .Values.query.automountServiceAccountToken }}
       {{- if .Values.query.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.query.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -145,8 +146,8 @@ spec:
             - --grpc-client-tls-key=/certs/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.client.tls.existingSecret "key" "tls-key") }}
             - --grpc-client-tls-ca=/certs/client/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.client.tls.existingSecret "key" "ca-cert") }}
             {{- end }}
-            {{- if .Values.query.grpc.client.servername }}
-            - --grpc-client-server-name={{ .Values.query.grpc.client.servername }}
+            {{- if .Values.query.grpc.client.serverName }}
+            - --grpc-client-server-name={{ .Values.query.grpc.client.serverName }}
             {{- end }}
             {{- if .Values.query.extraFlags }}
             {{- .Values.query.extraFlags | toYaml | nindent 12 }}
@@ -194,7 +195,7 @@ spec:
             httpGet:
               path: /-/ready
               port: http
-          {{- else if .Values.query.customReadinessProbe }}
+          {{- else if .Values.query.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.query.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.query.lifecycleHooks }}

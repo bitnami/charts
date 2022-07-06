@@ -31,15 +31,18 @@ Set the http prefix if the externalURl doesn't have it
     secretName: {{ .Values.internalTLS.caBundleSecret }}
 {{- end -}}
 
+{{- define "harbor.coreOverridesJsonSecret" -}}
+{{- if .Values.core.configOverwriteJsonSecret -}}
+{{- print .Values.core.configOverwriteJsonSecret }}
+{{- else }}
+{{- printf "%s-config-override" (include "harbor.core" .) -}}
+{{- end -}}
+{{- end -}}
+
 {{- define "harbor.caBundleVolumeMount" -}}
 - name: ca-bundle-certs
   mountPath: /harbor_cust_cert/custom-ca.crt
   subPath: ca.crt
-{{- end -}}
-
-{{/* Harbor Adapter for Clair URL */}}
-{{- define "harbor.clairAdapter.url" -}}
-  {{- printf "%s://%s:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.clair" .) (ternary .Values.clair.adapter.service.ports.https .Values.clair.adapter.service.ports.http .Values.internalTLS.enabled | int ) -}}
 {{- end -}}
 
 {{/* port is included in this url as a workaround for issue https://github.com/aquasecurity/harbor-scanner-trivy/issues/108 */}}
@@ -84,27 +87,22 @@ Set the http prefix if the externalURl doesn't have it
 {{- printf "%s" (coalesce .Values.chartmuseum.tls.existingSecret (printf "%s-crt" (include "harbor.chartmuseum" .))) -}}
 {{- end -}}
 
-{{/* Chartmuseum TLS secret name */}}
-{{- define "harbor.clair.tls.secretName" -}}
-{{- printf "%s" (coalesce .Values.clair.tls.existingSecret (printf "%s-crt" (include "harbor.clair" .))) -}}
-{{- end -}}
-
-{{/* Chartmuseum TLS secret name */}}
+{{/* Jobservice TLS secret name */}}
 {{- define "harbor.jobservice.tls.secretName" -}}
 {{- printf "%s" (coalesce .Values.jobservice.tls.existingSecret (printf "%s-crt" (include "harbor.jobservice" .))) -}}
 {{- end -}}
 
-{{/* Chartmuseum TLS secret name */}}
+{{/* Portal TLS secret name */}}
 {{- define "harbor.portal.tls.secretName" -}}
 {{- printf "%s" (coalesce .Values.portal.tls.existingSecret (printf "%s-crt" (include "harbor.portal" .))) -}}
 {{- end -}}
 
-{{/* Chartmuseum TLS secret name */}}
+{{/* Registry TLS secret name */}}
 {{- define "harbor.registry.tls.secretName" -}}
 {{- printf "%s" (coalesce .Values.registry.tls.existingSecret (printf "%s-crt" (include "harbor.registry" .))) -}}
 {{- end -}}
 
-{{/* Chartmuseum TLS secret name */}}
+{{/* Trivy TLS secret name */}}
 {{- define "harbor.trivy.tls.secretName" -}}
 {{- printf "%s" (coalesce .Values.trivy.tls.existingSecret (printf "%s-crt" (include "harbor.trivy" .))) -}}
 {{- end -}}
@@ -133,10 +131,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- ternary "postgres" .Values.externalDatabase.user .Values.postgresql.enabled -}}
 {{- end -}}
 
-{{- define "harbor.database.clairUsername" -}}
-{{- ternary "postgres" (default .Values.externalDatabase.user .Values.externalDatabase.clairUsername) .Values.postgresql.enabled -}}
-{{- end -}}
-
 {{- define "harbor.database.notaryServerUsername" -}}
 {{- ternary "postgres" (default .Values.externalDatabase.user .Values.externalDatabase.notaryServerUsername) .Values.postgresql.enabled -}}
 {{- end -}}
@@ -161,20 +155,12 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 {{- end -}}
 
-{{- define "harbor.database.clairRawPassword" -}}
-{{- ternary (include "harbor.database.rawPassword" .) (default .Values.externalDatabase.password .Values.externalDatabase.clairPassword) .Values.postgresql.enabled -}}
-{{- end -}}
-
 {{- define "harbor.database.notaryServerRawPassword" -}}
 {{- ternary (include "harbor.database.rawPassword" .) (default .Values.externalDatabase.password .Values.externalDatabase.notaryServerPassword) .Values.postgresql.enabled -}}
 {{- end -}}
 
 {{- define "harbor.database.notarySignerRawPassword" -}}
 {{- ternary (include "harbor.database.rawPassword" .) (default .Values.externalDatabase.password .Values.externalDatabase.notarySignerPassword) .Values.postgresql.enabled -}}
-{{- end -}}
-
-{{- define "harbor.database.escapedClairRawPassword" -}}
-  {{- include "harbor.database.clairRawPassword" . | urlquery | replace "+" "%20" -}}
 {{- end -}}
 
 {{ define "harbor.database.escapedNotaryServerRawPassword" -}}
@@ -189,16 +175,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   {{- include "harbor.database.rawPassword" . | b64enc | quote -}}
 {{- end -}}
 
-{{- define "harbor.database.encryptedClairPassword" -}}
-  {{- include "harbor.database.clairRawPassword" . | b64enc | quote -}}
-{{- end -}}
-
 {{- define "harbor.database.coreDatabase" -}}
 {{- ternary "registry" .Values.externalDatabase.coreDatabase .Values.postgresql.enabled -}}
-{{- end -}}
-
-{{- define "harbor.database.clairDatabase" -}}
-{{- ternary "postgres" .Values.externalDatabase.clairDatabase .Values.postgresql.enabled -}}
 {{- end -}}
 
 {{- define "harbor.database.notaryServerDatabase" -}}
@@ -211,10 +189,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- define "harbor.database.sslmode" -}}
 {{- ternary "disable" .Values.externalDatabase.sslmode .Values.postgresql.enabled -}}
-{{- end -}}
-
-{{- define "harbor.database.clair" -}}
-postgres://{{ template "harbor.database.clairUsername" . }}:{{ template "harbor.database.escapedClairRawPassword" . }}@{{ template "harbor.database.host" . }}:{{ template "harbor.database.port" . }}/{{ template "harbor.database.clairDatabase" . }}?sslmode={{ template "harbor.database.sslmode" . }}
 {{- end -}}
 
 {{- define "harbor.database.notaryServer" -}}
@@ -257,16 +231,12 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- ternary "3" .Values.externalRedis.chartmuseumDatabaseIndex .Values.redis.enabled -}}
 {{- end -}}
 
-{{- define "harbor.redis.clairAdapterDatabaseIndex" -}}
-{{- ternary "4" .Values.externalRedis.clairAdapterDatabaseIndex .Values.redis.enabled -}}
-{{- end -}}
-
 {{- define "harbor.redis.trivyAdapterDatabaseIndex" -}}
 {{- ternary "5" .Values.externalRedis.trivyAdapterDatabaseIndex .Values.redis.enabled -}}
 {{- end -}}
 
 {{/*
-Return whether Redis&trade; uses password authentication or not
+Return whether Redis&reg; uses password authentication or not
 */}}
 {{- define "harbor.redis.auth.enabled" -}}
 {{- if or .Values.redis.auth.enabled (and (not .Values.redis.enabled) .Values.externalRedis.password) }}
@@ -295,7 +265,7 @@ Return whether Redis&trade; uses password authentication or not
     {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
       {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
     {{- else -}}
-      {{- template "harbor.redis.host" . -}}:{{ template "harbor.redis.port" . -}}/{{ template "harbor.redis.jobserviceDatabaseIndex" . -}}
+      {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" .) (include "harbor.redis.port" .) (include "harbor.redis.jobserviceDatabaseIndex" .) -}}
     {{- end -}}
   {{- else -}}
     {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
@@ -319,23 +289,6 @@ Return whether Redis&trade; uses password authentication or not
       {{- printf "redis+sentinel://redis:%s@%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
     {{- else -}}
       {{- printf "redis+sentinel://%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
-    {{- end -}}
-  {{- end -}}
-{{- end -}}
-
-{{/*the username redis is used for a placeholder as no username needed in redis*/}}
-{{- define "harbor.redisForClairAdapter" -}}
-  {{- if eq .Values.externalRedis.sentinel.enabled false -}}
-    {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
-      {{- printf "redis://redis:%s@%s:%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.clairAdapterDatabaseIndex" . ) -}}
-    {{- else -}}
-      {{- printf "redis://%s:%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.port" . ) (include "harbor.redis.clairAdapterDatabaseIndex" . ) -}}
-    {{- end -}}
-  {{- else -}}
-    {{- if (include "harbor.redis.escapedRawPassword" . ) -}}
-      {{- printf "redis+sentinel://redis:%s@%s/%s" (include "harbor.redis.escapedRawPassword" . ) (include "harbor.redis.host" . ) (include "harbor.redis.clairAdapterDatabaseIndex" . ) -}}
-    {{- else -}}
-      {{- printf "redis+sentinel://%s/%s" (include "harbor.redis.host" . ) (include "harbor.redis.clairAdapterDatabaseIndex" . ) -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
@@ -400,10 +353,6 @@ Return whether Redis&trade; uses password authentication or not
   {{- printf "%s-database" (include "common.names.fullname" .) -}}
 {{- end -}}
 
-{{- define "harbor.clair" -}}
-  {{- printf "%s-clair" (include "common.names.fullname" .) -}}
-{{- end -}}
-
 {{- define "harbor.trivy" -}}
   {{- printf "%s-trivy" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -420,6 +369,10 @@ Return whether Redis&trade; uses password authentication or not
   {{- printf "%s-nginx" (include "common.names.fullname" .) -}}
 {{- end -}}
 
+{{- define "harbor.exporter" -}}
+  {{- printf "%s-exporter" (include "common.names.fullname" .) -}}
+{{- end -}}
+
 {{- define "harbor.ingress" -}}
   {{- printf "%s-ingress" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -429,7 +382,7 @@ Return whether Redis&trade; uses password authentication or not
 {{- end -}}
 
 {{- define "harbor.noProxy" -}}
-  {{- printf "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" (include "harbor.core" .) (include "harbor.jobservice" .) (include "harbor.database" .) (include "harbor.chartmuseum" .) (include "harbor.clair" .) (include "harbor.notary-server" .) (include "harbor.notary-signer" .) (include "harbor.registry" .) (include "harbor.portal" .) (include "harbor.trivy" .) .Values.proxy.noProxy -}}
+  {{- printf "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" (include "harbor.core" .) (include "harbor.jobservice" .) (include "harbor.database" .) (include "harbor.chartmuseum" .) (include "harbor.notary-server" .) (include "harbor.notary-signer" .) (include "harbor.registry" .) (include "harbor.portal" .) (include "harbor.trivy" .) .Values.proxy.noProxy -}}
 {{- end -}}
 
 {{/*
@@ -437,6 +390,13 @@ Return the proper Harbor Core image name
 */}}
 {{- define "harbor.core.image" -}}
 {{- include "common.images.image" ( dict "imageRoot" .Values.core.image "global" .Values.global ) -}}
+{{- end -}}
+
+{{/*
+Return the proper Harbor Exporter image name
+*/}}
+{{- define "harbor.exporter.image" -}}
+{{- include "common.images.image" ( dict "imageRoot" .Values.exporter.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
@@ -496,20 +456,6 @@ Return the proper Harbor Registryctl image name
 {{- end -}}
 
 {{/*
-Return the proper Harbor Clair image name
-*/}}
-{{- define "harbor.clair.server.image" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.clair.server.image "global" .Values.global ) -}}
-{{- end -}}
-
-{{/*
-Return the proper Harbor Clair image name
-*/}}
-{{- define "harbor.clair.adapter.image" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.clair.adapter.image "global" .Values.global ) -}}
-{{- end -}}
-
-{{/*
 Return the proper Nginx image name
 */}}
 {{- define "harbor.nginx.image" -}}
@@ -527,7 +473,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "harbor.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.core.image .Values.portal.image .Values.jobservice.image .Values.clair.server.image .Values.clair.adapter.image .Values.chartmuseum.image .Values.trivy.image .Values.notary.server.image .Values.notary.signer.image .Values.registry.server.image .Values.registry.controller.image .Values.nginx.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.core.image .Values.exporter.image .Values.portal.image .Values.jobservice.image .Values.chartmuseum.image .Values.trivy.image .Values.notary.server.image .Values.notary.signer.image .Values.registry.server.image .Values.registry.controller.image .Values.nginx.image .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/* Check if there are rolling tags in the images */}}
@@ -537,8 +483,6 @@ Return the proper Docker Image Registry Secret Names
 {{- include "common.warnings.rollingTag" .Values.jobservice.image -}}
 {{- include "common.warnings.rollingTag" .Values.registry.server.image -}}
 {{- include "common.warnings.rollingTag" .Values.registry.controller.image -}}
-{{- include "common.warnings.rollingTag" .Values.clair.server.image -}}
-{{- include "common.warnings.rollingTag" .Values.clair.adapter.image -}}
 {{- include "common.warnings.rollingTag" .Values.chartmuseum.image -}}
 {{- include "common.warnings.rollingTag" .Values.trivy.image -}}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image -}}

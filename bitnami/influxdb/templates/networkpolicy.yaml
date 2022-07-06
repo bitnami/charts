@@ -3,6 +3,7 @@ kind: NetworkPolicy
 apiVersion: {{ template "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -28,10 +29,5 @@ spec:
         - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
-        {{- if eq .Values.architecture "high-availability" }}
-        - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
-              app.kubernetes.io/component: relay
-        {{- end }}
       {{- end }}
 {{- end }}

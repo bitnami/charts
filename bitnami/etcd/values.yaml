@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets [array] Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
@@ -56,6 +58,7 @@ diagnosticMode:
     - infinity
 
 ## @section etcd parameters
+##
 
 ## Bitnami etcd image version
 ## ref: https://hub.docker.com/r/bitnami/etcd/tags/
@@ -69,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.2-debian-10-r23
+  tag: 3.5.4-debian-11-r9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -240,6 +243,8 @@ command: []
 args: []
 
 ## @section etcd statefulset parameters
+##
+
 
 ## @param replicaCount Number of etcd replicas to deploy
 ##
@@ -300,6 +305,7 @@ resources:
   ## limits:
   ##    cpu: 500m
   ##    memory: 1Gi
+  ##
   limits: {}
   requests: {}
 ## Configure extra options for liveness probe
@@ -447,13 +453,26 @@ schedulerName: ""
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
 priorityClassName: ""
+## @param runtimeClassName Name of the runtime class to be used by pod(s)
+## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+##
+runtimeClassName: ""
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
 ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
 ## The value is evaluated as a template
 ##
 topologySpreadConstraints: []
-
+## persistentVolumeClaimRetentionPolicy
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+## @param persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of a StatefulSet
+## @param persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+## @param persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+persistentVolumeClaimRetentionPolicy:
+  enabled: false
+  whenScaled: Retain
+  whenDeleted: Retain
 ## @section Traffic exposure parameters
+##
 
 service:
   ## @param service.type Kubernetes Service type
@@ -524,6 +543,7 @@ service:
   sessionAffinityConfig: {}
 
 ## @section Persistence parameters
+##
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -557,6 +577,7 @@ persistence:
   selector: {}
 
 ## @section Volume Permissions parameters
+##
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -574,7 +595,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r349
+    tag: 11-debian-11-r9
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -598,6 +619,7 @@ volumePermissions:
     ## limits:
     ##    cpu: 500m
     ##    memory: 1Gi
+    ##
     limits: {}
     requests: {}
 
@@ -655,6 +677,7 @@ networkPolicy:
   ingressNSPodMatchLabels: {}
 
 ## @section Metrics parameters
+##
 
 metrics:
   ## @param metrics.enabled Expose etcd metrics
@@ -700,8 +723,35 @@ metrics:
     ## @param metrics.podMonitor.relabelings [array] Prometheus relabeling rules
     ##
     relabelings: []
+  
+  ## Prometheus Operator PrometheusRule configuration
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled Create a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace Namespace for the PrometheusRule Resource (defaults to the Release Namespace)
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so PrometheusRule will be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.prometheusRule.rules Prometheus Rule definitions
+      # - alert: ETCD has no leader
+      #   annotations:
+      #     summary: "ETCD has no leader"
+      #     description: "pod {{`{{`}} $labels.pod {{`}}`}} state error, can't connect leader"
+      #   for: 1m
+      #   expr: etcd_server_has_leader == 0
+      #   labels:
+      #     severity: critical
+      #     group: PaaS
+    ##
+    rules: []
+
 
 ## @section Snapshotting parameters
+##
 
 ## Start a new etcd cluster recovering the data from an existing snapshot before bootstrapping
 ##
@@ -754,6 +804,7 @@ disasterRecovery:
       ## limits:
       ##    cpu: 500m
       ##    memory: 1Gi
+      ##
       limits: {}
       requests: {}
 
@@ -780,6 +831,7 @@ disasterRecovery:
     storageClassName: nfs
 
 ## @section Service account parameters
+##
 
 serviceAccount:
   ## @param serviceAccount.create Enable/disable service account creation
@@ -800,6 +852,7 @@ serviceAccount:
   labels: {}
 
 ## @section Other parameters
+##
 
 ## etcd Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -807,10 +860,10 @@ serviceAccount:
 pdb:
   ## @param pdb.create Enable/disable a Pod Disruption Budget creation
   ##
-  create: false
+  create: true
   ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
   ##
-  minAvailable: 1
+  minAvailable: 51%
   ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   maxUnavailable: ""

@@ -3,8 +3,14 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "kube-prometheus.operator.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.operator.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
   prometheus-config-reloader: {{ template "kube-prometheus.prometheusConfigReloader.image" . }}
 {{- end }}
