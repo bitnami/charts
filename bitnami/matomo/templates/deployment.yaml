@@ -197,11 +197,11 @@ spec:
             - name: MATOMO_SMTP_USER
               value: {{ .Values.smtpUser | quote }}
             {{- end }}
-            {{- if .Values.smtpPassword }}
+            {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
             - name: MATOMO_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "matomo.secretName" . }}
+                  name: {{ include "matomo.smtpSecretName" . }}
                   key: smtp-password
             {{- end }}
             {{- if .Values.smtpProtocol }}

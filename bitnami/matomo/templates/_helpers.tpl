@@ -56,6 +56,17 @@ Matomo credential secret name
 {{- end -}}
 
 {{/*
+Return the SMTP Secret Name
+*/}}
+{{- define "matomo.smtpSecretName" -}}
+{{- if .Values.smtpExistingSecret }}
+    {{- printf "%s" .Values.smtpExistingSecret -}}
+{{- else -}}
+    {{- printf "%s" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the MariaDB Hostname
 */}}
 {{- define "matomo.databaseHost" -}}
