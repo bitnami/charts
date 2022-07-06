@@ -450,7 +450,7 @@ master:
   masterOnly: true
   ## @param master.replicaCount Number of master-elegible replicas to deploy
   ##
-  replicaCount: 1
+  replicaCount: 2
   ## @param master.nameOverride String to partially override elasticsearch.master.fullname
   ##
   nameOverride: ""
@@ -739,7 +739,7 @@ master:
 data:
   ## @param data.replicaCount Number of data-only replicas to deploy
   ##
-  replicaCount: 1
+  replicaCount: 2
   ## @param data.nameOverride String to partially override elasticsearch.data.fullname
   ##
   nameOverride: ""
@@ -1028,7 +1028,7 @@ data:
 coordinating:
   ## @param coordinating.replicaCount Number of coordinating-only replicas to deploy
   ##
-  replicaCount: 1
+  replicaCount: 2
   ## @param coordinating.nameOverride String to partially override elasticsearch.coordinating.fullname
   ##
   nameOverride: ""
@@ -1278,7 +1278,7 @@ coordinating:
 ingest:
   ## @param ingest.replicaCount Number of ingest-only replicas to deploy
   ##
-  replicaCount: 1
+  replicaCount: 2
   ## @param ingest.nameOverride String to partially override elasticsearch.ingest.fullname
   ##
   nameOverride: ""

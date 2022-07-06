@@ -810,7 +810,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 19.0.0
 
-The new version of this chart is not longer sopported elasticsearch-curator, this repository has been deprecated.
+The new version of this chart no longer supports elasticsearch-curator, this repository has been deprecated.
 
 ### To 18.0.0
 
@@ -842,6 +842,7 @@ The following values have been modified:
 - `{master/data/ingest/coordinating}.securityContext` has been separated in two different values: `podSecurityContext` and `containerSecurityContext`.
 - `{master/data/ingest/coordinating}.updateStrategy` is now interpreted as an object. `rollingUpdatePartition` has been removed and has to be configured inside the updateStrategy object when needed.
 - Default values for `kibana.elasticsearch.hosts` and `kibana.elasticsearch.port` have been modified to use the new helpers.
+- `{master/data/ingest/coordinating/curator/metrics}.name` has been renamed as `{master/data/ingest/coordinating/curator}.nameOverride`.
 
 ### To 17.0.0
 
