@@ -295,6 +295,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `aggregator.extraVolumes`                                      | Extra volumes                                                                                                                                                      | `[]`                                                       |
 | `aggregator.extraVolumeMounts`                                 | Mount extra volume(s)                                                                                                                                              | `[]`                                                       |
 | `aggregator.extraVolumeClaimTemplates`                         | Optionally specify extra list of additional volume claim templates for the Fluentd Aggregator pods in StatefulSet                                                  | `[]`                                                       |
+| `initScripts`                              | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                           |
+| `initScriptsCM`                            | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`                           |
+| `initScriptsSecret`                        | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                           |
 | `metrics.enabled`                                              | Enable the export of Prometheus metrics                                                                                                                            | `false`                                                    |
 | `metrics.service.type`                                         | Prometheus metrics service type                                                                                                                                    | `ClusterIP`                                                |
 | `metrics.service.port`                                         | Prometheus metrics service port                                                                                                                                    | `24231`                                                    |
@@ -432,6 +435,15 @@ aggregator.extraEnv[0].name=ELASTICSEARCH_HOST
 aggregator.extraEnv[0].value=your-ip-here
 aggregator.extraEnv[1].name=ELASTICSEARCH_PORT
 aggregator.extraEnv[1].value=your-port-here
+```
+
+### Using custom init scripts
+
+For advanced operations, the Bitnami Fluentd charts allows using custom init scripts that will be mounted inside `/docker-entrypoint.init-db`. You can include the file directly in your `values.yaml`, depending on where you are going to initialize your scripts with `aggregator.initScripts` (or `forwarder.initScripts`), or use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. In this case you use the `aggregator.initScriptsCM` and `aggregator.initScriptsSecret` values (the same for `forwarder`).
+
+```console
+initScriptsCM=special-scripts
+initScriptsSecret=special-scripts-sensitive
 ```
 
 ### Forwarder Security Context & Policy

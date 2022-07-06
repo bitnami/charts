@@ -185,3 +185,10 @@ Return true if a TLS secret object should be created
     {{- true -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Get the initialization scripts volume name.
+*/}}
+{{- define "fluentd.initScripts" -}}
+{{- printf "%s-init-scripts" (include "common.names.fullname" .) -}}
+{{- end -}}
