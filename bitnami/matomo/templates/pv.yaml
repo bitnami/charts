@@ -12,8 +12,12 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not (empty .Values.persistence.accessModes) }}
   accessModes:
-    - {{ .Values.persistence.accessMode | quote }}
+  {{- range .Values.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  {{- end }}
   capacity:
     storage: {{ .Values.persistence.size | quote }}
   hostPath:

@@ -123,9 +123,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.storageClass`              | PVC Storage Class for Matomo volume                                                                                   | `""`                   |
 | `persistence.accessModes`               | PVC Access Mode for Matomo volume                                                                                     | `["ReadWriteOnce"]`    |
 | `persistence.size`                      | PVC Storage Request for Matomo volume                                                                                 | `8Gi`                  |
+| `persistence.dataSource`                | Custom PVC data source                                                                                                | `{}`                   |
 | `persistence.existingClaim`             | A manually managed Persistent Volume Claim                                                                            | `""`                   |
 | `persistence.hostPath`                  | If defined, the matomo-data volume will mount to the specified hostPath.                                              | `""`                   |
 | `persistence.annotations`               | Persistent Volume Claim annotations                                                                                   | `{}`                   |
+| `persistence.selector`                  | Selector to match an existing Persistent Volume for Matomo data PVC                                                   | `{}`                   |
 | `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                   |
 | `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                 |
 | `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                   |
