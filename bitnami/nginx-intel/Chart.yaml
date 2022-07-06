@@ -24,4 +24,4 @@ name: nginx-intel
 sources:
   - https://github.com/bitnami/bitnami-docker-nginx-intel
   - https://github.com/intel/asynch_mode_nginx
-version: 2.0.11
+version: 2.0.12

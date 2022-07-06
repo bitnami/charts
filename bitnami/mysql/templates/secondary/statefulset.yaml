@@ -217,6 +217,10 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/mysql
+            {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d
+            {{- end }}
             {{- if or .Values.secondary.configuration .Values.secondary.existingConfigmap }}
             - name: config
               mountPath: /opt/bitnami/mysql/conf/my.cnf
@@ -288,6 +292,11 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.secondary.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
+        - name: custom-init-scripts
+          configMap:
+            name: {{ include "mysql.initdbScriptsCM" . }}
+        {{- end }}
         {{- if or .Values.secondary.configuration .Values.secondary.existingConfigmap }}
         - name: config
           configMap:
