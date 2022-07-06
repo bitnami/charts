@@ -7,7 +7,7 @@ Magento is a powerful open source e-commerce platform. With easy customizations 
 [Overview of Magento](http://www.magento.com)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -62,6 +62,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                             | Value          |
@@ -76,6 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
+
 
 ### Magento parameters
 
@@ -161,6 +163,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                        | Pod annotations                                                                                                      | `{}`                 |
 | `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                           | `{}`                 |
 
+
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                         | Value   |
@@ -180,6 +183,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | magento Custom network policy ingress rule                                                                                          | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                      | `false` |
 | `networkPolicy.egressRules.customRules`                       | magento Custom network policy rule                                                                                                  | `{}`    |
+
 
 ### Database parameters
 
@@ -207,6 +211,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_magento`       |
 | `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                           | `""`                    |
 
+
 ### Elasticsearch parameters
 
 | Name                                      | Description                                                                | Value                   |
@@ -223,6 +228,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalElasticsearch.host`              | Host of the external elasticsearch server                                  | `""`                    |
 | `externalElasticsearch.port`              | Port of the external elasticsearch server                                  | `""`                    |
 
+
 ### Persistence parameters
 
 | Name                        | Description                                                                                             | Value               |
@@ -238,6 +244,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                  | `{}`                |
 | `persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
 
+
 ### Volume Permissions parameters
 
 | Name                                   | Description                                                                                                                                               | Value                   |
@@ -250,6 +257,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the init container                                                                                                               | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resourcesc for the init container                                                                                                           | `{}`                    |
+
 
 ### Traffic Exposure Parameters
 
@@ -283,6 +291,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 
+
 ### Metrics parameters
 
 | Name                          | Description                                                | Value                     |
@@ -298,6 +307,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.type`        | Prometheus metrics service type                            | `ClusterIP`               |
 | `metrics.service.port`        | Service Metrics port                                       | `9117`                    |
 | `metrics.service.annotations` | Annotations for the Prometheus exporter service            | `{}`                      |
+
 
 ### Certificate injection parameters
 
@@ -321,6 +331,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 
+
 ### Other Parameters
 
 | Name                       | Description                          | Value   |
@@ -330,6 +341,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.maxReplicas`  | Maximum number of replicas           | `11`    |
 | `autoscaling.targetCPU`    | Target CPU utilization percentage    | `""`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage | `""`    |
+
 
 The above parameters map to the env variables defined in [bitnami/magento](https://github.com/bitnami/bitnami-docker-magento). For more information please refer to the [bitnami/magento](https://github.com/bitnami/bitnami-docker-magento) image documentation.
 
@@ -386,10 +398,10 @@ If you configure the `image` value to one in a private registry, you will need t
 1. Manually create image pull secret(s) in the namespace. See [this YAML example reference](https://kubernetes.io/docs/concepts/containers/images/#creating-a-secret-with-a-docker-config). Consult your image registry's documentation about getting the appropriate secret.
 1. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
 
-   ```yaml
-   imagePullSecrets:
-     - name: SECRET_NAME
-   ```
+    ```yaml
+    imagePullSecrets:
+      - name: SECRET_NAME
+    ```
 
 1. Install the chart
 
@@ -419,23 +431,23 @@ In the first two cases, it's needed a certificate and a key. We would expect the
 
 - certificate files should look like (and there can be more than one certificate if there is a certificate chain)
 
-  ```console
-  -----BEGIN CERTIFICATE-----
-  MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
-  ...
-  jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
-  -----END CERTIFICATE-----
-  ```
+    ```console
+    -----BEGIN CERTIFICATE-----
+    MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+    ...
+    jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+    -----END CERTIFICATE-----
+    ```
 
 - keys should look like:
 
-  ```console
-  -----BEGIN RSA PRIVATE KEY-----
-  MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
-  ...
-  wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
-  -----END RSA PRIVATE KEY-----
-  ```
+    ```console
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+    ...
+    wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+    -----END RSA PRIVATE KEY-----
+    ```
 
 If you are going to use Helm to manage the certificates, please copy these values into the `certificate` and `key` values for a given `ingress.secrets` entry.
 
@@ -445,7 +457,7 @@ If you are going to manage TLS secrets outside of Helm, please know that you can
 
 The [Bitnami Magento](https://github.com/bitnami/bitnami-docker-magento) image stores the Magento data and configurations at the `/bitnami/magento` and `/bitnami/apache` paths of the container.
 
-Persistent Volume Claims are used to keep the data across deployments. There is a [known issue](https://github.com/kubernetes/kubernetes/issues/39178) in Kubernetes Clusters with EBS in different availability zones. Ensure your cluster is configured properly to create Volumes in the same availability zone where the nodes are running. Kuberentes 1.12 solved this issue with the [Volume Binding Mode](https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode).
+ Persistent Volume Claims are used to keep the data across deployments. There is a [known issue](https://github.com/kubernetes/kubernetes/issues/39178) in Kubernetes Clusters with EBS in different availability zones. Ensure your cluster is configured properly to create Volumes in the same availability zone where the nodes are running. Kuberentes 1.12 solved this issue with the [Volume Binding Mode](https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode).
 
 ### Adding extra environment variables
 
@@ -477,8 +489,8 @@ If these sidecars export extra ports, you can add extra port definitions using t
 
 ```yaml
 service:
----
-extraPorts:
+...
+  extraPorts:
   - name: extraPort
     port: 11311
     targetPort: 11311
@@ -536,9 +548,9 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. Create the PersistentVolumeClaim
 1. Install the chart
 
-   ```bash
-   $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/magento
-   ```
+    ```bash
+    $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/magento
+    ```
 
 ### Host path
 
@@ -552,12 +564,11 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 1. The specified `hostPath` directory must already exist (create one if it does not).
 1. Install the chart
 
-   ```bash
-   $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/magento
-   ```
+    ```bash
+    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT bitnami/magento
+    ```
 
-   This will mount the `magento-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
-
+    This will mount the `magento-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
 1. Because the container cannot control the host machine's directory permissions, you must set the Magento file directory permissions yourself and disable or clear Magento cache.
 
 ## CA Certificates
@@ -567,12 +578,11 @@ Custom CA certificates not included in the base docker image can be added by mea
 ```yaml
 certificates:
   customCAs:
-    - secret: my-ca-1
-    - secret: my-ca-2
+  - secret: my-ca-1
+  - secret: my-ca-2
 ```
 
 > Tip! You can create a secret containing your CA certificates using the following command:
-
 ```bash
 kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
 ```
@@ -700,9 +710,9 @@ Please read the update notes carefully.
 **What changes were introduced in this major version?**
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
-- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
-- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
 **Considerations when upgrading to this version**
 
@@ -816,4 +826,4 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License
+limitations under the License.
