@@ -89,7 +89,6 @@ it('allows customizing the home page', () => {
   cy.get('#menu-magento-backend-content').click();
   cy.get('.item-cms-page').click();
   cy.get('.page-main-actions');
-  cy.get('.admin__form-loading-mask').should('not.exist');
   cy.get('[data-role="grid-wrapper"]').within(() => {
     cy.contains('td', 'home').siblings().last().click();
     cy.get('[class="action-menu _active"]').within(() => {
