@@ -39,12 +39,10 @@ Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
     cy.visit('/admin');
-    cy.get('.admin__legend');
     cy.get('#username').type(username);
     cy.get('#login').type(password);
     cy.get('.action-login').click();
     cy.get('.page-title').should('have.text', 'Dashboard');
-    cy.reload();
   }
 );
 

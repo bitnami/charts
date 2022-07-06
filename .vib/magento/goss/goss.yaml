@@ -24,7 +24,7 @@ file:
     linked-to: /bitnami/magento
     exists: true
   /opt/bitnami/magento/package.json.sample:
-    filetype: symlink
+    filetype: file
     exists: true
     contains: 
       - "Magento Commerce Inc."
