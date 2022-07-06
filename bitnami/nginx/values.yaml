@@ -226,6 +226,13 @@ containerSecurityContext:
 containerPorts:
   http: 8080
   https: ""
+## @param extraContainerPorts Array of additional container ports for the Nginx container
+## e.g:
+## extraContainerPorts:
+##   - name: grpc
+##     containerPort: 4317
+##
+extraContainerPorts: []
 ## NGINX containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
