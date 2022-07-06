@@ -118,7 +118,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `smtpProtocol`                          | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `""`                   |
 | `smtpExistingSecret`                    | The name of an existing secret with SMTP credentials                                                                  | `""`                   |
 | `containerPorts`                        | Container ports                                                                                                       | `{}`                   |
-| `sessionAffinity`                       | Control where client requests go, to the same pod or round-robin. Values: ClientIP or None                            | `None`                 |
 | `persistence.enabled`                   | Enable persistence using PVC                                                                                          | `true`                 |
 | `persistence.storageClass`              | PVC Storage Class for Matomo volume                                                                                   | `""`                   |
 | `persistence.accessModes`               | PVC Access Mode for Matomo volume                                                                                     | `["ReadWriteOnce"]`    |
