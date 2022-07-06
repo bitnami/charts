@@ -68,7 +68,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/odoo
-  tag: 15.0.20220610-debian-11-r6
+  tag: 15.0.20220610-debian-11-r8
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -351,6 +351,13 @@ extraVolumes: []
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Odoo container(s)
 ##
 extraVolumeMounts: []
+## @param extraContainerPorts Optionally specify extra list of additional ports for Odoo container(s)
+## e.g:
+## extraContainerPorts:
+##   - name: longpolling
+##     containerPort: 8072
+##
+extraContainerPorts: []
 ## @param sidecars Add additional sidecar containers to the Odoo pod
 ## e.g:
 ## sidecars:
