@@ -52,7 +52,7 @@
               "path": "/.vib/airflow/goss"
             },
             "remote": {
-              "workload": "deploy-fluentd"
+              "workload": "sts-fluentd"
             }
           }
         }
