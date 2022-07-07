@@ -44,6 +44,17 @@
             "endpoint": "lb-fluentd-forwarder-http",
             "app_protocol": "HTTP"
           }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/airflow/goss"
+            },
+            "remote": {
+              "workload": "deploy-fluentd"
+            }
+          }
         }
       ]
     }
