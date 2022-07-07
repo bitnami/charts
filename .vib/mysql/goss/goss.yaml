@@ -1,0 +1,34 @@
+command:
+  mysql-env:
+    exec: env
+    exit-status: 0
+    stdout:
+      - "MYSQL_DATABASE=important_db"
+    stderr: [ ]
+    timeout: 40000  
+  mysql-create:
+    exec: mysql -h localhost -u root -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" -e 'DROP TABLE IF EXISTS TEST; create table TEST( test_id int auto_increment, test_value int, primary key(test_id)); INSERT INTO TEST (TEST_VALUE) VALUES (1993);SELECT * FROM TEST'
+    exit-status: 0
+    stdout:
+      - "test_id"
+      - "test_value"
+      - "1993"
+    stderr: [ ]
+    timeout: 40000    
+  user-id-test:
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+    exit-status: 0
+    stdout: []
+    stderr: []   
+file:
+  {{ printf "/bitnami/mysql/data/%s" .Env.MYSQL_DATABASE }}:
+    mode: "2750"
+    filetype: directory
+    exists: true
+  /opt/bitnami/mysql/conf/my.cnf:
+    mode: "0644"
+    filetype: file
+    contains: 
+    - "datadir=/bitnami/mysql/data"
+    - "socket=/opt/bitnami/mysql/tmp/mysql.sock"
+    exists: true

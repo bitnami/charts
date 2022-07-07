@@ -133,9 +133,8 @@ spec:
             - name: BITNAMI_DEBUG
               value: {{ .Values.image.debug | quote }}
             {{- end }}
-            {{- range $key, $value := .Values.extraEnvVars }}
-            - name: {{ $key }}
-              value: "{{ $value }}"
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:

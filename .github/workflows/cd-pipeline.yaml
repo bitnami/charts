@@ -4,41 +4,42 @@ on: # rebuild any PRs and main branch changes
     branches:
       - master
     paths:
-      - 'bitnami/airflow/Chart.yaml'
-      - 'bitnami/consul/Chart.yaml'
-      - 'bitnami/discourse/Chart.yaml'
-      - 'bitnami/dokuwiki/Chart.yaml'
-      - 'bitnami/external-dns/Chart.yaml'
-      - 'bitnami/ghost/Chart.yaml'
-      - 'bitnami/grafana-loki/Chart.yaml'
-      - 'bitnami/grafana/Chart.yaml'
-      - 'bitnami/haproxy-intel/Chart.yaml'
-      - 'bitnami/harbor/Chart.yaml'
-      - 'bitnami/jenkins/Chart.yaml'
-      - 'bitnami/kafka/Chart.yaml'
-      - 'bitnami/keycloak/Chart.yaml'
-      - 'bitnami/kibana/Chart.yaml'
-      - 'bitnami/mariadb/Chart.yaml'
-      - 'bitnami/mediawiki/Chart.yaml'
-      - 'bitnami/minio/Chart.yaml'
-      - 'bitnami/mongodb/Chart.yaml'
-      - 'bitnami/mysql/Chart.yaml'
-      - 'bitnami/nginx/Chart.yaml'
-      - 'bitnami/opencart/Chart.yaml'
-      - 'bitnami/owncloud/Chart.yaml'
-      - 'bitnami/phpmyadmin/Chart.yaml'
-      - 'bitnami/pinniped/Chart.yaml'
-      - 'bitnami/postgresql/Chart.yaml'
-      - 'bitnami/prestashop/Chart.yaml'
-      - 'bitnami/rabbitmq/Chart.yaml'
-      - 'bitnami/redis-cluster/Chart.yaml'
-      - 'bitnami/redis/Chart.yaml'
-      - 'bitnami/redmine/Chart.yaml'
-      - 'bitnami/sealed-secrets/Chart.yaml'
-      - 'bitnami/solr/Chart.yaml'
-      - 'bitnami/spring-cloud-dataflow/Chart.yaml'
-      - 'bitnami/suitecrm/Chart.yaml'
-      - 'bitnami/wordpress/Chart.yaml'
+      - 'bitnami/airflow/**'
+      - 'bitnami/consul/**'
+      - 'bitnami/discourse/**'
+      - 'bitnami/dokuwiki/**'
+      - 'bitnami/external-dns/**'
+      - 'bitnami/ghost/**'
+      - 'bitnami/grafana-loki/**'
+      - 'bitnami/grafana/**'
+      - 'bitnami/haproxy-intel/**'
+      - 'bitnami/harbor/**'
+      - 'bitnami/jenkins/**'
+      - 'bitnami/kafka/**'
+      - 'bitnami/keycloak/**'
+      - 'bitnami/kibana/**'
+      - 'bitnami/mariadb/**'
+      - 'bitnami/mediawiki/**'
+      - 'bitnami/minio/**'
+      - 'bitnami/mongodb/**'
+      - 'bitnami/mysql/**'
+      - 'bitnami/nginx/**'
+      - 'bitnami/opencart/**'
+      - 'bitnami/owncloud/**'
+      - 'bitnami/phpmyadmin/**'
+      - 'bitnami/pinniped/**'
+      - 'bitnami/postgresql/**'
+      - 'bitnami/prestashop/**'
+      - 'bitnami/rabbitmq/**'
+      - 'bitnami/redis-cluster/**'
+      - 'bitnami/redis/**'
+      - 'bitnami/redmine/**'
+      - 'bitnami/sealed-secrets/**'
+      - 'bitnami/solr/**'
+      - 'bitnami/spring-cloud-dataflow/**'
+      - 'bitnami/suitecrm/**'
+      - 'bitnami/wordpress/**'
+      - '!**.md'
 env:
   CSP_API_URL: https://console.cloud.vmware.com
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
@@ -143,3 +144,46 @@ jobs:
           git config user.name "Bitnami Containers"
           git config user.email "bitnami-bot@vmware.com"
           git add bitnami/index.yaml && git commit -m "${chart}-${chart_version}: Update index.yaml" -s && git push
+<<<<<<< HEAD
+=======
+
+  # If the CD Pipeline does not succeed we should notify the interested agents
+  slack-notif:
+    runs-on: ubuntu-latest
+    needs: vib-publish
+    if: always()
+    name: Notify unsuccessful CD run
+    steps:
+      - name: Notify in Slack channel
+        if: ${{ needs.vib-publish.result != 'success' }}
+        uses: slackapi/slack-github-action@v1.19.0
+        with:
+          channel-id: ${{ secrets.CD_SLACK_CHANNEL_ID }}
+          payload: |
+            {
+              "attachments": [
+                {
+                  "color": "#CC0000",
+                  "fallback": "Unsuccessful bitnami/charts CD pipeline",
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Unsuccessful `bitnami/charts` CD pipeline*"
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "The CD pipeline for <${{ github.event.head_commit.url }}|bitnami/charts@${{ github.event.head_commit.id }}> did not succeed. Check the related <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|action run> for more information."
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.CD_SLACK_BOT_TOKEN }}
+>>>>>>> master
