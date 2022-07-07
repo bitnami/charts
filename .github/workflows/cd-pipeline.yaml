@@ -20,6 +20,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/keycloak/**'
       - 'bitnami/kibana/**'
       - 'bitnami/mariadb/**'
+      - 'bitnami/matomo/**'
       - 'bitnami/mediawiki/**'
       - 'bitnami/minio/**'
       - 'bitnami/mongodb/**'
