@@ -8,6 +8,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/consul/**'
       - 'bitnami/discourse/**'
       - 'bitnami/dokuwiki/**'
+      - 'bitnami/elasticsearch'
       - 'bitnami/external-dns/**'
       - 'bitnami/ghost/**'
       - 'bitnami/grafana-loki/**'
