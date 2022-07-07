@@ -1,9 +1,15 @@
 
 file:
-  /opt/bitnami/fluentd/fluent.conf:
+  {{ printf "/opt/bitnami/fluentd/conf/%s" .Env.FLUENTD_CONF }}:
+    mode: "0777"
+    filetype: symlink
+    contains:
+    - fluentd-inputs.conf
+    exists: true
+  /opt/bitnami/fluentd/Gemfile:
     mode: "0644"
     filetype: file
-    exists: true
+    exists: true  
 command:
   user-id-test:
     exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
@@ -14,11 +20,10 @@ command:
     exec: fluentd --version | grep --quiet "$APP_VERSION"
     exit-status: 0
     stdout: []
-    stderr: []
+    stderr: []  
   fluentd-process:
     exec: ps aux | grep fluentd
     exit-status: 0
     stdout: 
-      - /bitnami/fluentd/plugins/
-      - /bitnami/fluentd/bin/fluentd/
+      - {{ printf "/bitnami.*%s/" .Env.BITNAMI_APP_NAME }}
     stderr: []  
