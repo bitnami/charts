@@ -49,7 +49,7 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/airflow/goss"
+              "path": "/.vib/fluentd/goss"
             },
             "remote": {
               "workload": "sts-fluentd"
