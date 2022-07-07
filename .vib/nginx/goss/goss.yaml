@@ -32,7 +32,3 @@ command:
     stdout: []
     stderr: 
       - "signal process started"
-  nginx-curl:
-    exec: diff <(curl --silent localhost:8080) /opt/bitnami/nginx/html/index.html
-    exit-status: 0
-    stderr: []
