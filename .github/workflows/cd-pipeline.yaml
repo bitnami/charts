@@ -144,8 +144,6 @@ jobs:
           git config user.name "Bitnami Containers"
           git config user.email "bitnami-bot@vmware.com"
           git add bitnami/index.yaml && git commit -m "${chart}-${chart_version}: Update index.yaml" -s && git push
-<<<<<<< HEAD
-=======
 
   # If the CD Pipeline does not succeed we should notify the interested agents
   slack-notif:
@@ -186,4 +184,3 @@ jobs:
             }
         env:
           SLACK_BOT_TOKEN: ${{ secrets.CD_SLACK_BOT_TOKEN }}
->>>>>>> master
