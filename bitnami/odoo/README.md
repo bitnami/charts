@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the the statefulset                                  | `["infinity"]`               |
 | `image.registry`         | Odoo image registry                                                                     | `docker.io`                  |
 | `image.repository`       | Odoo image repository                                                                   | `bitnami/odoo`               |
-| `image.tag`              | Odoo image tag (immutable tags are recommended)                                         | `15.0.20220610-debian-11-r0` |
+| `image.tag`              | Odoo image tag (immutable tags are recommended)                                         | `15.0.20220610-debian-11-r8` |
 | `image.pullPolicy`       | Odoo image pull policy                                                                  | `IfNotPresent`               |
 | `image.pullSecrets`      | Odoo image pull secrets                                                                 | `[]`                         |
 | `image.debug`            | Enable image debug mode                                                                 | `false`                      |
@@ -168,6 +168,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `updateStrategy.rollingUpdate`       | Odoo deployment rolling update configuration parameters                                                                  | `{}`            |
 | `extraVolumes`                       | Optionally specify extra list of additional volumes for Odoo pods                                                        | `[]`            |
 | `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Odoo container(s)                                           | `[]`            |
+| `extraContainerPorts`                | Optionally specify extra list of additional ports for Odoo container(s)                                                  | `[]`            |
 | `sidecars`                           | Add additional sidecar containers to the Odoo pod                                                                        | `[]`            |
 | `initContainers`                     | Add additional init containers to the Odoo pods                                                                          | `[]`            |
 
