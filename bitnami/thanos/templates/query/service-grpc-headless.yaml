@@ -20,7 +20,7 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - port: {{ if .Values.query.service.grpc }}{{ coalesce .Values.query.service.ports.grpc .Values.query.service.grpc.port }}{{ else }}{{ .Values.query.service.ports.grpc }}{{ end }}
+    - port: {{ .Values.query.serviceGrpc.ports.grpc }}
       targetPort: grpc
       protocol: TCP
       name: grpc
