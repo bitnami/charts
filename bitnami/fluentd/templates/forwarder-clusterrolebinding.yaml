@@ -2,7 +2,7 @@
 kind: ClusterRoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
-  name: {{ printf "common.names.fullname.namespace" . }}
+  name: {{ template "common.names.fullname.namespace" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -14,9 +14,9 @@ metadata:
 roleRef:
   kind: ClusterRole
   apiGroup: rbac.authorization.k8s.io
-  name: {{ printf "common.names.fullname.namespace" . }}
+  name: {{ template "common.names.fullname.namespace" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ printf "fluentd.forwarder.serviceAccountName" . }}
+    name: {{ include "fluentd.forwarder.serviceAccountName" . }}
     namespace: {{ .Release.Namespace | quote }}
 {{- end }}
