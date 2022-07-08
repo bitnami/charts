@@ -9,6 +9,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/discourse/**'
       - 'bitnami/dokuwiki/**'
       - 'bitnami/external-dns/**'
+      - 'bitnami/fluentd/**'
       - 'bitnami/ghost/**'
       - 'bitnami/grafana-loki/**'
       - 'bitnami/grafana/**'
@@ -38,7 +39,6 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/spring-cloud-dataflow/**'
       - 'bitnami/suitecrm/**'
       - 'bitnami/wordpress/**'
-      - 'bitnami/fluentd/**'
       - '!**.md'
 env:
   CSP_API_URL: https://console.cloud.vmware.com
