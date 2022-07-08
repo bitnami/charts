@@ -32,7 +32,7 @@ spec:
   loadBalancerSourceRanges: {{- toYaml $query.serviceGrpc.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ if $query.serviceGrpc.grpc }}{{ coalesce $query.serviceGrpc.ports.grpc $query.serviceGrpc.grpc.port }}{{ else }}{{ $query.serviceGrpc.ports.grpc }}{{ end }}
+    - port: {{ $query.serviceGrpc.ports.grpc }}
       targetPort: grpc
       protocol: TCP
       name: grpc
