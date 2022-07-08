@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.15.0-debian-11-r3
+  tag: 1.15.0-debian-11-r4
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -606,6 +606,24 @@ forwarder:
   ##     mountPath: /run/log/journal/
   ##
   extraVolumeMounts: []
+  ## @param forwarder.initScripts Dictionary of init scripts. Evaluated as a template.
+  ## Specify dictionary of scripts to be run at first boot
+  ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
+  ## For example:
+  ## initScripts:
+  ##   my_init_script.sh: |
+  ##      #!/bin/sh
+  ##      echo "Do something."
+  ##
+  initScripts: {}
+  ## @param forwarder.initScriptsCM ConfigMap with the init scripts. Evaluated as a template.
+  ## Note: This will override initScripts
+  ##
+  initScriptsCM: ""
+  ## @param forwarder.initScriptsSecret Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.
+  ##
+  initScriptsSecret: ""
+##
 ## Aggregator parameters
 ##
 aggregator:
@@ -1209,7 +1227,23 @@ aggregator:
   ## @param aggregator.extraVolumeClaimTemplates Optionally specify extra list of additional volume claim templates for the Fluentd Aggregator pods in StatefulSet
   ##
   extraVolumeClaimTemplates: []
-
+  ## @param aggregator.initScripts Dictionary of init scripts. Evaluated as a template.
+  ## Specify dictionary of scripts to be run at first boot
+  ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
+  ## For example:
+  ## initScripts:
+  ##   my_init_script.sh: |
+  ##      #!/bin/sh
+  ##      echo "Do something."
+  ##
+  initScripts: {}
+  ## @param aggregator.initScriptsCM ConfigMap with the init scripts. Evaluated as a template.
+  ## Note: This will override initScripts
+  ##
+  initScriptsCM: ""
+  ## @param aggregator.initScriptsSecret Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.
+  ##
+  initScriptsSecret: ""
 ## Prometheus Exporter / Metrics
 ##
 metrics:
