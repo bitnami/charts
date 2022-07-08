@@ -361,8 +361,6 @@ $ helm install my-release -f values.yaml bitnami/solr
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
->
-> NOTE: The Solr exporter is not supported when deploying Solr with authentication enabled.
 
 ## Configuration and installation details
 
