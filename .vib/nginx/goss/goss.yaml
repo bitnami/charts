@@ -1,3 +1,11 @@
+http:
+  http://localhost:8080:
+    status: 200
+    timeout: 1000
+    body: 
+      - Welcome to nginx
+      - If you see this page, the nginx web server is successfully installed 
+    method: GET 
 file:
   /opt/bitnami/nginx/conf/nginx.conf:
     exists: true
