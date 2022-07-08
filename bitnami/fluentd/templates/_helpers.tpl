@@ -185,3 +185,17 @@ Return true if a TLS secret object should be created
     {{- true -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Get the initialization forwarder scripts volume name.
+*/}}
+{{- define "fluentd.forwarder.initScripts" -}}
+{{- printf "%s-forwarder-init-scripts" (include "common.names.fullname" .) -}}
+{{- end -}}
+
+{{/*
+Get the initialization aggregator scripts volume name.
+*/}}
+{{- define "fluentd.aggregator.initScripts" -}}
+{{- printf "%s-aggregator-init-scripts" (include "common.names.fullname" .) -}}
+{{- end -}}
