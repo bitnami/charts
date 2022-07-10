@@ -89,7 +89,6 @@ spec:
           {{- else }}
           args:
             - --user-agent-comment=kubeapps/{{ .Chart.AppVersion }}
-            - --assetsvc-url={{ printf "http://%s:%d" (include "kubeapps.assetsvc.fullname" .) (int .Values.assetsvc.service.ports.http) }}
             {{- if .Values.clusters }}
             - --clusters-config-path=/config/clusters.conf
             {{- end }}

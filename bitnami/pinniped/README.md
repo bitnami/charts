@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release   | `[]`                |
 | `image.registry`    | Pinniped image registry                             | `docker.io`         |
 | `image.repository`  | Pinniped image repository                           | `bitnami/pinniped`  |
-| `image.tag`         | Pinniped image tag (immutable tags are recommended) | `0.18.0-scratch-r3` |
+| `image.tag`         | Pinniped image tag (immutable tags are recommended) | `0.18.0-scratch-r4` |
 | `image.pullPolicy`  | Pinniped image pull policy                          | `IfNotPresent`      |
 | `image.pullSecrets` | Pinniped image pull secrets                         | `[]`                |
 

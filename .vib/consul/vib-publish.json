@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/consul"
         },
-        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAiaHR0cCI6IDgwCiAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIg==",
+        "runtime_parameters": "c2VydmljZToKICBwb3J0czoKICAgIGh0dHA6IDgwCiAgdHlwZTogTG9hZEJhbGFuY2VyCmRhdGFjZW50ZXJOYW1lOiBkYXRhY2VudGVyMQpyZXBsaWNhQ291bnQ6IDMK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -35,9 +35,7 @@
           "action_id": "trivy",
           "params": {
             "threshold": "CRITICAL",
-            "vuln_type": [
-              "OS"
-            ]
+            "vuln_type": ["OS"]
           }
         },
         {
@@ -45,6 +43,31 @@
           "params": {
             "endpoint": "lb-consul-ui-http",
             "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/consul/cypress"
+            },
+            "endpoint": "lb-consul-ui-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "user",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/consul/goss"
+            },
+            "remote": {
+              "workload": "sts-consul"
+            }
           }
         }
       ]

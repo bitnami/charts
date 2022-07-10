@@ -130,6 +130,13 @@ Return true if PostgreSQL postgres user password has been provided
         {{- if .Values.global.postgresql.postgresPassword -}}
             {{- true -}}
         {{- end -}}
+        {{- if .Values.postgresql.postgresPassword -}}
+            {{- true -}}
+        {{- end -}}
+    {{- else -}}
+        {{- if .Values.postgresql.postgresPassword -}}
+            {{- true -}}
+        {{- end -}}
     {{- end -}}
 {{- else -}}
     {{- if .Values.postgresql.postgresPassword -}}
@@ -694,11 +701,3 @@ Return the path to the cert key file.
 {{- define "postgresql-ha.postgresql.tlsCertKey" -}}
 {{- required "Certificate Key filename is required when TLS in enabled" .Values.postgresql.tls.certKeyFilename | printf "/opt/bitnami/postgresql/certs/%s" -}}
 {{- end -}}
-
-{{/*
-Return the path to the CA cert file.
-*/}}
-{{- define "postgresql-ha.postgresql.tlsCACert" -}}
-{{- printf "/opt/bitnami/postgresql/certs/%s" .Values.postgresql.tls.certCAFilename -}}
-{{- end -}}
-

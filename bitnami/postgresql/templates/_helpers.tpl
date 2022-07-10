@@ -111,6 +111,8 @@ Get the replication-password key.
     {{- else -}}
         {{- "replication-password" -}}
     {{- end -}}
+{{- else -}}
+    {{- "replication-password" -}}
 {{- end -}}
 {{- end -}}
 

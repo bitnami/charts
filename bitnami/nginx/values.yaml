@@ -70,7 +70,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.22.0-debian-11-r3
+  tag: 1.23.0-debian-11-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -226,6 +226,13 @@ containerSecurityContext:
 containerPorts:
   http: 8080
   https: ""
+## @param extraContainerPorts Array of additional container ports for the Nginx container
+## e.g:
+## extraContainerPorts:
+##   - name: grpc
+##     containerPort: 4317
+##
+extraContainerPorts: []
 ## NGINX containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -411,7 +418,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.36.1-debian-11-r2
+    tag: 2.37.0-debian-11-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -761,7 +768,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 0.10.0-debian-11-r2
+    tag: 0.10.0-debian-11-r10
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
