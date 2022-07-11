@@ -23,6 +23,7 @@ it('allows admin to add a product to the store', () => {
   cy.get('#fileupload').selectFile('cypress/fixtures/images/image.png', {
     force: true,
   });
+  cy.get('.product-image');
   cy.get('#save-button').click();
   cy.contains('You saved the product');
   cy.get('#menu-magento-catalog-catalog').click();
@@ -67,6 +68,7 @@ it('allows customer to subscribe to newsletter', () => {
     cy.contains(`${random}.${customer.newCustomer.email}`);
   });
 });
+
 it('allows admin to add a discount', () => {
   cy.login();
   cy.get('#menu-magento-backend-marketing').click();
