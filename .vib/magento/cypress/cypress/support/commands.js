@@ -42,7 +42,7 @@ Cypress.Commands.add(
     cy.get('#username').type(username);
     cy.get('#login').type(password);
     cy.get('.action-login').click();
-    cy.get('.page-title').should('have.text', 'Dashboard');
+    cy.contains('.page-title', 'Dashboard');
   }
 );
 
