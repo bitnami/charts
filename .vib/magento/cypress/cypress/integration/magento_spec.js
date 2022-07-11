@@ -66,7 +66,7 @@ it('allows admin to add a discount', () => {
   });
   cy.contains('You saved the rule');
   cy.get('#apply_rules').click();
-  cy.contains('Updated rules applied.');
+  cy.contains('Updated rules applied');
 });
 
 it('allows customer to subscribe to newsletter', () => {
