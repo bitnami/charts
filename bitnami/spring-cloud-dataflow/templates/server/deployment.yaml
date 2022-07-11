@@ -112,7 +112,7 @@ spec:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.server.image.debug | quote }}
             - name: SERVER_PORT
-              value: "8080"
+              value: "{{ .Values.server.containerPort }}"
             - name: SPRING_CLOUD_CONFIG_ENABLED
               value: "false"
             - name: SPRING_CLOUD_KUBERNETES_CONFIG_ENABLE_API
