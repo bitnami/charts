@@ -19,6 +19,10 @@ it('allows admin to add a product to the store', () => {
     );
     cy.get('[name="product[price]"]').type(product.newProduct.price);
   });
+  cy.contains('Images And Videos').click();
+  cy.get('#fileupload').selectFile('cypress/fixtures/images/image.png', {
+    force: true,
+  });
   cy.get('#save-button').click();
   cy.contains('You saved the product');
   cy.get('#menu-magento-catalog-catalog').click();
