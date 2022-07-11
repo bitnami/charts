@@ -189,8 +189,10 @@ spec:
             - name: RABBITMQ_LDAP_USER_DN_PATTERN
               value: {{ .Values.ldap.user_dn_pattern }}
             {{- end }}
+            {{- if .Values.logs }}
             - name: RABBITMQ_LOGS
               value: {{ .Values.logs | quote }}
+            {{- end }}
             - name: RABBITMQ_ULIMIT_NOFILES
               value: {{ .Values.ulimitNofiles | quote }}
             {{- if and .Values.maxAvailableSchedulers }}
