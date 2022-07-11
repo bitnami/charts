@@ -2,12 +2,12 @@
 
 # Matomo packaged by Bitnami
 
-Matomo, formerly known as Piwik, is a real time web analytics program. It provides detailed reports on website visitors: the search engines and keywords they used,  popular pages, and much more.
+Matomo, formerly known as Piwik, is a real time web analytics program. It provides detailed reports on website visitors.
 
 [Overview of Matomo](https://matomo.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                                | Value |
@@ -74,7 +73,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonAnnotations` | Common annotations to add to all Matomo resources (sub-charts are not considered). Evaluated as a template | `{}`  |
 | `commonLabels`      | Common labels to add to all Matomo resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                               | `[]`  |
-
 
 ### Matomo parameters
 
@@ -169,7 +167,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                        | Pod annotations                                                                                                       | `{}`                   |
 | `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                   |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -201,7 +198,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Database parameters
 
 | Name                                        | Description                                                                              | Value               |
@@ -225,7 +221,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_matomo`    |
 | `externalDatabase.existingSecret`           | Name of a secret containing the database credentials                                     | `""`                |
 
-
 ### Volume Permissions parameters
 
 | Name                                   | Description                                                                                                                                               | Value                   |
@@ -239,7 +234,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
 
-
 ### Metrics parameters
 
 | Name                        | Description                                      | Value                     |
@@ -252,7 +246,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                      |
 | `metrics.resources`         | Metrics exporter resource requests and limits    | `{}`                      |
 | `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod  | `{}`                      |
-
 
 ### Certificate injection parameters
 
@@ -276,7 +269,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 
-
 ### NetworkPolicy parameters
 
 | Name                                                          | Description                                                                                                                | Value   |
@@ -296,7 +288,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                         | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                             | `false` |
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                 | `{}`    |
-
 
 The above parameters map to the env variables defined in [bitnami/matomo](https://github.com/bitnami/bitnami-docker-matomo). For more information please refer to the [bitnami/matomo](https://github.com/bitnami/bitnami-docker-matomo) image documentation.
 
@@ -391,7 +382,6 @@ $ helm install my-release --set persistence.existingClaim=PVC_NAME bitnami/matom
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
-
 
 ## License
 
