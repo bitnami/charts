@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | --------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`     | phpMyAdmin image registry                                                         | `docker.io`           |
 | `image.repository`   | phpMyAdmin image repository                                                       | `bitnami/phpmyadmin`  |
-| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                             | `5.2.0-debian-11-r12` |
+| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                             | `5.2.0-debian-11-r13` |
 | `image.pullPolicy`   | Image pull policy                                                                 | `IfNotPresent`        |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                                  | `[]`                  |
 | `image.debug`        | Enable phpmyadmin image debug mode                                                | `false`               |
@@ -209,7 +209,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                              | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                    | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                  | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                        | `0.11.0-debian-11-r12`    |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                        | `0.11.0-debian-11-r13`    |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                 | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                  | `[]`                      |
 | `metrics.resources`                        | Metrics exporter resource requests and limits                                     | `{}`                      |
