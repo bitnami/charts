@@ -39,7 +39,7 @@ it('allows user to create a customer account', () => {
     cy.get('#password-confirmation').type(customer.newCustomer.password);
   });
   cy.contains('button', 'Create an Account').click();
-  cy.contains('Thank you for registering with Main Website Store.');
+  cy.contains('Thank you for registering');
   cy.fixture('customers').then((customer) => {
     cy.get('.logged-in').contains(
       `${customer.newCustomer.firstName}.${random}`
