@@ -11,7 +11,7 @@ Return the proper ES image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "elasticsearch.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.curator.image .Values.sysctlImage .Values.volumePermissions.image) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.sysctlImage .Values.volumePermissions.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -19,13 +19,6 @@ Return the proper ES exporter image name
 */}}
 {{- define "elasticsearch.metrics.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return the proper ES curator image name
-*/}}
-{{- define "elasticsearch.curator.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.curator.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -133,20 +126,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- $name := default "metrics" .Values.metrics.nameOverride -}}
 {{- if .Values.metrics.fullnameOverride -}}
 {{- .Values.metrics.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "elasticsearch.curator.fullname" -}}
-{{- $name := default "curator" .Values.metrics.nameOverride -}}
-{{- if .Values.curator.fullnameOverride -}}
-{{- .Values.curator.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
@@ -274,17 +253,6 @@ Get the initialization scripts Secret name.
     {{ default (include "elasticsearch.ingest.fullname" .) .Values.ingest.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.ingest.serviceAccount.name }}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "elasticsearch.curator.serviceAccountName" -}}
-{{- if .Values.curator.serviceAccount.create -}}
-    {{ default (include "elasticsearch.curator.fullname" .) .Values.curator.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.curator.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 

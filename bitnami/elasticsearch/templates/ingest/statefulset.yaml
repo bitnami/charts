@@ -92,6 +92,7 @@ spec:
               {{- include "elasticsearch.sysctlIfLess" (dict "key" "fs.file-max" "value" "65536") | nindent 14 }}
           securityContext:
             privileged: true
+            runAsUser: 0
           {{- if .Values.sysctlImage.resources }}
           resources: {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
           {{- end }}

@@ -1,4 +1,4 @@
-{{- if and .Values.metrics.enabled .Values.metrics.customMetrics }}
+{{- if and .Values.metrics.enabled .Values.metrics.customMetrics (eq .Values.architecture "replication") }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

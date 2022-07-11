@@ -266,6 +266,8 @@ spec:
                 {{- end }}
             {{- end }}
             {{- end }}
+            - name: KEYCLOAK_HTTP_RELATIVE_PATH
+              value: {{ .Values.httpRelativePath | quote }}
             {{- if .Values.extraStartupArgs }}
             - name: KEYCLOAK_EXTRA_ARGS
               value: {{ .Values.extraStartupArgs | quote }}
@@ -305,7 +307,7 @@ spec:
           {{- if .Values.startupProbe.enabled }}
           startupProbe: {{- omit .Values.startupProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
-              path: /
+              path: {{ .Values.httpRelativePath }}
               port: http
           {{- else if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
@@ -313,7 +315,7 @@ spec:
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
-              path: /
+              path: {{ .Values.httpRelativePath }}
               port: http
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
@@ -321,7 +323,7 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
-              path: /realms/master
+              path: {{ .Values.httpRelativePath }}realms/master
               port: http
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
