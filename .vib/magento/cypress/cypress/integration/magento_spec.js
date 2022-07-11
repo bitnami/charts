@@ -4,9 +4,11 @@ import { random, allowDataUsage } from './utils';
 before(() => {
   cy.login();
   allowDataUsage();
+  cy.logout();
 });
 
 it('allows admin to add a product to the store', () => {
+  cy.login();
   cy.get('#menu-magento-catalog-catalog').click();
   cy.get('.item-catalog-products').click();
   cy.contains('Salable Quantity');
@@ -47,6 +49,20 @@ it('allows user to create a customer account', () => {
   });
 });
 
+it('allows customer to subscribe to newsletter', () => {
+  cy.visit('/');
+  cy.fixture('customers').then((customer) => {
+    cy.get('#newsletter').type(`${random}.${customer.newCustomer.email}`);
+  });
+  cy.contains('Subscribe').click();
+  cy.contains('Thank you for your subscription.');
+  cy.login();
+  cy.get('#menu-magento-backend-marketing').click();
+  cy.get('.item-newsletter-subscriber').click();
+  cy.fixture('customers').then((customer) => {
+    cy.contains(`${random}.${customer.newCustomer.email}`);
+  });
+});
 it('allows admin to add a discount', () => {
   cy.login();
   cy.get('#menu-magento-backend-marketing').click();
@@ -69,22 +85,7 @@ it('allows admin to add a discount', () => {
   cy.contains('Updated rules applied');
 });
 
-it('allows customer to subscribe to newsletter', () => {
-  cy.visit('/');
-  cy.fixture('customers').then((customer) => {
-    cy.get('#newsletter').type(`${random}.${customer.newCustomer.email}`);
-  });
-  cy.contains('Subscribe').click();
-  cy.contains('Thank you for your subscription.');
-  cy.login();
-  cy.get('#menu-magento-backend-marketing').click();
-  cy.get('.item-newsletter-subscriber').click();
-  cy.fixture('customers').then((customer) => {
-    cy.contains(`${random}.${customer.newCustomer.email}`);
-  });
-});
-
-it('allows customizing the home page', () => {
+it('allows admin to customize the home page', () => {
   cy.login();
   cy.get('#menu-magento-backend-content').click();
   cy.get('.item-cms-page').click();

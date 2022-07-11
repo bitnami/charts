@@ -46,6 +46,11 @@ Cypress.Commands.add(
   }
 );
 
+Cypress.Commands.add('logout', () => {
+  cy.get('[title="My Account"]').click();
+  cy.contains('Sign Out').click();
+});
+
 Cypress.on('uncaught:exception', (err, runnable) => {
   // we expect an application error with message 'rendering locks'
   // and don't want to fail the test so we return false
