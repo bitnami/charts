@@ -1,6 +1,6 @@
 command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+  user-id-root-test:
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 0; fi
     exit-status: 0
     stdout: []
     stderr: []
@@ -14,22 +14,22 @@ file:
     exists: true
     filetype: directory
     mode: "0664"
-    owner: root
+    owner: odoo
     group: root
   /opt/bitnami/odoo/conf/odoo.conf:
     exists: true
-    filetype: directory
-    mode: "0664"
-    owner: root
+    filetype: file
+    mode: "0644"
+    owner: odoo
     group: root
     contains:
-     - {{ printf "db_port *%s" .Env.ODOO_POSTGRESQL_SERVICE_PORT }}
-     - {{ printf "db_user *%s" .Env.ODOO_DATABASE_USER }}
-     - {{ printf "email_from *%s" .Env.ODOO_EMAIL }}
+     - {{ printf "db_port = %s" .Env.ODOO_POSTGRESQL_SERVICE_PORT }}
+     - {{ printf "db_user = %s" .Env.ODOO_DATABASE_USER }}
+     - {{ printf "email_from = %s" .Env.ODOO_EMAIL }}
   /opt/bitnami/odoo/venv/pyvenv.cfg:
     exists: true
     filetype: file
-    mode: "0664"
+    mode: "0644"
     owner: root
     group: root
     contains:
