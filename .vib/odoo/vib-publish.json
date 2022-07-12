@@ -65,6 +65,17 @@
               "password": "ComplicatedPassword123!4"
             }
           }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/mediawiki/goss"
+            },
+            "remote": {
+              "workload": "deploy-odoo"
+            }
+          }
         }
       ]
     },
