@@ -15,7 +15,7 @@ dependencies:
 description: Wavefront is a high-performance streaming analytics platform for monitoring and optimizing your environment and applications.
 engine: gotpl
 home: https://www.wavefront.com
-icon: https://bitnami.com/assets/stacks/wavefront-collector/img/wavefront-collector-stack-220x234.png
+icon: https://bitnami.com/assets/stacks/wavefront/img/wavefront-stack-220x234.png
 keywords:
   - metric
   - monitoring
@@ -30,4 +30,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-wavefront-proxy
   - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
   - https://github.com/wavefrontHQ/wavefront-proxy
-version: 4.0.3
+version: 4.0.4
