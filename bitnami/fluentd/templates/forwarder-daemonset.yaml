@@ -182,6 +182,18 @@ spec:
               mountPath: /opt/bitnami/fluentd/certs/out_forward
               readOnly: true
             {{- end }}
+            {{- if .Values.forwarder.initScripts }}
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d/init-scripts
+            {{- end }}
+            {{- if .Values.forwarder.initScriptsCM }}
+            - name: custom-init-scripts-cm
+              mountPath: /docker-entrypoint-initdb.d/init-scripts-cm
+            {{- end }}
+            {{- if .Values.forwarder.initScriptsSecret }}
+            - name: custom-init-scripts-secret
+              mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
+            {{- end }}
             - name: varlog
               mountPath: /var/log
             - name: varlibdockercontainers
@@ -202,6 +214,22 @@ spec:
           secret:
             secretName: {{ include "fluentd.forwarder.tlsSecretName" . }}
             defaultMode: 256
+        {{- end }}
+        {{- if .Values.forwarder.initScripts }}
+        - name: custom-init-scripts
+          configMap:
+            name: {{ template "fluentd.forwarder.initScripts" . }}
+        {{- end }}
+        {{- if .Values.forwarder.initScriptsCM }}
+        - name: custom-init-scripts-cm
+          configMap:
+            name: {{ template ".Values.initScriptsCM" . }}
+        {{- end }}
+        {{- if .Values.forwarder.initScriptsSecret }}
+        - name: custom-init-scripts-secret
+          secret:
+            secretName: {{ template ".Values.initScriptsSecret" . }}
+            defaultMode: 0755
         {{- end }}
         - name: fluentd-config
           configMap:
