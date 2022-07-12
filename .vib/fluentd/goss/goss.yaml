@@ -1,16 +1,18 @@
 
 file:
-  {{ printf "/opt/bitnami/fluentd/conf/%s" .Env.FLUENTD_CONF }}:
-    mode: "0777"
-    filetype: symlink
-    contains:
-    - fluentd-inputs.conf
-    exists: true
   /opt/bitnami/fluentd/Gemfile:
     mode: "0644"
     filetype: file
     exists: true  
 command:
+  fluentd-conf-test:
+    exec: fluentd -c /opt/bitnami/fluentd/conf/fluentd.conf --dry-run
+    exit-status: 0
+    stdout: 
+      - {{ printf "/bitnami.*%s/" .Env.BITNAMI_APP_NAME }}
+      - {{ printf "/port *%s/" .Env.FLUENTD_AGGREGATOR_SERVICE_PORT }}
+      - {{ printf "/port *%s/" .Env.FLUENTD_AGGREGATOR_SERVICE_PORT_TCP }}
+    stderr: []
   user-id-test:
     exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
     exit-status: 0
@@ -24,6 +26,6 @@ command:
   fluentd-process:
     exec: ps aux | grep fluentd
     exit-status: 0
-    stdout: 
+    stdout:
       - {{ printf "/bitnami.*%s/" .Env.BITNAMI_APP_NAME }}
     stderr: []  
