@@ -3869,22 +3869,21 @@ metrics:
     ## @param metrics.prometheusRule.additionalLabels Additional labels for the prometheusRule
     ##
     additionalLabels: {}
-    ## @param metrics.prometheusRule.rules Prometheus Rules for Thanos components
+    ## @param metrics.prometheusRule.groups Prometheus Rule Groups for Thanos components
     ## These are just examples rules, please adapt them to your needs.
-    ##    rules: |
-    ##      groups:
-    ##        - name: Compactor
-    ##          rules:
-    ##            - alert: ThanosCompactMultipleRunning
-    ##              annotations:
-    ##                description: No more than one Thanos Compact instance should be running at once. There are {{`{{`}}$value{{`}}`}} instances running.
-    ##                runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanoscompactmultiplerunning
-    ##                summary: Thanos Compact has multiple instances running.
-    ##              expr: sum by (job) (up{job=~"{{ template "common.names.fullname" . }}-compact.*"}) > 1
-    ##              for: 5m
-    ##              labels:
-    ##                severity: warning
-    rules: []
+    ##   groups:
+    ##     - name: Compactor
+    ##       rules:
+    ##         - alert: ThanosCompactMultipleRunning
+    ##           annotations:
+    ##             description: No more than one Thanos Compact instance should be running at once. There are {{`{{`}}$value{{`}}`}} instances running.
+    ##             runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanoscompactmultiplerunning
+    ##             summary: Thanos Compact has multiple instances running.
+    ##           expr: sum by (job) (up{job=~"{{ template "common.names.fullname" . }}-compact.*"}) > 1
+    ##           for: 5m
+    ##           labels:
+    ##             severity: warning
+    groups: []
 
 ## @section Volume Permissions parameters
 

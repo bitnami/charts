@@ -111,7 +111,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`                              | Thanos image registry                                                                                               | `docker.io`         |
 | `image.repository`                            | Thanos image repository                                                                                             | `bitnami/thanos`    |
-| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.27.0-scratch-r0` |
+| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.27.0-scratch-r3` |
 | `image.pullPolicy`                            | Thanos image pull policy                                                                                            | `IfNotPresent`      |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                    | `[]`                |
 | `objstoreConfig`                              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                                              | `""`                |
@@ -1072,7 +1072,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `metrics.prometheusRule.enabled`           | If `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true`) | `false` |
 | `metrics.prometheusRule.namespace`         | Namespace in which the PrometheusRule CRD is created                                                   | `""`    |
 | `metrics.prometheusRule.additionalLabels`  | Additional labels for the prometheusRule                                                               | `{}`    |
-| `metrics.prometheusRule.rules`             | Prometheus Rules for Thanos components                                                                 | `[]`    |
+| `metrics.prometheusRule.groups`            | Prometheus Rule Groups for Thanos components                                                           | `[]`    |
 
 
 ### Volume Permissions parameters
@@ -1082,7 +1082,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `11-debian-11-r12`      |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `11-debian-11-r14`      |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                | `[]`                    |
 
