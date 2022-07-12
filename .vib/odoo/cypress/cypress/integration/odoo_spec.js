@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 import { random } from './utils';
 import 'cypress-real-events/support';
+
 it('allows creating a company', () => {
   cy.login();
   cy.get('[title="Home Menu"]').click();
@@ -72,6 +73,9 @@ it('allows uploading a photo of the admin', () => {
   cy.login();
   cy.contains('Administrator').click();
   cy.contains('Preferences').click();
-  cy.get('.img').realHover().click();
-  cy.get('button[title="Edit"]').invoke('show').realClick();
+  cy.get('.img').realHover().realClick();
+  cy.get('input[type="file"').selectFile('cypress/fixtures/images/image.png', {
+    force: true,
+  });
+  cy.contains('Save').click();
 });
