@@ -179,8 +179,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                                | `false`                  |
 | `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
-| `ingress.existingSecretName`       | If you're providing your own certificates in a secret you manage yourself, please pass its here                                    | `""`                     |
+| `ingress.secrets`                  | If you're providing your own certificates and want to manage the secret via helm,                                                | `[]`                     |
+| `ingress.existingSecretName`       | If you're providing your own certificate and want to manage the secret yourself,                                                 | `""`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
