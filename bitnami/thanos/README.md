@@ -111,7 +111,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`                              | Thanos image registry                                                                                               | `docker.io`         |
 | `image.repository`                            | Thanos image repository                                                                                             | `bitnami/thanos`    |
-| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.26.0-scratch-r2` |
+| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.27.0-scratch-r0` |
 | `image.pullPolicy`                            | Thanos image pull policy                                                                                            | `IfNotPresent`      |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                    | `[]`                |
 | `objstoreConfig`                              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                                              | `""`                |
@@ -211,9 +211,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.grpc.client.tls.existingSecret`                    | Existing secret containing your own TLS certificates                                                                                    | `{}`                     |
 | `query.service.type`                                      | Kubernetes service type                                                                                                                 | `ClusterIP`              |
 | `query.service.ports.http`                                | Thanos Query service HTTP port                                                                                                          | `9090`                   |
-| `query.service.ports.grpc`                                | Thanos Query service GRPC port                                                                                                          | `10901`                  |
 | `query.service.nodePorts.http`                            | Specify the Thanos Query HTTP nodePort value for the LoadBalancer and NodePort service types                                            | `""`                     |
-| `query.service.nodePorts.grpc`                            | Specify the Thanos Query GRPC nodePort value for the LoadBalancer and NodePort service types                                            | `""`                     |
 | `query.service.clusterIP`                                 | Thanos Query service clusterIP IP                                                                                                       | `""`                     |
 | `query.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                                      | `""`                     |
 | `query.service.loadBalancerSourceRanges`                  | Address that are allowed when service is LoadBalancer                                                                                   | `[]`                     |
@@ -222,6 +220,17 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.service.extraPorts`                                | Extra ports to expose in the Thanos Query service                                                                                       | `[]`                     |
 | `query.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                       | `{}`                     |
 | `query.service.additionalHeadless`                        | Additional Headless service                                                                                                             | `false`                  |
+| `query.serviceGrpc.type`                                  | Kubernetes service type                                                                                                                 | `ClusterIP`              |
+| `query.serviceGrpc.ports.grpc`                            | Thanos Query service GRPC port                                                                                                          | `10901`                  |
+| `query.serviceGrpc.nodePorts.grpc`                        | Specify the Thanos Query GRPC nodePort value for the LoadBalancer and NodePort service types                                            | `""`                     |
+| `query.serviceGrpc.clusterIP`                             | Thanos Query service clusterIP IP                                                                                                       | `""`                     |
+| `query.serviceGrpc.loadBalancerIP`                        | Load balancer IP if service type is `LoadBalancer`                                                                                      | `""`                     |
+| `query.serviceGrpc.loadBalancerSourceRanges`              | Address that are allowed when service is LoadBalancer                                                                                   | `[]`                     |
+| `query.serviceGrpc.externalTrafficPolicy`                 | Thanos Query service externalTrafficPolicy                                                                                              | `Cluster`                |
+| `query.serviceGrpc.annotations`                           | Annotations for Thanos Query service                                                                                                    | `{}`                     |
+| `query.serviceGrpc.extraPorts`                            | Extra ports to expose in the Thanos Query service                                                                                       | `[]`                     |
+| `query.serviceGrpc.labelSelectorsOverride`                | Selector for Thanos Query service                                                                                                       | `{}`                     |
+| `query.serviceGrpc.additionalHeadless`                    | Additional Headless service                                                                                                             | `false`                  |
 | `query.automountServiceAccountToken`                      | Enable/disable auto mounting of the service account token only for the deployment                                                       | `true`                   |
 | `query.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                                    | `true`                   |
 | `query.serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                     | `""`                     |
@@ -1073,7 +1082,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `10-debian-10-r435`     |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                     | `11-debian-11-r12`      |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                | `[]`                    |
 
