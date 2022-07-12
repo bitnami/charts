@@ -45,7 +45,7 @@ it('allows inviting new users', () => {
     cy.get('.o_user_emails').type(`${random}.${newUser.newUser.email}`);
     cy.get('[data-loading-text="Inviting..."]').click();
     cy.get('#invite_users_setting').within(() => {
-      cy.contains(`${newUser.newUser.email}`);
+      cy.contains(`${random}.${newUser.newUser.email}`);
     });
   });
 });
