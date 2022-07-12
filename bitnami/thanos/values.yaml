@@ -53,7 +53,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.27.0-scratch-r0
+  tag: 0.27.0-scratch-r3
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -408,18 +408,14 @@ query:
     ##
     type: ClusterIP
     ## @param query.service.ports.http Thanos Query service HTTP port
-    ## @param query.service.ports.grpc Thanos Query service GRPC port
     ##
     ports:
       http: 9090
-      grpc: 10901
     ## @param query.service.nodePorts.http Specify the Thanos Query HTTP nodePort value for the LoadBalancer and NodePort service types
-    ## @param query.service.nodePorts.grpc Specify the Thanos Query GRPC nodePort value for the LoadBalancer and NodePort service types
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     nodePorts:
       http: ""
-      grpc: ""
     ## @param query.service.clusterIP Thanos Query service clusterIP IP
     ## e.g:
     ## clusterIP: None
@@ -453,6 +449,56 @@ query:
     ## @param query.service.additionalHeadless Additional Headless service
     ##
     additionalHeadless: false
+  
+  ## Service GRPC parameters
+  ##
+  serviceGrpc:
+    ## @param query.serviceGrpc.type Kubernetes service type
+    ##
+    type: ClusterIP
+    ## @param query.serviceGrpc.ports.grpc Thanos Query service GRPC port
+    ##
+    ports:
+      grpc: 10901
+    ## @param query.serviceGrpc.nodePorts.grpc Specify the Thanos Query GRPC nodePort value for the LoadBalancer and NodePort service types
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ##
+    nodePorts:
+      grpc: ""
+    ## @param query.serviceGrpc.clusterIP Thanos Query service clusterIP IP
+    ## e.g:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param query.serviceGrpc.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
+    ## Set the LoadBalancer service type to internal only
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    loadBalancerIP: ""
+    ## @param query.serviceGrpc.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ## - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param query.serviceGrpc.externalTrafficPolicy Thanos Query service externalTrafficPolicy
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param query.serviceGrpc.annotations Annotations for Thanos Query service
+    ##
+    annotations: {}
+    ## @param query.serviceGrpc.extraPorts Extra ports to expose in the Thanos Query service
+    ##
+    extraPorts: []
+    ## @param query.serviceGrpc.labelSelectorsOverride Selector for Thanos Query service
+    ##
+    labelSelectorsOverride: {}
+    ## @param query.serviceGrpc.additionalHeadless Additional Headless service
+    ##
+    additionalHeadless: false
+
   ## Autoscaling parameters
   ## @param query.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
   ##
@@ -3859,7 +3905,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r12
+    tag: 11-debian-11-r14
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
