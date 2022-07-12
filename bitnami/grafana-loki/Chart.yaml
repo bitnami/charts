@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.5.0
+appVersion: 2.6.0
 dependencies:
   - condition: memcachedchunks.enabled
     name: memcached
@@ -44,4 +44,4 @@ name: grafana-loki
 sources:
   - https://github.com/bitnami/bitnami-docker-grafana-loki
   - https://github.com/grafana/loki/
-version: 2.1.6
+version: 2.1.7
