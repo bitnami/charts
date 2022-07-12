@@ -1,7 +1,7 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Return a soft nodeAffinity definition
+Return a soft nodeAffinity definition 
 {{ include "common.affinities.nodes.soft" (dict "key" "FOO" "values" (list "BAR" "BAZ")) -}}
 */}}
 {{- define "common.affinities.nodes.soft" -}}
