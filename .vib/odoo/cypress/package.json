@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "cypress-real-events": "^1.7.1"
+    "cypress-real-events": "1.7.1"
   }
 }

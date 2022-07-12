@@ -4,3 +4,33 @@ command:
     exit-status: 0
     stdout: []
     stderr: []
+  odoo-version-test:
+    exec: odoo --version | grep --quiet "$APP_VERSION"
+    exit-status: 0
+    stdout: []
+    stderr: []  
+file:
+  /bitnami/odoo/data:
+    exists: true
+    filetype: directory
+    mode: "0664"
+    owner: root
+    group: root
+  /opt/bitnami/odoo/conf/odoo.conf:
+    exists: true
+    filetype: directory
+    mode: "0664"
+    owner: root
+    group: root
+    contains:
+     - {{ printf "db_port *%s" .Env.ODOO_POSTGRESQL_SERVICE_PORT }}
+     - {{ printf "db_user *%s" .Env.ODOO_DATABASE_USER }}
+     - {{ printf "email_from *%s" .Env.ODOO_EMAIL }}
+  /opt/bitnami/odoo/venv/pyvenv.cfg:
+    exists: true
+    filetype: file
+    mode: "0664"
+    owner: root
+    group: root
+    contains:
+     - home = /opt/bitnami/python
