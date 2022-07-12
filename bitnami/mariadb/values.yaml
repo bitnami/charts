@@ -1043,6 +1043,11 @@ metrics:
   extraArgs:
     primary: []
     secondary: []
+  ## @param metrics.extraVolumeMounts [object] Optionally specify extra list of additional volumeMounts for the MariaDB metrics container(s)
+  ##
+  extraVolumeMounts:
+    primary: []
+    secondary: []
   ## MariaDB metrics container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enable security context for MariaDB metrics container
