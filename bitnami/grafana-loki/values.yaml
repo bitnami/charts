@@ -200,9 +200,10 @@ loki:
             max_size_items: 1024
             validity: 24h
           {{- end }}
-
+    {{- if not .Values.queryScheduler.enabled }}
     frontend_worker:
       frontend_address: {{ include "grafana-loki.query-frontend.fullname" . }}:{{ .Values.queryFrontend.service.ports.grpc }}
+    {{- end }}
 
     frontend:
       log_queries_longer_than: 5s
@@ -2374,7 +2375,275 @@ queryFrontend:
     ## @param queryFrontend.service.extraPorts Extra ports to expose in the queryFrontend service
     ##
     extraPorts: []
+## @section Query Scheduler Deployment Parameters
+##
+queryScheduler:
+  ## @param queryScheduler.extraEnvVars Array with extra environment variables to add to queryScheduler nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param queryScheduler.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for queryScheduler nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param queryScheduler.extraEnvVarsSecret Name of existing Secret containing extra env vars for queryScheduler nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param queryScheduler.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param queryScheduler.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param queryScheduler.replicaCount Number of queryScheduler replicas to deploy
+  ##
+  replicaCount: 1
+  ## Configure extra options for queryScheduler containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param queryScheduler.livenessProbe.enabled Enable livenessProbe on queryScheduler nodes
+  ## @param queryScheduler.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param queryScheduler.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param queryScheduler.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param queryScheduler.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param queryScheduler.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+    
+  ## @param queryScheduler.minReadySeconds Minimum time to wait before performing readiness check
+  ##
+  minReadySeconds: 10 
 
+  ## @param queryScheduler.readinessProbe.enabled Enable readinessProbe on queryScheduler nodes
+  ## @param queryScheduler.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param queryScheduler.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param queryScheduler.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param queryScheduler.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param queryScheduler.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  ## @param queryScheduler.startupProbe.enabled Enable startupProbe on queryScheduler containers
+  ## @param queryScheduler.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param queryScheduler.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param queryScheduler.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param queryScheduler.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param queryScheduler.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param queryScheduler.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param queryScheduler.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param queryScheduler.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## queryScheduler resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param queryScheduler.resources.limits The resources limits for the queryScheduler containers
+  ## @param queryScheduler.resources.requests The requested resources for the queryScheduler containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param queryScheduler.podSecurityContext.enabled Enabled queryScheduler pods' Security Context
+  ## @param queryScheduler.podSecurityContext.fsGroup Set queryScheduler pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param queryScheduler.containerSecurityContext.enabled Enabled queryScheduler containers' Security Context
+  ## @param queryScheduler.containerSecurityContext.runAsUser Set queryScheduler containers' Security Context runAsUser
+  ## @param queryScheduler.containerSecurityContext.runAsNonRoot Set queryScheduler containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param queryScheduler.lifecycleHooks for the queryScheduler container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param queryScheduler.hostAliases queryScheduler pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param queryScheduler.podLabels Extra labels for queryScheduler pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param queryScheduler.podAnnotations Annotations for queryScheduler pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param queryScheduler.podAffinityPreset Pod affinity preset. Ignored if `queryScheduler.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param queryScheduler.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `queryScheduler.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node queryScheduler.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param queryScheduler.nodeAffinityPreset.type Node affinity preset type. Ignored if `queryScheduler.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param queryScheduler.nodeAffinityPreset.key Node label key to match. Ignored if `queryScheduler.affinity` is set
+    ##
+    key: ""
+    ## @param queryScheduler.nodeAffinityPreset.values Node label values to match. Ignored if `queryScheduler.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param queryScheduler.affinity Affinity for queryScheduler pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `queryScheduler.podAffinityPreset`, `queryScheduler.podAntiAffinityPreset`, and `queryScheduler.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param queryScheduler.nodeSelector Node labels for queryScheduler pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param queryScheduler.tolerations Tolerations for queryScheduler pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param queryScheduler.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param queryScheduler.priorityClassName queryScheduler pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param queryScheduler.schedulerName Kubernetes pod scheduler registry
+  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param queryScheduler.updateStrategy.type queryScheduler statefulset strategy type
+  ## @param queryScheduler.updateStrategy.rollingUpdate queryScheduler statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param queryScheduler.extraVolumes Optionally specify extra list of additional volumes for the queryScheduler pod(s)
+  ##
+  extraVolumes: []
+  ## @param queryScheduler.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the queryScheduler container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param queryScheduler.sidecars Add additional sidecar containers to the queryScheduler pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param queryScheduler.initContainers Add additional init containers to the queryScheduler pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## @section Query Frontend Traffic Exposure Parameters
+  ##
+
+  ## queryScheduler service parameters
+  ##
+  service:
+    ## @param queryScheduler.service.type queryScheduler service type
+    ##
+    type: ClusterIP
+    ## @param queryScheduler.service.ports.http queryScheduler HTTP service port
+    ## @param queryScheduler.service.ports.grpc queryScheduler GRPC service port
+    ##
+    ports:
+      http: 3100
+      grpc: 9095
+    ## Node ports to expose
+    ## NOTE: choose port between <30000-32767>
+    ## @param queryScheduler.service.nodePorts.http Node port for HTTP
+    ## @param queryScheduler.service.nodePorts.grpc Node port for GRPC
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
+    ## @param queryScheduler.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## @param queryScheduler.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param queryScheduler.service.clusterIP queryScheduler service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param queryScheduler.service.loadBalancerIP queryScheduler service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param queryScheduler.service.loadBalancerSourceRanges queryScheduler service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param queryScheduler.service.externalTrafficPolicy queryScheduler service external traffic policy
+    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param queryScheduler.service.annotations Additional custom annotations for queryScheduler service
+    ##
+    annotations: {}
+    ## @param queryScheduler.service.extraPorts Extra ports to expose in the queryScheduler service
+    ##
+    extraPorts: []
+    
 ## @section Ruler Deployment Parameters
 ##
 ruler:
