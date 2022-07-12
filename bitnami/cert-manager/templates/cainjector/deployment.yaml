@@ -85,6 +85,9 @@ spec:
           args:
             - --v={{ .Values.logLevel }}
             - --leader-election-namespace={{ .Values.leaderElection.namespace }}
+            {{- if .Values.cainjector.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.cainjector.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
           {{- end }}
           {{- if .Values.cainjector.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.cainjector.containerSecurityContext "enabled" | toYaml | nindent 12 }}

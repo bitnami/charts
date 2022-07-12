@@ -94,8 +94,11 @@ spec:
               mkdir -p "{{ .Values.persistence.mountPath }}"
               chown "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "{{ .Values.persistence.mountPath }}"
               find "{{ .Values.persistence.mountPath }}" -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}"
-          securityContext:
-            runAsUser: 0
+          {{- if eq ( toString ( .Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
+          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "runAsUser" | toYaml | nindent 12 }}
+          {{- else }}
+          securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
@@ -165,9 +168,9 @@ spec:
               value: {{ ternary "yes" "no" .Values.clustering.forceBoot | quote }}
             {{- if (eq "hostname" .Values.clustering.addressType) }}
             - name: RABBITMQ_NODE_NAME
-              value: "rabbit@$(MY_POD_NAME).$(K8S_SERVICE_NAME)"
+              value: "rabbit@$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             - name: K8S_HOSTNAME_SUFFIX
-              value: ".$(K8S_SERVICE_NAME)"
+              value: ".$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             {{- else }}
             - name: RABBITMQ_NODE_NAME
               value: "rabbit@$(MY_POD_NAME)"
@@ -186,8 +189,10 @@ spec:
             - name: RABBITMQ_LDAP_USER_DN_PATTERN
               value: {{ .Values.ldap.user_dn_pattern }}
             {{- end }}
+            {{- if .Values.logs }}
             - name: RABBITMQ_LOGS
               value: {{ .Values.logs | quote }}
+            {{- end }}
             - name: RABBITMQ_ULIMIT_NOFILES
               value: {{ .Values.ulimitNofiles | quote }}
             {{- if and .Values.maxAvailableSchedulers }}
@@ -261,9 +266,9 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - /bin/bash
+                - sh
                 - -ec
-                - rabbitmq-diagnostics -q ping
+                - test "$(curl -f --user {{ .Values.auth.username }}:$RABBITMQ_PASSWORD 127.0.0.1:{{ .Values.containerPorts.manager }}/api/healthchecks/node)" = '{"status":"ok"}'
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -271,9 +276,9 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - /bin/bash
+                - sh
                 - -ec
-                - rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_local_alarms
+                - curl -f --user {{ .Values.auth.username }}:$RABBITMQ_PASSWORD 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/local-alarms
           {{- else if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}

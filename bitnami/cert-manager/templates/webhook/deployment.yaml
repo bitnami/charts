@@ -88,6 +88,9 @@ spec:
             - --dynamic-serving-ca-secret-namespace=$(POD_NAMESPACE)
             - --dynamic-serving-ca-secret-name={{ template "certmanager.webhook.fullname" . }}-ca
             - --dynamic-serving-dns-names={{ template "certmanager.webhook.fullname" . }},{{ template "certmanager.webhook.fullname" . }}.{{ .Release.Namespace }},{{ template "certmanager.webhook.fullname" . }}.{{ .Release.Namespace }}.svc
+            {{- if .Values.webhook.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.webhook.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
           {{- end }}
           {{- if .Values.webhook.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.webhook.containerSecurityContext "enabled" | toYaml | nindent 12 }}
