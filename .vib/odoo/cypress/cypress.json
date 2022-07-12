@@ -1,0 +1,9 @@
+{
+  "baseUrl": "http://localhost/",
+  "env": {
+    "email": "user@example.com",
+    "password": "ComplicatedPassword123!4"
+  },
+  "defaultCommandTimeout": 35000,
+  "pageLoadTimeout": 35000
+}
