@@ -13,7 +13,7 @@ file:
   /bitnami/odoo/data:
     exists: true
     filetype: directory
-    mode: "0664"
+    mode: "0775"
     owner: odoo
     group: root
   /opt/bitnami/odoo/conf/odoo.conf:
