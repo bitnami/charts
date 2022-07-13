@@ -4,6 +4,6 @@
     "email": "user@example.com",
     "password": "ComplicatedPassword123!4"
   },
-  "defaultCommandTimeout": 35000,
+  "defaultCommandTimeout": 50000,
   "pageLoadTimeout": 60000
 }
