@@ -8,7 +8,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.commonAnnotations .Values.service.annotations }}
+  {{- if or .Values.commonAnnotations .Values.service.headless.annotations }}
   annotations:
     {{- if .Values.service.headless.annotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.service.headless.annotations "context" $ ) | nindent 4 }}
