@@ -48,6 +48,12 @@
             }
           }
         },
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-zookeeper-tcp-client"
+          }
+        }
       ]
     },
     "publish": {
