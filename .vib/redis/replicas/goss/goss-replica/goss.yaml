@@ -84,6 +84,5 @@ file:
     mode: "0777"
     filetype: symlink
     contains:
-      - slave-read-only yes
       - rename-command FLUSHDB ""
       - rename-command FLUSHALL ""
