@@ -44,7 +44,7 @@
               "path": "/.vib/zookeeper/goss"
             },
             "remote": {
-              "workload": "deploy-zookeeper"
+              "workload": "sts-zookeeper"
             }
           }
         },
