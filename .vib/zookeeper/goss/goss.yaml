@@ -23,3 +23,13 @@ command:
     exit-status: 0
     stdout: []
     stderr: []
+  zookeeper-create-znode:
+    exec: /opt/bitnami/zookeeper/bin/zkCli.sh -server 127.0.0.1:2181 create /zk_test my_data
+    exit-status: 0
+    stdout: []
+    stderr: []
+  zookeeper-check-znode:
+    exec: /opt/bitnami/zookeeper/bin/zkCli.sh -server 127.0.0.1:2181 get /zk_test
+    exit-status: 0
+    stdout: []
+    stderr: []
