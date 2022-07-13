@@ -22,7 +22,8 @@ it('allows creating a company', () => {
 
 it('allows installing/uninstalling an application', () => {
   cy.login();
-  cy.contains('Sales').click();
+  cy.get('[title="Home Menu"]').click();
+  cy.contains('Apps').click();
   cy.get('[title="Sales"]').within(() => {
     cy.contains('Install').click();
     cy.reload();
