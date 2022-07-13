@@ -36,7 +36,18 @@
           "params": {
             "endpoint": "lb-zookeeper-tcp-client"
           }
-        }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/harbor/goss"
+            },
+            "remote": {
+              "workload": "deploy-zookeeper"
+            }
+          }
+        },
       ]
     },
     "publish": {

@@ -1,0 +1,25 @@
+file:
+  /opt/bitnami/zookeeper:
+    filetype: directory
+    exists: true
+  /opt/bitnami/zookeeper/logs:
+    exists: true
+    filetype: directory
+    mode: "0775"
+  /opt/bitnami/zookeeper/conf/zoo.cfg:
+    exists: true
+    filetype: file
+    mode: "0644"
+    contains:
+      - {{ printf "/clientPort=.*%s/" .Env.ZOO_PORT_NUMBER }}
+command:
+  user-id-test:
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+    exit-status: 0
+    stdout: []
+    stderr: []
+  zookeeper-version-ok:
+    exec: /opt/bitnami/zookeeper/bin/zkCli.sh -server 127.0.0.1:2181 version | grep --quiet $(echo $APP_VERSION)
+    exit-status: 0
+    stdout: []
+    stderr: []
