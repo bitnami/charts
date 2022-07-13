@@ -11,9 +11,7 @@ it('allows creating a company', () => {
   cy.get('.o_list_button_add').click();
   cy.fixture('companies').then((company) => {
     cy.get('[name="name"]').type(`${company.newCompany.name}.${random}`);
-    cy.get('[name="phone"]').type(`${company.newCompany.phone}`, {
-      force: true,
-    });
+
     cy.contains('Save').click();
     cy.contains('.oe_title', 'Company Name');
     cy.contains('.oe_title', `${company.newCompany.name}.${random}`);
