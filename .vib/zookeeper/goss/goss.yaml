@@ -16,7 +16,7 @@ command:
     stdout: []
     stderr: []
   zookeeper-version-ok:
-    exec: /opt/bitnami/zookeeper/bin/zkCli.sh -server 127.0.0.1:2181 version | grep --quiet $(echo $APP_VERSION)
+    exec: /opt/bitnami/zookeeper/bin/zkCli.sh -server 127.0.0.1:$(echo $ZOO_PORT_NUMBER) version | grep --quiet $(echo $APP_VERSION)
     exit-status: 0
     stdout: []
     stderr: []
