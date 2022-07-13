@@ -17,5 +17,5 @@ rules:
   resources: ['podsecuritypolicies']
   verbs:     ['use']
   resourceNames:
-  - - {{ template "common.names.fullname.namespace" . }}
+  - {{ template "common.names.fullname.namespace" . }}
 {{- end }}
