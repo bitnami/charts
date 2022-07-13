@@ -5,5 +5,5 @@
     "password": "ComplicatedPassword123!4"
   },
   "defaultCommandTimeout": 50000,
-  "pageLoadTimeout": 60000
+  "pageLoadTimeout": 120000
 }
