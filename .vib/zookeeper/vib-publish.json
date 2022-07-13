@@ -41,7 +41,7 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/harbor/goss"
+              "path": "/.vib/zookeeper/goss"
             },
             "remote": {
               "workload": "deploy-zookeeper"
