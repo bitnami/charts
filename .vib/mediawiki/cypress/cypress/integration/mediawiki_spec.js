@@ -1,9 +1,9 @@
 /// <reference types="cypress" />
-import { random, getPageUrlFromTitle, confirmLogOut } from './utils';
+import { random, getPageUrlFromTitle, confirmLogOut } from '../support/utils';
 
 it('allows to log in and out', () => {
   cy.login();
-  cy.contains('li','Preferences')
+  cy.contains('li', 'Preferences');
   cy.contains('Log out').click();
   confirmLogOut();
   cy.contains('You are now logged out');
@@ -45,12 +45,9 @@ it('allows to create a new page', () => {
 it('allows to upload a file', () => {
   cy.login();
   cy.visit('/wiki/Special:Upload');
-  cy.get('#wpUploadFile').selectFile(
-    'cypress/fixtures/images/post_image.png',
-    {
-      force: true,
-    }
-  );
+  cy.get('#wpUploadFile').selectFile('cypress/fixtures/images/post_image.png', {
+    force: true,
+  });
   // We'll use a random fileName to bypass duplication-related errors
   cy.get('input[name="wpDestFile"]').type(`${random}.png`);
   // If Mediawiki detects that an identical file was already uploaded
