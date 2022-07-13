@@ -268,7 +268,7 @@ spec:
               command:
                 - sh
                 - -ec
-                - test "$(curl -f --user {{ .Values.auth.username }}:$RABBITMQ_PASSWORD 127.0.0.1:{{ .Values.containerPorts.manager }}/api/healthchecks/node)" = '{"status":"ok"}'
+                - curl -f --user {{ .Values.auth.username }}:$RABBITMQ_PASSWORD 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/virtual-hosts
           {{- else if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
