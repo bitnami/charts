@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random, getBasicAuthHeader } from "./utils";
+import { random, getBasicAuthHeader } from "../support/utils";
 
 it("allows accessing the Dashboard", () => {
   cy.login();
@@ -39,7 +39,7 @@ it("allows registering a user", () => {
  * SolR does also offer the possibility of uploading a file via UI. Nevertheless,
  * Cypress seems to struggle setting the Content-Type header to application/json
  * and the server refuses to process a octet-stream object. Use the API instead.
-*/
+ */
 it("allows uploading and indexing a file", () => {
   cy.fixture("books").then(($books) => {
     const formData = new FormData();
