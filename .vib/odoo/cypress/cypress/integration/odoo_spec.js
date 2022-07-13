@@ -10,8 +10,12 @@ it('allows creating a company', () => {
   cy.get('[data-menu-xmlid="base.menu_action_res_company_form"]').click();
   cy.get('.o_list_button_add').click();
   cy.fixture('companies').then((company) => {
-    cy.get('[name="name"]').type(`${company.newCompany.name}.${random}`);
-    cy.get('[name="phone"]').type(`${company.newCompany.phone}.${random}`);
+    cy.get('[name="name"]').type(`${company.newCompany.name}.${random}`, {
+      force: true,
+    });
+    cy.get('[name="phone"]').type(`${company.newCompany.phone}.${random}`, {
+      force: true,
+    });
     cy.contains('Save').click();
     cy.contains('.oe_title', 'Company Name');
     cy.contains('.oe_title', `${company.newCompany.name}.${random}`);
