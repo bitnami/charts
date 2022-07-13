@@ -32,21 +32,12 @@ spec:
   loadBalancerSourceRanges: {{- toYaml $query.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   ports:
-    - port: {{ if $query.service.http }}{{ coalesce $query.service.ports.http $query.service.http.port }}{{ else }}{{ $query.service.ports.http }}{{ end }}
+    - port: {{ $query.service.ports.http }}
       targetPort: http
       protocol: TCP
       name: http
       {{- if and (or (eq $query.service.type "NodePort") (eq $query.service.type "LoadBalancer")) $query.service.nodePorts.http }}
       nodePort: {{ $query.service.nodePorts.http }}
-      {{- else if eq $query.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
-    - port: {{ if $query.service.grpc }}{{ coalesce $query.service.ports.grpc $query.service.grpc.port }}{{ else }}{{ $query.service.ports.grpc }}{{ end }}
-      targetPort: grpc
-      protocol: TCP
-      name: grpc
-      {{- if and (or (eq $query.service.type "NodePort") (eq $query.service.type "LoadBalancer")) $query.service.nodePorts.grpc }}
-      nodePort: {{ $query.service.nodePorts.grpc }}
       {{- else if eq $query.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

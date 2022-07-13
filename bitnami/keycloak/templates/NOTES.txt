@@ -24,24 +24,45 @@ To access Keycloak from outside the cluster execute the following commands:
 
 {{- if contains "NodePort" .Values.service.type }}
 
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+    export HTTP_NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[?(@.name=='http')].nodePort}" services {{ include "common.names.fullname" . }})
+    {{- if .Values.auth.tls.enabled }}
+    export HTTPS_NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[?(@.name=='https')].nodePort}" services {{ include "common.names.fullname" . }})
+    {{- end }}
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    echo "http://${NODE_IP}:${NODE_PORT}/"
+
+    echo "http://${NODE_IP}:${HTTP_NODE_PORT}/"
+    {{- if .Values.auth.tls.enabled }}
+    echo "https://${NODE_IP}:${HTTPS_NODE_PORT}/"
+    {{- end }}
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         You can watch its status by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "common.names.fullname" . }}'
 
-    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "common.names.fullname" . }})
+    export HTTP_SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[?(@.name=='http')].port}" services {{ include "common.names.fullname" . }})
+    {{- if .Values.auth.tls.enabled }}
+    export HTTPS_SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[?(@.name=='https')].port}" services {{ include "common.names.fullname" . }})
+    {{- end }}
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-    echo "http://${SERVICE_IP}:${SERVICE_PORT}/"
+
+    echo "http://${SERVICE_IP}:${HTTP_SERVICE_PORT}/"
+    {{- if .Values.auth.tls.enabled }}
+    echo "https://${SERVICE_IP}:${HTTPS_SERVICE_PORT}/"
+    {{- end }}
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "common.names.fullname" . }})
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} ${SERVICE_PORT}:${SERVICE_PORT} &
-    echo "http://127.0.0.1:${SERVICE_PORT}/"
+    export HTTP_SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[?(@.name=='http')].port}" services {{ include "common.names.fullname" . }})
+    {{- if .Values.auth.tls.enabled }}
+    export HTTPS_SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[?(@.name=='https')].port}" services {{ include "common.names.fullname" . }})
+    {{- end }}
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} ${HTTP_SERVICE_PORT}:${HTTP_SERVICE_PORT} ${HTTPS_SERVICE_PORT}:${HTTPS_SERVICE_PORT} &
+
+    echo "http://127.0.0.1:${HTTP_SERVICE_PORT}/"
+    {{- if .Values.auth.tls.enabled }}
+    echo "https://127.0.0.1:${HTTPS_SERVICE_PORT}/"
+    {{- end }}
 
 {{- end }}
 {{- end }}
