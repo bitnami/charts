@@ -170,7 +170,7 @@ jobs:
             cp ../download/index.yaml bitnami/index.yaml
             # Push changes
             git add bitnami/index.yaml && git commit -m "${chart}-${chart_version}: Update index.yaml" -s
-            git push && is_index_updated=1
+            git push && is_index_updated=1 || true
 
             if [[ $is_index_updated -eq 1 ]]; then
               echo "::set-output name=result::ok"
