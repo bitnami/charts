@@ -11,7 +11,6 @@ it('allows creating a company', () => {
   cy.get('.o_list_button_add').click();
   cy.fixture('companies').then((company) => {
     cy.get('[name="name"]').type(`${company.newCompany.name}.${random}`);
-
     cy.contains('Save').click();
     cy.contains('.oe_title', 'Company Name');
     cy.contains('.oe_title', `${company.newCompany.name}.${random}`);
@@ -24,6 +23,7 @@ it('allows installing/uninstalling an application', () => {
   cy.contains('Apps').click();
   cy.get('[title="Sales"]').within(() => {
     cy.contains('Install').click();
+    cy.get('.o_blockUI').should('not.exist');
     cy.reload();
   });
   cy.get('[title="Home Menu"]').click();
