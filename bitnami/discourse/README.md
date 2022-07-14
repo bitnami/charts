@@ -131,51 +131,53 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Discourse container parameters
 
-| Name                                              | Description                                                                                  | Value           |
-| ------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------------- |
-| `discourse.skipInstall`                           | Do not run the Discourse installation wizard                                                 | `false`         |
-| `discourse.command`                               | Custom command to override image cmd                                                         | `[]`            |
-| `discourse.args`                                  | Custom args for the custom command                                                           | `[]`            |
-| `discourse.extraEnvVars`                          | Array with extra environment variables to add Discourse pods                                 | `[]`            |
-| `discourse.extraEnvVarsCM`                        | ConfigMap containing extra environment variables for Discourse pods                          | `""`            |
-| `discourse.extraEnvVarsSecret`                    | Secret containing extra environment variables (in case of sensitive data) for Discourse pods | `""`            |
-| `discourse.containerPorts.http`                   | Discourse HTTP container port                                                                | `8080`          |
-| `discourse.livenessProbe.enabled`                 | Enable livenessProbe on Discourse containers                                                 | `true`          |
-| `discourse.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                      | `500`           |
-| `discourse.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                             | `10`            |
-| `discourse.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                            | `5`             |
-| `discourse.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                          | `6`             |
-| `discourse.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                          | `1`             |
-| `discourse.readinessProbe.enabled`                | Enable readinessProbe on Discourse containers                                                | `true`          |
-| `discourse.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                     | `30`            |
-| `discourse.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                            | `10`            |
-| `discourse.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                           | `5`             |
-| `discourse.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                         | `6`             |
-| `discourse.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                         | `1`             |
-| `discourse.startupProbe.enabled`                  | Enable startupProbe on Discourse containers                                                  | `false`         |
-| `discourse.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                       | `60`            |
-| `discourse.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                              | `10`            |
-| `discourse.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                             | `5`             |
-| `discourse.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                           | `15`            |
-| `discourse.startupProbe.successThreshold`         | Success threshold for startupProbe                                                           | `1`             |
-| `discourse.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                          | `{}`            |
-| `discourse.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                         | `{}`            |
-| `discourse.customStartupProbe`                    | Custom startupProbe that overrides the default one                                           | `{}`            |
-| `discourse.resources.limits`                      | The resources limits for the Discourse containers                                            | `{}`            |
-| `discourse.resources.requests`                    | The requested resources for the Discourse containers                                         | `{}`            |
-| `discourse.containerSecurityContext.enabled`      | Enabled Discourse containers' Security Context                                               | `false`         |
-| `discourse.containerSecurityContext.runAsUser`    | Set Discourse containers' Security Context runAsUser                                         | `0`             |
-| `discourse.containerSecurityContext.runAsNonRoot` | Set Discourse containers' Security Context runAsNonRoot                                      | `false`         |
-| `discourse.lifecycleHooks`                        | for the Discourse container(s) to automate configuration before or after startup             | `{}`            |
-| `discourse.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Discourse pods              | `[]`            |
-| `persistence.enabled`                             | Enable persistence using Persistent Volume Claims                                            | `true`          |
-| `persistence.storageClass`                        | Persistent Volume storage class                                                              | `""`            |
-| `persistence.accessModes`                         | Persistent Volume access modes                                                               | `[]`            |
-| `persistence.accessMode`                          | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)            | `ReadWriteOnce` |
-| `persistence.size`                                | Persistent Volume size                                                                       | `10Gi`          |
-| `persistence.existingClaim`                       | The name of an existing PVC to use for persistence                                           | `""`            |
-| `persistence.selector`                            | Selector to match an existing Persistent Volume for Discourse data PVC                       | `{}`            |
-| `persistence.annotations`                         | Persistent Volume Claim annotations                                                          | `{}`            |
+| Name                                                   | Description                                                                                  | Value           |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
+| `discourse.skipInstall`                                | Do not run the Discourse installation wizard                                                 | `false`         |
+| `discourse.command`                                    | Custom command to override image cmd                                                         | `[]`            |
+| `discourse.args`                                       | Custom args for the custom command                                                           | `[]`            |
+| `discourse.extraEnvVars`                               | Array with extra environment variables to add Discourse pods                                 | `[]`            |
+| `discourse.extraEnvVarsCM`                             | ConfigMap containing extra environment variables for Discourse pods                          | `""`            |
+| `discourse.extraEnvVarsSecret`                         | Secret containing extra environment variables (in case of sensitive data) for Discourse pods | `""`            |
+| `discourse.passenger.extraFlags`                       | Discourse Passenger ExtraFlags                                                               | `""`            |
+| `discourse.passenger.customNginxTemplateConfigMapName` | Name of the configMap to a custom template to passenger                                      | `""`            |
+| `discourse.containerPorts.http`                        | Discourse HTTP container port                                                                | `8080`          |
+| `discourse.livenessProbe.enabled`                      | Enable livenessProbe on Discourse containers                                                 | `true`          |
+| `discourse.livenessProbe.initialDelaySeconds`          | Initial delay seconds for livenessProbe                                                      | `500`           |
+| `discourse.livenessProbe.periodSeconds`                | Period seconds for livenessProbe                                                             | `10`            |
+| `discourse.livenessProbe.timeoutSeconds`               | Timeout seconds for livenessProbe                                                            | `5`             |
+| `discourse.livenessProbe.failureThreshold`             | Failure threshold for livenessProbe                                                          | `6`             |
+| `discourse.livenessProbe.successThreshold`             | Success threshold for livenessProbe                                                          | `1`             |
+| `discourse.readinessProbe.enabled`                     | Enable readinessProbe on Discourse containers                                                | `true`          |
+| `discourse.readinessProbe.initialDelaySeconds`         | Initial delay seconds for readinessProbe                                                     | `30`            |
+| `discourse.readinessProbe.periodSeconds`               | Period seconds for readinessProbe                                                            | `10`            |
+| `discourse.readinessProbe.timeoutSeconds`              | Timeout seconds for readinessProbe                                                           | `5`             |
+| `discourse.readinessProbe.failureThreshold`            | Failure threshold for readinessProbe                                                         | `6`             |
+| `discourse.readinessProbe.successThreshold`            | Success threshold for readinessProbe                                                         | `1`             |
+| `discourse.startupProbe.enabled`                       | Enable startupProbe on Discourse containers                                                  | `false`         |
+| `discourse.startupProbe.initialDelaySeconds`           | Initial delay seconds for startupProbe                                                       | `60`            |
+| `discourse.startupProbe.periodSeconds`                 | Period seconds for startupProbe                                                              | `10`            |
+| `discourse.startupProbe.timeoutSeconds`                | Timeout seconds for startupProbe                                                             | `5`             |
+| `discourse.startupProbe.failureThreshold`              | Failure threshold for startupProbe                                                           | `15`            |
+| `discourse.startupProbe.successThreshold`              | Success threshold for startupProbe                                                           | `1`             |
+| `discourse.customLivenessProbe`                        | Custom livenessProbe that overrides the default one                                          | `{}`            |
+| `discourse.customReadinessProbe`                       | Custom readinessProbe that overrides the default one                                         | `{}`            |
+| `discourse.customStartupProbe`                         | Custom startupProbe that overrides the default one                                           | `{}`            |
+| `discourse.resources.limits`                           | The resources limits for the Discourse containers                                            | `{}`            |
+| `discourse.resources.requests`                         | The requested resources for the Discourse containers                                         | `{}`            |
+| `discourse.containerSecurityContext.enabled`           | Enabled Discourse containers' Security Context                                               | `false`         |
+| `discourse.containerSecurityContext.runAsUser`         | Set Discourse containers' Security Context runAsUser                                         | `0`             |
+| `discourse.containerSecurityContext.runAsNonRoot`      | Set Discourse containers' Security Context runAsNonRoot                                      | `false`         |
+| `discourse.lifecycleHooks`                             | for the Discourse container(s) to automate configuration before or after startup             | `{}`            |
+| `discourse.extraVolumeMounts`                          | Optionally specify extra list of additional volumeMounts for the Discourse pods              | `[]`            |
+| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                            | `true`          |
+| `persistence.storageClass`                             | Persistent Volume storage class                                                              | `""`            |
+| `persistence.accessModes`                              | Persistent Volume access modes                                                               | `[]`            |
+| `persistence.accessMode`                               | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)            | `ReadWriteOnce` |
+| `persistence.size`                                     | Persistent Volume size                                                                       | `10Gi`          |
+| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                           | `""`            |
+| `persistence.selector`                                 | Selector to match an existing Persistent Volume for Discourse data PVC                       | `{}`            |
+| `persistence.annotations`                              | Persistent Volume Claim annotations                                                          | `{}`            |
 
 
 ### Sidekiq container parameters
