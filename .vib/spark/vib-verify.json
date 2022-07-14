@@ -37,6 +37,31 @@
             "endpoint": "lb-spark-master-svc-http",
             "app_protocol": "HTTP"
           }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/spark/goss"
+            },
+            "remote": {
+              "workload": "sts-spark-master"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/spark/cypress"
+            },
+            "endpoint": "lb-spark-master-svc-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "user",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
         }
       ]
     }

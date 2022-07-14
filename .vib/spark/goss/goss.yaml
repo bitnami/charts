@@ -1,0 +1,27 @@
+file:
+  /opt/bitnami/spark/conf/spark-defaults.conf:
+    filetype: file
+    exists: true
+    mode: "0664"
+command:
+  user-id-test:
+    exec: id -u
+    exit-status: 0
+    stdout:
+      - 1001
+    stderr: []
+  spark-version-ok:
+    exec: cat /opt/bitnami/spark/RELEASE | grep "Spark $APP_VERSION"
+    exit-status: 0
+    stdout: []
+    stderr: []
+  pyspark-ok:
+    exec: pip show pyspark
+    exit-status: 0
+    stdout: []
+    stderr: []
+  spark-help-ok:
+    exec: spark-shell --help
+    exit-status: 0
+    stdout: []
+    stderr: []

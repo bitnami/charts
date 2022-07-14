@@ -15,7 +15,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/spark
 ```
 
-## Introduction
+### Introduction
 
 This chart bootstraps an [Apache Spark](https://github.com/bitnami/containers/tree/main/bitnami/spark) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
@@ -23,7 +23,7 @@ Apache Spark includes APIs for Java, Python, Scala and R.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-## Prerequisites
+### Prerequisites
 
 - Kubernetes 1.19+
 - Helm 3.2.0+
