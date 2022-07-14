@@ -19,6 +19,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/kafka/**'
       - 'bitnami/keycloak/**'
       - 'bitnami/kibana/**'
+      - 'bitnami/magento/**'
       - 'bitnami/mariadb/**'
       - 'bitnami/matomo/**'
       - 'bitnami/mediawiki/**'

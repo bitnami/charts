@@ -120,6 +120,9 @@ spec:
           args:
             - -target=querier
             - -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
+            {{- if .Values.queryScheduler.enabled }}
+            - -querier.scheduler-address={{ template "grafana-loki.query-scheduler.fullname" . }}:{{ .Values.queryScheduler.service.ports.grpc }}
+            {{- end }}
           {{- end }}
           {{- if .Values.querier.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.querier.extraEnvVars "context" $) | nindent 12 }}
