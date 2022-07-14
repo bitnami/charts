@@ -38,7 +38,7 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ template "keycloak.namespace" . }}
+      - {{ include "common.names.namespace" . | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       {{- if .Values.metrics.serviceMonitor.selector }}

@@ -18,17 +18,6 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{/*
-Return the proper Keycloak namespace
-*/}}
-{{- define "keycloak.namespace" -}}
-    {{- if .Values.namespaceOverride -}}
-        {{- print .Values.namespaceOverride -}}
-    {{- else -}}
-        {{- print .Release.Namespace -}}
-    {{- end }}
-{{- end -}}
-
-{{/*
 Return the proper Keycloak image name
 */}}
 {{- define "keycloak.image" -}}

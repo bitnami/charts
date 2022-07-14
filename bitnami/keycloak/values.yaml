@@ -29,7 +29,7 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override keycloak.fullname
 ##
 fullnameOverride: ""
-## @param namespaceOverride String to fully override keycloak.namespace
+## @param namespaceOverride String to fully override common.names.namespace
 ##
 namespaceOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
