@@ -25,7 +25,7 @@ spec:
   loadBalancerIP: {{ .Values.skipper.service.loadBalancerIP }}
   {{- end }}
   {{- if and (eq .Values.skipper.service.type "LoadBalancer") .Values.skipper.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml .Values.skipper.service.loadBalancerSourceRanges | nindent 4 }}
+  loadBalancerSourceRanges: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.service.loadBalancerSourceRanges "context" $) | nindent 4 }}
   {{- end }}
   {{- if or (eq .Values.skipper.service.type "LoadBalancer") (eq .Values.skipper.service.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.skipper.service.externalTrafficPolicy | quote }}
