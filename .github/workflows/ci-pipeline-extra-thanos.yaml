@@ -33,4 +33,4 @@ jobs:
         with:
           pipeline: thanos/bucketweb/vib-verify.json
         env:
-          VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
+          VIB_ENV_TARGET_PLATFORM: 7ddab896-2e4e-4d58-a501-f79897eba3a0
