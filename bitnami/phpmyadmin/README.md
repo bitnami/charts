@@ -179,7 +179,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                                | `false`                  |
 | `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates and want to manage the secret via helm,                                                | `[]`                     |
+| `ingress.existingSecretName`       | If you're providing your own certificate and want to manage the secret yourself,                                                 | `""`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
@@ -298,13 +299,14 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ### TLS Secrets
 
-This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are three common use cases:
+This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are some common use cases:
 
-- Helm generates/manages certificate secrets.
-- User generates/manages certificates separately.
+- Helm generates and manages certificate secrets (default).
+- User generates certificates and helm manages secrets.
+- User generates and manages certificates separately.
 - An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
 
-In the first two cases, it's needed a certificate and a key. We would expect them to look like this:
+In the second case, a certificate and a key are needed. We would expect them to look like this:
 
 - certificate files should look like (and there can be more than one certificate if there is a certificate chain)
 
@@ -326,9 +328,11 @@ In the first two cases, it's needed a certificate and a key. We would expect the
     -----END RSA PRIVATE KEY-----
     ```
 
-If you are going to use Helm to manage the certificates, please copy these values into the `certificate` and `key` values for a given `ingress.secrets` entry.
+If you are going to generate certificates yourself and want helm to manage the secret, please copy these values into the `certificate` and `key` values for a given `ingress.secrets` entry.
 
-If you are going to manage TLS secrets outside of Helm, please know that you can create a TLS secret (named `phpmyadmin.local-tls` for example).
+If you want to manage TLS secrets outside of Helm, please know that you can create a TLS secret and pass its name via the parameter `ingress.existingSecretName`.
+
+To make use of cert-manager, you need to add the the `cert-manager.io/cluster-issuer:` annotation to the ingress object via `ingress.annotations`.
 
 ### Adding extra environment variables
 

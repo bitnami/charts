@@ -21,10 +21,10 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - name: http-management
+    - name: http
       port: {{ coalesce .Values.metrics.service.ports.http .Values.metrics.service.port }}
       protocol: TCP
-      targetPort: http-management
+      targetPort: http
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
 {{- end }}
