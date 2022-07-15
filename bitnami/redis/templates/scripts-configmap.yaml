@@ -64,10 +64,15 @@ data:
 
     SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "TCP_SENTINEL")
     validate_quorum() {
+        redis_service=${REDIS_SERVICE}
+        if ! timeout 1 bash -c "cat < /dev/null > /dev/tcp/${REDIS_SERVICE}/${SENTINEL_SERVICE_PORT}"; then
+            warn "Timeout when connecting to ${REDIS_SERVICE}, will use ${HEADLESS_SERVICE}"
+            redis_service=${HEADLESS_SERVICE}
+        fi
         if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
-            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel master {{ .Values.sentinel.masterSet }}"
+            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $redis_service -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel master {{ .Values.sentinel.masterSet }}"
         else
-            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel master {{ .Values.sentinel.masterSet }}"
+            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $redis_service -p $SENTINEL_SERVICE_PORT sentinel master {{ .Values.sentinel.masterSet }}"
         fi
         info "about to run the command: $quorum_info_command"
         eval $quorum_info_command | grep -Fq "s_down"
