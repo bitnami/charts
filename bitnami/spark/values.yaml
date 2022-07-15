@@ -9,12 +9,15 @@
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
-  imageRegistry: ""
+  #imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
-  imagePullSecrets: []
+  registry: registry.local
+  repository: spark
+  tag: development
+  imagePullSecrets: [ ]
   storageClass: ""
 
 ## @section Common parameters
@@ -44,6 +47,23 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param initScripts Dictionary of init scripts. Evaluated as a template.
+## Specify dictionary of scripts to be run at first boot
+## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
+## For example:
+#initScripts:
+  #my_init_script.sh: |
+    #  #!/bin/sh
+   #   touch test
+#echo "Do something." >> test.txt
+initScripts: {}
+## @param initScriptsCM ConfigMap with the init scripts. Evaluated as a template.
+## Note: This will override initScripts
+##
+initScriptsCM: ""
+## @param initScriptsSecret Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.
+##
+initScriptsSecret: ""
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -59,9 +79,6 @@ diagnosticMode:
   args:
     - infinity
 
-## @section Spark parameters
-##
-
 ## Bitnami Spark image version
 ## ref: https://hub.docker.com/r/bitnami/spark/tags/
 ## @param image.registry Spark image registry
@@ -72,14 +89,14 @@ diagnosticMode:
 ## @param image.debug Enable image debug mode
 ##
 image:
-  registry: docker.io
-  repository: bitnami/spark
-  tag: 3.3.0-debian-11-r2
+  registry: registry.local
+  repository: spark
+  tag: development
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
-  pullPolicy: IfNotPresent
+  pullPolicy: Never
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
