@@ -111,9 +111,9 @@ spec:
               value: {{ .Values.auth.rootUser | quote }}
             {{- if .Values.auth.usePasswordFile }}
             - name: MONGODB_ROOT_PASSWORD_FILE
-              value: "/bitnami/mongodb/secrets/mongodb-root-password"
+              value: {{ $.Values.auth.passwordFile.root | quote }}
             - name: MONGODB_REPLICA_SET_KEY_FILE
-              value: "/bitnami/mongodb/secrets/mongodb-replica-set-key"
+              value: {{ $.Values.auth.passwordFile.replica | quote }}
             {{- else }}
             - name: MONGODB_ROOT_PASSWORD
               valueFrom:
