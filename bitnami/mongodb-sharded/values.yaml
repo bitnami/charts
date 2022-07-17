@@ -119,9 +119,9 @@ auth:
   usePasswordFile: false
   ## @param auth.passwordFile sets mountpoint of the password files, if the auth.usePasswordFile is set to `true`
   ##
-  ## passwordFile:
-  ##   root: /path/to/file
-  ##   replica: /path/to/file
+  passwordFile:
+    root: /path/to/file
+    replica: /path/to/file
 
 ## @param shards Number of shards to be created
 ## ref: https://docs.mongodb.com/manual/core/sharded-cluster-shards/
