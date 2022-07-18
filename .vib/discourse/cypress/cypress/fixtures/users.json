@@ -1,8 +1,8 @@
 {
   "newUser": {
-    "username": "NonTrivialUser",
-    "password": "N0ntR1Vi@lPaS$wOrD",
     "email": "nontrivial@email.com",
-    "name": "Trivial Name"
+    "name": "Trivial Name",
+    "password": "N0ntR1Vi@lPaS$wOrD",
+    "username": "NonTrivialUser"
   }
 }

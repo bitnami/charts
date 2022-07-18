@@ -37,11 +37,11 @@
         {
           "action_id": "goss",
           "params": {
-            "resources": {
-              "path": "/.vib/nginx/goss"
-            },
             "remote": {
               "workload": "deploy-nginx"
+            },
+            "resources": {
+              "path": "/.vib/nginx/goss"
             }
           }
         }
@@ -51,7 +51,7 @@
           "path": "/bitnami/nginx",
           "url": "{SHA_ARCHIVE}"
         },
-        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0IjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
+        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0cyI6IAogICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIK",
         "target_platform": {
           "size": {
             "name": "S4"

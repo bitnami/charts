@@ -1,18 +1,33 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/cert-manager"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
         },
         {
           "action_id": "helm-lint"
+        }
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/cert-manager",
+          "url": "{SHA_ARCHIVE}"
+        }
+      }
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "password": "{VIB_ENV_S3_PASSWORD}",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}"
+            }
+          }
         }
       ]
     },
@@ -25,21 +40,6 @@
             "vuln_type": [
               "OS"
             ]
-          }
-        }
-      ]
-    },
-    "publish": {
-      "actions": [
-        {
-          "action_id": "helm-publish",
-          "params": {
-            "repository": {
-              "kind": "S3",
-              "url": "{VIB_ENV_S3_URL}",
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
-            }
           }
         }
       ]

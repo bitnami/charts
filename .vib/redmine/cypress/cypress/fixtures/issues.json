@@ -1,6 +1,6 @@
 {
   "newIssue": {
-    "subject": "This is a first bug ever discovered",
-    "description": "Lorem ipsum bug sit amet"
+    "description": "Lorem ipsum bug sit amet",
+    "subject": "This is a first bug ever discovered"
   }
 }

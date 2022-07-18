@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/mariadb"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,43 +8,13 @@
         {
           "action_id": "helm-lint"
         }
-      ]
-    },
-    "verify": {
+      ],
       "context": {
         "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/mariadb"
-        },
-        "runtime_parameters": "YXV0aDoKICBkYXRhYmFzZTogdGVzdF9kYXRhYmFzZQogIHVzZXJuYW1lOiAidXNlciIKICBwYXNzd29yZDogIkNvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNCI=",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
+          "path": "/bitnami/mariadb",
+          "url": "{SHA_ARCHIVE}"
         }
-      },
-      "actions": [
-        {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
-          }
-        },
-
-        {
-          "action_id": "goss",
-          "params": {
-            "resources": {
-              "path": "/.vib/mariadb/goss"
-            },
-            "remote": {
-              "workload": "sts-mariadb"
-            }
-          }
-        }
-      ]
+      }
     },
     "publish": {
       "actions": [
@@ -59,13 +23,50 @@
           "params": {
             "repository": {
               "kind": "S3",
+              "password": "{VIB_ENV_S3_PASSWORD}",
               "url": "{VIB_ENV_S3_URL}",
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
+              "username": "{VIB_ENV_S3_USERNAME}"
             }
           }
         }
       ]
+    },
+    "verify": {
+      "actions": [
+        {
+          "action_id": "trivy",
+          "params": {
+            "threshold": "CRITICAL",
+            "vuln_type": [
+              "OS"
+            ]
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "remote": {
+              "workload": "sts-mariadb"
+            },
+            "resources": {
+              "path": "/.vib/mariadb/goss"
+            }
+          }
+        }
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/mariadb",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "YXV0aDoKICBkYXRhYmFzZTogdGVzdF9kYXRhYmFzZQogIHVzZXJuYW1lOiAidXNlciIKICBwYXNzd29yZDogIkNvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNCI=",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
+        }
+      }
     }
   }
 }

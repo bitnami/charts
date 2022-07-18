@@ -43,15 +43,28 @@
         {
           "action_id": "goss",
           "params": {
-            "resources": {
-              "path": "/.vib/mariadb/goss"
-            },
             "remote": {
               "workload": "sts-mariadb"
+            },
+            "resources": {
+              "path": "/.vib/mariadb/goss"
             }
           }
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/mariadb",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "YXV0aDoKICBkYXRhYmFzZTogdGVzdF9kYXRhYmFzZQogIHVzZXJuYW1lOiAidXNlciIKICBwYXNzd29yZDogIkNvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNCI=",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
+        }
+      }
     }
   }
 }

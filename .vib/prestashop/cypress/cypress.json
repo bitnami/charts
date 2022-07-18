@@ -1,14 +1,14 @@
 {
+  "chromeWebSecurity": false,
+  "defaultCommandTimeout": 30000,
   "env": {
-    "username": "user",
     "email": "user@example.com",
-    "password": "ComplicatedPassword123!4"
+    "password": "ComplicatedPassword123!4",
+    "username": "user"
   },
   "hosts": {
     "vmware-prestashop.my": "{{ TARGET_IP }}"
   },
-  "defaultCommandTimeout": 30000,
-  "viewportWidth": 1800,
   "viewportHeight": 800,
-  "chromeWebSecurity": false
+  "viewportWidth": 1800
 }

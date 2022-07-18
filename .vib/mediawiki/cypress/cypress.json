@@ -1,10 +1,10 @@
 {
+  "defaultCommandTimeout": 30000,
   "env": {
-    "username": "user",
-    "password": "ComplicatedPassword123!4"
+    "password": "ComplicatedPassword123!4",
+    "username": "user"
   },
   "hosts": {
     "bitnami-mediawiki.my": "{{ TARGET_IP }}"
-  },
-  "defaultCommandTimeout": 30000
+  }
 }

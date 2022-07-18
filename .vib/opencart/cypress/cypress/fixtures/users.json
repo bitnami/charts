@@ -1,9 +1,9 @@
 {
   "newUser": {
+    "email": "janeeyre@example.com",
     "firstName": "Jane",
     "lastName": "Eyre",
-    "email": "janeeyre@example.com",
-    "phone": "653111345",
-    "password": "someComplicatedPass12345!"
+    "password": "someComplicatedPass12345!",
+    "phone": "653111345"
   }
 }

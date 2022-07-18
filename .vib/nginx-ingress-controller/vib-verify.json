@@ -40,7 +40,7 @@
           "path": "/bitnami/nginx-ingress-controller",
           "url": "{SHA_ARCHIVE}"
         },
-        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0IjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
+        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0cyI6IAogICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIK",
         "target_platform": {
           "size": {
             "name": "S4"

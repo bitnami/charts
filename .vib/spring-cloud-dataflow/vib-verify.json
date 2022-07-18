@@ -37,22 +37,22 @@
         {
           "action_id": "goss",
           "params": {
-            "resources": {
-              "path": "/.vib/spring-cloud-dataflow/goss"
-            },
             "remote": {
               "workload": "deploy-spring-cloud-dataflow-server"
+            },
+            "resources": {
+              "path": "/.vib/spring-cloud-dataflow/goss"
             }
           }
         },
         {
           "action_id": "cypress",
           "params": {
+            "app_protocol": "HTTP",
+            "endpoint": "lb-spring-cloud-dataflow-server-http",
             "resources": {
               "path": "/.vib/spring-cloud-dataflow/cypress"
-            },
-            "endpoint": "lb-spring-cloud-dataflow-server-http",
-            "app_protocol": "HTTP"
+            }
           }
         }
       ],
@@ -61,7 +61,7 @@
           "path": "/bitnami/spring-cloud-dataflow",
           "url": "{SHA_ARCHIVE}"
         },
-        "runtime_parameters": "InNlcnZlciI6CiAgInNlcnZpY2UiOgogICAgInBvcnQiOiA4MAogICAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIg==",
+        "runtime_parameters": "c2VydmVyOgogIHNlcnZpY2U6CiAgICB0eXBlOiBMb2FkQmFsYW5jZXIKICAgIHBvcnQ6IDgwCg==",
         "target_platform": {
           "size": {
             "name": "S4"

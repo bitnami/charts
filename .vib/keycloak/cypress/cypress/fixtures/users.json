@@ -1,10 +1,10 @@
 {
   "newUser": {
+    "email": "thea@mail.com",
     "firstName": "Theodore",
     "lastName": "Ronclaw",
-    "username": "thea",
-    "email": "thea@mail.com",
     "password": "someComplicatedPass12345!",
-    "role": "User"
+    "role": "User",
+    "username": "thea"
   }
 }

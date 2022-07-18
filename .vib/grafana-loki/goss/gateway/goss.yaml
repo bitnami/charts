@@ -1,17 +1,17 @@
-file:
-  /opt/bitnami/nginx/conf/nginx.conf:
-    mode: "0644"
-    filetype: file
-    exists: true
-  /app/index.html:
-    mode: "0644"
-    filetype: file
-    exists: true
-    contains:
-      - "Welcome to nginx!"   
 command:
   user-id-test:
     exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
     exit-status: 0
-    stdout: []
     stderr: []
+    stdout: []
+file:
+  /app/index.html:
+    contains:
+      - Welcome to nginx!
+    exists: true
+    filetype: file
+    mode: "0644"
+  /opt/bitnami/nginx/conf/nginx.conf:
+    exists: true
+    filetype: file
+    mode: "0644"

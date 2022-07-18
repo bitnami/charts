@@ -1,8 +1,8 @@
 {
   "newUser": {
-    "userName": "Doe",
+    "email": "joanofarc@email.com",
     "password": "ComplicatedUserpassword123!4",
     "realName": "Joan Of Arc",
-    "email": "joanofarc@email.com"
+    "userName": "Doe"
   }
 }

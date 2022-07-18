@@ -36,11 +36,11 @@
         {
           "action_id": "goss",
           "params": {
-            "resources": {
-              "path": "/.vib/postgresql/goss"
-            },
             "remote": {
               "workload": "sts-postgresql"
+            },
+            "resources": {
+              "path": "/.vib/postgresql/goss"
             }
           }
         }
@@ -50,7 +50,7 @@
           "path": "/bitnami/postgresql",
           "url": "{SHA_ARCHIVE}"
         },
-        "runtime_parameters": "ImF1dGgiOgogICJwb3N0Z3Jlc1Bhc3N3b3JkIjogIjdkTXhMZmNxeE4iCiJwcmltYXJ5IjoKICAic2VydmljZSI6CiAgICAicG9ydHMiOgogICAgICAicG9zdGdyZXNxbCI6IDgwCiAgICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
+        "runtime_parameters": "YXV0aDoKICB1c2VybmFtZTogdXNlcgogIHBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzNAogIGRhdGFiYXNlOiB0ZXN0X2RhdGFiYXNlCnByaW1hcnk6CiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBwb3N0Z3Jlc3FsOiA4MAogICAgdHlwZTogTG9hZEJhbGFuY2Vy",
         "target_platform": {
           "size": {
             "name": "S4"

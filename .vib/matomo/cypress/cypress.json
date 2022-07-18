@@ -1,11 +1,11 @@
 {
+  "defaultCommandTimeout": 30000,
   "env": {
-    "username": "user",
+    "email": "user@example.com",
     "password": "ComplicatedPassword123!4",
-    "email": "user@example.com"
+    "username": "user"
   },
   "hosts": {
     "bitnami-matomo.my": "{{ TARGET_IP }}"
-  },
-  "defaultCommandTimeout": 30000
+  }
 }

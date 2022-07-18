@@ -1,6 +1,6 @@
 {
   "newDiscount": {
-    "ruleName": "WELCOME",
-    "amount": "35"
+    "amount": "35",
+    "ruleName": "WELCOME"
   }
 }

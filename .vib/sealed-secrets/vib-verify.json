@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/sealed-secrets"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,7 +8,13 @@
         {
           "action_id": "helm-lint"
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/sealed-secrets",
+          "url": "{SHA_ARCHIVE}"
+        }
+      }
     },
     "verify": {
       "actions": [
@@ -22,7 +22,9 @@
           "action_id": "trivy",
           "params": {
             "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "vuln_type": [
+              "OS"
+            ]
           }
         }
       ]

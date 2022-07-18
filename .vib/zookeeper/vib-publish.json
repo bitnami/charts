@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/zookeeper"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,22 +8,30 @@
         {
           "action_id": "helm-lint"
         }
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/zookeeper",
+          "url": "{SHA_ARCHIVE}"
+        }
+      }
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "password": "{VIB_ENV_S3_PASSWORD}",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}"
+            }
+          }
+        }
       ]
     },
     "verify": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/zookeeper"
-        },
-        "runtime_parameters": "ImF1dGgiOgogICJjbGllbnRQYXNzd29yZCI6ICI5N1JSc1VOc2xnTjAiCiJsb2dMZXZlbCI6ICJJTkZPIgoic2VydmljZSI6CiAgInBvcnRzIjoKICAgICJjbGllbnQiOiAiODAiCiAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgoidGxzIjoKICAiY2xpZW50IjoKICAgICJrZXlzdG9yZVBhc3N3b3JkIjogImk5S3dEZ01GY3FTZCIKICAgICJ0cnVzdHN0b3JlUGFzc3dvcmQiOiAiN0NFU0JkOVppdm1EIgogICJxdW9ydW0iOgogICAgImtleXN0b3JlUGFzc3dvcmQiOiAiNm5wQmx3MWdPQmZXIgogICAgInRydXN0c3RvcmVQYXNzd29yZCI6ICI0MFo4VE1BV0tkUkUi",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
-        }
-      },
       "actions": [
         {
           "action_id": "trivy",
@@ -46,22 +48,20 @@
             "endpoint": "lb-zookeeper-tcp-client"
           }
         }
-      ]
-    },
-    "publish": {
-      "actions": [
-        {
-          "action_id": "helm-publish",
-          "params": {
-            "repository": {
-              "kind": "S3",
-              "url": "{VIB_ENV_S3_URL}",
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
-            }
-          }
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/zookeeper",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "ImF1dGgiOgogICJjbGllbnRQYXNzd29yZCI6ICI5N1JSc1VOc2xnTjAiCiJsb2dMZXZlbCI6ICJJTkZPIgoic2VydmljZSI6CiAgInBvcnRzIjoKICAgICJjbGllbnQiOiAiODAiCiAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgoidGxzIjoKICAiY2xpZW50IjoKICAgICJrZXlzdG9yZVBhc3N3b3JkIjogImk5S3dEZ01GY3FTZCIKICAgICJ0cnVzdHN0b3JlUGFzc3dvcmQiOiAiN0NFU0JkOVppdm1EIgogICJxdW9ydW0iOgogICAgImtleXN0b3JlUGFzc3dvcmQiOiAiNm5wQmx3MWdPQmZXIgogICAgInRydXN0c3RvcmVQYXNzd29yZCI6ICI0MFo4VE1BV0tkUkUi",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
         }
-      ]
+      }
     }
   }
 }

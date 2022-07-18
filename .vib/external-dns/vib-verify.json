@@ -30,11 +30,11 @@
         {
           "action_id": "goss",
           "params": {
-            "resources": {
-              "path": "/.vib/external-dns/goss"
-            },
             "remote": {
               "workload": "deploy-external-dns"
+            },
+            "resources": {
+              "path": "/.vib/external-dns/goss"
             }
           }
         },

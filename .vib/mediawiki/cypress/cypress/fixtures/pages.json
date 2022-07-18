@@ -1,7 +1,7 @@
 {
   "newPage": {
-    "title": "Super Page",
+    "content": "Inventive Lorem ipsum content",
     "summary": "Page's super summary",
-    "content": "Inventive Lorem ipsum content"
+    "title": "Super Page"
   }
 }

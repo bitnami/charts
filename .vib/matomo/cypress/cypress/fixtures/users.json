@@ -1,7 +1,7 @@
 {
   "newUser": {
-    "username": "NonTrivialUser",
+    "email": "test@email.com",
     "password": "N0ntR1Vi@lPaS$wOrD",
-    "email": "test@email.com"
+    "username": "NonTrivialUser"
   }
 }

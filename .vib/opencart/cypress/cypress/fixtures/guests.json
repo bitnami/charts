@@ -1,11 +1,11 @@
 {
   "newGuest": {
-    "firstName": "Abigail",
-    "lastName": "Somersat",
-    "email": "abby@example.com",
-    "phone": "653111345",
     "address": "Summer Street 13",
     "city": "Midland",
+    "email": "abby@example.com",
+    "firstName": "Abigail",
+    "lastName": "Somersat",
+    "phone": "653111345",
     "postCode": "02003",
     "zone": "Angus"
   }

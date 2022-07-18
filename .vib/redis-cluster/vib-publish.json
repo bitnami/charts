@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/redis-cluster"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,22 +8,30 @@
         {
           "action_id": "helm-lint"
         }
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/redis-cluster",
+          "url": "{SHA_ARCHIVE}"
+        }
+      }
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "password": "{VIB_ENV_S3_PASSWORD}",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}"
+            }
+          }
+        }
       ]
     },
     "verify": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/redis-cluster"
-        },
-        "runtime_parameters": "InBhc3N3b3JkIjogIkNvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNCIKInNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAicmVkaXMiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
-        }
-      },
       "actions": [
         {
           "action_id": "trivy",
@@ -49,30 +51,28 @@
         {
           "action_id": "goss",
           "params": {
-            "resources": {
-              "path": "/.vib/redis-cluster/goss"
-            },
             "remote": {
               "workload": "sts-redis-cluster"
+            },
+            "resources": {
+              "path": "/.vib/redis-cluster/goss"
             }
           }
         }
-      ]
-    },
-    "publish": {
-      "actions": [
-        {
-          "action_id": "helm-publish",
-          "params": {
-            "repository": {
-              "kind": "S3",
-              "url": "{VIB_ENV_S3_URL}",
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
-            }
-          }
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/redis-cluster",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "InBhc3N3b3JkIjogIkNvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNCIKInNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAicmVkaXMiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
         }
-      ]
+      }
     }
   }
 }

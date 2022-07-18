@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/grafana-loki"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,70 +8,78 @@
         {
           "action_id": "helm-lint"
         }
-      ]
-    },
-    "verify": {
+      ],
       "context": {
         "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/grafana-loki"
-        },
-        "runtime_parameters": "Z2F0ZXdheToKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDgwCiAgICB0eXBlOiBMb2FkQmFsYW5jZXIK",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
+          "path": "/bitnami/grafana-loki",
+          "url": "{SHA_ARCHIVE}"
         }
-      },
+      }
+    },
+    "verify": {
       "actions": [
         {
           "action_id": "trivy",
           "params": {
             "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "vuln_type": [
+              "OS"
+            ]
           }
         },
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-grafana-loki-gateway-http",
-            "app_protocol": "HTTP"
+            "app_protocol": "HTTP",
+            "endpoint": "lb-grafana-loki-gateway-http"
           }
         },
         {
           "action_id": "goss",
           "params": {
-            "resources": {
-              "path": "/.vib/grafana-loki/goss/gateway"
-            },
             "remote": {
               "workload": "deploy-grafana-loki-gateway"
+            },
+            "resources": {
+              "path": "/.vib/grafana-loki/goss/gateway"
             }
           }
         },
         {
           "action_id": "goss",
           "params": {
-            "resources": {
-              "path": "/.vib/grafana-loki/goss/querier"
-            },
             "remote": {
               "workload": "sts-grafana-loki-querier"
+            },
+            "resources": {
+              "path": "/.vib/grafana-loki/goss/querier"
             }
           }
         },
         {
           "action_id": "cypress",
           "params": {
+            "app_protocol": "HTTP",
+            "endpoint": "lb-grafana-loki-gateway-http",
             "resources": {
               "path": "/.vib/grafana-loki/cypress"
-            },
-            "endpoint": "lb-grafana-loki-gateway-http",
-            "app_protocol": "HTTP"
+            }
           }
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/grafana-loki",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "Z2F0ZXdheToKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDgwCiAgICB0eXBlOiBMb2FkQmFsYW5jZXIK",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
+        }
+      }
     }
   }
 }

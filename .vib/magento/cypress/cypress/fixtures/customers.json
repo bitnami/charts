@@ -1,8 +1,8 @@
 {
   "newCustomer": {
+    "email": "emperor@romanmail.com",
     "firstName": "Marcus",
     "lastName": "Aurelius",
-    "email": "emperor@romanmail.com",
     "password": "stoicLife124"
   }
 }

@@ -1,9 +1,9 @@
 {
   "newUser": {
-    "userName": "JaneJessica",
-    "password": "someComplicatedPass12345!",
+    "email": "thisisanemail@email.com",
     "firstName": "Jane Doe Jess",
     "lastName": "Doe",
-    "email": "thisisanemail@email.com"
+    "password": "someComplicatedPass12345!",
+    "userName": "JaneJessica"
   }
 }

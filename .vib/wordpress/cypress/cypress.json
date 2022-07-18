@@ -3,13 +3,6 @@
   "defaultCommandTimeout": 30000,
   "env": {
     "password": "ComplicatedPassword123!4",
-    "smtpMailServer": "mail.server.com",
-    "smtpPort": "120",
-    "smtpUser": "test_mail_user",
-    "username": "test_user",
-    "wordpressBlogname": "Test_Users's Blog!",
-    "wordpressEmail": "test_user_email@email.com",
-    "wordpressFirstName": "TestName",
-    "wordpressLastName": "TestLastName"
+    "username": "test_user"
   }
 }

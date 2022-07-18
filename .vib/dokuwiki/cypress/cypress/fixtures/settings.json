@@ -1,7 +1,7 @@
 {
   "newSetting": {
-    "saveFolder": "./data",
     "directoryCreationMode": "0755",
-    "newDokuWikiFullName": "CuriousUserWiki"
+    "newDokuWikiFullName": "CuriousUserWiki",
+    "saveFolder": "./data"
   }
 }

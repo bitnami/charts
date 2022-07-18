@@ -1,19 +1,19 @@
 {
-  "shopper": {
-    "firstName": "Tom",
-    "lastName": "Chat",
-    "email": "lechat@example.com",
-    "address": {
-      "street": "3401 Hillview Ave",
-      "city": "Palo Alto",
-      "state": "California",
-      "zipcode": "94304"
-    }
-  },
   "newCustomer": {
+    "email": "lecanard@example.com",
     "firstName": "Maurice",
     "lastName": "Canard",
-    "email": "lecanard@example.com",
     "password": "Sup3rComplicated!"
+  },
+  "shopper": {
+    "address": {
+      "city": "Palo Alto",
+      "state": "California",
+      "street": "3401 Hillview Ave",
+      "zipcode": "94304"
+    },
+    "email": "lechat@example.com",
+    "firstName": "Tom",
+    "lastName": "Chat"
   }
 }

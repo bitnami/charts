@@ -39,8 +39,53 @@
               "OS"
             ]
           }
+        },
+        {
+          "action_id": "health-check",
+          "params": {
+            "app_protocol": "HTTP",
+            "endpoint": "lb-joomla-http"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "remote": {
+              "workload": "deploy-joomla"
+            },
+            "resources": {
+              "path": "/.vib/joomla/goss"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "app_protocol": "HTTP",
+            "endpoint": "lb-joomla-http",
+            "env": {
+              "password": "ComplicatedPassword123!4",
+              "username": "user"
+            },
+            "resources": {
+              "path": "/.vib/joomla/cypress"
+            }
+          }
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/joomla",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "am9vbWxhVXNlcm5hbWU6IHVzZXIKam9vbWxhUGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNApzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODA=",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
+        }
+      }
     }
   }
 }

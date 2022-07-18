@@ -1,8 +1,8 @@
 {
   "newUser1": {
-    "username": "janedoe",
-    "password": "somePass12345",
+    "email": "jane@example.com",
     "fullname": "Jane Jessica Doe",
-    "email": "jane@example.com"
+    "password": "somePass12345",
+    "username": "janedoe"
   }
 }

@@ -43,11 +43,24 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-nginx-intel-http",
-            "app_protocol": "HTTP"
+            "app_protocol": "HTTP",
+            "endpoint": "lb-nginx-intel-http"
           }
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/nginx-intel",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0cyI6IAogICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIK",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
+        }
+      }
     }
   }
 }

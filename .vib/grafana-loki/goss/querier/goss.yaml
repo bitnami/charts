@@ -1,9 +1,9 @@
 file:
-  /opt/bitnami/grafana-loki/bin/loki:
-    mode: "0755"
-    filetype: file
-    exists: true
   /opt/bitnami/grafana-loki/bin/logcli:
-    mode: "0755"
-    filetype: file
     exists: true
+    filetype: file
+    mode: "0755"
+  /opt/bitnami/grafana-loki/bin/loki:
+    exists: true
+    filetype: file
+    mode: "0755"

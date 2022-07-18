@@ -43,36 +43,49 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-prestashop-http",
-            "app_protocol": "HTTP"
+            "app_protocol": "HTTP",
+            "endpoint": "lb-prestashop-http"
           }
         },
         {
           "action_id": "goss",
           "params": {
-            "resources": {
-              "path": "/.vib/prestashop/goss"
-            },
             "remote": {
               "workload": "deploy-prestashop"
+            },
+            "resources": {
+              "path": "/.vib/prestashop/goss"
             }
           }
         },
         {
           "action_id": "cypress",
           "params": {
+            "app_protocol": "HTTP",
+            "endpoint": "lb-prestashop-http",
+            "env": {
+              "password": "ComplicatedPassword123!4",
+              "username": "user"
+            },
             "resources": {
               "path": "/.vib/prestashop/cypress"
-            },
-            "endpoint": "lb-prestashop-http",
-            "app_protocol": "HTTP",
-            "env": {
-              "username": "user",
-              "password": "ComplicatedPassword123!4"
             }
           }
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/prestashop",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "cHJlc3Rhc2hvcFVzZXJuYW1lOiB1c2VyCnByZXN0YXNob3BFbWFpbDogdXNlckBleGFtcGxlLmNvbQpwcmVzdGFzaG9wUGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNApwcmVzdGFzaG9wSG9zdDogdm13YXJlLXByZXN0YXNob3AubXkKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCg==",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
+        }
+      }
     }
   }
 }

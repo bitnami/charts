@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/kong"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,22 +8,30 @@
         {
           "action_id": "helm-lint"
         }
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/kong",
+          "url": "{SHA_ARCHIVE}"
+        }
+      }
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "password": "{VIB_ENV_S3_PASSWORD}",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}"
+            }
+          }
+        }
       ]
     },
     "verify": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/kong"
-        },
-        "runtime_parameters": "InBvZEFmZmluaXR5UHJlc2V0IjogImhhcmQiCiJwb2RBbnRpQWZmaW5pdHlQcmVzZXQiOiAiIgoicG9zdGdyZXNxbCI6CiAgInBvc3RncmVzcWxQYXNzd29yZCI6ICI3ZE14TGZjcXhOIgoicmVwbGljYUNvdW50IjogMQoic2VydmljZSI6CiAgInByb3h5SHR0cFBvcnQiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
-        }
-      },
       "actions": [
         {
           "action_id": "trivy",
@@ -46,22 +48,20 @@
             "endpoint": "lb-kong-http-proxy"
           }
         }
-      ]
-    },
-    "publish": {
-      "actions": [
-        {
-          "action_id": "helm-publish",
-          "params": {
-            "repository": {
-              "kind": "S3",
-              "url": "{VIB_ENV_S3_URL}",
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
-            }
-          }
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/kong",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "InBvZEFmZmluaXR5UHJlc2V0IjogImhhcmQiCiJwb2RBbnRpQWZmaW5pdHlQcmVzZXQiOiAiIgoicG9zdGdyZXNxbCI6CiAgInBvc3RncmVzcWxQYXNzd29yZCI6ICI3ZE14TGZjcXhOIgoicmVwbGljYUNvdW50IjogMQoic2VydmljZSI6CiAgInByb3h5SHR0cFBvcnQiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}"
         }
-      ]
+      }
     }
   }
 }

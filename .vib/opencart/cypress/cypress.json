@@ -1,12 +1,12 @@
 {
+  "defaultCommandTimeout": 30000,
   "env": {
-    "username": "user",
     "password": "ComplicatedPassword123!4",
     "smtpHost": "smtptesthost",
-    "smtpUser": "smtpUser"
+    "smtpUser": "smtpUser",
+    "username": "user"
   },
   "hosts": {
     "vmware-opencart.my": "{{ TARGET_IP }}"
-  },
-  "defaultCommandTimeout": 30000
+  }
 }

@@ -1,11 +1,11 @@
 {
+  "defaultCommandTimeout": 50000,
   "env": {
-    "username": "user",
-    "password": "ComplicatedPassword123!4"
+    "password": "ComplicatedPassword123!4",
+    "username": "user"
   },
   "hosts": {
     "vmware-magento.my": "{{ TARGET_IP }}"
   },
-  "defaultCommandTimeout": 50000,
   "pageLoadTimeout": 500000
 }

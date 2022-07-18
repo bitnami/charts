@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/wordpress-intel"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,22 +8,30 @@
         {
           "action_id": "helm-lint"
         }
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/wordpress-intel",
+          "url": "{SHA_ARCHIVE}"
+        }
+      }
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "password": "{VIB_ENV_S3_PASSWORD}",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}"
+            }
+          }
+        }
       ]
     },
     "verify": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/wordpress-intel"
-        },
-        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0IjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIiCiJ3b3JkcHJlc3NQYXNzd29yZCI6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQi",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
-        }
-      },
       "actions": [
         {
           "action_id": "trivy",
@@ -43,26 +45,24 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-wordpress-intel-http",
-            "app_protocol": "HTTP"
+            "app_protocol": "HTTP",
+            "endpoint": "lb-wordpress-intel-http"
           }
         }
-      ]
-    },
-    "publish": {
-      "actions": [
-        {
-          "action_id": "helm-publish",
-          "params": {
-            "repository": {
-              "kind": "S3",
-              "url": "{VIB_ENV_S3_URL}",
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
-            }
-          }
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/wordpress-intel",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0IjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIiCiJ3b3JkcHJlc3NQYXNzd29yZCI6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQi",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
         }
-      ]
+      }
     }
   }
 }

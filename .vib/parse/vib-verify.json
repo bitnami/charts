@@ -46,7 +46,20 @@
             "endpoint": "lb-parse-http-server"
           }
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/parse",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "InNlcnZlciI6CiAgInNlcnZpY2UiOgogICAgInBvcnRzIjoKICAgICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIK",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
+        }
+      }
     }
   }
 }

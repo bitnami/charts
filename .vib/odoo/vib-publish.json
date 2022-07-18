@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/odoo"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,22 +8,30 @@
         {
           "action_id": "helm-lint"
         }
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/odoo",
+          "url": "{SHA_ARCHIVE}"
+        }
+      }
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "password": "{VIB_ENV_S3_PASSWORD}",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}"
+            }
+          }
+        }
       ]
     },
     "verify": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/odoo"
-        },
-        "runtime_parameters": "Im9kb29FbWFpbCI6ICJ1c2VyQGV4YW1wbGUuY29tIgoib2Rvb1Bhc3N3b3JkIjogImJpdG5hbWkiCiJwb3N0Z3Jlc3FsIjoKICAicG9zdGdyZXNxbFBhc3N3b3JkIjogIjdkTXhMZmNxeE4iCiJzZXJ2aWNlIjoKICAicG9ydCI6IDgwCiAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIg==",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
-        }
-      },
       "actions": [
         {
           "action_id": "trivy",
@@ -43,26 +45,24 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-odoo-http",
-            "app_protocol": "HTTP"
+            "app_protocol": "HTTP",
+            "endpoint": "lb-odoo-http"
           }
         }
-      ]
-    },
-    "publish": {
-      "actions": [
-        {
-          "action_id": "helm-publish",
-          "params": {
-            "repository": {
-              "kind": "S3",
-              "url": "{VIB_ENV_S3_URL}",
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
-            }
-          }
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/odoo",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "Im9kb29FbWFpbCI6ICJ1c2VyQGV4YW1wbGUuY29tIgoib2Rvb1Bhc3N3b3JkIjogImJpdG5hbWkiCiJwb3N0Z3Jlc3FsIjoKICAicG9zdGdyZXNxbFBhc3N3b3JkIjogIjdkTXhMZmNxeE4iCiJzZXJ2aWNlIjoKICAicG9ydCI6IDgwCiAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIg==",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}"
         }
-      ]
+      }
     }
   }
 }

@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/kafka"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,28 +8,38 @@
         {
           "action_id": "helm-lint"
         }
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/kafka",
+          "url": "{SHA_ARCHIVE}"
+        }
+      }
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "password": "{VIB_ENV_S3_PASSWORD}",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}"
+            }
+          }
+        }
       ]
     },
     "verify": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/kafka"
-        },
-        "runtime_parameters": "ImV4dGVybmFsQWNjZXNzIjoKICAiYXV0b0Rpc2NvdmVyeSI6CiAgICAiZW5hYmxlZCI6IHRydWUKICAiZW5hYmxlZCI6IHRydWUKICAic2VydmljZSI6CiAgICAicG9ydHMiOgogICAgICAiZXh0ZXJuYWwiOiA4MAogICAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgoicmJhYyI6CiAgImNyZWF0ZSI6IHRydWU=",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
-        }
-      },
       "actions": [
         {
           "action_id": "trivy",
           "params": {
             "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
+            "vuln_type": [
+              "OS"
+            ]
           }
         },
         {
@@ -47,30 +51,28 @@
         {
           "action_id": "goss",
           "params": {
-            "resources": {
-              "path": "/.vib/kafka/goss"
-            },
             "remote": {
               "workload": "sts-kafka"
+            },
+            "resources": {
+              "path": "/.vib/kafka/goss"
             }
           }
         }
-      ]
-    },
-    "publish": {
-      "actions": [
-        {
-          "action_id": "helm-publish",
-          "params": {
-            "repository": {
-              "kind": "S3",
-              "url": "{VIB_ENV_S3_URL}",
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
-            }
-          }
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/kafka",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "ImV4dGVybmFsQWNjZXNzIjoKICAiYXV0b0Rpc2NvdmVyeSI6CiAgICAiZW5hYmxlZCI6IHRydWUKICAiZW5hYmxlZCI6IHRydWUKICAic2VydmljZSI6CiAgICAicG9ydHMiOgogICAgICAiZXh0ZXJuYWwiOiA4MAogICAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgoicmJhYyI6CiAgImNyZWF0ZSI6IHRydWU=",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
         }
-      ]
+      }
     }
   }
 }

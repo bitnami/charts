@@ -36,11 +36,11 @@
         {
           "action_id": "goss",
           "params": {
-            "resources": {
-              "path": "/.vib/redis-cluster/goss"
-            },
             "remote": {
               "workload": "sts-redis-cluster"
+            },
+            "resources": {
+              "path": "/.vib/redis-cluster/goss"
             }
           }
         }
@@ -50,7 +50,7 @@
           "path": "/bitnami/redis-cluster",
           "url": "{SHA_ARCHIVE}"
         },
-        "runtime_parameters": "InBhc3N3b3JkIjogImJpdG5hbWkiCiJzZXJ2aWNlIjoKICAicG9ydHMiOgogICAgInJlZGlzIjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
+        "runtime_parameters": "InBhc3N3b3JkIjogIkNvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNCIKInNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAicmVkaXMiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciI=",
         "target_platform": {
           "size": {
             "name": "S4"

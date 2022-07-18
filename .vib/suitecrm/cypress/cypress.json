@@ -1,15 +1,15 @@
 {
+  "defaultCommandTimeout": 40000,
   "env": {
-    "username": "user",
-    "password": "ComplicatedPassword123!4",
     "emailServer": "testhost",
+    "password": "ComplicatedPassword123!4",
     "smtpPort": "9125",
-    "smtpUser": "testHostUser"
+    "smtpUser": "testHostUser",
+    "username": "user"
   },
   "hosts": {
     "vmware-suitecrm.my": "{{ TARGET_IP }}"
   },
-  "defaultCommandTimeout": 40000,
-  "viewportWidth": 1800,
-  "viewportHeight": 800
+  "viewportHeight": 800,
+  "viewportWidth": 1800
 }

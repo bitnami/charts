@@ -39,8 +39,28 @@
               "OS"
             ]
           }
+        },
+        {
+          "action_id": "health-check",
+          "params": {
+            "app_protocol": "HTTP",
+            "endpoint": "lb-wordpress-intel-http"
+          }
         }
-      ]
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/wordpress-intel",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "InNlcnZpY2UiOgogICJwb3J0IjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIiCiJ3b3JkcHJlc3NQYXNzd29yZCI6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQi",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
+        }
+      }
     }
   }
 }

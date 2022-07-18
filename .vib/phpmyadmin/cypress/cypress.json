@@ -4,5 +4,6 @@
   "env": {
     "password": "rootPassword",
     "username": "root"
-  }
+  },
+  "pageLoadTimeout": 240000
 }

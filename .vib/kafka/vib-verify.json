@@ -36,11 +36,11 @@
         {
           "action_id": "goss",
           "params": {
-            "resources": {
-              "path": "/.vib/kafka/goss"
-            },
             "remote": {
               "workload": "sts-kafka"
+            },
+            "resources": {
+              "path": "/.vib/kafka/goss"
             }
           }
         }

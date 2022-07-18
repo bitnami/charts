@@ -2,26 +2,26 @@ command:
   user-id-test:
     exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
     exit-status: 0
-    stdout: []
     stderr: []
+    stdout: []
 file:
   /opt/bitnami/apache/conf/extra/httpd-manual.conf:
-    mode: "0664"
+    exists: true
     filetype: file
+    mode: "0664"
+  /opt/bitnami/mysql:
     exists: true
+    filetype: directory
+    mode: "0755"
   /opt/bitnami/opencart/config.php:
-    mode: "0777"
-    filetype: symlink
-    exists: true
     contains:
       - vmware-opencart
       - mysqli
       - 3306
+    exists: true
+    filetype: symlink
+    mode: "0777"
   /opt/bitnami/opencart/system/config:
+    exists: true
+    filetype: directory
     mode: "0775"
-    filetype: directory
-    exists: true
-  /opt/bitnami/mysql:
-    mode: "0755"
-    filetype: directory
-    exists: true

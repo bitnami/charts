@@ -1,7 +1,7 @@
 {
   "newContact": {
+    "address": "Calle de Camino de Santiago",
     "firstName": "Julius Francisco",
-    "lastName": "Doe",
-    "address": "Calle de Camino de Santiago"
+    "lastName": "Doe"
   }
 }

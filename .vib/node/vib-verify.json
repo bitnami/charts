@@ -40,7 +40,7 @@
           "path": "/bitnami/node",
           "url": "{SHA_ARCHIVE}"
         },
-        "runtime_parameters": "Im1vbmdvZGIiOgogICJhdXRoIjoKICAgICJyb290UGFzc3dvcmQiOiAiQU9pWTlOZjEiCiJzZXJ2aWNlIjoKICAicG9ydCI6IDgwCiAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIg==",
+        "runtime_parameters": "Im1vbmdvZGIiOgogICJhdXRoIjoKICAgICJyb290UGFzc3dvcmQiOiAiQU9pWTlOZjEiCiJzZXJ2aWNlIjoKICAicG9ydHMiOgogICAgImh0dHAiOiA4MAogICJ0eXBlIjogIkxvYWRCYWxhbmNlciIK",
         "target_platform": {
           "size": {
             "name": "S4"

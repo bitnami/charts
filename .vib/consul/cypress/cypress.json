@@ -1,10 +1,10 @@
 {
   "baseUrl": "http://localhost",
-  "pageLoadTimeout": 240000,
   "defaultCommandTimeout": 60000,
   "env": {
+    "containerRpcPort": "8400",
     "datacenterName": "datacenter1",
-    "replicaCount": "3",
-    "containerRpcPort": "8400"
-  }
+    "replicaCount": "3"
+  },
+  "pageLoadTimeout": 240000
 }

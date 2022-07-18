@@ -31,7 +31,28 @@
           "action_id": "health-check",
           "params": {
             "app_protocol": "HTTP",
-            "endpoint": "lb-elasticsearch-kibana-http"
+            "endpoint": "lb-elasticsearch-tcp-rest-api"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "remote": {
+              "workload": "sts-elasticsearch-master"
+            },
+            "resources": {
+              "path": "/.vib/elasticsearch/goss"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "app_protocol": "HTTP",
+            "endpoint": "lb-elasticsearch-tcp-rest-api",
+            "resources": {
+              "path": "/.vib/elasticsearch/cypress"
+            }
           }
         }
       ],
@@ -40,10 +61,10 @@
           "path": "/bitnami/elasticsearch",
           "url": "{SHA_ARCHIVE}"
         },
-        "runtime_parameters": "ImNvb3JkaW5hdGluZyI6CiAgInJlcGxpY2FzIjogIjEiCiJkYXRhIjoKICAicmVwbGljYXMiOiAiMSIKImdsb2JhbCI6CiAgImtpYmFuYUVuYWJsZWQiOiB0cnVlCiJraWJhbmEiOgogICJzZXJ2aWNlIjoKICAgICJwb3J0IjogODAKICAgICJ0eXBlIjogIkxvYWRCYWxhbmNlciIKIm1hc3RlciI6CiAgInJlcGxpY2FzIjogIjEiCiJzeXNjdGxJbWFnZSI6CiAgImVuYWJsZWQiOiB0cnVl",
+        "runtime_parameters": "Cm1hc3RlcjoKICByZXBsaWNhQ291bnQ6IDEKY29vcmRpbmF0aW5nOgogIHJlcGxpY2FDb3VudDogMQpkYXRhOgogIHJlcGxpY2FDb3VudDogMQppbmdlc3Q6CiAgcmVwbGljYUNvdW50OiAxCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICByZXN0QVBJOiA4MAogICAgdHJhbnNwb3J0OiA5MzAwCnN5c2N0bEltYWdlOgogIGVuYWJsZWQ6IHRydWUK",
         "target_platform": {
           "size": {
-            "name": "S4"
+            "name": "L4"
           },
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}"
         }

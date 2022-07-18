@@ -4,7 +4,12 @@
       "stream": {
         "label": "value"
       },
-      "values": [["timestamp_placeholder", "value"]]
+      "values": [
+        [
+          "timestamp_placeholder",
+          "value"
+        ]
+      ]
     }
   ]
 }

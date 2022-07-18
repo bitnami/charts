@@ -1,7 +1,7 @@
 {
   "newExchange": {
-    "name": "testExchange",
     "argument1": "A",
-    "argument2": "B"
+    "argument2": "B",
+    "name": "testExchange"
   }
 }

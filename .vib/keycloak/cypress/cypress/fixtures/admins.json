@@ -1,8 +1,8 @@
 {
   "newAdmin": {
+    "email": "lilly@mail.com",
     "firstName": "Lilly",
     "lastName": "Raven",
-    "username": "lilly92",
-    "email": "lilly@mail.com"
+    "username": "lilly92"
   }
 }

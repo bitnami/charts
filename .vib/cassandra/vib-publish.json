@@ -1,12 +1,6 @@
 {
   "phases": {
     "package": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/cassandra"
-        }
-      },
       "actions": [
         {
           "action_id": "helm-package"
@@ -14,22 +8,30 @@
         {
           "action_id": "helm-lint"
         }
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/cassandra",
+          "url": "{SHA_ARCHIVE}"
+        }
+      }
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "password": "{VIB_ENV_S3_PASSWORD}",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}"
+            }
+          }
+        }
       ]
     },
     "verify": {
-      "context": {
-        "resources": {
-          "url": "{SHA_ARCHIVE}",
-          "path": "/bitnami/cassandra"
-        },
-        "runtime_parameters": "ImRiVXNlciI6CiAgInBhc3N3b3JkIjogIjBQVzFmbFlMIgogICJ1c2VyIjogImNhc3NhbmRyYSIKInNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAiY3FsIjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
-        "target_platform": {
-          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
-          "size": {
-            "name": "S4"
-          }
-        }
-      },
       "actions": [
         {
           "action_id": "trivy",
@@ -46,22 +48,20 @@
             "endpoint": "lb-cassandra-cql"
           }
         }
-      ]
-    },
-    "publish": {
-      "actions": [
-        {
-          "action_id": "helm-publish",
-          "params": {
-            "repository": {
-              "kind": "S3",
-              "url": "{VIB_ENV_S3_URL}",
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
-            }
-          }
+      ],
+      "context": {
+        "resources": {
+          "path": "/bitnami/cassandra",
+          "url": "{SHA_ARCHIVE}"
+        },
+        "runtime_parameters": "ImRiVXNlciI6CiAgInBhc3N3b3JkIjogIjBQVzFmbFlMIgogICJ1c2VyIjogImNhc3NhbmRyYSIKInNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAiY3FsIjogODAKICAidHlwZSI6ICJMb2FkQmFsYW5jZXIi",
+        "target_platform": {
+          "size": {
+            "name": "S4"
+          },
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}"
         }
-      ]
+      }
     }
   }
 }
