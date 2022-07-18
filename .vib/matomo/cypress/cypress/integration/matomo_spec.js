@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random } from './utils';
+import { random } from '../support/utils';
 
 it('allows to log in and out', () => {
   cy.login();
@@ -12,12 +12,8 @@ it('allows to create user', () => {
   cy.visit('/?module=UsersManager&showadduser=1');
   cy.fixture('users').then((user) => {
     cy.get('#user_login').type(`${user.newUser.username}-${random}`);
-    cy.get('#user_password').type(
-      `${user.newUser.password}-${random}`
-    );
-    cy.get('#user_password').type(
-      `${user.newUser.password}-${random}`
-    );
+    cy.get('#user_password').type(`${user.newUser.password}-${random}`);
+    cy.get('#user_password').type(`${user.newUser.password}-${random}`);
     cy.get('#user_email').type(`${random}_${user.newUser.email}`);
     cy.get('input[value*="Create user"]').click();
     cy.contains('changes have been saved');
@@ -34,8 +30,12 @@ it('allows to create a new website', () => {
   cy.get('button[title*="A website"]').click();
   cy.fixture('websites').then((site) => {
     // The name input has no attribute "name" or "id"
-    cy.get('input[placeholder="Name"]').type(`${site.newSite.name} ${random}`, { force: true });
-    cy.get('textarea[name="urls"]').type(`${site.newSite.url}`, { force: true });
+    cy.get('input[placeholder="Name"]').type(`${site.newSite.name} ${random}`, {
+      force: true,
+    });
+    cy.get('textarea[name="urls"]').type(`${site.newSite.url}`, {
+      force: true,
+    });
   });
   cy.get('input[type="submit"]').click();
   cy.contains('Website created');
@@ -51,15 +51,18 @@ it('allows to use the API', () => {
   cy.get('#description').type(random);
   cy.get('input[type="submit"]').click();
   cy.contains('Token successfully generated');
-  cy.get('code').invoke('text').then((apiToken) => {
-    cy.request(
-      '/index.php?module=API&method=API.getMatomoVersion'
-      + `&format=JSON&token_auth=${apiToken}`).then((response) => {
+  cy.get('code')
+    .invoke('text')
+    .then((apiToken) => {
+      cy.request(
+        '/index.php?module=API&method=API.getMatomoVersion' +
+          `&format=JSON&token_auth=${apiToken}`
+      ).then((response) => {
         const bodyString = JSON.stringify(response.body);
         expect(response.status).to.eq(200);
         expect(bodyString).to.contain('"value":');
+      });
     });
-  });
 });
 
 it('allows to change users settings', () => {
