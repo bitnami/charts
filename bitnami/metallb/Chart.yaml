@@ -21,8 +21,8 @@ keywords:
   - vrrp
   - vip
 maintainers:
-  - name: cellebyte
-    email: cellebyte@gmail.com
+  - email: cellebyte@gmail.com
+    name: cellebyte
   - name: Bitnami
     url: https://github.com/bitnami/charts
 name: metallb
@@ -30,4 +30,4 @@ sources:
   - https://github.com/metallb/metallb
   - https://github.com/bitnami/bitnami-docker-metallb
   - https://metallb.universe.tf
-version: 3.0.10
+version: 3.0.11
