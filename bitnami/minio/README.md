@@ -7,7 +7,7 @@ MinIO(R) is an object storage server, compatible with Amazon S3 cloud storage se
 [Overview of Bitnami Object Storage based on MinIO&reg;](https://min.io/)
 
 Disclaimer: All software products, projects and company names are trademark(TM) or registered(R) trademarks of their respective holders, and use of them does not imply any affiliation or endorsement. This software is licensed to you subject to one or more open source licenses and VMware provides the software on an AS-IS basis. MinIO(R) is a registered trademark of the MinIO Inc. in the US and other countries. Bitnami is not affiliated, associated, authorized, endorsed by, or in any way officially connected with MinIO Inc. MinIO(R) is licensed under GNU AGPL v3.0.
-                           
+
 ## TL;DR
 
 ```console
@@ -334,6 +334,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.auth.gcs.projectID`                             | GCP Project ID to use                                                                              | `""`                       |
 | `gateway.auth.nas.accessKey`                             | Access key to access MinIO&reg; using NAS Gateway                                                  | `""`                       |
 | `gateway.auth.nas.secretKey`                             | Secret key to access MinIO&reg; using NAS Gateway                                                  | `""`                       |
+| `gateway.auth.s3.useIRSA`                                | Use IAM roles for service accounts to access AWS S3                                                | `false`                    |
 | `gateway.auth.s3.accessKey`                              | Access key to use to access AWS S3                                                                 | `""`                       |
 | `gateway.auth.s3.secretKey`                              | Secret key to use to access AWS S3                                                                 | `""`                       |
 | `gateway.auth.s3.serviceEndpoint`                        | AWS S3 endpoint                                                                                    | `https://s3.amazonaws.com` |
