@@ -10,8 +10,6 @@ command:
     exit-status: 0
     stdout: 
       - {{ printf "/bitnami.*%s/" .Env.BITNAMI_APP_NAME }}
-      - {{ printf "/port *%s/" .Env.FLUENTD_AGGREGATOR_SERVICE_PORT }}
-      - {{ printf "/port *%s/" .Env.FLUENTD_AGGREGATOR_SERVICE_PORT_TCP }}
     stderr: []
   user-id-test:
     exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
