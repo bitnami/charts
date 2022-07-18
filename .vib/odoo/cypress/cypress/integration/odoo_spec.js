@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random } from './utils';
+import { random } from '../support/utils';
 import 'cypress-real-events/support';
 
 it('allows creating a company', () => {
