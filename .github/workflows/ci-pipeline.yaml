@@ -110,9 +110,9 @@ jobs:
           pipeline: ${{ needs.get-chart.outputs.chart }}/vib-verify.json
         env:
           # Target-Platform used by default
-          VIB_ENV_TARGET_PLATFORM: 91d398a2-25c4-4cda-8732-75a3cfc179a1
+          VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
           # Alternative Target-Platform to be used in case of incompatibilities
-          VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: 91d398a2-25c4-4cda-8732-75a3cfc179a1
+          VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: ${{ secrets.VIB_ENV_ALTERNATIVE_TARGET_PLATFORM }}
   ci-pr-review:
     runs-on: ubuntu-latest
     needs: vib-verify

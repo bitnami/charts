@@ -108,8 +108,8 @@ jobs:
           pipeline: ${{ needs.get-chart.outputs.chart }}/vib-publish.json
           config: charts/.vib/
         env:
-          VIB_ENV_TARGET_PLATFORM: 91d398a2-25c4-4cda-8732-75a3cfc179a1
-          VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: 91d398a2-25c4-4cda-8732-75a3cfc179a1
+          VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
+          VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: ${{ secrets.VIB_ENV_ALTERNATIVE_TARGET_PLATFORM }}
           VIB_ENV_S3_URL: s3://${{ secrets.AWS_S3_BUCKET }}/bitnami
           VIB_ENV_S3_USERNAME: ${{ secrets.AWS_ACCESS_KEY_ID }}
           VIB_ENV_S3_PASSWORD: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
