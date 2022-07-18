@@ -621,6 +621,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 8.0.0
+
+This major release only bumps the Grafana version to 9.x. No major issues are expected during the upgrade.
+
 ### To 7.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
