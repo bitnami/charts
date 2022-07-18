@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random, verifySuccesOfAction } from './utils';
+import { random, verifySuccesOfAction } from '../support/utils';
 
 it('allows user to log in and log out', () => {
   cy.login();

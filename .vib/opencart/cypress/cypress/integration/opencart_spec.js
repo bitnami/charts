@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random } from './utils';
+import { random } from '../support/utils';
 
 it('allows a user to register', () => {
   cy.visit('/index.php?route=account/login');
