@@ -21,9 +21,8 @@ command:
     exit-status: 0
     stdout: []
     stderr: []  
-  fluentd-process:
-    exec: ps aux | grep fluentd
+  fluent-cat-test :
+    exec: echo '{"message":"hello"}' | fluent-cat debug.log
     exit-status: 0
-    stdout:
-      - {{ printf "/bitnami.*%s/" .Env.BITNAMI_APP_NAME }}
+    stdout: []
     stderr: []  
