@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2022.7.8
+appVersion: 2022.7.17
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -25,4 +25,4 @@ name: minio
 sources:
   - https://github.com/bitnami/bitnami-docker-minio
   - https://min.io
-version: 11.7.9
+version: 11.7.13
