@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random } from '../support/utils';
+import { random } from './utils';
 
 export const importAnApplication = (application) => {
   cy.visit('/dashboard');
