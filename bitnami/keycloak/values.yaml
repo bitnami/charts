@@ -745,6 +745,9 @@ metrics:
     ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
     ##
     enabled: false
+    ## @param metrics.serviceMonitor.path Metrics service HTTP path
+    ##
+    path: /metrics
     ## @param metrics.serviceMonitor.namespace Namespace which Prometheus is running in
     ##
     namespace: ""
