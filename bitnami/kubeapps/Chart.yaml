@@ -5,7 +5,7 @@ appVersion: 2.4.6
 dependencies:
   - name: redis
     repository: https://charts.bitnami.com/bitnami
-    version: 16.x.x
+    version: 17.x.x
     condition: packaging.flux.enabled
   - name: postgresql
     repository: https://charts.bitnami.com/bitnami
@@ -30,4 +30,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/vmware-tanzu/kubeapps
-version: 9.0.3
+version: 10.0.0

@@ -1,12 +1,12 @@
 annotations:
   category: Forum
 apiVersion: v2
-appVersion: 2.8.5
+appVersion: 2.8.6
 dependencies:
   - condition: redis.enabled
     name: redis
     repository: https://charts.bitnami.com/bitnami
-    version: 16.X.X
+    version: 17.X.X
   - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
@@ -35,4 +35,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-discourse
   - https://github.com/spinnaker
   - https://www.discourse.org/
-version: 7.3.13
+version: 8.0.1
