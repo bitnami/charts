@@ -821,6 +821,13 @@ metrics:
   ## @param metrics.podLabels Additional labels for Metrics exporter pod
   ##
   podLabels: {}
+  ## Containers' Security Context - All fields other than `enabled` get added to the metrics container's security context
+  ## @param metrics.containerSecurityContext.enabled Enable Metrics Containers' Security Context
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation for metrics container
+  ##
+  containerSecurityContext:
+    enabled: false
+    allowPrivilegeEscalation: false
   ## Enable this if you're using https://github.com/coreos/prometheus-operator
   ##
   serviceMonitor:

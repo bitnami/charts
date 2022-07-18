@@ -441,8 +441,9 @@ ingress:
   ##   secretName: phpmyadmin.local-tls
   ##
   extraTls: []
-  ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
-  ## key and certificate should start with -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
+  ## @param ingress.secrets If you're providing your own certificates and want to manage the secret via helm, 
+  ## please use this to add the certificates as secrets key and certificate should start with 
+  ## -----BEGIN CERTIFICATE----- or -----BEGIN RSA PRIVATE KEY-----
   ## name should line up with a secretName set further up
   ##
   ## If it is not set and you're using cert-manager, this is unneeded, as it will create the secret for you
@@ -457,6 +458,14 @@ ingress:
   ##     certificate: ""
   ##
   secrets: []
+  ## @param ingress.existingSecretName If you're providing your own certificate and want to manage the secret yourself,
+  ## please provide the name of the secret with this parameter. This secret will then be used for tls termination.
+  ## It has higher priority than the cert-manager or the generation of the certificate from the chart.
+  ## 
+  ## Example:
+  ## existingSecretName: "byo-phpmyadmin-tls"
+  ##
+  existingSecretName: ""
   ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
   ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/

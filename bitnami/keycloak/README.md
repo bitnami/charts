@@ -247,7 +247,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                       | Description                                                                           | Value   |
 | ------------------------------------------ | ------------------------------------------------------------------------------------- | ------- |
 | `metrics.enabled`                          | Enable exposing Keycloak statistics                                                   | `false` |
-| `metrics.service.ports.http`               | Metrics service HTTP port                                                             | `9990`  |
+| `metrics.service.ports.http`               | Metrics service HTTP port                                                             | `8080`  |
 | `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints                   | `{}`    |
 | `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator          | `false` |
 | `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                              | `""`    |
