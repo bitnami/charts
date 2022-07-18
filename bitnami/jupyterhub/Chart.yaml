@@ -3,9 +3,9 @@ annotations:
 apiVersion: v2
 appVersion: 1.5.0
 dependencies:
-  - name: postgresql
+  - condition: postgresql.enabled
+    name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    condition: postgresql.enabled
     version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -26,4 +26,4 @@ name: jupyterhub
 sources:
   - https://github.com/bitnami/bitnami-docker-jupyterhub
   - https://github.com/jupyterhub/jupyterhub
-version: 1.3.8
+version: 1.3.9
