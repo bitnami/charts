@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random, allowDataUsage } from './utils';
+import { random, allowDataUsage } from '../support/utils';
 
 before(() => {
   cy.login();
