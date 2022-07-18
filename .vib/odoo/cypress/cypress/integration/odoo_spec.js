@@ -24,7 +24,7 @@ it('allows installing/uninstalling an application', () => {
   cy.get('[title="Sales"]').within(() => {
     cy.contains('Install').click();
     cy.get('.o_blockUI').should('not.exist');
-    cy.reload();
+    //   cy.reload();
   });
   cy.get('[title="Home Menu"]').click();
   cy.contains('Apps').click();
