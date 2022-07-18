@@ -623,7 +623,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 8.0.0
 
-This major release only bumps the Grafana version to 9.x. No major issues are expected during the upgrade.
+This major release only bumps the Grafana version to 9.x. No major issues are expected during the upgrade. See the upstream changelog https://grafana.com/docs/grafana/latest/release-notes/release-notes-9-0-0/ for more info about the changes included in this new major version of the application
 
 ### To 7.0.0
 
