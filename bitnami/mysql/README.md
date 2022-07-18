@@ -107,6 +107,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                            | Description                                                                                                     | Value               |
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `primary.name`                                  | Name of the primary database (eg primary, master, leader, ...)                                                  | `primary`           |
 | `primary.command`                               | Override default container command on MySQL Primary container(s) (useful when using custom images)              | `[]`                |
 | `primary.args`                                  | Override default container args on MySQL Primary container(s) (useful when using custom images)                 | `[]`                |
 | `primary.lifecycleHooks`                        | for the MySQL Primary container(s) to automate configuration before or after startup                            | `{}`                |
@@ -192,6 +193,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                              | Description                                                                                                         | Value               |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `secondary.name`                                  | Name of the secondary database (eg secondary, slave, ...)                                                           | `secondary`         |
 | `secondary.replicaCount`                          | Number of MySQL secondary replicas                                                                                  | `1`                 |
 | `secondary.hostAliases`                           | Deployment pod host aliases                                                                                         | `[]`                |
 | `secondary.command`                               | Override default container command on MySQL Secondary container(s) (useful when using custom images)                | `[]`                |
