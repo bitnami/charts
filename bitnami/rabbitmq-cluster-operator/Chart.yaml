@@ -26,4 +26,4 @@ name: rabbitmq-cluster-operator
 sources:
   - https://github.com/bitnami/bitnami-docker-rabbitmq-cluster-operator
   - https://github.com/rabbitmq/cluster-operator
-version: 2.6.8
+version: 2.6.9

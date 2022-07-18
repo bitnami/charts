@@ -323,6 +323,9 @@ spec:
             - name: mariadb-credentials
               mountPath: /opt/bitnami/mysqld-exporter/secrets/
           {{- end }}
+          {{- if .Values.metrics.extraVolumeMounts.primary }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts.primary "context" $) | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- if .Values.primary.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.primary.sidecars "context" $) | nindent 8 }}

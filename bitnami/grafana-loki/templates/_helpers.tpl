@@ -53,6 +53,12 @@ Return the proper Grafana Loki query-frontend fullname
 {{- define "grafana-loki.query-frontend.fullname" -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) "query-frontend" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+{{/*
+Return the proper Grafana Loki query-scheduler fullname
+*/}}
+{{- define "grafana-loki.query-scheduler.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "query-scheduler" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 
 {{/*
 Return the proper Grafana Loki ruler fullname

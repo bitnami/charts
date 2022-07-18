@@ -152,6 +152,9 @@ initdbScriptsConfigMap: ""
 ## @section MySQL Primary parameters
 
 primary:
+  ## @param primary.name Name of the primary database (eg primary, master, leader, ...)
+  ##
+  name: primary
   ## @param primary.command Override default container command on MySQL Primary container(s) (useful when using custom images)
   ##
   command: []
@@ -506,6 +509,9 @@ primary:
 ## @section MySQL Secondary parameters
 
 secondary:
+  ## @param secondary.name Name of the secondary database (eg secondary, slave, ...)
+  ##
+  name: secondary
   ## @param secondary.replicaCount Number of MySQL secondary replicas
   ##
   replicaCount: 1

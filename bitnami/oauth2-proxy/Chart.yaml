@@ -3,10 +3,10 @@ annotations:
 apiVersion: v2
 appVersion: 7.3.0
 dependencies:
-  - name: redis
+  - condition: redis.enabled
+    name: redis
     repository: https://charts.bitnami.com/bitnami
-    condition: redis.enabled
-    version: 16.x.x
+    version: 17.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -30,4 +30,4 @@ name: oauth2-proxy
 sources:
   - https://github.com/bitnami/bitnami-docker-oauth2-proxy
   - https://github.com/oauth2-proxy/oauth2-proxy
-version: 2.1.10
+version: 3.0.1
