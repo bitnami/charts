@@ -20,7 +20,7 @@ it('allows creating a company', () => {
 it('allows installing/uninstalling an application', () => {
   cy.login();
   cy.get('[title="Home Menu"]').click();
-  cy.contains('Apps').click();
+  cy.get('[data-menu-xmlid="base.menu_management"]').click();
   cy.get('[title="Sales"]').within(() => {
     cy.contains('Install').click();
     cy.get('.o_blockUI').should('not.exist');
