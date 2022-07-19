@@ -91,17 +91,6 @@ In order to replicate the container startup scripts execute this command:
 
 {{- else }}
 
-{{- if .Values.curator.enabled }}
-
-  A CronJob will run with schedule {{ .Values.curator.cronjob.schedule }}.
-
-  The Jobs will not be removed automagically when deleting this Helm chart.
-  To remove these jobs, run the following:
-
-    kubectl --namespace {{ include "common.names.namespace" . }} delete job -l app={{ template "common.names.name" . }},role=curator
-
-{{- end }}
-
   Elasticsearch can be accessed within the cluster on port {{ include "elasticsearch.service.ports.restAPI" . }} at {{ template "elasticsearch.service.name" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
 
   To access from outside the cluster execute the following commands:

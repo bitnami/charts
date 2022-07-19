@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import body from '../fixtures/logs-body.json';
+import { lastMinuteTimestamp } from '../support/utils';
 
 it('shows build info endpoint', () => {
   cy.request({
@@ -51,11 +52,16 @@ it('checks Loki range endpoint', () => {
 });
 
 it('can publish and retrieve a label', () => {
+  // Per configuration, Loki rejects timestamps older than 168h
+  const upToDateJson = JSON.stringify(body).replace(
+    'timestamp_placeholder',
+    lastMinuteTimestamp
+  );
   cy.request({
     method: 'POST',
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
     url: 'loki/api/v1/push',
-    body: body,
+    body: JSON.parse(upToDateJson),
   }).then((response) => {
     expect(response.status).to.eq(204);
   });

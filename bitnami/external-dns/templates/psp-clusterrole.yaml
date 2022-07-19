@@ -3,7 +3,7 @@
 kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
-  name: {{ template "external-dns.fullname" . }}-psp
+  name: {{ printf "%s-%s" (include "common.names.fullname.namespace" .) "psp" }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{ include "external-dns.labels" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -17,5 +17,5 @@ rules:
   resources: ['podsecuritypolicies']
   verbs:     ['use']
   resourceNames:
-  - {{ template "external-dns.fullname" . }}
+  - {{ template "common.names.fullname.namespace" . }}
 {{- end }}
