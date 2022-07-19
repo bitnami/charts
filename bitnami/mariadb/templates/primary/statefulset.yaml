@@ -4,6 +4,8 @@ metadata:
   name: {{ include "mariadb.primary.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: mariadb-primary
     app.kubernetes.io/component: primary
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
