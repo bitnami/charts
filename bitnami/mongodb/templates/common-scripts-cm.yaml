@@ -44,7 +44,7 @@ data:
   {{- if .Values.tls.enabled }}
   generate-certs.sh: |
     #!/bin/bash
-    {{- if and .Values.tls.enabled (include "mongodb.autoGenerateCerts" .) }}
+    {{- if (include "mongodb.autoGenerateCerts" .) }}
     additional_ips=()
     additional_names=()
     while getopts "i:n:s:" flag
