@@ -16,12 +16,13 @@ command:
     stdout: []
     stderr: []
   zookeeper-version-ok:
-    exec: /opt/bitnami/zookeeper/bin/zkCli.sh -server 127.0.0.1:$ZOO_PORT_NUMBER version | grep "ZooKeeper CLI version" | cut -d- -f1 | grep --quiet $APP_VERSION
+    exec: "/opt/bitnami/zookeeper/bin/zkCli.sh -server 127.0.0.1:$ZOO_PORT_NUMBER version | grep \"ZooKeeper CLI version: $APP_VERSION\""
     exit-status: 0
     stdout: []
     stderr: []
   zookeeper-create-znode:
-    exec: /opt/bitnami/zookeeper/bin/zkCli.sh -server 127.0.0.1:2181 create /zk_test my_data
+    exec: /opt/bitnami/zookeeper/bin/zkCli.sh -server 127.0.0.1:$ZOO_PORT_NUMBER create /my_key_$(shuf -i 0-1000 -n1) my_data
     exit-status: 0
     stdout: []
-    stderr: []
+    stderr:
+      - "/Created /my_key_[0-9]/"
