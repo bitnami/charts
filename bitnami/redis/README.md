@@ -734,7 +734,7 @@ The Redis&reg; sentinel exporter was removed in this version because the upstrea
 ### To 14.0.0
 
 - Several parameters were renamed or disappeared in favor of new ones on this major version:
-    - The term *slave* has been replaced by the term *replica*. Therefore, parameters prefixed with `slave` are now prefixed with `replicas`.
+    - The term *slave* has been replaced by the term *replica*. Therefore, parameters prefixed with `slave` are now prefixed with `replica`.
     - Credentials parameter are reorganized under the `auth` parameter.
     - `cluster.enabled` parameter is deprecated in favor of `architecture` parameter that accepts two values: `standalone` and `replication`.
     - `securityContext.*` is deprecated in favor of `XXX.podSecurityContext` and `XXX.containerSecurityContext`.
