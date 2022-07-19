@@ -1,4 +1,4 @@
-name: Organizing cards based on comments
+name: '[Support] Organizing cards based on comments'
 on:
   issue_comment:
     types:

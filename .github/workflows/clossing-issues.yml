@@ -1,4 +1,4 @@
-name: 'Close Solved issues'
+name: '[Support] Close Solved issues'
 on:
   schedule:
     # Hourly

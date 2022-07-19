@@ -1,6 +1,5 @@
 # This workflow is built to manage the triage support by using GH issues.
-
-name: Organize triage
+name: '[Support] Organize triage'
 on:
   issues:
     types:

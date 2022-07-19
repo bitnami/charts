@@ -1,4 +1,4 @@
-name: 'Move closed issues'
+name: '[Support] Move closed issues'
 on:
   issues:
     types:

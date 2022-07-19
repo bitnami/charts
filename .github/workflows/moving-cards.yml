@@ -1,6 +1,5 @@
 # This workflow is built to manage the triage support by using GH issues.
-
-name: Cards movements
+name: '[Support] Cards movements'
 on:
   project_card:
     types:
