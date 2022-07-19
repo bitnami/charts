@@ -21,8 +21,8 @@ command:
     stdout: []
     stderr: []
   zookeeper-create-znode:
-    exec: /opt/bitnami/zookeeper/bin/zkCli.sh -server 127.0.0.1:$ZOO_PORT_NUMBER create /my_key_$(shuf -i 0-1000 -n1) my_data
+    exec: /opt/bitnami/zookeeper/bin/zkCli.sh -server 127.0.0.1:$ZOO_PORT_NUMBER create /my_key_{{randAlpha 5}} my_data
     exit-status: 0
     stdout: []
     stderr:
-      - "/Created /my_key_[0-9]/"
+      - "/Created /my_key_[A-Za-z]/"
