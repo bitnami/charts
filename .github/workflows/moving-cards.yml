@@ -69,11 +69,11 @@ jobs:
           echo "SUPPORT_TEAM_STRING=$SUPPORT_TEAM_STRING" >> $GITHUB_ENV
       - name: Assign to a person to work on it
         # Only if moved into In progress FROM Triage
-        if: ${{ github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID && github.event.project_card.changes != null && github.event.project_card.changes.column_id && github.event.project_card.changes.column_id == env.TRIAGE_COLUMN_ID }}
+        if: ${{ github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID && github.event.project_card.changes != null && github.event.project_card.changes.column_id && github.event.project_card.changes.column_id.from == env.TRIAGE_COLUMN_ID }}
         uses: pozil/auto-assign-issue@v1.7.3
         with:
           numOfAssignee: 1
-          assignees: ${{ env.SUPPORTTEAM_STRING }}
+          assignees: ${{ env.SUPPORT_TEAM_STRING }}
           removePreviousAssignees: true
           # teams: XXX
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
