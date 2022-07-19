@@ -832,7 +832,7 @@ serviceAccount:
   automountServiceAccountToken: true
   ## @param serviceAccount.labels [object] Additional labels to be included on the service account
   ##
-  labels: { }
+  labels: {}
 ## RBAC parameters
 ## https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 ##
