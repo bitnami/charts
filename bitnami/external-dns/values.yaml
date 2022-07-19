@@ -1005,3 +1005,9 @@ metrics:
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
+    ## @section Service account parameters
+    ##
+    serviceAccount:
+      ## @param serviceAccount.labels [object] Additional labels to be included on the service account
+      ##
+      labels: { }
