@@ -44,7 +44,7 @@ jobs:
           assignees: ${{ env.TRIAGE_TEAM_STRING }}
           removePreviousAssignees: false
           # teams: XXX
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          repo-token: "${{ secrets.GHPROJECT_TOKEN }}"
       - name: Send to the board
         if: ${{ github.actor != 'bitnami-bot'  }}
         uses: peter-evans/create-or-update-project-card@v2
