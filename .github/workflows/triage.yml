@@ -60,8 +60,4 @@ jobs:
         with:
           add-labels: ${{ (!contains(fromJson(env.BITNAMI_TEAM), github.actor)) && 'triage' || 'bitnami' }}
           # For reopened issues
-<<<<<<< HEAD
           remove-labels: "solved"
-=======
-          remove-labels: "solved"
->>>>>>> master
