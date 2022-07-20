@@ -58,6 +58,7 @@ jobs:
         # Only if moved into Solved
         uses: andymckay/labeler@1.0.4
         with:
+          repo-token: "${{ secrets.GHPROJECT_TOKEN }}"
           add-labels: ${{ (!contains(fromJson(env.BITNAMI_TEAM), github.actor)) && 'triage' || 'bitnami' }}
           # For reopened issues
           remove-labels: "solved"
