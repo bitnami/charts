@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`       |
 | `image.registry`         | Spark image registry                                                                                                                                | `docker.io`          |
 | `image.repository`       | Spark image repository                                                                                                                              | `bitnami/spark`      |
-| `image.tag`              | Spark image tag (immutable tags are recommended)                                                                                                    | `3.3.0-debian-11-r2` |
+| `image.tag`              | Spark image tag (immutable tags are recommended)                                                                                                    | `3.3.0-debian-11-r7` |
 | `image.pullPolicy`       | Spark image pull policy                                                                                                                             | `IfNotPresent`       |
 | `image.pullSecrets`      | Specify docker-registry secret names as an array                                                                                                    | `[]`                 |
 | `image.debug`            | Enable image debug mode                                                                                                                             | `false`              |
