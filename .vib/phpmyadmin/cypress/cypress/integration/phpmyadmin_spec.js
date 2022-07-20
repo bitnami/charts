@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random } from './utils';
+import { random } from '../support/utils';
 
 it('allows the user to log in and log out', () => {
   cy.login();
@@ -12,11 +12,13 @@ it('allows creating a database and a table', () => {
   cy.login();
   cy.visit('index.php?route=/server/databases');
   cy.fixture('testdata').then((td) => {
-    cy.get('#text_create_db').type(`${td.databaseName}.${random}`);
-    cy.get('#buttonGo').click();
+    cy.get('#text_create_db').type(`${td.databaseName}.${random}`, {
+      force: true,
+    });
+    cy.get('#buttonGo').click({ force: true });
     cy.get('.lock-page [type="text"]').type(`${td.tableName}.${random}`);
     cy.get('.lock-page [type="number"]').clear().type(td.columnNumber);
-    cy.contains('[type="submit"]', 'Go').click();
+    cy.contains('[type="submit"]', 'Create').click();
     cy.get('#field_0_1').type(`${td.columnName}.${random}`);
     cy.get('.btn-primary').click();
     cy.visit('index.php');
@@ -58,8 +60,8 @@ it('allows adding a user', () => {
   cy.get('#add_user_anchor').click();
   cy.fixture('testdata').then((td) => {
     cy.get('#pma_username').type(`${td.username}.${random}`);
-    cy.get('#text_pma_pw').type(td.password);
-    cy.get('#text_pma_pw2').type(td.password);
+    cy.get('#text_pma_pw').type(td.password, { force: true });
+    cy.get('#text_pma_pw2').type(td.password, { force: true });
     cy.get('#adduser_submit').click();
   });
   cy.contains('You have added a new user.');

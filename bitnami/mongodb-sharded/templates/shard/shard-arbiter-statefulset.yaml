@@ -190,7 +190,7 @@ spec:
                 name: {{ include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if $.Values.shardsvr.arbiter.extraEnvVarsSecret }}
-            - configMapRef:
+            - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}

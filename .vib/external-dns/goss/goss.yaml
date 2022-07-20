@@ -1,0 +1,27 @@
+port:
+  tcp6:7979:
+    listening: true
+    ip:
+    - '::'
+file:
+  /opt/bitnami/external-dns/bin:
+    mode: "0755"
+    filetype: directory
+    exists: true
+command:
+  user-id-test:
+    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
+    exit-status: 0
+    stdout: []
+    stderr: []
+  external-dns-version:
+    exec: external-dns --version 2>&1 | grep --quiet "$APP_VERSION"
+    exit-status: 0
+    stdout: []
+    stderr: []
+  external-dns-process:
+    exec: ps aux | grep external-dns
+    exit-status: 0
+    stdout: 
+      - /external-dns/
+    stderr: []  

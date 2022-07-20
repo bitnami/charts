@@ -22,7 +22,7 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: server
   {{- if .Values.server.updateStrategy }}
-  strategy: {{- toYaml .Values.server.updateStrategy | nindent 4 }}
+  strategy: {{- include "common.tplvalues.render" (dict "value" .Values.server.updateStrategy "context" $) | nindent 4 }}
   {{- end }}
   template:
     metadata:
@@ -81,7 +81,7 @@ spec:
           command:
             - /scripts/wait-for-backends.sh
           {{- if .Values.waitForBackends.resources }}
-          resources: {{- toYaml .Values.waitForBackends.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.waitForBackends.resources "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: scripts
@@ -112,7 +112,7 @@ spec:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.server.image.debug | quote }}
             - name: SERVER_PORT
-              value: "8080"
+              value: "{{ .Values.server.containerPort }}"
             - name: SPRING_CLOUD_CONFIG_ENABLED
               value: "false"
             - name: SPRING_CLOUD_KUBERNETES_CONFIG_ENABLE_API
@@ -233,7 +233,7 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.server.resources }}
-          resources: {{- toYaml .Values.server.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.server.resources "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: database
@@ -243,7 +243,7 @@ spec:
               mountPath: /opt/bitnami/spring-cloud-dataflow/conf
               readOnly: true
             {{- if .Values.server.extraVolumeMounts }}
-            {{- toYaml .Values.server.extraVolumeMounts | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.server.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- if .Values.server.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.server.sidecars "context" $) | nindent 8 }}
@@ -265,5 +265,5 @@ spec:
             defaultMode: 0755
         {{- end }}
         {{- if .Values.server.extraVolumes }}
-          {{- toYaml .Values.server.extraVolumes | nindent 8 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.server.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
