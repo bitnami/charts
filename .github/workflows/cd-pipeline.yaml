@@ -123,16 +123,16 @@ jobs:
       result: ${{ steps.update-index.outputs.result }}
     if: ${{ needs.vib-verify.result == 'success' }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v3
         with:
-          path: charts
+          path: ~/artifacts
       # If we perform a checkout of the master branch, we will find conflicts with the submodules
       - uses: actions/checkout@v2
         with:
           ref: 'index'
           path: index
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-      - name: Install and configure aws-cli, helm and yq
+      - name: Install and configure aws-cli, helm and jq
         run: |
           # AWS CLI
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y awscli
@@ -140,17 +140,17 @@ jobs:
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws configure set source_profile default
-            # helm
+          # helm
           HELM_TARBALL="helm-v3.8.1-linux-amd64.tar.gz"
           curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
-          # yq
-          sudo curl -SsLf https://github.com/mikefarah/yq/releases/download/v4.23.1/yq_linux_amd64 -o /usr/local/bin/yq && sudo chmod +x /usr/local/bin/yq
+          # jq
+          sudo curl -SsLf https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 -o /usr/local/bin/jq && sudo chmod +x /usr/local/bin/jq
       - name: Fetch chart and update index
         run: |
           mkdir download
           chart="${{ needs.get-chart.outputs.chart }}"
-          # HACK: Obtain chart tarball out of the latest commit
-          chart_version="$(yq ".version" charts/bitnami/${chart}/Chart.yaml)"
+          find ~/artifacts -name "*.zip" -exec unzip {} -d ~/artifacts \; -quit
+          chart_version=$(jq -re '.actions|map(select(.action_id == "helm-publish"))[0] | .application.version' ~/artifacts/result.json)
           aws s3 cp s3://${{ secrets.AWS_S3_BUCKET }}/bitnami/${chart}-${chart_version}.tgz download/
 
           cd index
