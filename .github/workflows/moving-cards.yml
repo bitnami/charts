@@ -75,4 +75,4 @@ jobs:
           assignees: ${{ env.SUPPORT_TEAM_STRING }}
           removePreviousAssignees: true
           # teams: XXX
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          repo-token: "${{ secrets.GHPROJECT_TOKEN }}"
