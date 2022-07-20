@@ -1,4 +1,4 @@
-name: [Index] Generate the full bitnami/charts index.yaml
+name: '[Index] Generate the full bitnami/charts index.yaml'
 on:
   push:
     branches:
