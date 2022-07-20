@@ -34,6 +34,13 @@ Return the proper service name for Argo CD controller
 {{- end -}}
 
 {{/*
+Return the proper service name for Argo CD Application Set controller
+*/}}
+{{- define "argocd.applicationset-controller" -}}
+  {{- printf "%s-appset-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+{{/*
 Return the proper service name for Argo CD server
 */}}
 {{- define "argocd.server" -}}
@@ -93,6 +100,17 @@ Create the name of the service account to use for the Argo CD application contro
     {{ default (printf "%s-argocd-app-controller" (include "common.names.fullname" .)) .Values.controller.serviceAccount.name | trunc 63 | trimSuffix "-" }}
 {{- else -}}
     {{ default "default" .Values.controller.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for the Argo CD Application Set controller
+*/}}
+{{- define "argocd.applicationset-controller.serviceAccountName" -}}
+{{- if .Values.applicationSet.serviceAccount.create -}}
+    {{ default (printf "%s-argocd-appset-controller" (include "common.names.fullname" .)) .Values.applicationSet.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.applicationSet.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
