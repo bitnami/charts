@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random } from './utils';
+import { random } from '../support/utils';
 
 it('allows admin to login/logout', () => {
   cy.login();

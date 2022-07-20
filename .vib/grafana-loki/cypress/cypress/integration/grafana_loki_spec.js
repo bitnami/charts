@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import body from '../fixtures/logs-body.json';
-import { lastMinuteTimestamp } from './utils';
+import { lastMinuteTimestamp } from '../support/utils';
 
 it('shows build info endpoint', () => {
   cy.request({

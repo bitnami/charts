@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random, checkErrors } from './utils';
+import { random, checkErrors } from '../support/utils';
 
 it('allows to create system credentials', () => {
   cy.login();

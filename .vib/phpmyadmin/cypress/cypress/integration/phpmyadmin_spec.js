@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random } from './utils';
+import { random } from '../support/utils';
 
 it('allows the user to log in and log out', () => {
   cy.login();
@@ -12,7 +12,9 @@ it('allows creating a database and a table', () => {
   cy.login();
   cy.visit('index.php?route=/server/databases');
   cy.fixture('testdata').then((td) => {
-    cy.get('#text_create_db').type(`${td.databaseName}.${random}`, { force: true });
+    cy.get('#text_create_db').type(`${td.databaseName}.${random}`, {
+      force: true,
+    });
     cy.get('#buttonGo').click({ force: true });
     cy.get('.lock-page [type="text"]').type(`${td.tableName}.${random}`);
     cy.get('.lock-page [type="number"]').clear().type(td.columnNumber);

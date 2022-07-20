@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { closeThePopups, skipTheWelcomeScreen, random } from './utils';
+import { closeThePopups, skipTheWelcomeScreen, random } from '../support/utils';
 
 before(() => {
   skipTheWelcomeScreen();

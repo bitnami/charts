@@ -69,6 +69,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`            |
 | `nameOverride`           | String to partially override keycloak.fullname                                          | `""`            |
 | `fullnameOverride`       | String to fully override keycloak.fullname                                              | `""`            |
+| `namespaceOverride`      | String to fully override common.names.namespace                                         | `""`            |
 | `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
 | `clusterDomain`          | Default Kubernetes cluster domain                                                       | `cluster.local` |
