@@ -1,4 +1,4 @@
-name: Update README metadata
+name: '[Support] Update README metadata'
 
 on:
   pull_request_target:

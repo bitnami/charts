@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.4.6
+appVersion: 2.4.7
 dependencies:
   - condition: redis.enabled
     name: redis
