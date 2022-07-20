@@ -39,4 +39,4 @@ sources:
   - https://github.com/bitnami/bitnami-docker-spring-cloud-dataflow
   - https://github.com/bitnami/bitnami-docker-spring-cloud-skipper
   - https://dataflow.spring.io/
-version: 12.0.3
+version: 12.0.4
