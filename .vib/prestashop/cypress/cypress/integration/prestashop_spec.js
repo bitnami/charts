@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random } from './utils';
+import { random } from '../support/utils';
 
 // Note: Interaction with the UI is preferred over cy.visit() as
 // PrestaShop requires to provide a token within the URL or else

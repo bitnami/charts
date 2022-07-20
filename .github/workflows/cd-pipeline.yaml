@@ -1,4 +1,4 @@
-name: 'CD Pipeline'
+name: '[CI/CD] CD Pipeline'
 on: # rebuild any PRs and main branch changes
   push:
     branches:
@@ -19,6 +19,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/kafka/**'
       - 'bitnami/keycloak/**'
       - 'bitnami/kibana/**'
+      - 'bitnami/magento/**'
       - 'bitnami/mariadb/**'
       - 'bitnami/matomo/**'
       - 'bitnami/mediawiki/**'
@@ -107,8 +108,8 @@ jobs:
           pipeline: ${{ needs.get-chart.outputs.chart }}/vib-publish.json
           config: charts/.vib/
         env:
-          VIB_ENV_TARGET_PLATFORM: 7ddab896-2e4e-4d58-a501-f79897eba3a0
-          VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: 91d398a2-25c4-4cda-8732-75a3cfc179a1
+          VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
+          VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: ${{ secrets.VIB_ENV_ALTERNATIVE_TARGET_PLATFORM }}
           VIB_ENV_S3_URL: s3://${{ secrets.AWS_S3_BUCKET }}/bitnami
           VIB_ENV_S3_USERNAME: ${{ secrets.AWS_ACCESS_KEY_ID }}
           VIB_ENV_S3_PASSWORD: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                 | Keycloak image registry                                                                                                      | `docker.io`           |
 | `image.repository`               | Keycloak image repository                                                                                                    | `bitnami/keycloak`    |
-| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `18.0.2-debian-11-r3` |
+| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `18.0.2-debian-11-r9` |
 | `image.pullPolicy`               | Keycloak image pull policy                                                                                                   | `IfNotPresent`        |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                             | `[]`                  |
 | `image.debug`                    | Specify if debug logs should be enabled                                                                                      | `false`               |
@@ -244,21 +244,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                           | Value   |
-| ------------------------------------------ | ------------------------------------------------------------------------------------- | ------- |
-| `metrics.enabled`                          | Enable exposing Keycloak statistics                                                   | `false` |
-| `metrics.service.ports.http`               | Metrics service HTTP port                                                             | `9990`  |
-| `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints                   | `{}`    |
-| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator          | `false` |
-| `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                              | `""`    |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                           | `30s`   |
-| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                   | `""`    |
-| `metrics.serviceMonitor.labels`            | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus | `{}`    |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                   | `{}`    |
-| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                    | `[]`    |
-| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                             | `[]`    |
-| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels              | `false` |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.     | `""`    |
+| Name                                       | Description                                                                           | Value      |
+| ------------------------------------------ | ------------------------------------------------------------------------------------- | ---------- |
+| `metrics.enabled`                          | Enable exposing Keycloak statistics                                                   | `false`    |
+| `metrics.service.ports.http`               | Metrics service HTTP port                                                             | `8080`     |
+| `metrics.service.annotations`              | Annotations for enabling prometheus to access the metrics endpoints                   | `{}`       |
+| `metrics.serviceMonitor.enabled`           | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator          | `false`    |
+| `metrics.serviceMonitor.path`              | Metrics service HTTP path                                                             | `/metrics` |
+| `metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                              | `""`       |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped                                           | `30s`      |
+| `metrics.serviceMonitor.scrapeTimeout`     | Specify the timeout after which the scrape is ended                                   | `""`       |
+| `metrics.serviceMonitor.labels`            | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus | `{}`       |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                   | `{}`       |
+| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                    | `[]`       |
+| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                             | `[]`       |
+| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels              | `false`    |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.     | `""`       |
 
 
 ### keycloak-config-cli parameters
@@ -268,7 +269,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                       | `false`                       |
 | `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                    | `docker.io`                   |
 | `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                  | `bitnami/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                         | `5.2.1-debian-11-r3`          |
+| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                         | `5.2.1-debian-11-r9`          |
 | `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                 | `IfNotPresent`                |
 | `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                | `[]`                          |
 | `keycloakConfigCli.annotations`                           | Annotations for keycloak-config-cli job                                                         | `{}`                          |
