@@ -226,6 +226,17 @@ PLAINTEXT
 {{- end -}}
 
 {{/*
+Return the port used with zookeeper
+*/}}
+{{- define "kafka.zookeeper.port" -}}
+{{- if .Values.auth.zookeeper.tls.enabled -}}
+3181
+{{- else -}}
+2181
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Kafka JAAS credentials secret
 */}}
 {{- define "kafka.jaasSecretName" -}}
