@@ -1,4 +1,4 @@
-name: Sync bitnami/charts index.yaml to S3
+name: [Index] Sync bitnami/charts index.yaml to S3
 
 on:
   push:
