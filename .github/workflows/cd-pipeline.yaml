@@ -160,7 +160,7 @@ jobs:
           attempts=0
           max_attempts=5
           is_index_updated=0
-          while [[ $attempts -lt $max_attempts ]]; do
+          while [[ $attempts -lt $max_attempts && $is_index_updated -eq 0 ]]; do
             attempts=$((attempts + 1))
             git fetch origin index
             git reset --hard origin/index
@@ -170,18 +170,14 @@ jobs:
             cp ../download/index.yaml bitnami/index.yaml
             # Push changes
             git add bitnami/index.yaml && git commit -m "${chart}-${chart_version}: Update index.yaml" -s
-            git push && is_index_updated=1 || true
-
-            if [[ $is_index_updated -eq 1 ]]; then
-              echo "::set-output name=result::ok"
-              break
-            else
-              echo "Failed to push during attempt $attempts"
-            fi
+            git push && is_index_updated=1 || echo "Failed to push during attempt $attempts"
           done
 
-          # If after $max_attempts attempts changes can't be pushed, the action is considered as failed
-          echo "::set-output name=result::fail"
+          if [[ $is_index_updated -eq 1 ]]; then
+            echo "::set-output name=result::ok"
+          else
+            echo "::set-output name=result::fail"
+          fi
       - id: show-error
         name: 'Show error'
         if: ${{ steps.update-index.outputs.result == 'fail' }}
