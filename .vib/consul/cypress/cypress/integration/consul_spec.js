@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { random } from './utils';
+import { random } from '../support/utils';
 
 const DATACENTER_NAME = Cypress.env('datacenterName');
 const REPLICA_COUNT = Cypress.env('replicaCount');

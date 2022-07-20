@@ -1,28 +1,28 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.6.0
+appVersion: 2.6.1
 dependencies:
-  - condition: memcachedchunks.enabled
+  - alias: memcachedchunks
+    condition: memcachedchunks.enabled
     name: memcached
     repository: https://charts.bitnami.com/bitnami
     version: 6.x.x
-    alias: memcachedchunks
-  - condition: memcachedfrontend.enabled
+  - alias: memcachedfrontend
+    condition: memcachedfrontend.enabled
     name: memcached
     repository: https://charts.bitnami.com/bitnami
     version: 6.x.x
-    alias: memcachedfrontend
-  - condition: memcachedindexqueries.enabled
+  - alias: memcachedindexqueries
+    condition: memcachedindexqueries.enabled
     name: memcached
     repository: https://charts.bitnami.com/bitnami
     version: 6.x.x
-    alias: memcachedindexqueries
-  - condition: memcachedindexwrites.enabled
+  - alias: memcachedindexwrites
+    condition: memcachedindexwrites.enabled
     name: memcached
     repository: https://charts.bitnami.com/bitnami
     version: 6.x.x
-    alias: memcachedindexwrites
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -44,4 +44,4 @@ name: grafana-loki
 sources:
   - https://github.com/bitnami/bitnami-docker-grafana-loki
   - https://github.com/grafana/loki/
-version: 2.2.0
+version: 2.2.3

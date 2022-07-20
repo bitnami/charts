@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | -------------------------------------------------------------- | ----------------------- |
 | `loki.image.registry`                 | Grafana Loki image registry                                    | `docker.io`             |
 | `loki.image.repository`               | Grafana Loki image repository                                  | `bitnami/grafana-loki`  |
-| `loki.image.tag`                      | Grafana Loki image tag (immutable tags are recommended)        | `2.6.0-debian-11-r0`    |
+| `loki.image.tag`                      | Grafana Loki image tag (immutable tags are recommended)        | `2.6.1-debian-11-r0`    |
 | `loki.image.pullPolicy`               | Grafana Loki image pull policy                                 | `IfNotPresent`          |
 | `loki.image.pullSecrets`              | Grafana Loki image pull secrets                                | `[]`                    |
 | `loki.configuration`                  | Loki components configuration                                  | `""`                    |
@@ -193,7 +193,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.enabled`                               | Enable Gateway deployment                                                                         | `true`                 |
 | `gateway.image.registry`                        | Nginx image registry                                                                              | `docker.io`            |
 | `gateway.image.repository`                      | Nginx image repository                                                                            | `bitnami/nginx`        |
-| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                  | `1.21.6-debian-11-r13` |
+| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                  | `1.21.6-debian-11-r17` |
 | `gateway.image.pullPolicy`                      | Nginx image pull policy                                                                           | `IfNotPresent`         |
 | `gateway.image.pullSecrets`                     | Nginx image pull secrets                                                                          | `[]`                   |
 | `gateway.image.debug`                           | Enable debugging in the initialization process                                                    | `false`                |
@@ -978,7 +978,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.enabled`                               | Deploy promtail                                                                                    | `true`               |
 | `promtail.image.registry`                        | Grafana Promtail image registry                                                                    | `docker.io`          |
 | `promtail.image.repository`                      | Grafana Promtail image repository                                                                  | `bitnami/promtail`   |
-| `promtail.image.tag`                             | Grafana Promtail image tag (immutable tags are recommended)                                        | `2.6.0-debian-11-r0` |
+| `promtail.image.tag`                             | Grafana Promtail image tag (immutable tags are recommended)                                        | `2.6.0-debian-11-r2` |
 | `promtail.image.pullPolicy`                      | Grafana Promtail image pull policy                                                                 | `IfNotPresent`       |
 | `promtail.image.pullSecrets`                     | Grafana Promtail image pull secrets                                                                | `[]`                 |
 | `promtail.extraEnvVars`                          | Array with extra environment variables to add to promtail nodes                                    | `[]`                 |
@@ -1070,7 +1070,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r13`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r16`      |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -1120,7 +1120,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedchunks.enabled`                 | Deploy memcached sub-chart                           | `true`                 |
 | `memcachedchunks.image.registry`          | Memcached image registry                             | `docker.io`            |
 | `memcachedchunks.image.repository`        | Memcached image repository                           | `bitnami/memcached`    |
-| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended) | `1.6.15-debian-11-r13` |
+| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended) | `1.6.15-debian-11-r17` |
 | `memcachedchunks.nameOverride`            | override the subchart name                           | `""`                   |
 | `memcachedchunks.architecture`            | Memcached architecture                               | `high-availability`    |
 | `memcachedchunks.service.ports.memcached` | Memcached service port                               | `11211`                |
@@ -1141,7 +1141,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                           | `true`                 |
 | `memcachedfrontend.image.registry`          | Memcached image registry                             | `docker.io`            |
 | `memcachedfrontend.image.repository`        | Memcached image repository                           | `bitnami/memcached`    |
-| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended) | `1.6.15-debian-11-r13` |
+| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended) | `1.6.15-debian-11-r17` |
 | `memcachedfrontend.architecture`            | Memcached architecture                               | `high-availability`    |
 | `memcachedfrontend.nameOverride`            | override the subchart name                           | `""`                   |
 | `memcachedfrontend.service.ports.memcached` | Memcached service port                               | `11211`                |
@@ -1162,7 +1162,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart                           | `true`                 |
 | `memcachedindexqueries.image.registry`          | Memcached image registry                             | `docker.io`            |
 | `memcachedindexqueries.image.repository`        | Memcached image repository                           | `bitnami/memcached`    |
-| `memcachedindexqueries.image.tag`               | Memcached image tag (immutable tags are recommended) | `1.6.15-debian-11-r13` |
+| `memcachedindexqueries.image.tag`               | Memcached image tag (immutable tags are recommended) | `1.6.15-debian-11-r17` |
 | `memcachedindexqueries.architecture`            | Memcached architecture                               | `high-availability`    |
 | `memcachedindexqueries.nameOverride`            | override the subchart name                           | `""`                   |
 | `memcachedindexqueries.service.ports.memcached` | Memcached service port                               | `11211`                |
@@ -1183,7 +1183,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedindexwrites.enabled`                 | Deploy memcached sub-chart                           | `false`                |
 | `memcachedindexwrites.image.registry`          | Memcached image registry                             | `docker.io`            |
 | `memcachedindexwrites.image.repository`        | Memcached image repository                           | `bitnami/memcached`    |
-| `memcachedindexwrites.image.tag`               | Memcached image tag (immutable tags are recommended) | `1.6.15-debian-11-r13` |
+| `memcachedindexwrites.image.tag`               | Memcached image tag (immutable tags are recommended) | `1.6.15-debian-11-r17` |
 | `memcachedindexwrites.architecture`            | Memcached architecture                               | `high-availability`    |
 | `memcachedindexwrites.nameOverride`            | override the subchart name                           | `""`                   |
 | `memcachedindexwrites.service.ports.memcached` | Memcached service port                               | `11211`                |

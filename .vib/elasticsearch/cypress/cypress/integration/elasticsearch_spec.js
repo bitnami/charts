@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random } from './utils';
+import { random } from '../support/utils';
 import body from '../fixtures/documents.json';
 
 const NODE_NUMBER = Cypress.env('nodeNumber');
