@@ -1,4 +1,4 @@
-name: Generate the full index archive for Bitnami Charts
+name: [Index] Generate the full bitnami/charts index.yaml
 on:
   push:
     branches:
