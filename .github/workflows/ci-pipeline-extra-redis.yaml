@@ -1,5 +1,5 @@
 # Multiple deployments pipelines are custom per asset. All single deployments pipelines are handled by ci-pipeline.yaml
-name: 'CI Pipeline extra Redis'
+name: '[CI/CD] CI Pipeline extra Redis'
 on: # rebuild any PRs and main branch changes
   pull_request_target:
     types:
