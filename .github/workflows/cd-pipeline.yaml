@@ -200,7 +200,7 @@ jobs:
     name: Notify unsuccessful CD run
     steps:
       - name: Notify in Slack channel
-        if: ${{ needs.vib-publish.result != 'success' ||  needs.vib-publish.result != 'ok' }}
+        if: ${{ needs.vib-publish.result != 'success' ||  needs.update-index.result != 'ok' }}
         uses: slackapi/slack-github-action@v1.19.0
         with:
           channel-id: ${{ secrets.CD_SLACK_CHANNEL_ID }}
