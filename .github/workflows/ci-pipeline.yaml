@@ -17,6 +17,7 @@ jobs:
   get-chart:
     runs-on: ubuntu-latest
     name: 'Get modified charts'
+    if: ${{ github.event.pull_request.state != 'closed' }}
     outputs:
       chart: ${{ steps.get-chart.outputs.chart }}
       result: ${{ steps.get-chart.outputs.result }}
@@ -89,14 +90,16 @@ jobs:
     needs: get-chart
     # Given performance issues of the action feature on GH's side, we need to be very restrictive in the job's triggers:
     # -> The 'Get modified charts' job suceededs AND
-    # -> The event action is different from opened AND
+    # -> The event is not opened (avoids running twice on consecutive opened and labeled events)  AND
     #  ( ---> The pipeline was triggered due to a label addition and said label was the 'verify' one OR
     #    ---> The pipeline was NOT triggered due to a label addition but the PR already contains the 'verify' one )
     if: |
         needs.get-chart.outputs.result == 'ok' &&
         github.event.action != 'opened' &&
-        (github.event.action == 'labeled' && github.event.label.name == 'verify' ||
-        github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'verify'))
+        (
+          (github.event.action == 'labeled' && github.event.label.name == 'verify') ||
+          (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'verify'))
+        )
     name: VIB Verify
     steps:
       - uses: actions/checkout@v2
