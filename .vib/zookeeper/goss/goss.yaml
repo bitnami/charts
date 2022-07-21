@@ -25,4 +25,4 @@ command:
     exit-status: 0
     stdout: []
     stderr:
-      - "/Created /my_key_[A-Za-z]/"
+      - /Created /my_key_[A-Za-z]/
