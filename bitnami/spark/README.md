@@ -64,32 +64,29 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                                  | Value           |
-| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
-| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
-| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
-| `namespaceOverride`      | String to fully override common.names.namespace                                              | `""`            |
-| `commonLabels`           | Labels to add to all deployed objects                                                        | `{}`            |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                   | `{}`            |
-| `clusterDomain`          | Kubernetes cluster domain name                                                               | `cluster.local` |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
-
-
-### Spark parameters
-
-| Name                | Description                                      | Value                |
-| ------------------- | ------------------------------------------------ | -------------------- |
-| `image.registry`    | Spark image registry                             | `docker.io`          |
-| `image.repository`  | Spark image repository                           | `bitnami/spark`      |
-| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.2.1-debian-11-r3` |
-| `image.pullPolicy`  | Spark image pull policy                          | `IfNotPresent`       |
-| `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                 |
-| `image.debug`       | Enable image debug mode                          | `false`              |
-| `hostNetwork`       | Enable HOST Network                              | `false`              |
+| Name                     | Description                                                                                                                                         | Value                |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                                                                | `""`                 |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name)                                                        | `""`                 |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                                                                             | `""`                 |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                 |
+| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                 |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                 |
+| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`      |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                 |
+| `initScripts`            | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                 |
+| `initScriptsCM`          | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`                 |
+| `initScriptsSecret`      | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                 |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`              |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`          |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`       |
+| `image.registry`         | Spark image registry                                                                                                                                | `docker.io`          |
+| `image.repository`       | Spark image repository                                                                                                                              | `bitnami/spark`      |
+| `image.tag`              | Spark image tag (immutable tags are recommended)                                                                                                    | `3.3.0-debian-11-r2` |
+| `image.pullPolicy`       | Spark image pull policy                                                                                                                             | `IfNotPresent`       |
+| `image.pullSecrets`      | Specify docker-registry secret names as an array                                                                                                    | `[]`                 |
+| `image.debug`            | Enable image debug mode                                                                                                                             | `false`              |
+| `hostNetwork`            | Enable HOST Network                                                                                                                                 | `false`              |
 
 
 ### Spark master parameters
