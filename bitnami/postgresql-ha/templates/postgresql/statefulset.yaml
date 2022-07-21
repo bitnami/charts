@@ -5,6 +5,8 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: postgresql
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: postgresql
     {{- if .Values.postgresql.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.labels "context" $) | nindent 4 }}
     {{- end }}
@@ -26,6 +28,8 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: postgresql
+        ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+        app: postgresql
         {{- if .Values.postgresql.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.podLabels "context" $) | nindent 8 }}
         {{- end }}

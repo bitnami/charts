@@ -4,6 +4,8 @@ metadata:
   name: {{ include "postgresql-ha.pgpool" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{ include "common.labels.standard" . | nindent 4 }}
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: pgpool
     app.kubernetes.io/component: pgpool
     {{- if .Values.pgpool.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.labels "context" $) | nindent 4 }}
@@ -29,6 +31,8 @@ spec:
     metadata:
       labels: {{ include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: pgpool
+        ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+        app: pgpool
         {{- if .Values.pgpool.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.podLabels "context" $) | nindent 8 }}
         {{- end }}
