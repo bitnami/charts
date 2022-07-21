@@ -410,7 +410,7 @@ See the [Spark Configuration](https://spark.apache.org/docs/latest/configuration
 
 ### Configure SSL communication
 
-In order to enable secure transport between workers and master, deploy the Helm chart with the `ssl.enabled=true` chart parameter.
+In order to enable secure transport between workers and master, deploy the Helm chart with the `security.ssl.enabled=true` chart parameter.
 
 ### Create certificate and password secrets
 
