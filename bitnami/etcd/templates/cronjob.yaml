@@ -21,6 +21,8 @@ spec:
         metadata:
           labels: {{- include "common.labels.standard" . | nindent 12 }}
             app.kubernetes.io/component: snapshotter
+            ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+            app: snapshotter
           {{- if .Values.disasterRecovery.cronjob.podAnnotations }}
           annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.disasterRecovery.cronjob.podAnnotations "context" $) | nindent 12 }}
           {{- end }}
