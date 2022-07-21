@@ -5,6 +5,8 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: primary
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: mariadb-primary
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -32,6 +34,8 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: primary
+        ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+        app: mariadb-primary
         {{- if .Values.primary.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.primary.podLabels "context" $) | nindent 8 }}
         {{- end }}

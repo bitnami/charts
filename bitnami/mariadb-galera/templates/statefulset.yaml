@@ -4,6 +4,8 @@ metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: mariadb-galera
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
@@ -28,6 +30,8 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       {{- end }}
       labels: {{- include "common.labels.matchLabels" . | nindent 8 }}
+        ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+        app: mariadb-galera
         {{- if .Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
