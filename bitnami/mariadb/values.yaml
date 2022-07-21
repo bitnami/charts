@@ -158,6 +158,9 @@ initdbScriptsConfigMap: ""
 ## Mariadb Primary parameters
 ##
 primary:
+  ## @param primary.name Name of the primary database (eg primary, master, leader, ...)
+  ##
+  name: primary
   ## @param primary.command Override default container command on MariaDB Primary container(s) (useful when using custom images)
   ##
   command: []
@@ -536,6 +539,9 @@ primary:
 ## Mariadb Secondary parameters
 ##
 secondary:
+  ## @param secondary.name Name of the secondary database (eg secondary, slave, ...)
+  ##
+  name: secondary
   ## @param secondary.replicaCount Number of MariaDB secondary replicas
   ##
   replicaCount: 1
