@@ -1,4 +1,4 @@
-name: 'CI Pipeline'
+name: '[CI/CD] CI Pipeline'
 on: # rebuild any PRs and main branch changes
   pull_request_target:
     types:

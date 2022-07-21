@@ -176,6 +176,7 @@ $ helm delete --purge my-release
 | `master.replicaCount`                                | Number of master-elegible replicas to deploy                                                                                                       | `2`                 |
 | `master.nameOverride`                                | String to partially override elasticsearch.master.fullname                                                                                         | `""`                |
 | `master.fullnameOverride`                            | String to fully override elasticsearch.master.fullname                                                                                             | `""`                |
+| `master.annotations`                                 | Annotations for the master statefulset                                                                                                             | `{}`                |
 | `master.updateStrategy.type`                         | Master-elegible nodes statefulset stategy type                                                                                                     | `RollingUpdate`     |
 | `master.resources.limits`                            | The resources limits for the master-elegible containers                                                                                            | `{}`                |
 | `master.resources.requests`                          | The requested resources for the master-elegible containers                                                                                         | `{}`                |
@@ -258,6 +259,7 @@ $ helm delete --purge my-release
 | `data.replicaCount`                                | Number of data-only replicas to deploy                                                                                                           | `2`                 |
 | `data.nameOverride`                                | String to partially override elasticsearch.data.fullname                                                                                         | `""`                |
 | `data.fullnameOverride`                            | String to fully override elasticsearch.data.fullname                                                                                             | `""`                |
+| `data.annotations`                                 | Annotations for the data statefulset                                                                                                             | `{}`                |
 | `data.updateStrategy.type`                         | Data-only nodes statefulset stategy type                                                                                                         | `RollingUpdate`     |
 | `data.resources.limits`                            | The resources limits for the data containers                                                                                                     | `{}`                |
 | `data.resources.requests`                          | The requested resources for the data containers                                                                                                  | `{}`                |
@@ -340,6 +342,7 @@ $ helm delete --purge my-release
 | `coordinating.replicaCount`                                | Number of coordinating-only replicas to deploy                                                                            | `2`             |
 | `coordinating.nameOverride`                                | String to partially override elasticsearch.coordinating.fullname                                                          | `""`            |
 | `coordinating.fullnameOverride`                            | String to fully override elasticsearch.coordinating.fullname                                                              | `""`            |
+| `coordinating.annotations`                                 | Annotations for the coordinating-only statefulset                                                                         | `{}`            |
 | `coordinating.updateStrategy.type`                         | Coordinating-only nodes statefulset stategy type                                                                          | `RollingUpdate` |
 | `coordinating.resources.limits`                            | The resources limits for the coordinating-only containers                                                                 | `{}`            |
 | `coordinating.resources.requests`                          | The requested resources for the coordinating-only containers                                                              | `{}`            |
@@ -414,6 +417,7 @@ $ helm delete --purge my-release
 | `ingest.replicaCount`                                | Number of ingest-only replicas to deploy                                                                                         | `2`                          |
 | `ingest.nameOverride`                                | String to partially override elasticsearch.ingest.fullname                                                                       | `""`                         |
 | `ingest.fullnameOverride`                            | String to fully override elasticsearch.ingest.fullname                                                                           | `""`                         |
+| `ingest.annotations`                                 | Annotations for the ingest statefulset                                                                                           | `{}`                         |
 | `ingest.containerPorts.restAPI`                      | Elasticsearch REST API port                                                                                                      | `9200`                       |
 | `ingest.containerPorts.transport`                    | Elasticsearch Transport port                                                                                                     | `9300`                       |
 | `ingest.updateStrategy.type`                         | Ingest-only nodes statefulset stategy type                                                                                       | `RollingUpdate`              |
