@@ -12,5 +12,5 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  {{- include "common.tplvalues.render" ( dict "value" .Values.initScripts "context" $ ) | nindent 4 }}
+{{- include "common.tplvalues.render" ( dict "value" .Values.initScripts "context" $ ) | nindent 2 }}
 {{- end }}
