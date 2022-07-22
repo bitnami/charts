@@ -99,7 +99,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ----------------------------------------------------- | -------------------- |
 | `image.registry`    | Redis&reg; image registry                             | `docker.io`          |
 | `image.repository`  | Redis&reg; image repository                           | `bitnami/redis`      |
-| `image.tag`         | Redis&reg; image tag (immutable tags are recommended) | `7.0.4-debian-11-r3` |
+| `image.tag`         | Redis&reg; image tag (immutable tags are recommended) | `7.0.4-debian-11-r4` |
 | `image.pullPolicy`  | Redis&reg; image pull policy                          | `IfNotPresent`       |
 | `image.pullSecrets` | Redis&reg; image pull secrets                         | `[]`                 |
 | `image.debug`       | Enable image debug mode                               | `false`              |
@@ -321,7 +321,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.enabled`                            | Use Redis&reg; Sentinel on Redis&reg; pods.                                                                                                 | `false`                  |
 | `sentinel.image.registry`                     | Redis&reg; Sentinel image registry                                                                                                          | `docker.io`              |
 | `sentinel.image.repository`                   | Redis&reg; Sentinel image repository                                                                                                        | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                          | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.0.4-debian-11-r0`     |
+| `sentinel.image.tag`                          | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.0.4-debian-11-r1`     |
 | `sentinel.image.pullPolicy`                   | Redis&reg; Sentinel image pull policy                                                                                                       | `IfNotPresent`           |
 | `sentinel.image.pullSecrets`                  | Redis&reg; Sentinel image pull secrets                                                                                                      | `[]`                     |
 | `sentinel.image.debug`                        | Enable image debug mode                                                                                                                     | `false`                  |
