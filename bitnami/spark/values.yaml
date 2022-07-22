@@ -48,11 +48,11 @@ extraDeploy: []
 ## Specify dictionary of scripts to be run at first boot
 ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
 ## For example:
-#initScripts:
-  #my_init_script.sh: |
-    #  #!/bin/sh
-   #   touch test
-#echo "Do something." >> test.txt
+## initScripts:
+##   my_init_script.sh: |
+##      #!/bin/sh
+##      echo "Do something."
+##
 initScripts: {}
 ## @param initScriptsCM ConfigMap with the init scripts. Evaluated as a template.
 ## Note: This will override initScripts
