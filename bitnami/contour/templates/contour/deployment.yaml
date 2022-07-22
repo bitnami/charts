@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}-contour
+  name: {{ printf "%s-contour" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour
@@ -103,7 +103,7 @@ spec:
             - --contour-cert-file=/certs/tls.crt
             - --contour-key-file=/certs/tls.key
             - --config-path=/config/contour.yaml
-            - --envoy-service-name={{ include "common.names.fullname" . }}-envoy
+            - --envoy-service-name={{ printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
             - --leader-election-resource-name={{ include "common.names.namespace" . }}
             {{- if .Values.contour.debug }}
             - --debug

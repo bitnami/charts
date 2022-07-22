@@ -66,7 +66,7 @@ Get the user to use to access MinIO&reg;
         {{- else -}}
             {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-user")  -}}
         {{- end -}}
-    {{- else if eq .Values.gateway.type "s3" }}
+    {{- else if and (eq .Values.gateway.type "s3") (not .Values.gateway.auth.s3.useIRSA ) }}
         {{- .Values.gateway.auth.s3.accessKey -}}
     {{- end -}}
 {{- else }}
@@ -103,7 +103,7 @@ Get the password to use to access MinIO&reg;
         {{- else -}}
             {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "root-password")  -}}
         {{- end -}}
-    {{- else if eq .Values.gateway.type "s3" }}
+    {{- else if and (eq .Values.gateway.type "s3") (not .Values.gateway.auth.s3.useIRSA ) }}
         {{- .Values.gateway.auth.s3.secretKey -}}
     {{- end -}}
 {{- else }}
@@ -288,7 +288,7 @@ minio: persistence.accessModes
 Validate values of MinIO&reg; - when using MinIO&reg; as a S3 Gateway, the Access & Secret keys are required
 */}}
 {{- define "minio.validateValues.gateway.s3.credentials" -}}
-{{- if and .Values.gateway.enabled (eq .Values.gateway.type "s3") (or (empty .Values.gateway.auth.s3.accessKey) (empty .Values.gateway.auth.s3.secretKey)) }}
+{{- if and .Values.gateway.enabled (eq .Values.gateway.type "s3") (not .Values.gateway.auth.s3.useIRSA ) (or (empty .Values.gateway.auth.s3.accessKey) (empty .Values.gateway.auth.s3.secretKey)) }}
 minio: gateway.auth.s3
     The Access & Secret keys are required to use MinIO&reg; as a S3 Gateway.
     Please set valid keys (--set gateway.auth.s3.accessKey="xxxx",gateway.auth.s3.secretKey="yyyy")
