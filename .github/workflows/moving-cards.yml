@@ -9,13 +9,14 @@ permissions:
   repository-projects: read
   issues: write
 
+# To fix the concurrency when for example more than one label is added
 concurrency:
-  # Cards are special
-  group: ${{ github.event.project_card.content_url }}
+  group: ${{ github.run_id }}
   cancel-in-progress: false
 
 jobs:
   label-card:
+    if: ${{ github.actor != 'bitnami-bot' && github.event.pull_request && (!contains(github.event.pull_request.labels.*.name, 'auto-merge')) }}
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout
@@ -52,6 +53,7 @@ jobs:
           add-labels: "solved"
           remove-labels: "in-progress, on-hold, triage"
   assign-assignee-if-needed:
+    if: ${{ github.actor != 'bitnami-bot' && (!contains(github.event.issue.labels.*.name, 'auto-merge')) }}
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout
