@@ -16,7 +16,7 @@ env:
 jobs:
   auto-pr-triage:
     runs-on: ubuntu-latest
-    name: 'Labels and auto-merge'
+    name: Triage for automated PRs
     if: |
       contains(github.event.pull_request.title, 'Release') &&
       github.event.action == 'opened' &&
