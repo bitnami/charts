@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random, verifySuccesOfAction } from './utils';
+import { random, verifySuccesOfAction } from '../support/utils';
 
 it('allows user to log in and log out', () => {
   cy.login();
@@ -25,7 +25,6 @@ it('allows creating a dashboard with a panel', () => {
   });
 
   cy.get('[aria-label*="Save dashboard"]').click();
-  cy.get('button[aria-label*="Close dialogue"]');
   cy.fixture('dashboards').then((dashboard) => {
     cy.get('[name*="title"]')
       .clear()

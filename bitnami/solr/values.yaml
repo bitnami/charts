@@ -674,7 +674,7 @@ metrics:
   enabled: false
   ## @param metrics.configFile Config file with metrics to export by the Solr prometheus metrics. To change it mount a different file using `extraConfigMaps`
   ##
-  configFile: "/opt/bitnami/solr/contrib/prometheus-exporter/conf/solr-exporter-config.xml"
+  configFile: "/opt/bitnami/solr/prometheus-exporter/conf/solr-exporter-config.xml"
   ## @param metrics.threads Number of Solr exporter threads
   ##
   threads: 7

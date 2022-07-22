@@ -1,4 +1,4 @@
-name: 'Synchronize labels from the containers repository'
+name: '[Support] Synchronize labels from the containers repository'
 on:
   schedule:
     # Daily

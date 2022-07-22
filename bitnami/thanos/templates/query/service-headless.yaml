@@ -24,10 +24,6 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-    - port: {{ if .Values.query.service.grpc }}{{ coalesce .Values.query.service.ports.grpc .Values.query.service.grpc.port }}{{ else }}{{ .Values.query.service.ports.grpc }}{{ end }}
-      targetPort: grpc
-      protocol: TCP
-      name: grpc
     {{- if .Values.query.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.query.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

@@ -705,48 +705,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-### To 3.0.0
-
-This major update the Redis&reg; subchart to its newest major, 16.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1600) you can find more info about the specific changes.
-
-Additionally, this chart has been standardised adding features from other charts.
-
-### To 2.0.0
-
-This major update the Redis&reg; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
-
-### To 1.0.0
-
-In this version, the `image` block is defined once and is used in the different templates, while in the previous version, the `image` block was duplicated for every component
-
-```yaml
-image:
-  registry: docker.io
-  repository: bitnami/argo-cd
-  tag: 2.0.5
-```
-VS
-```yaml
-controller:
-  image:
-    registry: docker.io
-    repository: bitnami/argo-cd
-    tag: 2.0.5
-...
-server:
-  image:
-    registry: docker.io
-    repository: bitnami/argo-cd
-    tag: 2.0.5
-...
-repoServer:
-  image:
-    registry: docker.io
-    repository: bitnami/argo-cd
-    tag: 2.0.5
-```
-
-See [PR#7113](https://github.com/bitnami/charts/pull/7113) for more info about the implemented changes
+Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/harbor/administration/upgrade/).
 
 ## License
 

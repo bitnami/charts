@@ -7,7 +7,7 @@ A reverse proxy and static file server that provides authentication using Provid
 [Overview of OAuth2 Proxy](https://github.com/oauth2-proxy/oauth2-proxy)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -315,15 +315,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-### To 2.0.0
-
-This major update the Redis&reg; subchart to its newest major, 16.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1600) you can find more info about the specific changes.
-
-Additionally, this chart has been standardised adding features from other charts.
-
-### To 1.0.0
-
-This major update the Redis&reg; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
+Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/oauth2-proxy/administration/upgrade/).
 
 ## License
 

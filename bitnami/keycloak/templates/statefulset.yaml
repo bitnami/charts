@@ -3,7 +3,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ template "keycloak.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
     {{- if .Values.commonLabels }}
@@ -297,9 +297,11 @@ spec:
             - name: http
               containerPort: {{ .Values.containerPorts.http }}
               protocol: TCP
+            {{- if .Values.auth.tls.enabled }}
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
+            {{- end }}
             - name: http-management
               containerPort: {{ .Values.containerPorts.management }}
               protocol: TCP
