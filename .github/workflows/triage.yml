@@ -13,13 +13,15 @@ permissions:
   repository-projects: write
   issues: write
 
+# To fix the concurrency when for example more than one label is added
 concurrency:
-  group: ${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
+  group: ${{ github.run_id }}
   cancel-in-progress: false
 
 jobs:
   # For any opened or reopened issue, should be sent into Triage
   send_to_board:
+    if: ${{ github.actor != 'bitnami-bot' && github.event.pull_request && (!contains(github.event.pull_request.labels.*.name, 'auto-merge')) }}
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout
@@ -38,7 +40,6 @@ jobs:
           # creating env variable "on the fly"
           echo "TRIAGE_TEAM_STRING=$TRIAGE_TEAM_STRING" >> $GITHUB_ENV
       - name: Assign to a person to work on it
-        if: ${{ github.actor != 'bitnami-bot' }}
         uses: pozil/auto-assign-issue@v1.7.3
         with:
           numOfAssignee: 1
@@ -47,7 +48,6 @@ jobs:
           # teams: XXX
           repo-token: "${{ secrets.GHPROJECT_TOKEN }}"
       - name: Send to the board
-        if: ${{ github.actor != 'bitnami-bot' }}
         uses: peter-evans/create-or-update-project-card@v2
         with:
           project-name: Support

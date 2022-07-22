@@ -7,12 +7,14 @@ permissions:
   repository-projects: write
   issues: write
 
+# To fix the concurrency when for example more than one label is added
 concurrency:
-  group: ${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
+  group: ${{ github.run_id }}
   cancel-in-progress: false
 
 jobs:
   comments_handler:
+    if: ${{ github.actor != 'bitnami-bot' && github.event.pull_request && (!contains(github.event.pull_request.labels.*.name, 'auto-merge')) }}
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout
