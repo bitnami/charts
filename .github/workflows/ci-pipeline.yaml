@@ -25,14 +25,11 @@ jobs:
       # Enables auto-merge and adds necessary labels for automated releases' PRs
       - id: labeling
         name: Label PR
-        run: |
-          curl --request POST \
-          --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels \
-          --header 'authorization: Bearer ${{ secrets.BITNAMI_BOT_TOKEN }}' \
-          --data '{
-            "labels": ["verify", "auto-merge"]
-            }' \
-          --fail
+        uses: andymckay/labeler@1.0.4
+        with:
+          # We can't use GITHUB_TOKEN because the labeling needs to trigger a new CI pipeline
+          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
+          add-labels: "verify, auto-merge"
       - id: auto-merge
         name: Enable auto-merge
         run: |
@@ -167,14 +164,25 @@ jobs:
             "event": "APPROVE"
             }' \
           --fail
-      # Removes "auto-merge" label and add related agents as reviewers if the 'VIB Verify' job failed
+      - name: Remove auto-merge label
+        if: ${{ needs.vib-verify.result == 'failure' }}
+        uses: andymckay/labeler@1.0.4
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          remove-labels: "auto-merge"
+      - name: Disable auto-merge
+        if: ${{ needs.vib-verify.result == 'failure' }}
+        run: |
+          curl --request POST \
+          --url https://api.github.com/graphql \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --data '{
+            "query": "mutation { disablePullRequestAutoMerge(input: {pullRequestId: \"${{ github.event.pull_request.node_id }}\"}) { clientMutationId }}"
+            }' \
+          --fail
       - name: Manual review required
         if: ${{ needs.vib-verify.result == 'failure' }}
         run: |
-          curl --request DELETE \
-          --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels/auto-merge \
-          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-          --fail
           curl --request POST \
           --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments \
           --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
@@ -189,12 +197,5 @@ jobs:
           --header 'content-type: application/json' \
           --data '{
             "team_reviewers": ["build-maintainers"]
-            }' \
-          --fail
-          curl --request POST \
-          --url https://api.github.com/graphql \
-          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-          --data '{
-            "query": "mutation { disablePullRequestAutoMerge(input: {pullRequestId: \"${{ github.event.pull_request.node_id }}\"}) { clientMutationId }}"
             }' \
           --fail
