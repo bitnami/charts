@@ -8,7 +8,7 @@ it('allows creating a company', () => {
   cy.contains('Settings').click();
   cy.contains('Users & Companies').click();
   cy.get('[data-menu-xmlid="base.menu_action_res_company_form"]').click();
-  cy.get('.o_list_button_add').click();
+  cy.contains('Create').click();
   cy.fixture('companies').then((company) => {
     cy.get('[name="name"]').type(`${company.newCompany.name}.${random}`);
     cy.contains('Save').click();
@@ -58,7 +58,7 @@ it('allows creating a user', () => {
   cy.contains('Settings').click();
   cy.contains('Users').click();
   cy.get('[data-menu-xmlid="base.menu_action_res_users"]').click();
-  cy.get('.o_list_button_add').click({ force: true });
+  cy.contains('Create').click({ force: true });
   cy.fixture('users').then((user) => {
     cy.contains('Access Rights');
     cy.get('[name="name"]').type(`${user.newUser.name}.${random}`);
