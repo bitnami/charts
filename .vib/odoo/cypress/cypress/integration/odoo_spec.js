@@ -43,11 +43,11 @@ it('allows inviting new users', () => {
   cy.login();
   cy.get('[title="Home Menu"]').click();
   cy.contains('Settings').click();
-  cy.fixture('newUsers').then((newUser) => {
-    cy.get('.o_user_emails').type(`${random}.${newUser.newUser.email}`);
+  cy.fixture('users').then((user) => {
+    cy.get('.o_user_emails').type(`${random}.${user.newUser.email}`);
     cy.get('[data-loading-text="Inviting..."]').click();
     cy.get('#invite_users_setting').within(() => {
-      cy.contains(`${random}.${newUser.newUser.email}`);
+      cy.contains(`${random}.${user.newUser.email}`);
     });
   });
 });
