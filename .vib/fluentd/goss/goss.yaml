@@ -10,6 +10,10 @@ command:
     exit-status: 0
     stdout: 
       - {{ printf "/bitnami.*%s/" .Env.BITNAMI_APP_NAME }}
+      - parsing config file is succeeded 
+      - kafka
+      - grafana-loki
+      - elasticsearch
     stderr: []
   user-id-test:
     exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
@@ -21,7 +25,7 @@ command:
     exit-status: 0
     stdout: []
     stderr: []  
-  fluent-cat-test :
+  fluent-cat-test:
     exec: echo '{"message":"hello"}' | fluent-cat debug.log
     exit-status: 0
     stdout: []
