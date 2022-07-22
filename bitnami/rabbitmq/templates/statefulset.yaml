@@ -93,7 +93,7 @@ spec:
             - |
               mkdir -p "{{ .Values.persistence.mountPath }}"
               {{- if eq ( toString ( .Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
-              chown -R `id -u`:`id -G | cut -d " " -f2` {{ .Values.persistence.mountPath }}
+              chown `id -u`:`id -G | cut -d " " -f2` {{ .Values.persistence.mountPath }}
               {{- else }}
               chown "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "{{ .Values.persistence.mountPath }}"
               {{- end }}
