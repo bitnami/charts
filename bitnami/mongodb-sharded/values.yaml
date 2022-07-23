@@ -117,7 +117,13 @@ auth:
   ## @param auth.usePasswordFile Mount credentials as files instead of using environment variables
   ##
   usePasswordFile: false
-
+  ## @param customPasswordFiles Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `replica`.
+  ## Example:
+  ## customPasswordFiles:
+  ##   root: /vault/secrets/root
+  ##   replica: /vault/secrets/replica
+  ##
+  customPasswordFiles: {}
 
 ## @param shards Number of shards to be created
 ## ref: https://docs.mongodb.com/manual/core/sharded-cluster-shards/

@@ -111,9 +111,9 @@ spec:
               value: {{ .Values.auth.rootUser | quote }}
             {{- if .Values.auth.usePasswordFile }}
             - name: MONGODB_ROOT_PASSWORD_FILE
-              value: "/bitnami/mongodb/secrets/mongodb-root-password"
+              value: {{ default "/bitnami/mongodb/secrets/mongodb-root-password" .Values.auth.customPasswordFiles.root | quote }}
             - name: MONGODB_REPLICA_SET_KEY_FILE
-              value: "/bitnami/mongodb/secrets/mongodb-replica-set-key"
+              value: {{ default "/bitnami/mongodb/secrets/mongodb-replica-set-key" .Values.auth.customPasswordFiles.replica | quote }}
             {{- else }}
             - name: MONGODB_ROOT_PASSWORD
               valueFrom:
@@ -235,7 +235,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.auth.usePasswordFile }}
+            {{- if and .Values.auth.usePasswordFile (not .Values.auth.customPasswordFiles) }}
             - name: secrets
               mountPath: /bitnami/mongodb/secrets/
             {{- end }}
@@ -261,9 +261,9 @@ spec:
           {{- if $.Values.auth.enabled }}
             - name: MONGODB_ROOT_USER
               value: {{ .Values.auth.rootUser | quote }}
-          {{- if .Values.auth.usePasswordFile }}
+          {{- if and .Values.auth.usePasswordFile (not .Values.auth.customPasswordFiles) }}
             - name: MONGODB_ROOT_PASSWORD_FILE
-              value: "/bitnami/mongodb/secrets/mongodb-root-password"
+              value: {{ default "/bitnami/mongodb/secrets/mongodb-root-password" .Values.auth.customPasswordFiles.root | quote }}
           {{- else }}
             - name: MONGODB_ROOT_PASSWORD
               valueFrom:
@@ -286,7 +286,7 @@ spec:
               {{- end }}
               /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPorts.metrics }}" --mongodb.uri mongodb://$(echo $MONGODB_ROOT_USER):$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:{{ .Values.common.containerPorts.mongodb }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ .Values.metrics.extraArgs }}
           {{- end }}
-          {{- if .Values.auth.usePasswordFile }}
+          {{- if and .Values.auth.usePasswordFile (not .Values.auth.customPasswordFiles) }}
           volumeMounts:
             - name: secrets
               mountPath: /bitnami/mongodb/secrets/
@@ -328,7 +328,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.auth.usePasswordFile }}
+        {{- if and .Values.auth.usePasswordFile (not .Values.auth.customPasswordFiles) }}
         - name: secrets
           secret:
             secretName: {{ include "mongodb-sharded.secret" . }}
