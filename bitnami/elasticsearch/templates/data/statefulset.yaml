@@ -202,9 +202,9 @@ spec:
             {{- end }}
           {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret .Values.data.extraEnvVarsCM .Values.data.extraEnvVarsSecret }}
           envFrom:
-            {{- if .Values.data.extraEnvVarsCM }}
+            {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" ( dict "value" .Values.data.extraEnvVarsCM "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if .Values.data.extraEnvVarsCM }}
             - configMapRef:
@@ -214,9 +214,9 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
-            {{- if .Values.extraEnvVarsSecret }}
+            {{- if .Values.data.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsSecret "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.data.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
           ports:
