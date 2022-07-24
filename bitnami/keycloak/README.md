@@ -91,8 +91,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.debug`                    | Specify if debug logs should be enabled                                                                                      | `false`                |
 | `auth.adminUser`                 | Keycloak administrator user                                                                                                  | `user`                 |
 | `auth.adminPassword`             | Keycloak administrator password for the new user                                                                             | `""`                   |
-| `auth.managementUser`            | Wildfly management user                                                                                                      | `manager`              |
-| `auth.managementPassword`        | Wildfly management password                                                                                                  | `""`                   |
 | `auth.existingSecret`            | An already existing secret containing auth info                                                                              | `""`                   |
 | `auth.existingSecretPerPassword` | Override `existingSecret` and other secret values                                                                            | `{}`                   |
 | `auth.tls.enabled`               | Enable TLS encryption. Required for HTTPs traffic.                                                                           | `false`                |
@@ -127,7 +125,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                          | Number of Keycloak replicas to deploy                                                                                    | `1`             |
 | `containerPorts.http`                   | Keycloak HTTP container port                                                                                             | `8080`          |
 | `containerPorts.https`                  | Keycloak HTTPS container port                                                                                            | `8443`          |
-| `containerPorts.management`             | Keycloak management HTTP container port                                                                                  | `9990`          |
 | `podSecurityContext.enabled`            | Enabled Keycloak pods' Security Context                                                                                  | `true`          |
 | `podSecurityContext.fsGroup`            | Set Keycloak pod's Security Context fsGroup                                                                              | `1001`          |
 | `containerSecurityContext.enabled`      | Enabled Keycloak containers' Security Context                                                                            | `true`          |

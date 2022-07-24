@@ -100,19 +100,12 @@ auth:
   ## @param auth.adminPassword Keycloak administrator password for the new user
   ##
   adminPassword: ""
-  ## @param auth.managementUser Wildfly management user
-  ##
-  managementUser: manager
-  ## @param auth.managementPassword Wildfly management password
-  ##
-  managementPassword: ""
   ## @param auth.existingSecret An already existing secret containing auth info
   ## e.g:
   ## existingSecret:
   ##   name: mySecret
   ##   keyMapping:
   ##     admin-password: myPasswordKey
-  ##     management-password: myManagementPasswordKey
   ##     tls-keystore-password: myTlsKeystorePasswordKey
   ##     tls-truststore-password: myTlsTruststorePasswordKey
   ##
@@ -122,14 +115,11 @@ auth:
   ## existingSecretPerPassword:
   ##   keyMapping:
   ##     adminPassword: KEYCLOAK_ADMIN_PASSWORD
-  ##     managementPassword: KEYCLOAK_MANAGEMENT_PASSWORD
   ##     databasePassword: password
   ##     tlsKeystorePassword: JKS_KEYSTORE_TRUSTSTORE_PASSWORD
   ##     tlsTruststorePassword: JKS_KEYSTORE_TRUSTSTORE_PASSWORD
   ##   adminPassword:
   ##     name: keycloak-test2.credentials ## release-name
-  ##   managementPassword:
-  ##     name: keycloak-test2.credentials
   ##   databasePassword:
   ##     name: keycloak.pocwatt-keycloak-cluster.credentials
   ##   tlsKeystorePassword:
@@ -270,12 +260,10 @@ extraEnvVarsSecret: ""
 replicaCount: 1
 ## @param containerPorts.http Keycloak HTTP container port
 ## @param containerPorts.https Keycloak HTTPS container port
-## @param containerPorts.management Keycloak management HTTP container port
 ##
 containerPorts:
   http: 8080
   https: 8443
-  management: 9990
 ## Keycloak pods' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled Keycloak pods' Security Context
