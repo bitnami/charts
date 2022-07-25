@@ -127,6 +127,8 @@ jobs:
         with:
           ref: 'index'
           path: index
+          # The token is persisted in the local git config and enables scripts to run authenticated git commands.
+          token: ${{ secrets.BITNAMI_BOT_TOKEN }}
       - name: Install and configure aws-cli, helm and jq
         run: |
           # AWS CLI
