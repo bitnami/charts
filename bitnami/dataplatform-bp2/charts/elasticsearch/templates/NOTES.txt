@@ -1,0 +1,132 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+{{- if contains .Values.coordinating.service.type "LoadBalancer" }}
+
+-------------------------------------------------------------------------------
+ WARNING
+
+    By specifying "coordinating.service.type=LoadBalancer" you have most likely
+    exposed the Elasticsearch service externally.
+
+    Please note that Elasticsearch does not implement a authentication
+    mechanism to secure your cluster. For security reasons, we strongly
+    suggest that you switch to "ClusterIP" or "NodePort".
+-------------------------------------------------------------------------------
+{{- end }}
+{{- if not .Values.sysctlImage.enabled }}
+
+-------------------------------------------------------------------------------
+ WARNING
+
+    Elasticsearch requires some changes in the kernel of the host machine to
+    work as expected. If those values are not set in the underlying operating
+    system, the ES containers fail to boot with ERROR messages.
+
+    To check whether the host machine meets the requirements, run the command
+    below:
+
+      kubectl logs --namespace {{ .Release.Namespace }} $(kubectl get --namespace {{ .Release.Namespace }} \
+        pods -l app={{ template "common.names.name" . }},role=master -o jsonpath='{.items[0].metadata.name}') \
+	elasticsearch
+
+    You can adapt the Kernel parameters on you cluster as described in the
+    official documentation:
+
+      https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster
+
+    As an alternative, you can specify "sysctlImage.enabled=true" to use a
+    privileged initContainer to change those settings in the Kernel:
+
+      helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/elasticsearch --set sysctlImage.enabled=true
+
+    Note that this requires the ability to run privileged containers, which is likely not
+    the case on many secure clusters. To cover this use case, you can also set some parameters
+    in the config file to customize the default settings:
+
+      https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-store.html
+      https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-virtual-memory.html
+
+    For that, you can place the desired parameters by using the "config" block present in the values.yaml
+
+{{- else if .Values.sysctlImage.enabled }}
+
+-------------------------------------------------------------------------------
+ WARNING
+
+    Elasticsearch requires some changes in the kernel of the host machine to
+    work as expected. If those values are not set in the underlying operating
+    system, the ES containers fail to boot with ERROR messages.
+
+    More information about these requirements can be found in the links below:
+
+      https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html
+      https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html
+
+    This chart uses a privileged initContainer to change those settings in the Kernel
+    by running: sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536
+
+{{- end }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/elasticsearch/entrypoint.sh /opt/bitnami/scripts/elasticsearch/run.sh
+
+{{- else }}
+
+{{- if .Values.curator.enabled }}
+
+  A CronJob will run with schedule {{ .Values.curator.cronjob.schedule }}.
+
+  The Jobs will not be removed automagically when deleting this Helm chart.
+  To remove these jobs, run the following:
+
+    kubectl --namespace {{ .Release.Namespace }} delete job -l app={{ template "common.names.name" . }},role=curator
+
+{{- end }}
+
+  Elasticsearch can be accessed within the cluster on port {{ .Values.coordinating.service.port }} at {{ template "elasticsearch.coordinating.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+
+  To access from outside the cluster execute the following commands:
+
+{{- if contains "NodePort" .Values.coordinating.service.type }}
+
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "elasticsearch.coordinating.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    curl http://$NODE_IP:$NODE_PORT/
+{{- else if contains "LoadBalancer" .Values.coordinating.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "elasticsearch.coordinating.fullname" . }}'
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "elasticsearch.coordinating.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    curl http://$SERVICE_IP:{{ .Values.coordinating.service.port }}/
+{{- else if contains "ClusterIP"  .Values.coordinating.service.type }}
+
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "elasticsearch.coordinating.fullname" . }} {{ .Values.coordinating.service.port }}:9200 &
+    curl http://127.0.0.1:9200/
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.sysctlImage }}
+
+{{- end }}
+{{ include "elasticsearch.validateValues" . }}

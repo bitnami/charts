@@ -1,0 +1,27 @@
+# Test values file for generating hidden section of the yaml
+# and check that the rendering is correct
+replicaCount: 3
+auth:
+  clientProtocol: sasl
+  interBrokerProtocol: sasl
+  sasl:
+    mechanisms: plain,scram-sha-256,scram-sha-512
+    interBrokerMechanism: plain
+    jaas:
+      clientUsers:
+        - user1
+        - user2
+      clientPasswords:
+        - password1
+        - password2
+      interBrokerUser: admin
+      interBrokerPassword: adminpassword
+      zookeeperUser: zoouser
+      zookeeperPassword: zoopassword
+zookeeper:
+  auth:
+    enabled: true
+    clientUser: zoouser
+    clientPassword: zoopassword
+    serverUsers: zoouser
+    serverPasswords: zoopassword

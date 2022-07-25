@@ -1,0 +1,73 @@
+{{- if .Values.curator.enabled }}
+{{- range $kind, $enabled := .Values.curator.hooks }}
+{{- if $enabled }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "elasticsearch.curator.fullname" . }}-curator-on-{{ $kind }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: curator
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: curator
+  annotations:
+    "helm.sh/hook": post-{{ $kind }}
+    "helm.sh/hook-weight": "1"
+    {{- if $.Values.cronjob.annotations }}
+    {{- toYaml $.Values.cronjob.annotations | nindent 4 }}
+    {{- end }}
+spec:
+ template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 10 }}
+        app.kubernetes.io/component: curator
+        ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+        app: curator
+      {{- if $.Values.podAnnotations }}
+      annotations: {{- toYaml $.Values.podAnnotations | nindent 8 }}
+      {{- end }}
+    spec:
+      restartPolicy: Never
+      {{- if $.Values.curator.priorityClassName }}
+      priorityClassName: {{ $.Values.curator.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.curator.schedulerName }}
+      schedulerName: {{ .Values.curator.schedulerName }}
+      {{- end }}
+      {{- if $.Values.curator.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.curator.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if $.Values.curator.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" $.Values.curator.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if $.Values.curator.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" $.Values.curator.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ template "elasticsearch.curator.fullname" . }}
+          image: {{ template "elasticsearch.curator.image" . }}
+          imagePullPolicy: {{ .Values.curator.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else }}
+          command: [ "curator" ]
+          args: [ "--config", "/etc/es-curator/config.yml", "/etc/es-curator/action_file.yml" ]
+          {{- end }}
+          resources: {{- toYaml $.Values.curator.resources | nindent 12 }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/es-curator
+           {{- if $.Values.curator.extraVolumeMounts }}
+           {{- toYaml $.Values.curator.extraVolumeMounts | nindent 12 }}
+           {{- end }}
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ template "elasticsearch.curator.fullname" . }}
+        {{- if $.Values.curator.extraVolumes }}
+        {{- toYaml $.Values.curator.extraVolumes | nindent 8 }}
+        {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

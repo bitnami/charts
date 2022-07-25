@@ -1,0 +1,182 @@
+{{- if .Values.rbac.create -}}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: ClusterRole
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  {{- if .Values.kubeResources.certificatesigningrequests }}
+  - apiGroups: ["certificates.k8s.io"]
+    resources:
+      - certificatesigningrequests
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.configmaps }}
+  - apiGroups: [""]
+    resources:
+      - configmaps
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.cronjobs }}
+  - apiGroups: ["batch"]
+    resources:
+      - cronjobs
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.daemonsets }}
+  - apiGroups: ["extensions", "apps"]
+    resources:
+      - daemonsets
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.deployments }}
+  - apiGroups: ["extensions", "apps"]
+    resources:
+      - deployments
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.endpoints }}
+  - apiGroups: [""]
+    resources:
+      - endpoints
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.horizontalpodautoscalers }}
+  - apiGroups: ["autoscaling"]
+    resources:
+      - horizontalpodautoscalers
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.ingresses }}
+  - apiGroups: ["extensions", "networking.k8s.io"]
+    resources:
+      - ingresses
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.jobs }}
+  - apiGroups: ["batch"]
+    resources:
+      - jobs
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.limitranges }}
+  - apiGroups: [""]
+    resources:
+      - limitranges
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.mutatingwebhookconfigurations }}
+  - apiGroups: ["admissionregistration.k8s.io"]
+    resources:
+      - mutatingwebhookconfigurations
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.namespaces }}
+  - apiGroups: [""]
+    resources:
+      - namespaces
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.networkpolicies }}
+  - apiGroups: ["networking.k8s.io"]
+    resources:
+      - networkpolicies
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.nodes }}
+  - apiGroups: [""]
+    resources:
+      - nodes
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.persistentvolumeclaims }}
+  - apiGroups: [""]
+    resources:
+      - persistentvolumeclaims
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.persistentvolumes }}
+  - apiGroups: [""]
+    resources:
+      - persistentvolumes
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.poddisruptionbudgets }}
+  - apiGroups: ["policy"]
+    resources:
+      - poddisruptionbudgets
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.pods }}
+  - apiGroups: [""]
+    resources:
+      - pods
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.replicasets }}
+  - apiGroups: ["extensions", "apps"]
+    resources:
+      - replicasets
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.replicationcontrollers }}
+  - apiGroups: [""]
+    resources:
+      - replicationcontrollers
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.resourcequotas }}
+  - apiGroups: [""]
+    resources:
+      - resourcequotas
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.secrets }}
+  - apiGroups: [""]
+    resources:
+      - secrets
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.services }}
+  - apiGroups: [""]
+    resources:
+      - services
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.statefulsets }}
+  - apiGroups: ["apps"]
+    resources:
+      - statefulsets
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.storageclasses }}
+  - apiGroups: ["storage.k8s.io"]
+    resources:
+      - storageclasses
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.verticalpodautoscalers }}
+  - apiGroups: ["autoscaling.k8s.io"]
+    resources:
+      - verticalpodautoscalers
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.validatingwebhookconfigurations }}
+  - apiGroups: ["admissionregistration.k8s.io"]
+    resources:
+      - validatingwebhookconfigurations
+    verbs: ["list", "watch"]
+  {{- end }}
+  {{- if .Values.kubeResources.volumeattachments }}
+  - apiGroups: ["storage.k8s.io"]
+    resources:
+      - volumeattachments
+    verbs: ["list", "watch"]
+  {{- end }}
+{{- end }}

@@ -1,0 +1,12 @@
+{{- if .Values.initScripts }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "elasticsearch.initScripts" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    component: master
+data:
+{{- with .Values.initScripts }}
+{{ toYaml . | indent 2 }}
+{{- end }}
+{{ end }}

@@ -1,0 +1,11 @@
+{{- if .Values.curator.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "elasticsearch.curator.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: curator
+data:
+  action_file.yml: {{ required "A valid .Values.curator.configMaps.action_file_yml entry is required!" (toYaml .Values.curator.configMaps.action_file_yml | indent 2) }}
+  config.yml: {{ required "A valid .Values.curator.configMaps.config_yml entry is required!" (tpl (toYaml .Values.curator.configMaps.config_yml | indent 2) $) }}
+{{- end }}

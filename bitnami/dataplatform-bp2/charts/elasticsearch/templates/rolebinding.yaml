@@ -1,0 +1,17 @@
+{{- if and .Values.curator.enabled .Values.curator.rbac.enabled }}
+kind: RoleBinding
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ include "elasticsearch.curator.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    role: curator
+    component: elasticsearch-curator-configmap
+roleRef:
+  kind: Role
+  name: {{ template "elasticsearch.curator.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "elasticsearch.curator.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}

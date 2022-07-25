@@ -1,0 +1,280 @@
+apiVersion: {{ template "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ include "elasticsearch.coordinating.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: coordinating-only
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: coordinating-only
+spec:
+  updateStrategy:
+    type: {{ .Values.coordinating.updateStrategy.type }}
+    {{- if (eq "Recreate" .Values.coordinating.updateStrategy.type) }}
+    rollingUpdate: null
+    {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: coordinating-only
+  podManagementPolicy: Parallel
+  {{- if not .Values.coordinating.autoscaling.enabled }}
+  replicas: {{ .Values.coordinating.replicas }}
+  {{- end }}
+  serviceName: {{ template "elasticsearch.coordinating.fullname" . }}
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: coordinating-only
+        ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+        app: coordinating-only
+        {{- if .Values.coordinating.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- if and (include "elasticsearch.createTlsSecret" .) (not .Values.security.tls.coordinating.existingSecret) }}
+        checksum/tls: {{ include (print $.Template.BasePath "/tls-secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.coordinating.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "elasticsearch.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.coordinating.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.coordinating.schedulerName }}
+      schedulerName: {{ .Values.coordinating.schedulerName }}
+      {{- end }}
+      {{- if .Values.coordinating.priorityClassName }}
+      priorityClassName: {{ .Values.coordinating.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.coordinating.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.coordinating.podAffinityPreset "component" "coordinating-only" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.coordinating.podAntiAffinityPreset "component" "coordinating-only" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.coordinating.nodeAffinityPreset.type "key" .Values.coordinating.nodeAffinityPreset.key "values" .Values.coordinating.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.coordinating.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.coordinating.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.coordinating.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ template "elasticsearch.coordinating.serviceAccountName" . }}
+      {{- if or .Values.coordinating.podSecurityContext.enabled .Values.coordinating.securityContext.enabled }}
+      securityContext:
+        {{- if .Values.coordinating.podSecurityContext.enabled }}
+        {{- omit .Values.coordinating.podSecurityContext "enabled" | toYaml | nindent 8 }}
+        {{- else }}
+        fsGroup: {{ .Values.coordinating.securityContext.fsGroup }}
+        {{- end }}
+      {{- end }}
+      {{- if or .Values.coordinating.initContainers .Values.sysctlImage.enabled }}
+      initContainers:
+        {{- if .Values.sysctlImage.enabled }}
+        ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
+        - name: sysctl
+          image: {{ include "elasticsearch.sysctl.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              {{- include "elasticsearch.sysctlIfLess" (dict "key" "vm.max_map_count" "value" "262144") | nindent 14 }}
+              {{- include "elasticsearch.sysctlIfLess" (dict "key" "fs.file-max" "value" "65536") | nindent 14 }}
+          securityContext:
+            privileged: true
+          {{- if .Values.sysctlImage.resources }}
+          resources: {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
+          {{- end }}
+        {{- end }}
+        {{- if .Values.coordinating.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: elasticsearch
+          image: {{ include "elasticsearch.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if or .Values.coordinating.containerSecurityContext.enabled .Values.coordinating.securityContext.enabled }}
+          securityContext:
+            {{- if .Values.coordinating.containerSecurityContext.enabled }}
+            {{- omit .Values.coordinating.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+            {{- else }}
+            runAsUser: {{ .Values.coordinating.securityContext.runAsUser }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: ELASTICSEARCH_CLUSTER_NAME
+              value: {{ .Values.name | quote }}
+            - name: ELASTICSEARCH_CLUSTER_HOSTS
+              value: {{ include "elasticsearch.hosts" . | quote }}
+            - name: ELASTICSEARCH_TOTAL_NODES
+              value: {{ add (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas .Values.master.autoscaling.enabled) (ternary .Values.data.autoscaling.minReplicas .Values.data.replicas .Values.data.autoscaling.enabled) | quote }}
+            - name: ELASTICSEARCH_CLUSTER_MASTER_HOSTS
+              {{- $elasticsearchMasterFullname := include "elasticsearch.master.fullname" . }}
+              {{- $replicas := int (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas .Values.master.autoscaling.enabled) }}
+              value: {{ range $i, $e := until $replicas }}{{ $elasticsearchMasterFullname }}-{{ $e }} {{ end }}
+            - name: ELASTICSEARCH_MINIMUM_MASTER_NODES
+              value: {{ add (div (ternary .Values.master.autoscaling.minReplicas .Values.master.replicas .Values.master.autoscaling.enabled) 2) 1 | quote }}
+            - name: ELASTICSEARCH_ADVERTISED_HOSTNAME
+              value: "$(MY_POD_NAME).{{ include "elasticsearch.coordinating.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+            {{- if .Values.plugins }}
+            - name: ELASTICSEARCH_PLUGINS
+              value: {{ .Values.plugins | quote }}
+            {{- end }}
+            - name: ELASTICSEARCH_HEAP_SIZE
+              value: {{ .Values.coordinating.heapSize | quote }}
+            - name: ELASTICSEARCH_IS_DEDICATED_NODE
+              value: "yes"
+            - name: ELASTICSEARCH_NODE_TYPE
+              value: "coordinating"
+            {{- if .Values.security.enabled }}
+            {{- include "elasticsearch.configure.security" . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.extraEnvVarsConfigMap .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsConfigMap }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsConfigMap "context" $ ) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: {{ include "elasticsearch.httpPortName" . }}
+              containerPort: 9200
+            - name: transport
+              containerPort: 9300
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.coordinating.startupProbe.enabled }}
+          startupProbe:
+            initialDelaySeconds: {{ .Values.coordinating.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.coordinating.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.coordinating.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.coordinating.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.coordinating.startupProbe.failureThreshold }}
+            exec:
+              command:
+                - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
+          {{- else if .Values.coordinating.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.coordinating.livenessProbe.enabled }}
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.coordinating.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.coordinating.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.coordinating.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.coordinating.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.coordinating.livenessProbe.failureThreshold }}
+            exec:
+              command:
+                - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
+          {{- else if .Values.coordinating.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.coordinating.readinessProbe.enabled }}
+          readinessProbe:
+            initialDelaySeconds: {{ .Values.coordinating.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.coordinating.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.coordinating.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.coordinating.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.coordinating.readinessProbe.failureThreshold }}
+            exec:
+              command:
+                - /opt/bitnami/scripts/elasticsearch/healthcheck.sh
+          {{- else if .Values.coordinating.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.coordinating.resources }}
+          resources: {{- toYaml .Values.coordinating.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- if .Values.config }}
+            - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch.yml
+              name: config
+              subPath: elasticsearch.yml
+            {{- end }}
+            {{- if .Values.extraConfig }}
+            - mountPath: /opt/bitnami/elasticsearch/config/my_elasticsearch.yml
+              name: config
+              subPath: my_elasticsearch.yml
+            {{- end }}
+            - name: data
+              mountPath: /bitnami/elasticsearch/data
+            {{- if .Values.security.enabled }}
+            - name: elasticsearch-certificates
+              mountPath: /opt/bitnami/elasticsearch/config/certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+            {{- if .Values.initScripts }}
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d/init-scripts
+            {{- end }}
+            {{- if .Values.initScriptsCM }}
+            - name: custom-init-scripts-cm
+              mountPath: /docker-entrypoint-initdb.d/init-scripts-cm
+            {{- end }}
+            {{- if .Values.initScriptsSecret }}
+            - name: custom-init-scripts-secret
+              mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
+            {{- end }}
+        {{- if .Values.coordinating.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.coordinating.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        {{- if or .Values.config .Values.extraConfig }}
+        - name: config
+          configMap:
+            name: {{ include "common.names.fullname" . }}
+        {{- end }}
+        {{- if .Values.security.enabled }}
+        - name: elasticsearch-certificates
+          secret:
+            secretName: {{ include "elasticsearch.coordinating.tlsSecretName" . }}
+            defaultMode: 256
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- end }}
+        {{- if .Values.initScripts }}
+        - name: custom-init-scripts
+          configMap:
+            name: {{ template "elasticsearch.initScripts" . }}
+        {{- end }}
+        {{- if .Values.initScriptsCM }}
+        - name: custom-init-scripts-cm
+          configMap:
+            name: {{ template "elasticsearch.initScriptsCM" . }}
+        {{- end }}
+        {{- if .Values.initScriptsSecret }}
+        - name: custom-init-scripts-secret
+          secret:
+            secretName: {{ template "elasticsearch.initScriptsSecret" . }}
+            defaultMode: 0755
+        {{- end }}
+        - name: "data"
+          emptyDir: {}

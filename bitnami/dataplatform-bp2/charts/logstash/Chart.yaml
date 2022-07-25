@@ -1,0 +1,27 @@
+annotations:
+  category: LogManagement
+apiVersion: v2
+appVersion: 7.17.2
+dependencies:
+- name: common
+  repository: https://charts.bitnami.com/bitnami
+  tags:
+  - bitnami-common
+  version: 1.x.x
+description: Logstash is an open source data processing engine. It ingests data from
+  multiple sources, processes it, and sends the output to final destination in real-time.
+  It is a core component of the ELK stack.
+home: https://github.com/bitnami/charts/tree/master/bitnami/logstash
+icon: https://bitnami.com/assets/stacks/logstash/img/logstash-stack-220x234.png
+keywords:
+- logstash
+- logging
+- elk
+maintainers:
+- email: containers@bitnami.com
+  name: Bitnami
+name: logstash
+sources:
+- https://github.com/bitnami/bitnami-docker-logstash
+- https://www.elastic.co/products/logstash
+version: 3.8.8

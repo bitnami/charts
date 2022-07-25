@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "elasticsearch.coordinating.fullname" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: coordinating-only
+  annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.coordinating.service.annotations "context" $) | nindent 4 }}
+spec:
+  type: {{ .Values.coordinating.service.type | quote }}
+  {{- if and (eq .Values.coordinating.service.type "LoadBalancer") (not (empty .Values.coordinating.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.coordinating.service.loadBalancerIP }}
+  externalTrafficPolicy: {{ .Values.coordinating.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  publishNotReadyAddresses: true
+  ports:
+    - name: {{ include "elasticsearch.httpPortName" . }}
+      port: {{ .Values.coordinating.service.port }}
+      targetPort: {{ include "elasticsearch.httpPortName" . }}
+      {{- if and (or (eq .Values.coordinating.service.type "NodePort") (eq .Values.coordinating.service.type "LoadBalancer")) (not (empty .Values.coordinating.service.nodePort)) }}
+      nodePort: {{ .Values.coordinating.service.nodePort }}
+      {{- else if eq .Values.coordinating.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: tcp-transport
+      port: 9300
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: coordinating-only

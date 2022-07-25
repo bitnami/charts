@@ -1,0 +1,193 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  minReadySeconds: {{ .Values.minReadySeconds }}
+  template:
+    metadata:
+      {{- if or .Values.podAnnotations .Values.commonAnnotations }}
+      annotations:
+      {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.podLabels }}
+        {{- toYaml .Values.podLabels | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "kube-state-metrics.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- end }}
+      hostNetwork: {{ .Values.hostNetwork }}
+      serviceAccountName: {{ template "kube-state-metrics.serviceAccountName" . }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: kube-state-metrics
+          image: {{ template "kube-state-metrics.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            {{- if .Values.kubeResources.certificatesigningrequests }}
+            - --resources=certificatesigningrequests
+            {{- end }}
+            {{- if .Values.kubeResources.configmaps }}
+            - --resources=configmaps
+            {{- end }}
+            {{- if .Values.kubeResources.cronjobs }}
+            - --resources=cronjobs
+            {{- end }}
+            {{- if .Values.kubeResources.daemonsets }}
+            - --resources=daemonsets
+            {{- end }}
+            {{- if .Values.kubeResources.deployments }}
+            - --resources=deployments
+            {{- end }}
+            {{- if .Values.kubeResources.endpoints }}
+            - --resources=endpoints
+            {{- end }}
+            {{- if .Values.kubeResources.horizontalpodautoscalers }}
+            - --resources=horizontalpodautoscalers
+            {{- end }}
+            {{- if .Values.kubeResources.ingresses }}
+            - --resources=ingresses
+            {{- end }}
+            {{- if .Values.kubeResources.jobs }}
+            - --resources=jobs
+            {{- end }}
+            {{- if .Values.kubeResources.limitranges }}
+            - --resources=limitranges
+            {{- end }}
+            {{- if .Values.kubeResources.mutatingwebhookconfigurations }}
+            - --resources=mutatingwebhookconfigurations
+            {{- end }}
+            {{- if .Values.kubeResources.namespaces }}
+            - --resources=namespaces
+            {{- end }}
+            {{- if .Values.kubeResources.networkpolicies }}
+            - --resources=networkpolicies
+            {{- end }}
+            {{- if .Values.kubeResources.nodes }}
+            - --resources=nodes
+            {{- end }}
+            {{- if .Values.kubeResources.persistentvolumeclaims }}
+            - --resources=persistentvolumeclaims
+            {{- end }}
+            {{- if .Values.kubeResources.persistentvolumes }}
+            - --resources=persistentvolumes
+            {{- end }}
+            {{- if .Values.kubeResources.poddisruptionbudgets }}
+            - --resources=poddisruptionbudgets
+            {{- end }}
+            {{- if .Values.kubeResources.pods }}
+            - --resources=pods
+            {{- end }}
+            {{- if .Values.kubeResources.replicasets }}
+            - --resources=replicasets
+            {{- end }}
+            {{- if .Values.kubeResources.replicationcontrollers }}
+            - --resources=replicationcontrollers
+            {{- end }}
+            {{- if .Values.kubeResources.resourcequotas }}
+            - --resources=resourcequotas
+            {{- end }}
+            {{- if .Values.kubeResources.secrets }}
+            - --resources=secrets
+            {{- end }}
+            {{- if .Values.kubeResources.services }}
+            - --resources=services
+            {{- end }}
+            {{- if .Values.kubeResources.statefulsets }}
+            - --resources=statefulsets
+            {{- end }}
+            {{- if .Values.kubeResources.storageclasses }}
+            - --resources=storageclasses
+            {{- end }}
+            {{- if .Values.kubeResources.verticalpodautoscalers }}
+            - --resources=verticalpodautoscalers
+            {{- end }}
+            {{- if .Values.kubeResources.validatingwebhookconfigurations }}
+            - --resources=validatingwebhookconfigurations
+            {{- end }}
+            {{- if .Values.kubeResources.volumeattachments }}
+            - --resources=volumeattachments
+            {{- end }}
+            {{- if .Values.namespaces }}
+            - --namespaces={{- include "common.tplvalues.render" ( dict "value" .Values.namespaces "context" $ ) }}
+            {{- end }}
+            {{- range $key, $value := .Values.extraArgs }}
+            {{- if $value }}
+            - --{{ $key }}={{ $value }}
+            {{- else }}
+            - --{{ $key }}
+            {{- end }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
