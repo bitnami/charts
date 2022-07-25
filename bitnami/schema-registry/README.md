@@ -77,7 +77,7 @@ helm uninstall my-release
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                | Schema Registry image registry                                                                              | `docker.io`               |
 | `image.repository`                              | Schema Registry image repository                                                                            | `bitnami/schema-registry` |
-| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                  | `7.1.1-photon-3-r7`       |
+| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                  | `7.1.3-debian-11-r1`      |
 | `image.pullPolicy`                              | Schema Registry image pull policy                                                                           | `IfNotPresent`            |
 | `image.pullSecrets`                             | Schema Registry image pull secrets                                                                          | `[]`                      |
 | `image.debug`                                   | Enable image debug mode                                                                                     | `false`                   |
@@ -218,30 +218,30 @@ helm uninstall my-release
 
 ### Kafka chart parameters
 
-| Name                                            | Description                                                                                                         | Value                            |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| `kafka.enabled`                                 | Enable/disable Kafka chart installation                                                                             | `true`                           |
-| `kafka.replicaCount`                            | Number of Kafka brokers                                                                                             | `1`                              |
-| `kafka.auth.clientProtocol`                     | Authentication protocol for communications with clients. Allowed protocols: plaintext, tls, mtls, sasl and sasl_tls | `plaintext`                      |
-| `kafka.auth.interBrokerProtocol`                | Authentication protocol for inter-broker communications. Allowed protocols: plaintext, tls, mtls, sasl and sasl_tls | `plaintext`                      |
-| `kafka.auth.jksSecret`                          | Name of the existing secret containing the truststore and one keystore per Kafka broker you have in the cluster     | `""`                             |
-| `kafka.auth.jksPassword`                        | Password to access the JKS files when they are password-protected                                                   | `""`                             |
-| `kafka.auth.tlsEndpointIdentificationAlgorithm` | The endpoint identification algorithm to validate server hostname using server certificate                          | `https`                          |
-| `kafka.auth.jaas.clientUsers`                   | Kafka client users for SASL authentication                                                                          | `[]`                             |
-| `kafka.auth.jaas.clientPasswords`               | Kafka client passwords for SASL authentication                                                                      | `[]`                             |
-| `kafka.auth.jaas.interBrokerUser`               | Kafka inter broker communication user for SASL authentication                                                       | `admin`                          |
-| `kafka.auth.jaas.interBrokerPassword`           | Kafka inter broker communication password for SASL authentication                                                   | `""`                             |
-| `kafka.auth.jaas.zookeeperUser`                 | Kafka Zookeeper user for SASL authentication                                                                        | `""`                             |
-| `kafka.auth.jaas.zookeeperPassword`             | Kafka Zookeeper password for SASL authentication                                                                    | `""`                             |
-| `kafka.auth.jaas.existingSecret`                | Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser                | `""`                             |
-| `kafka.service.port`                            | Kafka port for client connections                                                                                   | `9092`                           |
-| `kafka.zookeeper.enabled`                       | Enable/disable Zookeeper chart installation                                                                         | `true`                           |
-| `kafka.zookeeper.replicaCount`                  | Number of Zookeeper replicas                                                                                        | `1`                              |
-| `kafka.zookeeper.auth`                          | Zookeeper auth settings                                                                                             | `{}`                             |
-| `externalKafka.brokers`                         | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port                                       | `["PLAINTEXT://localhost:9092"]` |
-| `externalKafka.auth.protocol`                   | Authentication protocol. Allowed protocols: plaintext, tls, sasl and sasl_tls                                       | `plaintext`                      |
-| `externalKafka.auth.jaas.user`                  | User for SASL authentication                                                                                        | `user`                           |
-| `externalKafka.auth.jaas.password`              | Password for SASL authentication                                                                                    | `""`                             |
+| Name                                             | Description                                                                                                         | Value                            |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| `kafka.enabled`                                  | Enable/disable Kafka chart installation                                                                             | `true`                           |
+| `kafka.replicaCount`                             | Number of Kafka brokers                                                                                             | `1`                              |
+| `kafka.auth.clientProtocol`                      | Authentication protocol for communications with clients. Allowed protocols: plaintext, tls, mtls, sasl and sasl_tls | `plaintext`                      |
+| `kafka.auth.interBrokerProtocol`                 | Authentication protocol for inter-broker communications. Allowed protocols: plaintext, tls, mtls, sasl and sasl_tls | `plaintext`                      |
+| `kafka.auth.tls.existingSecrets`                 | Array existing secrets containing the TLS certificates for the Kafka brokers                                        | `[]`                             |
+| `kafka.auth.tls.password`                        | Password to access the JKS files or PEM key when they are password-protected.                                       | `""`                             |
+| `kafka.auth.tls.endpointIdentificationAlgorithm` | The endpoint identification algorithm to validate server hostname using server certificate                          | `https`                          |
+| `kafka.auth.sasl.jaas.clientUsers`               | Kafka client users for SASL authentication                                                                          | `[]`                             |
+| `kafka.auth.sasl.jaas.clientPasswords`           | Kafka client passwords for SASL authentication                                                                      | `[]`                             |
+| `kafka.auth.sasl.jaas.interBrokerUser`           | Kafka inter broker communication user for SASL authentication                                                       | `admin`                          |
+| `kafka.auth.sasl.jaas.interBrokerPassword`       | Kafka inter broker communication password for SASL authentication                                                   | `""`                             |
+| `kafka.auth.sasl.jaas.zookeeperUser`             | Kafka Zookeeper user for SASL authentication                                                                        | `""`                             |
+| `kafka.auth.sasl.jaas.zookeeperPassword`         | Kafka Zookeeper password for SASL authentication                                                                    | `""`                             |
+| `kafka.auth.sasl.jaas.existingSecret`            | Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser                | `""`                             |
+| `kafka.service.ports.client`                     | Kafka service port for client connections                                                                           | `9092`                           |
+| `kafka.zookeeper.enabled`                        | Enable/disable Zookeeper chart installation                                                                         | `true`                           |
+| `kafka.zookeeper.replicaCount`                   | Number of Zookeeper replicas                                                                                        | `1`                              |
+| `kafka.zookeeper.auth`                           | Zookeeper auth settings                                                                                             | `{}`                             |
+| `externalKafka.brokers`                          | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port                                       | `["PLAINTEXT://localhost:9092"]` |
+| `externalKafka.auth.protocol`                    | Authentication protocol. Allowed protocols: plaintext, tls, sasl and sasl_tls                                       | `plaintext`                      |
+| `externalKafka.auth.jaas.user`                   | User for SASL authentication                                                                                        | `user`                           |
+| `externalKafka.auth.jaas.password`               | Password for SASL authentication                                                                                    | `""`                             |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
