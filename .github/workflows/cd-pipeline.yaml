@@ -37,6 +37,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/redis-cluster/**'
       - 'bitnami/redis/**'
       - 'bitnami/redmine/**'
+      - 'bitnami/schema-registry/**'
       - 'bitnami/sealed-secrets/**'
       - 'bitnami/solr/**'
       - 'bitnami/spring-cloud-dataflow/**'
