@@ -118,7 +118,6 @@ jobs:
     name: Update charts index
     outputs:
       result: ${{ steps.update-index.outputs.result }}
-    if: ${{ needs.vib-publish.result == 'success' }}
     steps:
       - uses: actions/download-artifact@v3
         with:
