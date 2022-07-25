@@ -175,15 +175,9 @@ jobs:
             echo "::set-output name=result::ok"
           else
             echo "::set-output name=result::fail"
+            echo "Could not update the index after $max_attempts attempts"
+            exit 1
           fi
-      - id: show-error
-        name: 'Show error'
-        if: ${{ steps.update-index.outputs.result == 'fail' }}
-        uses: actions/github-script@v3
-        with:
-          script: |
-              core.setFailed('There was a problem updating the index.')
-
   # If the CD Pipeline does not succeed we should notify the interested agents
   slack-notif:
     runs-on: ubuntu-latest
