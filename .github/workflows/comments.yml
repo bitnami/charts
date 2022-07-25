@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   comments_handler:
-    if: ${{ github.actor != 'bitnami-bot' && ((github.event.pull_request && (!contains(github.event.pull_request.labels.*.name, 'auto-merge'))) || github.event_name == 'issues') }}
+    if: ${{ github.actor != 'bitnami-bot' && ((github.event.pull_request && (!contains(github.event.pull_request.labels.*.name, 'auto-merge'))) || (github.event.issue && (!contains(github.event.issue.labels.*.name, 'auto-merge')))) }}
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout
