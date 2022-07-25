@@ -6,7 +6,6 @@ on: # rebuild any PRs and main branch changes
     paths:
       - 'bitnami/airflow/**'
       - 'bitnami/consul/**'
-      - 'bitnami/dataplatform-bp2/**'
       - 'bitnami/discourse/**'
       - 'bitnami/dokuwiki/**'
       - 'bitnami/elasticsearch/**'
