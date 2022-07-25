@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   label-card:
-    if: ${{ github.actor != 'bitnami-bot' && github.event.pull_request && (!contains(github.event.pull_request.labels.*.name, 'auto-merge')) }}
+    if: ${{ github.actor != 'bitnami-bot' }}
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout
