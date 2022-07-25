@@ -129,7 +129,7 @@ jobs:
           path: index
           # The token is persisted in the local git config and enables scripts to run authenticated git commands.
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-      - name: Install and configure aws-cli, helm and jq
+      - name: Install and configure aws-cli and helm
         run: |
           # AWS CLI
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y awscli
@@ -140,8 +140,6 @@ jobs:
           # helm
           HELM_TARBALL="helm-v3.8.1-linux-amd64.tar.gz"
           curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
-          # jq
-          sudo curl -SsLf https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 -o /usr/local/bin/jq && sudo chmod +x /usr/local/bin/jq
       - id: update-index
         name: Fetch chart and update index
         run: |
