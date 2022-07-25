@@ -1,14 +1,3 @@
-command:
-  user-id-root-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 0; fi
-    exit-status: 0
-    stdout: []
-    stderr: []
-  odoo-version-test:
-    exec: odoo --version | grep --quiet "$APP_VERSION"
-    exit-status: 0
-    stdout: []
-    stderr: []  
 file:
   /bitnami/odoo/data:
     exists: true
@@ -16,6 +5,7 @@ file:
     mode: "0775"
     owner: odoo
     group: root
+  # Check hardcoded runtime_params are correctly set in app's config
   /opt/bitnami/odoo/conf/odoo.conf:
     exists: true
     filetype: file
@@ -23,14 +13,5 @@ file:
     owner: root
     group: root
     contains:
-     - {{ printf "db_port = %s" .Env.ODOO_POSTGRESQL_SERVICE_PORT }}
-     - {{ printf "db_user = %s" .Env.ODOO_DATABASE_USER }}
-     - {{ printf "email_from = %s" .Env.ODOO_EMAIL }}
-  /opt/bitnami/odoo/venv/pyvenv.cfg:
-    exists: true
-    filetype: file
-    mode: "0644"
-    owner: root
-    group: root
-    contains:
-     - home = /opt/bitnami/python
+     - {{ printf "http_port = 8069" }}
+     - {{ printf "db_user = bn_odoo" }}

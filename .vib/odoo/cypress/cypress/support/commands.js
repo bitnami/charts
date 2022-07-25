@@ -1,4 +1,4 @@
-const CLICK_DELAY = 1800;
+const CLICK_DELAY = 800;
 
 for (const command of ['click']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
@@ -16,9 +16,8 @@ Cypress.Commands.add(
   'login',
   (username = Cypress.env('email'), password = Cypress.env('password')) => {
     cy.visit('/');
-    cy.get('.card-body');
     cy.get('#login').type(username);
     cy.get('#password').type(password);
-    cy.contains('.btn', 'Log in').click();
+    cy.contains('button', 'Log in').click();
   }
 );
