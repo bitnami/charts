@@ -21,6 +21,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: cassandra
 sources:
-  - https://github.com/bitnami/bitnami-docker-cassandra
+  - https://github.com/bitnami/containers/tree/main/bitnami/cassandra
   - http://cassandra.apache.org
 version: 9.2.8

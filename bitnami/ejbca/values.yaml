@@ -242,7 +242,7 @@ schedulerName: ""
 ##
 topologySpreadConstraints: []
 ## @param ejbcaAdminUsername EJBCA administrator username
-## ref: https://github.com/bitnami/bitnami-docker-ejbca#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/ejbca#environment-variables
 ##
 ejbcaAdminUsername: bitnami
 ## @param ejbcaAdminPassword Password for the administrator account
@@ -535,7 +535,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -563,13 +563,13 @@ mariadb:
   ## @param mariadb.auth.password Password for the database
   ##
   auth:
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
     ##
     database: bitnami_ejbca
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
     ##
     username: bn_ejbca
     password: ""

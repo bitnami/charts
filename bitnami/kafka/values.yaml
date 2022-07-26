@@ -213,7 +213,7 @@ allowEveryoneIfNoAclFound: true
 ##
 superUsers: User:admin
 ## Authentication parameters
-## https://github.com/bitnami/bitnami-docker-kafka#security
+## https://github.com/bitnami/containers/tree/main/bitnami/kafka#security
 ##
 auth:
   ## Authentication protocol for client and inter-broker communications
@@ -403,7 +403,7 @@ command:
 ##
 args: []
 ## @param extraEnvVars Extra environment variables to add to Kafka pods
-## ref: https://github.com/bitnami/bitnami-docker-kafka#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/kafka#configuration
 ## e.g:
 ## extraEnvVars:
 ##   - name: KAFKA_CFG_BACKGROUND_THREADS

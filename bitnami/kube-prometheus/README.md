@@ -7,7 +7,7 @@ Prometheus Operator provides easy monitoring definitions for Kubernetes services
 [Overview of Prometheus Operator](https://github.com/coreos/prometheus-operator)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/kube-prometheus
 
 ## Introduction
 
-This chart bootstraps [Prometheus Operator](https://github.com/bitnami/bitnami-docker-prometheus-operator) on [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
+This chart bootstraps [Prometheus Operator](https://github.com/bitnami/containers/tree/main/bitnami/prometheus-operator) on [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
 
 In the default configuration the chart deploys the following components on the Kubernetes cluster:
 
@@ -50,7 +50,7 @@ To install the chart with the release name `my-release`:
 $ helm install my-release bitnami/kube-prometheus
 ```
 
-The command deploys kube-prometheus on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys kube-prometheus on the Kubernetes cluster in the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 

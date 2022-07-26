@@ -19,6 +19,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: zookeeper
 sources:
-  - https://github.com/bitnami/bitnami-docker-zookeeper
+  - https://github.com/bitnami/containers/tree/main/bitnami/zookeeper
   - https://zookeeper.apache.org/
 version: 10.0.2

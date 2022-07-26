@@ -7,7 +7,7 @@ Magento is a powerful open source e-commerce platform. With easy customizations 
 [Overview of Magento](http://www.magento.com)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/magento
 
 ## Introduction
 
-This chart bootstraps a [Magento](https://github.com/bitnami/bitnami-docker-magento) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Magento](https://github.com/bitnami/containers/tree/main/bitnami/magento) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment as a database for the Magento application.
 
@@ -343,7 +343,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetMemory` | Target Memory utilization percentage | `""`    |
 
 
-The above parameters map to the env variables defined in [bitnami/magento](https://github.com/bitnami/bitnami-docker-magento). For more information please refer to the [bitnami/magento](https://github.com/bitnami/bitnami-docker-magento) image documentation.
+The above parameters map to the env variables defined in [bitnami/magento](https://github.com/bitnami/containers/tree/main/bitnami/magento). For more information please refer to the [bitnami/magento](https://github.com/bitnami/containers/tree/main/bitnami/magento) image documentation.
 
 > **Note**:
 >
@@ -455,7 +455,7 @@ If you are going to manage TLS secrets outside of Helm, please know that you can
 
 ## Persistence
 
-The [Bitnami Magento](https://github.com/bitnami/bitnami-docker-magento) image stores the Magento data and configurations at the `/bitnami/magento` and `/bitnami/apache` paths of the container.
+The [Bitnami Magento](https://github.com/bitnami/containers/tree/main/bitnami/magento) image stores the Magento data and configurations at the `/bitnami/magento` and `/bitnami/apache` paths of the container.
 
  Persistent Volume Claims are used to keep the data across deployments. There is a [known issue](https://github.com/kubernetes/kubernetes/issues/39178) in Kubernetes Clusters with EBS in different availability zones. Ensure your cluster is configured properly to create Volumes in the same availability zone where the nodes are running. Kuberentes 1.12 solved this issue with the [Volume Binding Mode](https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode).
 
@@ -523,7 +523,7 @@ externalDatabase.port=3306
 
 Note also if you disable MariaDB per above you MUST supply values for the `externalDatabase` connection.
 
-In case the database already contains data from a previous Magento installation, you need to set the `magentoSkipInstall` parameter to _true_. Otherwise, the container would execute the installation wizard and could modify the existing data in the database. This parameter force the container to not execute the Magento installation wizard. This is necessary in case you use a database that already has Magento data [+info](https://github.com/bitnami/bitnami-docker-magento#connect-magento-docker-container-to-an-existing-database).
+In case the database already contains data from a previous Magento installation, you need to set the `magentoSkipInstall` parameter to _true_. Otherwise, the container would execute the installation wizard and could modify the existing data in the database. This parameter force the container to not execute the Magento installation wizard. This is necessary in case you use a database that already has Magento data [+info](https://github.com/bitnami/containers/tree/main/bitnami/magento#connect-magento-docker-container-to-an-existing-database).
 
 ### Deploying extra resources
 
@@ -537,7 +537,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Persistence
 
-The [Bitnami Magento](https://github.com/bitnami/bitnami-docker-magento) image stores the Magento data and configurations at the `/bitnami/magento` path of the container.
+The [Bitnami Magento](https://github.com/bitnami/containers/tree/main/bitnami/magento) image stores the Magento data and configurations at the `/bitnami/magento` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -625,7 +625,7 @@ This upgrade adapts the chart to the latest Bitnami good practices. Check the Pa
 
 **2. Migration of the Magento image to non-root**
 
-The [Bitnami Magento](https://github.com/bitnami/bitnami-docker-magento) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. Consequences:
+The [Bitnami Magento](https://github.com/bitnami/containers/tree/main/bitnami/magento) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. Consequences:
 
 - The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
 - Backwards compatibility is not guaranteed. Uninstall & install the chart again to obtain the latest version.

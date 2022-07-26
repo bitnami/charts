@@ -7,7 +7,7 @@ ExternalDNS is a Kubernetes addon that configures public DNS servers with inform
 [Overview of ExternalDNS](https://github.com/kubernetes-incubator/external-dns)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/external-dns
 
 ## Introduction
 
-This chart bootstraps a [ExternalDNS](https://github.com/bitnami/bitnami-docker-external-dns) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [ExternalDNS](https://github.com/bitnami/containers/tree/main/bitnami/external-dns) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 

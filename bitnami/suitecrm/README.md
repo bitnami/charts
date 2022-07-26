@@ -7,7 +7,7 @@ SuiteCRM is a completely open source, enterprise-grade Customer Relationship Man
 [Overview of SuiteCRM](http://www.suitecrm.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/suitecrm
 
 ## Introduction
 
-This chart bootstraps a [SuiteCRM](https://github.com/bitnami/bitnami-docker-suitecrm) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [SuiteCRM](https://github.com/bitnami/containers/tree/main/bitnami/suitecrm) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 SuiteCRM is a software fork of the popular customer relationship management (CRM) system SugarCRM.
 
@@ -312,7 +312,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                   | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/suitecrm](https://github.com/bitnami/bitnami-docker-suitecrm). For more information please refer to the [bitnami/suitecrm](https://github.com/bitnami/bitnami-docker-suitecrm) image documentation.
+The above parameters map to the env variables defined in [bitnami/suitecrm](https://github.com/bitnami/containers/tree/main/bitnami/suitecrm). For more information please refer to the [bitnami/suitecrm](https://github.com/bitnami/containers/tree/main/bitnami/suitecrm) image documentation.
 
 > **Note**:
 >
@@ -382,7 +382,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Persistence
 
-The [Bitnami SuiteCRM](https://github.com/bitnami/bitnami-docker-suitecrm) image stores the SuiteCRM data and configurations at the `/bitnami/suitecrm` path of the container.
+The [Bitnami SuiteCRM](https://github.com/bitnami/containers/tree/main/bitnami/suitecrm) image stores the SuiteCRM data and configurations at the `/bitnami/suitecrm` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -477,7 +477,7 @@ In this major the MariaDB dependency version was also bumped to a new major vers
 
 **3. Migration of the SuiteCRM image to non-root **
 
-The [Bitnami SuiteCRM](https://github.com/bitnami/bitnami-docker-suitecrm) image was updated to support and enable the "non-root" user approach
+The [Bitnami SuiteCRM](https://github.com/bitnami/containers/tree/main/bitnami/suitecrm) image was updated to support and enable the "non-root" user approach
 
 If you want to continue to run the container image as the `root` user, you need to set `podSecurityContext.enabled=false` and `containerSecurity.context.enabled=false`.
 

@@ -79,11 +79,11 @@ containerPorts:
   restAPI: 9200
   transport: 9300
 ## @param plugins Comma, semi-colon or space separated list of plugins to install at initialization
-## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch#environment-variables
 ##
 plugins: ""
 ## @param snapshotRepoPath File System snapshot repository path
-## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch#environment-variables
 ##
 snapshotRepoPath: ""
 ## @param config Override elasticsearch configuration
@@ -202,7 +202,7 @@ security:
   ##
   enabled: false
   ## @param security.elasticPassword Password for 'elastic' user
-  ## Ref: https://github.com/bitnami/bitnami-docker-elasticsearch#security
+  ## Ref: https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch#security
   ##
   elasticPassword: ""
   ## @param security.existingSecret Name of the existing secret containing the Elasticsearch password and
@@ -434,7 +434,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -1700,7 +1700,7 @@ ingest:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:

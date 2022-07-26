@@ -21,6 +21,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: sealed-secrets
 sources:
-  - https://github.com/bitnami/bitnami-docker-sealed-secrets
+  - https://github.com/bitnami/containers/tree/main/bitnami/sealed-secrets
   - https://github.com/bitnami-labs/sealed-secrets
 version: 1.0.10

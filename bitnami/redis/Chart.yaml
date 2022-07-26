@@ -23,5 +23,5 @@ maintainers:
     name: desaintmartin
 name: redis
 sources:
-  - https://github.com/bitnami/bitnami-docker-redis
+  - https://github.com/bitnami/containers/tree/main/bitnami/redis
 version: 17.0.5

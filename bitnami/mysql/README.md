@@ -7,7 +7,7 @@ MySQL is a fast, reliable, scalable, and easy to use open source relational data
 [Overview of MySQL](http://www.mysql.com)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/mysql
 
 ## Introduction
 
-This chart bootstraps a [MySQL](https://github.com/bitnami/bitnami-docker-mysql) replication cluster deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MySQL](https://github.com/bitnami/containers/tree/main/bitnami/mysql) replication cluster deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -355,7 +355,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.rules`               | Prometheus Rule definitions                                                                                                    | `[]`                      |
 
 
-The above parameters map to the env variables defined in [bitnami/mysql](https://github.com/bitnami/bitnami-docker-mysql). For more information please refer to the [bitnami/mysql](https://github.com/bitnami/bitnami-docker-mysql) image documentation.
+The above parameters map to the env variables defined in [bitnami/mysql](https://github.com/bitnami/containers/tree/main/bitnami/mysql). For more information please refer to the [bitnami/mysql](https://github.com/bitnami/containers/tree/main/bitnami/mysql) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -391,7 +391,7 @@ To modify the application version used in this chart, specify a different versio
 
 ### Customize a new MySQL instance
 
-The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image allows you to use your custom scripts to initialize a fresh instance. Custom scripts may be specified using the `initdbScripts` parameter. Alternatively, an external ConfigMap may be created with all the initialization scripts and the ConfigMap passed to the chart via the `initdbScriptsConfigMap` parameter. Note that this will override the `initdbScripts` parameter.
+The [Bitnami MySQL](https://github.com/bitnami/containers/tree/main/bitnami/mysql) image allows you to use your custom scripts to initialize a fresh instance. Custom scripts may be specified using the `initdbScripts` parameter. Alternatively, an external ConfigMap may be created with all the initialization scripts and the ConfigMap passed to the chart via the `initdbScriptsConfigMap` parameter. Note that this will override the `initdbScripts` parameter.
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
 
@@ -427,7 +427,7 @@ initContainers:
 
 ## Persistence
 
-The [Bitnami MySQL](https://github.com/bitnami/bitnami-docker-mysql) image stores the MySQL data and configurations at the `/bitnami/mysql` path of the container.
+The [Bitnami MySQL](https://github.com/bitnami/containers/tree/main/bitnami/mysql) image stores the MySQL data and configurations at the `/bitnami/mysql` path of the container.
 
 The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can also be defined for this purpose.
 

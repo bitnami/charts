@@ -104,7 +104,7 @@ auth:
   ##
   rootUser: root
   ## @param auth.rootPassword MongoDB(&reg;) root password
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-user-and-password-on-first-run
   ##
   rootPassword: ""
   ## @param auth.replicaSetKey Key used for authentication in the replicaset (only when `architecture=replicaset`)
@@ -134,11 +134,11 @@ common:
   ##
   useHostnames: true
   ## @param common.mongodbEnableIPv6 Switch to enable/disable IPv6 on MongoDB&reg;
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-ipv6
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#enablingdisabling-ipv6
   ##
   mongodbEnableIPv6: false
   ## @param common.mongodbDirectoryPerDB Switch to enable/disable DirectoryPerDB on MongoDB&reg;
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-directoryperdb
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#enablingdisabling-directoryperdb
   ##
   mongodbDirectoryPerDB: false
   ## @param common.mongodbSystemLogVerbosity MongoDB&reg; system log verbosity level
@@ -146,7 +146,7 @@ common:
   ##
   mongodbSystemLogVerbosity: 0
   ## @param common.mongodbDisableSystemLog Whether to disable MongoDB&reg; system log or not
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb#configuring-system-log-verbosity-level
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#configuring-system-log-verbosity-level
   ##
   mongodbDisableSystemLog: false
   ## @param common.mongodbMaxWaitTimeout Maximum time (in seconds) for MongoDB&reg; nodes to wait for another MongoDB&reg; node to be ready

@@ -7,7 +7,7 @@ Elasticsearch is a distributed search and analytics engine. It is used for web s
 [Overview of Elasticsearch](https://www.elastic.co/products/elasticsearch)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/elasticsearch
 
 ## Introduction
 
-This chart bootstraps a [Elasticsearch](https://github.com/bitnami/bitnami-docker-elasticsearch) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Elasticsearch](https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -793,7 +793,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Persistence
 
-The [Bitnami Elasticsearch](https://github.com/bitnami/bitnami-docker-elasticsearch) image stores the Elasticsearch data at the `/bitnami/elasticsearch/data` path of the container.
+The [Bitnami Elasticsearch](https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch) image stores the Elasticsearch data at the `/bitnami/elasticsearch/data` path of the container.
 
 By default, the chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning. See the [Parameters](#parameters) section to configure the PVC.
 

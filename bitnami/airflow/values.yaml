@@ -57,7 +57,7 @@ diagnosticMode:
 ## @section Airflow common parameters
 
 ## Authentication parameters
-## ref: https://github.com/bitnami/bitnami-docker-airflow#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/airflow#environment-variables
 ##
 auth:
   ## @param auth.username Username to access web UI

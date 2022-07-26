@@ -32,6 +32,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: kong
 sources:
-  - https://github.com/bitnami/bitnami-docker-kong
+  - https://github.com/bitnami/containers/tree/main/bitnami/kong
   - https://konghq.com/
 version: 6.3.23
