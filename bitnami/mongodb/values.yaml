@@ -147,7 +147,7 @@ auth:
   ##
   rootPassword: ""
   ## MongoDB(&reg;) custom users and databases
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#creating-users-and-databases-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#creating-a-user-and-database-on-first-run
   ## @param auth.usernames List of custom users to be created during the initialization
   ## @param auth.passwords List of passwords for the custom users set at `auth.usernames`
   ## @param auth.databases List of custom databases to be created during the initialization
