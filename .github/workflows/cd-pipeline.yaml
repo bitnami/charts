@@ -116,8 +116,6 @@ jobs:
     needs:
       - vib-publish
     name: Update charts index
-    outputs:
-      result: ${{ steps.update-index.outputs.result }}
     steps:
       - uses: actions/download-artifact@v3
         with:
@@ -171,10 +169,7 @@ jobs:
             git push && is_index_updated=1 || echo "Failed to push during attempt $attempts"
           done
 
-          if [[ $is_index_updated -eq 1 ]]; then
-            echo "::set-output name=result::ok"
-          else
-            echo "::set-output name=result::fail"
+          if [[ $is_index_updated -ne 1 ]]; then
             echo "Could not update the index after $max_attempts attempts"
             exit 1
           fi
@@ -188,7 +183,7 @@ jobs:
     name: Notify unsuccessful CD run
     steps:
       - name: Notify in Slack channel
-        if: ${{ needs.vib-publish.result != 'success' ||  needs.update-index.outputs.result != 'ok' }}
+        if: ${{ needs.vib-publish.result != 'success' ||  needs.update-index.result != 'success' }}
         uses: slackapi/slack-github-action@v1.19.0
         with:
           channel-id: ${{ secrets.CD_SLACK_CHANNEL_ID }}
