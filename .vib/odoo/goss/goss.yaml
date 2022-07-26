@@ -1,5 +1,5 @@
 file:
-  /bitnami/odoo/data:
+  /bitnami/odoo:
     exists: true
     filetype: directory
     mode: "0775"
