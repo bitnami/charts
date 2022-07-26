@@ -11,7 +11,7 @@ it('allows triggering execution of a sample DAG', () => {
 
     // Verify the DAG appears in the list of active jobs
     cy.visit('home?status=active');
-    cy.get(`[href='dags/${dags.triggered.id}/grid']`);
+    cy.get(`[href='/dags/${dags.triggered.id}/grid']`);
   });
 });
 
