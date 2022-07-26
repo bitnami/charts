@@ -7,7 +7,7 @@ ASP.NET Core is an open-source framework for web application development created
 [Overview of ASP.NET](https://github.com/dotnet/aspnetcore)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -19,7 +19,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps an [ASP.NET Core](https://github.com/bitnami/bitnami-docker-aspnet-core) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [ASP.NET Core](https://github.com/bitnami/containers/tree/main/bitnami/aspnet-core) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -289,8 +289,8 @@ Find more information about the process to create your own image in the guide be
 
 This is done using two different init containers:
 
-- `clone-repository`: uses the [Bitnami GIT Image](https://github.com/bitnami/bitnami-docker-git) to download the repository.
-- `dotnet-publish`: uses the [Bitnami .Net SDK Image](https://github.com/bitnami/bitnami-docker-dotnet-sdk) to build/publish the ASP.NET Core application.
+- `clone-repository`: uses the [Bitnami GIT Image](https://github.com/bitnami/containers/tree/main/bitnami/git) to download the repository.
+- `dotnet-publish`: uses the [Bitnami .Net SDK Image](https://github.com/bitnami/containers/tree/main/bitnami/dotnet-sdk) to build/publish the ASP.NET Core application.
 
 To use this feature, set the `appFromExternalRepo.enabled` to `true` and set the repository and branch to use setting the `appFromExternalRepo.clone.repository` and `appFromExternalRepo.clone.revision` parameters. Then, specify the sub folder under the Git repository containing the ASP.NET Core app setting the `appFromExternalRepo.publish.subFolder` parameter. Finally, provide the start command to use setting the `appFromExternalRepo.startCommand`.
 

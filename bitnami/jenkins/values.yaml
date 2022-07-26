@@ -88,7 +88,7 @@ image:
 
 ## @section Jenkins Configuration parameters
 ## Jenkins settings based on environment variables
-## ref: https://github.com/bitnami/bitnami-docker-jenkins#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/jenkins#configuration
 
 ## @param jenkinsUser Jenkins username
 ##

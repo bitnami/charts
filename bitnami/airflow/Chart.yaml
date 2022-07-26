@@ -30,6 +30,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: airflow
 sources:
-  - https://github.com/bitnami/bitnami-docker-airflow
+  - https://github.com/bitnami/containers/tree/main/bitnami/airflow
   - https://airflow.apache.org/
 version: 13.0.0

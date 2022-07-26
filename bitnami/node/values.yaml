@@ -81,11 +81,11 @@ mongodb:
     ##
     enabled: true
     ## @param mongodb.auth.rootPassword MongoDB&reg; admin password
-    ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
     ## @param mongodb.auth.username MongoDB&reg; custom user
-    ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#creating-a-user-and-database-on-first-run
     ##
     username: user
     ## @param mongodb.auth.database MongoDB&reg; custom database
@@ -683,7 +683,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:

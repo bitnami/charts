@@ -88,27 +88,27 @@ image:
 
 ## @section Odoo Configuration parameters
 ## Odoo settings based on environment variables
-## ref: https://github.com/bitnami/bitnami-docker-odoo#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo#environment-variables
 ##
 
 ## @param odooEmail Odoo user email
-## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo#configuration
 ##
 odooEmail: user@example.com
 ## @param odooPassword Odoo user password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo#configuration
 ##
 odooPassword: ""
 ## @param odooSkipInstall Skip Odoo installation wizard
 ##
 odooSkipInstall: false
 ## @param loadDemoData Whether to load demo data for all modules during initialization
-## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo#configuration
 ##
 loadDemoData: false
 ## @param customPostInitScripts Custom post-init.d user scripts
-## ref: https://github.com/bitnami/bitnami-docker-odoo
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo
 ## NOTE: supported formats are `.sh`, `.sql` or `.php`
 ## NOTE: scripts are exclusively executed during the 1st boot of the container
 ## e.g:
@@ -120,7 +120,7 @@ loadDemoData: false
 ##
 customPostInitScripts: {}
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-odoo/#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo/#smtp-configuration
 ## @param smtpHost SMTP server host
 ## @param smtpPort SMTP server port
 ## @param smtpUser SMTP username

@@ -7,7 +7,7 @@ Contour is an open source Kubernetes ingress controller that works by deploying 
 [Overview of Contour](https://github.com/projectcontour/contour)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -38,7 +38,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/contour
 ```
 
-These commands deploy contour on the Kubernetes cluster in the default configuration. The [Parameters](##parameters) section lists the parameters that can be configured during installation.
+These commands deploy contour on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list` or `helm ls --all-namespaces`
 

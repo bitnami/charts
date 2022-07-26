@@ -7,7 +7,7 @@ HashiCorp Consul is a tool for discovering and configuring services in your infr
 [Overview of HashiCorp Consul](https://consul.io)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/consul
 
 ## Introduction
 
-This chart bootstraps a [HashiCorp Consul](https://github.com/bitnami/bitnami-docker-consul) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [HashiCorp Consul](https://github.com/bitnami/containers/tree/main/bitnami/consul) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -413,7 +413,7 @@ initContainers:
 
 ## Persistence
 
-The [Bitnami HashiCorp Consul](https://github.com/bitnami/bitnami-docker-consul) image stores the HashiCorp Consul data at the `/bitnami` path of the container.
+The [Bitnami HashiCorp Consul](https://github.com/bitnami/containers/tree/main/bitnami/consul) image stores the HashiCorp Consul data at the `/bitnami` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.

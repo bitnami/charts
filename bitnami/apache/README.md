@@ -7,7 +7,7 @@ Apache HTTP Server is an open-source HTTP server. The goal of this project is to
 [Overview of Apache](https://httpd.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -19,7 +19,7 @@ $ helm install my-release bitnami/apache
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps a [Apache](https://github.com/bitnami/bitnami-docker-apache) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Apache](https://github.com/bitnami/containers/tree/main/bitnami/apache) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 The Apache HTTP Server ("httpd") was launched in 1995 and it has been the most popular web server on the Internet since April 1996. It has celebrated its 20th birthday as a project in February 2015.
 
@@ -302,7 +302,7 @@ This release updates the Bitnami Apache container to `2.4.41-debian-9-r40`, whic
 
 ### 6.0.0
 
-This release allows you to use your custom static application. In order to do so, check [this section](#deploying-your-custom-web-application).
+This release allows you to use your custom static application. In order to do so, check [this section](#deploying-a-custom-web-application).
 
 ## Upgrading
 

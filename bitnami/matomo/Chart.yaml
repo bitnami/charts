@@ -28,6 +28,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: matomo
 sources:
-  - https://github.com/bitnami/bitnami-docker-matomo
+  - https://github.com/bitnami/containers/tree/main/bitnami/matomo
   - https://www.matomo.org/
 version: 0.1.3

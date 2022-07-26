@@ -70,7 +70,7 @@ image:
   registry: docker.io
   repository: bitnami/redis-cluster
   ## Bitnami Redis&reg; image tag
-  ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/redis#supported-tags-and-respective-dockerfile-links
   ##
   tag: 7.0.4-debian-11-r1
   ## Specify a imagePullPolicy
@@ -179,7 +179,7 @@ containerSecurityContext:
 usePassword: true
 ## @param password Redis&reg; password (ignored if existingSecret set)
 ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true
-## ref: https://github.com/bitnami/bitnami-docker-redis#setting-the-server-password-on-first-run
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/redis#setting-the-server-password-on-first-run
 ##
 password: ""
 ## @param existingSecret Name of existing secret object (for password authentication)

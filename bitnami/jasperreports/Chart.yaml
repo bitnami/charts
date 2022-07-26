@@ -28,6 +28,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: jasperreports
 sources:
-  - https://github.com/bitnami/bitnami-docker-jasperreports
+  - https://github.com/bitnami/containers/tree/main/bitnami/jasperreports
   - http://community.jaspersoft.com/project/jasperreports-server
 version: 14.1.13

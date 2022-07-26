@@ -28,6 +28,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: ejbca
 sources:
-  - https://github.com/bitnami/bitnami-docker-ejbca
+  - https://github.com/bitnami/containers/tree/main/bitnami/ejbca
   - https://www.ejbca.org/
 version: 6.2.10

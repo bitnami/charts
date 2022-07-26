@@ -7,7 +7,7 @@ Matomo, formerly known as Piwik, is a real time web analytics program. It provid
 [Overview of Matomo](https://matomo.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/matomo
 
 ## Introduction
 
-This chart bootstraps a [Matomo](https://github.com/bitnami/bitnami-docker-matomo) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Matomo](https://github.com/bitnami/containers/tree/main/bitnami/matomo) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment as a database for the Matomo application.
 
@@ -298,7 +298,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                 | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/matomo](https://github.com/bitnami/bitnami-docker-matomo). For more information please refer to the [bitnami/matomo](https://github.com/bitnami/bitnami-docker-matomo) image documentation.
+The above parameters map to the env variables defined in [bitnami/matomo](https://github.com/bitnami/containers/tree/main/bitnami/matomo). For more information please refer to the [bitnami/matomo](https://github.com/bitnami/containers/tree/main/bitnami/matomo) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -354,7 +354,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Persistence
 
-The [Bitnami Matomo](https://github.com/bitnami/bitnami-docker-matomo) image stores the Matomo data and configurations at the `/bitnami/matomo` path of the container.
+The [Bitnami Matomo](https://github.com/bitnami/containers/tree/main/bitnami/matomo) image stores the Matomo data and configurations at the `/bitnami/matomo` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.

@@ -7,7 +7,7 @@ PrestaShop is a powerful open source eCommerce platform used by over 250,000 onl
 [Overview of PrestaShop](http://www.prestashop.com)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/prestashop
 
 ## Introduction
 
-This chart bootstraps a [PrestaShop](https://github.com/bitnami/bitnami-docker-prestashop) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [PrestaShop](https://github.com/bitnami/containers/tree/main/bitnami/prestashop) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the PrestaShop application.
 
@@ -300,7 +300,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                     | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/prestashop](https://github.com/bitnami/bitnami-docker-prestashop). For more information please refer to the [bitnami/prestashop](https://github.com/bitnami/bitnami-docker-prestashop) image documentation.
+The above parameters map to the env variables defined in [bitnami/prestashop](https://github.com/bitnami/containers/tree/main/bitnami/prestashop). For more information please refer to the [bitnami/prestashop](https://github.com/bitnami/containers/tree/main/bitnami/prestashop) image documentation.
 
 > **Note**:
 >
@@ -370,7 +370,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Persistence
 
-The [Bitnami PrestaShop](https://github.com/bitnami/bitnami-docker-prestashop) image stores the PrestaShop data and configurations at the `/bitnami/prestashop` path of the container.
+The [Bitnami PrestaShop](https://github.com/bitnami/containers/tree/main/bitnami/prestashop) image stores the PrestaShop data and configurations at the `/bitnami/prestashop` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -510,7 +510,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ### To 10.0.0
 
-The [Bitnami PrestaShop](https://github.com/bitnami/bitnami-docker-prestashop) image was updated to support and enable the "non-root" user approach
+The [Bitnami PrestaShop](https://github.com/bitnami/containers/tree/main/bitnami/prestashop) image was updated to support and enable the "non-root" user approach
 
 If you want to continue to run the container image as the `root` user, you need to set `podSecurityContext.enabled=false` and `containerSecurity.context.enabled=false`.
 

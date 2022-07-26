@@ -7,7 +7,7 @@ Drupal is one of the most versatile open source content management systems in th
 [Overview of Drupal](http://drupal.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/drupal
 
 ## Introduction
 
-This chart bootstraps a [Drupal](https://github.com/bitnami/bitnami-docker-drupal) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Drupal](https://github.com/bitnami/containers/tree/main/bitnami/drupal) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment as a database for the Drupal application.
 
@@ -296,7 +296,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                 | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/drupal](https://github.com/bitnami/bitnami-docker-drupal). For more information please refer to the [bitnami/drupal](https://github.com/bitnami/bitnami-docker-drupal) image documentation.
+The above parameters map to the env variables defined in [bitnami/drupal](https://github.com/bitnami/containers/tree/main/bitnami/drupal). For more information please refer to the [bitnami/drupal](https://github.com/bitnami/containers/tree/main/bitnami/drupal) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -352,7 +352,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Persistence
 
-The [Bitnami Drupal](https://github.com/bitnami/bitnami-docker-drupal) image stores the Drupal data and configurations at the `/bitnami/drupal` path of the container.
+The [Bitnami Drupal](https://github.com/bitnami/containers/tree/main/bitnami/drupal) image stores the Drupal data and configurations at the `/bitnami/drupal` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -474,7 +474,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ### To 8.0.0
 
-The [Bitnami Drupal](https://github.com/bitnami/bitnami-docker-drupal) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+The [Bitnami Drupal](https://github.com/bitnami/containers/tree/main/bitnami/drupal) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
 
 Consequences:
 

@@ -7,7 +7,7 @@ Grafana Tempo is a distributed tracing system that has out-of-the-box integratio
 [Overview of Grafana Tempo](https://github.com/grafana/tempo)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -795,7 +795,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
-The above parameters map to the env variables defined in [bitnami/grafana-tempo](https://github.com/bitnami/bitnami-docker-grafana-tempo). For more information please refer to the [bitnami/grafana-tempo](https://github.com/bitnami/bitnami-docker-grafana-tempo) image documentation.
+The above parameters map to the env variables defined in [bitnami/grafana-tempo](https://github.com/bitnami/containers/tree/main/bitnami/grafana-tempo). For more information please refer to the [bitnami/grafana-tempo](https://github.com/bitnami/containers/tree/main/bitnami/grafana-tempo) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -828,7 +828,7 @@ The tempo configuration file `tempo.yaml` is shared across the different compone
 
 ## Persistence
 
-The [Bitnami grafana-tempo](https://github.com/bitnami/bitnami-docker-grafana-tempo) image stores the grafana-tempo `ingester` data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitnami/grafana-tempo) image stores the grafana-tempo `ingester` data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Additional environment variables
 

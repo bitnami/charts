@@ -29,6 +29,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: drupal
 sources:
-  - https://github.com/bitnami/bitnami-docker-drupal
+  - https://github.com/bitnami/containers/tree/main/bitnami/drupal
   - https://www.drupal.org/
 version: 12.3.1

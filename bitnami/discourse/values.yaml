@@ -86,7 +86,7 @@ image:
   ##
   debug: false
 ## Authentication parameters
-## ref: https://github.com/bitnami/bitnami-docker-discourse#user-and-site-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/discourse#user-and-site-configuration
 ##
 auth:
   ## @param auth.email Discourse admin user email

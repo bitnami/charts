@@ -72,28 +72,28 @@ image:
 ##
 replicaCount: 1
 ## @param moodleSkipInstall Skip Moodle&trade; installation wizard. Useful for migrations and restoring from SQL dump
-## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle#configuration
 ##
 moodleSkipInstall: false
 ## @param moodleSiteName Site name
-## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle#configuration
 ##
 moodleSiteName: ""
 ## @param moodleUsername User of the application
-## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle#configuration
 ##
 moodleUsername: user
 ## @param moodlePassword Application password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle#configuration
 ##
 moodlePassword: ""
 ## @param moodleEmail Admin email
-## ref: https://github.com/bitnami/bitnami-docker-moodle#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle#configuration
 ##
 moodleEmail: user@example.com
 ## @param allowEmptyPassword Allow DB blank passwords
-## ref: https://github.com/bitnami/bitnami-docker-moodle#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle#environment-variables
 ##
 allowEmptyPassword: true
 ## @param command Override default container command (useful when using custom images)
@@ -157,7 +157,7 @@ topologySpreadConstraints: []
 ##
 existingSecret: ""
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-moodle/#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle/#smtp-configuration
 ## @param smtpHost SMTP host
 ## @param smtpPort SMTP port
 ## @param smtpUser SMTP user
@@ -528,7 +528,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -553,15 +553,15 @@ mariadb:
   ##
   auth:
     ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
     ## @param mariadb.auth.database Database name to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
     ##
     database: bitnami_moodle
     ## @param mariadb.auth.username Database user to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
     ##
     username: bn_moodle
     ## @param mariadb.auth.password Password for the database

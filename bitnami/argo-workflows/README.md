@@ -7,7 +7,7 @@ Argo Workflows is meant to orchestrate Kubernetes jobs in parallel. It uses DAG 
 [Overview of Argo Workflows](https://argoproj.github.io/workflows)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -371,7 +371,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
-The above parameters map to the env variables defined in [bitnami/argo-workflow-cli](https://github.com/bitnami/bitnami-docker-argo-workflow-cli). For more information please refer to the [bitnami/argo-workflow-cli](https://github.com/bitnami/bitnami-docker-argo-workflow-cli) image documentation.
+The above parameters map to the env variables defined in [bitnami/argo-workflow-cli](https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-cli). For more information please refer to the [bitnami/argo-workflow-cli](https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-cli) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
