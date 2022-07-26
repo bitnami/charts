@@ -256,7 +256,7 @@ replicaSetHostnames: true
 ##
 enableIPv6: false
 ## @param directoryPerDB Switch to enable/disable DirectoryPerDB on MongoDB(&reg;)
-## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#enabling/disabling-directoryperdb
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#enablingdisabling-directoryperdb
 ##
 directoryPerDB: false
 ## MongoDB(&reg;) System Log configuration
