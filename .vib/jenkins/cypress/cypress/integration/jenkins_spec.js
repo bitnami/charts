@@ -14,7 +14,7 @@ it('allows to create system credentials', () => {
     );
     cy.get('[name="_.password"]').type(credential.newUserAndPass.password);
     cy.get('[name="_.id"]').type(`${credential.newUserAndPass.id}-${random}`);
-    cy.contains('button', 'OK').click();
+    cy.contains('button', 'Create').click();
     cy.visit(
       `/credentials/store/system/domain/_/credential/${credential.newUserAndPass.id}-${random}`
     );
@@ -41,10 +41,10 @@ it('should be possible to create a new Jenkins pipeline', () => {
   // As a new Git project is created in every execution, the next build
   // will always be the first one.
   const nextBuildNumber = 1;
-  cy.get("a[title='Build Now']").click();
+  cy.contains('Build Now').click();
   cy.contains(`#${nextBuildNumber}`);
 
-  cy.get("a[title='Build Now']");
+  cy.contains('Build Now');
   // Depending on the setup, the node where to execute the build needs to be
   // provisioned, which can take up some time
   cy.get(`a[href$='/${nextBuildNumber}/'][class*='display-name']`).click();
