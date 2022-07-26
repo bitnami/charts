@@ -104,7 +104,7 @@ auth:
   ##
   rootUser: root
   ## @param auth.rootPassword MongoDB(&reg;) root password
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-password-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-user-and-password-on-first-run
   ##
   rootPassword: ""
   ## @param auth.replicaSetKey Key used for authentication in the replicaset (only when `architecture=replicaset`)
