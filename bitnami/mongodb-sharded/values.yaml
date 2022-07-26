@@ -138,7 +138,7 @@ common:
   ##
   mongodbEnableIPv6: false
   ## @param common.mongodbDirectoryPerDB Switch to enable/disable DirectoryPerDB on MongoDB&reg;
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#enabling/disabling-directoryperdb
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#enablingdisabling-directoryperdb
   ##
   mongodbDirectoryPerDB: false
   ## @param common.mongodbSystemLogVerbosity MongoDB&reg; system log verbosity level
