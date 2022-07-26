@@ -143,7 +143,7 @@ auth:
   ##
   rootUser: root
   ## @param auth.rootPassword MongoDB(&reg;) root password
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-password-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-user-and-password-on-first-run
   ##
   rootPassword: ""
   ## MongoDB(&reg;) custom users and databases
