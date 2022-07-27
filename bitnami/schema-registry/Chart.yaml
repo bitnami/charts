@@ -21,8 +21,8 @@ keywords:
   - zookeeper
   - streaming
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: schema-registry
 sources:
   - https://github.com/bitnami/bitnami-docker-schema-registry
