@@ -4,7 +4,7 @@
 
 [Confluent Schema Registry](www.confluent.io/schema) provides a RESTful interface by adding a serving layer for your metadata on top of Kafka. It expands Kafka enabling support for Apache Avro, JSON, and Protobuf schemas.
 
-## TL;DR;
+## TL;DR
 
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
