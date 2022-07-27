@@ -1,30 +1,21 @@
-port:
-  {{ printf "tcp6:%s" .Env.CONSUL_HTTP_PORT_NUMBER  }}:  
-    listening: true
-    ip:
-    - '::'
 file:   
- /opt/bitnami/consul/conf/consul.json:
+  /opt/bitnami/consul/conf/consul.json:
     mode: "0644"
     filetype: file
     contains: 
-     - {{ printf "/http.*%s/" .Env.CONSUL_HTTP_PORT_NUMBER }}
-     - {{ printf "/dns.*%s/" .Env.CONSUL_DNS_PORT_NUMBER }}
-     - {{ printf "/serf_lan.*%s/" .Env.CONSUL_SERF_LAN_PORT_NUMBER }}
-     - {{ printf "/server.*%s/" .Env.CONSUL_RPC_PORT_NUMBER  }}
+     - {{ printf "/bootstrap_expect.*%s/ .Vars.nodeCount " }}
+     - {{ printf "/http.*%s/" .Vars.http_port }}
     exists: true
+  /bitnami/consul:
+    exists: true
+    filetype: directory
+    mode: "0775"
+    owner: root
+    group: root
 command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
-    exit-status: 0
-    stdout: []
-    stderr: []
   consul-kv-put:
     exec: consul kv put test test
     exit-status: 0
-    stdout: 
-      - "Success! Data written to: test"
-    stderr: [] 
   consul-cli:
     exec: consul members
     exit-status: 0
@@ -33,11 +24,3 @@ command:
       - "consul-1"
       - "consul-2"
     stderr: []    
-  consul-info:
-    exec: consul info
-    exit-status: 0
-    stdout: 
-      - "agent"
-      - "raft"
-      - "build"
-    stderr: []
