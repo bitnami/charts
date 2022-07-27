@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: 6.0.1
+appVersion: 7.1.3
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -10,7 +10,7 @@ dependencies:
     name: kafka
     repository: https://charts.bitnami.com/bitnami
     version: 18.x.x
-description: Confluent Schema Registry provides a RESTful interface by adding a serving layer for your metadata on top of Kafka. It expands Kafka enabling support for Apache Avro, JSON, and Protobuf schemas.
+description: Schema Registry (Commercial)
 engine: gotpl
 home: https://confluent.io/
 icon: https://bitnami.com/assets/stacks/schema-registry-stac/img/schema-registry-stack-220x234.png
