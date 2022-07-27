@@ -35,7 +35,7 @@ jobs:
         run: |
           curl --request POST \
           --url https://api.github.com/graphql \
-          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'authorization: Bearer ${{ secrets.BITNAMI_BOT_TOKEN }}' \
           --data '{
             "query": "mutation { enablePullRequestAutoMerge(input: {pullRequestId: \"${{ github.event.pull_request.node_id }}\", mergeMethod: SQUASH}) { clientMutationId }}"
             }' \
@@ -175,7 +175,7 @@ jobs:
         run: |
           curl --request POST \
           --url https://api.github.com/graphql \
-          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'authorization: Bearer ${{ secrets.BITNAMI_BOT_TOKEN }}' \
           --data '{
             "query": "mutation { disablePullRequestAutoMerge(input: {pullRequestId: \"${{ github.event.pull_request.node_id }}\"}) { clientMutationId }}"
             }' \
