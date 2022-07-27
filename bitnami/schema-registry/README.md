@@ -1,10 +1,10 @@
-<!--- app-name: Schema Regsitry -->
+<!--- app-name: Confluent Schema Registry -->
 
-# Schema Registry packaged by Bitnami
+# Bitnami Confluent Schema Registry Stack
 
-Schema Registry (Commercial)
+Confluent Schema Registry provides a RESTful interface by adding a serving layer for your metadata on top of Kafka. It expands Kafka enabling support for Apache Avro, JSON, and Protobuf schemas.
 
-[Overview of Schema Regsitry](https://change.me)
+[Overview of Confluent Schema Registry](https://www.confluent.io)
 
 
                            
