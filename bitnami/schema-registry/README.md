@@ -3,7 +3,6 @@
 # Confluent Schema Registry packaged by Bitnami
 
 [Confluent Schema Registry](www.confluent.io/schema) provides a RESTful interface by adding a serving layer for your metadata on top of Kafka. It expands Kafka enabling support for Apache Avro, JSON, and Protobuf schemas.
-keywords:
 
 ## TL;DR;
 
@@ -20,9 +19,10 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Prerequisites
 
-- Kubernetes 1.12+
-- Helm 3.0-beta3+
+- Kubernetes 1.19+
+- Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure
+- ReadWriteMany volumes for deployment scaling
 
 ## Installing the Chart
 
@@ -33,7 +33,7 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 helm install my-release bitnami/schema-registry
 ```
 
-These commands deploy Schema Registr on the Kubernetes cluster with the default configuration. The [parameters](#parameters) section lists the parameters that can be configured during installation.
+These commands deploy Schema Registry on the Kubernetes cluster with the default configuration. The [parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -42,8 +42,10 @@ These commands deploy Schema Registr on the Kubernetes cluster with the default 
 To uninstall/delete the `my-release` chart:
 
 ```bash
-helm uninstall my-release
+helm delete my-release
 ```
+
+The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Parameters
 
@@ -249,10 +251,12 @@ helm uninstall my-release
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```bash
-helm install my-release --set replicaCount=2 bitnami/schema-registry
+helm install my-release \
+  --set replicaCount=2 \
+    bitnami/schema-registry
 ```
 
-The above command install Schema Registry chart with 2 replicas.
+The above command installs Schema Registry chart with 2 replicas.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
@@ -272,22 +276,23 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Enable authentication for Kafka
 
-You can configure different authentication protocols to authenticate with Kafka brokers. This table shows the available protocols and the security they provide:
+You can configure different authentication protocols for each listener you configure in Kafka. For instance, you can use `sasl_tls` authentication for client communications, while using `tls` for inter-broker communications. This table shows the available protocols and the security they provide:
 
-| Method    | Authentication                | Encryption via TLS |
-|-----------|-------------------------------|--------------------|
-| plaintext | None                          | No                 |
-| tls       | None                          | Yes                |
-| sasl      | Yes (via SASL)                | No                 |
-| sasl_tls  | Yes (via SASL)                | Yes                |
+| Method    | Authentication               | Encryption via TLS |
+|-----------|------------------------------|--------------------|
+| plaintext | None                         | No                 |
+| tls       | None                         | Yes                |
+| mtls      | Yes (two-way authentication) | Yes                |
+| sasl      | Yes (via SASL)               | No                 |
+| sasl_tls  | Yes (via SASL)               | Yes                |
 
-If you enabled SASL authentication for client communication with the Kafka brokers, the following parameters must be provided:
+Learn more about how to configure Kafka to use the different authentication protocols in the [chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/kafka/administration/enable-security/).
 
-- `kafka.auth.clientProtocol`
-- `kafka.auth.jaas.clientUsers`
-- `kafka.auth.jaas.clientPasswords`
-- `kafka.auth.saslMechanisms`
-- `kafka.auth.saslInterBrokerMechanism`
+If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
+
+- `kafka.auth.sasl.jaas.clientUsers`/`kafka.auth.sasl.jaas.clientPasswords`: when enabling SASL authentication for communications with clients.
+- `kafka.auth.sasl.jaas.interBrokerUser`/`kafka.auth.sasl.jaas.interBrokerPassword`:  when enabling SASL authentication for inter-broker communications.
+- `kafka.auth.jaas.zookeeperUser`/`kafka.auth.jaas.zookeeperPassword`: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
 
 For instance, you can deploy the chart with the following parameters:
 
@@ -297,16 +302,19 @@ kafka.auth.jaas.clientUsers[0]=clientUser
 kafka.auth.jaas.clientPasswords[0]=clientPassword
 ```
 
-In order to configure TLS authentication/encryption, you **must** create two secrets containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`), one keystore (`kafka.keystore.jks`) per Kafka broker you have in the cluster, the truststore (`schema-registry.truststore.jks`) and one keystore (`schema-registry.keystore.jks`) per Schema Registry replica. Then, you need pass the secret names with the `auth.kafka.jksSecret` and `kafka.auth.jksSecret` parameters when deploying the chart.
+In order to configure TLS authentication/encryption, you **can** create a secret per Kafka broker you have in the cluster containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and the keystore (`kafka.keystore.jks`). Then, you need pass the secret names with the `kafka.auth.tls.existingSecrets` parameter when deploying the chart.
 
-> **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `auth.kafka.keystorePassword`, `auth.kafka.truststorePassword`, and `kafka.auth.jksPassword` parameters to provide your passwords.
+> **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `kafka.auth.tls.password` parameter to provide your password.
 
 For instance, to configure TLS authentication on a cluster with 2 Kafka brokers, and 1 Schema Registry replica use the commands below to create the secrets:
 
 ```console
 kubectl create secret generic schema-registry-jks --from-file=/schema-registry.truststore.jks --from-file=./schema-registry-0.keystore.jks
-kubectl create secret generic kafka-jks --from-file=./kafka.truststore.jks --from-file=./kafka-0.keystore.jks --from-file=./kafka-1.keystore.jks
+kubectl create secret generic kafka-jks-0 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-0.keystore.jks
+kubectl create secret generic kafka-jks-1 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-1.keystore.jks
 ```
+
+> **Note**: the command above assumes you already created the truststore and keystores files. This [script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) can help you with the JKS files generation.
 
 Then, deploy the chart with the following parameters:
 
@@ -314,16 +322,18 @@ Then, deploy the chart with the following parameters:
 auth.kafka.jksSecret=schema-registry-jks
 auth.kafka.keystorePassword=some-password
 auth.kafka.truststorePassword=some-password
+kafka.replicaCount=2
 kafka.auth.clientProtocol=tls
-kafka.auth.jksSecret=kafka-jks
-kafka.auth.jksPassword=some-password
+kafka.auth.tls.existingSecrets[0]=kafka-jks-0
+kafka.auth.tls.existingSecrets[1]=kafka-jks-1
+kafka.auth.tls.password=jksPassword
 ```
 
-In case you want to ignore hostname verification on Kafka certificates, set the parameter `auth.kafka.tlsEndpointIdentificationAlgorithm` with an empty string `""`. In this case, you can reuse the same truststore and keystore for every Kafka broker and Schema Registry replica. For instance, to configure TLS authentication on a cluster with 2 Kafka brokers, and 1 Schema Registry replica use the commands below to create the secrets:
+In case you want to ignore hostname verification on Kafka certificates, set the parameter `auth.kafka.tls.endpointIdentificationAlgorithm` with an empty string `""`. In this case, you can reuse the same truststore and keystore for every Kafka broker and Schema Registry replica. For instance, to configure TLS authentication on a cluster with 2 Kafka brokers, and 1 Schema Registry replica use the commands below to create the secrets:
 
 ```console
 kubectl create secret generic schema-registry-jks --from-file=schema-registry.truststore.jks=common.truststore.jks --from-file=schema-registry-0.keystore.jks=common.keystore.jks
-kubectl create secret generic kafka-jks --from-file=kafka.truststore.jks=common.truststore.jks --from-file=kafka-0.keystore.jks=common.keystore.jks --from-file=kafka-1.keystore.jks=common.keystore.jks
+kubectl create secret generic kafka-jks --from-file=kafka.truststore.jks=common.truststore.jks --from-file=kafka.keystore.jks=common.keystore.jks
 ```
 
 ### Adding extra flags
@@ -384,9 +394,9 @@ externalKafka.auth.jaas.password=mypassword
 
 ### Ingress
 
-This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik) you can utilize the ingress controller to serve your Schema Registry.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your Schema Registry.
 
-To enable ingress integration, please set `ingress.enabled` to `true`
+To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name.
 
 #### Hosts
 
@@ -439,3 +449,23 @@ This version bump the version of charts used as dependency in a major. Kafka fro
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/
 - https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## License
+
+Copyright &copy; 2022 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
