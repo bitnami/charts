@@ -1264,7 +1264,25 @@ metrics:
     enabled: false
     jobLabel: "app.kubernetes.io/name"
     interval: ""
-    metricRelabelings: []
+    metricRelabelings:
+      - sourceLabels: [ envoy_cluster_name ]
+        separator: ;
+        regex: (.+?)_(.+?)_(.*)
+        targetLabel: upstream_namespace
+        replacement: $1
+        action: replace
+      - sourceLabels: [ envoy_cluster_name ]
+        separator: ;
+        regex: (.+?)_(.+?)_(.*)
+        targetLabel: upstream_service
+        replacement: $2
+        action: replace
+      - sourceLabels: [ envoy_cluster_name ]
+        separator: ;
+        regex: (.+?)_(.+?)_(.*)
+        targetLabel: upstream_port
+        replacement: $3
+        action: replace
     relabelings: []
     honorLabels: false
     scrapeTimeout: ""
