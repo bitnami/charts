@@ -1730,7 +1730,7 @@ testImage:
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Deploy a PostgreSQL server to satisfy the applications database requirements
 ## @param postgresql.auth.postgresPassword Password for 'postgres' user
-## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#setting-the-root-password-on-first-run
 ## @param postgresql.auth.database Name for a custom database to create
 ## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
 ##

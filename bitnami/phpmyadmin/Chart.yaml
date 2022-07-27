@@ -27,6 +27,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: phpmyadmin
 sources:
-  - https://github.com/bitnami/bitnami-docker-phpmyadmin
+  - https://github.com/bitnami/containers/tree/main/bitnami/phpmyadmin
   - https://www.phpmyadmin.net/
 version: 10.2.1

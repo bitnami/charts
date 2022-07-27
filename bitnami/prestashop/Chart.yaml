@@ -1,7 +1,7 @@
 annotations:
   category: E-Commerce
 apiVersion: v2
-appVersion: 1.7.8-6
+appVersion: 1.7.8-7
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -27,6 +27,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: prestashop
 sources:
-  - https://github.com/bitnami/bitnami-docker-prestashop
+  - https://github.com/bitnami/containers/tree/main/bitnami/prestashop
   - https://prestashop.com/
-version: 15.2.12
+version: 15.2.13

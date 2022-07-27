@@ -7,7 +7,7 @@ Jenkins is an open source Continuous Integration and Continuous Delivery (CI/CD)
 [Overview of Jenkins](http://jenkins-ci.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -17,7 +17,7 @@ helm install my-release bitnami/jenkins
 
 ## Introduction
 
-This chart bootstraps a [Jenkins](https://github.com/bitnami/bitnami-docker-jenkins) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Jenkins](https://github.com/bitnami/containers/tree/main/bitnami/jenkins) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------- | ---------------------- |
 | `image.registry`    | Jenkins image registry                             | `docker.io`            |
 | `image.repository`  | Jenkins image repository                           | `bitnami/jenkins`      |
-| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.332.3-debian-11-r0` |
+| `image.tag`         | Jenkins image tag (immutable tags are recommended) | `2.346.2-debian-11-r4` |
 | `image.pullPolicy`  | Jenkins image pull policy                          | `IfNotPresent`         |
 | `image.pullSecrets` | Jenkins image pull secrets                         | `[]`                   |
 | `image.debug`       | Enable image debug mode                            | `false`                |
@@ -211,7 +211,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r0`       |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r17`      |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                     | `{}`                    |
@@ -219,7 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
 
 
-The above parameters map to the env variables defined in [bitnami/jenkins](https://github.com/bitnami/bitnami-docker-jenkins). For more information please refer to the [bitnami/jenkins](https://github.com/bitnami/bitnami-docker-jenkins) image documentation.
+The above parameters map to the env variables defined in [bitnami/jenkins](https://github.com/bitnami/containers/tree/main/bitnami/jenkins). For more information please refer to the [bitnami/jenkins](https://github.com/bitnami/containers/tree/main/bitnami/jenkins) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -290,7 +290,7 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 
 ## Persistence
 
-The [Bitnami Jenkins](https://github.com/bitnami/bitnami-docker-jenkins) image stores the Jenkins data and configurations at the `/bitnami/jenkins` path of the container. Persistent Volume Claims (PVCs) are used to keep the data across deployments.
+The [Bitnami Jenkins](https://github.com/bitnami/containers/tree/main/bitnami/jenkins) image stores the Jenkins data and configurations at the `/bitnami/jenkins` path of the container. Persistent Volume Claims (PVCs) are used to keep the data across deployments.
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
@@ -315,7 +315,7 @@ Affected values:
 
 ### To 8.0.0
 
-Due to recent changes in the container image (see [Notable changes](https://github.com/bitnami/bitnami-docker-jenkins#notable-changes)), the major version of the chart has been bumped preemptively.
+Due to recent changes in the container image (see [Notable changes](https://github.com/bitnami/containers/tree/main/bitnami/jenkins#notable-changes)), the major version of the chart has been bumped preemptively.
 
 Upgrading from version `7.x.x` should be possible following the workaround below (the following example assumes that the release name is `jenkins`):
 
@@ -360,7 +360,7 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 ### To 5.0.0
 
-The [Bitnami Jenkins](https://github.com/bitnami/bitnami-docker-jenkins) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Jenkins service was started as the `jenkins` user. From now on, both the container and the Jenkins service run as user `jenkins` (`uid=1001`). You can revert this behavior by setting the parameters `securityContext.runAsUser`, and `securityContext.fsGroup` to `root`.
+The [Bitnami Jenkins](https://github.com/bitnami/containers/tree/main/bitnami/jenkins) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Jenkins service was started as the `jenkins` user. From now on, both the container and the Jenkins service run as user `jenkins` (`uid=1001`). You can revert this behavior by setting the parameters `securityContext.runAsUser`, and `securityContext.fsGroup` to `root`.
 Ingress configuration was also adapted to follow the Helm charts best practices.
 
 Consequences:

@@ -718,6 +718,7 @@ prometheus:
     ##   key:
     ##   certificate:
     ##
+    ## NOTE: the secret name MUST match {{ingress.hostname}}-tls to be used if selfSigned is false or no certManager is used
     secrets: []
     ## @param prometheus.ingress.extraRules Additional rules to be covered with this ingress record
     ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules

@@ -79,32 +79,32 @@ image:
 ##
 replicaCount: 1
 ## @param matomoUsername User of the application
-## ref: https://github.com/bitnami/bitnami-docker-matomo#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/matomo#configuration
 ##
 matomoUsername: user
 ## @param matomoPassword Application password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-matomo#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/matomo#configuration
 ##
 matomoPassword: ""
 ## @param matomoEmail Admin email
-## ref: https://github.com/bitnami/bitnami-docker-matomo#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/matomo#configuration
 ##
 matomoEmail: user@example.com
 ## @param matomoWebsiteName Matomo application name
-## ref: https://github.com/bitnami/bitnami-docker-matomo#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/matomo#configuration
 ##
 matomoWebsiteName: example
 ## @param matomoWebsiteHost Matomo application host
-## ref: https://github.com/bitnami/bitnami-docker-matomo#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/matomo#configuration
 ##
 matomoWebsiteHost: https://example.org
 ## @param matomoSkipInstall Skip Matomo installation wizard. Useful for migrations and restoring from SQL dump
-## ref: https://github.com/bitnami/bitnami-docker-matomo#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/matomo#configuration
 ##
 matomoSkipInstall: false
 ## @param customPostInitScripts Custom post-init.d user scripts
-## ref: https://github.com/bitnami/bitnami-docker-dokuwiki
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki
 ## NOTE: supported formats are `.sh` or `.php`
 ## NOTE: scripts are exclusively executed during the 1st boot of the container
 ## e.g:
@@ -119,7 +119,7 @@ matomoSkipInstall: false
 ##
 customPostInitScripts: {}
 ## @param allowEmptyPassword Allow DB blank passwords
-## ref: https://github.com/bitnami/bitnami-docker-matomo#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/matomo#environment-variables
 ##
 allowEmptyPassword: true
 ## @param command Override default container command (useful when using custom images)
@@ -188,7 +188,7 @@ tolerations: []
 ##
 existingSecret: ""
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-matomo/#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/matomo/#smtp-configuration
 ## @param smtpHost SMTP host
 ## @param smtpPort SMTP port
 ## @param smtpUser SMTP user
@@ -591,13 +591,13 @@ mariadb:
   ## @param mariadb.auth.password Password for the database
   ##
   auth:
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
     ##
     database: bitnami_matomo
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
     ##
     username: bn_matomo
     password: ""

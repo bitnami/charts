@@ -92,7 +92,7 @@ image:
 
 ## @section WordPress Configuration parameters
 ## WordPress settings based on environment variables
-## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/wordpress#environment-variables
 ##
 
 ## @param wordpressUsername WordPress username
@@ -127,7 +127,7 @@ wordpressTablePrefix: wp_
 wordpressScheme: http
 ## @param wordpressSkipInstall Skip wizard installation
 ## NOTE: useful if you use an external database that already contains WordPress data
-## ref: https://github.com/bitnami/bitnami-docker-wordpress#connect-wordpress-docker-container-to-an-existing-database
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/wordpress#connect-wordpress-docker-container-to-an-existing-database
 ##
 wordpressSkipInstall: false
 ## @param wordpressExtraConfigContent Add extra content to the default wp-config.php file
@@ -162,7 +162,7 @@ apacheConfiguration: ""
 ##
 existingApacheConfigurationConfigMap: ""
 ## @param customPostInitScripts Custom post-init.d user scripts
-## ref: https://github.com/bitnami/bitnami-docker-wordpress
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/wordpress
 ## NOTE: supported formats are `.sh`, `.sql` or `.php`
 ## NOTE: scripts are exclusively executed during the 1st boot of the container
 ## e.g:
@@ -180,7 +180,7 @@ existingApacheConfigurationConfigMap: ""
 ##
 customPostInitScripts: {}
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-wordpress/#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/wordpress/#smtp-configuration
 ## @param smtpHost SMTP server host
 ## @param smtpPort SMTP server port
 ## @param smtpUser SMTP username
@@ -237,7 +237,7 @@ extraEnvVarsCM: ""
 extraEnvVarsSecret: ""
 
 ## @section WordPress Multisite Configuration parameters
-## ref: https://github.com/bitnami/bitnami-docker-wordpress#multisite-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/wordpress#multisite-configuration
 ##
 
 ## @param multisite.enable Whether to enable WordPress Multisite configuration.
@@ -1080,9 +1080,9 @@ mariadb:
   ## @param mariadb.auth.database MariaDB custom database
   ## @param mariadb.auth.username MariaDB custom user name
   ## @param mariadb.auth.password MariaDB custom user password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
-  ##      https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
-  ##      https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
+  ##      https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
+  ##      https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
   ##
   auth:
     rootPassword: ""
@@ -1137,7 +1137,7 @@ memcached:
   ##
   enabled: false
   ## Authentication parameters
-  ## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/memcached#creating-the-memcached-admin-user
   ##
   auth:
     ## @param memcached.auth.enabled Enable Memcached authentication

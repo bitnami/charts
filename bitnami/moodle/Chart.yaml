@@ -23,6 +23,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: moodle
 sources:
-  - https://github.com/bitnami/bitnami-docker-moodle
+  - https://github.com/bitnami/containers/tree/main/bitnami/moodle
   - https://www.moodle.org/
 version: 14.1.12

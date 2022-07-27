@@ -30,6 +30,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: mediawiki
 sources:
-  - https://github.com/bitnami/bitnami-docker-mediawiki
+  - https://github.com/bitnami/containers/tree/main/bitnami/mediawiki
   - https://www.mediawiki.org/
 version: 14.2.12

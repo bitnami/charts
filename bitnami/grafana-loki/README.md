@@ -2,12 +2,12 @@
 
 # Grafana Loki packaged by Bitnami
 
-Grafana Loki is a horizontally scalable, highly available, and multi-tenant log aggregation system. It provides real-time long tailing and full persistence to object storage. 
+Grafana Loki is a horizontally scalable, highly available, and multi-tenant log aggregation system. It provides real-time long tailing and full persistence to object storage.
 
 [Overview of Grafana Loki](https://grafana.com/oss/loki/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -1191,7 +1191,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
-The above parameters map to the env variables defined in [bitnami/grafana-loki](https://github.com/bitnami/bitnami-docker-grafana-loki). For more information please refer to the [bitnami/grafana-loki](https://github.com/bitnami/bitnami-docker-grafana-loki) image documentation.
+The above parameters map to the env variables defined in [bitnami/grafana-loki](https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki). For more information please refer to the [bitnami/grafana-loki](https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -1224,7 +1224,7 @@ The loki configuration file `loki.yaml` is shared across the different component
 
 ## Persistence
 
-The [Bitnami grafana-loki](https://github.com/bitnami/bitnami-docker-grafana-loki) image stores the grafana-loki `ingester` data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki) image stores the grafana-loki `ingester` data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Additional environment variables
 

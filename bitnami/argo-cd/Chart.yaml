@@ -26,8 +26,8 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: argo-cd
 sources:
-  - https://github.com/bitnami/bitnami-docker-argo-cd
+  - https://github.com/bitnami/containers/tree/main/bitnami/argo-cd
   - https://github.com/argoproj/argo-cd/
-  - https://github.com/bitnami/bitnami-docker-dex
+  - https://github.com/bitnami/containers/tree/main/bitnami/dex
   - https://github.com/dexidp/dex
 version: 4.0.2

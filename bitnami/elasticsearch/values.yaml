@@ -79,11 +79,11 @@ containerPorts:
   restAPI: 9200
   transport: 9300
 ## @param plugins Comma, semi-colon or space separated list of plugins to install at initialization
-## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch#environment-variables
 ##
 plugins: ""
 ## @param snapshotRepoPath File System snapshot repository path
-## ref: https://github.com/bitnami/bitnami-docker-elasticsearch#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch#environment-variables
 ##
 snapshotRepoPath: ""
 ## @param config Override elasticsearch configuration
@@ -176,7 +176,7 @@ initContainers: []
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 8.3.2-debian-11-r1
+  tag: 8.3.2-debian-11-r7
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -202,7 +202,7 @@ security:
   ##
   enabled: false
   ## @param security.elasticPassword Password for 'elastic' user
-  ## Ref: https://github.com/bitnami/bitnami-docker-elasticsearch#security
+  ## Ref: https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch#security
   ##
   elasticPassword: ""
   ## @param security.existingSecret Name of the existing secret containing the Elasticsearch password and
@@ -434,7 +434,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -1700,7 +1700,7 @@ ingest:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -1733,7 +1733,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.3.0-debian-11-r14
+    tag: 1.4.0-debian-11-r2
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -2058,7 +2058,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r14
+    tag: 11-debian-11-r18
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -2103,7 +2103,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 11-debian-11-r14
+  tag: 11-debian-11-r18
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

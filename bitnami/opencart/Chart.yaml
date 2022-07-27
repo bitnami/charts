@@ -27,6 +27,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: opencart
 sources:
-  - https://github.com/bitnami/bitnami-docker-opencart
+  - https://github.com/bitnami/containers/tree/main/bitnami/opencart
   - https://opencart.com/
 version: 12.2.11

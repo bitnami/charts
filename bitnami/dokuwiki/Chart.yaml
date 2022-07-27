@@ -22,6 +22,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: dokuwiki
 sources:
-  - https://github.com/bitnami/bitnami-docker-dokuwiki
+  - https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki
   - http://www.dokuwiki.org/
 version: 12.5.8

@@ -3595,7 +3595,7 @@ exporter:
 postgresql:
   enabled: true
   ## Override PostgreSQL default image as 14.x is not supported https://goharbor.io/docs/2.4.0/install-config/
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql
   ## @param postgresql.image.registry PostgreSQL image registry
   ## @param postgresql.image.repository PostgreSQL image repository
   ## @param postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)

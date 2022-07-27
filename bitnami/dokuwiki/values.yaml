@@ -85,31 +85,31 @@ hostAliases:
     hostnames:
       - "status.localhost"
 ## @param dokuwikiUsername User of the application
-## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki#environment-variables
 ##
 dokuwikiUsername: user
 ## @param dokuwikiPassword Application password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki#environment-variables
 ##
 dokuwikiPassword: ""
 ## @param existingSecret Use an existing secret with the dokuwiki password
 ##
 existingSecret: ""
 ## @param dokuwikiEmail Admin email
-## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki#environment-variables
 ##
 dokuwikiEmail: user@example.com
 ## @param dokuwikiFullName User's Full Name
-## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki#environment-variables
 ##
 dokuwikiFullName: User Name
 ## @param dokuwikiWikiName Wiki name
-## ref: https://github.com/bitnami/bitnami-docker-dokuwiki#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki#environment-variables
 ##
 dokuwikiWikiName: My Wiki
 ## @param customPostInitScripts Custom post-init.d user scripts
-## ref: https://github.com/bitnami/bitnami-docker-dokuwiki
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki
 ## NOTE: supported formats are `.sh` or `.php`
 ## NOTE: scripts are exclusively executed during the 1st boot of the container
 ## e.g:

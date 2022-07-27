@@ -114,11 +114,11 @@ dnsConfig: {}
 ##
 auth:
   ## @param auth.username RabbitMQ application username
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
   username: user
   ## @param auth.password RabbitMQ application password
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
   password: ""
   ## @param auth.existingPasswordSecret Existing secret with RabbitMQ credentials (must contain a value for `rabbitmq-password` key)
@@ -127,7 +127,7 @@ auth:
   ##
   existingPasswordSecret: ""
   ## @param auth.erlangCookie Erlang cookie to determine whether different nodes are allowed to communicate with each other
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
   erlangCookie: ""
   ## @param auth.existingErlangSecret Existing secret with RabbitMQ Erlang cookie (must contain a value for `rabbitmq-erlang-cookie` key)
@@ -164,7 +164,7 @@ auth:
 ##
 logs: "-"
 ## @param ulimitNofiles RabbitMQ Max File Descriptors
-## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
 ## ref: https://www.rabbitmq.com/install-debian.html#kernel-resource-limits
 ##
 ulimitNofiles: "65536"
@@ -834,7 +834,7 @@ service:
   ##
   distPortEnabled: true
   ## @param service.managerPortEnabled RabbitMQ Manager port
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
   managerPortEnabled: true
   ## @param service.epmdPortEnabled RabbitMQ EPMD Discovery service port

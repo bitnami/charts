@@ -23,6 +23,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: kibana
 sources:
-  - https://github.com/bitnami/bitnami-docker-kibana
+  - https://github.com/bitnami/containers/tree/main/bitnami/kibana
   - https://www.elastic.co/products/kibana
 version: 10.1.16
