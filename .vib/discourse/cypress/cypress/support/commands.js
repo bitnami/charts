@@ -31,6 +31,6 @@ Cypress.Commands.add(
     });
     // In Discourse, logging is not considered as completed until the home page is visible.
     // Navigating to any other site before that will lead to a 404 error
-    cy.contains('Admin Quick Start Guide');
+    cy.contains('a', 'Unread');
   }
 );
