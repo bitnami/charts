@@ -1,8 +1,16 @@
-connection:
+architecture: replication
+auth:
+  database: test_database
   username: "user"
   password: "ComplicatedPassword123!4"
   rootPassword: "R0ot)Password"
-  database: "test_database"
-ports:
-  primary: 80
-  secondary: 3306
+primary:
+  service:
+    type: LoadBalancer
+    ports:
+      mysql: 80
+secondary:
+  service:
+    type: ClusterIP
+    ports:
+      mysql: 3306
