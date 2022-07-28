@@ -1,4 +1,3 @@
-architecture: replication
 auth:
   database: test_database
   username: "user"
@@ -6,11 +5,9 @@ auth:
   rootPassword: "R0ot)Password"
 primary:
   service:
-    type: LoadBalancer
     ports:
       mysql: 80
 secondary:
   service:
-    type: ClusterIP
     ports:
       mysql: 3306
