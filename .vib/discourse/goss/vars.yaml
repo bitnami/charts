@@ -1,2 +1,4 @@
-hostname: bitnami-discourse.my
-db_username: bn_discourse
+host: bitnami-discourse.my
+postgresql:
+  auth:
+    username: bn_discourse
