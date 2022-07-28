@@ -8,7 +8,18 @@ it('allows login and logout', () => {
   cy.get('#login');
 });
 
-it('allows adding users', () => {
+it('allows editing the starting page', () => {
+  cy.visit('/start');
+  cy.get('.edit > a').click({ force: true });
+  cy.fixture('pages').then((page) => {
+    cy.get('#wiki__text').clear().type(`${page.newPage.content}.${random}`);
+    cy.contains('button', 'Save').click();
+    cy.reload();
+    cy.contains(`${page.newPage.content}.${random}`);
+  });
+});
+
+it('allows managing users', () => {
   cy.login();
   cy.visit('login?do=admin&page=usermanager');
   cy.fixture('users').then((user) => {
@@ -20,15 +31,4 @@ it('allows adding users', () => {
   });
   cy.contains('button', 'Add').click();
   cy.contains('User added successfully');
-});
-
-it('allows editing a page in the playground', () => {
-  cy.login();
-  cy.visit('/playground:playground');
-  cy.get('.edit > a').click({ force: true });
-  cy.fixture('pages').then((page) => {
-    cy.get('#wiki__text').clear().type(`${page.newPage.content}.${random}`);
-    cy.contains('button', 'Save').click();
-    cy.contains('.page', `${page.newPage.content}.${random}`);
-  });
 });
