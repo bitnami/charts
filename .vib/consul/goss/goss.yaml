@@ -18,8 +18,7 @@ command:
   consul-cli:
     exec: consul members
     exit-status: 0
-    stdout: 
-      - "consul-0"
-      - "consul-1"
-      - "consul-2"
-    stderr: []    
+    stdout:
+    {{ range $e, $i := until .Vars.replicaCount }}
+      - consul-{{ $i }}
+    {{ end }}
