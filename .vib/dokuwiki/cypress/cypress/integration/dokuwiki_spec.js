@@ -19,7 +19,7 @@ it('allows editing the starting page', () => {
   });
 });
 
-it('allows managing users', () => {
+it('allows adding users', () => {
   cy.login();
   cy.visit('login?do=admin&page=usermanager');
   cy.fixture('users').then((user) => {
