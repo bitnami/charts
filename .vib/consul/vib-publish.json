@@ -67,7 +67,8 @@
             },
             "remote": {
               "workload": "sts-consul"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         }
       ]

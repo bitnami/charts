@@ -1,17 +1,16 @@
 file:   
   /opt/bitnami/consul/conf/consul.json:
-    mode: "0644"
-    filetype: file
-    contains: 
-     - {{ printf "/bootstrap_expect.*%s/ .Vars.nodeCount " }}
-     - {{ printf "/http.*%s/" .Vars.http_port }}
     exists: true
+    filetype: file
+    mode: "0644"
+    contains: 
+    - /bootstrap_expect.*{{ .Vars.nodeCount }}/
+    - /http.*{{ .Vars.http_port }}/
   /bitnami/consul:
     exists: true
     filetype: directory
-    mode: "0775"
+    mode: "2775"
     owner: root
-    group: root
 command:
   consul-kv-put:
     exec: consul kv put test test
