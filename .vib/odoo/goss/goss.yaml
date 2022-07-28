@@ -5,7 +5,6 @@ file:
     mode: "0775"
     owner: odoo
     group: root
-  # Check hardcoded runtime_params are correctly set in app's config
   /opt/bitnami/odoo/conf/odoo.conf:
     exists: true
     filetype: file
@@ -13,5 +12,5 @@ file:
     owner: root
     group: root
     contains:
-     - {{ printf "http_port = 8069" }}
-     - {{ printf "db_user = bn_odoo" }}
+     - db_user = {{ .Vars.postgresql.auth.username }}
+     - http_port = {{ .Vars.containerPorts.http }}
