@@ -7,7 +7,6 @@ it('allows triggering execution of a sample DAG', () => {
     cy.visit(`dags/${dags.triggered.id}/grid`);
     cy.get('[aria-label="Trigger DAG"]').click();
     cy.contains('button', 'Trigger DAG').click(); // A dropdown appears and clicking again is needed
-    cy.contains('div', `Triggered ${dags.triggered.id}`);
 
     // Verify the DAG appears in the list of active jobs
     cy.visit('home?status=active');
