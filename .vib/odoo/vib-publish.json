@@ -64,7 +64,8 @@
             },
             "remote": {
               "workload": "deploy-odoo"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         }
       ]
