@@ -1,25 +1,15 @@
 file:
-  /opt/bitnami/dokuwiki/data/:
+  /bitnami/dokuwiki:
+    exists: true
+    filetype: file
     mode: "0777"
-    filetype: symlink
-    exists: true
+    owner: root
     group: root
-  /opt/bitnami/dokuwiki/conf/users.auth.php:
-    mode: "0644"
-    filetype: file
+	/bitnami/dokuwiki/conf/local.php:
     exists: true
-  /opt/bitnami/dokuwiki/conf/acl.auth.php:
-    mode: "0644"
     filetype: file
-    exists: true     
-  /opt/bitnami/apache2/conf/bitnami/php.conf:
     mode: "0644"
-    filetype: file
-    exists: true
+    owner: 1001
     group: root
-command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
-    exit-status: 0
-    stdout: []
-    stderr: []
+    contains:
+     - /title.*{{ .Vars.dokuwikiWikiName }}/
