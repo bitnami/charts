@@ -55,7 +55,8 @@
             },
             "remote": {
               "workload": "deploy-discourse"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         },
         {

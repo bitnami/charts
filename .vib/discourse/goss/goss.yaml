@@ -12,8 +12,8 @@ file:
     owner: root
     group: root
     contains:
-      - {{ printf "hostname = bitnami-discourse.my" }}
-      - {{ printf "db_username = bn_discourse" }}
+      - hostname = {{ .Vars.hostname }}
+      - db_username = {{ .Vars.db_username }}
 command:
   discourse-cli:
     exec: cd /opt/bitnami/discourse/ && RAILS_ENV=production bundle exec rake -T
