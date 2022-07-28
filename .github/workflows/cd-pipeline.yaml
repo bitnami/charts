@@ -27,6 +27,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/mongodb/**'
       - 'bitnami/mysql/**'
       - 'bitnami/nginx/**'
+      - 'bitnami/odoo/**'
       - 'bitnami/opencart/**'
       - 'bitnami/owncloud/**'
       - 'bitnami/phpmyadmin/**'
