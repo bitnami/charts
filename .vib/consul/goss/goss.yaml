@@ -4,8 +4,8 @@ file:
     filetype: file
     mode: "0644"
     contains: 
-    - /bootstrap_expect.*{{ .Vars.nodeCount }}/
-    - /http.*{{ .Vars.http_port }}/
+    - /bootstrap_expect.*{{ .Vars.replicaCount }}/
+    - /http.*{{ .Vars.containerPorts.http }}/
   /bitnami/consul:
     exists: true
     filetype: directory
