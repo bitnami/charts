@@ -127,7 +127,7 @@ data:
         else
             # Case 2: No active sentinel and in previous sentinel.conf we were not master --> REPLICA
             info "Configuring the node as replica"
-            export REDIS_REPLICATION_MODE="slave"
+            export REDIS_REPLICATION_MODE="replica"
             REDIS_MASTER_HOST=${master_in_persisted_conf}
             REDIS_MASTER_PORT_NUMBER=${master_port_in_persisted_conf}
         fi
@@ -145,7 +145,7 @@ data:
         else
             # Case 4: Active sentinel and master is not this node --> REPLICA
             info "Configuring the node as replica"
-            export REDIS_REPLICATION_MODE="slave"
+            export REDIS_REPLICATION_MODE="replica"
 
             {{- if and .Values.sentinel.automateClusterRecovery (le (int .Values.sentinel.downAfterMilliseconds) 2000) }}
             retry_count=1
@@ -199,7 +199,7 @@ data:
     ARGS=("--port" "${REDIS_PORT}")
     {{- end }}
 
-    if [[ "$REDIS_REPLICATION_MODE" = "slave" ]]; then
+    if [[ "$REDIS_REPLICATION_MODE" = "slave" ]] || [[ "$REDIS_REPLICATION_MODE" = "replica" ]]; then
         ARGS+=("--replicaof" "${REDIS_MASTER_HOST}" "${REDIS_MASTER_PORT_NUMBER}")
     fi
 
