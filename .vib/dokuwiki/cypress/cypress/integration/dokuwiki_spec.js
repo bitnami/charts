@@ -1,10 +1,9 @@
 /// <reference types="cypress" />
 import { random } from '../support/utils';
 
-it('allows editing a page in the playground', () => {
-  cy.login();
-  cy.visit('/playground:playground');
-  cy.get('.edit > a').click({ force: true });
+it('allows editing the starting page', () => {
+  cy.visit('/start');
+  cy.get('a[href="/start?do=edit"]').click({ force: true });
   cy.fixture('pages').then((page) => {
     cy.get('#wiki__text').clear().type(`${page.newPage.content}.${random}`);
     cy.contains('button', 'Save').click();
