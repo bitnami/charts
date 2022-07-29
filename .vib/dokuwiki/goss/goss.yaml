@@ -1,15 +1,12 @@
 file:
   /bitnami/dokuwiki:
     exists: true
-    filetype: file
-    mode: "0777"
+    filetype: directory
+    mode: "2775"
     owner: root
-    group: root
-	/bitnami/dokuwiki/conf/local.php:
+  /bitnami/dokuwiki/conf/local.php:
     exists: true
     filetype: file
     mode: "0644"
-    owner: 1001
-    group: root
     contains:
-     - /title.*{{ .Vars.dokuwikiWikiName }}/
+      - /title.*{{ .Vars.dokuwikiWikiName }}/

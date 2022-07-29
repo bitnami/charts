@@ -1,15 +1,9 @@
 /// <reference types="cypress" />
 import { random } from '../support/utils';
 
-it('allows login and logout', () => {
+it('allows editing a page in the playground', () => {
   cy.login();
-  cy.get('.error').should('not.exist');
-  cy.contains('Log Out').click();
-  cy.get('#login');
-});
-
-it('allows editing the starting page', () => {
-  cy.visit('/start');
+  cy.visit('/playground:playground');
   cy.get('.edit > a').click({ force: true });
   cy.fixture('pages').then((page) => {
     cy.get('#wiki__text').clear().type(`${page.newPage.content}.${random}`);
@@ -19,7 +13,7 @@ it('allows editing the starting page', () => {
   });
 });
 
-it('allows adding users', () => {
+it('allows registering users', () => {
   cy.login();
   cy.visit('login?do=admin&page=usermanager');
   cy.fixture('users').then((user) => {
