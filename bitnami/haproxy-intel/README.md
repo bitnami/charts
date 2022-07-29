@@ -7,7 +7,7 @@ HAProxy is a high-performance, open-source load balancer and reverse proxy for T
 [Overview of HAProxy for Intel](http://www.haproxy.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -69,7 +69,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------- | -------------------------------------------------- | ----------------------- |
 | `haproxy.image.registry`    | HAProxy image registry                             | `docker.io`             |
 | `haproxy.image.repository`  | HAProxy image repository                           | `bitnami/haproxy-intel` |
-| `haproxy.image.tag`         | HAProxy image tag (immutable tags are recommended) | `2.6.1-debian-11-r2`    |
+| `haproxy.image.tag`         | HAProxy image tag (immutable tags are recommended) | `2.6.2-debian-11-r2`    |
 | `haproxy.image.pullPolicy`  | HAProxy image pull policy                          | `IfNotPresent`          |
 | `haproxy.image.pullSecrets` | HAProxy image pull secrets                         | `[]`                    |
 
@@ -86,7 +86,7 @@ helm install my-release \
 
 The above command sets the HAProxy service type as LoadBalancer.
 
-You can use the `configuration` or `existingConfigmap` parameters to set your own configuration file. You can read more about configuration in the [container's readme](https://github.com/bitnami/bitnami-docker-haproxy-intel#configuration).
+You can use the `configuration` or `existingConfigmap` parameters to set your own configuration file. You can read more about configuration in the [container's readme](https://github.com/bitnami/containers/tree/main/bitnami/haproxy-intel#configuration).
 
 > NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
 

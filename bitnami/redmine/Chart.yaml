@@ -34,6 +34,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: redmine
 sources:
-  - https://github.com/bitnami/bitnami-docker-redmine
+  - https://github.com/bitnami/containers/tree/main/bitnami/redmine
   - https://www.redmine.org/
-version: 20.2.14
+version: 20.2.16

@@ -17,7 +17,7 @@ $ helm install my-release bitnami/wildfly
 
 ## Introduction
 
-This chart bootstraps a [WildFly](https://github.com/bitnami/bitnami-docker-wildfly) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [WildFly](https://github.com/bitnami/containers/tree/main/bitnami/wildfly) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 WildFly is written in Java, and implements the Java Platform, Enterprise Edition (Java EE) specification.
 
@@ -226,7 +226,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
 
 
-The above parameters map to the env variables defined in [bitnami/wildfly](https://github.com/bitnami/bitnami-docker-wildfly). For more information please refer to the [bitnami/wildfly](https://github.com/bitnami/bitnami-docker-wildfly) image documentation.
+The above parameters map to the env variables defined in [bitnami/wildfly](https://github.com/bitnami/containers/tree/main/bitnami/wildfly). For more information please refer to the [bitnami/wildfly](https://github.com/bitnami/containers/tree/main/bitnami/wildfly) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -258,7 +258,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ## Persistence
 
-The [Bitnami WildFly](https://github.com/bitnami/bitnami-docker-wildfly) image stores the WildFly data and configurations at the `/bitnami/wildfly` path of the container.
+The [Bitnami WildFly](https://github.com/bitnami/containers/tree/main/bitnami/wildfly) image stores the WildFly data and configurations at the `/bitnami/wildfly` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -304,7 +304,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 10.0.0
 
-Due to recent changes in the container image (see [Notable changes](https://github.com/bitnami/bitnami-docker-apache#notable-changes)), the major version of the chart has been bumped preemptively.
+Due to recent changes in the container image (see [Notable changes](https://github.com/bitnami/containers/tree/main/bitnami/apache#notable-changes)), the major version of the chart has been bumped preemptively.
 
 Upgrading from version `9.x.x` should be possible without any extra required step, but it's highly recommended to backup your custom web apps data before upgrading.
 

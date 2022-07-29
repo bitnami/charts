@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.6.1
+appVersion: 2.6.2
 dependencies:
   - name: haproxy
     repository: https://charts.bitnami.com/bitnami
@@ -24,6 +24,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: haproxy-intel
 sources:
-  - https://github.com/bitnami/bitnami-docker-haproxy-intel
+  - https://github.com/bitnami/containers/tree/main/bitnami/haproxy-intel
   - https://github.com/haproxytech/haproxy
-version: 0.1.8
+version: 0.1.9

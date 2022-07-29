@@ -30,7 +30,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.10.5-debian-11-r11
+  tag: 3.10.6-debian-11-r5
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
   ##
@@ -114,11 +114,11 @@ dnsConfig: {}
 ##
 auth:
   ## @param auth.username RabbitMQ application username
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
   username: user
   ## @param auth.password RabbitMQ application password
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
   password: ""
   ## @param auth.existingPasswordSecret Existing secret with RabbitMQ credentials (must contain a value for `rabbitmq-password` key)
@@ -127,7 +127,7 @@ auth:
   ##
   existingPasswordSecret: ""
   ## @param auth.erlangCookie Erlang cookie to determine whether different nodes are allowed to communicate with each other
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
   erlangCookie: ""
   ## @param auth.existingErlangSecret Existing secret with RabbitMQ Erlang cookie (must contain a value for `rabbitmq-erlang-cookie` key)
@@ -164,7 +164,7 @@ auth:
 ##
 logs: "-"
 ## @param ulimitNofiles RabbitMQ Max File Descriptors
-## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
 ## ref: https://www.rabbitmq.com/install-debian.html#kernel-resource-limits
 ##
 ulimitNofiles: "65536"
@@ -834,7 +834,7 @@ service:
   ##
   distPortEnabled: true
   ## @param service.managerPortEnabled RabbitMQ Manager port
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
   managerPortEnabled: true
   ## @param service.epmdPortEnabled RabbitMQ EPMD Discovery service port
@@ -1240,7 +1240,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r10
+    tag: 11-debian-11-r17
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

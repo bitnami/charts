@@ -28,10 +28,10 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: harbor
 sources:
-  - https://github.com/bitnami/bitnami-docker-harbor-core
-  - https://github.com/bitnami/bitnami-docker-harbor-portal
-  - https://github.com/bitnami/bitnami-docker-harbor-jobservice
-  - https://github.com/bitnami/bitnami-docker-harbor-registry
-  - https://github.com/bitnami/bitnami-docker-harbor-registryctl
+  - https://github.com/bitnami/containers/tree/main/bitnami/harbor-core
+  - https://github.com/bitnami/containers/tree/main/bitnami/harbor-portal
+  - https://github.com/bitnami/containers/tree/main/bitnami/harbor-jobservice
+  - https://github.com/bitnami/containers/tree/main/bitnami/harbor-registry
+  - https://github.com/bitnami/containers/tree/main/bitnami/harbor-registryctl
   - https://goharbor.io/
-version: 15.0.0
+version: 15.0.2

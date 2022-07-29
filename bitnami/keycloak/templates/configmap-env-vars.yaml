@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ printf "%s-env-vars" (include "keycloak.fullname" .) }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
     {{- if .Values.commonLabels }}
@@ -30,7 +30,7 @@ data:
   {{- if .Values.cache.enabled }}
   KEYCLOAK_CACHE_TYPE: "ispn"
   KEYCLOAK_CACHE_STACK: "kubernetes"
-  JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.%s" (include "keycloak.fullname" .) .Release.Namespace .Values.clusterDomain }}
+  JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.%s" (include "keycloak.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain }}
   {{- else }}
   KEYCLOAK_CACHE_TYPE: "local"
   {{- end }}

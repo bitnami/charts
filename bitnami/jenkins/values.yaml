@@ -68,7 +68,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jenkins
-  tag: 2.332.3-debian-11-r3
+  tag: 2.346.2-debian-11-r4
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -88,7 +88,7 @@ image:
 
 ## @section Jenkins Configuration parameters
 ## Jenkins settings based on environment variables
-## ref: https://github.com/bitnami/bitnami-docker-jenkins#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/jenkins#configuration
 
 ## @param jenkinsUser Jenkins username
 ##
@@ -557,7 +557,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r3
+    tag: 11-debian-11-r17
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

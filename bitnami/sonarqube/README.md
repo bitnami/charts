@@ -7,7 +7,7 @@ SonarQube is an open source quality management platform that analyzes and measur
 [Overview of SonarQube](http://www.sonarqube.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/sonarqube
 
 ## Introduction
 
-This chart bootstraps an [SonarQube](https://github.com/bitnami/bitnami-docker-sonarqube) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [SonarQube](https://github.com/bitnami/containers/tree/main/bitnami/sonarqube) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -317,7 +317,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.port`           | Port of an external PostgreSQL to connect (only if postgresql.enabled=false)                                    | `5432`      |
 
 
-The above parameters map to the env variables defined in [bitnami/sonarqube](https://github.com/bitnami/bitnami-docker-sonarqube). For more information please refer to the [bitnami/sonarqube](https://github.com/bitnami/bitnami-docker-sonarqube) image documentation.
+The above parameters map to the env variables defined in [bitnami/sonarqube](https://github.com/bitnami/containers/tree/main/bitnami/sonarqube). For more information please refer to the [bitnami/sonarqube](https://github.com/bitnami/containers/tree/main/bitnami/sonarqube) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -399,7 +399,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ## Persistence
 
-The [Bitnami SonarQube](https://github.com/bitnami/bitnami-docker-sonarqube) image stores the SonarQube data and configurations at the `/bitnami/sonarqube` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami SonarQube](https://github.com/bitnami/containers/tree/main/bitnami/sonarqube) image stores the SonarQube data and configurations at the `/bitnami/sonarqube` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Adjust permissions of persistent volume mountpoint
 

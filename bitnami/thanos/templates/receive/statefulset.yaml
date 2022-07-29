@@ -120,7 +120,9 @@ spec:
             - --grpc-address=0.0.0.0:10901
             - --http-address=0.0.0.0:10902
             - --remote-write.address=0.0.0.0:19291
+            {{- if or .Values.objstoreConfig .Values.existingObjstoreSecret }}
             - --objstore.config=$(OBJSTORE_CONFIG)
+            {{- end }}
             - --tsdb.path=/var/thanos/receive
             - --label={{ .Values.receive.replicaLabel }}="$(NAME)"
             - --label=receive="true"
@@ -152,11 +154,13 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            {{- if or .Values.objstoreConfig .Values.existingObjstoreSecret }}
             - name: OBJSTORE_CONFIG
               valueFrom:
                 secretKeyRef:
                   key: objstore.yml
                   name: {{ include "thanos.objstoreSecretName" . }}
+            {{- end }}
             {{- if .Values.receive.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

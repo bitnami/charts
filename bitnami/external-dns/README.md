@@ -17,7 +17,7 @@ $ helm install my-release bitnami/external-dns
 
 ## Introduction
 
-This chart bootstraps a [ExternalDNS](https://github.com/bitnami/bitnami-docker-external-dns) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [ExternalDNS](https://github.com/bitnami/containers/tree/main/bitnami/external-dns) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -78,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                              | ExternalDNS image registry                                                                                                                                                   | `docker.io`               |
 | `image.repository`                            | ExternalDNS image repository                                                                                                                                                 | `bitnami/external-dns`    |
-| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.12.0-debian-11-r0`     |
+| `image.tag`                                   | ExternalDNS Image tag (immutable tags are recommended)                                                                                                                       | `0.12.2-debian-11-r0`     |
 | `image.pullPolicy`                            | ExternalDNS image pull policy                                                                                                                                                | `IfNotPresent`            |
 | `image.pullSecrets`                           | ExternalDNS image pull secrets                                                                                                                                               | `[]`                      |
 | `hostAliases`                                 | Deployment pod host aliases                                                                                                                                                  | `[]`                      |
@@ -276,6 +276,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | ServiceAccount to use. A name is generated using the external-dns.fullname template if it is not set                                                                         | `""`                      |
 | `serviceAccount.annotations`                  | Additional Service Account annotations                                                                                                                                       | `{}`                      |
 | `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.                                                                                                                             | `true`                    |
+| `serviceAccount.labels`                       | Additional labels to be included on the service account                                                                                                                      | `{}`                      |
 | `rbac.create`                                 | Whether to create & use RBAC resources or not                                                                                                                                | `true`                    |
 | `rbac.clusterRole`                            | Whether to create Cluster Role. When set to false creates a Role in `namespace`                                                                                              | `true`                    |
 | `rbac.apiVersion`                             | Version of the RBAC API                                                                                                                                                      | `v1`                      |

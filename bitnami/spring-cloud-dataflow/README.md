@@ -7,7 +7,7 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 [Overview of Spring Cloud Data Flow](https://github.com/spring-cloud/spring-cloud-dataflow)
 
 
-                           
+
 ## TL;DR
 
 ```bash
@@ -17,7 +17,7 @@ helm install my-release bitnami/spring-cloud-dataflow
 
 ## Introduction
 
-This chart bootstraps a [Spring Cloud Data Flow](https://github.com/bitnami/bitnami-docker-spring-cloud-dataflow) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Spring Cloud Data Flow](https://github.com/bitnami/containers/tree/main/bitnami/spring-cloud-dataflow) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 

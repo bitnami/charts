@@ -68,7 +68,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/magento
-  tag: 2.4.4-debian-11-r15
+  tag: 2.4.4-debian-11-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -97,63 +97,63 @@ hostAliases:
 ##
 replicaCount: 1
 ## @param magentoSkipInstall Skip Magento installation wizard. Useful for migrations and restoring from SQL dump
-## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/magento#configuration
 ##
 magentoSkipInstall: false
 ## @param magentoHost Magento host to create application URLs
-## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/magento#configuration
 ##
 magentoHost: ""
 ## @param magentoUsername User of the application
-## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/magento#configuration
 ##
 magentoUsername: user
 ## @param magentoPassword Application password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/magento#configuration
 ##
 magentoPassword: ""
 ## @param magentoEmail Admin email
-## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/magento#configuration
 ##
 magentoEmail: user@example.com
 ## @param magentoFirstName Magento Admin First Name
-## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/magento#configuration
 ##
 magentoFirstName: ""
 ## @param magentoLastName Magento Admin Last Name
-## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/magento#configuration
 ##
 magentoLastName: ""
 ## @param magentoAdminUri Magento prefix to access Magento Admin
-## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/magento#configuration
 ##
 magentoAdminUri: ""
 ## @param magentoMode Magento mode
-## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/magento#configuration
 ##
 magentoMode: ""
 ## @param magentoExtraInstallArgs Magento extra install args
-## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/magento#configuration
 ##
 magentoExtraInstallArgs: ""
 ## @param magentoDeployStaticContent Deploy static content during the first deployment, to optimize page load time
-## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/magento#configuration
 ##
 magentoDeployStaticContent: false
 ## @param magentoUseHttps Use SSL to access the Magento Store. Valid values: `true`, `false`
-## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/magento#configuration
 ##
 magentoUseHttps: false
 ## @param magentoUseSecureAdmin Use SSL to access the Magento Admin. Valid values: `true`, `false`
-## ref: https://github.com/bitnami/bitnami-docker-magento#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/magento#configuration
 ##
 magentoUseSecureAdmin: false
 ## @param magentoSkipReindex Skip Magento Indexer reindex step during the initialization. Valid values: `true`, `false`
 ##
 magentoSkipReindex: false
 ## @param allowEmptyPassword Allow DB blank passwords
-## ref: https://github.com/bitnami/bitnami-docker-magento#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/magento#environment-variables
 ##
 allowEmptyPassword: false
 ## @param command Override default container command (useful when using custom images)
@@ -480,7 +480,7 @@ mariadb:
   ##
   enabled: true
   ## Override MariaDB default image as 10.6 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb
   ## @param mariadb.image.registry MariaDB image registry
   ## @param mariadb.image.repository MariaDB image repository
   ## @param mariadb.image.tag MariaDB image tag (immutable tags are recommended)
@@ -488,7 +488,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.4.25-debian-11-r14
+    tag: 10.4.25-debian-11-r21
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
   architecture: standalone
@@ -496,15 +496,15 @@ mariadb:
   ##
   auth:
     ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
     ## @param mariadb.auth.database Database name to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
     ##
     database: bitnami_magento
     ## @param mariadb.auth.username Database user to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
     ##
     username: bn_magento
     ## @param mariadb.auth.password Password for the database
@@ -572,7 +572,7 @@ elasticsearch:
   ##
   enabled: true
   ## Override Elasticsearch default image as version 8 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
-  ## ref: https://github.com/bitnami/bitnami-docker-elasticsearch
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch
   ## @param elasticsearch.image.registry Elasticsearch image registry
   ## @param elasticsearch.image.repository Elasticsearch image repository
   ## @param elasticsearch.image.tag Elasticsearch image tag (immutable tags are recommended)
@@ -580,7 +580,7 @@ elasticsearch:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch
-    tag: 7.17.5-debian-11-r4
+    tag: 7.17.5-debian-11-r10
   ## @param elasticsearch.sysctlImage.enabled Enable kernel settings modifier image for Elasticsearch
   ##
   sysctlImage:
@@ -688,7 +688,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r14
+    tag: 11-debian-11-r19
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -887,7 +887,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-11-r14
+    tag: 0.11.0-debian-11-r22
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -985,7 +985,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r14
+    tag: 11-debian-11-r19
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/prestashop
-  tag: 1.7.8-6-debian-11-r11
+  tag: 1.7.8-7-debian-11-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -84,48 +84,48 @@ hostAliases:
 ##
 replicaCount: 1
 ## @param prestashopSkipInstall Skip PrestaShop installation wizard. Useful for migrations and restoring from SQL dump
-## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/prestashop#configuration
 ##
 prestashopSkipInstall: false
 ## @param prestashopHost PrestaShop host to create application URLs (when ingress, it will be ignored)
-## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/prestashop#configuration
 ##
 prestashopHost: ""
 ## @param prestashopUsername User of the application
-## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/prestashop#configuration
 ##
 prestashopUsername: user@example.com
 ## @param prestashopPassword Application password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/prestashop#configuration
 ##
 prestashopPassword: ""
 ## @param prestashopEmail Admin email
-## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/prestashop#configuration
 ##
 prestashopEmail: user@example.com
 ## @param prestashopFirstName First Name
-## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/prestashop#configuration
 ##
 prestashopFirstName: Bitnami
 ## @param prestashopLastName Last Name
-## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/prestashop#configuration
 ##
 prestashopLastName: User
 ## @param prestashopCookieCheckIP Whether to check the cookie's IP address or not
-## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/prestashop#configuration
 ##
 prestashopCookieCheckIP: "no"
 ## @param prestashopCountry Default country of the store
-## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/prestashop#configuration
 ##
 prestashopCountry: "us"
 ## @param prestashopLanguage Default language of the store (ISO code)
-## ref: https://github.com/bitnami/bitnami-docker-prestashop#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/prestashop#configuration
 ##
 prestashopLanguage: "en"
 ## @param allowEmptyPassword Allow DB blank passwords
-## ref: https://github.com/bitnami/bitnami-docker-prestashop#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/prestashop#environment-variables
 ##
 allowEmptyPassword: true
 ## @param command Override default container command (useful when using custom images)
@@ -185,7 +185,7 @@ topologySpreadConstraints: []
 ##
 existingSecret: ""
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-prestashop/#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/prestashop/#smtp-configuration
 ## @param smtpHost SMTP host
 ## @param smtpPort SMTP port
 ## @param smtpUser SMTP user
@@ -535,7 +535,7 @@ ingress:
   ## - host: prestashop.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: prestashop-svc
   ##           port:
@@ -560,15 +560,15 @@ mariadb:
   ##
   auth:
     ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
     ## @param mariadb.auth.database Database name to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
     ##
     database: bitnami_prestashop
     ## @param mariadb.auth.username Database user to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
     ##
     username: bn_prestashop
     ## @param mariadb.auth.password Password for the database
@@ -643,7 +643,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r13
+    tag: 11-debian-11-r18
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -691,7 +691,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-11-r13
+    tag: 0.11.0-debian-11-r22
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -759,7 +759,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r13
+    tag: 11-debian-11-r18
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

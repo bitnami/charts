@@ -17,7 +17,7 @@ $ helm install my-release bitnami/mongodb-sharded
 
 ## Introduction
 
-This chart bootstraps a [MongoDB(&reg;) Sharded](https://github.com/bitnami/bitnami-docker-mongodb-sharded) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MongoDB(&reg;) Sharded](https://github.com/bitnami/containers/tree/main/bitnami/mongodb-sharded) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Classified as a NoSQL database, MongoDB&reg; eschews the traditional table-based relational database structure in favor of JSON-like documents with dynamic schemas, making the integration of data in certain types of applications easier and faster.
 
@@ -555,7 +555,7 @@ This chart deploys a sharded cluster by default. Some characteristics of this ch
 
 ### Initialize a fresh instance
 
-The [Bitnami MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb-sharded) image allows you to use your custom scripts to initialize a fresh instance. You can create a custom config map and give it via `initScriptsCM`(check options for more details).
+The [Bitnami MongoDB&reg;](https://github.com/bitnami/containers/tree/main/bitnami/mongodb-sharded) image allows you to use your custom scripts to initialize a fresh instance. You can create a custom config map and give it via `initScriptsCM`(check options for more details).
 
 The allowed extensions are `.sh`, and `.js`.
 
@@ -603,7 +603,7 @@ It is possible to not deploy any shards or a config server. For example, it is p
 
 ## Persistence
 
-The [Bitnami MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb-sharded) image stores the MongoDB&reg; data and configurations at the `/bitnami/mongodb` path of the container.
+The [Bitnami MongoDB&reg;](https://github.com/bitnami/containers/tree/main/bitnami/mongodb-sharded) image stores the MongoDB&reg; data and configurations at the `/bitnami/mongodb` path of the container.
 
 The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 

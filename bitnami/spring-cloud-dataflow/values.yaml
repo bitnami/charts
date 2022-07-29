@@ -471,7 +471,7 @@ server:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -1440,18 +1440,18 @@ mariadb:
   ##
   auth:
     ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
     ## @param mariadb.auth.username Username of new user to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
     ##
     username: dataflow
     ## @param mariadb.auth.password Password for the new user
     ##
     password: change-me
     ## @param mariadb.auth.database Database name to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#creating-a-database-on-first-run
     ##
     database: dataflow
     ## @param mariadb.auth.forcePassword Force users to specify required passwords in the database

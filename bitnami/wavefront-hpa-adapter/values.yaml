@@ -59,7 +59,7 @@ image:
   repository: bitnami/wavefront-hpa-adapter
   ## @param image.tag Adapter image tag (immutabe tags are recommended)
   ##
-  tag: 0.9.8-scratch-r23
+  tag: 0.9.9-scratch-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

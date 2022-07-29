@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { random } from './utils';
+import { random } from '../support/utils';
 
 it('allows creating a folder and uploading a file ', () => {
   cy.login();

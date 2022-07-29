@@ -58,7 +58,7 @@ diagnosticMode:
 
 ## @section Redmine Configuration parameters
 ## Redmine settings based on environment variables
-## ref: https://github.com/bitnami/bitnami-docker-redmine#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/redmine#environment-variables
 
 ## Bitnami Redmine image
 ## ref: https://hub.docker.com/r/bitnami/redmine/tags/
@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redmine
-  tag: 5.0.2-debian-11-r7
+  tag: 5.0.2-debian-11-r14
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -107,7 +107,7 @@ redmineLanguage: en
 ##
 allowEmptyPassword: false
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-redmine/#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/redmine/#smtp-configuration
 ## @param smtpHost SMTP server host
 ## @param smtpPort SMTP server port
 ## @param smtpUser SMTP username
@@ -630,7 +630,7 @@ autoscaling:
 ## @section Database Parameters
 
 ## @param databaseType Redmine database type. Allowed values: `mariadb` and `postgresql`
-## ref: https://github.com/bitnami/bitnami-docker-redmine/#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/redmine/#environment-variables
 ##
 databaseType: mariadb
 ## MariaDB chart configuration
@@ -939,7 +939,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r14
+    tag: 11-debian-11-r19
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

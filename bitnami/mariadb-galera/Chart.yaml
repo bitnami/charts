@@ -24,7 +24,7 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: mariadb-galera
 sources:
-  - https://github.com/bitnami/bitnami-docker-mariadb-galera
+  - https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera
   - https://github.com/prometheus/mysqld_exporter
   - https://mariadb.org
 version: 7.3.6

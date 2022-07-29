@@ -75,28 +75,28 @@ hostAliases:
 ##
 replicaCount: 1
 ## @param owncloudSkipInstall Skip ownCloud installation wizard. Useful for migrations and restoring from SQL dump
-## ref: https://github.com/bitnami/bitnami-docker-owncloud#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/owncloud#configuration
 ##
 owncloudSkipInstall: false
 ## @param owncloudHost ownCloud host to create application URLs (when ingress, it will be ignored)
-## ref: https://github.com/bitnami/bitnami-docker-owncloud#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/owncloud#configuration
 ##
 owncloudHost: ""
 ## @param owncloudUsername User of the application
-## ref: https://github.com/bitnami/bitnami-docker-owncloud#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/owncloud#configuration
 ##
 owncloudUsername: user
 ## @param owncloudPassword Application password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-owncloud#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/owncloud#configuration
 ##
 owncloudPassword: ""
 ## @param owncloudEmail Admin email
-## ref: https://github.com/bitnami/bitnami-docker-owncloud#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/owncloud#configuration
 ##
 owncloudEmail: user@example.com
 ## @param allowEmptyPassword Allow DB blank passwords
-## ref: https://github.com/bitnami/bitnami-docker-owncloud#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/owncloud#environment-variables
 ##
 allowEmptyPassword: false
 ## @param command Override default container command (useful when using custom images)
@@ -162,7 +162,7 @@ topologySpreadConstraints: []
 ##
 existingSecret: ""
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-owncloud/#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/owncloud/#smtp-configuration
 ## @param smtpHost SMTP host
 ## @param smtpPort SMTP port
 ## @param smtpUser SMTP user
@@ -340,15 +340,15 @@ mariadb:
   ##
   auth:
     ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
     ## @param mariadb.auth.database Database name to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
     ##
     database: bitnami_owncloud
     ## @param mariadb.auth.username Database user to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
     ##
     username: bn_owncloud
     ## @param mariadb.auth.password Password for the database
@@ -647,7 +647,7 @@ ingress:
   ## - host: owncloud.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: owncloud-svc
   ##           port:

@@ -17,7 +17,7 @@ $ helm install my-release bitnami/geode
 
 ## Introduction
 
-This chart bootstraps an [Apache Geode](https://github.com/bitnami/bitnami-docker-geode) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Apache Geode](https://github.com/bitnami/containers/tree/main/bitnami/geode) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -370,7 +370,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                          | `true`  |
 
 
-The above parameters map to the env variables defined in [bitnami/geode](https://github.com/bitnami/bitnami-docker-geode). For more information please refer to the [bitnami/geode](https://github.com/bitnami/bitnami-docker-geode) image documentation.
+The above parameters map to the env variables defined in [bitnami/geode](https://github.com/bitnami/containers/tree/main/bitnami/geode). For more information please refer to the [bitnami/geode](https://github.com/bitnami/containers/tree/main/bitnami/geode) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -481,7 +481,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ## Persistence
 
-The [Bitnami geode](https://github.com/bitnami/bitnami-docker-geode) image stores the geode data and configurations at the `/bitnami/geode` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami geode](https://github.com/bitnami/containers/tree/main/bitnami/geode) image stores the geode data and configurations at the `/bitnami/geode` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Adjust permissions of persistent volume mountpoint
 
