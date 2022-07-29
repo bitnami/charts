@@ -61,7 +61,7 @@ diagnosticMode:
 rabbitmqImage:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.10.5-debian-11-r11
+  tag: 3.10.6-debian-11-r1
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-rabbitmqImage-private-registry/
@@ -81,7 +81,7 @@ rabbitmqImage:
 credentialUpdaterImage:
   registry: docker.io
   repository: bitnami/rmq-default-credential-updater
-  tag: 1.0.2-scratch-r3
+  tag: 1.0.2-scratch-r4
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-credentialUpdaterImage-private-registry/
@@ -103,7 +103,7 @@ clusterOperator:
   image:
     registry: docker.io
     repository: bitnami/rabbitmq-cluster-operator
-    tag: 1.14.0-scratch-r1
+    tag: 1.14.0-scratch-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -481,7 +481,7 @@ msgTopologyOperator:
   image:
     registry: docker.io
     repository: bitnami/rmq-messaging-topology-operator
-    tag: 1.7.1-scratch-r0
+    tag: 1.7.1-scratch-r1
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
