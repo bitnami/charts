@@ -7,7 +7,7 @@ Redis(R) is an open source, advanced key-value store. It is often referred to as
 [Overview of Redis&reg;](http://redis.io)
 
 Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are reserved to Redis Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Ltd.
-                           
+
 ## TL;DR
 
 ```bash
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/redis
 
 ## Introduction
 
-This chart bootstraps a [Redis&reg;](https://github.com/bitnami/bitnami-docker-redis) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Redis&reg;](https://github.com/bitnami/containers/tree/main/bitnami/redis) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -627,7 +627,7 @@ An example of use case is the creation of a redundant set of standalone masters 
 
 One way of achieving this is by setting `master.service.internalTrafficPolicy=Local` in combination with a `master.affinity.podAntiAffinity` spec to never schedule more than one master per Kubernetes node.
 
-It's recommended to only change `master.count` if you know what you are doing.  
+It's recommended to only change `master.count` if you know what you are doing.
 `master.count` greater than `1` is not designed for use when `sentinel.enabled=true`.
 
 ### Using a password file
@@ -797,7 +797,7 @@ The metrics exporter has been changed from a separate deployment to a sidecar co
 
 In order to improve the performance in case of slave failure, we added persistence to the read-only slaves. That means that we moved from Deployment to StatefulSets. This should not affect upgrades from previous versions of the chart, as the deployments did not contain any persistence at all.
 
-This version also allows enabling Redis&reg; Sentinel containers inside of the Redis&reg; Pods (feature disabled by default). In case the master crashes, a new Redis&reg; node will be elected as master. In order to query the current master (no redis master service is exposed), you need to query first the Sentinel cluster. Find more information [in this section](#master-slave-with-sentinel).
+This version also allows enabling Redis&reg; Sentinel containers inside of the Redis&reg; Pods (feature disabled by default). In case the master crashes, a new Redis&reg; node will be elected as master. In order to query the current master (no redis master service is exposed), you need to query first the Sentinel cluster.
 
 ### To 11.0.0
 

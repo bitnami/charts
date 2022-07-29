@@ -46,9 +46,9 @@ spec:
     {{- if .Values.prometheus.ingress.extraRules }}
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.ingress.extraRules "context" $) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.prometheus.ingress.extraTls (and .Values.prometheus.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.prometheus.ingress.annotations )) .Values.prometheus.ingress.selfSigned)) }}
+  {{- if or .Values.prometheus.ingress.extraTls (and .Values.prometheus.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.prometheus.ingress.annotations )) .Values.prometheus.ingress.secrets .Values.prometheus.ingress.selfSigned)) }}
   tls:
-    {{- if and .Values.prometheus.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.prometheus.ingress.annotations )) .Values.prometheus.ingress.selfSigned) }}
+    {{- if and .Values.prometheus.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.prometheus.ingress.annotations ))  .Values.prometheus.ingress.secrets .Values.prometheus.ingress.selfSigned) }}
     - hosts:
         - {{ .Values.prometheus.ingress.hostname }}
       secretName: {{ printf "%s-tls" .Values.prometheus.ingress.hostname }}

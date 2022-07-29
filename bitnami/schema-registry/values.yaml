@@ -1,0 +1,756 @@
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## e.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @section Common parameters
+## @param nameOverride String to partially override airflow.fullname template with a string (will prepend the release name)
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override airflow.fullname template with a string
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
+## @section Schema Registry parameters
+## Bitnami Schema Registry image
+## ref: https://hub.docker.com/r/bitnami/schema-registry/tags/
+## @param image.registry Schema Registry image registry
+## @param image.repository Schema Registry image repository
+## @param image.tag Schema Registry image tag (immutable tags are recommended)
+## @param image.pullPolicy Schema Registry image pull policy
+## @param image.pullSecrets Schema Registry image pull secrets
+## @param image.debug Enable image debug mode
+##
+image:
+  registry: docker.io
+  repository: bitnami/schema-registry
+  tag: 7.1.3-debian-11-r6
+  ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ##
+  debug: false
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param hostAliases Schema Registry pods host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+## @param podLabels Extra labels for Schema Registry pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## @param configuration Specify content for schema-registry.properties. Auto-generated based on other parameters when not specified
+##
+## e.g:
+## configuration: |-
+##   listeners = http://0.0.0.0:8081
+##   kafkastore.bootstrap.servers = protocol://broker_hostname:port
+##   host.name = schema-registry
+##   kafkastore.topic = _schemas
+##   inter.instance.protocol = http
+##   avro.compatibility.level = backward
+##   debug = false
+##
+configuration: {}
+## @param existingConfigmap Name of existing ConfigMap with Schema Registry configuration
+## NOTE: When it's set the configuration parameter is ignored
+##
+existingConfigmap: ""
+## @param log4j Schema Registry Log4J Configuration (optional)
+## Overwrites default log4j.properties file
+##
+log4j: {}
+## @param existingLog4jConfigMap Name of existing ConfigMap containing a custom log4j.properties file.
+## NOTE: When it's set the log4j is ignored
+##
+existingLog4jConfigMap: ""
+## Authentication parameteres
+## https://github.com/bitnami/bitnami-docker-kafka#security
+##
+auth:
+  ## TLS parameters to be used when a listener uses HTTPS
+  ##
+  tls:
+    ## @param auth.tls.enabled Enable TLS configuration to provide to be used when a listener uses HTTPS
+    ##
+    enabled: false
+    ## @param auth.tls.jksSecret Existing secret containing the truststore and one keystore per Schema Registry replica
+    ##
+    ## Create this secret following the steps below:
+    ## 1) Generate your trustore and keystore files. Helpful script: https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh
+    ## 2) Rename your truststore to `schema-registry.truststore.jks`.
+    ## 3) Rename your keystores to `schema-registry-X.keystore.jks` where X is the ID of each Schema Registry replica
+    ## 4) Run the command below where SECRET_NAME is the name of the secret you want to create:
+    ##       kubectl create secret generic SECRET_NAME --from-file=./schema-registry.truststore.jks --from-file=./schema-registry-0.keystore.jks --from-file=./schema-registry-1.keystore.jks ...
+    ##
+    jksSecret: ""
+    ## @param auth.tls.keystorePassword Password to access the keystore when it's password-protected
+    ##
+    keystorePassword: ""
+    ## @param auth.tls.truststorePassword Password to access the truststore when it's password-protected
+    ##
+    truststorePassword: ""
+    ## @param auth.tls.clientAuthentication Client authentication configuration.
+    ## Valid options: NONE, REQUESTED, over REQUIRED
+    ##
+    clientAuthentication: NONE
+  ## Parameters to configure authentication with kafka brokers
+  ##
+  kafka:
+    ## @param auth.kafka.jksSecret Existing secret containing the truststore and one keystore per Schema Registry replica
+    ##
+    ## Create this secret following the steps below:
+    ## 1) Generate your trustore and keystore files. Helpful script: https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh
+    ## 2) Rename your truststore to `kafka.truststore.jks`.
+    ## 3) Rename your keystores to `kafka-X.keystore.jks` where X is the ID of each Schema Registry replica
+    ## 4) Run the command below where SECRET_NAME is the name of the secret you want to create:
+    ##       kubectl create secret generic SECRET_NAME --from-file=./kafka.truststore.jks --from-file=./kafka-0.keystore.jks --from-file=./kafka-1.keystore.jks ...
+    ##
+    jksSecret: ""
+    ## @param auth.kafka.tlsEndpointIdentificationAlgorithm The endpoint identification algorithm used validate brokers hostnames
+    ## Disable server hostname verification by setting it to an empty string
+    ## See: https://docs.confluent.io/current/kafka/authentication_ssl.html#optional-settings
+    ##
+    tlsEndpointIdentificationAlgorithm: https
+    ## @param auth.kafka.keystorePassword Password to access the keystore when it's password-protected
+    ##
+    keystorePassword: ""
+    ## @param auth.kafka.truststorePassword Password to access the truststore when it's password-protected
+    ##
+    truststorePassword: ""
+    ## @param auth.kafka.saslMechanism Mechanism that schema registry will use to connect to kafka. Allowed: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512
+    ##
+    saslMechanism: PLAIN
+## @param listeners Comma-separated list of listeners that listen for API requests over either HTTP or HTTPS
+##
+listeners: http://0.0.0.0:8081
+## @param avroCompatibilityLevel Avro compatibility type
+## Valid options: none, backward, backward_transitive, forward, forward_transitive, full, or full_transitive
+##
+avroCompatibilityLevel: backward
+## @param extraEnvVars Extra environment variables to be set on Schema Registry container
+## e.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: BAR
+##
+extraEnvVars: []
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
+##
+extraEnvVarsSecret: ""
+
+## @section Schema Registry statefulset parameters
+## @param replicaCount Number of Schema Registry replicas to deploy.
+##
+replicaCount: 1
+## @param updateStrategy.type Schema Registry statefulset strategy type
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
+updateStrategy:
+  ## StrategyType
+  ## Can be set to RollingUpdate or OnDelete
+  ##
+  type: RollingUpdate
+## Node affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  type: ""
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+  ##
+  key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param affinity Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+## @param nodeSelector Node labels for pod assignment
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+## @param tolerations Tolerations for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+## @param podManagementPolicy Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join
+## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+##
+podManagementPolicy: OrderedReady
+## @param podAnnotations Annotations for Schema Registry pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## @param priorityClassName Schema Registry pod priority class name
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+##
+priorityClassName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: {}
+## @param schedulerName Name of the k8s scheduler (other than default) for Schema Registry pods
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
+## @param lifecycleHooks for the Schema Registry container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
+## Schema Registry pods' Security Context.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled Controller pods' Security Context
+## @param podSecurityContext.fsGroup Set Controller pod's Security Context fsGroup
+## @param podSecurityContext.sysctls sysctl settings of the Schema Registry pods
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+  ## sysctl settings
+  ## Example:
+  ## sysctls:
+  ## - name: net.core.somaxconn
+  ##   value: "10000"
+  ##
+  sysctls: []
+## Schema Registry containers' Security Context (only main container).
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enable container security context
+## @param containerSecurityContext.runAsUser User ID for the container
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+## Schema Registry containers' resource requests and limits.
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resources.limits The resources limits for the container
+## @param resources.requests The requested resources for the container
+##
+resources:
+  ## e.g:
+  ## limits:
+  ##   cpu: 100m
+  ##   memory: 128Mi
+  limits: {}
+  ## e.g:
+  ## requests:
+  ##   cpu: 100m
+  ##   memory: 128Mi
+  requests: {}
+## Schema Registry pods' liveness and readiness probes. Evaluated as a template.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 10
+  timeoutSeconds: 1
+  periodSeconds: 20
+  failureThreshold: 6
+  successThreshold: 1
+## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 10
+  timeoutSeconds: 1
+  periodSeconds: 20
+  failureThreshold: 6
+  successThreshold: 1
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 10
+  timeoutSeconds: 1
+  periodSeconds: 5
+  failureThreshold: 20
+  successThreshold: 1
+## @param customLivenessProbe Custom livenessProbe that overrides the default one
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom readinessProbe that overrides the default one
+##
+customReadinessProbe: {}
+## @param customStartupProbe Custom startupProbe that overrides the default one
+##
+customStartupProbe: {}
+## @param extraVolumes Optionally specify extra list of additional volumes for MinIO&reg; pods
+## e.g:
+## extraVolumes:
+##   - name: avro-properties
+##     configMap:
+##       name: avro-properties
+##
+extraVolumes: []
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for MinIO&reg; container(s)
+## e.g:
+## extraVolumeMounts:
+##   - name: avro-properties
+##     mountPath: /bitnami/schema-registry/etc/schema-registry/connect-avro-standalone.properties
+##     subPath: connect-avro-standalone.properties
+##
+extraVolumeMounts: []
+## @param initContainers Add additional init containers to the Schema Registry pods.
+## e.g:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers: []
+## @param sidecars Add additional sidecar containers to the Schema Registry pods.
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+## Schema Registry Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+## @param pdb.create Enable/disable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that must still be available after the eviction
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable after the eviction
+##
+pdb:
+  create: false
+  minAvailable: 1
+  maxUnavailable: ""
+## Schema Registry Autoscaling parameters.
+## @param autoscaling.enabled Enable autoscaling for replicas
+## @param autoscaling.minReplicas Minimum number of replicas
+## @param autoscaling.maxReplicas Maximum number of replicas
+## @param autoscaling.targetCPU Target CPU utilization percentage
+## @param autoscaling.targetMemory Target Memory utilization percentage
+##
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 11
+  targetCPU: ""
+  targetMemory: ""
+
+## @section Exposure Parameters
+## Schema Registry Service paramaters.
+##
+service:
+  ## @param service.type Kubernetes service type
+  ##
+  type: ClusterIP
+  ## @param service.ports.http Service HTTP port
+  ##
+  ports:
+    http: 8081
+  ## @param service.nodePorts.http Service HTTP node port
+  ## Specify the nodePort value for the LoadBalancer and NodePort service types.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  nodePorts:
+    http: ""
+  ## @param service.clusterIP Schema Registry service clusterIP IP
+  ## e.g:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.externalTrafficPolicy Enable client source IP preservation
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.loadBalancerIP loadBalancerIP if service type is LoadBalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ## - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.annotations Annotations for Schema Registry service
+  ##
+  annotations: {}
+  ## @param service.extraPorts Extra ports to expose in Schema Registry service (normally used with the `sidecars` value)
+  ##
+  extraPorts: []
+  ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
+  ## Values: ClientIP or None
+  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+## @param ingress.enabled                Enable ingress controller resource
+## @param ingress.hostname               Default host for the ingress resource
+## @param ingress.annotations            Ingress annotations
+## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+## @param ingress.secrets Custom TLS certificates as secrets
+## Configure the ingress resource that allows you to access Schema Registry
+##
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for Schema Registry
+  ##
+  enabled: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress record
+  ##
+  hostname: schema-registry.local
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  ## @param ingress.annotations Additional custom annotations for the ingress record
+  ## NOTE: If `ingress.certManager=true`, annotation `kubernetes.io/tls-acme: "true"` will automatically be added
+  ##
+  ## For a full list of possible ingress annotations, please see
+  ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+  ##
+  annotations: {}
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Relay on cert-manager to create it by setting `ingress.certManager=true`
+  ##   - Relay on Helm to create self-signed certificates by setting `ingress.tls=true` and `ingress.certManager=false`
+  ##
+  tls: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##  - name: schema-registry.local
+  ##    path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
+  ## - hosts:
+  ##     - schema-registry.local
+  ##   secretName: schema-registry.local-tls
+  ##
+  extraTls: []
+  ## @param ingress.secrets Custom TLS certificates as secrets
+  ## NOTE: 'key' and 'certificate' are expected in PEM format
+  ## NOTE: 'name' should line up with a 'secretName' set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## e.g:
+  ## secrets:
+  ##   - name: odoo.local-tls
+  ##     key: |-
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ##     certificate: |-
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
+  ##
+  secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: airflow.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: airflow-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
+
+## @section RBAC parameters
+## Schema Registry pods ServiceAccount.
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable the creation of a ServiceAccount for Schema Registry pods
+  ##
+  create: true
+  ## @param serviceAccount.name Name of the created ServiceAccount to use
+  ## If not set and create is true, a name is generated using the schema-registry.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ##
+  automountServiceAccountToken: true
+
+## @section Kafka chart parameters
+##
+## Kafka chart configuration
+## For information about these parameters, refer to:
+##   https://github.com/bitnami/charts/blob/master/bitnami/kafka/values.yaml
+##
+kafka:
+  ## @param kafka.enabled Enable/disable Kafka chart installation
+  ##
+  enabled: true
+  ## @param kafka.replicaCount Number of Kafka brokers
+  ##
+  replicaCount: 1
+  auth:
+    ## @param kafka.auth.clientProtocol Authentication protocol for communications with clients. Allowed protocols: plaintext, tls, mtls, sasl and sasl_tls
+    ##
+    clientProtocol: plaintext
+    ## @param kafka.auth.interBrokerProtocol Authentication protocol for inter-broker communications. Allowed protocols: plaintext, tls, mtls, sasl and sasl_tls
+    ##
+    interBrokerProtocol: plaintext
+    ## TLS configuration
+    ##
+    tls:
+      ## @param kafka.auth.tls.existingSecrets Array existing secrets containing the TLS certificates for the Kafka brokers
+      ## When using 'jks' format for certificates, each secret should contain a truststore and a keystore.
+      ## Create these secrets following the steps below:
+      ## 1) Generate your truststore and keystore files. Helpful script: https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh
+      ## 2) Rename your truststore to `kafka.truststore.jks`.
+      ## 3) Rename your keystores to `kafka-X.keystore.jks` where X is the ID of each Kafka broker.
+      ## 4) Run the command below one time per broker to create its associated secret (SECRET_NAME_X is the name of the secret you want to create):
+      ##       kubectl create secret generic SECRET_NAME_0 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-0.keystore.jks
+      ##       kubectl create secret generic SECRET_NAME_1 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-1.keystore.jks
+      ##       ...
+      ##
+      ## When using 'pem' format for certificates, each secret should contain a public CA certificate, a public certificate and one private key.
+      ## Create these secrets following the steps below:
+      ## 1) Create a certificate key and signing request per Kafka broker, and sign the signing request with your CA
+      ## 2) Rename your CA file to `kafka.ca.crt`.
+      ## 3) Rename your certificates to `kafka-X.tls.crt` where X is the ID of each Kafka broker.
+      ## 3) Rename your keys to `kafka-X.tls.key` where X is the ID of each Kafka broker.
+      ## 4) Run the command below one time per broker to create its associated secret (SECRET_NAME_X is the name of the secret you want to create):
+      ##       kubectl create secret generic SECRET_NAME_0 --from-file=ca.crt=./kafka.ca.crt --from-file=tls.crt=./kafka-0.tls.crt --from-file=tls.key=./kafka-0.tls.key
+      ##       kubectl create secret generic SECRET_NAME_1 --from-file=ca.crt=./kafka.ca.crt --from-file=tls.crt=./kafka-1.tls.crt --from-file=tls.key=./kafka-1.tls.key
+      ##       ...
+      ##
+      existingSecrets: []
+      ## @param kafka.auth.tls.password Password to access the JKS files or PEM key when they are password-protected.
+      ## Note: ignored when using 'existingSecret'.
+      ##
+      password: ""
+      ## @param kafka.auth.tls.endpointIdentificationAlgorithm The endpoint identification algorithm to validate server hostname using server certificate
+      ## Disable server host name verification by setting it to an empty string.
+      ## ref: https://docs.confluent.io/current/kafka/authentication_ssl.html#optional-settings
+      ##
+      endpointIdentificationAlgorithm: https
+    sasl:
+      jaas:
+        ## @param kafka.auth.sasl.jaas.clientUsers [array] Kafka client users for SASL authentication
+        ##
+        clientUsers:
+          - user
+        ## @param kafka.auth.sasl.jaas.clientPasswords Kafka client passwords for SASL authentication
+        ##
+        clientPasswords: []
+        ## @param kafka.auth.sasl.jaas.interBrokerUser Kafka inter broker communication user for SASL authentication
+        ##
+        interBrokerUser: admin
+        ## @param kafka.auth.sasl.jaas.interBrokerPassword Kafka inter broker communication password for SASL authentication
+        ##
+        interBrokerPassword: ""
+        ## @param kafka.auth.sasl.jaas.zookeeperUser Kafka Zookeeper user for SASL authentication
+        ##
+        zookeeperUser: ""
+        ## @param kafka.auth.sasl.jaas.zookeeperPassword Kafka Zookeeper password for SASL authentication
+        ##
+        zookeeperPassword: ""
+        ## @param kafka.auth.sasl.jaas.existingSecret Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser
+        ##
+        existingSecret: ""
+  service:
+    ## @param kafka.service.ports.client Kafka service port for client connections
+    ##
+    ports:
+      client: 9092
+  ##
+  ## Zookeeper chart configuration
+  ## For information about these parameters, refer to:
+  ##   https://github.com/bitnami/charts/blob/master/bitnami/zookeeper/values.yaml
+  ##
+  zookeeper:
+    ## @param kafka.zookeeper.enabled Enable/disable Zookeeper chart installation
+    ##
+    enabled: true
+    ## @param kafka.zookeeper.replicaCount Number of Zookeeper replicas
+    ##
+    replicaCount: 1
+    ## @param kafka.zookeeper.auth [object] Zookeeper auth settings
+    auth:
+      client:
+        enabled: false
+        clientUser: zookeeperUser
+        clientPassword: ""
+        serverUsers: zookeeperUser
+        serverPasswords: ""
+        existingSecret: ""
+##
+## External Kafka Configuration
+## All of these values are only used when kafka.enabled is set to false
+##
+externalKafka:
+  ## @param externalKafka.brokers Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port
+  ##
+  brokers:
+    - PLAINTEXT://localhost:9092
+  ## Authentication parameters
+  ## @param externalKafka.auth.protocol                   Authentication protocol. Allowed protocols: plaintext, tls, sasl and sasl_tls
+  ## @param externalKafka.auth.jaas.user                  User for SASL authentication
+  ## @param externalKafka.auth.jaas.password              Password for SASL authentication
+  ##
+  auth:
+    ## Authentication protocol
+    ## Supported values: 'plaintext', 'tls', sasl' and 'sasl_tls'
+    ## This table shows the security provided on each protocol:
+    ## | Method    | Authentication                | Encryption via TLS |
+    ## | plaintext | None                          | No                 |
+    ## | tls       | None                          | Yes                |
+    ## | sasl      | Yes (via SASL)                | No                 |
+    ## | sasl_tls  | Yes (via SASL)                | Yes                |
+    ##
+    protocol: plaintext
+    ## JAAS configuration for SASL authentication
+    ## MANDATORY when protocol is 'sasl' or 'sasl_tls'
+    ##
+    jaas:
+      user: user
+      password: ""

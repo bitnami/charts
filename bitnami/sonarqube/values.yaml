@@ -92,7 +92,7 @@ image:
 
 ## @section SonarQube Configuration parameters
 ## SonarQube settings based on environment variables
-## ref: https://github.com/bitnami/bitnami-docker-sonarqube#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/sonarqube#environment-variables
 ## @param sonarqubeUsername SonarQube username
 ##
 sonarqubeUsername: user
@@ -126,11 +126,11 @@ startTimeout: 150
 extraProperties: []
 ## @param sonarqubeSkipInstall Skip wizard installation
 ## NOTE: useful if you use an external database that already contains SonarQube data
-## ref: https://github.com/bitnami/bitnami-docker-sonarqube#connect-sonarqube-container-to-an-existing-database
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/sonarqube#connect-sonarqube-container-to-an-existing-database
 ##
 sonarqubeSkipInstall: false
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-sonarqube/#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/sonarqube/#smtp-configuration
 ## @param smtpHost SMTP server host
 ## @param smtpPort SMTP server port
 ## @param smtpUser SMTP username

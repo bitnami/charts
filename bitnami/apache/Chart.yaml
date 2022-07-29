@@ -24,6 +24,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: apache
 sources:
-  - https://github.com/bitnami/bitnami-docker-apache
+  - https://github.com/bitnami/containers/tree/main/bitnami/apache
   - https://httpd.apache.org
 version: 9.1.13

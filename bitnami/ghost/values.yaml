@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/ghost
-  tag: 5.4.1-debian-11-r0
+  tag: 5.5.0-debian-11-r1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -74,7 +74,7 @@ image:
 
 ## @section Ghost Configuration parameters
 ## Ghost settings based on environment variables
-## ref: https://github.com/bitnami/bitnami-docker-ghost#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/ghost#configuration
 
 ## @param ghostUsername Ghost user name
 ##
@@ -104,7 +104,7 @@ ghostPath: /
 ##
 ghostEnableHttps: false
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-ghost/#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/ghost/#smtp-configuration
 ## @param smtpHost SMTP server host
 ## @param smtpPort SMTP server port
 ## @param smtpUser SMTP username
@@ -564,7 +564,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r16
+    tag: 11-debian-11-r19
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -611,9 +611,9 @@ mysql:
   ## @param mysql.auth.username MySQL custom user name
   ## @param mysql.auth.password MySQL custom user password
   ## @param mysql.auth.existingSecret Existing secret with MySQL credentials
-  ## ref: https://github.com/bitnami/bitnami-docker-mysql#setting-the-root-password-on-first-run
-  ##      https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#creating-a-database-on-first-run
-  ##      https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#creating-a-database-user-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mysql#setting-the-root-password-on-first-run
+  ##      https://github.com/bitnami/containers/tree/main/bitnami/mysql/#creating-a-database-on-first-run
+  ##      https://github.com/bitnami/containers/tree/main/bitnami/mysql/#creating-a-database-user-on-first-run
   auth:
     rootPassword: ""
     database: bitnami_ghost

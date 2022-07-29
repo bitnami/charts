@@ -23,6 +23,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: nginx
 sources:
-  - https://github.com/bitnami/bitnami-docker-nginx
+  - https://github.com/bitnami/containers/tree/main/bitnami/nginx
   - https://www.nginx.org
 version: 13.1.4

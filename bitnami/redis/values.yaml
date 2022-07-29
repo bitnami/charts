@@ -97,14 +97,14 @@ image:
   debug: false
 
 ## @section Redis&reg; common configuration parameters
-## https://github.com/bitnami/bitnami-docker-redis#configuration
+## https://github.com/bitnami/containers/tree/main/bitnami/redis#configuration
 ##
 
 ## @param architecture Redis&reg; architecture. Allowed values: `standalone` or `replication`
 ##
 architecture: replication
 ## Redis&reg; Authentication parameters
-## ref: https://github.com/bitnami/bitnami-docker-redis#setting-the-server-password-on-first-run
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/redis#setting-the-server-password-on-first-run
 ##
 auth:
   ## @param auth.enabled Enable password authentication

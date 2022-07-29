@@ -71,7 +71,7 @@ loki:
   image:
     registry: docker.io
     repository: bitnami/grafana-loki
-    tag: 2.6.1-debian-11-r0
+    tag: 2.6.1-debian-11-r4
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -577,7 +577,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-11-r17
+    tag: 1.23.1-debian-11-r2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3239,7 +3239,7 @@ promtail:
   image:
     registry: docker.io
     repository: bitnami/promtail
-    tag: 2.6.0-debian-11-r2
+    tag: 2.6.1-debian-11-r3
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3652,7 +3652,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r16
+    tag: 11-debian-11-r19
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -3772,7 +3772,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.15-debian-11-r17
+    tag: 1.6.15-debian-11-r21
 
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -3812,7 +3812,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.15-debian-11-r17
+    tag: 1.6.15-debian-11-r21
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
   architecture: high-availability
@@ -3852,7 +3852,7 @@ memcachedindexqueries:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.15-debian-11-r17
+    tag: 1.6.15-debian-11-r21
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
   architecture: high-availability
@@ -3891,7 +3891,7 @@ memcachedindexwrites:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.15-debian-11-r17
+    tag: 1.6.15-debian-11-r21
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##
   architecture: high-availability

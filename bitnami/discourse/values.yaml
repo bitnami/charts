@@ -68,7 +68,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 2.8.6-debian-11-r0
+  tag: 2.8.7-debian-11-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -86,7 +86,7 @@ image:
   ##
   debug: false
 ## Authentication parameters
-## ref: https://github.com/bitnami/bitnami-docker-discourse#user-and-site-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/discourse#user-and-site-configuration
 ##
 auth:
   ## @param auth.email Discourse admin user email

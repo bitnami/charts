@@ -42,6 +42,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: grafana-loki
 sources:
-  - https://github.com/bitnami/bitnami-docker-grafana-loki
+  - https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki
   - https://github.com/grafana/loki/
-version: 2.2.3
+version: 2.2.5

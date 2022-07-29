@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 18.0.2-debian-11-r9
+  tag: 18.0.2-debian-11-r13
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -91,7 +91,7 @@ image:
   ##
   debug: false
 ## Keycloak authentication parameters
-## ref: https://github.com/bitnami/bitnami-docker-keycloak#admin-credentials
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#admin-credentials
 ##
 auth:
   ## @param auth.adminUser Keycloak administrator user
@@ -139,7 +139,7 @@ auth:
   ##
   existingSecretPerPassword: {}
   ## TLS encryption parameters
-  ## ref: https://github.com/bitnami/bitnami-docker-keycloak#tls-encryption
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#tls-encryption
   ##
   tls:
     ## @param auth.tls.enabled Enable TLS encryption. Required for HTTPs traffic.
@@ -210,7 +210,7 @@ proxy: passthrough
 ##
 httpRelativePath: "/"
 ## Keycloak Service Discovery settings
-## ref: https://github.com/bitnami/bitnami-docker-keycloak#cluster-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#cluster-configuration
 ##
 ## @param configuration Keycloak Configuration. Auto-generated based on other parameters when not specified
 ## Specify content for keycloak.conf
@@ -232,7 +232,7 @@ existingConfigmap: ""
 extraStartupArgs: ""
 ## @param initdbScripts Dictionary of initdb scripts
 ## Specify dictionary of scripts to be run at first boot
-## ref: https://github.com/bitnami/bitnami-docker-keycloak#initializing-a-new-instance
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#initializing-a-new-instance
 ## Example:
 ## initdbScripts:
 ##   my_init_script.sh: |
@@ -727,7 +727,7 @@ autoscaling:
 ##
 metrics:
   ## @param metrics.enabled Enable exposing Keycloak statistics
-  ## ref: https://github.com/bitnami/bitnami-docker-keycloak#enabling-statistics
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#enabling-statistics
   ##
   enabled: false
   ## Keycloak metrics service parameters
@@ -802,7 +802,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 5.2.1-debian-11-r9
+    tag: 5.2.2-debian-11-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
