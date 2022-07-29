@@ -1,0 +1,34 @@
+file:
+  /opt/bitnami/fluentd/conf/fluentd-inputs.conf:
+    exists: true
+    filetype: symlink
+    contains:
+      - "type http"
+      - "type kubernetes_metadata"
+      - "path /var/log/containers/*.log"
+  /var/log:
+    exists: true
+    filetype: directory
+    mode: "0755"
+    owner: root
+    group: root
+  /var/lib/docker/containers:
+    exists: true
+    filetype: directory
+    mode: "0701"
+    owner: root
+    group: root
+command:
+  # The Chart is configured to keep track of the logs in the /var/log/containers directory. Creating a log file
+  # should trigger the Forwarder to send the contents to the Aggregator.
+  #
+  # The integration can be verified as the Forwarder pods have access to the logs of every pod in the cluster, so
+  # we check that the Aggregator is aware of the newly created file.
+  {{ with (printf "test-%s.log" (randAlpha 5)) }}
+  forward-aggregator-integration:
+    exec: "cd /var/log/containers && echo '{\"time\": \"2022-07-29T11:33:47.408955753Z\", \"data\": \"zwiebel\"}' > {{.}} && sleep 65 && find . -name \"*fluentd-0*\" -exec tail {} \\;"
+    exit-status: 0
+    stdout:
+      - {{.}}
+    timeout: 75000
+  {{end}}
