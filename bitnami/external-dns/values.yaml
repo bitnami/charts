@@ -59,7 +59,7 @@ watchReleaseNamespace: false
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.12.0-debian-11-r9
+  tag: 0.12.2-debian-11-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -830,6 +830,9 @@ serviceAccount:
   ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
   ##
   automountServiceAccountToken: true
+  ## @param serviceAccount.labels [object] Additional labels to be included on the service account
+  ##
+  labels: {}
 ## RBAC parameters
 ## https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 ##

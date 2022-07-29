@@ -27,6 +27,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: kafka
 sources:
-  - https://github.com/bitnami/bitnami-docker-kafka
+  - https://github.com/bitnami/containers/tree/main/bitnami/kafka
   - https://kafka.apache.org/
 version: 18.0.3

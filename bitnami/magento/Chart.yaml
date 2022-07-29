@@ -33,6 +33,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: magento
 sources:
-  - https://github.com/bitnami/bitnami-docker-magento
+  - https://github.com/bitnami/containers/tree/main/bitnami/magento
   - https://magento.com/
-version: 21.0.2
+version: 21.0.4

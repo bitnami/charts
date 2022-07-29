@@ -6,7 +6,7 @@ dependencies:
   - condition: redis.enabled
     name: redis
     repository: https://charts.bitnami.com/bitnami
-    version: 16.x.x
+    version: 17.x.x
   - condition: postgresql.enabled
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
@@ -30,6 +30,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: airflow
 sources:
-  - https://github.com/bitnami/bitnami-docker-airflow
+  - https://github.com/bitnami/containers/tree/main/bitnami/airflow
   - https://airflow.apache.org/
-version: 12.5.13
+version: 13.0.0

@@ -7,7 +7,7 @@ HAProxy is a TCP proxy and a HTTP reverse proxy. It supports SSL termination and
 [Overview of HAProxy](http://www.haproxy.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -183,7 +183,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                              | `""`   |
 
 
-The above parameters map to the env variables defined in [bitnami/haproxy](https://github.com/bitnami/bitnami-docker-haproxy). For more information please refer to the [bitnami/haproxy](https://github.com/bitnami/bitnami-docker-haproxy) image documentation.
+The above parameters map to the env variables defined in [bitnami/haproxy](https://github.com/bitnami/containers/tree/main/bitnami/haproxy). For more information please refer to the [bitnami/haproxy](https://github.com/bitnami/containers/tree/main/bitnami/haproxy) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

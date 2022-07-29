@@ -1,7 +1,7 @@
 annotations:
   category: Infrastructure
 apiVersion: v2
-appVersion: 2.332.3
+appVersion: 2.346.2
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -24,6 +24,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: jenkins
 sources:
-  - https://github.com/bitnami/bitnami-docker-jenkins
+  - https://github.com/bitnami/containers/tree/main/bitnami/jenkins
   - https://jenkins.io/
-version: 10.2.4
+version: 10.2.5

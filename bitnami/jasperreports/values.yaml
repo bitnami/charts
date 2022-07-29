@@ -71,24 +71,24 @@ image:
   ##
   pullSecrets: []
 ## @param jasperreportsUsername JasperReports user
-## ref: https://github.com/bitnami/bitnami-docker-jasperreports#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#configuration
 ##
 jasperreportsUsername: jasperadmin
 ## @param jasperreportsPassword JasperReports password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-jasperreports#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#configuration
 ##
 jasperreportsPassword: ""
 ## @param jasperreportsEmail JasperReports user email
-## ref: https://github.com/bitnami/bitnami-docker-jasperreports#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#configuration
 ##
 jasperreportsEmail: user@example.com
 ## @param allowEmptyPassword Set to `yes` to allow the container to be started with blank passwords
-## ref: https://github.com/bitnami/bitnami-docker-jasperreports#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#environment-variables
 ##
 allowEmptyPassword: "no"
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-jasperreports#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#smtp-configuration
 ## @param smtpHost SMTP host
 ## @param smtpPort SMTP port
 ## @param smtpEmail SMTP email
@@ -508,7 +508,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -534,15 +534,15 @@ mariadb:
   ##
   auth:
     ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
     ## @param mariadb.auth.database Database name to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
     ##
     database: bitnami_jasperreports
     ## @param mariadb.auth.username Database user to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
     ##
     username: bn_jasperreports
     ## @param mariadb.auth.password Password for the database

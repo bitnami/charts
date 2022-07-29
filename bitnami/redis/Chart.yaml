@@ -1,7 +1,7 @@
 annotations:
   category: Database
 apiVersion: v2
-appVersion: 7.0.3
+appVersion: 7.0.4
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -23,5 +23,5 @@ maintainers:
     name: desaintmartin
 name: redis
 sources:
-  - https://github.com/bitnami/bitnami-docker-redis
-version: 17.0.0
+  - https://github.com/bitnami/containers/tree/main/bitnami/redis
+version: 17.0.6

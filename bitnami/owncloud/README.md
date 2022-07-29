@@ -7,7 +7,7 @@ ownCloud is an open source content collaboration platform used to store and shar
 [Overview of ownCloud](http://owncloud.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/owncloud
 
 ## Introduction
 
-This chart bootstraps an [ownCloud](https://github.com/bitnami/bitnami-docker-owncloud) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [ownCloud](https://github.com/bitnami/containers/tree/main/bitnami/owncloud) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the ownCloud application.
 
@@ -307,7 +307,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                   | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/owncloud](https://github.com/bitnami/bitnami-docker-owncloud). For more information please refer to the [bitnami/owncloud](https://github.com/bitnami/bitnami-docker-owncloud) image documentation.
+The above parameters map to the env variables defined in [bitnami/owncloud](https://github.com/bitnami/containers/tree/main/bitnami/owncloud). For more information please refer to the [bitnami/owncloud](https://github.com/bitnami/containers/tree/main/bitnami/owncloud) image documentation.
 
 > **Note**:
 >
@@ -377,7 +377,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Persistence
 
-The [Bitnami ownCloud](https://github.com/bitnami/bitnami-docker-owncloud) image stores the ownCloud data and configurations at the `/bitnami/owncloud` path of the container.
+The [Bitnami ownCloud](https://github.com/bitnami/containers/tree/main/bitnami/owncloud) image stores the ownCloud data and configurations at the `/bitnami/owncloud` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -467,7 +467,7 @@ This upgrade adapts the chart to the latest Bitnami good practices. Check the Pa
 
 **2. Migration of the ownCloud image to non-root**
 
-The [Bitnami ownCloud](https://github.com/bitnami/bitnami-docker-owncloud) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. Consequences:
+The [Bitnami ownCloud](https://github.com/bitnami/containers/tree/main/bitnami/owncloud) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. Consequences:
 
 - The HTTP/HTTPS ports exposed by the container are now `8080/8443` instead of `80/443`.
 - Backwards compatibility is not guaranteed. Uninstall & install the chart again to obtain the latest version.

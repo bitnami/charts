@@ -90,7 +90,7 @@ image:
 ##
 architecture: standalone
 ## Authentication parameters
-## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/memcached#creating-the-memcached-admin-user
 ##
 auth:
   ## @param auth.enabled Enable Memcached authentication

@@ -7,7 +7,7 @@ phpMyAdmin is a free software tool written in PHP, intended to handle the admini
 [Overview of phpMyAdmin](https://www.phpmyadmin.net/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/phpmyadmin
 
 ## Introduction
 
-This chart bootstraps a [phpMyAdmin](https://github.com/bitnami/bitnami-docker-phpmyadmin) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [phpMyAdmin](https://github.com/bitnami/containers/tree/main/bitnami/phpmyadmin) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 As a portable web application written primarily in PHP, phpMyAdmin has become one of the most popular MySQL administration tools, especially for web hosting services.
 
@@ -179,7 +179,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                                | `false`                  |
 | `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
 | `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.secrets`                  | If you're providing your own certificates and want to manage the secret via helm,                                                | `[]`                     |
+| `ingress.existingSecretName`       | If you're providing your own certificate and want to manage the secret yourself,                                                 | `""`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
@@ -255,7 +256,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                     | `{}`    |
 
 
-For more information please refer to the [bitnami/phpmyadmin](https://github.com/bitnami/bitnami-docker-Phpmyadmin) image documentation.
+For more information please refer to the [bitnami/phpmyadmin](https://github.com/bitnami/containers/tree/main/bitnami/phpmyadmin) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -298,13 +299,14 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ### TLS Secrets
 
-This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are three common use cases:
+This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are some common use cases:
 
-- Helm generates/manages certificate secrets.
-- User generates/manages certificates separately.
+- Helm generates and manages certificate secrets (default).
+- User generates certificates and helm manages secrets.
+- User generates and manages certificates separately.
 - An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
 
-In the first two cases, it's needed a certificate and a key. We would expect them to look like this:
+In the second case, a certificate and a key are needed. We would expect them to look like this:
 
 - certificate files should look like (and there can be more than one certificate if there is a certificate chain)
 
@@ -326,9 +328,11 @@ In the first two cases, it's needed a certificate and a key. We would expect the
     -----END RSA PRIVATE KEY-----
     ```
 
-If you are going to use Helm to manage the certificates, please copy these values into the `certificate` and `key` values for a given `ingress.secrets` entry.
+If you are going to generate certificates yourself and want helm to manage the secret, please copy these values into the `certificate` and `key` values for a given `ingress.secrets` entry.
 
-If you are going to manage TLS secrets outside of Helm, please know that you can create a TLS secret (named `phpmyadmin.local-tls` for example).
+If you want to manage TLS secrets outside of Helm, please know that you can create a TLS secret and pass its name via the parameter `ingress.existingSecretName`.
+
+To make use of cert-manager, you need to add the the `cert-manager.io/cluster-issuer:` annotation to the ingress object via `ingress.annotations`.
 
 ### Adding extra environment variables
 
@@ -492,7 +496,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ### To 6.0.0
 
-The [Bitnami phpMyAdmin](https://github.com/bitnami/bitnami-docker-phpmyadmin) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+The [Bitnami phpMyAdmin](https://github.com/bitnami/containers/tree/main/bitnami/phpmyadmin) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
 Chart labels and Ingress configuration were also adapted to follow the Helm charts best practices.
 
 Consequences:

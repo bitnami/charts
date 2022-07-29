@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
-  name: {{ include "common.names.fullname" . }}-contour-certgen
+  name: {{ printf "%s-contour-certgen" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   annotations:
     "helm.sh/hook": "pre-install,pre-upgrade"
@@ -27,7 +27,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ include "common.names.fullname" . }}-contour-certgen
+  name: {{ printf "%s-contour-certgen" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   annotations:
     "helm.sh/hook": "pre-install,pre-upgrade"
@@ -37,7 +37,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ include "common.names.fullname" . }}-contour-certgen
+  name: {{ printf "%s-contour-certgen" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 subjects:
   - kind: ServiceAccount
     name: {{ include "contour.contourCertGenServiceAccountName" . }}
