@@ -243,6 +243,30 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `persistence.imageChartStorage.oss.secretkey`                 | OSS storage type setting: Secret key                                                                                                                                                                                                                                                                                                                 | `""`                                     |
 
 
+### Tracing parameters
+
+| Name                       | Description                                                                                                                                                              | Value           |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- |
+| `tracing.enabled`          | Enable tracing                                                                                                                                                           | `false`         |
+| `tracing.sampleRate`       | Tracing sample rate from 0 to 1                                                                                                                                          | `1`             |
+| `tracing.namespace`        | Used to differentiate traces between different harbor services                                                                                                           | `""`            |
+| `tracing.attributes`       | A key value dict containing user defined attributes used to initialize the trace provider                                                                                | `{}`            |
+| `tracing.jaeger`           | Configuration for exporting to jaeger. If using jaeger collector mode, use endpoint, username and password. If using jaeger agent mode, use agentHostname and agentPort. |                 |
+| `tracing.jaeger.enabled`   | Enable jaeger export                                                                                                                                                     | `false`         |
+| `tracing.jaeger.endpoint`  | Jaeger endpoint                                                                                                                                                          | `""`            |
+| `tracing.jaeger.username`  | Jaeger username                                                                                                                                                          | `""`            |
+| `tracing.jaeger.password`  | Jaeger password                                                                                                                                                          | `""`            |
+| `tracing.jaeger.agentHost` | Jaeger agent hostname                                                                                                                                                    | `""`            |
+| `tracing.jaeger.agentPort` | Jaeger agent port                                                                                                                                                        | `""`            |
+| `tracing.otel`             | Configuration for exporting to an otel endpoint                                                                                                                          |                 |
+| `tracing.otel.enabled`     | Enable otel export                                                                                                                                                       | `false`         |
+| `tracing.otel.endpoint`    | The hostname and port for an otel compatible backend                                                                                                                     | `hostname:4318` |
+| `tracing.otel.urlpath`     | Url path of otel endpoint                                                                                                                                                | `/v1/traces`    |
+| `tracing.otel.compression` | Enable data compression                                                                                                                                                  | `false`         |
+| `tracing.otel.timeout`     | The timeout for data transfer                                                                                                                                            | `10s`           |
+| `tracing.otel.insecure`    | Ignore cert verification for otel backend                                                                                                                                | `true`          |
+
+
 ### Volume Permissions parameters
 
 | Name                                                   | Description                                                                     | Value                   |

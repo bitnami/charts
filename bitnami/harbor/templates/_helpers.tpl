@@ -528,3 +528,25 @@ harbor: exposureType
     "proxy". Please set a valid exposureType (--set exposureType="xxxx")
 {{- end -}}
 {{- end -}}
+
+{{/* lists all tracing related environment variables except for TRACE_SERVICE_NAME, which should be set separately */}}
+{{- define "harbor.tracing.envvars" -}}
+TRACE_ENABLE: {{ .Values.tracing.enabled | quote }}
+TRACE_SAMPLE_RATE: {{ .Values.tracing.sampleRate | quote }}
+TRACE_NAMESPACE: {{ .Values.tracing.namespace | quote }}
+TRACE_ATTRIBUTES: {{ .Values.tracing.attributes | toJson }}
+{{- if .Values.tracing.jaeger.enabled }}
+TRACE_JAEGER_ENDPOINT: {{ .Values.tracing.jaeger.endpoint | quote }}
+TRACE_JAEGER_USERNAME: {{ .Values.tracing.jaeger.username | quote }}
+TRACE_JAEGER_PASSWORD: {{ .Values.tracing.jaeger.password | quote }}
+TRACE_JAEGER_AGENT_HOSTNAME: {{ .Values.tracing.jaeger.agentHost | quote }}
+TRACE_JAEGER_AGENT_PORT: {{ .Values.tracing.jaeger.agentPort | quote }}
+{{- end }}
+{{- if .Values.tracing.otel.enabled }}
+TRACE_OTEL_ENDPOINT: {{ .Values.tracing.otel.endpoint | quote }}
+TRACE_OTEL_URL_PATH: {{ .Values.tracing.otel.urlpath | quote }}
+TRACE_OTEL_COMPRESSION: {{ .Values.tracing.otel.compression | quote }}
+TRACE_OTEL_TIMEOUT: {{ .Values.tracing.otel.timeout | quote }}
+TRACE_OTEL_INSECURE: {{ .Values.tracing.otel.insecure | quote }}
+{{- end }}
+{{- end -}}

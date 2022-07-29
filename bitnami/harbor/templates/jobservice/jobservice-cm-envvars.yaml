@@ -23,3 +23,7 @@ data:
   NO_PROXY: {{ include "harbor.noProxy" . | quote }}
   {{- end }}
   LOG_LEVEL: {{ .Values.logLevel | quote }}
+  {{- if .Values.tracing.enabled }}
+  TRACE_SERVICE_NAME: "harbor-jobservice"
+  {{- include "harbor.tracing.envvars" . | nindent 2}}
+  {{- end }}

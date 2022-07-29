@@ -643,6 +643,65 @@ persistence:
       rootdirectory: ""
       secretkey: ""
 
+## @section Tracing parameters
+##
+
+## Tracing parameters:
+## tracing: Configure tracing for Harbor, only one of tracing.jeager.enabled and tracing.otel.enabled should be set
+tracing:
+  ## @param tracing.enabled Enable tracing
+  ##
+  enabled: false
+  ## @param tracing.sampleRate Tracing sample rate from 0 to 1
+  ##
+  sampleRate: 1
+  ## @param tracing.namespace Used to differentiate traces between different harbor services
+  ##
+  namespace: ""
+  ## @param tracing.attributes A key value dict containing user defined attributes used to initialize the trace provider
+  ## e.g:
+  ## attributes:
+  ##   application: harbor
+  ##
+  attributes: {}
+
+  ## @extra tracing.jaeger Configuration for exporting to jaeger. If using jaeger collector mode, use endpoint, username and password. If using jaeger agent mode, use agentHostname and agentPort.
+  ## e.g:
+  ## jaeger:
+  ##   enabled: true
+  ##   endpoint: http://hostname:14268/api/traces
+  ##   username: "jaeger-username"
+  ##   password: "jaeger-password"
+  ## @param tracing.jaeger.enabled Enable jaeger export
+  ## @param tracing.jaeger.endpoint Jaeger endpoint
+  ## @param tracing.jaeger.username Jaeger username
+  ## @param tracing.jaeger.password Jaeger password
+  ## @param tracing.jaeger.agentHost Jaeger agent hostname
+  ## @param tracing.jaeger.agentPort Jaeger agent port
+  ##
+  jaeger:
+    enabled: false
+    endpoint: ""
+    username: ""
+    password: ""
+    agentHost: ""
+    agentPort: ""
+  ## @extra tracing.otel Configuration for exporting to an otel endpoint
+  ## @param tracing.otel.enabled Enable otel export
+  ## @param tracing.otel.endpoint The hostname and port for an otel compatible backend
+  ## @param tracing.otel.urlpath Url path of otel endpoint
+  ## @param tracing.otel.compression Enable data compression
+  ## @param tracing.otel.timeout The timeout for data transfer
+  ## @param tracing.otel.insecure Ignore cert verification for otel backend
+  ##
+  otel:
+    enabled: false
+    endpoint: "hostname:4318"
+    urlpath: "/v1/traces"
+    compression: false
+    timeout: 10s
+    insecure: true
+
 ## @section Volume Permissions parameters
 ##
 

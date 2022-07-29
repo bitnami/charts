@@ -249,6 +249,8 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.registry.controller.args "context" $) | nindent 12 }}
           {{- end }}
           envFrom:
+            - configMapRef:
+                name: {{ printf "%s-ctl-envvars" (include "harbor.registry" .) }}
             - secretRef:
                 name: {{ include "harbor.registry" . }}
             {{- if .Values.registry.controller.extraEnvVarsCM }}

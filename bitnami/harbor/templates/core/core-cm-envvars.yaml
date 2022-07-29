@@ -59,3 +59,7 @@ data:
   METRIC_NAMESPACE: harbor
   METRIC_SUBSYSTEM: core
   {{- end }}
+  {{- if .Values.tracing.enabled }}
+  TRACE_SERVICE_NAME: "harbor-core"
+  {{- include "harbor.tracing.envvars" . | nindent 2}}
+  {{- end }}
