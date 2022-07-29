@@ -2,7 +2,7 @@ name: '[Support] Synchronize team members in the .env file'
 on:
   schedule:
     # Daily
-    - cron: '0 1 * * *'
+    - cron: '0 5 * * *'
 permissions:
   repository-projects: write
 
