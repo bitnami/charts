@@ -56,7 +56,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.18.0-scratch-r4
+  tag: 0.18.0-scratch-r6
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
