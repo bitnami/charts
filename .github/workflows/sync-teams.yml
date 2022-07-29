@@ -23,7 +23,7 @@ jobs:
         run: |
           TEAM_MEMBERS=$(curl --request GET \
           --url https://api.github.com/orgs/bitnami/teams/developers/members \
-          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'authorization: Bearer ${{ secrets.BITNAMI_BOT_TOKEN }}' \
           --header 'content-type: application/json' \
           | jq 'sort_by(.login)|map(.login)|join(",")')
           TEAM_MEMBERS='['${TEAM_MEMBERS//','/'","'}']'
