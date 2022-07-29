@@ -23,6 +23,13 @@ rules:
     verbs:
       - list
       - watch
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - list
+      - watch
   {{- if and .Values.scope.enabled .Values.scope.namespace }}
   - apiGroups:
       - ""
