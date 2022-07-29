@@ -1,12 +1,18 @@
 /// <reference types="cypress" />
 import { random } from '../support/utils';
 
-it('allows to log in and out', () => {
-  cy.login();
-  cy.get('#current-user').click();
-  cy.get('[title="Preferences"]').click();
-  cy.contains('Log Out').click();
-  cy.contains('button', 'Log In');
+it('allows to sign up', () => {
+  cy.visit('/');
+  cy.contains('button', 'Sign Up').click();
+  cy.fixture('users').then((user) => {
+    cy.get('#new-account-email').type(`${random}.${user.newUser.email}`);
+    cy.get('#new-account-username').type(`${random}.${user.newUser.username}`);
+    cy.get('#new-account-name').type(`${user.newUser.name} ${random}`);
+    cy.get('#new-account-password').type(`${random}.${user.newUser.password}`);
+  });
+  cy.contains('Checking username').should('not.exist');
+  cy.contains('button', 'Create your account').click();
+  cy.contains('button', 'Resend Activation Email');
 });
 
 it('allows to create a topic', () => {
