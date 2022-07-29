@@ -8,5 +8,4 @@ file:
 /bitnami/elasticsearch/data:
     mode: "0644"
     filetype: directory
-    contains: 
     exists: true  
