@@ -70,6 +70,21 @@ rules:
     verbs:
       - create
   - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    resourceNames:
+      - {{ .Values.electionID }}
+    verbs:
+      - get
+      - update
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - create
+  - apiGroups:
       - ""
     resources:
       - endpoints
