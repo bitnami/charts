@@ -113,7 +113,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.12.1-debian-11-r9
+    tag: 0.12.1-debian-11-r11
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -468,7 +468,7 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.12.1-debian-11-r9
+    tag: 0.12.1-debian-11-r11
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
