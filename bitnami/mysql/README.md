@@ -275,6 +275,24 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.podLabels`                             | Additional pod labels for MySQL secondary pods                                                                      | `{}`                |
 
 
+### MySQL shared service parameters
+
+| Name                                     | Description                                                          | Value       |
+| ---------------------------------------- | -------------------------------------------------------------------- | ----------- |
+| `sharedService.create`                   | Create a service include all instance                                | `true`      |
+| `sharedService.type`                     | MySQL Shared K8s service type                                        | `ClusterIP` |
+| `sharedService.ports.mysql`              | MySQL Shared K8s service port                                        | `3306`      |
+| `sharedService.nodePorts.mysql`          | MySQL Shared K8s service node port                                   | `""`        |
+| `sharedService.clusterIP`                | MySQL Shared K8s service clusterIP IP                                | `""`        |
+| `sharedService.loadBalancerIP`           | MySQL Shared loadBalancerIP if service type is `LoadBalancer`        | `""`        |
+| `sharedService.externalTrafficPolicy`    | Enable client source IP preservation                                 | `Cluster`   |
+| `sharedService.loadBalancerSourceRanges` | Addresses that are allowed when MySQL Shared service is LoadBalancer | `[]`        |
+| `sharedService.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)       | `[]`        |
+| `sharedService.annotations`              | Additional custom annotations for MySQL shared service               | `{}`        |
+| `sharedService.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP" | `None`      |
+| `sharedService.sessionAffinityConfig`    | Additional settings for the sessionAffinity                          | `{}`        |
+
+
 ### RBAC parameters
 
 | Name                                          | Description                                                    | Value   |
