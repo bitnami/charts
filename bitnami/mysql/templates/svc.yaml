@@ -1,0 +1,53 @@
+{{- if .Values.sharedService.create }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: shared
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.shared.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.shared.service.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.sharedService.type }}
+  {{- if and .Values.sharedService.clusterIP (eq .Values.sharedService.type "ClusterIP") }}
+  clusterIP: {{ .Values.sharedService.clusterIP }}
+  {{- end }}
+  {{- if .Values.sharedService.sessionAffinity }}
+  sessionAffinity: {{ .Values.sharedService.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.sharedService.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.sharedService.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.sharedService.type "LoadBalancer") (eq .Values.sharedService.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.sharedService.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.sharedService.type "LoadBalancer") (not (empty .Values.sharedService.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.sharedService.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.sharedService.type "LoadBalancer") (not (empty .Values.sharedService.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.sharedService.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: mysql
+      port: {{ .Values.sharedService.ports.mysql }}
+      protocol: TCP
+      targetPort: mysql
+      {{- if (and (or (eq .Values.sharedService.type "NodePort") (eq .Values.sharedService.type "LoadBalancer")) .Values.sharedService.nodePorts.mysql) }}
+      nodePort: {{ .Values.sharedService.nodePorts.mysql }}
+      {{- else if eq .Values.sharedService.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.sharedService.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.sharedService.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{ include "common.labels.matchLabels" . | nindent 4 }}
+{{- end }}
