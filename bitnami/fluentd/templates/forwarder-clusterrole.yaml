@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ include "common.names.fullname.namespace" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -28,7 +28,7 @@ rules:
     resources:
       - "podsecuritypolicies"
     resourceNames:
-      - {{ include "common.names.fullname" . }}-forwarder
+      - {{ printf "%s-%s" (include "common.names.fullname.namespace" .) "forwarder" }}
     verbs:
       - "use"
   {{- end }}
