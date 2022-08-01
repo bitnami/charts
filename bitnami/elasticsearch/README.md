@@ -414,7 +414,7 @@ $ helm delete --purge my-release
 
 | Name                                                 | Description                                                                                                                      | Value                        |
 | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `ingest.enable`                                      | Enable ingest nodes/pods                                                                                                         | `false`                      |
+| `ingest.enabled`                                     | Enable ingest nodes                                                                                                              | `false`                      |
 | `ingest.replicaCount`                                | Number of ingest-only replicas to deploy                                                                                         | `2`                          |
 | `ingest.nameOverride`                                | String to partially override elasticsearch.ingest.fullname                                                                       | `""`                         |
 | `ingest.fullnameOverride`                            | String to fully override elasticsearch.ingest.fullname                                                                           | `""`                         |
