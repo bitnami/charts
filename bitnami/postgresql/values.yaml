@@ -950,6 +950,9 @@ readReplicas:
     ## @param readReplicas.persistence.enabled Enable PostgreSQL read only data persistence using PVC
     ##
     enabled: true
+    ## @param readReplicas.persistence.existingClaim Name of an existing PVC to use
+    ##
+    existingClaim: ""
     ## @param readReplicas.persistence.mountPath The path the volume will be mounted at
     ## Note: useful when using custom PostgreSQL images
     ##
