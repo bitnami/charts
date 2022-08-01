@@ -41,6 +41,9 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
       annotations:
+        {{- if (include "postgresql.readReplicas.createExtendedConfigmap" .) }}
+        checksum/extended-configuration: {{ include (print $.Template.BasePath "/read/extended-configmap.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.readReplicas.podAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.podAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
@@ -358,6 +361,10 @@ spec:
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
+            {{- if .Values.readReplicas.extendedConfiguration }}
+            - name: postgresql-extended-config
+              mountPath: /bitnami/postgresql/conf/conf.d/
+            {{- end }}
             {{- if .Values.tls.enabled }}
             - name: postgresql-certificates
               mountPath: /opt/bitnami/postgresql/certs
@@ -466,6 +473,11 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
+        {{- if .Values.readReplicas.extendedConfiguration }}
+        - name: postgresql-extended-config
+          configMap:
+            name: {{ include "postgresql.readReplicas.extendedConfigmapName" . }}
+        {{- end }}
         {{- if .Values.auth.usePasswordFiles }}
         - name: postgresql-password
           secret:

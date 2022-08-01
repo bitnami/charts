@@ -264,6 +264,7 @@ kubectl delete pvc -l release=my-release
 | Name                                              | Description                                                                                                              | Value                 |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `readReplicas.replicaCount`                       | Number of PostgreSQL read only replicas                                                                                  | `1`                   |
+| `readReplicas.extendedConfiguration`              | Extended PostgreSQL read only replicas configuration (appended to main or default configuration)                         | `""`                  |
 | `readReplicas.extraEnvVars`                       | Array with extra environment variables to add to PostgreSQL read only nodes                                              | `[]`                  |
 | `readReplicas.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for PostgreSQL read only nodes                                      | `""`                  |
 | `readReplicas.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for PostgreSQL read only nodes                                         | `""`                  |
@@ -493,7 +494,7 @@ To modify the application version used in this chart, specify a different versio
 
 ### postgresql.conf / pg_hba.conf files as configMap
 
-This helm chart also supports to customize the PostgreSQL configuration file. You can add additional PostgreSQL configuration parameters using the `primary.extendedConfiguration` parameter as a string. Alternatively, to replace the entire default configuration use `primary.configuration`.
+This helm chart also supports to customize the PostgreSQL configuration file. You can add additional PostgreSQL configuration parameters using the `primary.extendedConfiguration`/`readReplicas.extendedConfiguration` parameters as a string. Alternatively, to replace the entire default configuration use `primary.configuration`.
 
 You can also add a custom pg_hba.conf using the `primary.pgHbaConfiguration` parameter.
 
