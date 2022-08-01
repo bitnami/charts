@@ -2,12 +2,12 @@ file:
   /etc/registry/config.yml:
     exists: true
     filetype: file
-    mode: "0664"
+    mode: "0644"
     owner: root
     contains:
-      - rootdirectory.*{{ .Vars.persistence.imageChartStorage.filesystem.rootdirectory }}
-      - addr.*localhost:{{ .Vars.registry.server.containerPorts.debug }}
-      - level.*{{ .Vars.logLevel }}
+      - "level: {{ .Vars.logLevel }}"
+      - "rootdirectory: {{ .Vars.persistence.imageChartStorage.filesystem.rootdirectory }}"
+      - "addr: localhost:{{ .Vars.registry.server.containerPorts.debug }}"
   {{ .Vars.persistence.imageChartStorage.filesystem.rootdirectory }}:
     exists: true
     filetype: directory
@@ -16,5 +16,5 @@ file:
   /etc/registry/root.crt:
     exists: true
     filetype: file
-    mode: "0664"
+    mode: "0644"
     owner: root
