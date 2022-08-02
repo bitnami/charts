@@ -1,3 +1,4 @@
+# Based on: https://github.com/metallb/metallb/blob/v0.13.4/charts/metallb/charts/crds/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
