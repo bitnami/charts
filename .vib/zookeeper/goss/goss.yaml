@@ -1,28 +1,4 @@
-file:
-  /opt/bitnami/zookeeper/logs:
-    exists: true
-    filetype: directory
-    mode: "0775"
-  /opt/bitnami/zookeeper/conf/zoo.cfg:
-    exists: true
-    filetype: file
-    mode: "0644"
-    contains:
-      - {{ printf "/clientPort=.*%s/" .Env.ZOO_PORT_NUMBER }}
 command:
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
-    exit-status: 0
-    stdout: []
-    stderr: []
-  zookeeper-version-ok:
-    exec: "/opt/bitnami/zookeeper/bin/zkCli.sh -server 127.0.0.1:$ZOO_PORT_NUMBER version | grep \"ZooKeeper CLI version: $APP_VERSION\""
-    exit-status: 0
-    stdout: []
-    stderr: []
   zookeeper-create-znode:
     exec: /opt/bitnami/zookeeper/bin/zkCli.sh -server 127.0.0.1:$ZOO_PORT_NUMBER create /my_key_{{randAlpha 5}} my_data
     exit-status: 0
-    stdout: []
-    stderr:
-      - /Created \/my_key_[A-Za-z]/
