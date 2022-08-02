@@ -7,7 +7,7 @@ MetalLB is a load-balancer implementation for bare metal Kubernetes clusters, us
 [Overview of MetalLB](https://metallb.universe.tf/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -80,8 +80,6 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                    | Description                                                                                                                                 | Value   |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `existingConfigMap`                     | Specify the name of an externally-defined ConfigMap to use as the configuration. This is mutually exclusive with the `configInline` option. | `""`    |
-| `configInline`                          | Specifies MetalLB's configuration directly, in yaml format.                                                                                 | `{}`    |
 | `rbac.create`                           | Specifies whether to install and use RBAC rules                                                                                             | `true`  |
 | `psp.create`                            | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
 | `networkPolicy.enabled`                 | Enable NetworkPolicy                                                                                                                        | `false` |
@@ -299,28 +297,28 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 To configure [MetalLB](https://metallb.universe.tf) please look into the configuration section [MetalLB Configuration](https://metallb.universe.tf/configuration/).
 
-### Example Layer 2 configuration
+### Example IP addresses to assing to the LoadBalancer configuration
 
 ```yaml
-configInline:
-  # The address-pools section lists the IP addresses that MetalLB is
-  # allowed to allocate, along with settings for how to advertise
-  # those addresses over BGP once assigned. You can have as many
-  # address pools as you want.
-  address-pools:
-  - # A name for the address pool. Services can request allocation
-    # from a specific address pool using this name, by listing this
-    # name under the 'metallb.universe.tf/address-pool' annotation.
-    name: generic-cluster-pool
-    # Protocol can be used to select how the announcement is done.
-    # Supported values are bgp and layer2.
-    protocol: layer2
-    # A list of IP address ranges over which MetalLB has
-    # authority. You can list multiple ranges in a single pool, they
-    # will all share the same settings. Each range can be either a
-    # CIDR prefix, or an explicit start-end range of IPs.
-    addresses:
-    - 10.27.50.30-10.27.50.35
+# The address-pools lists the IP addresses that MetalLB is
+# allowed to allocate. You can have as many
+# address pools as you want.
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  # A name for the address pool. Services can request allocation
+  # from a specific address pool using this name.
+  name: first-pool
+  namespace: metallb-system
+spec:
+  # A list of IP address ranges over which MetalLB has
+  # authority. You can list multiple ranges in a single pool, they
+  # will all share the same settings. Each range can be either a
+  # CIDR prefix, or an explicit start-end range of IPs.
+  addresses:
+  - 192.168.10.0/24
+  - 192.168.9.1-192.168.9.5
+  - fc00:f853:0ccd:e799::/124
 ```
 
 ## Troubleshooting
@@ -328,6 +326,10 @@ configInline:
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 4.0.0
+
+This major release includes the changes and features available in MetalLB from version 0.13.0. Those changes include the deprecation of configmaps for configuring the service and using CRDs instead. If you are upgrading from a previous version, you can follow the official documentation on [how to migrate the configuration from a configMap to CRDs](https://metallb.universe.tf/#backward-compatibility).
 
 ### To 3.0.0
 
