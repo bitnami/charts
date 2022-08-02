@@ -318,7 +318,6 @@ spec:
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
-          {{- if or (and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles)) .Values.metrics.extraVolumeMounts.primary }}
           volumeMounts:
           {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
             - name: mariadb-credentials
@@ -326,7 +325,6 @@ spec:
           {{- end }}
           {{- if .Values.metrics.extraVolumeMounts.primary }}
           {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts.primary "context" $) | nindent 12 }}
-          {{- end }}
           {{- end }}
         {{- end }}
         {{- if .Values.primary.sidecars }}
