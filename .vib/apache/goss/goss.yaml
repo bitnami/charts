@@ -1,0 +1,14 @@
+file:
+  /opt/bitnami/apache:
+    exists: true
+    filetype: directory
+    mode: "0775"
+  /etc/hosts:
+    exists: true
+    filetype: file
+    contains:
+      - /^{{ index .Vars.hostAliases 0 "ip" }}.*{{ index .Vars.hostAliases 0 "hostnames" 0 }}$/
+  /app:
+    exists: true
+    filetype: directory
+    mode: "0755"
