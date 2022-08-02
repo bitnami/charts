@@ -53,7 +53,8 @@
             },
             "remote": {
               "workload": "deploy-jenkins"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         },
         {
