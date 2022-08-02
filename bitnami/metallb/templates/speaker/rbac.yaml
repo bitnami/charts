@@ -75,44 +75,58 @@ rules:
       - get
       - list
       - watch
-  - apiGroups: metallb.io
-    resources: addresspools
+  - apiGroups:
+      - metallb.io
+    resources:
+      - addresspools
     verbs:
       - get
       - list
       - watch
-  - apiGroups: metallb.io
-    resources: bfdprofiles
+  - apiGroups:
+      - metallb.io
+    resources:
+      - bfdprofiles
     verbs:
       - get
       - list
       - watch
-  - apiGroups: metallb.io
-    resources: bgppeers
+  - apiGroups:
+      - metallb.io
+    resources:
+      - bgppeers
     verbs:
       - get
       - list
       - watch
-  - apiGroups: metallb.io
-    resources: l2advertisements
+  - apiGroups:
+      - metallb.io
+    resources:
+      - l2advertisements
     verbs:
       - get
       - list
       - watch
-  - apiGroups: metallb.io
-    resources: bgpadvertisements
+  - apiGroups:
+      - metallb.io
+    resources:
+      - bgpadvertisements
     verbs:
       - get
       - list
       - watch
-  - apiGroups: metallb.io
-    resources: ipaddresspools
+  - apiGroups:
+      - metallb.io
+    resources:
+      - ipaddresspools
     verbs:
       - get
       - list
       - watch
-  - apiGroups: metallb.io
-    resources: communities
+  - apiGroups:
+      - metallb.io
+    resources:
+      - communities
     verbs:
       - get
       - list
