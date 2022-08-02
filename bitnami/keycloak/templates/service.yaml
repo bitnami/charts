@@ -38,6 +38,7 @@ spec:
   sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
+    {{- if .Values.service.http.enabled }}
     - name: http
       port: {{ coalesce .Values.service.ports.http .Values.service.port }}
       protocol: TCP
@@ -47,6 +48,7 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- end }}
     {{- if .Values.auth.tls.enabled }}
     - name: https
       port: {{ coalesce .Values.service.ports.https .Values.service.httpsPort }}
