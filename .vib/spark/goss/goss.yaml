@@ -1,4 +1,3 @@
-command:
   spark-submit-app:
     exec: spark-submit --class org.apache.spark.examples.SparkPi --master $SPARK_MASTER_URL --deploy-mode cluster /opt/bitnami/spark/examples/jars/spark*.jar
     exit-status: 0
