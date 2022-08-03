@@ -1,7 +1,7 @@
 annotations:
   category: Analytics
 apiVersion: v2
-appVersion: 4.5.0
+appVersion: 4.5.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -23,5 +23,5 @@ maintainers:
 name: grafana-operator
 sources:
   - https://github.com/grafana-operator/grafana-operator
-  - https://github.com/bitnami/bitnami-docker-grafana-operator
-version: 2.6.6
+  - https://github.com/bitnami/containers/tree/main/bitnami/grafana-operator
+version: 2.6.8

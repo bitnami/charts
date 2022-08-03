@@ -11,12 +11,14 @@ permissions:
   issues: write
   repository-projects: write
 
+# To fix the concurrency when for example more than one label is added
 concurrency:
-  group: ${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
+  group: ${{ github.run_id }}
   cancel-in-progress: false
 
 jobs:
   send_to_solved:
+    if: ${{ github.actor != 'bitnami-bot' }}
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout
@@ -27,25 +29,18 @@ jobs:
         uses: xom9ikk/dotenv@v1.0.2
         with:
           path: .github/workflows/
-      - name: Preparing string variables
-        run: |
-          TRIAGE_TEAM_STRING=${TRIAGE_TEAM/[/}
-          TRIAGE_TEAM_STRING=${TRIAGE_TEAM_STRING/]/}
-          TRIAGE_TEAM_STRING=${TRIAGE_TEAM_STRING//'"'/}
-          # creating env variable "on the fly"
-          echo "TRIAGE_TEAM_STRING=$TRIAGE_TEAM_STRING" >> $GITHUB_ENV
       - name: Send to the Solved column
         uses: peter-evans/create-or-update-project-card@v2
         with:
           project-name: Support
           # If the author comes from Bitnami, send it to Bitnami. Otherwise, all to Triage
           column-name: 'Solved'
-          token: "${{ secrets.GHPROJECT_TOKEN }}"
+          token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           issue-number: ${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
       - name: Solved labeling
         # Only if moved into Solved
         uses: andymckay/labeler@1.0.4
         with:
-          repo-token: "${{ secrets.GHPROJECT_TOKEN }}"
+          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           add-labels: "solved"
           remove-labels: "in-progress, on-hold, triage"

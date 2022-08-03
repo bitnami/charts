@@ -20,6 +20,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: aspnet-core
 sources:
-  - https://github.com/bitnami/bitnami-docker-aspnet-core
+  - https://github.com/bitnami/containers/tree/main/bitnami/aspnet-core
   - https://dotnet.microsoft.com/apps/aspnet
-version: 3.4.12
+version: 3.4.16

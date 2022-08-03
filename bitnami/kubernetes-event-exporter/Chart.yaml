@@ -24,6 +24,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: kubernetes-event-exporter
 sources:
-  - https://github.com/bitnami/bitnami-docker-kubernetes-event-exporter
+  - https://github.com/bitnami/containers/tree/main/bitnami/kubernetes-event-exporter
   - https://github.com/opsgenie/kubernetes-event-exporter
-version: 1.4.16
+version: 1.4.18

@@ -17,7 +17,7 @@ $ helm install my-release bitnami/jasperreports
 
 ## Introduction
 
-This chart bootstraps a [JasperReports](https://github.com/bitnami/bitnami-docker-jasperreports) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [JasperReports](https://github.com/bitnami/containers/tree/main/bitnami/jasperreports) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which bootstraps a MariaDB deployment required by the JasperReports application.
 
@@ -238,7 +238,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                        | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/jasperreports](https://github.com/bitnami/bitnami-docker-jasperreports). For more information please refer to the [bitnami/jasperreports](https://github.com/bitnami/bitnami-docker-jasperreports) image documentation.
+The above parameters map to the env variables defined in [bitnami/jasperreports](https://github.com/bitnami/containers/tree/main/bitnami/jasperreports). For more information please refer to the [bitnami/jasperreports](https://github.com/bitnami/containers/tree/main/bitnami/jasperreports) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -270,7 +270,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ## Persistence
 
-The [Bitnami JasperReports](https://github.com/bitnami/bitnami-docker-jasperreports) image stores the JasperReports data and configurations at the `/bitnami/jasperreports` path of the container.
+The [Bitnami JasperReports](https://github.com/bitnami/containers/tree/main/bitnami/jasperreports) image stores the JasperReports data and configurations at the `/bitnami/jasperreports` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -343,7 +343,7 @@ Additionally updates the MariaDB subchart to it newest major, 10.0.0, which cont
 
 ### To 11.0.0
 
-The [Bitnami JasperReports](https://github.com/bitnami/bitnami-docker-jasperreports) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Tomcat daemon was started as the `tomcat` user. From now on, both the container and the Tomcat daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+The [Bitnami JasperReports](https://github.com/bitnami/containers/tree/main/bitnami/jasperreports) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Tomcat daemon was started as the `tomcat` user. From now on, both the container and the Tomcat daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
 
 Consequences:
 
@@ -352,7 +352,7 @@ Consequences:
 
 To upgrade to `11.0.0`, backup JasperReports data and the previous MariaDB databases, install a new JasperReports chart and import the backups and data, ensuring the `1001` user has the appropriate permissions on the migrated volume.
 
-In addition to this, the image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-jasperreports/tree/master/7/debian-10/rootfs) folder of the container image.
+In addition to this, the image was refactored and now the source code is published in GitHub in the `rootfs` folder of the container image.
 
 We also fixed a regression with readiness and liveness probes. Now the kind of probe cannot be configured under the *readinessProbe/livenessProbe* sections but in the *customReadinessProbe/customLivenessProbe* sections.
 

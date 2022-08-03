@@ -65,7 +65,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/geode
-  tag: 1.15.0-debian-11-r0
+  tag: 1.15.0-debian-11-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -83,12 +83,12 @@ image:
   ##
   debug: false
 ## @param groups List of Apache Geode member groups to belong to
-## ref: https://github.com/bitnami/bitnami-docker-geode#apache-geode-cluster-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/geode#apache-geode-cluster-configuration
 ## Caveats: it's not possible to indicate different groups for each Apache Geode member
 ##
 groups: []
 ## Authentication parameters
-## ref: https://github.com/bitnami/bitnami-docker-geode#security
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/geode#security
 ##
 auth:
   ## @param auth.enabled Enable Apache Geode security
@@ -150,15 +150,15 @@ auth:
 
 locator:
   ## @param locator.logLevel Log level for Locator nodes
-  ## ref: https://github.com/bitnami/bitnami-docker-geode#apache-geode-configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/geode#apache-geode-configuration
   ##
   logLevel: "info"
   ## @param locator.initialHeapSize Initial size of the heap on Locator nodes
-  ## ref: https://github.com/bitnami/bitnami-docker-geode#apache-geode-configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/geode#apache-geode-configuration
   ##
   initialHeapSize: ""
   ## @param locator.maxHeapSize Maximum size of the heap on Locator nodes
-  ## ref: https://github.com/bitnami/bitnami-docker-geode#apache-geode-configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/geode#apache-geode-configuration
   ##
   maxHeapSize: ""
   ## @param locator.configuration Specify content for gemfire.properties on Locator nodes (auto-generated based on other env. vars otherwise)
@@ -498,15 +498,15 @@ locator:
 
 server:
   ## @param server.logLevel Log level for Cache Server nodes
-  ## ref: https://github.com/bitnami/bitnami-docker-geode#apache-geode-configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/geode#apache-geode-configuration
   ##
   logLevel: "info"
   ## @param server.initialHeapSize Initial size of the heap on Cache Server nodes
-  ## ref: https://github.com/bitnami/bitnami-docker-geode#apache-geode-configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/geode#apache-geode-configuration
   ##
   initialHeapSize: ""
   ## @param server.maxHeapSize Maximum size of the heap on Cache Server nodes
-  ## ref: https://github.com/bitnami/bitnami-docker-geode#apache-geode-configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/geode#apache-geode-configuration
   ##
   maxHeapSize: ""
   ## @param server.configuration Specify content for gemfire.properties on Cache server nodes (auto-generated based on other env. vars otherwise)
@@ -903,7 +903,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -932,7 +932,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r10
+    tag: 11-debian-11-r20
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -979,7 +979,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/haproxy
-    tag: 2.6.1-debian-11-r2
+    tag: 2.6.2-debian-11-r5
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

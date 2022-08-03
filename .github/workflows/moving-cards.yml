@@ -9,13 +9,14 @@ permissions:
   repository-projects: read
   issues: write
 
+# To fix the concurrency when for example more than one label is added
 concurrency:
-  # Cards are special
-  group: ${{ github.event.project_card.content_url }}
+  group: ${{ github.run_id }}
   cancel-in-progress: false
 
 jobs:
   label-card:
+    if: ${{ github.actor != 'bitnami-bot' }}
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout
@@ -32,7 +33,7 @@ jobs:
         if: ${{ github.event.project_card.column_id == env.ON_HOLD_COLUMN_ID  }}
         uses: andymckay/labeler@1.0.4
         with:
-          repo-token: "${{ secrets.GHPROJECT_TOKEN }}"
+          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           add-labels: "on-hold"
           remove-labels: "triage"
       - name: In progress labeling
@@ -40,7 +41,7 @@ jobs:
         if: ${{ github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID  }}
         uses: andymckay/labeler@1.0.4
         with:
-          repo-token: "${{ secrets.GHPROJECT_TOKEN }}"
+          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           add-labels: "in-progress"
           remove-labels: "on-hold, triage"
       - name: Solved labeling
@@ -48,10 +49,11 @@ jobs:
         if: ${{ github.event.project_card.column_id == env.SOLVED_COLUMN_ID  }}
         uses: andymckay/labeler@1.0.4
         with:
-          repo-token: "${{ secrets.GHPROJECT_TOKEN }}"
+          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           add-labels: "solved"
           remove-labels: "in-progress, on-hold, triage"
   assign-assignee-if-needed:
+    if: ${{ github.actor != 'bitnami-bot' && (!contains(github.event.issue.labels.*.name, 'auto-merge')) }}
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout
@@ -62,20 +64,12 @@ jobs:
         uses: xom9ikk/dotenv@v1.0.2
         with:
           path: .github/workflows/
-      - name: Preparing string variables
-        run: |
-          SUPPORT_TEAM_STRING=${SUPPORT_TEAM/[/}
-          SUPPORT_TEAM_STRING=${SUPPORT_TEAM_STRING/]/}
-          SUPPORT_TEAM_STRING=${SUPPORT_TEAM_STRING//'"'/}
-          # creating env variable "on the fly"
-          echo "SUPPORT_TEAM_STRING=$SUPPORT_TEAM_STRING" >> $GITHUB_ENV
       - name: Assign to a person to work on it
         # Only if moved into In progress FROM Triage
         if: ${{ github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID && github.event.changes != null && github.event.changes.column_id && github.event.changes.column_id.from == env.TRIAGE_COLUMN_ID }}
         uses: pozil/auto-assign-issue@v1.7.3
         with:
           numOfAssignee: 1
-          assignees: ${{ env.SUPPORT_TEAM_STRING }}
           removePreviousAssignees: true
-          # teams: XXX
-          repo-token: "${{ secrets.GHPROJECT_TOKEN }}"
+          teams: ${{ env.SUPPORT_TEAM_NAME }}
+          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"

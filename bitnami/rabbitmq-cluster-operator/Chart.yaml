@@ -24,6 +24,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: rabbitmq-cluster-operator
 sources:
-  - https://github.com/bitnami/bitnami-docker-rabbitmq-cluster-operator
+  - https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq-cluster-operator
   - https://github.com/rabbitmq/cluster-operator
-version: 2.6.9
+version: 2.6.10

@@ -387,7 +387,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 
 See [readme-generator-for-helm](https://github.com/bitnami-labs/readme-generator-for-helm) to create the table.
 
-The above parameters map to the env variables defined in [bitnami/rabbitmq-cluster-operator](https://github.com/bitnami/bitnami-docker-rabbitmq-cluster-operator). For more information please refer to the [bitnami/rabbitmq-cluster-operator](https://github.com/bitnami/bitnami-docker-rabbitmq-cluster-operator) image documentation.
+The above parameters map to the env variables defined in [bitnami/rabbitmq-cluster-operator](https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq-cluster-operator). For more information please refer to the [bitnami/rabbitmq-cluster-operator](https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq-cluster-operator) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

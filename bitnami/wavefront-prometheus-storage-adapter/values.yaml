@@ -71,7 +71,7 @@ image:
   repository: bitnami/wavefront-prometheus-storage-adapter
   ## @param image.tag Adapter image tag (immutabe tags are recommended)
   ##
-  tag: 1.0.5-debian-11-r9
+  tag: 1.0.5-debian-11-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

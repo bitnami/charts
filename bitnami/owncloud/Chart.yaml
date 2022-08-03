@@ -29,6 +29,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: owncloud
 sources:
-  - https://github.com/bitnami/bitnami-docker-owncloud
+  - https://github.com/bitnami/containers/tree/main/bitnami/owncloud
   - https://owncloud.org/
 version: 12.1.12

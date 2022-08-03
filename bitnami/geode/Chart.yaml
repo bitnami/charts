@@ -20,6 +20,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: geode
 sources:
-  - https://github.com/bitnami/bitnami-docker-geode
+  - https://github.com/bitnami/containers/tree/main/bitnami/geode
   - https://github.com/apache/geode
-version: 0.6.9
+version: 0.6.11

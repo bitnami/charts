@@ -71,7 +71,7 @@ tempo:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo
-    tag: 1.4.1-debian-11-r9
+    tag: 1.4.1-debian-11-r23
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1828,7 +1828,7 @@ queryFrontend:
     image:
       registry: docker.io
       repository: bitnami/grafana-tempo-query
-      tag: 1.4.1-debian-11-r9
+      tag: 1.4.1-debian-11-r22
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2031,7 +2031,7 @@ vulture:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo-vulture
-    tag: 1.4.1-debian-11-r9
+    tag: 1.4.1-debian-11-r21
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2327,7 +2327,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r10
+    tag: 11-debian-11-r20
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -2438,7 +2438,7 @@ memcached:
   ##
   enabled: true
   ## Authentication parameters
-  ## ref: https://github.com/bitnami/bitnami-docker-memcached#creating-the-memcached-admin-user
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/memcached#creating-the-memcached-admin-user
   ##
   auth:
     ## @param memcached.auth.enabled Enable Memcached authentication

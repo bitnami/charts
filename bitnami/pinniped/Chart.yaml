@@ -20,6 +20,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: pinniped
 sources:
-  - https://github.com/bitnami/bitnami-docker-pinniped
+  - https://github.com/bitnami/containers/tree/main/bitnami/pinniped
   - https://github.com/vmware-tanzu/pinniped/
-version: 0.1.5
+version: 0.1.6

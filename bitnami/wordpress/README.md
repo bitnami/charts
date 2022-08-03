@@ -17,7 +17,7 @@ $ helm install my-release bitnami/wordpress
 
 ## Introduction
 
-This chart bootstraps a [WordPress](https://github.com/bitnami/bitnami-docker-wordpress) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [WordPress](https://github.com/bitnami/containers/tree/main/bitnami/wordpress) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the WordPress application, and the [Bitnami Memcached chart](https://github.com/bitnami/charts/tree/master/bitnami/memcached) that can be used to cache database queries.
 
@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ---------------------------------------------------- | -------------------- |
 | `image.registry`    | WordPress image registry                             | `docker.io`          |
 | `image.repository`  | WordPress image repository                           | `bitnami/wordpress`  |
-| `image.tag`         | WordPress image tag (immutable tags are recommended) | `6.0.1-debian-11-r3` |
+| `image.tag`         | WordPress image tag (immutable tags are recommended) | `6.0.1-debian-11-r7` |
 | `image.pullPolicy`  | WordPress image pull policy                          | `IfNotPresent`       |
 | `image.pullSecrets` | WordPress image pull secrets                         | `[]`                 |
 | `image.debug`       | Specify if debug values should be set                | `false`              |
@@ -251,7 +251,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r16`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r20`      |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -284,7 +284,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose metrics                                 | `false`                   |
 | `metrics.image.registry`                     | Apache exporter image registry                                                        | `docker.io`               |
 | `metrics.image.repository`                   | Apache exporter image repository                                                      | `bitnami/apache-exporter` |
-| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                            | `0.11.0-debian-11-r16`    |
+| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                            | `0.11.0-debian-11-r24`    |
 | `metrics.image.pullPolicy`                   | Apache exporter image pull policy                                                     | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Apache exporter image pull secrets                                                    | `[]`                      |
 | `metrics.containerPorts.metrics`             | Prometheus exporter container port                                                    | `9117`                    |
@@ -375,7 +375,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalCache.port`                       | External cache server port                                                        | `11211`             |
 
 
-The above parameters map to the env variables defined in [bitnami/wordpress](https://github.com/bitnami/bitnami-docker-wordpress). For more information please refer to the [bitnami/wordpress](https://github.com/bitnami/bitnami-docker-wordpress) image documentation.
+The above parameters map to the env variables defined in [bitnami/wordpress](https://github.com/bitnami/containers/tree/main/bitnami/wordpress). For more information please refer to the [bitnami/wordpress](https://github.com/bitnami/containers/tree/main/bitnami/wordpress) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -469,7 +469,7 @@ By default, the container image includes all the default `.htaccess` files in Wo
 
 ## Persistence
 
-The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image stores the WordPress data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami WordPress](https://github.com/bitnami/containers/tree/main/bitnami/wordpress) image stores the WordPress data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
@@ -508,7 +508,7 @@ Removed support for limiting auto-updates to WordPress core via the `wordpressAu
 
 ### 11.0.0
 
-The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs) folder of the container image.
+The [Bitnami WordPress](https://github.com/bitnami/containers/tree/main/bitnami/wordpress) image was refactored and now the source code is published in GitHub in the `rootfs` folder of the container image.
 
 In addition, several new features have been implemented:
 
@@ -542,7 +542,7 @@ Site backups can be easily performed using tools such as [VaultPress](https://va
 
 ### To 11.0.0
 
-The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image was refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-wordpress/tree/master/5/debian-10/rootfs) folder of the container image.
+The [Bitnami WordPress](https://github.com/bitnami/containers/tree/main/bitnami/wordpress) image was refactored and now the source code is published in GitHub in the `rootfs` folder of the container image.
 
 Compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected.
 
@@ -594,7 +594,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ### To 9.0.0
 
-The [Bitnami WordPress](https://github.com/bitnami/bitnami-docker-wordpress) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `securityContext.runAsUser`, and `securityContext.fsGroup` to `0`.
+The [Bitnami WordPress](https://github.com/bitnami/containers/tree/main/bitnami/wordpress) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `securityContext.runAsUser`, and `securityContext.fsGroup` to `0`.
 Chart labels and Ingress configuration were also adapted to follow the Helm charts best practices.
 
 Consequences:

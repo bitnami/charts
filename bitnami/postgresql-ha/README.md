@@ -589,7 +589,7 @@ In addition to this option, you can also set an external ConfigMap with all the 
 
 ### Initialize a fresh instance
 
-The [Bitnami PostgreSQL with Repmgr](https://github.com/bitnami/bitnami-docker-postgresql-repmgr) image allows you to use your custom scripts to initialize a fresh instance. You can specify custom scripts using the `initdbScripts` parameter as dict so they can be consumed as a ConfigMap.
+The [Bitnami PostgreSQL with Repmgr](https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr) image allows you to use your custom scripts to initialize a fresh instance. You can specify custom scripts using the `initdbScripts` parameter as dict so they can be consumed as a ConfigMap.
 
 In addition to this option, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `initdbScriptsCM` parameter. Note that this will override the two previous options. If your initialization scripts contain sensitive information such as credentials or passwords, you can use the `initdbScriptsSecret` parameter.
 
@@ -597,7 +597,7 @@ The above parameters (`initdbScripts`, `initdbScriptsCM`, and `initdbScriptsSecr
 
 The allowed extensions are `.sh`, `.sql` and `.sql.gz` in the **postgresql** container while only `.sh` in the case of the **pgpool** one.
 
-+info: https://github.com/bitnami/bitnami-docker-postgresql#initializing-a-new-instance and https://github.com/bitnami/bitnami-docker-pgpool#initializing-with-custom-scripts
++info: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#initializing-a-new-instance and https://github.com/bitnami/containers/tree/main/bitnami/pgpool#initializing-with-custom-scripts
 
 ### Use of global variables
 
@@ -826,7 +826,7 @@ $ helm upgrade my-release --version 3.0.0 bitnami/postgresql-ha \
 
 ### To 2.0.0
 
-The [Bitnami Pgpool](https://github.com/bitnami/bitnami-docker-pgpool) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Pgpool daemon was started as the `pgpool` user. From now on, both the container and the Pgpool daemon run as user `1001`. You can revert this behavior by setting the parameters `pgpool.containerSecurityContext.runAsUser`, and `pgpool.securityContext.fsGroup` to `0`.
+The [Bitnami Pgpool](https://github.com/bitnami/containers/tree/main/bitnami/pgpool) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Pgpool daemon was started as the `pgpool` user. From now on, both the container and the Pgpool daemon run as user `1001`. You can revert this behavior by setting the parameters `pgpool.containerSecurityContext.runAsUser`, and `pgpool.securityContext.fsGroup` to `0`.
 
 Consequences:
 

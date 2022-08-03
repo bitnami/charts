@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/phpbb
-  tag: 3.3.8-debian-11-r5
+  tag: 3.3.8-debian-11-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -75,28 +75,28 @@ image:
 ##
 replicaCount: 1
 ## @param phpbbSkipInstall Skip phpBB installation wizard. Useful for migrations and restoring from SQL dump
-## ref: https://github.com/bitnami/bitnami-docker-phpbb#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/phpbb#configuration
 ##
 phpbbSkipInstall: "no"
 ## @param phpbbDisableSessionValidation Disable session validation
-## ref: https://github.com/bitnami/bitnami-docker-phpbb#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/phpbb#configuration
 ##
 phpbbDisableSessionValidation: "yes"
 ## @param phpbbUsername User of the application
-## ref: https://github.com/bitnami/bitnami-docker-phpbb#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/phpbb#configuration
 ##
 phpbbUsername: user
 ## @param phpbbPassword Application password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-phpbb#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/phpbb#configuration
 ##
 phpbbPassword: ""
 ## @param phpbbEmail Admin email
-## ref: https://github.com/bitnami/bitnami-docker-phpbb#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/phpbb#configuration
 ##
 phpbbEmail: user@example.com
 ## @param allowEmptyPassword Allow DB blank passwords
-## ref: https://github.com/bitnami/bitnami-docker-phpbb#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/phpbb#environment-variables
 ##
 allowEmptyPassword: "no"
 ## @param command Override default container command (useful when using custom images)
@@ -168,7 +168,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r13
+    tag: 11-debian-11-r20
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -199,7 +199,7 @@ volumePermissions:
     ##    memory: 128Mi
     requests: {}
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-phpbb/#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/phpbb/#smtp-configuration
 ## @param smtpHost SMTP host
 ## @param smtpPort SMTP port
 ## @param smtpUser SMTP user
@@ -555,7 +555,7 @@ ingress:
   ## - host: phpbb.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: phpbb-svc
   ##           port:
@@ -580,15 +580,15 @@ mariadb:
   ##
   auth:
     ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
     ## @param mariadb.auth.database Database name to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
     ##
     database: bitnami_phpbb
     ## @param mariadb.auth.username Database user to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
     ##
     username: bn_phpbb
     ## @param mariadb.auth.password Password for the database
@@ -663,7 +663,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-11-r13
+    tag: 0.11.0-debian-11-r24
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

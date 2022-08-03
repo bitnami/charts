@@ -22,6 +22,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: nats
 sources:
-  - https://github.com/bitnami/bitnami-docker-nats
+  - https://github.com/bitnami/containers/tree/main/bitnami/nats
   - https://nats.io/
-version: 7.3.7
+version: 7.3.8

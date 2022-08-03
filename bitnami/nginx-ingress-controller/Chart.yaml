@@ -25,6 +25,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: nginx-ingress-controller
 sources:
-  - https://github.com/bitnami/bitnami-docker-nginx-ingress-controller
+  - https://github.com/bitnami/containers/tree/main/bitnami/nginx-ingress-controller
   - https://github.com/kubernetes/ingress-nginx
-version: 9.2.20
+version: 9.2.24

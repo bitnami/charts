@@ -28,5 +28,5 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: wavefront-prometheus-storage-adapter
 sources:
-  - https://github.com/bitnami/bitnami-docker-wavefront-prometheus-storage-adapter
-version: 2.0.5
+  - https://github.com/bitnami/containers/tree/main/bitnami/wavefront-prometheus-storage-adapter
+version: 2.0.7

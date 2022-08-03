@@ -10,6 +10,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/dokuwiki/**'
       - 'bitnami/elasticsearch/**'
       - 'bitnami/external-dns/**'
+      - 'bitnami/fluentd/**'
       - 'bitnami/ghost/**'
       - 'bitnami/grafana-loki/**'
       - 'bitnami/grafana/**'
@@ -27,6 +28,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/mongodb/**'
       - 'bitnami/mysql/**'
       - 'bitnami/nginx/**'
+      - 'bitnami/odoo/**'
       - 'bitnami/opencart/**'
       - 'bitnami/owncloud/**'
       - 'bitnami/phpmyadmin/**'
@@ -37,6 +39,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/redis-cluster/**'
       - 'bitnami/redis/**'
       - 'bitnami/redmine/**'
+      - 'bitnami/schema-registry/**'
       - 'bitnami/sealed-secrets/**'
       - 'bitnami/solr/**'
       - 'bitnami/spring-cloud-dataflow/**'
@@ -91,7 +94,6 @@ jobs:
         with:
           script: |
               core.setFailed('${{ steps.get-chart.outputs.error }}')
-
   vib-publish:
     runs-on: ubuntu-latest
     needs: get-chart
@@ -113,13 +115,23 @@ jobs:
           VIB_ENV_S3_URL: s3://${{ secrets.AWS_S3_BUCKET }}/bitnami
           VIB_ENV_S3_USERNAME: ${{ secrets.AWS_ACCESS_KEY_ID }}
           VIB_ENV_S3_PASSWORD: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  update-index:
+    runs-on: ubuntu-latest
+    needs:
+      - vib-publish
+    name: Update charts index
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          path: ~/artifacts
       # If we perform a checkout of the master branch, we will find conflicts with the submodules
       - uses: actions/checkout@v2
         with:
           ref: 'index'
           path: index
+          # The token is persisted in the local git config and enables scripts to run authenticated git commands.
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-      - name: Install and configure aws-cli, helm and yq
+      - name: Install and configure aws-cli and helm
         run: |
           # AWS CLI
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y awscli
@@ -127,36 +139,55 @@ jobs:
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws configure set source_profile default
-            # helm
+          # helm
           HELM_TARBALL="helm-v3.8.1-linux-amd64.tar.gz"
           curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
-          # yq
-          sudo curl -SsLf https://github.com/mikefarah/yq/releases/download/v4.23.1/yq_linux_amd64 -o /usr/local/bin/yq && sudo chmod +x /usr/local/bin/yq
-      - name: Fetch chart and update index
+      - id: update-index
+        name: Fetch chart and update index
         run: |
+          # Extract chart release metadata from the publish result file
+          vib_publish_result_file=$(find ~/artifacts -name "result.json" -print -quit)
+          chart_name=$(jq -re '.actions|map(select(.action_id == "helm-publish"))[0] | .application.name' $vib_publish_result_file)
+          chart_version=$(jq -re '.actions|map(select(.action_id == "helm-publish"))[0] | .application.version' $vib_publish_result_file)
+          # Download published asset
           mkdir download
-          chart="${{ needs.get-chart.outputs.chart }}"
-          # HACK: Obtain chart tarball out of the latest commit
-          chart_version="$(yq ".version" charts/bitnami/${chart}/Chart.yaml)"
-          aws s3 cp s3://${{ secrets.AWS_S3_BUCKET }}/bitnami/${chart}-${chart_version}.tgz download/
-          # Rebuild index
-          helm repo index --url https://charts.bitnami.com/bitnami --merge index/bitnami/index.yaml download
-          cp download/index.yaml index/bitnami/index.yaml
+          aws s3 cp s3://${{ secrets.AWS_S3_BUCKET }}/bitnami/${chart_name}-${chart_version}.tgz download/
+
           cd index
-          # Push changes
           git config user.name "Bitnami Containers"
           git config user.email "bitnami-bot@vmware.com"
-          git add bitnami/index.yaml && git commit -m "${chart}-${chart_version}: Update index.yaml" -s && git push
 
+          attempts=0
+          max_attempts=5
+          is_index_updated=0
+          while [[ $attempts -lt $max_attempts && $is_index_updated -eq 0 ]]; do
+            attempts=$((attempts + 1))
+            git fetch origin index
+            git reset --hard origin/index
+
+            # Rebuild index
+            helm repo index --url https://charts.bitnami.com/bitnami --merge bitnami/index.yaml ../download
+            cp ../download/index.yaml bitnami/index.yaml
+            # Push changes
+            git add bitnami/index.yaml && git commit -m "${chart_name}-${chart_version}: Update index.yaml" -s
+            git push && is_index_updated=1 || echo "Failed to push during attempt $attempts"
+          done
+
+          if [[ $is_index_updated -ne 1 ]]; then
+            echo "Could not update the index after $max_attempts attempts"
+            exit 1
+          fi
   # If the CD Pipeline does not succeed we should notify the interested agents
   slack-notif:
     runs-on: ubuntu-latest
-    needs: vib-publish
+    needs:
+      - vib-publish
+      - update-index
     if: always()
     name: Notify unsuccessful CD run
     steps:
       - name: Notify in Slack channel
-        if: ${{ needs.vib-publish.result != 'success' }}
+        if: ${{ needs.vib-publish.result != 'success' || needs.update-index.result != 'success' }}
         uses: slackapi/slack-github-action@v1.19.0
         with:
           channel-id: ${{ secrets.CD_SLACK_CHANNEL_ID }}

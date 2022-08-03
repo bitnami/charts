@@ -26,8 +26,8 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: wavefront
 sources:
-  - https://github.com/bitnami/bitnami-docker-wavefront-kubernetes-collector
-  - https://github.com/bitnami/bitnami-docker-wavefront-proxy
+  - https://github.com/bitnami/containers/tree/main/bitnami/wavefront-kubernetes-collector
+  - https://github.com/bitnami/containers/tree/main/bitnami/wavefront-proxy
   - https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes
   - https://github.com/wavefrontHQ/wavefront-proxy
-version: 4.0.4
+version: 4.0.5

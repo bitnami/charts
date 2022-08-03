@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 10.6.8-debian-11-r9
+  tag: 10.6.8-debian-11-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -100,26 +100,26 @@ architecture: standalone
 ##
 auth:
   ## @param auth.rootPassword Password for the `root` user. Ignored if existing secret is provided.
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
   ##
   rootPassword: ""
   ## @param auth.database Name for a custom database to create
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+  ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
   ##
   database: my_database
   ## @param auth.username Name for a custom user to create
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+  ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
   ##
   username: ""
   ## @param auth.password Password for the new user. Ignored if existing secret is provided
   ##
   password: ""
   ## @param auth.replicationUser MariaDB replication user
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-up-a-replication-cluster
   ##
   replicationUser: replicator
   ## @param auth.replicationPassword MariaDB replication user password. Ignored if existing secret is provided
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-up-a-replication-cluster
   ##
   replicationPassword: ""
   ## @param auth.existingSecret Use existing secret for password details (`auth.rootPassword`, `auth.password`, `auth.replicationPassword` will be ignored and picked up from this secret). The secret has to contain the keys `mariadb-root-password`, `mariadb-replication-password` and `mariadb-password`
@@ -158,6 +158,9 @@ initdbScriptsConfigMap: ""
 ## Mariadb Primary parameters
 ##
 primary:
+  ## @param primary.name Name of the primary database (eg primary, master, leader, ...)
+  ##
+  name: primary
   ## @param primary.command Override default container command on MariaDB Primary container(s) (useful when using custom images)
   ##
   command: []
@@ -387,7 +390,7 @@ primary:
   ## `bitnami/mariadb` Docker image has built-in startup check mechanism,
   ## which periodically checks if MariaDB service has started up and stops it
   ## if all checks have failed after X tries. Use these to control these checks.
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/pull/240
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb/pull/240
   ## Example (with default options):
   ## startupWaitOptions:
   ##   retries: 300
@@ -536,6 +539,9 @@ primary:
 ## Mariadb Secondary parameters
 ##
 secondary:
+  ## @param secondary.name Name of the secondary database (eg secondary, slave, ...)
+  ##
+  name: secondary
   ## @param secondary.replicaCount Number of MariaDB secondary replicas
   ##
   replicaCount: 1
@@ -766,7 +772,7 @@ secondary:
   ## `bitnami/mariadb` Docker image has built-in startup check mechanism,
   ## which periodically checks if MariaDB service has started up and stops it
   ## if all checks have failed after X tries. Use these to control these checks.
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/pull/240
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb/pull/240
   ## Example (with default options):
   ## startupWaitOptions:
   ##   retries: 300
@@ -954,7 +960,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r10
+    tag: 11-debian-11-r21
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -988,7 +994,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.14.0-debian-11-r9
+    tag: 0.14.0-debian-11-r20
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

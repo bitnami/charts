@@ -21,6 +21,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: metrics-server
 sources:
-  - https://github.com/bitnami/bitnami-docker-metrics-server
+  - https://github.com/bitnami/containers/tree/main/bitnami/metrics-server
   - https://github.com/kubernetes-incubator/metrics-server
-version: 6.0.8
+version: 6.0.10

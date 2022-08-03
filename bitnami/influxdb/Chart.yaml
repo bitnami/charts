@@ -22,6 +22,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: influxdb
 sources:
-  - https://github.com/bitnami/bitnami-docker-influxdb
+  - https://github.com/bitnami/containers/tree/main/bitnami/influxdb
   - https://www.influxdata.com/products/influxdb-overview/
-version: 5.3.7
+version: 5.3.8

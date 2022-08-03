@@ -13,13 +13,15 @@ permissions:
   repository-projects: write
   issues: write
 
+# To fix the concurrency when for example more than one label is added
 concurrency:
-  group: ${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
+  group: ${{ github.run_id }}
   cancel-in-progress: false
 
 jobs:
   # For any opened or reopened issue, should be sent into Triage
   send_to_board:
+    if: ${{ github.actor != 'bitnami-bot' }}
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout
@@ -30,35 +32,26 @@ jobs:
         uses: xom9ikk/dotenv@v1.0.2
         with:
           path: .github/workflows/
-      - name: Preparing string variables
-        run: |
-          TRIAGE_TEAM_STRING=${TRIAGE_TEAM/[/}
-          TRIAGE_TEAM_STRING=${TRIAGE_TEAM_STRING/]/}
-          TRIAGE_TEAM_STRING=${TRIAGE_TEAM_STRING//'"'/}
-          # creating env variable "on the fly"
-          echo "TRIAGE_TEAM_STRING=$TRIAGE_TEAM_STRING" >> $GITHUB_ENV
       - name: Assign to a person to work on it
         uses: pozil/auto-assign-issue@v1.7.3
         with:
           numOfAssignee: 1
-          assignees: ${{ env.TRIAGE_TEAM_STRING }}
           removePreviousAssignees: false
-          # teams: XXX
-          repo-token: "${{ secrets.GHPROJECT_TOKEN }}"
+          teams: ${{ env.TRIAGE_TEAM_NAME }}
+          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
       - name: Send to the board
-        if: ${{ github.actor != 'bitnami-bot'  }}
         uses: peter-evans/create-or-update-project-card@v2
         with:
           project-name: Support
           # If the author comes from Bitnami, send it to Bitnami. Otherwise, all to Triage
           column-name: ${{ (contains(fromJson(env.BITNAMI_TEAM), github.actor)) && 'From Bitnami' || 'Triage' }}
-          token: "${{ secrets.GHPROJECT_TOKEN }}"
+          token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           issue-number: ${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
       - name: Triage labeling
         # Only if moved into Solved
         uses: andymckay/labeler@1.0.4
         with:
-          repo-token: "${{ secrets.GHPROJECT_TOKEN }}"
+          repo-token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           add-labels: ${{ (!contains(fromJson(env.BITNAMI_TEAM), github.actor)) && 'triage' || 'bitnami' }}
           # For reopened issues
           remove-labels: "solved"

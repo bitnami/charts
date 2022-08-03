@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 5.0.9-debian-11-r6
+  tag: 5.0.10-debian-11-r1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -104,7 +104,7 @@ auth:
   ##
   rootUser: root
   ## @param auth.rootPassword MongoDB(&reg;) root password
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-user-and-password-on-first-run
   ##
   rootPassword: ""
   ## @param auth.replicaSetKey Key used for authentication in the replicaset (only when `architecture=replicaset`)
@@ -134,11 +134,11 @@ common:
   ##
   useHostnames: true
   ## @param common.mongodbEnableIPv6 Switch to enable/disable IPv6 on MongoDB&reg;
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-ipv6
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#enablingdisabling-ipv6
   ##
   mongodbEnableIPv6: false
   ## @param common.mongodbDirectoryPerDB Switch to enable/disable DirectoryPerDB on MongoDB&reg;
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#enabling/disabling-directoryperdb
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#enablingdisabling-directoryperdb
   ##
   mongodbDirectoryPerDB: false
   ## @param common.mongodbSystemLogVerbosity MongoDB&reg; system log verbosity level
@@ -146,7 +146,7 @@ common:
   ##
   mongodbSystemLogVerbosity: 0
   ## @param common.mongodbDisableSystemLog Whether to disable MongoDB&reg; system log or not
-  ## ref: https://github.com/bitnami/bitnami-docker-mongodb#configuring-system-log-verbosity-level
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#configuring-system-log-verbosity-level
   ##
   mongodbDisableSystemLog: false
   ## @param common.mongodbMaxWaitTimeout Maximum time (in seconds) for MongoDB&reg; nodes to wait for another MongoDB&reg; node to be ready
@@ -242,7 +242,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r16
+    tag: 11-debian-11-r20
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1537,7 +1537,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.33.0-debian-11-r3
+    tag: 0.33.0-debian-11-r8
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

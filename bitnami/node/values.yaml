@@ -81,11 +81,11 @@ mongodb:
     ##
     enabled: true
     ## @param mongodb.auth.rootPassword MongoDB&reg; admin password
-    ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
     ## @param mongodb.auth.username MongoDB&reg; custom user
-    ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#creating-a-user-and-database-on-first-run
     ##
     username: user
     ## @param mongodb.auth.database MongoDB&reg; custom database
@@ -133,7 +133,7 @@ externaldb:
 image:
   registry: docker.io
   repository: bitnami/node
-  tag: 16.16.0-debian-11-r1
+  tag: 16.16.0-debian-11-r11
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -415,7 +415,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.37.0-debian-11-r4
+    tag: 2.37.1-debian-11-r6
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -469,7 +469,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r14
+    tag: 11-debian-11-r20
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -683,7 +683,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:

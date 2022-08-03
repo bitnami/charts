@@ -28,6 +28,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: concourse
 sources:
-  - https://github.com/bitnami/bitnami-docker-concourse
+  - https://github.com/bitnami/containers/tree/main/bitnami/concourse
   - https://github.com/concourse/concourse
-version: 1.3.8
+version: 1.3.9

@@ -29,6 +29,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: osclass
 sources:
-  - https://github.com/bitnami/bitnami-docker-osclass
+  - https://github.com/bitnami/containers/tree/main/bitnami/osclass
   - https://osclass.org/
-version: 14.1.15
+version: 14.1.16

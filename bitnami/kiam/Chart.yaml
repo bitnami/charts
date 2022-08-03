@@ -21,6 +21,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: kiam
 sources:
-  - https://github.com/bitnami/bitnami-docker-kiam
+  - https://github.com/bitnami/containers/tree/main/bitnami/kiam
   - https://github.com/uswitch/kiam
-version: 1.0.14
+version: 1.0.16

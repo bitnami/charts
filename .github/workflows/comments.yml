@@ -7,12 +7,14 @@ permissions:
   repository-projects: write
   issues: write
 
+# To fix the concurrency when for example more than one label is added
 concurrency:
-  group: ${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
+  group: ${{ github.run_id }}
   cancel-in-progress: false
 
 jobs:
   comments_handler:
+    if: ${{ github.actor != 'bitnami-bot' && ((github.event.pull_request && (!contains(github.event.pull_request.labels.*.name, 'auto-merge'))) || (github.event.issue && (!contains(github.event.issue.labels.*.name, 'auto-merge')))) }}
     runs-on: ubuntu-latest
     steps:
       - name: Repo checkout
@@ -29,21 +31,21 @@ jobs:
         with:
           project-name: Support
           column-name: Pending
-          token: "${{ secrets.GHPROJECT_TOKEN }}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Move into In Progress
         uses: peter-evans/create-or-update-project-card@v2
         if: ${{ contains(github.event.issue.labels.*.name, 'in-progress') && (!contains(fromJson(env.BITNAMI_TEAM), github.event.comment.user.login)) }}
         with:
           project-name: Support
           column-name: In progress
-          token: "${{ secrets.GHPROJECT_TOKEN }}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Move into Triage
         uses: peter-evans/create-or-update-project-card@v2
         if: ${{ ((contains(github.event.issue.labels.*.name, 'triage')) || (contains(github.event.issue.labels.*.name, 'solved'))) && (!contains(fromJson(env.BITNAMI_TEAM), github.event.comment.user.login)) }}
         with:
           project-name: Support
           column-name: Triage
-          token: "${{ secrets.GHPROJECT_TOKEN }}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Label as triage back
         # Only if commented when solved
         if: ${{ contains(github.event.issue.labels.*.name, 'solved') }}

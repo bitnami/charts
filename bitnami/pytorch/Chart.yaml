@@ -22,6 +22,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: pytorch
 sources:
-  - https://github.com/bitnami/bitnami-docker-pytorch
+  - https://github.com/bitnami/containers/tree/main/bitnami/pytorch
   - https://pytorch.org/
-version: 2.4.12
+version: 2.4.14

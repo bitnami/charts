@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/consul"
         },
-        "runtime_parameters": "c2VydmljZToKICBwb3J0czoKICAgIGh0dHA6IDgwCiAgdHlwZTogTG9hZEJhbGFuY2VyCmRhdGFjZW50ZXJOYW1lOiBkYXRhY2VudGVyMQpyZXBsaWNhQ291bnQ6IDMK",
+        "runtime_parameters": "Y29udGFpbmVyUG9ydHM6CiAgaHR0cDogODUwMApzZXJ2aWNlOgogIHBvcnRzOgogICAgaHR0cDogODAKICB0eXBlOiBMb2FkQmFsYW5jZXIKZGF0YWNlbnRlck5hbWU6IGRhdGFjZW50ZXIxCnJlcGxpY2FDb3VudDogMwo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -31,13 +31,6 @@
         }
       },
       "actions": [
-        {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
-          }
-        },
         {
           "action_id": "health-check",
           "params": {
@@ -67,7 +60,8 @@
             },
             "remote": {
               "workload": "sts-consul"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         }
       ]

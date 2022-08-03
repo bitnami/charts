@@ -17,7 +17,7 @@ $ helm install my-release bitnami/nats
 
 ## Introduction
 
-This chart bootstraps a [NATS](https://github.com/bitnami/bitnami-docker-nats) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [NATS](https://github.com/bitnami/containers/tree/main/bitnami/nats) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -321,7 +321,7 @@ helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 bitnami/nat
 
 ### To 7.0.0
 
-This new version updates the NATS image to a [new version that has support to configure NATS based on bash logic](https://github.com/bitnami/bitnami-docker-nats#264-r13), although this chart overwrites the configuration file so that shouldn't affect the functionality. It also adds several standardizations that were missing in the chart:
+This new version updates the NATS image to a [new version that has support to configure NATS based on bash logic](https://github.com/bitnami/containers/tree/main/bitnami/nats#264-r13), although this chart overwrites the configuration file so that shouldn't affect the functionality. It also adds several standardizations that were missing in the chart:
 
 - Add missing parameters such as `existingSecret`, `containerPorts.*`, `startupProbe.*` or `lifecycleHooks`.
 - Add missing parameters to extend the services such as `service.extraPorts` or `service.sessionAffinity`.
