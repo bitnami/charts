@@ -71,7 +71,7 @@ spec:
       priorityClassName: {{ $.Values.shardsvr.dataNode.priorityClassName | quote }}
       {{- end }}
       {{- if $.Values.shardsvr.dataNode.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.topologySpreadConstraints "context" .) | nindent 8 }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.topologySpreadConstraints "context" (set $ "dataNodeLoopId" $i)) | nindent 8 }}
       {{- end }}
       {{- if $.Values.shardsvr.dataNode.podSecurityContext.enabled }}
       securityContext: {{- omit $.Values.shardsvr.dataNode.podSecurityContext "enabled" | toYaml | nindent 8 }}
@@ -239,8 +239,8 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.shardsvr.dataNode.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - /bin/sh 
-                - -c 
+                - /bin/sh
+                - -c
                 - mongosh --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
           {{- else if $.Values.shardsvr.dataNode.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.customReadinessProbe "context" $) | nindent 12 }}
@@ -401,7 +401,7 @@ spec:
     - metadata:
         name: datadir
         {{- if or $.Values.shardsvr.persistence.annotations $.Values.commonAnnotations $.Values.shardsvr.persistence.resourcePolicy }}
-        {{- if or .Values.commonAnnotations .Values.configsvr.persistence.annotations .Values.configsvr.persistence.resourcePolicy }}
+        {{- if or $.Values.commonAnnotations $.Values.configsvr.persistence.annotations $.Values.configsvr.persistence.resourcePolicy }}
         annotations:
           {{- if $.Values.commonAnnotations }}
           {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 10 }}
