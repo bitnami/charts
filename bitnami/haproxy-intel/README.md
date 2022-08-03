@@ -7,7 +7,7 @@ HAProxy is a high-performance, open-source load balancer and reverse proxy for T
 [Overview of HAProxy for Intel](http://www.haproxy.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -69,7 +69,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------- | -------------------------------------------------- | ----------------------- |
 | `haproxy.image.registry`    | HAProxy image registry                             | `docker.io`             |
 | `haproxy.image.repository`  | HAProxy image repository                           | `bitnami/haproxy-intel` |
-| `haproxy.image.tag`         | HAProxy image tag (immutable tags are recommended) | `2.6.2-debian-11-r2`    |
+| `haproxy.image.tag`         | HAProxy image tag (immutable tags are recommended) | `2.6.2-debian-11-r5`    |
 | `haproxy.image.pullPolicy`  | HAProxy image pull policy                          | `IfNotPresent`          |
 | `haproxy.image.pullSecrets` | HAProxy image pull secrets                         | `[]`                    |
 
