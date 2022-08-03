@@ -301,8 +301,8 @@ spec:
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
-          {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
           volumeMounts:
+          {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
             - name: mariadb-credentials
               mountPath: /opt/bitnami/mysqld-exporter/secrets/
           {{- end }}
