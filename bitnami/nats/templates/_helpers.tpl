@@ -29,11 +29,39 @@ We prepend a random letter to the string to avoid password validation errors
 {{- randAlpha 1 -}}{{- randAlphaNum 9 -}}
 {{- end -}}
 
+{{/* Get current password or generate randomPassword */}}
+{{- define "nats.password" }}
+{{- if .Values.auth.password }}
+{{- .Values.auth.password }}
+{{- else -}}
+{{- $secrets := (lookup "v1" "Secret" .Release.Namespace (include "common.names.fullname" .)).data -}}
+{{- if hasKey $secrets "user-password" }}
+{{- index $secrets "user-password" | b64dec -}}
+{{- else -}}
+{{- include "nats.randomPassword" . -}}
+{{- end -}}
+{{- end -}}
+{{- end }}
+
+{{/* Get current cluster password or generate randomPassword */}}
+{{- define "nats.clusterPassword" }}
+{{- if .Values.cluster.auth.password }}
+{{- .Values.cluster.auth.password }}
+{{- else -}}
+{{- $secrets := (lookup "v1" "Secret" .Release.Namespace (include "common.names.fullname" .)).data -}}
+{{- if hasKey $secrets "cluster-password" }}
+{{- index $secrets "cluster-password" | b64dec -}}
+{{- else -}}
+{{- include "nats.randomPassword" . -}}
+{{- end -}}
+{{- end -}}
+{{- end }}
+
 {{/*
 Return true if a NATS configuration secret object should be created
 */}}
 {{- define "nats.createSecret" -}}
-{{- if and .Values.configuration (not .Values.existingSecret) }}
+{{- if not .Values.existingSecret }}
     {{- true -}}
 {{- end -}}
 {{- end -}}
