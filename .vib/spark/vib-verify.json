@@ -46,7 +46,8 @@
             },
             "remote": {
               "workload": "sts-spark-worker"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         },
         {
