@@ -7,7 +7,7 @@ Odoo is an open source ERP and CRM platform, formerly known as OpenERP, that can
 [Overview of Odoo](https://www.odoo.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the the statefulset                                  | `["infinity"]`               |
 | `image.registry`         | Odoo image registry                                                                     | `docker.io`                  |
 | `image.repository`       | Odoo image repository                                                                   | `bitnami/odoo`               |
-| `image.tag`              | Odoo image tag (immutable tags are recommended)                                         | `15.0.20220610-debian-11-r8` |
+| `image.tag`              | Odoo image tag (immutable tags are recommended)                                         | `15.0.20220710-debian-11-r7` |
 | `image.pullPolicy`       | Odoo image pull policy                                                                  | `IfNotPresent`               |
 | `image.pullSecrets`      | Odoo image pull secrets                                                                 | `[]`                         |
 | `image.debug`            | Enable image debug mode                                                                 | `false`                      |
