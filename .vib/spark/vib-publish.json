@@ -45,7 +45,7 @@
               "path": "/.vib/spark/goss"
             },
             "remote": {
-              "workload": "sts-spark-master"
+              "workload": "sts-spark-worker"
             }
           }
         },
