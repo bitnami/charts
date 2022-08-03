@@ -51,22 +51,6 @@ diagnosticMode:
     - infinity
 ## @section MetalLB parameters
 
-## To configure MetalLB, you must specify ONE of the following two
-## options.
-## @param existingConfigMap Specify the name of an externally-defined ConfigMap to use as the configuration. This is mutually exclusive with the `configInline` option.
-## Helm will not manage the contents of this ConfigMap, it is your responsibility to create it.
-## e.g:
-## existingConfigMap: metallb-config
-##
-existingConfigMap: ""
-## @param configInline Specifies MetalLB's configuration directly, in yaml format.
-## When configInline is used, Helm manages MetalLB's
-## configuration ConfigMap as part of the release, and
-## existingConfigMap is ignored.
-## Refer to https://metallb.universe.tf/configuration/ for
-## available options.
-##
-configInline: {}
 ## RBAC creation for controller and speaker
 ##
 rbac:
@@ -113,7 +97,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.12.1-debian-11-r11
+    tag: 0.13.4-debian-11-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -468,7 +452,7 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.12.1-debian-11-r11
+    tag: 0.13.4-debian-11-r4
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
