@@ -1,0 +1,7 @@
+containerPorts:
+  http: 8080
+postgresql:
+  auth:
+    username: bn_keycloak
+logging:
+  output: default
