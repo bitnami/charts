@@ -33,7 +33,7 @@ jobs:
         with:
           path: .github/workflows/
       - name: Assign to a person to work on it
-        uses: pozil/auto-assign-issue@v1.7.3
+        uses: pozil/auto-assign-issue@v1.9.0
         with:
           numOfAssignee: 1
           removePreviousAssignees: false
