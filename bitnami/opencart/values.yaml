@@ -104,6 +104,12 @@ opencartPassword: ""
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/opencart#configuration
 ##
 opencartEmail: user@example.com
+## @param opencartEnableHttps Whether to use HTTPS by default, default is false.
+## For applications with Ingress and TLS feature enabled, it's defaulted to true and can be
+## overrided by the OPENCART_ENABLE_HTTPS environment variable.
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/opencart#environment-variables
+##
+opencartEnableHttps: false
 ## @param allowEmptyPassword Allow DB blank passwords
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/opencart#environment-variables
 ##

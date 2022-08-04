@@ -93,6 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `opencartUsername`                      | User of the application                                                                   | `user`                  |
 | `opencartPassword`                      | Application password                                                                      | `""`                    |
 | `opencartEmail`                         | Admin email                                                                               | `user@example.com`      |
+| `opencartEnableHttps`                   | Whether to use HTTPS by default, default is false.                                        | `false`                 |
 | `allowEmptyPassword`                    | Allow DB blank passwords                                                                  | `true`                  |
 | `command`                               | Override default container command (useful when using custom images)                      | `[]`                    |
 | `args`                                  | Override default container args (useful when using custom images)                         | `[]`                    |
