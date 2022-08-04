@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------ | -------------------- |
 | `image.registry`    | Ghost image registry                             | `docker.io`          |
 | `image.repository`  | Ghost image repository                           | `bitnami/ghost`      |
-| `image.tag`         | Ghost image tag (immutable tags are recommended) | `5.7.0-debian-11-r0` |
+| `image.tag`         | Ghost image tag (immutable tags are recommended) | `5.7.1-debian-11-r1` |
 | `image.pullPolicy`  | Ghost image pull policy                          | `IfNotPresent`       |
 | `image.pullSecrets` | Ghost image pull secrets                         | `[]`                 |
 | `image.debug`       | Enable image debug mode                          | `false`              |
