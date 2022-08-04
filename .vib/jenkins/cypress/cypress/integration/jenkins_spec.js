@@ -37,20 +37,6 @@ it('should be possible to create a new Jenkins pipeline', () => {
   });
 });
 
-it('should not report any configuration errors', () => {
-  cy.login();
-  cy.visit('/manage');
-
-  const errorAllowedList = [];
-  cy.get('body').then(($body) => {
-    if ($body.find('.alert-danger').length > 0) {
-      checkErrors('.alert-danger', errorAllowedList);
-    } else {
-      cy.log('No error messages found in the UI');
-    }
-  });
-});
-
 it('should list the built-in node', () => {
   cy.login();
   cy.visit('/computer');
