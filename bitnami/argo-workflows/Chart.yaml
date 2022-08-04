@@ -31,8 +31,8 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: argo-workflows
 sources:
-  - https://github.com/bitnami/bitnami-docker-argo-workflow-cli
-  - https://github.com/bitnami/bitnami-docker-argo-workflow-controller
-  - https://github.com/bitnami/bitnami-docker-argo-workflow-exec
+  - https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-cli
+  - https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-controller
+  - https://github.com/bitnami/containers/tree/main/bitnami/argo-workflow-exec
   - https://argoproj.github.io/workflows/
-version: 2.3.6
+version: 2.3.7

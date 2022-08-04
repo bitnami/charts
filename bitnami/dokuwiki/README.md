@@ -17,7 +17,7 @@ $ helm install my-release bitnami/dokuwiki
 
 ## Introduction
 
-This chart bootstraps a [DokuWiki](https://github.com/bitnami/bitnami-docker-dokuwiki) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [DokuWiki](https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `image.registry`                        | DokuWiki image registry                                                                                               | `docker.io`                  |
 | `image.repository`                      | DokuWiki image repository                                                                                             | `bitnami/dokuwiki`           |
-| `image.tag`                             | DokuWiki image tag                                                                                                    | `20200729.0.0-debian-11-r13` |
+| `image.tag`                             | DokuWiki image tag                                                                                                    | `20200729.0.0-debian-11-r21` |
 | `image.pullPolicy`                      | Image pull policy                                                                                                     | `IfNotPresent`               |
 | `image.pullSecrets`                     | Image pull policy                                                                                                     | `[]`                         |
 | `image.debug`                           | Enable image debugging                                                                                                | `false`                      |
@@ -194,7 +194,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r13`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r21`      |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
@@ -208,7 +208,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a exporter side-car                        | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                   | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image name                       | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                        | `0.11.0-debian-11-r13`    |
+| `metrics.image.tag`         | Apache exporter image tag                        | `0.11.0-debian-11-r24`    |
 | `metrics.image.pullPolicy`  | Image pull policy                                | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                      |
 | `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod  | `{}`                      |
@@ -233,12 +233,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)         | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                           | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                              | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag                                          | `11-debian-11-r13`                       |
+| `certificates.image.tag`                             | Container sidecar image tag                                          | `11-debian-11-r21`                       |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                  | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                 | `[]`                                     |
 
 
-The above parameters map to the env variables defined in [bitnami/dokuwiki](https://github.com/bitnami/bitnami-docker-dokuwiki). For more information please refer to the [bitnami/dokuwiki](https://github.com/bitnami/bitnami-docker-dokuwiki) image documentation.
+The above parameters map to the env variables defined in [bitnami/dokuwiki](https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki). For more information please refer to the [bitnami/dokuwiki](https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -276,7 +276,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Persistence
 
-The [Bitnami DokuWiki](https://github.com/bitnami/bitnami-docker-dokuwiki) image stores the DokuWiki data and configurations at the `/bitnami/dokuwiki` path of the container.
+The [Bitnami DokuWiki](https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki) image stores the DokuWiki data and configurations at the `/bitnami/dokuwiki` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. There is a [known issue](https://github.com/kubernetes/kubernetes/issues/39178) in Kubernetes Clusters with EBS in different availability zones. Ensure your cluster is configured properly to create Volumes in the same availability zone where the nodes are running. Kuberentes 1.12 solved this issue with the [Volume Binding Mode](https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode).
 
@@ -381,7 +381,7 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 
 This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
-The [Bitnami Dokuwiki](https://github.com/bitnami/bitnami-docker-dokuwiki) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+The [Bitnami Dokuwiki](https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
 
 Consequences:
 

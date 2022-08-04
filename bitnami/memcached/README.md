@@ -17,7 +17,7 @@ $ helm install my-release bitnami/memcached
 
 ## Introduction
 
-This chart bootstraps a [Memcached](https://github.com/bitnami/bitnami-docker-memcached) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Memcached](https://github.com/bitnami/containers/tree/main/bitnami/memcached) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -264,7 +264,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.jobLabel`                      | The name of the label on the target service to use as the job name in prometheus.     | `""`                         |
 
 
-The above parameters map to the environment variables defined in the [bitnami/memcached](https://github.com/bitnami/bitnami-docker-memcached) container image. For more information please refer to the [bitnami/memcached](https://github.com/bitnami/bitnami-docker-memcached) container image documentation.
+The above parameters map to the environment variables defined in the [bitnami/memcached](https://github.com/bitnami/containers/tree/main/bitnami/memcached) container image. For more information please refer to the [bitnami/memcached](https://github.com/bitnami/containers/tree/main/bitnami/memcached) container image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -306,7 +306,7 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 
 ## Persistence
 
-When using `architecture: "high-availability"` the [Bitnami Memcached](https://github.com/bitnami/bitnami-docker-memcached) image stores the cache-state at the `/cache-state` path of the container if enabled.
+When using `architecture: "high-availability"` the [Bitnami Memcached](https://github.com/bitnami/containers/tree/main/bitnami/memcached) image stores the cache-state at the `/cache-state` path of the container if enabled.
 
 Persistent Volume Claims (PVCs) are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 

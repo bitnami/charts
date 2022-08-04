@@ -7,7 +7,7 @@ MinIO(R) is an object storage server, compatible with Amazon S3 cloud storage se
 [Overview of Bitnami Object Storage based on MinIO&reg;](https://min.io/)
 
 Disclaimer: All software products, projects and company names are trademark(TM) or registered(R) trademarks of their respective holders, and use of them does not imply any affiliation or endorsement. This software is licensed to you subject to one or more open source licenses and VMware provides the software on an AS-IS basis. MinIO(R) is a registered trademark of the MinIO Inc. in the US and other countries. Bitnami is not affiliated, associated, authorized, endorsed by, or in any way officially connected with MinIO Inc. MinIO(R) is licensed under GNU AGPL v3.0.
-
+                           
 ## TL;DR
 
 ```console
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/minio
 
 ## Introduction
 
-This chart bootstraps a [MinIO&reg;](https://github.com/bitnami/bitnami-docker-minio) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MinIO&reg;](https://github.com/bitnami/containers/tree/main/bitnami/minio) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -81,13 +81,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`           | MinIO&reg; image registry                                                                                                                                                                                 | `docker.io`              |
 | `image.repository`         | MinIO&reg; image repository                                                                                                                                                                               | `bitnami/minio`          |
-| `image.tag`                | MinIO&reg; image tag (immutable tags are recommended)                                                                                                                                                     | `2022.7.17-debian-11-r0` |
+| `image.tag`                | MinIO&reg; image tag (immutable tags are recommended)                                                                                                                                                     | `2022.8.2-debian-11-r0`  |
 | `image.pullPolicy`         | Image pull policy                                                                                                                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                                          | `[]`                     |
 | `image.debug`              | Specify if debug logs should be enabled                                                                                                                                                                   | `false`                  |
 | `clientImage.registry`     | MinIO&reg; Client image registry                                                                                                                                                                          | `docker.io`              |
 | `clientImage.repository`   | MinIO&reg; Client image repository                                                                                                                                                                        | `bitnami/minio-client`   |
-| `clientImage.tag`          | MinIO&reg; Client image tag (immutable tags are recommended)                                                                                                                                              | `2022.7.11-debian-11-r1` |
+| `clientImage.tag`          | MinIO&reg; Client image tag (immutable tags are recommended)                                                                                                                                              | `2022.7.29-debian-11-r1` |
 | `mode`                     | MinIO&reg; server mode (`standalone` or `distributed`)                                                                                                                                                    | `standalone`             |
 | `auth.rootUser`            | MinIO&reg; root username                                                                                                                                                                                  | `admin`                  |
 | `auth.rootPassword`        | Password for MinIO&reg; root user                                                                                                                                                                         | `""`                     |
@@ -256,7 +256,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `11-debian-11-r15`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                         | `11-debian-11-r21`      |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                    | `{}`                    |
@@ -334,7 +334,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.auth.gcs.projectID`                             | GCP Project ID to use                                                                              | `""`                       |
 | `gateway.auth.nas.accessKey`                             | Access key to access MinIO&reg; using NAS Gateway                                                  | `""`                       |
 | `gateway.auth.nas.secretKey`                             | Secret key to access MinIO&reg; using NAS Gateway                                                  | `""`                       |
-| `gateway.auth.s3.useIRSA`                                | Use IAM roles for service accounts to access AWS S3                                                | `false`                    |
 | `gateway.auth.s3.accessKey`                              | Access key to use to access AWS S3                                                                 | `""`                       |
 | `gateway.auth.s3.secretKey`                              | Secret key to use to access AWS S3                                                                 | `""`                       |
 | `gateway.auth.s3.serviceEndpoint`                        | AWS S3 endpoint                                                                                    | `https://s3.amazonaws.com` |
@@ -405,7 +404,7 @@ MinIO&reg; exports Prometheus metrics at `/minio/v2/metrics/cluster`. To allow P
 
 ## Persistence
 
-The [Bitnami Object Storage based on MinIO(&reg;)](https://github.com/bitnami/bitnami-docker-minio) image stores data at the `/data` path of the container.
+The [Bitnami Object Storage based on MinIO(&reg;)](https://github.com/bitnami/containers/tree/main/bitnami/minio) image stores data at the `/data` path of the container.
 
 The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 

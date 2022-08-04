@@ -239,7 +239,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/ejbca](https://github.com/bitnami/bitnami-docker-ejbca). For more information please refer to the [bitnami/ejbca](https://github.com/bitnami/bitnami-docker-ejbca) image documentation.
+The above parameters map to the env variables defined in [bitnami/ejbca](https://github.com/bitnami/containers/tree/main/bitnami/ejbca). For more information please refer to the [bitnami/ejbca](https://github.com/bitnami/containers/tree/main/bitnami/ejbca) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -305,7 +305,7 @@ To modify the application version used in this chart, specify a different versio
 
 ## Persistence
 
-The [Bitnami EJBCA](https://github.com/bitnami/bitnami-docker-discourse) image stores the EJBCA data and configurations at the `/bitnami` path of the container.
+The [Bitnami EJBCA](https://github.com/bitnami/containers/tree/main/bitnami/discourse) image stores the EJBCA data and configurations at the `/bitnami` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 

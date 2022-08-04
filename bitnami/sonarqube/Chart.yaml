@@ -26,6 +26,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: sonarqube
 sources:
-  - https://github.com/bitnami/bitnami-docker-sonarqube
+  - https://github.com/bitnami/containers/tree/main/bitnami/sonarqube
   - https://github.com/SonarSource/sonarqube
 version: 1.4.7

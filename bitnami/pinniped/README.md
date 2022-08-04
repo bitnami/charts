@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release   | `[]`                |
 | `image.registry`    | Pinniped image registry                             | `docker.io`         |
 | `image.repository`  | Pinniped image repository                           | `bitnami/pinniped`  |
-| `image.tag`         | Pinniped image tag (immutable tags are recommended) | `0.18.0-scratch-r4` |
+| `image.tag`         | Pinniped image tag (immutable tags are recommended) | `0.18.0-scratch-r6` |
 | `image.pullPolicy`  | Pinniped image pull policy                          | `IfNotPresent`      |
 | `image.pullSecrets` | Pinniped image pull secrets                         | `[]`                |
 
@@ -299,7 +299,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
-The above parameters map to the env variables defined in [bitnami/pinniped](http://github.com/bitnami/bitnami-docker-pinniped). For more information please refer to the [bitnami/pinniped](http://github.com/bitnami/bitnami-docker-pinniped) image documentation.
+The above parameters map to the env variables defined in [bitnami/pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped). For more information please refer to the [bitnami/pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -329,7 +329,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ## Persistence
 
-The [Bitnami pinniped](https://github.com/bitnami/bitnami-docker-pinniped) image stores the pinniped data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/pinniped/configuration/chart-persistence/).
+The [Bitnami pinniped](https://github.com/bitnami/containers/tree/main/bitnami/pinniped) image stores the pinniped data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/pinniped/configuration/chart-persistence/).
 
 ### Additional environment variables
 

@@ -1,0 +1,5 @@
+containerPorts:
+  http: 8069
+postgresql:
+  auth:
+    username: bn_odoo

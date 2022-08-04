@@ -20,6 +20,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: spark
 sources:
-  - https://github.com/bitnami/bitnami-docker-spark
+  - https://github.com/bitnami/containers/tree/main/bitnami/spark
   - https://spark.apache.org/
-version: 6.1.14
+version: 6.2.3

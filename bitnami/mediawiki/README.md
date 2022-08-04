@@ -7,7 +7,7 @@ MediaWiki is the free and open source wiki software that powers Wikipedia. Used 
 [Overview of MediaWiki](http://www.mediawiki.org/wiki/MediaWiki)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/mediawiki
 
 ## Introduction
 
-This chart bootstraps a [MediaWiki](https://github.com/bitnami/bitnami-docker-mediawiki) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MediaWiki](https://github.com/bitnami/containers/tree/main/bitnami/mediawiki) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the MediaWiki application.
 
@@ -275,7 +275,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                    | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/mediawiki](https://github.com/bitnami/bitnami-docker-mediawiki). For more information please refer to the [bitnami/mediawiki](https://github.com/bitnami/bitnami-docker-mediawiki) image documentation.
+The above parameters map to the env variables defined in [bitnami/mediawiki](https://github.com/bitnami/containers/tree/main/bitnami/mediawiki). For more information please refer to the [bitnami/mediawiki](https://github.com/bitnami/containers/tree/main/bitnami/mediawiki) image documentation.
 
 > **Note**:
 >
@@ -311,7 +311,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ## Persistence
 
-The [Bitnami MediaWiki](https://github.com/bitnami/bitnami-docker-mediawiki) image stores the MediaWiki data and configurations at the `/bitnami/mediawiki` path of the container.
+The [Bitnami MediaWiki](https://github.com/bitnami/containers/tree/main/bitnami/mediawiki) image stores the MediaWiki data and configurations at the `/bitnami/mediawiki` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -487,7 +487,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ### To 10.0.0
 
-The [Bitnami MediaWiki](https://github.com/bitnami/bitnami-docker-mediawiki) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
+The [Bitnami MediaWiki](https://github.com/bitnami/containers/tree/main/bitnami/mediawiki) image was migrated to a "non-root" user approach. Previously the container ran as the `root` user and the Apache daemon was started as the `daemon` user. From now on, both the container and the Apache daemon run as user `1001`. You can revert this behavior by setting the parameters `containerSecurityContext.runAsUser` to `root`.
 
 Consequences:
 

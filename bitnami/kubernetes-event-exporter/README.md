@@ -35,7 +35,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/kubernetes-event-exporter
 ```
 
-These commands deploy Kubernetes Event Exporter on the Kubernetes cluster in the default configuration. The [Parameters](##parameters) section lists the parameters that can be configured during installation.
+These commands deploy Kubernetes Event Exporter on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list` or `helm ls --all-namespaces`
 

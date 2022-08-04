@@ -7,7 +7,7 @@ Redis(R) is an open source, scalable, distributed in-memory cache for applicatio
 [Overview of Redis&reg; Cluster](http://redis.io)
 
 Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are reserved to Redis Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Ltd.
-                           
+
 ## TL;DR
 
 ```bash
@@ -17,7 +17,7 @@ $ helm install my-release bitnami/redis-cluster
 
 ## Introduction
 
-This chart bootstraps a [Redis&reg;](https://github.com/bitnami/bitnami-docker-redis) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Redis&reg;](https://github.com/bitnami/containers/tree/main/bitnami/redis) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 

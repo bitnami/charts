@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/osclass
-  tag: 8.0.2-debian-11-r14
+  tag: 8.0.2-debian-11-r21
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -75,7 +75,7 @@ image:
 
 ## @param osclassSkipInstall Skip wizard installation
 ## NOTE: useful if you use an external database that already contains Osclass data
-## ref: https://github.com/bitnami/bitnami-docker-osclass#connect-osclass-docker-container-to-an-existing-database
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/osclass#connect-osclass-docker-container-to-an-existing-database
 ##
 osclassSkipInstall: false
 ## @param osclassUsername Osclass username
@@ -100,7 +100,7 @@ existingSecret: ""
 ##
 allowEmptyPassword: true
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-osclass/#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/osclass/#smtp-configuration
 ## @param smtpHost SMTP server host
 ## @param smtpPort SMTP server port
 ## @param smtpUser SMTP username
@@ -253,7 +253,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r13
+    tag: 11-debian-11-r20
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -569,7 +569,7 @@ ingress:
   ## - host: ossclass.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: ossclass-svc
   ##           port:
@@ -621,9 +621,9 @@ mariadb:
   ## @param mariadb.auth.database MariaDB custom database
   ## @param mariadb.auth.username MariaDB custom user name
   ## @param mariadb.auth.password MariaDB custom user password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
-  ##      https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
-  ##      https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
+  ##      https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
+  ##      https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
   ##
   auth:
     rootPassword: ""
@@ -699,7 +699,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r13
+    tag: 11-debian-11-r20
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -775,7 +775,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-11-r13
+    tag: 0.11.0-debian-11-r24
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

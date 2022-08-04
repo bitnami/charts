@@ -104,3 +104,24 @@ Compile all warnings into a single message, and call fail.
 {{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Get the initialization scripts volume name.
+*/}}
+{{- define "spark.initScripts" -}}
+{{- printf "%s-init-scripts" (include "common.names.fullname" .) -}}
+{{- end -}}
+
+{{/*
+Get the initialization scripts ConfigMap name.
+*/}}
+{{- define "spark.initScriptsCM" -}}
+{{- printf "%s" .Values.initScriptsCM -}}
+{{- end -}}
+
+{{/*
+Get the initialization scripts Secret name.
+*/}}
+{{- define "spark.initScriptsSecret" -}}
+{{- printf "%s" .Values.initScriptsSecret -}}
+{{- end -}}

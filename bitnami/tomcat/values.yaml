@@ -57,7 +57,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/tomcat
-  tag: 10.0.22-debian-11-r13
+  tag: 10.0.23-debian-11-r2
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -79,11 +79,11 @@ image:
 ##
 hostAliases: []
 ## @param tomcatUsername Tomcat admin user
-## ref: https://github.com/bitnami/bitnami-docker-tomcat#creating-a-custom-user
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/tomcat#creating-a-custom-user
 ##
 tomcatUsername: user
 ## @param tomcatPassword Tomcat admin password
-## ref: https://github.com/bitnami/bitnami-docker-tomcat#creating-a-custom-user
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/tomcat#creating-a-custom-user
 ##
 tomcatPassword: ""
 ## @param tomcatAllowRemoteManagement Enable remote access to management interface
@@ -573,7 +573,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r14
+    tag: 11-debian-11-r20
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -631,7 +631,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.17.0-debian-11-r14
+      tag: 0.17.0-debian-11-r20
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

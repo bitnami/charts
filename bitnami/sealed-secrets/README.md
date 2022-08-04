@@ -7,7 +7,7 @@ Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone
 [Overview of Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
 
 
-                           
+
 ## TL;DR
 
 ```console

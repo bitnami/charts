@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                | image registry                                                                                                                         | `docker.io`          |
 | `image.repository`              | image repository                                                                                                                       | `bitnami/concourse`  |
-| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.8.0-debian-11-r0` |
+| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.8.2-debian-11-r0` |
 | `image.pullPolicy`              | image pull policy                                                                                                                      | `IfNotPresent`       |
 | `image.pullSecrets`             | image pull secrets                                                                                                                     | `[]`                 |
 | `secrets.localAuth.enabled`     | the use of local authentication (basic auth).                                                                                          | `true`               |
@@ -361,7 +361,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `11-debian-11-r0`       |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `11-debian-11-r15`      |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
@@ -398,7 +398,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
 
-The above parameters map to the env variables defined in [bitnami/concourse](https://github.com/bitnami/bitnami-docker-concourse). For more information please refer to the [bitnami/concourse](https://github.com/bitnami/bitnami-docker-concourse) image documentation.
+The above parameters map to the env variables defined in [bitnami/concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse). For more information please refer to the [bitnami/concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -446,7 +446,7 @@ The chart also facilitates the creation of TLS secrets for use with the Ingress 
 
 ## Persistence
 
-The [Bitnami Concourse](https://github.com/bitnami/bitnami-docker-concourse) image stores the concourse data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami Concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse) image stores the concourse data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Configure extra environment variables
 

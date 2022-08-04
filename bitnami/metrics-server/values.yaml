@@ -65,7 +65,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/metrics-server
-  tag: 0.6.1-debian-11-r9
+  tag: 0.6.1-debian-11-r23
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -172,7 +172,7 @@ extraEnvVarsCM: ""
 ##
 extraEnvVarsSecret: ""
 ## @param extraArgs Extra arguments to pass to metrics-server on start up
-## ref: https://github.com/kubernetes-incubator/metrics-server/blob/master/README.md#flags
+## ref: https://github.com/kubernetes-incubator/metrics-server#flags
 ##
 ## extraArgs:
 ##   - --kubelet-insecure-tls=true

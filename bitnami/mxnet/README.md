@@ -17,7 +17,7 @@ $ helm install my-release bitnami/mxnet
 
 ## Introduction
 
-This chart bootstraps an [Apache MXNet (Incubating)](https://github.com/bitnami/bitnami-docker-mxnet) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Apache MXNet (Incubating)](https://github.com/bitnami/containers/tree/main/bitnami/mxnet) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -524,7 +524,7 @@ initContainers:
 
 ## Persistence
 
-The [Bitnami Apache MXNet (Incubating)](https://github.com/bitnami/bitnami-docker-mxnet) image can persist data. If enabled, the persisted path is `/bitnami/mxnet` by default.
+The [Bitnami Apache MXNet (Incubating)](https://github.com/bitnami/containers/tree/main/bitnami/mxnet) image can persist data. If enabled, the persisted path is `/bitnami/mxnet` by default.
 
 The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 

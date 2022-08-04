@@ -60,6 +60,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                | Description                                        | Value           |
@@ -72,16 +73,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`     | Kubernetes cluster domain name                     | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release  | `[]`            |
 
+
 ### Argo CD image parameters
 
 | Name                | Description                                        | Value                |
 | ------------------- | -------------------------------------------------- | -------------------- |
 | `image.registry`    | Argo CD image registry                             | `docker.io`          |
 | `image.repository`  | Argo CD image repository                           | `bitnami/argo-cd`    |
-| `image.tag`         | Argo CD image tag (immutable tags are recommended) | `2.3.4-debian-11-r0` |
+| `image.tag`         | Argo CD image tag (immutable tags are recommended) | `2.4.7-debian-11-r0` |
 | `image.pullPolicy`  | Argo CD image pull policy                          | `IfNotPresent`       |
 | `image.pullSecrets` | Argo CD image pull secrets                         | `[]`                 |
 | `image.debug`       | Enable Argo CD image debug mode                    | `false`              |
+
 
 ### Argo CD application controller parameters
 
@@ -196,6 +199,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Argo CD container(s)                | `[]`            |
 | `controller.sidecars`                                          | Add additional sidecar containers to the Argo CD pod(s)                                              | `[]`            |
 | `controller.initContainers`                                    | Add additional init containers to the Argo CD pod(s)                                                 | `[]`            |
+
 
 ### Argo CD server Parameters
 
@@ -340,6 +344,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                  | `true`                   |
 | `server.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                      | `{}`                     |
 
+
 ### Argo CD repo server Parameters
 
 | Name                                                           | Description                                                                                          | Value           |
@@ -448,115 +453,117 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.sidecars`                                          | Add additional sidecar containers to the Argo CD repo server pod(s)                                  | `[]`            |
 | `repoServer.initContainers`                                    | Add additional init containers to the Argo CD repo server pod(s)                                     | `[]`            |
 
+
 ### Dex Parameters
 
-| Name                                                    | Description                                                                                   | Value                 |
-| ------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------- |
-| `dex.image.registry`                                    | Dex image registry                                                                            | `docker.io`           |
-| `dex.image.repository`                                  | Dex image repository                                                                          | `bitnami/dex`         |
-| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                | `2.31.2-debian-11-r0` |
-| `dex.image.pullPolicy`                                  | Dex image pull policy                                                                         | `IfNotPresent`        |
-| `dex.image.pullSecrets`                                 | Dex image pull secrets                                                                        | `[]`                  |
-| `dex.image.debug`                                       | Enable Dex image debug mode                                                                   | `false`               |
-| `dex.enabled`                                           | Enable the creation of a Dex deployment for SSO                                               | `false`               |
-| `dex.replicaCount`                                      | Number of Dex replicas to deploy                                                              | `1`                   |
-| `dex.startupProbe.enabled`                              | Enable startupProbe on Dex nodes                                                              | `false`               |
-| `dex.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                        | `10`                  |
-| `dex.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                               | `10`                  |
-| `dex.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                              | `1`                   |
-| `dex.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                            | `3`                   |
-| `dex.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                            | `1`                   |
-| `dex.livenessProbe.enabled`                             | Enable livenessProbe on Dex nodes                                                             | `true`                |
-| `dex.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                       | `10`                  |
-| `dex.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                              | `10`                  |
-| `dex.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                             | `1`                   |
-| `dex.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                           | `3`                   |
-| `dex.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                           | `1`                   |
-| `dex.readinessProbe.enabled`                            | Enable readinessProbe on Dex nodes                                                            | `true`                |
-| `dex.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                      | `10`                  |
-| `dex.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                             | `10`                  |
-| `dex.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                            | `1`                   |
-| `dex.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                          | `3`                   |
-| `dex.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                          | `1`                   |
-| `dex.customStartupProbe`                                | Custom startupProbe that overrides the default one                                            | `{}`                  |
-| `dex.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                           | `{}`                  |
-| `dex.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                          | `{}`                  |
-| `dex.resources.limits`                                  | The resources limits for the Dex containers                                                   | `{}`                  |
-| `dex.resources.requests`                                | The requested resources for the Dex containers                                                | `{}`                  |
-| `dex.podSecurityContext.enabled`                        | Enabled Dex pods' Security Context                                                            | `true`                |
-| `dex.podSecurityContext.fsGroup`                        | Set Dex pod's Security Context fsGroup                                                        | `1001`                |
-| `dex.containerSecurityContext.enabled`                  | Enabled Dex containers' Security Context                                                      | `true`                |
-| `dex.containerSecurityContext.runAsUser`                | Set Dex containers' Security Context runAsUser                                                | `1001`                |
-| `dex.containerSecurityContext.allowPrivilegeEscalation` | Set Dex containers' Security Context allowPrivilegeEscalation                                 | `false`               |
-| `dex.containerSecurityContext.readOnlyRootFilesystem`   | Set Dex containers' server Security Context readOnlyRootFilesystem                            | `false`               |
-| `dex.containerSecurityContext.runAsNonRoot`             | Set Dex containers' Security Context runAsNonRoot                                             | `true`                |
-| `dex.service.type`                                      | Dex service type                                                                              | `ClusterIP`           |
-| `dex.service.ports.http`                                | Dex HTTP service port                                                                         | `5556`                |
-| `dex.service.ports.grpc`                                | Dex grpc service port                                                                         | `5557`                |
-| `dex.service.nodePorts.http`                            | HTTP node port for the Dex service                                                            | `""`                  |
-| `dex.service.nodePorts.grpc`                            | gRPC node port for the Dex service                                                            | `""`                  |
-| `dex.service.clusterIP`                                 | Dex service Cluster IP                                                                        | `""`                  |
-| `dex.service.loadBalancerIP`                            | Dex service Load Balancer IP                                                                  | `""`                  |
-| `dex.service.loadBalancerSourceRanges`                  | Dex service Load Balancer sources                                                             | `[]`                  |
-| `dex.service.externalTrafficPolicy`                     | Dex service external traffic policy                                                           | `Cluster`             |
-| `dex.service.annotations`                               | Additional custom annotations for Dex service                                                 | `{}`                  |
-| `dex.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                | `[]`                  |
-| `dex.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                          | `None`                |
-| `dex.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                   | `{}`                  |
-| `dex.containerPorts.http`                               | Dex container HTTP port                                                                       | `5556`                |
-| `dex.containerPorts.grpc`                               | Dex gRPC port                                                                                 | `5557`                |
-| `dex.containerPorts.metrics`                            | Dex metrics port                                                                              | `5558`                |
-| `dex.metrics.enabled`                                   | Enable metrics for Dex                                                                        | `false`               |
-| `dex.metrics.service.type`                              | Dex service type                                                                              | `ClusterIP`           |
-| `dex.metrics.service.port`                              | Dex metrics service port                                                                      | `5558`                |
-| `dex.metrics.service.nodePort`                          | Node port for the Dex service                                                                 | `""`                  |
-| `dex.metrics.service.clusterIP`                         | Dex service metrics service Cluster IP                                                        | `""`                  |
-| `dex.metrics.service.loadBalancerIP`                    | Dex service Load Balancer IP                                                                  | `""`                  |
-| `dex.metrics.service.loadBalancerSourceRanges`          | Dex service Load Balancer sources                                                             | `[]`                  |
-| `dex.metrics.service.externalTrafficPolicy`             | Dex service external traffic policy                                                           | `Cluster`             |
-| `dex.metrics.service.annotations`                       | Additional custom annotations for Dex service                                                 | `{}`                  |
-| `dex.metrics.service.sessionAffinity`                   | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                          | `None`                |
-| `dex.metrics.service.sessionAffinityConfig`             | Additional settings for the sessionAffinity                                                   | `{}`                  |
-| `dex.metrics.serviceMonitor.enabled`                    | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                  | `false`               |
-| `dex.metrics.serviceMonitor.namespace`                  | Namespace which Prometheus is running in                                                      | `""`                  |
-| `dex.metrics.serviceMonitor.jobLabel`                   | The name of the label on the target service to use as the job name in prometheus.             | `""`                  |
-| `dex.metrics.serviceMonitor.interval`                   | Interval at which metrics should be scraped                                                   | `30s`                 |
-| `dex.metrics.serviceMonitor.scrapeTimeout`              | Timeout after which the scrape is ended                                                       | `10s`                 |
-| `dex.metrics.serviceMonitor.relabelings`                | RelabelConfigs to apply to samples before scraping                                            | `[]`                  |
-| `dex.metrics.serviceMonitor.metricRelabelings`          | MetricRelabelConfigs to apply to samples before ingestion                                     | `[]`                  |
-| `dex.metrics.serviceMonitor.selector`                   | ServiceMonitor selector labels                                                                | `{}`                  |
-| `dex.metrics.serviceMonitor.honorLabels`                | honorLabels chooses the metric's labels on collisions with target labels                      | `false`               |
-| `dex.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created for Dex                                  | `true`                |
-| `dex.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                        | `""`                  |
-| `dex.serviceAccount.automountServiceAccountToken`       | Automount service account token for the Dex service account                                   | `true`                |
-| `dex.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.    | `{}`                  |
-| `dex.command`                                           | Override default container command (useful when using custom images)                          | `[]`                  |
-| `dex.args`                                              | Override default container args (useful when using custom images)                             | `[]`                  |
-| `dex.extraArgs`                                         | Add extra args to the default args for Dex                                                    | `[]`                  |
-| `dex.hostAliases`                                       | Dex pods host aliases                                                                         | `[]`                  |
-| `dex.podLabels`                                         | Extra labels for Dex pods                                                                     | `{}`                  |
-| `dex.podAnnotations`                                    | Annotations for Dex pods                                                                      | `{}`                  |
-| `dex.podAffinityPreset`                                 | Pod affinity preset. Ignored if `dex.affinity` is set. Allowed values: `soft` or `hard`       | `""`                  |
-| `dex.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `dex.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                |
-| `dex.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `dex.affinity` is set. Allowed values: `soft` or `hard` | `""`                  |
-| `dex.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `dex.affinity` is set                                     | `""`                  |
-| `dex.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `dex.affinity` is set                                  | `[]`                  |
-| `dex.affinity`                                          | Affinity for Dex pods assignment                                                              | `{}`                  |
-| `dex.nodeSelector`                                      | Node labels for Dex pods assignment                                                           | `{}`                  |
-| `dex.tolerations`                                       | Tolerations for Dex pods assignment                                                           | `[]`                  |
-| `dex.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                | `""`                  |
-| `dex.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                | `[]`                  |
-| `dex.updateStrategy.type`                               | Dex statefulset strategy type                                                                 | `RollingUpdate`       |
-| `dex.priorityClassName`                                 | Dex pods' priorityClassName                                                                   | `""`                  |
-| `dex.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                | `""`                  |
-| `dex.lifecycleHooks`                                    | for the Dex container(s) to automate configuration before or after startup                    | `{}`                  |
-| `dex.extraEnvVars`                                      | Array with extra environment variables to add to Dex nodes                                    | `[]`                  |
-| `dex.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Dex nodes                            | `""`                  |
-| `dex.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Dex nodes                               | `""`                  |
-| `dex.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Dex pod(s)                        | `[]`                  |
-| `dex.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Dex container(s)             | `[]`                  |
-| `dex.sidecars`                                          | Add additional sidecar containers to the Dex pod(s)                                           | `[]`                  |
-| `dex.initContainers`                                    | Add additional init containers to the Dex pod(s)                                              | `[]`                  |
+| Name                                                    | Description                                                                                   | Value                  |
+| ------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------- |
+| `dex.image.registry`                                    | Dex image registry                                                                            | `docker.io`            |
+| `dex.image.repository`                                  | Dex image repository                                                                          | `bitnami/dex`          |
+| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                | `2.32.0-debian-11-r13` |
+| `dex.image.pullPolicy`                                  | Dex image pull policy                                                                         | `IfNotPresent`         |
+| `dex.image.pullSecrets`                                 | Dex image pull secrets                                                                        | `[]`                   |
+| `dex.image.debug`                                       | Enable Dex image debug mode                                                                   | `false`                |
+| `dex.enabled`                                           | Enable the creation of a Dex deployment for SSO                                               | `false`                |
+| `dex.replicaCount`                                      | Number of Dex replicas to deploy                                                              | `1`                    |
+| `dex.startupProbe.enabled`                              | Enable startupProbe on Dex nodes                                                              | `false`                |
+| `dex.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                        | `10`                   |
+| `dex.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                               | `10`                   |
+| `dex.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                              | `1`                    |
+| `dex.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                            | `3`                    |
+| `dex.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                            | `1`                    |
+| `dex.livenessProbe.enabled`                             | Enable livenessProbe on Dex nodes                                                             | `true`                 |
+| `dex.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                       | `10`                   |
+| `dex.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                              | `10`                   |
+| `dex.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                             | `1`                    |
+| `dex.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                           | `3`                    |
+| `dex.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                           | `1`                    |
+| `dex.readinessProbe.enabled`                            | Enable readinessProbe on Dex nodes                                                            | `true`                 |
+| `dex.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                      | `10`                   |
+| `dex.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                             | `10`                   |
+| `dex.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                            | `1`                    |
+| `dex.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                          | `3`                    |
+| `dex.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                          | `1`                    |
+| `dex.customStartupProbe`                                | Custom startupProbe that overrides the default one                                            | `{}`                   |
+| `dex.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                           | `{}`                   |
+| `dex.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                          | `{}`                   |
+| `dex.resources.limits`                                  | The resources limits for the Dex containers                                                   | `{}`                   |
+| `dex.resources.requests`                                | The requested resources for the Dex containers                                                | `{}`                   |
+| `dex.podSecurityContext.enabled`                        | Enabled Dex pods' Security Context                                                            | `true`                 |
+| `dex.podSecurityContext.fsGroup`                        | Set Dex pod's Security Context fsGroup                                                        | `1001`                 |
+| `dex.containerSecurityContext.enabled`                  | Enabled Dex containers' Security Context                                                      | `true`                 |
+| `dex.containerSecurityContext.runAsUser`                | Set Dex containers' Security Context runAsUser                                                | `1001`                 |
+| `dex.containerSecurityContext.allowPrivilegeEscalation` | Set Dex containers' Security Context allowPrivilegeEscalation                                 | `false`                |
+| `dex.containerSecurityContext.readOnlyRootFilesystem`   | Set Dex containers' server Security Context readOnlyRootFilesystem                            | `false`                |
+| `dex.containerSecurityContext.runAsNonRoot`             | Set Dex containers' Security Context runAsNonRoot                                             | `true`                 |
+| `dex.service.type`                                      | Dex service type                                                                              | `ClusterIP`            |
+| `dex.service.ports.http`                                | Dex HTTP service port                                                                         | `5556`                 |
+| `dex.service.ports.grpc`                                | Dex grpc service port                                                                         | `5557`                 |
+| `dex.service.nodePorts.http`                            | HTTP node port for the Dex service                                                            | `""`                   |
+| `dex.service.nodePorts.grpc`                            | gRPC node port for the Dex service                                                            | `""`                   |
+| `dex.service.clusterIP`                                 | Dex service Cluster IP                                                                        | `""`                   |
+| `dex.service.loadBalancerIP`                            | Dex service Load Balancer IP                                                                  | `""`                   |
+| `dex.service.loadBalancerSourceRanges`                  | Dex service Load Balancer sources                                                             | `[]`                   |
+| `dex.service.externalTrafficPolicy`                     | Dex service external traffic policy                                                           | `Cluster`              |
+| `dex.service.annotations`                               | Additional custom annotations for Dex service                                                 | `{}`                   |
+| `dex.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                | `[]`                   |
+| `dex.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                          | `None`                 |
+| `dex.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                   | `{}`                   |
+| `dex.containerPorts.http`                               | Dex container HTTP port                                                                       | `5556`                 |
+| `dex.containerPorts.grpc`                               | Dex gRPC port                                                                                 | `5557`                 |
+| `dex.containerPorts.metrics`                            | Dex metrics port                                                                              | `5558`                 |
+| `dex.metrics.enabled`                                   | Enable metrics for Dex                                                                        | `false`                |
+| `dex.metrics.service.type`                              | Dex service type                                                                              | `ClusterIP`            |
+| `dex.metrics.service.port`                              | Dex metrics service port                                                                      | `5558`                 |
+| `dex.metrics.service.nodePort`                          | Node port for the Dex service                                                                 | `""`                   |
+| `dex.metrics.service.clusterIP`                         | Dex service metrics service Cluster IP                                                        | `""`                   |
+| `dex.metrics.service.loadBalancerIP`                    | Dex service Load Balancer IP                                                                  | `""`                   |
+| `dex.metrics.service.loadBalancerSourceRanges`          | Dex service Load Balancer sources                                                             | `[]`                   |
+| `dex.metrics.service.externalTrafficPolicy`             | Dex service external traffic policy                                                           | `Cluster`              |
+| `dex.metrics.service.annotations`                       | Additional custom annotations for Dex service                                                 | `{}`                   |
+| `dex.metrics.service.sessionAffinity`                   | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                          | `None`                 |
+| `dex.metrics.service.sessionAffinityConfig`             | Additional settings for the sessionAffinity                                                   | `{}`                   |
+| `dex.metrics.serviceMonitor.enabled`                    | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                  | `false`                |
+| `dex.metrics.serviceMonitor.namespace`                  | Namespace which Prometheus is running in                                                      | `""`                   |
+| `dex.metrics.serviceMonitor.jobLabel`                   | The name of the label on the target service to use as the job name in prometheus.             | `""`                   |
+| `dex.metrics.serviceMonitor.interval`                   | Interval at which metrics should be scraped                                                   | `30s`                  |
+| `dex.metrics.serviceMonitor.scrapeTimeout`              | Timeout after which the scrape is ended                                                       | `10s`                  |
+| `dex.metrics.serviceMonitor.relabelings`                | RelabelConfigs to apply to samples before scraping                                            | `[]`                   |
+| `dex.metrics.serviceMonitor.metricRelabelings`          | MetricRelabelConfigs to apply to samples before ingestion                                     | `[]`                   |
+| `dex.metrics.serviceMonitor.selector`                   | ServiceMonitor selector labels                                                                | `{}`                   |
+| `dex.metrics.serviceMonitor.honorLabels`                | honorLabels chooses the metric's labels on collisions with target labels                      | `false`                |
+| `dex.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created for Dex                                  | `true`                 |
+| `dex.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                        | `""`                   |
+| `dex.serviceAccount.automountServiceAccountToken`       | Automount service account token for the Dex service account                                   | `true`                 |
+| `dex.serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.    | `{}`                   |
+| `dex.command`                                           | Override default container command (useful when using custom images)                          | `[]`                   |
+| `dex.args`                                              | Override default container args (useful when using custom images)                             | `[]`                   |
+| `dex.extraArgs`                                         | Add extra args to the default args for Dex                                                    | `[]`                   |
+| `dex.hostAliases`                                       | Dex pods host aliases                                                                         | `[]`                   |
+| `dex.podLabels`                                         | Extra labels for Dex pods                                                                     | `{}`                   |
+| `dex.podAnnotations`                                    | Annotations for Dex pods                                                                      | `{}`                   |
+| `dex.podAffinityPreset`                                 | Pod affinity preset. Ignored if `dex.affinity` is set. Allowed values: `soft` or `hard`       | `""`                   |
+| `dex.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `dex.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                 |
+| `dex.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `dex.affinity` is set. Allowed values: `soft` or `hard` | `""`                   |
+| `dex.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `dex.affinity` is set                                     | `""`                   |
+| `dex.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `dex.affinity` is set                                  | `[]`                   |
+| `dex.affinity`                                          | Affinity for Dex pods assignment                                                              | `{}`                   |
+| `dex.nodeSelector`                                      | Node labels for Dex pods assignment                                                           | `{}`                   |
+| `dex.tolerations`                                       | Tolerations for Dex pods assignment                                                           | `[]`                   |
+| `dex.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                | `""`                   |
+| `dex.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                | `[]`                   |
+| `dex.updateStrategy.type`                               | Dex statefulset strategy type                                                                 | `RollingUpdate`        |
+| `dex.priorityClassName`                                 | Dex pods' priorityClassName                                                                   | `""`                   |
+| `dex.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                | `""`                   |
+| `dex.lifecycleHooks`                                    | for the Dex container(s) to automate configuration before or after startup                    | `{}`                   |
+| `dex.extraEnvVars`                                      | Array with extra environment variables to add to Dex nodes                                    | `[]`                   |
+| `dex.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Dex nodes                            | `""`                   |
+| `dex.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Dex nodes                               | `""`                   |
+| `dex.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Dex pod(s)                        | `[]`                   |
+| `dex.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Dex container(s)             | `[]`                   |
+| `dex.sidecars`                                          | Add additional sidecar containers to the Dex pod(s)                                           | `[]`                   |
+| `dex.initContainers`                                    | Add additional init containers to the Dex pod(s)                                              | `[]`                   |
+
 
 ### Shared config for Argo CD components
 
@@ -583,6 +590,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `config.secret.repositoryCredentials`          | Repository credentials to add to the Argo CD server confgi secret                                     | `{}`   |
 | `config.clusterCredentials`                    | Configure external cluster credentials                                                                | `[]`   |
 
+
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                     | Value                   |
@@ -590,12 +598,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r0`       |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r16`      |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
+
 
 ### Other Parameters
 
@@ -604,7 +613,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`                             | Specifies whether RBAC resources should be created                          | `true`               |
 | `redis.image.registry`                    | Argo CD controller image registry                                           | `docker.io`          |
 | `redis.image.repository`                  | Argo CD controller image repository                                         | `bitnami/redis`      |
-| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `6.2.7-debian-11-r0` |
+| `redis.image.tag`                         | Argo CD controller image tag (immutable tags are recommended)               | `7.0.4-debian-11-r2` |
 | `redis.image.pullPolicy`                  | Argo CD controller image pull policy                                        | `IfNotPresent`       |
 | `redis.image.pullSecrets`                 | Argo CD controller image pull secrets                                       | `[]`                 |
 | `redis.enabled`                           | Enable Redis dependency                                                     | `true`               |
@@ -620,7 +629,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.existingSecret`            | Existing secret for the external redis                                      | `""`                 |
 | `externalRedis.existingSecretPasswordKey` | Password key for the existing secret containing the external redis password | `redis-password`     |
 
-The above parameters map to the env variables defined in [bitnami/argo-cd](https://github.com/bitnami/bitnami-docker-argo-cd). For more information please refer to the [bitnami/argo-cd](https://github.com/bitnami/bitnami-docker-argo-cd) image documentation.
+
+The above parameters map to the env variables defined in [bitnami/argo-cd](https://github.com/bitnami/containers/tree/main/bitnami/argo-cd). For more information please refer to the [bitnami/argo-cd](https://github.com/bitnami/containers/tree/main/bitnami/argo-cd) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -705,7 +715,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/harbor/administration/upgrade/).
+Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/argo-cd/administration/upgrade/).
 
 ## License
 
