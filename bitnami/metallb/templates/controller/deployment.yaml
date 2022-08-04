@@ -89,12 +89,18 @@ spec:
           {{- else }}
           args:
             - --port={{ .Values.controller.containerPorts.metrics }}
-            - --config={{ include "metallb.configMapName" . }}
+            - --cert-service-name=metallb-webhook-service
           {{- end }}
           {{- if .Values.controller.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.controller.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
+            {{- if .Values.speaker.enabled }}
+            - name: METALLB_ML_SECRET_NAME
+              value: {{ include "metallb.speaker.secretName" . }}
+            - name: METALLB_DEPLOYMENT
+              value: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+            {{- end }}
             {{- if .Values.controller.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -110,9 +116,16 @@ spec:
           ports:
             - name: metrics
               containerPort: {{ .Values.controller.containerPorts.metrics }}
-          {{- if .Values.controller.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            - name: webhook-server
+              containerPort: 9443
+              protocol: TCP
+          volumeMounts:
+            - name: cert
+              mountPath: /tmp/k8s-webhook-server/serving-certs
+              readOnly: true
+            {{- if .Values.controller.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.controller.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.controller.livenessProbe "enabled") "context" $) | nindent 12 }}
@@ -144,6 +157,11 @@ spec:
         {{- if .Values.controller.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.controller.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if .Values.controller.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+      volumes:
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: webhook-server-cert
+        {{- if .Values.controller.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
