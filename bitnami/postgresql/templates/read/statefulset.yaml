@@ -494,7 +494,11 @@ spec:
         {{- if .Values.readReplicas.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
-  {{- if not .Values.readReplicas.persistence.enabled }}
+  {{- if and .Values.readReplicas.persistence.enabled .Values.readReplicas.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ tpl .Values.readReplicas.persistence.existingClaim $ }}
+  {{- else if not .Values.readReplicas.persistence.enabled }}
         - name: data
           emptyDir: {}
   {{- else }}
