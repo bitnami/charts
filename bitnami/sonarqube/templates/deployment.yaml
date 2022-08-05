@@ -77,6 +77,7 @@ spec:
               {{- include "sonarqube.sysctl.ifLess" (dict "key" "fs.file-max" "value" "65536") | nindent 14 }}
           securityContext:
             privileged: true
+            runAsUser: 0
           {{- if .Values.sysctl.resources }}
           resources: {{- toYaml .Values.sysctl.resources | nindent 12 }}
           {{- end }}

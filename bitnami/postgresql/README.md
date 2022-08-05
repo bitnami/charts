@@ -101,7 +101,7 @@ kubectl delete pvc -l release=my-release
 | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `image.registry`                         | PostgreSQL image registry                                                                                                                                                                                                                                                                                                                     | `docker.io`                |
 | `image.repository`                       | PostgreSQL image repository                                                                                                                                                                                                                                                                                                                   | `bitnami/postgresql`       |
-| `image.tag`                              | PostgreSQL image tag (immutable tags are recommended)                                                                                                                                                                                                                                                                                         | `14.4.0-debian-11-r18`     |
+| `image.tag`                              | PostgreSQL image tag (immutable tags are recommended)                                                                                                                                                                                                                                                                                         | `14.4.0-debian-11-r21`     |
 | `image.pullPolicy`                       | PostgreSQL image pull policy                                                                                                                                                                                                                                                                                                                  | `IfNotPresent`             |
 | `image.pullSecrets`                      | Specify image pull secrets                                                                                                                                                                                                                                                                                                                    | `[]`                       |
 | `image.debug`                            | Specify if debug values should be set                                                                                                                                                                                                                                                                                                         | `false`                    |
@@ -264,6 +264,7 @@ kubectl delete pvc -l release=my-release
 | Name                                              | Description                                                                                                              | Value                 |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `readReplicas.replicaCount`                       | Number of PostgreSQL read only replicas                                                                                  | `1`                   |
+| `readReplicas.extendedConfiguration`              | Extended PostgreSQL read only replicas configuration (appended to main or default configuration)                         | `""`                  |
 | `readReplicas.extraEnvVars`                       | Array with extra environment variables to add to PostgreSQL read only nodes                                              | `[]`                  |
 | `readReplicas.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for PostgreSQL read only nodes                                      | `""`                  |
 | `readReplicas.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for PostgreSQL read only nodes                                         | `""`                  |
@@ -336,6 +337,7 @@ kubectl delete pvc -l release=my-release
 | `readReplicas.service.sessionAffinity`            | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                     | `None`                |
 | `readReplicas.service.sessionAffinityConfig`      | Additional settings for the sessionAffinity                                                                              | `{}`                  |
 | `readReplicas.persistence.enabled`                | Enable PostgreSQL read only data persistence using PVC                                                                   | `true`                |
+| `readReplicas.persistence.existingClaim`          | Name of an existing PVC to use                                                                                           | `""`                  |
 | `readReplicas.persistence.mountPath`              | The path the volume will be mounted at                                                                                   | `/bitnami/postgresql` |
 | `readReplicas.persistence.subPath`                | The subdirectory of the volume to mount to                                                                               | `""`                  |
 | `readReplicas.persistence.storageClass`           | PVC Storage Class for PostgreSQL read only data volume                                                                   | `""`                  |
@@ -373,7 +375,7 @@ kubectl delete pvc -l release=my-release
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `11-debian-11-r20`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)    | `11-debian-11-r22`      |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                             | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                            | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                               | `{}`                    |
@@ -401,7 +403,7 @@ kubectl delete pvc -l release=my-release
 | `metrics.enabled`                               | Start a prometheus exporter                                                           | `false`                     |
 | `metrics.image.registry`                        | PostgreSQL Prometheus Exporter image registry                                         | `docker.io`                 |
 | `metrics.image.repository`                      | PostgreSQL Prometheus Exporter image repository                                       | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                             | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)             | `0.10.1-debian-11-r20`      |
+| `metrics.image.tag`                             | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)             | `0.10.1-debian-11-r22`      |
 | `metrics.image.pullPolicy`                      | PostgreSQL Prometheus Exporter image pull policy                                      | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                     | Specify image pull secrets                                                            | `[]`                        |
 | `metrics.customMetrics`                         | Define additional custom metrics                                                      | `{}`                        |
@@ -493,7 +495,7 @@ To modify the application version used in this chart, specify a different versio
 
 ### postgresql.conf / pg_hba.conf files as configMap
 
-This helm chart also supports to customize the PostgreSQL configuration file. You can add additional PostgreSQL configuration parameters using the `primary.extendedConfiguration` parameter as a string. Alternatively, to replace the entire default configuration use `primary.configuration`.
+This helm chart also supports to customize the PostgreSQL configuration file. You can add additional PostgreSQL configuration parameters using the `primary.extendedConfiguration`/`readReplicas.extendedConfiguration` parameters as a string. Alternatively, to replace the entire default configuration use `primary.configuration`.
 
 You can also add a custom pg_hba.conf using the `primary.pgHbaConfiguration` parameter.
 
