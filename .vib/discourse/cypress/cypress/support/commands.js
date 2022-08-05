@@ -1,4 +1,4 @@
-const CLICK_DELAY = 500;
+const COMMAND_DELAY = 2000;
 const BASE_URL = 'http://bitnami-discourse.my';
 
 for (const command of ['click']) {
@@ -8,7 +8,7 @@ for (const command of ['click']) {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(origVal);
-      }, CLICK_DELAY);
+      }, COMMAND_DELAY);
     });
   });
 }
