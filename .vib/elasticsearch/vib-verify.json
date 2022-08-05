@@ -46,7 +46,8 @@
             },
             "remote": {
               "workload": "sts-elasticsearch-master"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         },
         {
