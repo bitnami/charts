@@ -24,6 +24,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: phpbb
 sources:
-  - https://github.com/bitnami/bitnami-docker-phpbb
+  - https://github.com/bitnami/containers/tree/main/bitnami/phpbb
   - https://www.phpbb.com/
-version: 12.2.13
+version: 12.2.14

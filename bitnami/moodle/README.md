@@ -17,7 +17,7 @@ $ helm install my-release bitnami/moodle
 
 ## Introduction
 
-This chart bootstraps a [Moodle&trade;](https://github.com/bitnami/bitnami-docker-moodle) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Moodle&trade;](https://github.com/bitnami/containers/tree/main/bitnami/moodle) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/master/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Moodle&trade; application.
 
@@ -304,7 +304,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                 | `{}`    |
 
 
-The above parameters map to the env variables defined in [bitnami/moodle](https://github.com/bitnami/bitnami-docker-moodle). For more information please refer to the [bitnami/moodle](https://github.com/bitnami/bitnami-docker-moodle) image documentation.
+The above parameters map to the env variables defined in [bitnami/moodle](https://github.com/bitnami/containers/tree/main/bitnami/moodle). For more information please refer to the [bitnami/moodle](https://github.com/bitnami/containers/tree/main/bitnami/moodle) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -384,7 +384,7 @@ ingress:
 
 ## Persistence
 
-The [Bitnami Container Image for Moodle&trade;](https://github.com/bitnami/bitnami-docker-moodle) stores the Moodle&trade; data and configurations at the `/bitnami/moodle` and `/bitnami/apache` paths of the container.
+The [Bitnami Container Image for Moodle&trade;](https://github.com/bitnami/containers/tree/main/bitnami/moodle) stores the Moodle&trade; data and configurations at the `/bitnami/moodle` and `/bitnami/apache` paths of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, vpshere, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -479,7 +479,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ### To 8.0.0
 
-The [Bitnami Container Image for Moodle&trade;](https://github.com/bitnami/bitnami-docker-moodle) was updated to support "non-root" user approach, however, **it is not enabled by default**. The container still runs as the `root` user and the Apache daemon is started as the `daemon` user, due to running Cron as a service, which requires running as root.
+The [Bitnami Container Image for Moodle&trade;](https://github.com/bitnami/containers/tree/main/bitnami/moodle) was updated to support "non-root" user approach, however, **it is not enabled by default**. The container still runs as the `root` user and the Apache daemon is started as the `daemon` user, due to running Cron as a service, which requires running as root.
 
 If you want to run with a non-root user, you need to set `podSecurityContext.enabled=true` and `containerSecurity.context.enabled=true`. In addition to that, you will also need to change the default Apache HTTP ports to run as a non-privileged user by setting `containerPorts.http` and `containerPorts.https` to a non-privileged port number (higher than 1024, i.e. 8080 and 8443, respectively). Note that, when running as a non-root user, Cron will not supported and therefore scheduled tasks will not be enabled for Moodle&trade;.
 

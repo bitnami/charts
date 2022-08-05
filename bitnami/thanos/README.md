@@ -17,7 +17,7 @@ helm install my-release bitnami/thanos
 
 ## Introduction
 
-This chart bootstraps a [Thanos](https://github.com/bitnami/bitnami-docker-thanos) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Thanos](https://github.com/bitnami/containers/tree/main/bitnami/thanos) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -36,7 +36,7 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 helm install my-release bitnami/thanos
 ```
 
-These commands deploy Thanos on the Kubernetes cluster with the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+These commands deploy Thanos on the Kubernetes cluster with the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 

@@ -13,16 +13,12 @@ Returns the volume mounts that will be used by git containers (clone and sync)
 */}}
 {{- define "airflow.git.volumeMounts" -}}
 {{- if .Values.git.dags.enabled }}
-  {{- range .Values.git.dags.repositories }}
-- name: git-cloned-dag-files-{{ include "airflow.git.repository.name" . }}
-  mountPath: /dags_{{ include "airflow.git.repository.name" . }}
-  {{- end }}
+- name: git-cloned-dags
+  mountPath: /dags
 {{- end }}
 {{- if .Values.git.plugins.enabled }}
-  {{- range .Values.git.plugins.repositories }}
-- name: git-cloned-plugins-files-{{ include "airflow.git.repository.name" . }}
-  mountPath: /plugins_{{ include "airflow.git.repository.name" . }}
-  {{- end }}
+- name: git-cloned-plugins
+  mountPath: /plugins
 {{- end }}
 {{- end -}}
 
@@ -32,20 +28,24 @@ Returns the volume mounts that will be used by the main container
 {{- define "airflow.git.maincontainer.volumeMounts" -}}
 {{- if .Values.git.dags.enabled }}
   {{- range .Values.git.dags.repositories }}
-- name: git-cloned-dag-files-{{ include "airflow.git.repository.name" . }}
+- name: git-cloned-dags
   mountPath: /opt/bitnami/airflow/dags/git_{{ include "airflow.git.repository.name" . }}
-    {{- if .path }}
-  subPath: {{ .path }}
-    {{- end }}
+  {{- if .path }}
+  subPath: {{ include "airflow.git.repository.name" . }}/{{ .path }}
+  {{- else }}
+  subPath: {{ include "airflow.git.repository.name" . }}
+  {{- end }}
   {{- end }}
 {{- end }}
 {{- if .Values.git.plugins.enabled }}
   {{- range .Values.git.plugins.repositories }}
-- name: git-cloned-plugins-files-{{ include "airflow.git.repository.name" . }}
+- name: git-cloned-plugins
   mountPath: /opt/bitnami/airflow/plugins/git_{{ include "airflow.git.repository.name" . }}
-    {{- if .path }}
-  subPath: {{ .path }}
-    {{- end }}
+  {{- if .path }}
+  subPath: {{ include "airflow.git.repository.name" . }}/{{ .path }}
+  {{- else }}
+  subPath: {{ include "airflow.git.repository.name" . }}
+  {{- end }}
   {{- end }}
 {{- end }}
 {{- end -}}
@@ -55,18 +55,14 @@ Returns the volumes that will be attached to the workload resources (deployment,
 */}}
 {{- define "airflow.git.volumes" -}}
 {{- if .Values.git.dags.enabled }}
-  {{- range .Values.git.dags.repositories }}
-- name: git-cloned-dag-files-{{ include "airflow.git.repository.name" . }}
+- name: git-cloned-dags
   emptyDir: {}
-  {{- end }}
 {{- end }}
 {{- if .Values.git.plugins.enabled }}
-  {{- range .Values.git.plugins.repositories }}
-- name: git-cloned-plugins-files-{{ include "airflow.git.repository.name" . }}
+- name: git-cloned-plugins
   emptyDir: {}
-  {{- end }}
 {{- end }}
-{{- end }}
+{{- end -}}
 
 {{/*
 Returns the init container that will clone repositories files from a given list of git repositories
@@ -100,12 +96,12 @@ Usage:
       [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && . /opt/bitnami/scripts/git/entrypoint.sh
     {{- if .context.Values.git.dags.enabled }}
       {{- range .context.Values.git.dags.repositories }}
-      is_mounted_dir_empty "/dags_{{ include "airflow.git.repository.name" . }}" && git clone {{ .repository }} --branch {{ .branch }} /dags_{{ include "airflow.git.repository.name" . }}
+      is_dir_empty "/dags/{{ include "airflow.git.repository.name" . }}" && git clone {{ .repository }} --branch {{ .branch }} /dags/{{ include "airflow.git.repository.name" . }}
       {{- end }}
     {{- end }}
     {{- if .context.Values.git.plugins.enabled }}
       {{- range .context.Values.git.plugins.repositories }}
-      is_mounted_dir_empty "/plugins_{{ include "airflow.git.repository.name" . }}" && git clone {{ .repository }} --branch {{ .branch }} /plugins_{{ include "airflow.git.repository.name" . }}
+      is_dir_empty "/plugins/{{ include "airflow.git.repository.name" . }}" && git clone {{ .repository }} --branch {{ .branch }} /plugins/{{ include "airflow.git.repository.name" . }}
       {{- end }}
     {{- end }}
 {{- end }}
@@ -132,7 +128,7 @@ Usage:
 {{- end -}}
 
 {{/*
-Returns the a container that will pull and sync repositories files from a given list of git repositories
+Returns the container that will pull and sync repositories files from a given list of git repositories
 Usage:
 {{ include "airflow.git.containers.sync" ( dict "securityContext" .Values.path.to.the.component.securityContext "context" $ ) }}
 */}}
@@ -163,12 +159,12 @@ Usage:
       while true; do
       {{- if .context.Values.git.dags.enabled }}
         {{- range .context.Values.git.dags.repositories }}
-          cd /dags_{{ include "airflow.git.repository.name" . }} && git pull origin {{ .branch }} || true
+          cd /dags/{{ include "airflow.git.repository.name" . }} && git pull origin {{ .branch }} || true
         {{- end }}
       {{- end }}
       {{- if .context.Values.git.plugins.enabled }}
         {{- range .context.Values.git.plugins.repositories }}
-          cd /plugins_{{ include "airflow.git.repository.name" . }} && git pull origin {{ .branch }} || true
+          cd /plugins/{{ include "airflow.git.repository.name" . }} && git pull origin {{ .branch }} || true
         {{- end }}
       {{- end }}
           sleep {{ default "60" .context.Values.git.sync.interval }}

@@ -82,7 +82,6 @@ spec:
           {{- else }}
           args:
             - --port={{ .Values.speaker.containerPorts.metrics }}
-            - --config={{ include "metallb.configMapName" . }}
           {{- end }}
           {{- if .Values.speaker.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.lifecycleHooks "context" $) | nindent 12 }}

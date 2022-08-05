@@ -17,7 +17,7 @@ $ helm install my-release bitnami/cassandra
 
 ## Introduction
 
-This chart bootstraps an [Apache Cassandra](https://github.com/bitnami/bitnami-docker-cassandra) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Apache Cassandra](https://github.com/bitnami/containers/tree/main/bitnami/cassandra) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`              | Cassandra image registry                                                                                               | `docker.io`          |
 | `image.repository`            | Cassandra image repository                                                                                             | `bitnami/cassandra`  |
-| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.4-debian-11-r0` |
+| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.0.5-debian-11-r0` |
 | `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`       |
 | `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                 |
 | `image.debug`                 | Enable image debug mode                                                                                                | `false`              |
@@ -232,7 +232,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume                                                           | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume                                                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume                                                           | `11-debian-11-r0`       |
+| `volumePermissions.image.tag`                 | Init container volume                                                           | `11-debian-11-r16`      |
 | `volumePermissions.image.pullPolicy`          | Init container volume                                                           | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                | `[]`                    |
 | `volumePermissions.resources.limits`          | The resources limits for the container                                          | `{}`                    |
@@ -247,7 +247,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                   | `false`                      |
 | `metrics.image.registry`                   | Cassandra exporter image registry                                                                      | `docker.io`                  |
 | `metrics.image.repository`                 | Cassandra exporter image name                                                                          | `bitnami/cassandra-exporter` |
-| `metrics.image.tag`                        | Cassandra exporter image tag                                                                           | `2.3.8-debian-11-r0`         |
+| `metrics.image.tag`                        | Cassandra exporter image tag                                                                           | `2.3.8-debian-11-r16`        |
 | `metrics.image.pullPolicy`                 | image pull policy                                                                                      | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                       | `[]`                         |
 | `metrics.resources.limits`                 | The resources limits for the container                                                                 | `{}`                         |
@@ -284,7 +284,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.tlsEncryptionSecretName` | Secret with the encryption of the TLS certificates                                            | `""`    |
 
 
-The above parameters map to the env variables defined in [bitnami/cassandra](https://github.com/bitnami/bitnami-docker-cassandra). For more information please refer to the [bitnami/cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image documentation.
+The above parameters map to the env variables defined in [bitnami/cassandra](https://github.com/bitnami/containers/tree/main/bitnami/cassandra). For more information please refer to the [bitnami/cassandra](https://github.com/bitnami/containers/tree/main/bitnami/cassandra) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -331,7 +331,7 @@ Refer to the chart documentation for more [information on customizing an Apache 
 
 ### Initialize the database
 
-The [Bitnami Apache Cassandra image](https://github.com/bitnami/bitnami-docker-cassandra) image supports the use of custom scripts to initialize a fresh instance. This may be done by creating a Kubernetes ConfigMap that includes the necessary *sh* or *cql* scripts and passing this ConfigMap to the chart via the *initDBConfigMap* parameter.
+The [Bitnami Apache Cassandra image](https://github.com/bitnami/containers/tree/main/bitnami/cassandra) image supports the use of custom scripts to initialize a fresh instance. This may be done by creating a Kubernetes ConfigMap that includes the necessary *sh* or *cql* scripts and passing this ConfigMap to the chart via the *initDBConfigMap* parameter.
 
 Refer to the chart documentation for more [information on customizing an Apache Cassandra deployment](https://docs.bitnami.com/kubernetes/infrastructure/cassandra/configuration/customize-new-instance/).
 
@@ -343,7 +343,7 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 
 ## Persistence
 
-The [Bitnami Apache Cassandra](https://github.com/bitnami/bitnami-docker-cassandra) image stores the Apache Cassandra data at the `/bitnami/cassandra` path of the container.
+The [Bitnami Apache Cassandra](https://github.com/bitnami/containers/tree/main/bitnami/cassandra) image stores the Apache Cassandra data at the `/bitnami/cassandra` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -441,7 +441,7 @@ This release make it possible to specify custom initialization scripts in both c
 
 #### Breaking changes
 
-- `startupCQL` has been removed. Instead, for initializing the database, see [this section](#initializing-the-database).
+- `startupCQL` has been removed. Instead, for initializing the database, see [this section](#initialize-the-database).
 
 ## License
 

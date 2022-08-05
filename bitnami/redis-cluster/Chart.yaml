@@ -21,6 +21,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: redis-cluster
 sources:
-  - https://github.com/bitnami/bitnami-docker-redis
+  - https://github.com/bitnami/containers/tree/main/bitnami/redis
   - http://redis.io/
-version: 8.1.1
+version: 8.1.2

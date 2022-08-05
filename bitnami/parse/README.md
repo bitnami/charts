@@ -17,7 +17,7 @@ $ helm install my-release bitnami/parse
 
 ## Introduction
 
-This chart bootstraps a [Parse](https://github.com/bitnami/bitnami-docker-parse) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Parse](https://github.com/bitnami/containers/tree/main/bitnami/parse) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -316,7 +316,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongodb.persistence.size`         | PVC Storage Request for MongoDB&reg; volume | `8Gi`           |
 
 
-The above parameters map to the env variables defined in [bitnami/parse](https://github.com/bitnami/bitnami-docker-parse). For more information please refer to the [bitnami/parse](https://github.com/bitnami/bitnami-docker-parse) image documentation.
+The above parameters map to the env variables defined in [bitnami/parse](https://github.com/bitnami/containers/tree/main/bitnami/parse). For more information please refer to the [bitnami/parse](https://github.com/bitnami/containers/tree/main/bitnami/parse) image documentation.
 
 > **Note**:
 >
@@ -362,7 +362,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Deploy your Cloud functions with Parse Cloud Code
 
-The [Bitnami Parse](https://github.com/bitnami/bitnami-docker-parse) image allows you to deploy your Cloud functions with Parse Cloud Code (a feature which allows running a piece of code in your Parse Server instead of the user's mobile devices). In order to add your custom scripts, they must be located inside the chart folder `files/cloud` so they can be consumed as a ConfigMap.
+The [Bitnami Parse](https://github.com/bitnami/containers/tree/main/bitnami/parse) image allows you to deploy your Cloud functions with Parse Cloud Code (a feature which allows running a piece of code in your Parse Server instead of the user's mobile devices). In order to add your custom scripts, they must be located inside the chart folder `files/cloud` so they can be consumed as a ConfigMap.
 
 Alternatively, you can specify custom scripts using the `cloudCodeScripts` parameter as dict.
 
@@ -370,7 +370,7 @@ In addition to these options, you can also set an external ConfigMap with all th
 
 ## Persistence
 
-The [Bitnami Parse](https://github.com/bitnami/bitnami-docker-parse) image stores the Parse data and configurations at the `/bitnami/parse` path of the container.
+The [Bitnami Parse](https://github.com/bitnami/containers/tree/main/bitnami/parse) image stores the Parse data and configurations at the `/bitnami/parse` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -460,7 +460,7 @@ Please visit the release notes from the upstream project at https://github.com/p
 
 ### To 15.0.0
 
-The [Bitnami Parse](https://github.com/bitnami/bitnami-docker-parse) and [Bitnami Parse Dashboard](https://github.com/bitnami/bitnami-docker-parse-dashboard) images were refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-parse/tree/master/4/debian-10/rootfs) folder of the container images.
+The [Bitnami Parse](https://github.com/bitnami/containers/tree/main/bitnami/parse) and [Bitnami Parse Dashboard](https://github.com/bitnami/containers/tree/main/bitnami/parse-dashboard) images were refactored and now the source code is published in GitHub in the `rootfs` folder of the container images.
 
 Compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected.
 

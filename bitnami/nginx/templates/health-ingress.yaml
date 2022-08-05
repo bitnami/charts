@@ -46,9 +46,9 @@ spec:
     {{- if .Values.healthIngress.extraRules }}
     {{- include "common.tplvalues.render" (dict "value" .Values.healthIngress.extraRules "context" $) | nindent 4 }}
     {{- end }}
-  {{- if or (and .Values.healthIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.healthIngress.annotations )) .Values.healthIngress.selfSigned)) .Values.healthIngress.extraTls }}
+  {{- if or (and .Values.healthIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.healthIngress.annotations )) .Values.healthIngress.selfSigned (not (empty .Values.healthIngress.secrets)))) .Values.healthIngress.extraTls }}
   tls:
-    {{- if and .Values.healthIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.healthIngress.annotations )) .Values.healthIngress.selfSigned) }}
+    {{- if and .Values.healthIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.healthIngress.annotations )) .Values.healthIngress.selfSigned (not (empty .Values.healthIngress.secrets))) }}
     - hosts:
         - {{ .Values.healthIngress.hostname | quote }}
       secretName: {{ printf "%s-health-tls" .Values.healthIngress.hostname }}

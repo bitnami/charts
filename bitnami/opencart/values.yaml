@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/opencart
-  tag: 3.0.3-8-debian-11-r13
+  tag: 3.0.3-8-debian-11-r22
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -84,28 +84,34 @@ hostAliases:
 ##
 replicaCount: 1
 ## @param opencartSkipInstall Skip OpenCart installation wizard. Useful for migrations and restoring from SQL dump
-## ref: https://github.com/bitnami/bitnami-docker-opencart#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/opencart#configuration
 ##
 opencartSkipInstall: false
 ## @param opencartHost OpenCart host to create application URLs
-## ref: https://github.com/bitnami/bitnami-docker-opencart#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/opencart#configuration
 ##
 opencartHost: ""
 ## @param opencartUsername User of the application
-## ref: https://github.com/bitnami/bitnami-docker-opencart#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/opencart#configuration
 ##
 opencartUsername: user
 ## @param opencartPassword Application password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-opencart#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/opencart#configuration
 ##
 opencartPassword: ""
 ## @param opencartEmail Admin email
-## ref: https://github.com/bitnami/bitnami-docker-opencart#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/opencart#configuration
 ##
 opencartEmail: user@example.com
+## @param opencartEnableHttps Whether to use HTTPS by default, default is false.
+## For applications with Ingress and TLS feature enabled, it's defaulted to true and can be
+## overrided by the OPENCART_ENABLE_HTTPS environment variable.
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/opencart#environment-variables
+##
+opencartEnableHttps: false
 ## @param allowEmptyPassword Allow DB blank passwords
-## ref: https://github.com/bitnami/bitnami-docker-opencart#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/opencart#environment-variables
 ##
 allowEmptyPassword: true
 ## @param command Override default container command (useful when using custom images)
@@ -165,7 +171,7 @@ tolerations: []
 ##
 existingSecret: ""
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-opencart/#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/opencart/#smtp-configuration
 ## @param smtpHost SMTP host
 ## @param smtpPort SMTP port
 ## @param smtpUser SMTP user
@@ -517,7 +523,7 @@ ingress:
   ## - host: opencart.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: opencart-svc
   ##           port:
@@ -542,15 +548,15 @@ mariadb:
   ##
   auth:
     ## @param mariadb.auth.rootPassword Password for the MariaDB `root` user
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
     ##
     rootPassword: ""
     ## @param mariadb.auth.database Database name to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
     ##
     database: bitnami_opencart
     ## @param mariadb.auth.username Database user to create
-    ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+    ## ref: https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
     ##
     username: bn_opencart
     ## @param mariadb.auth.password Password for the database
@@ -625,7 +631,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r13
+    tag: 11-debian-11-r20
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -673,7 +679,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.11.0-debian-11-r13
+    tag: 0.11.0-debian-11-r24
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -743,7 +749,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r13
+    tag: 11-debian-11-r20
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

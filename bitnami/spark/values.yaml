@@ -44,6 +44,23 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param initScripts Dictionary of init scripts. Evaluated as a template.
+## Specify dictionary of scripts to be run at first boot
+## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
+## For example:
+## initScripts:
+##   my_init_script.sh: |
+##      #!/bin/sh
+##      echo "Do something."
+##
+initScripts: {}
+## @param initScriptsCM ConfigMap with the init scripts. Evaluated as a template.
+## Note: This will override initScripts
+##
+initScriptsCM: ""
+## @param initScriptsSecret Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.
+##
+initScriptsSecret: ""
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -74,7 +91,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/spark
-  tag: 3.3.0-debian-11-r7
+  tag: 3.3.0-debian-11-r15
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

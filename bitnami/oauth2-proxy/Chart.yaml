@@ -28,6 +28,6 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: oauth2-proxy
 sources:
-  - https://github.com/bitnami/bitnami-docker-oauth2-proxy
+  - https://github.com/bitnami/containers/tree/main/bitnami/oauth2-proxy
   - https://github.com/oauth2-proxy/oauth2-proxy
-version: 3.0.1
+version: 3.0.3

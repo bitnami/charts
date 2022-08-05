@@ -68,7 +68,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/wildfly
-  tag: 26.1.1-debian-11-r10
+  tag: 26.1.1-debian-11-r24
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -88,7 +88,7 @@ image:
 
 ## @section WildFly Configuration parameters
 ## WildFly settings based on environment variables
-## ref: https://github.com/bitnami/bitnami-docker-wildfly#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/wildfly#configuration
 
 ## @param wildflyUsername WildFly username
 ##
@@ -492,7 +492,7 @@ ingress:
   ## - host: wildfly.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: wildfly-svc
   ##           port:
@@ -630,7 +630,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r10
+    tag: 11-debian-11-r20
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
