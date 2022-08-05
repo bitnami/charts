@@ -214,10 +214,27 @@ Get the PostgreSQL primary extended configuration ConfigMap name.
 {{- end -}}
 
 {{/*
+Get the PostgreSQL read replica extended configuration ConfigMap name.
+*/}}
+{{- define "postgresql.readReplicas.extendedConfigmapName" -}}
+    {{- printf "%s-extended-configuration" (include "postgresql.readReplica.fullname" .) -}}
+{{- end -}}
+
+{{/*
 Return true if a configmap object should be created for PostgreSQL primary with the extended configuration
 */}}
 {{- define "postgresql.primary.createExtendedConfigmap" -}}
 {{- if and .Values.primary.extendedConfiguration (not .Values.primary.existingExtendedConfigmap) }}
+    {{- true -}}
+{{- else -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a configmap object should be created for PostgreSQL read replica with the extended configuration
+*/}}
+{{- define "postgresql.readReplicas.createExtendedConfigmap" -}}
+{{- if .Values.readReplicas.extendedConfiguration }}
     {{- true -}}
 {{- else -}}
 {{- end -}}

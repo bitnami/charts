@@ -111,6 +111,7 @@ rules:
       - gateways
       - httproutes
       - referencepolicies
+      - referencegrants
       - tlsroutes
     verbs:
       - get
