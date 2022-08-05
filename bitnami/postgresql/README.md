@@ -259,7 +259,7 @@ kubectl delete pvc -l release=my-release
 | `primary.persistence.dataSource`             | Custom PVC data source                                                                                                   | `{}`                  |
 
 
-### PostgreSQL read only replica parameters
+### PostgreSQL read only replica parameters (only used when `architecture` is set to `replication`)
 
 | Name                                              | Description                                                                                                              | Value                 |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
