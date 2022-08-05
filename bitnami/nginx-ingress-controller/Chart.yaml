@@ -19,7 +19,7 @@ keywords:
   - web
   - www
   - reverse proxy
-kubeVersion: '>= 1.19.0-0'
+kubeVersion: '>= 1.20.0-0'
 maintainers:
   - name: Bitnami
     url: https://github.com/bitnami/charts
@@ -27,4 +27,4 @@ name: nginx-ingress-controller
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/nginx-ingress-controller
   - https://github.com/kubernetes/ingress-nginx
-version: 9.2.26
+version: 9.2.27
