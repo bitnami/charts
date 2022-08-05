@@ -7,7 +7,7 @@ Parse is a platform that enables users to add a scalable and powerful backend to
 [Overview of Parse Server](http://parseplatform.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```console
@@ -431,6 +431,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 19.0.0
+
+This major updates the MongoDB&reg; subchart to its newest major, [13.0.0](https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1300). No major issues are expected during the upgrade.
 
 ### To 18.0.0
 

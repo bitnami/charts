@@ -24,13 +24,14 @@ Cypress.Commands.add(
     cy.contains('button', 'Log In').click();
     cy.get('#login-account-name').type(username);
     cy.get('#login-account-password').type(`${password}{enter}`);
+
+    // In Discourse, logging is not considered as completed until the home page is visible.
+    // Navigating to any other site before that will lead to a 404 error
+    cy.contains('a', 'Unread');
     cy.get('body').then(($body) => {
       if ($body.text().includes('Skip these tips')) {
         cy.contains('Skip these tips').click();
       }
     });
-    // In Discourse, logging is not considered as completed until the home page is visible.
-    // Navigating to any other site before that will lead to a 404 error
-    cy.contains('Admin Quick Start Guide');
   }
 );
