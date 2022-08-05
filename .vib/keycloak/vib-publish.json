@@ -46,7 +46,8 @@
             },
             "remote": {
               "workload": "sts-keycloak"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         },
         {
