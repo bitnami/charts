@@ -27,5 +27,5 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: schema-registry
 sources:
-  - https://github.com/bitnami/bitnami-docker-schema-registry
+  - https://github.com/bitnami/containers/tree/main/bitnami/schema-registry
 version: 4.0.3
