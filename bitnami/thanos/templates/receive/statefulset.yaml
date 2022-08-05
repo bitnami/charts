@@ -35,7 +35,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.receive.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
-        checksum/ojbstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
+        checksum/objstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
         {{- if (include "thanos.receive.createConfigmap" .) }}
         checksum/receive-configuration: {{ include (print $.Template.BasePath "/receive/configmap.yaml") . | sha256sum }}
         {{- end }}

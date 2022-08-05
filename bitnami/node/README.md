@@ -108,7 +108,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | `image.registry`                              | NodeJS image registry                                                                                                    | `docker.io`             |
 | `image.repository`                            | NodeJS image repository                                                                                                  | `bitnami/node`          |
-| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                                                        | `16.15.0-debian-10-r26` |
+| `image.tag`                                   | NodeJS image tag (immutable tags are recommended)                                                                        | `16.16.0-debian-11-r14` |
 | `image.pullPolicy`                            | NodeJS image pull policy                                                                                                 | `IfNotPresent`          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                         | `[]`                    |
 | `image.debug`                                 | Set to true if you would like to see extra information on logs                                                           | `false`                 |
@@ -181,7 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------ | -------------------------------------------------------------- | -------------------------------------------- |
 | `git.image.registry`           | Git image registry                                             | `docker.io`                                  |
 | `git.image.repository`         | Git image repository                                           | `bitnami/git`                                |
-| `git.image.tag`                | Git image tag (immutable tags are recommended)                 | `2.36.1-debian-10-r15`                       |
+| `git.image.tag`                | Git image tag (immutable tags are recommended)                 | `2.37.1-debian-11-r8`                        |
 | `git.image.pullPolicy`         | Git image pull policy                                          | `IfNotPresent`                               |
 | `git.image.pullSecrets`        | Specify docker-registry secret names as an array               | `[]`                                         |
 | `git.image.debug`              | Set to true if you would like to see extra information on logs | `false`                                      |
@@ -198,7 +198,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory  | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                             | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                           | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `10-debian-10-r434`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended) | `11-debian-11-r22`      |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                          | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                             | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                       | `{}`                    |
@@ -403,6 +403,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 19.0.0
+
+This major updates the MongoDB&reg; subchart to its newest major, [13.0.0](https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1300). No major issues are expected during the upgrade.
 
 ### To 18.0.0
 
