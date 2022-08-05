@@ -21,9 +21,6 @@ spec:
         {{- if .Values.auth.tls.enabled }}
         - port: {{ .Values.containerPorts.https }}
         {{- end }}
-        {{- if .Values.metrics.enabled }}
-        - port: {{ .Values.containerPorts.management }}
-        {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:

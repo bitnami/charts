@@ -16,19 +16,6 @@
         }
       ]
     },
-    "verify": {
-      "actions": [
-        {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": [
-              "OS"
-            ]
-          }
-        }
-      ]
-    },
     "publish": {
       "actions": [
         {
