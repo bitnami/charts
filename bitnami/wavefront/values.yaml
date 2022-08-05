@@ -326,7 +326,9 @@ collector:
   ## @param collector.controlplane.enabled Enable metrics for control plane dashboard (default false)
   ##
   controlplane:
-    enabled: false
+    enabled: true
+    collection:
+      interval: 120s
   ## @param collector.existingConfigmap Name of existing ConfigMap with collector configuration
   ##
   existingConfigmap: ""
