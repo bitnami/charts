@@ -5,7 +5,7 @@ appVersion: 5.2.4
 dependencies:
   - name: mongodb
     repository: https://charts.bitnami.com/bitnami
-    version: 12.x.x
+    version: 13.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -30,4 +30,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/parse
   - https://github.com/bitnami/containers/tree/main/bitnami/parse-dashboard
   - https://parse.com/
-version: 18.1.18
+version: 19.0.0
