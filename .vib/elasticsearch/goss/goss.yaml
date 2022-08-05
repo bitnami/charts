@@ -3,28 +3,9 @@ file:
     mode: "0644"
     filetype: file
     contains: 
-     - {{ printf "/port.*%s/" .Env.ELASTICSEARCH_TRANSPORT_PORT_NUMBER }}
+     - /port.*{{ .Vars.containerPorts.transport }}/
     exists: true
 /bitnami/elasticsearch/data:
     mode: "0644"
     filetype: directory
-    contains: 
     exists: true  
-command:
-  networking-test:
-    exec: curl localhost:{{ .Env.ELASTICSEARCH_HTTP_PORT_NUMBER }}
-    exit-status: 0
-    stdout: 
-      - {{ printf "/number.*%s/" .Env.APP_VERSION }}
-    stderr: []
-  user-id-test:
-    exec: if [ "$(id -u)" -eq 0 ]; then exit 1; fi
-    exit-status: 0
-    stdout: []
-    stderr: []  
-  elasticsearch-process:
-    exec: ps aux | grep elasticsearch
-    exit-status: 0
-    stdout: 
-      - /opt/bitnami/java/bin/java
-    stderr: []  

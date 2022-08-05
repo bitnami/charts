@@ -175,6 +175,10 @@ spec:
                 secretKeyRef:
                   name: {{ include "opencart.databaseSecretName" . }}
                   key: mariadb-password
+            {{- if or .Values.opencartEnableHttps (and .Values.ingress.enabled (or .Values.ingress.tls .Values.ingress.extraTls)) }}
+            - name: OPENCART_ENABLE_HTTPS
+              value: "true"
+            {{- end }}
             - name: OPENCART_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.opencartSkipInstall | quote }}
             {{- $port:= (coalesce .Values.service.ports.http .Values.service.port) | toString }}
