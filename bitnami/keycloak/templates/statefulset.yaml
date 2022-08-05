@@ -220,16 +220,6 @@ spec:
                   name: {{ $globalSecretName }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "admin-password") }}
                 {{- end }}
-            - name: KEYCLOAK_MANAGEMENT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                {{- if .Values.auth.existingSecretPerPassword }}
-                  name: {{ tpl (include "common.secrets.name" (dict "existingSecret" .Values.auth.existingSecretPerPassword.managementPassword "context" $)) $ }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecretPerPassword "key" "managementPassword") }}
-                {{- else }}
-                  name: {{ $globalSecretName }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.auth.existingSecret "key" "management-password") }}
-                {{- end }}
             - name: KEYCLOAK_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -302,9 +292,6 @@ spec:
               containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
             {{- end }}
-            - name: http-management
-              containerPort: {{ .Values.containerPorts.management }}
-              protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.startupProbe.enabled }}
           startupProbe: {{- omit .Values.startupProbe "enabled" | toYaml | nindent 12 }}
