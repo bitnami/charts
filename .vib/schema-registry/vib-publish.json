@@ -46,7 +46,8 @@
             },
             "remote": {
               "workload": "sts-schema-registry"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         },
         {

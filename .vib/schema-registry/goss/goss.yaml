@@ -4,5 +4,5 @@ file:
     filetype: file
     exists: true
     contains:
-      - "listeners = http://0.0.0.0:8081"
-      - "avro.compatibility.level = backward"
+      - "listeners = {{ .Vars.listeners }}"
+      - "avro.compatibility.level = {{ .Vars.avroCompatibilityLevel }}"
