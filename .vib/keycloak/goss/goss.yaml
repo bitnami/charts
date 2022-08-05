@@ -2,7 +2,7 @@ file:
   /opt/bitnami/keycloak/conf/keycloak.conf:
     exists: true
     filetype: file
-    mode: "0644"
+    mode: "0664"
     contains:
     - /http-port.*{{ .Vars.containerPorts.http }}/
     - /log-console-output.*{{ .Vars.logging.output }}/
