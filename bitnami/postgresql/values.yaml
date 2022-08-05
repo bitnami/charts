@@ -668,12 +668,16 @@ primary:
     ##
     dataSource: {}
 
-## @section PostgreSQL read only replica parameters
+## @section PostgreSQL read only replica parameters (only used when `architecture` is set to `replication`)
 ##
 readReplicas:
   ## @param readReplicas.replicaCount Number of PostgreSQL read only replicas
   ##
   replicaCount: 1
+  ## @param readReplicas.extendedConfiguration Extended PostgreSQL read only replicas configuration (appended to main or default configuration)
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#allow-settings-to-be-loaded-from-files-other-than-the-default-postgresqlconf
+  ##
+  extendedConfiguration: ""
   ## @param readReplicas.extraEnvVars Array with extra environment variables to add to PostgreSQL read only nodes
   ## e.g:
   ## extraEnvVars:
