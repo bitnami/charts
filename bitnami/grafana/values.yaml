@@ -240,14 +240,13 @@ dashboardsConfigMaps: []
 ## @param datasources.secretDefinition The contents of a secret to define containing custom datasource files.
 ## Only used if datasources.secretName is empty or not defined. Example:
 ##  secretDefinition:
-##    datasources.yaml:
-##      apiVersion: 1
-##      datasources:
-##      - name: Prometheus
-##        type: prometheus
-##        url: http://prometheus-prometheus-server
-##        access: proxy
-##        isDefault: true
+##    apiVersion: 1
+##    datasources:
+##    - name: Prometheus
+##      type: prometheus
+##      url: http://prometheus-prometheus-server
+##      access: proxy
+##      isDefault: true
 datasources:
   secretName: ""
   ##secretDefinition:
