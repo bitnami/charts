@@ -284,6 +284,9 @@ tls:
 ## @section PostgreSQL Primary parameters
 ##
 primary:
+  ## @param primary.name Name of the primary database (eg primary, master, leader, ...)
+  ##
+  name: primary
   ## @param primary.configuration PostgreSQL Primary main configuration to be injected as ConfigMap
   ## ref: https://www.postgresql.org/docs/current/static/runtime-config.html
   ##
@@ -671,6 +674,9 @@ primary:
 ## @section PostgreSQL read only replica parameters (only used when `architecture` is set to `replication`)
 ##
 readReplicas:
+  ## @param readReplicas.name Name of the read replicas database (eg secondary, slave, ...)
+  ##
+  name: read
   ## @param readReplicas.replicaCount Number of PostgreSQL read only replicas
   ##
   replicaCount: 1
