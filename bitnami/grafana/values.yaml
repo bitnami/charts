@@ -249,7 +249,7 @@ dashboardsConfigMaps: []
 ##      isDefault: true
 datasources:
   secretName: ""
-  ##secretDefinition:
+  secretDefinition: {}
 
 ## Create notifiers from a configMap
 ## The notifiersName must contain the files
