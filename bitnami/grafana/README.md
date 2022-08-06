@@ -209,7 +209,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `dashboardsProvider.configMapName` | Name of a ConfigMap containing a custom dashboard provider                                                                                           | `""`                              |
 | `dashboardsConfigMaps`             | Array with the names of a series of ConfigMaps containing dashboards files                                                                           | `[]`                              |
 | `datasources.secretName`           | The name of an externally-managed secret containing custom datasource files.                                                                         | `""`                              |
-| `datasources.secretDefinition`     | The contents of a secret to define containing custom datasource files.                                                                               | `{}`                              |
+| `datasources.secretDefinition`     | The contents of a secret defining a custom datasource file. Only used if datasources.secretName is empty or not defined.                             | `{}`                              |
 | `notifiers.configMapName`          | Name of a ConfigMap containing Grafana notifiers configuration                                                                                       | `""`                              |
 
 
