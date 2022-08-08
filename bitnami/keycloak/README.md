@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                 | Keycloak image registry                                                                                                      | `docker.io`            |
 | `image.repository`               | Keycloak image repository                                                                                                    | `bitnami/keycloak`     |
-| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `18.0.2-debian-11-r17` |
+| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `18.0.2-debian-11-r18` |
 | `image.pullPolicy`               | Keycloak image pull policy                                                                                                   | `IfNotPresent`         |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                             | `[]`                   |
 | `image.debug`                    | Specify if debug logs should be enabled                                                                                      | `false`                |

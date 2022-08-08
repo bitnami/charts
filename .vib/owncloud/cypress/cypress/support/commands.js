@@ -1,4 +1,4 @@
-const COMMAND_DELAY = 800;
+const COMMAND_DELAY = 2000;
 const BASE_URL = 'http://vmware-owncloud.my';
 
 for (const command of ['click']) {
