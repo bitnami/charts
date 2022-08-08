@@ -14,11 +14,12 @@ it('can access the API and obtain global compatibility level', () => {
   });
 });
 
-it('can access the API and create a new schema in the "test" subject', () => {
+it('can create a new schema and subject', () => {
+  const newSubject = 'test';
   cy.request({
     method: 'POST',
     headers: { 'Content-Type': 'application/vnd.schemaregistry.v1+json' },
-    url: 'subjects/test/versions',
+    url: `/subjects/${newSubject}/versions`,
     body: body,
   }).then((response) => {
     expect(response.status).to.eq(200);
@@ -27,11 +28,11 @@ it('can access the API and create a new schema in the "test" subject', () => {
 
   cy.request({
     method: 'GET',
-    url: 'subjects',
+    url: '/subjects',
     form: true,
   }).then((response) => {
     expect(response.status).to.eq(200);
     expect(response.body).to.have.length(1);
-    expect(response.body).to.include('test');
+    expect(response.body).to.include(newSubject);
   });
 });
