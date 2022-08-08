@@ -1,14 +1,10 @@
 file:
-  /opt/bitnami/discourse/tmp:
+  /bitnami/discourse:
     exists: true
     filetype: directory
     mode: "0775"
     owner: discourse
     group: root
-  /opt/bitnami/discourse/plugins:
-    filetype: symlink
-    linked-to: /bitnami/discourse/plugins
-    exists: true
   /opt/bitnami/discourse/config/discourse.conf:
     exists: true
     filetype: file
@@ -16,15 +12,9 @@ file:
     owner: root
     group: root
     contains:
-      - {{ printf "hostname = %s" .Env.DISCOURSE_HOST }}
+      - hostname = {{ .Vars.host }}
+      - db_username = {{ .Vars.postgresql.auth.username }}
 command:
   discourse-cli:
     exec: cd /opt/bitnami/discourse/ && RAILS_ENV=production bundle exec rake -T
     exit-status: 0
-    stdout:
-      - rake about
-      - rake plugin:versions
-    stderr: []
-user:
-  discourse:
-    exists: true
