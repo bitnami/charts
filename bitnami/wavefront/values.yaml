@@ -323,10 +323,13 @@ collector:
     ##       password = "PASSWORD"
     ##
     config: []
-  ## @param collector.controlplane.enabled Enable metrics for control plane dashboard (default false)
+  ## @param collector.controlplane.enabled Enable metrics for control plane dashboard
+  ## @param collector.controlplane.collection.interval The collection interval for the control plane
   ##
   controlplane:
-    enabled: false
+    enabled: true
+    collection:
+      interval: 120s
   ## @param collector.existingConfigmap Name of existing ConfigMap with collector configuration
   ##
   existingConfigmap: ""
