@@ -1418,6 +1418,9 @@ persistence:
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations: {}
+  ## @param persistence.labels Persistent Volume Claim labels
+  ##
+  labels: {}
   ## @param persistence.selector Selector to match an existing Persistent Volume (this value is evaluated as a template)
   ## selector:
   ##   matchLabels:
@@ -1427,7 +1430,7 @@ persistence:
 
 ## @section Traffic Exposure parameters
 
-## PgPool service parameters
+## PostgreSQL service parameters
 ##
 service:
   ## @param service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)

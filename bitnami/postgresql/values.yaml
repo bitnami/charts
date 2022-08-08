@@ -668,7 +668,7 @@ primary:
     ##
     dataSource: {}
 
-## @section PostgreSQL read only replica parameters
+## @section PostgreSQL read only replica parameters (only used when `architecture` is set to `replication`)
 ##
 readReplicas:
   ## @param readReplicas.replicaCount Number of PostgreSQL read only replicas
