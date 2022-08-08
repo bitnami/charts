@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the the statefulset                                  | `["infinity"]`               |
 | `image.registry`         | Odoo image registry                                                                     | `docker.io`                  |
 | `image.repository`       | Odoo image repository                                                                   | `bitnami/odoo`               |
-| `image.tag`              | Odoo image tag (immutable tags are recommended)                                         | `15.0.20220710-debian-11-r7` |
+| `image.tag`              | Odoo image tag (immutable tags are recommended)                                         | `15.0.20220710-debian-11-r9` |
 | `image.pullPolicy`       | Odoo image pull policy                                                                  | `IfNotPresent`               |
 | `image.pullSecrets`      | Odoo image pull secrets                                                                 | `[]`                         |
 | `image.debug`            | Enable image debug mode                                                                 | `false`                      |

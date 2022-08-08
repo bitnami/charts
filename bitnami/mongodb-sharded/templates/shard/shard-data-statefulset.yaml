@@ -91,7 +91,7 @@ spec:
             - -ec
             - |
               mkdir -p {{ $.Values.shardsvr.persistence.mountPath }}{{- if $.Values.shardsvr.persistence.subPath }}/{{ $.Values.shardsvr.persistence.subPath }}{{- end }}
-              chmod 700 {{ $.Values.shardsvr.persistence.mountPath }}
+              chown {{ $.Values.shardsvr.dataNode.containerSecurityContext.runAsUser }}:{{ $.Values.shardsvr.dataNode.podSecurityContext.fsGroup }} {{ $.Values.shardsvr.persistence.mountPath }}{{- if $.Values.shardsvr.persistence.subPath }}/{{ $.Values.shardsvr.persistence.subPath }}{{- end }}
               find {{ $.Values.shardsvr.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ $.Values.shardsvr.dataNode.containerSecurityContext.runAsUser }}:{{ $.Values.shardsvr.dataNode.podSecurityContext.fsGroup }}
           securityContext:
             runAsUser: 0
