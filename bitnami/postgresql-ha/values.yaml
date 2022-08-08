@@ -1430,7 +1430,7 @@ persistence:
 
 ## @section Traffic Exposure parameters
 
-## PgPool service parameters
+## PostgreSQL service parameters
 ##
 service:
   ## @param service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)
