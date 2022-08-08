@@ -2,15 +2,13 @@
 import { body } from '../fixtures/schema.json';
 
 it('can access the API and obtain global compatibility level', () => {
-  cy.fixture('config').then((config) => {
-    cy.request({
-      method: 'GET',
-      url: '/config',
-      form: true,
-    }).then((response) => {
-      expect(response.status).to.eq(200);
-      expect(response.body.compatibilityLevel).to.contain(config.compatibilityLevel);
-    });
+  cy.request({
+    method: 'GET',
+    url: '/config',
+    form: true,
+  }).then((response) => {
+    expect(response.status).to.eq(200);
+    expect(response.body.compatibilityLevel).to.contain(Cypress.env('compatibilityLevel'));
   });
 });
 
