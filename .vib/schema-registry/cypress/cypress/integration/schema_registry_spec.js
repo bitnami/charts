@@ -1,14 +1,16 @@
 /// <reference types="cypress" />
-import body from '../fixtures/schema.json';
+import { body } from '../fixtures/schema.json';
 
 it('can access the API and obtain global compatibility level', () => {
-  cy.request({
-    method: 'GET',
-    url: '/config',
-    form: true,
-  }).then((response) => {
-    expect(response.status).to.eq(200);
-    expect(response.body.compatibilityLevel).to.contain('BACKWARD');
+  cy.fixture('config').then((config) => {
+    cy.request({
+      method: 'GET',
+      url: '/config',
+      form: true,
+    }).then((response) => {
+      expect(response.status).to.eq(200);
+      expect(response.body.compatibilityLevel).to.contain(config.compatibilityLevel);
+    });
   });
 });
 
