@@ -67,7 +67,7 @@ jobs:
       - name: Assign to a person to work on it
         # Only if moved into In progress FROM Triage
         if: ${{ github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID && github.event.changes != null && github.event.changes.column_id && github.event.changes.column_id.from == env.TRIAGE_COLUMN_ID }}
-        uses: pozil/auto-assign-issue@v1.7.3
+        uses: pozil/auto-assign-issue@v1.9.0
         with:
           numOfAssignee: 1
           removePreviousAssignees: true
