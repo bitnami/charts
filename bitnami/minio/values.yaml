@@ -374,17 +374,17 @@ provisioning:
   config: []
   ## MinIO&reg; pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param podSecurityContext.enabled Enable pod Security Context
-  ## @param podSecurityContext.fsGroup Group ID for the container
+  ## @param provisioning.podSecurityContext.enabled Enable pod Security Context
+  ## @param provisioning.podSecurityContext.fsGroup Group ID for the container
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
   ## MinIO&reg; container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param containerSecurityContext.enabled Enable container Security Context
-  ## @param containerSecurityContext.runAsUser User ID for the container
-  ## @param containerSecurityContext.runAsNonRoot Avoid running as root User
+  ## @param provisioning.containerSecurityContext.enabled Enable container Security Context
+  ## @param provisioning.containerSecurityContext.runAsUser User ID for the container
+  ## @param provisioning.containerSecurityContext.runAsNonRoot Avoid running as root User
   ##
   containerSecurityContext:
     enabled: true
