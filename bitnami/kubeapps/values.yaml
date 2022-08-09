@@ -1581,6 +1581,14 @@ pinnipedProxy:
   ## @param pinnipedProxy.defaultPinnipedAPISuffix Specify the (default) API suffix
   ##
   defaultPinnipedAPISuffix: pinniped.dev
+  ## @param pinnipedProxy.TLSSecret Specify an optional TLS secret with which to proxy requests
+  ##
+  TLSSecret: ""
+  ## @param pinnipedProxy.CACert Specify the TLS CA cert config map which
+  ## clients of pinniped proxy should use with tls requests. This config map
+  ## must contain a ca.crt key with the CA cert content as the value.
+  ##
+  CACert: ""
   ## @param pinnipedProxy.lifecycleHooks for the Pinniped Proxy container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
