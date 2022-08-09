@@ -25,4 +25,4 @@ name: kibana
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kibana
   - https://www.elastic.co/products/kibana
-version: 10.1.19
+version: 10.1.20
