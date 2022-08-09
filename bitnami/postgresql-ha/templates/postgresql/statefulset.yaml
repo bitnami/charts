@@ -169,7 +169,7 @@ spec:
               value: {{ .Values.persistence.mountPath | quote }}
             - name: PGDATA
               value: {{ printf "%s/%s" .Values.persistence.mountPath "data" | quote }}
-            {{- if and (or (not (include "postgresql-ha.postgresqlCreateSecret" .)) (include "postgresql-ha.postgresqlPasswordProvided" .)) (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) }}
+            {{- if or (or (not (include "postgresql-ha.postgresqlCreateSecret" .)) (include "postgresql-ha.postgresqlPasswordProvided" .)) (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
               value: "/opt/bitnami/postgresql/secrets/postgresql-postgres-password"
