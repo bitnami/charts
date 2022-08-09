@@ -579,6 +579,11 @@ dashboard:
   defaultTheme: ""
   ## @param dashboard.replicaCount Number of Dashboard replicas to deploy
   ##
+  ## @param dashboard.createNamespaceLabels Labels added to newly created namespaces
+  ## e.g:
+  # createNamespaceLabels:
+  #   "managed-by": "kubeapps"
+  createNamespaceLabels: {}
   replicaCount: 2
   ## @param dashboard.updateStrategy.type Dashboard deployment strategy type.
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
