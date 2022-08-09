@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { body } from '../fixtures/schema.json';
+import body from '../fixtures/schema.json';
 
 it('can access the API and obtain global compatibility level', () => {
   cy.request({
