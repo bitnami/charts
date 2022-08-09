@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/dokuwiki"
         },
-        "runtime_parameters": "ZG9rdXdpa2lVc2VybmFtZTogdXNlcgpkb2t1d2lraVBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgw",
+        "runtime_parameters": "ZG9rdXdpa2lVc2VybmFtZTogdXNlcgpkb2t1d2lraVBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKZG9rdXdpa2lXaWtpTmFtZTogTXkgU3VwZXIgV2lraQpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODA=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -31,13 +31,6 @@
         }
       },
       "actions": [
-        {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
-          }
-        },
         {
           "action_id": "health-check",
           "params": {
@@ -67,7 +60,8 @@
             },
             "remote": {
               "workload": "deploy-dokuwiki"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         }
       ]
