@@ -194,7 +194,7 @@ Compile all warnings into a single message.
 
 {{/* Validate values of Apache Geode - The list of components for which to enable TLS must be provided when TLS authentication is enabled */}}
 {{- define "geode.validateValues.tls.components" -}}
-{{- if and .Values.auth.tls.enabled (and (empty .Values.auth.tls.components)) -}}
+{{- if and .Values.auth.tls.enabled (empty .Values.auth.tls.components) -}}
 geode: auth.tls.components
     A list of components for which to enable TLS is required
     when TLS authentication is enabled.
