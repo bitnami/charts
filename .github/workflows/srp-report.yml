@@ -7,7 +7,8 @@ on:
 env:
   BAC_SRP_ENDPOINT: https://apigw.vmware.com/v1/s1/api/helix-beta
   BAC_SRP_CLIENT_ID: ${{ secrets.BAC_SRP_CLIENT_ID }}
-  BAC_SRP_CLIENT_SECRET: ${{ secrets.BAC_SRP_CLIENT_ID }}
+  BAC_SRP_CLIENT_SECRET: ${{ secrets.BAC_SRP_CLIENT_SECRET }}
+
 jobs:
   report:
     runs-on: ubuntu-latest
@@ -18,6 +19,7 @@ jobs:
           curl -SsLfo /tmp/srp-cli.tgz https://srp-cli.s3.amazonaws.com/srp-cli-latest.tgz
           sudo tar xf /tmp/srp-cli.tgz -C /usr/local/bin/
           srp config --srp-endpoint ${BAC_SRP_ENDPOINT}
+          srp config auth --client-id=${BAC_SRP_CLIENT_ID} --client-secret=${BAC_SRP_CLIENT_SECRET}
       - uses: actions/checkout@v3
         name: Checkout Repository
         with:
@@ -30,8 +32,9 @@ jobs:
           export SRP_UID="uid.obj.build.github(instance='github.com',namespace='${GITHUB_REPOSITORY}',ref='${GITHUB_REF}',action='${GITHUB_ACTION}',build_id='${GITHUB_RUN_ID}_${GITHUB_RUN_ATTEMPT}')"
           srp provenance source --verbose --scm-type git \
             --name "bac-charts" --path . --saveto ./source-provenance.json \
-            --comp-uid "${SRP_UID}"  --build-number "${GITHUB_RUN_ID}" \
-            --version "1.0.0-rc.${GITHUB_RUN_NUMBER}" --all-ephemeral true --build-type release
+            --comp-uid "${SRP_UID}" --build-number "${GITHUB_RUN_ID}" \
+            --version "1.0" --all-ephemeral true --build-type release
+          echo "::set-output name=uid::${SRP_UID}"
       - name: Archive SRP report
         uses: actions/upload-artifact@v3
         with:
@@ -40,5 +43,4 @@ jobs:
       - id: submit-report
         name: Submit SRP report
         run: |
-          srp config auth --client-id=${BAC_SRP_CLIENT_ID} --client-secret=${BAC_SRP_CLIENT_SECRET}
-          srp metadata submit --path ./source-provenance.json
+          srp metadata submit --verbose --path ./source-provenance.json --uid "uid.mtd.provenance_2_5.fragment(obj_uid=${{ steps.build-report.outputs.uid }},revision='')"
