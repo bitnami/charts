@@ -133,7 +133,7 @@ collector:
   image:
     registry: docker.io
     repository: bitnami/wavefront-kubernetes-collector
-    tag: 1.11.0-scratch-r8
+    tag: 1.11.0-scratch-r10
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -323,10 +323,13 @@ collector:
     ##       password = "PASSWORD"
     ##
     config: []
-  ## @param collector.controlplane.enabled Enable metrics for control plane dashboard (default false)
+  ## @param collector.controlplane.enabled Enable metrics for control plane dashboard
+  ## @param collector.controlplane.collection.interval The collection interval for the control plane
   ##
   controlplane:
-    enabled: false
+    enabled: true
+    collection:
+      interval: 120s
   ## @param collector.existingConfigmap Name of existing ConfigMap with collector configuration
   ##
   existingConfigmap: ""
@@ -526,7 +529,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/wavefront-proxy
-    tag: 11.3.0-debian-11-r14
+    tag: 11.3.0-debian-11-r15
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
