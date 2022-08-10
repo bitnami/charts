@@ -7,7 +7,7 @@ RabbitMQ is an open source general-purpose message broker that is designed for c
 [Overview of RabbitMQ](https://www.rabbitmq.com)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-
+                           
 ## TL;DR
 
 ```bash
@@ -66,7 +66,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------------------- | --------------------- |
 | `image.registry`    | RabbitMQ image registry                                        | `docker.io`           |
 | `image.repository`  | RabbitMQ image repository                                      | `bitnami/rabbitmq`    |
-| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)            | `3.10.6-debian-11-r5` |
+| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)            | `3.10.7-debian-11-r4` |
 | `image.pullPolicy`  | RabbitMQ image pull policy                                     | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array               | `[]`                  |
 | `image.debug`       | Set to true if you would like to see extra information on logs | `false`               |
@@ -135,6 +135,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.manager`           |                                                                                                                                                      | `15672`                                           |
 | `containerPorts.epmd`              |                                                                                                                                                      | `4369`                                            |
 | `containerPorts.metrics`           |                                                                                                                                                      | `9419`                                            |
+| `initScripts`                      | Dictionary of init scripts. Evaluated as a template.                                                                                                 | `{}`                                              |
+| `initScriptsCM`                    | ConfigMap with the init scripts. Evaluated as a template.                                                                                            | `""`                                              |
+| `initScriptsSecret`                | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.  | `""`                                              |
 | `extraContainerPorts`              | Extra ports to be included in container spec, primarily informational                                                                                | `[]`                                              |
 | `configuration`                    | RabbitMQ Configuration file content: required cluster configuration                                                                                  | `""`                                              |
 | `extraConfiguration`               | Configuration file content: extra configuration to be appended to RabbitMQ configuration                                                             | `""`                                              |
@@ -337,7 +340,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                     | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                   | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag                                                                          | `11-debian-11-r17`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag                                                                          | `11-debian-11-r23`      |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                  | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                     | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                    | `{}`                    |
@@ -647,6 +650,12 @@ See the [Upgrading guide](https://www.rabbitmq.com/upgrade.html) and the [Rabbit
 - Chart labels and Ingress configuration were adapted to follow the Helm charts best practices.
 - Initialization logic now relies on the container.
 - This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+- The layout of the persistent volumes has changed (if using persistence). Action is required if preserving data through the upgrade is desired:
+  - The data has moved from `mnesia/` within the persistent volume to the root of the persistent volume
+  - The `config/` and `schema/` directories within the persistent volume are no longer used
+  - An init container can be used to move and clean up the peristent volumes. An example can be found [here](https://github.com/bitnami/charts/issues/10913#issuecomment-1169619513).
+  - Alternately the value `persistence.subPath` can be overridden to be `mnesia` so that the directory layout is consistent with what it was previously.
+    - Note however that this will leave the unused `config/` and `schema/` directories within the peristent volume forever.
 
 Consequences:
 
