@@ -92,8 +92,8 @@ spec:
             - --clusters-config-path=/config/clusters.conf
             {{- end }}
             {{- if .Values.pinnipedProxy.enabled }}
-            - --pinniped-proxy-url={{ printf "http%s://%s.%s:%d" (eq .Values.pinnipedProxy.CACert "" | ternary "" "s") (include "kubeapps.pinniped-proxy.fullname" .) .Release.Namespace (int .Values.pinnipedProxy.service.ports.pinnipedProxy) }}
-            {{- if .Values.pinnipedProxy.CACert }}
+            - --pinniped-proxy-url={{ printf "http%s://%s.%s:%d" (eq .Values.pinnipedProxy.tls.caCertificate "" | ternary "" "s") (include "kubeapps.pinniped-proxy.fullname" .) .Release.Namespace (int .Values.pinnipedProxy.service.ports.pinnipedProxy) }}
+            {{- if .Values.pinnipedProxy.tls.caCertificate }}
             - --pinniped-proxy-ca-cert=/etc/pinniped-proxy-tls/ca.crt
             {{- end }}
             {{- end }}
@@ -173,7 +173,7 @@ spec:
             {{- if .Values.kubeops.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-            {{- if .Values.pinnipedProxy.CACert }}
+            {{- if .Values.pinnipedProxy.tls.caCertificate }}
             - name: pinniped-proxy-ca-cert
               mountPath: /etc/pinniped-proxy-tls
             {{- end }}
@@ -188,10 +188,10 @@ spec:
         - name: ca-certs
           emptyDir: {}
         {{- end }}
-        {{- if .Values.pinnipedProxy.CACert }}
+        {{- if .Values.pinnipedProxy.tls.caCertificate }}
         - name: pinniped-proxy-ca-cert
           configMap:
-            name: {{ .Values.pinnipedProxy.CACert }}
+            name: {{ .Values.pinnipedProxy.tls.caCertificate }}
         {{- end }}
         {{- if .Values.kubeops.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.kubeops.extraVolumes "context" $) | nindent 8 }}

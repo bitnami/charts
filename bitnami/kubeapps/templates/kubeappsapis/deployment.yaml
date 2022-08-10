@@ -103,8 +103,8 @@ spec:
             - --plugin-config-path=/config/kubeapps-apis/plugins.conf
             {{- end }}
             {{- if .Values.pinnipedProxy.enabled }}
-            - --pinniped-proxy-url={{ printf "http%s://%s.%s:%d" (eq .Values.pinnipedProxy.CACert "" | ternary "" "s") (include "kubeapps.pinniped-proxy.fullname" .) .Release.Namespace (int .Values.pinnipedProxy.service.ports.pinnipedProxy) }}
-            {{- if .Values.pinnipedProxy.CACert }}
+            - --pinniped-proxy-url={{ printf "http%s://%s.%s:%d" (eq .Values.pinnipedProxy.tls.caCertificate "" | ternary "" "s") (include "kubeapps.pinniped-proxy.fullname" .) .Release.Namespace (int .Values.pinnipedProxy.service.ports.pinnipedProxy) }}
+            {{- if .Values.pinnipedProxy.tls.caCertificate }}
             - --pinniped-proxy-ca-cert=/etc/pinniped-proxy-tls/ca.crt
             {{- end }}
             {{- end }}
@@ -212,7 +212,7 @@ spec:
             - name: plugins-config
               mountPath: /config/kubeapps-apis
           {{- end }}
-          {{- if .Values.pinnipedProxy.CACert }}
+          {{- if .Values.pinnipedProxy.tls.caCertificate }}
             - name: pinniped-proxy-ca-cert
               mountPath: /etc/pinniped-proxy-tls
           {{- end }}
@@ -235,10 +235,10 @@ spec:
           configMap:
             name: {{ template "kubeapps.kubeappsapis.fullname" . }}-configmap
       {{- end }}
-      {{- if .Values.pinnipedProxy.CACert }}
+      {{- if .Values.pinnipedProxy.tls.caCertificate }}
         - name: pinniped-proxy-ca-cert
           configMap:
-            name: {{ .Values.pinnipedProxy.CACert }}
+            name: {{ .Values.pinnipedProxy.tls.caCertificate }}
       {{- end }}
       {{- if .Values.kubeappsapis.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.extraVolumes "context" $) | nindent 8 }}

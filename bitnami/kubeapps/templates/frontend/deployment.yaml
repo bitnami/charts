@@ -236,7 +236,7 @@ spec:
           {{- else }}
           command:
             - pinniped-proxy
-            {{- if .Values.pinnipedProxy.TLSSecret }}
+            {{- if .Values.pinnipedProxy.tls.existingSecret }}
             - --proxy-tls-cert=/etc/pinniped-tls/tls.crt
             - --proxy-tls-cert-key=/etc/pinniped-tls/tls.key
             {{- end }}
@@ -279,7 +279,7 @@ spec:
           resources: {{- toYaml .Values.pinnipedProxy.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.pinnipedProxy.TLSSecret }}
+            {{- if .Values.pinnipedProxy.tls.existingSecret }}
             - name: pinniped-tls-secret
               mountPath: "/etc/pinniped-tls"
               readOnly: true
@@ -295,10 +295,10 @@ spec:
         - name: vhost
           configMap:
             name: {{ template "kubeapps.frontend-config.fullname" . }}
-        {{- if .Values.pinnipedProxy.TLSSecret }}
+        {{- if .Values.pinnipedProxy.tls.existingSecret }}
         - name: pinniped-tls-secret
           secret:
-            secretName: {{ .Values.pinnipedProxy.TLSSecret }}
+            secretName: {{ .Values.pinnipedProxy.tls.existingSecret }}
         {{- end }}
         {{- if .Values.frontend.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.frontend.extraVolumes "context" $) | nindent 8 }}
