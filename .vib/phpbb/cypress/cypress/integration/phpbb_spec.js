@@ -12,14 +12,14 @@ it('allows to access Administrator Control Panel', () => {
 
 it('allows to create a topic', () => {
   cy.login();
-  cy.get('a.forumtitle').click();
+  cy.get('.forumtitle').click();
   cy.contains('New Topic').click();
   cy.fixture('topics').then((topic) => {
     cy.get('[name="subject"]').type(`${topic.newTopic.subject}-${random}`);
     cy.get('#message').type(`${topic.newTopic.content} ${random}`);
     cy.contains('Attachments').click();
-    cy.get('input[type=file]').selectFile('cypress/fixtures/images/post_image.png', { force: true });
-    cy.get('span.file-uploaded');
+    cy.get('[type=file]').selectFile('cypress/fixtures/images/post_image.png', { force: true });
+    cy.get('.file-uploaded');
     cy.contains('Submit').click();
     cy.visit('/search.php?search_id=newposts');
     cy.contains(`${topic.newTopic.subject}-${random}`);
