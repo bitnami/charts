@@ -1,27 +1,14 @@
-const CLICK_DELAY = 1000;
-const GET_DELAY = 1000;
+const COMMAND_DELAY = 2000;
 const BASE_URL = 'http://vmware-magento.my';
 
-for (const command of ['click']) {
+for (const command of ['click', 'get']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
     const origVal = originalFn(...args);
 
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(origVal);
-      }, CLICK_DELAY);
-    });
-  });
-}
-
-for (const command of ['get']) {
-  Cypress.Commands.overwrite(command, (originalFn, ...args) => {
-    const origVal = originalFn(...args);
-
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(origVal);
-      }, GET_DELAY);
+      }, COMMAND_DELAY);
     });
   });
 }
