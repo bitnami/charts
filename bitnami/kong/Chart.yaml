@@ -34,4 +34,4 @@ name: kong
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kong
   - https://konghq.com/
-version: 6.3.31
+version: 6.3.32

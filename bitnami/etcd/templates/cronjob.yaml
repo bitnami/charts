@@ -63,8 +63,8 @@ spec:
               securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 16 }}
               {{- end }}
               {{- if .Values.diagnosticMode.enabled }}
-              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
               {{- else }}
               command:
                 - /opt/bitnami/scripts/etcd/snapshot.sh
