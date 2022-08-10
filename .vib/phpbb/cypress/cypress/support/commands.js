@@ -15,9 +15,13 @@ for (const command of ['click']) {
 Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
-    cy.visit('/ucp.php?mode=login&redirect=index.php');
+    // Using the specific URL results in random authentication errors
+    cy.visit('/');
+    cy.contains('Login').click();
     cy.get('#username').type(username);
     cy.get('#password').type(password);
     cy.get('[name=login]').click();
+    // The authentication is not completed until the page is rendered
+    cy.contains('Notifications');
   }
 );
