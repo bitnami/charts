@@ -372,6 +372,24 @@ provisioning:
   ##     options:
   ##       name: us-east-1
   config: []
+  ## MinIO&reg; pod Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param provisioning.podSecurityContext.enabled Enable pod Security Context
+  ## @param provisioning.podSecurityContext.fsGroup Group ID for the container
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## MinIO&reg; container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param provisioning.containerSecurityContext.enabled Enable container Security Context
+  ## @param provisioning.containerSecurityContext.runAsUser User ID for the container
+  ## @param provisioning.containerSecurityContext.runAsNonRoot Avoid running as root User
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
 
 ## @param hostAliases MinIO&reg; pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
