@@ -150,6 +150,8 @@ extraVolumes: []
 ## @param extraVolumeMounts [array] Optionally specify extra list of additional volumeMounts for WildFly container(s)
 ##
 extraVolumeMounts: []
+## @param serviceAccountName Name of existing ServiceAccount to be connected
+serviceAccountName: ""
 ## @param sidecars [array] Add additional sidecar containers to the WildFly pod
 ## e.g:
 ## sidecars:
