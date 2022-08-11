@@ -571,6 +571,24 @@ sidecars: []
 ##    command: ['sh', '-c', 'echo "hello world"']
 ##
 initContainers: []
+## @param dnsPolicy Pod DNS policy. Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst', 'Default' or 'None'.
+## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+##
+dnsPolicy: ""
+## @param dnsConfig Pod DNS configuration.
+## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
+## e.g:
+## dnsConfig:
+##   nameservers:
+##   - 8.8.8.8
+##   - 8.8.4.4
+##   options:
+##   - name: ndots
+##     value: "2"
+##   searches:
+##   - example.com
+##
+dnsConfig: {}
 
 ## ServiceAccount configuration
 ##
