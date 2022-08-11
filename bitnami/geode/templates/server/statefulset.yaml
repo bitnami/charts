@@ -209,8 +209,11 @@ spec:
             {{- end }}
             {{- end }}
           volumeMounts:
+            {{- if .Values.auth.tls.enabled }}
             - name: shared-certs
               mountPath: /opt/bitnami/geode/config/certs
+              readOnly: true
+            {{- end }}
           command:
             - /bin/bash
           args:
