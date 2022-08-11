@@ -161,6 +161,7 @@ kubectl delete pvc -l release=my-release
 
 | Name                                         | Description                                                                                                              | Value                 |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| `primary.name`                               | Name of the primary database (eg primary, master, leader, ...)                                                           | `primary`             |
 | `primary.configuration`                      | PostgreSQL Primary main configuration to be injected as ConfigMap                                                        | `""`                  |
 | `primary.pgHbaConfiguration`                 | PostgreSQL Primary client authentication configuration                                                                   | `""`                  |
 | `primary.existingConfigmap`                  | Name of an existing ConfigMap with PostgreSQL Primary configuration                                                      | `""`                  |
@@ -263,6 +264,7 @@ kubectl delete pvc -l release=my-release
 
 | Name                                              | Description                                                                                                              | Value                 |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| `readReplicas.name`                               | Name of the read replicas database (eg secondary, slave, ...)                                                            | `read`                |
 | `readReplicas.replicaCount`                       | Number of PostgreSQL read only replicas                                                                                  | `1`                   |
 | `readReplicas.extendedConfiguration`              | Extended PostgreSQL read only replicas configuration (appended to main or default configuration)                         | `""`                  |
 | `readReplicas.extraEnvVars`                       | Array with extra environment variables to add to PostgreSQL read only nodes                                              | `[]`                  |
