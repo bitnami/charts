@@ -617,16 +617,18 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 ### Redis&reg; chart configuration
 
-| Name                            | Description                                                      | Value                                                    |
-| ------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------- |
-| `redis.auth.enabled`            | Enable password authentication                                   | `true`                                                   |
-| `redis.auth.password`           | Redis&reg; password                                              | `""`                                                     |
-| `redis.auth.existingSecret`     | The name of an existing secret with Redis&reg; credentials       | `""`                                                     |
-| `redis.master.extraFlags`       | Array with additional command line flags for Redis&reg; master   | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
-| `redis.master.disableCommands`  | Array with commands to deactivate on Redis&reg;                  | `[]`                                                     |
-| `redis.replica.replicaCount`    | Number of Redis&reg; replicas to deploy                          | `1`                                                      |
-| `redis.replica.extraFlags`      | Array with additional command line flags for Redis&reg; replicas | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
-| `redis.replica.disableCommands` | Array with commands to deactivate on Redis&reg;                  | `[]`                                                     |
+| Name                                | Description                                                      | Value                                                    |
+| ----------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------- |
+| `redis.auth.enabled`                | Enable password authentication                                   | `true`                                                   |
+| `redis.auth.password`               | Redis&reg; password                                              | `""`                                                     |
+| `redis.auth.existingSecret`         | The name of an existing secret with Redis&reg; credentials       | `""`                                                     |
+| `redis.master.extraFlags`           | Array with additional command line flags for Redis&reg; master   | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
+| `redis.master.disableCommands`      | Array with commands to deactivate on Redis&reg;                  | `[]`                                                     |
+| `redis.master.persistence.enabled`  | Enable Redis&reg; master data persistence using PVC              | `false`                                                  |
+| `redis.replica.replicaCount`        | Number of Redis&reg; replicas to deploy                          | `1`                                                      |
+| `redis.replica.extraFlags`          | Array with additional command line flags for Redis&reg; replicas | `["--maxmemory 200mb","--maxmemory-policy allkeys-lru"]` |
+| `redis.replica.disableCommands`     | Array with commands to deactivate on Redis&reg;                  | `[]`                                                     |
+| `redis.replica.persistence.enabled` | Enable Redis&reg; replica data persistence using PVC             | `false`                                                  |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

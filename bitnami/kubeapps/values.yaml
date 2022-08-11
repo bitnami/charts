@@ -2134,6 +2134,12 @@ redis:
       ##
     ## @param redis.master.disableCommands Array with commands to deactivate on Redis&reg;
     disableCommands: []
+    ## Redis(R) Master persistence configuration
+    #
+    persistence:
+      ## @param redis.master.persistence.enabled Enable Redis&reg; master data persistence using PVC
+      ##
+      enabled: false
   replica:
     ## @param redis.replica.replicaCount Number of Redis&reg; replicas to deploy
     ##
@@ -2156,3 +2162,9 @@ redis:
     ## @param redis.replica.disableCommands Array with commands to deactivate on Redis&reg;
     ##
     disableCommands: []
+    ## Redis(R) Replica persistence configuration
+    ##
+    persistence:
+      ## @param redis.replica.persistence.enabled Enable Redis&reg; replica data persistence using PVC
+      ##
+      enabled: false
