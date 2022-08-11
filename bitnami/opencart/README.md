@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                        | OpenCart image registry                                                                   | `docker.io`             |
 | `image.repository`                      | OpenCart image repository                                                                 | `bitnami/opencart`      |
-| `image.tag`                             | OpenCart image tag (immutable tags are recommended)                                       | `3.0.3-8-debian-11-r24` |
+| `image.tag`                             | OpenCart image tag (immutable tags are recommended)                                       | `3.0.3-8-debian-11-r25` |
 | `image.pullPolicy`                      | OpenCart image pull policy                                                                | `IfNotPresent`          |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                          | `[]`                    |
 | `image.debug`                           | Specify if debug logs should be enabled                                                   | `false`                 |
