@@ -579,6 +579,11 @@ dashboard:
   defaultTheme: ""
   ## @param dashboard.replicaCount Number of Dashboard replicas to deploy
   ##
+  ## @param dashboard.createNamespaceLabels Labels added to newly created namespaces
+  ## e.g:
+  # createNamespaceLabels:
+  #   "managed-by": "kubeapps"
+  createNamespaceLabels: {}
   replicaCount: 2
   ## @param dashboard.updateStrategy.type Dashboard deployment strategy type.
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -1569,19 +1574,30 @@ pinnipedProxy:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param pinnipedProxy.defaultPinnipedNamespace Specify the (default) namespace in which pinniped concierge is installed
+  ## @param pinnipedProxy.defaultPinnipedNamespace Namespace in which pinniped concierge is installed
   ##
   defaultPinnipedNamespace: pinniped-concierge
-  ## @param pinnipedProxy.defaultAuthenticatorType Specify the (default) authenticator type
+  ## @param pinnipedProxy.defaultAuthenticatorType Authenticator type
   ##
   defaultAuthenticatorType: JWTAuthenticator
-  ## @param pinnipedProxy.defaultAuthenticatorName Specify the (default) authenticator name
+  ## @param pinnipedProxy.defaultAuthenticatorName Authenticator name
   ##
   defaultAuthenticatorName: jwt-authenticator
-  ## @param pinnipedProxy.defaultPinnipedAPISuffix Specify the (default) API suffix
+  ## @param pinnipedProxy.defaultPinnipedAPISuffix API suffix
   ##
   defaultPinnipedAPISuffix: pinniped.dev
-  ## @param pinnipedProxy.lifecycleHooks for the Pinniped Proxy container(s) to automate configuration before or after startup
+  ## TLS settings for Pinniped Proxy
+  ## ref: https://kubeapps.dev/docs/latest/howto/oidc/using-an-oidc-provider-with-pinniped/#running-the-pinniped-proxy-service-over-tls
+  ##
+  tls:
+    ## @param pinnipedProxy.tls.existingSecret TLS secret with which to proxy requests
+    ##
+    existingSecret: ""
+    ## @param pinnipedProxy.tls.caCertificate TLS CA cert config map which clients of pinniped proxy should use with TLS requests
+    ## This config map must contain a ca.crt key with the CA cert content as the value.
+    ##
+    caCertificate: ""
+  ## @param pinnipedProxy.lifecycleHooks For the Pinniped Proxy container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
   ## @param pinnipedProxy.command Override default container command (useful when using custom images)
