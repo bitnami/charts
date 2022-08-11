@@ -1761,6 +1761,9 @@ postgresql:
   primary:
     persistence:
       enabled: false
+  ## @param architecture PostgreSQL architecture (`standalone` or `replication`)
+  ##
+  architecture: standalone
   ## @param postgresql.securityContext.enabled Enabled PostgreSQL replicas pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -2114,6 +2117,9 @@ redis:
     enabled: true
     password: ""
     existingSecret: ""
+  ## @param architecture Redis(R) architecture (`standalone` or `replication`)
+  ##
+  architecture: standalone
   master:
     ## @param redis.master.extraFlags Array with additional command line flags for Redis&reg; master
     ##
