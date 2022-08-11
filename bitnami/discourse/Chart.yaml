@@ -1,7 +1,7 @@
 annotations:
   category: Forum
 apiVersion: v2
-appVersion: 2.8.7
+appVersion: 2.8.8
 dependencies:
   - condition: redis.enabled
     name: redis
