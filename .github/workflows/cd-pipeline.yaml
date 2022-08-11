@@ -44,6 +44,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/solr/**'
       - 'bitnami/spring-cloud-dataflow/**'
       - 'bitnami/suitecrm/**'
+      - 'bitnami/wildfly/**'
       - 'bitnami/wordpress/**'
       - '!**.md'
 env:
