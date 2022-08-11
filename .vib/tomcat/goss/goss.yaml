@@ -1,0 +1,6 @@
+file:
+  /bitnami/tomcat:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
