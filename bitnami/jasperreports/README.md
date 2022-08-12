@@ -218,6 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.user`                     | Existing username in the external db                 | `bn_jasperreports`      |
 | `externalDatabase.password`                 | Password for the above username                      | `""`                    |
 | `externalDatabase.database`                 | Name of the existing database                        | `bitnami_jasperreports` |
+| `externalDatabase.type`                     | Type of the existing database                        | `mariadb`               |
 
 
 ### NetworkPolicy parameters
