@@ -101,42 +101,13 @@ spec:
             - {{ .Values.gateway.type }}
             - --console-address
             - :{{ .Values.containerPorts.console }}
-            {{- if eq .Values.gateway.type "gcs" }}
-            - {{ .Values.gateway.auth.gcs.projectID }}
+            {{- if eq .Values.gateway.type "s3" }}
+            - {{ .Values.gateway.auth.s3.serviceEndpoint }}
             {{- else if eq .Values.gateway.type "nas" }}
             - {{ .Values.persistence.mountPath }}
-            {{- else if eq .Values.gateway.type "s3" }}
-            - {{ .Values.gateway.auth.s3.serviceEndpoint }}
-            {{- else if and (eq .Values.gateway.type "azure") .Values.gateway.auth.azure.serviceEndpoint }}
-            - {{ .Values.gateway.auth.azure.serviceEndpoint }}
             {{- end }}
             {{- end }}
           env:
-            {{- if eq .Values.gateway.type "azure" }}
-            - name: AZURE_STORAGE_ACCOUNT
-              valueFrom:
-                secretKeyRef:
-                {{- if not ( or (empty .Values.gateway.auth.azure.storageAccountNameExistingSecret) (empty .Values.gateway.auth.azure.storageAccountNameExistingSecretKey)) }}
-                  name: {{ .Values.gateway.auth.azure.storageAccountNameExistingSecret }}
-                  key: {{ .Values.gateway.auth.azure.storageAccountNameExistingSecretKey }}
-                {{- else }}
-                  name: {{ include "minio.secretName" . }}
-                  key: azure-storage-account-name
-                {{- end }}
-            - name: AZURE_STORAGE_KEY
-              valueFrom:
-                secretKeyRef:
-                {{- if not ( or (empty .Values.gateway.auth.azure.storageAccountNameExistingSecret) (empty .Values.gateway.auth.azure.storageAccountNameExistingSecretKey)) }}
-                  name: {{ .Values.gateway.auth.azure.storageAccountKeyExistingSecret }}
-                  key: {{ .Values.gateway.auth.azure.storageAccountKeyExistingSecretKey }}
-                {{- else }}
-                  name: {{ include "minio.secretName" . }}
-                  key: azure-storage-account-key
-                {{- end }}
-            {{- else if and (eq .Values.gateway.type "gcs") .Values.gateway.auth.gcs.keyJSON }}
-            - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: "/opt/bitnami/minio/secrets/key.json"
-            {{- end }}
             - name: MINIO_ROOT_USER
               valueFrom:
                 secretKeyRef:
@@ -204,11 +175,6 @@ spec:
             - name: minio-certs
               mountPath: {{ default "/opt/bitnami/minio/certs" .Values.tls.mountPath }}
             {{- end }}
-            {{- if and (eq .Values.gateway.type "gcs") .Values.gateway.auth.gcs.keyJSON }}
-            - name: minio-credentials
-              mountPath: /opt/bitnami/minio/secrets/
-              readOnly: true
-            {{- end }}
             {{- if eq .Values.gateway.type "nas" }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
@@ -220,11 +186,6 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if and (eq .Values.gateway.type "gcs") .Values.gateway.auth.gcs.keyJSON }}
-        - name: minio-credentials
-          secret:
-            secretName: {{ include "minio.secretName" . }}
-        {{- end }}
         {{- if eq .Values.gateway.type "nas" }}
         - name: data
           {{- if .Values.persistence.enabled }}

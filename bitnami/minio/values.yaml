@@ -1067,9 +1067,7 @@ gateway:
   ## @param gateway.enabled Use MinIO&reg; as Gateway for other storage systems
   ##
   enabled: false
-  ## @param gateway.type Gateway type. Supported types are: `azure`, `gcs`, `nas`, `s3`
-  ## ref: https://docs.minio.io/docs/minio-gateway-for-azure
-  ## ref: https://docs.minio.io/docs/minio-gateway-for-gcs
+  ## @param gateway.type Gateway type. Supported types are: `nas`, `s3`
   ## ref: https://docs.minio.io/docs/minio-gateway-for-nas
   ## ref: https://docs.minio.io/docs/minio-gateway-for-s3
   ##
@@ -1098,38 +1096,6 @@ gateway:
   ## Gateway authentication configuration
   ##
   auth:
-    ## Authentication configuration for Azure. Ignored unless type=azure
-    ## @param gateway.auth.azure.accessKey Access key to access MinIO&reg; using Azure Gateway
-    ## @param gateway.auth.azure.secretKey Secret key to access MinIO&reg; using Azure Gateway
-    ## @param gateway.auth.azure.serviceEndpoint Azure Blob Storage custom endpoint
-    ## @param gateway.auth.azure.storageAccountName Azure Storage Account Name to use to access Azure Blob Storage
-    ## @param gateway.auth.azure.storageAccountKey Azure Storage Account Key to use to access Azure Blob Storage
-    ## @param gateway.auth.azure.storageAccountNameExistingSecret Existing Secret name to extract Azure Storage Account Name from to access Azure Blob Storage
-    ## @param gateway.auth.azure.storageAccountNameExistingSecretKey Existing Secret key to extract Azure Storage Account Name from to use to access Azure Blob Storage
-    ## @param gateway.auth.azure.storageAccountKeyExistingSecret Existing Secret name to extract Azure Storage Account Key from to access Azure Blob Storage
-    ## @param gateway.auth.azure.storageAccountKeyExistingSecretKey Existing Secret key to extract Azure Storage Account Key from to use to access Azure Blob Storage
-    ##
-    azure:
-      accessKey: ""
-      secretKey: ""
-      serviceEndpoint: ""
-      storageAccountName: ""
-      storageAccountKey: ""
-      storageAccountNameExistingSecret: ""
-      storageAccountNameExistingSecretKey: ""
-      storageAccountKeyExistingSecret: ""
-      storageAccountKeyExistingSecretKey: ""
-    ## Authentication configuration for GCS. Ignored unless type=gcs
-    ## @param gateway.auth.gcs.accessKey Access key to access MinIO&reg; using GCS Gateway
-    ## @param gateway.auth.gcs.secretKey Secret key to access MinIO&reg; using GCS Gateway
-    ## @param gateway.auth.gcs.keyJSON Service Account key to access GCS
-    ## @param gateway.auth.gcs.projectID GCP Project ID to use
-    ##
-    gcs:
-      accessKey: ""
-      secretKey: ""
-      keyJSON: ""
-      projectID: ""
     ## Authentication configuration for NAS. Ignored unless type=nas
     ## @param gateway.auth.nas.accessKey Access key to access MinIO&reg; using NAS Gateway
     ## @param gateway.auth.nas.secretKey Secret key to access MinIO&reg; using NAS Gateway
