@@ -273,7 +273,7 @@ spec:
           args:
             - bootstrap
             - /config/envoy.json
-            - --xds-address={{ template "common.names.fullname" . }}
+            - --xds-address={{ printf "%s-contour" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
             - --xds-port={{ .Values.contour.service.ports.xds }}
             - --resources-dir=/config/resources
             - --envoy-cafile=/certs/ca.crt

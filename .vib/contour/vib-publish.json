@@ -34,7 +34,7 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-contour-tcp-xds"
+            "endpoint": "lb-contour-contour-tcp-xds"
           }
         }
       ]
