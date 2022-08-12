@@ -86,7 +86,7 @@ $ helm delete --purge my-release
 | ------------------------------- | -------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                | HashiCorp Consul image registry                                                              | `docker.io`           |
 | `image.repository`              | HashiCorp Consul image repository                                                            | `bitnami/consul`      |
-| `image.tag`                     | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.13.0-debian-11-r0` |
+| `image.tag`                     | HashiCorp Consul image tag (immutable tags are recommended)                                  | `1.13.0-debian-11-r1` |
 | `image.pullPolicy`              | HashiCorp Consul image pull policy                                                           | `IfNotPresent`        |
 | `image.pullSecrets`             | HashiCorp Consul image pull secrets                                                          | `[]`                  |
 | `image.debug`                   | Enable image debug mode                                                                      | `false`               |
@@ -222,7 +222,7 @@ $ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume | `false`                 |
 | `volumePermissions.image.registry`     | Bitnami Shell image registry                                                    | `docker.io`             |
 | `volumePermissions.image.repository`   | Bitnami Shell image repository                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `11-debian-11-r23`      |
+| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                        | `11-debian-11-r24`      |
 | `volumePermissions.image.pullPolicy`   | Bitnami Shell image pull policy                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Bitnami Shell image pull secrets                                                | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                          | `{}`                    |
