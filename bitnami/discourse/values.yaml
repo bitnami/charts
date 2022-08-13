@@ -270,13 +270,9 @@ discourse:
   ## Configure Discourse Passenger Options
   ## @param discourse.passenger.extraFlags Discourse Passenger ExtraFlags
   ## ref: https://www.phusionpassenger.com/library/config/standalone/reference/
-  ## @param discourse.passenger.customNginxTemplateConfigMapName Name of the configMap to a custom template to passenger
-  ## ref: https://www.phusionpassenger.com/library/config/standalone/intro.html#nginx-configuration-template
-  ## Note: the custom template configMap file will be mounted at '/bitnami/passenger/nginx.conf.erb' and the expected key in the configMap is 'nginx.conf.erb'.
   ##
   passenger:
     extraFlags: ""
-    customNginxTemplateConfigMapName: ""
   ## @param discourse.containerPorts.http Discourse HTTP container port
   ##
   containerPorts:
