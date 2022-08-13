@@ -213,11 +213,6 @@ spec:
             {{- if .Values.discourse.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.discourse.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-            {{- if .Values.discourse.passenger.customNginxTemplateConfigMapName }}
-            - name: nginx-configuration-template
-              mountPath: /bitnami/passenger/nginx.conf.erb
-              subpath: nginx.conf.erb
-            {{- end }}
         - name: sidekiq
           image: {{ include "discourse.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -334,10 +329,5 @@ spec:
           {{ end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.discourse.passenger.customNginxTemplateConfigMapName }}
-        - name: nginx-configuration-template
-          configMap:
-            name: {{ .Values.discourse.passenger.customNginxTemplateConfigMapName }}
         {{- end }}
 {{- end }}
