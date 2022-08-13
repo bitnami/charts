@@ -1,4 +1,4 @@
-const COMMAND_DELAY = 500;
+const COMMAND_DELAY = 2000;
 const BASE_URL = 'http://bitnami-matomo.my';
 
 for (const command of ['click']) {

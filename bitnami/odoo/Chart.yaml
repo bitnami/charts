@@ -1,7 +1,7 @@
 annotations:
   category: CRM
 apiVersion: v2
-appVersion: 15.0.20220710
+appVersion: 15.0.20220810
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -27,4 +27,4 @@ name: odoo
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/odoo
   - https://www.odoo.com/
-version: 21.5.4
+version: 21.5.5

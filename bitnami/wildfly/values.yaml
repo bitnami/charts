@@ -68,7 +68,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/wildfly
-  tag: 26.1.1-debian-11-r24
+  tag: 26.1.1-debian-11-r26
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -150,6 +150,8 @@ extraVolumes: []
 ## @param extraVolumeMounts [array] Optionally specify extra list of additional volumeMounts for WildFly container(s)
 ##
 extraVolumeMounts: []
+## @param serviceAccountName Name of existing ServiceAccount to be connected
+serviceAccountName: ""
 ## @param sidecars [array] Add additional sidecar containers to the WildFly pod
 ## e.g:
 ## sidecars:
@@ -630,7 +632,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r20
+    tag: 11-debian-11-r23
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
