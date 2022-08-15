@@ -647,7 +647,33 @@ This label will be displayed in the output of a successful install.
 - The Bitnami PostgreSQL image is non-root by default. This requires that you run the pod with `securityContext` and updates the permissions of the volume with an `initContainer`. A key benefit of this configuration is that the pod follows security best practices and is prepared to run on Kubernetes distributions with hard security constraints like OpenShift.
 - For OpenShift, one may either define the runAsUser and fsGroup accordingly, or try this more dynamic option: volumePermissions.securityContext.runAsUser="auto",securityContext.enabled=false,containerSecurityContext.enabled=false,shmVolume.chmod.enabled=false
 
-### Setting Pod's affinity
+## OpenShift
+
+For OpenShift, one may either define the `runAsUser` and `fsGroup` accordingly, or try a more dynamic option
+and pass in a values file as follows:
+
+```yaml
+primary:
+  podSecurityContext:
+    enabled: false
+    fsGroup: "auto"
+  containerSecurityContext:
+    enabled: false
+    runAsUser: "auto"
+
+volumePermissions:
+  enabled: false
+  containerSecurityContext:
+    runAsUser: "auto"
+```
+
+For example, if the file is called `values.yaml`, then use a command line like:
+
+```bash
+helm install --values ./values.yaml database-for-app bitnami/postgresql 
+```
+
+## Setting Pod's affinity
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
