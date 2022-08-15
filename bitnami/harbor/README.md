@@ -7,7 +7,7 @@ Harbor is an open source trusted cloud-native registry to store, sign, and scan 
 [Overview of Harbor](https://goharbor.io/)
 
 
-                           
+
 ## TL;DR
 
 ```bash
@@ -1158,11 +1158,27 @@ $ helm install my-release -f values.yaml bitnami/harbor
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Use an external database
+
+Sometimes, you may want to have the chart use an external database rather than using the one bundled with the chart. Common use cases include using a managed database service, or using a single database server for all your applications. This chart supports external databases through its `externalDatabase.*` parameters.
+
+When using these parameters, it is necessary to disable installation of the bundled PostgreSQL database using the `postgresql.enabled=false` parameter.
+
+An example of the parameters set when deploying the chart with an external database are shown below:
+```
+postgresql.enabled=false
+externalDatabase.host=myexternalhost
+externalDatabase.port=5432
+externalDatabase.user=myuser
+externalDatabase.password=mypassword
+externalDatabase.database=mydatabase
+```
 
 ### Configure the way how to expose Harbor core
 
@@ -1194,31 +1210,51 @@ If Harbor is deployed behind the proxy, set it as the URL of proxy.
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as any of the Harbor components (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter inside each component subsection. Simply define your container according to the Kubernetes container spec.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Here is an example:
 
 ```yaml
-core:
-  sidecars:
-    - name: your-image-name
-      image: your-image
-      imagePullPolicy: Always
-      ports:
-        - name: portname
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+...
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
         containerPort: 1234
 ```
 
-Similarly, you can add extra init containers using the `initContainers` parameter.
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
-```yaml
-core:
-  initContainers:
-    - name: your-image-name
-      image: your-image
-      imagePullPolicy: Always
-      ports:
-        - name: portname
-          containerPort: 1234
-```
+### Use existing secrets
+
+To configure the secrets use the following options:
+
+- Secret keys: Secret keys are used for secure communication between components. Fill `core.secret`, `jobservice.secret` and `registry.secret` to configure.
+- Certificates: Used for token encryption/decryption. Fill `core.secretName` to configure.
+
+Secrets and certificates must be setup to avoid changes on every Helm upgrade (refer to the [Harbor issues section](https://github.com/goharbor/harbor-helm/issues/107) in its GitHub repository for more information on this).
 
 ### Adding extra environment variables
 
@@ -1239,18 +1275,29 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 - **Persistent Volume Claim(default)**: A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `storageClass` or set `existingClaim` if you have already existing persistent volumes to use.
 - **External Storage(only for images and charts)**: For images and charts, the external storages are supported: `azure`, `gcs`, `s3` `swift` and `oss`.
 
-### Configure the secrets
+### Pod affinity
 
-- **Secret keys**: Secret keys are used for secure communication between components. Fill `core.secret`, `jobservice.secret` and `registry.secret` to configure.
-- **Certificates**: Used for token encryption/decryption. Fill `core.secretName` to configure.
+This chart allows you to set your custom affinity using the `*.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-Secrets and certificates must be setup to avoid changes on every Helm upgrade (see: [#107](https://github.com/goharbor/harbor-helm/issues/107)).
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `*.podAffinityPreset`, `*.podAntiAffinityPreset`, or `*.nodeAffinityPreset` parameters.
 
-### Setting Pod's affinity
+### Ingress
 
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host.
+
+In general, to enable Ingress integration, set the `*.ingress.enabled` parameter to *true*.
+
+The most common scenario is to have one host name mapped to the deployment. In this case, the `*.ingress.hostname` property can be used to set the host name. The `*.ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `*.ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `*.ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `*.ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### Adjust permissions of persistent volume mountpoint
 
@@ -1263,11 +1310,212 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ## Troubleshooting
 
+Sometimes, due to unexpected issues, installations can become corrupted and get stuck in a *CrashLoopBackOff* restart loop. In these situations, it may be necessary to access the containers and perform manual operations to troubleshoot and fix the issues. To ease this task, the chart has a "Diagnostic mode" that will deploy all the containers with all probes and lifecycle hooks disabled. In addition to this, it will override all commands and arguments with `sleep infinity`.
+
+To activate the "Diagnostic mode", upgrade the release with the following comman. Replace the `MY-RELEASE` placeholder with the release name:
+```console
+$ helm upgrade MY-RELEASE --set diagnosticMode.enabled=true
+```
+It is also possible to change the default `sleep infinity` command by setting the `diagnosticMode.command` and `diagnosticMode.args` values.
+
+Once the chart has been deployed in "Diagnostic mode", access the containers by executing the following command and replacing the `MY-CONTAINER` placeholder with the container name:
+```console
+$ kubectl exec -ti MY-CONTAINER -- bash
+```
+
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/harbor/administration/upgrade/).
+### To 15.0.0
+
+This major update the Redis&trade; subchart to its newest major, 17.0.0, which updates Redis&trade; from its version 6.2 to the latest 7.0.
+
+### To 14.0.0
+
+The new version of this chart is not longer sopported Clair, who was deprecated by Habor in the [version 2.2.0](https://goharbor.io/blog/harbor-2.2/)
+
+### To 13.0.0
+
+This major release updates the PostgreSQL subchart image to the newest 13.x version.
+
+#### Upgrading Instructions
+
+The upgrade process to *13.x.x* from *12.x.x* should be done by reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `harbor`):
+
+> NOTE: Please, create a backup of your database before running any of these actions.
+
+1. Select the namespace where Harbor is deployed:
+```console
+HARBOR_NAMESPACE='default'
+```
+
+2. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+```console
+HARBOR_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
+POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+POSTGRESQL_PVC=$(kubectl get pvc --namespace "${HARBOR_NAMESPACE:?}" -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+3. Delete the PostgreSQL statefulset (notice the option `--cascade=orphan`) and secret:
+```console
+kubectl delete statefulsets.apps --namespace "${HARBOR_NAMESPACE:?}" --cascade=orphan harbor-postgresql
+kubectl delete secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql
+```
+
+4. Upgrade your release using the same PostgreSQL version:
+```console
+CURRENT_PG_VERSION=$(kubectl exec --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0 -c harbor-postgresql -- bash -c 'printenv APP_VERSION')
+helm --namespace "${HARBOR_NAMESPACE:?}" upgrade harbor bitnami/harbor \
+  --set adminPassword="${HARBOR_PASSWORD:?}" \
+  --set postgresql.image.tag="${CURRENT_PG_VERSION:?}" \
+  --set postgresql.auth.postgresPassword="${POSTGRESQL_PASSWORD:?}" \
+  --set postgresql.primary.persistence.existingClaim="${POSTGRESQL_PVC:?}"
+```
+
+5. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+```console
+kubectl delete pod --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0
+```
+
+### To 12.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository. Additionally updates the PostgreSQL & Redis subcharts to their newest major 11.x.x and 16.x.x, respectively, which contain similar changes.
+
+#### What changes were introduced in this major version?
+
+- `harborAdminPassword` was renamed to `adminPassword`
+- `forcePassword` was deprecated
+- Traffic exposure was completely redesigned:
+  - The new parameter `exposureType` allows deciding whether to expose Harbor using Ingress or an NGINX proxy
+  - `service.type` doesn't accept `Ingress` as a valid value anymore. To configure traffic exposure through Ingress, set `exposureType` to `ingress`
+  - `service.tls` map has been renamed to `nginx.tls`
+  - To configure TLS termination with Ingress, set the `ingress.core.tls` and `ingress.notary.tls` parameters
+  - `ingress` map is completely redefined
+- `xxxImage` parameters (e.g. `nginxImage`) have been renamed to `xxx.image` (e.g. `nginx.image`)
+- `xxx.replicas` parameters (e.g. `nginx.replicas`) have been renamed to `xxx.replicaCount` (e.g. `nginx.replicaCount`)
+- `persistence.persistentVolumeClaim.xxx.accessMode` parameters (e.g. `persistence.persistentVolumeClaim.registry.accessMode`) have been renamed to `persistence.persistentVolumeClaim.xxx.accessModes` (e.g. `persistence.persistentVolumeClaim.registry.accessModes`) and expect an array instead of a string
+- `caBundleSecretName` was renamed to `internalTLS.caBundleSecret`
+- `persistence.imageChartStorage.caBundleSecretName` was renamed to `persistence.imageChartStorage.caBundleSecret`
+- `core.uaaSecretName` was renamed to `core.uaaSecret`
+
+#### Upgrading Instructions
+
+To upgrade to *12.x.x* from *11.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `harbor`):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+1. Select the namespace where Harbor is deployed:
+```console
+HARBOR_NAMESPACE='default'
+```
+
+2. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+```console
+HARBOR_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
+POSTGRESQL_PASSWORD=$(kubectl get secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+POSTGRESQL_PVC=$(kubectl get pvc --namespace "${HARBOR_NAMESPACE:?}" -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+3. Delete the PostgreSQL statefulset (notice the option `--cascade=orphan`) and secret:
+```console
+kubectl delete statefulsets.apps --namespace "${HARBOR_NAMESPACE:?}" --cascade=orphan harbor-postgresql
+kubectl delete secret --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql
+```
+
+4. Upgrade your release using the same PostgreSQL version:
+```console
+CURRENT_PG_VERSION=$(kubectl exec --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0 -c harbor-postgresql -- bash -c 'printenv BITNAMI_IMAGE_VERSION')
+helm --namespace "${HARBOR_NAMESPACE:?}" upgrade harbor bitnami/harbor \
+  --set adminPassword="${HARBOR_PASSWORD:?}" \
+  --set postgresql.image.tag="${CURRENT_PG_VERSION:?}" \
+  --set postgresql.auth.postgresPassword="${POSTGRESQL_PASSWORD:?}" \
+  --set postgresql.primary.persistence.existingClaim="${POSTGRESQL_PVC:?}"
+```
+
+5. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+```console
+kubectl delete pod --namespace "${HARBOR_NAMESPACE:?}" harbor-postgresql-0
+```
+
+> **NOTE:** the instructions above reuse the same PostgreSQL version you were using in your chart release. Otherwise, you will find an error such as the one below when upgrading since the new chart major version also bumps the application version. To workaround this issue you need to upgrade database, please refer to the [official PostgreSQL documentation](https://www.postgresql.org/docs/current/upgrading.html) for more information about this.
+>
+> ```console
+> $ kubectl --namespace "${HARBOR_NAMESPACE:?}" logs harbor-postgresql-0 --container harbor-postgresql
+>     ...
+> postgresql 08:10:14.72 INFO  ==> ** Starting PostgreSQL **
+> 2022-02-01 08:10:14.734 GMT [1] FATAL:  database files are incompatible with server
+> 2022-02-01 08:10:14.734 GMT [1] DETAIL:  The data directory was initialized by PostgreSQL version 11, which is not compatible with this version 14.1.
+> ```
+
+### To 11.0.0
+
+This major update the Redis&trade; subchart to its newest major, 15.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500) you can find more info about the specific changes.
+
+### To 10.0.0
+
+This major updates the Redis&trade; subchart to it newest major, 14.0.0, which contains breaking changes. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis&trade; upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1400).
+
+### To 9.7.0
+
+This new version of the chart bumps the version of Harbor to [`2.2.0`](https://github.com/goharbor/harbor/releases/tag/v2.2.0) which deprecates built-in Clair. If you still want to use Clair, you will need to set `clair.enabled` to `true` and Clair scanner and the Harbor adapter will be deployed. Follow [these steps](https://goharbor.io/docs/latest/administration/vulnerability-scanning/pluggable-scanners) to add it as an additional interrogation service for Harbor.
+
+Please note that Clair might be fully deprecated from this chart in following updates.
+
+### To 9.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+#### What changes were introduced in this major version?
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running *helm dependency update*, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Chart.
+- This chart depends on the **PostgreSQL 10** instead of **PostgreSQL 9**. Apart from the same changes that are described in this section, there are also other major changes due to the master/slave nomenclature was replaced by primary/readReplica. [Here](https://github.com/bitnami/charts/pull/4385) you can find more information about the changes introduced.
+
+#### Considerations when upgrading to this version
+
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version does not support Helm v2 anymore.
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3.
+
+#### Useful links
+
+- [Bitnami Tutorial](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues)
+- [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
+- [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
+
+#### Upgrading Instructions
+
+To upgrade to *9.0.0* from *8.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is `harbor` and the release namespace `default`):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+```console
+export HARBOR_PASSWORD=$(kubectl get secret --namespace default harbor-core-envvars -o jsonpath="{.data.HARBOR_ADMIN_PASSWORD}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default harbor-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=harbor,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+```
+
+2. Delete the PostgreSQL statefulset (notice the option `--cascade=false``)
+```console
+kubectl delete statefulsets.apps --cascade=false harbor-postgresql
+```
+
+3. Upgrade your release:
+```console
+helm upgrade harbor bitnami/harbor \
+  --set harborAdminPassword=$HARBOR_PASSWORD \
+  --set postgresql.image.tag=$CURRENT_PG_VERSION \
+  --set postgresql.postgresqlPassword$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+4. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+```console
+kubectl delete pod harbor-postgresql-0
+```
 
 ## License
 

@@ -7,7 +7,7 @@ etcd is a distributed key-value store designed to securely store data across a c
 [Overview of Etcd](https://etcd.io/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -331,7 +331,7 @@ $ helm install my-release -f values.yaml bitnami/etcd
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -341,13 +341,91 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 The Bitnami etcd chart can be used to bootstrap an etcd cluster, easy to scale and with available features to implement disaster recovery.
 
-Refer to the [chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/etcd/get-started/understand-default-configuration/) for more information about all these details.
+#### Bootstrapping and discovery
 
-### Enable security for etcd
+The etcd chart uses static discovery configured via environment variables to bootstrap the etcd cluster. Based on the number of initial replicas, and using the A records added to the DNS configuration by the headless service, the chart can calculate every advertised peer URL.
 
-The etcd chart can be configured with Role-based access control and TLS encryption to improve its security.
+The chart makes use of some extra elements offered by Kubernetes to ensure the bootstrapping is successful:
 
-[Learn more about security in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/etcd/administration/enable-security/).
+- It sets a "Parallel" Pod Management Policy. This is critical, since all the etcd replicas should be created simultaneously to guarantee they can find each other.
+- It records "not ready" pods in the DNS, so etcd replicas are reachable using their associated FQDN before they're actually ready.
+
+Learn more about [etcd discovery](https://etcd.io/docs/current/op-guide/clustering/#discovery), [Pod Management Policies](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies) and [recording "not ready" pods](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-hostname-and-subdomain-fields).
+
+Here is an example of the environment configuration bootstrapping an etcd cluster with 3 replicas:
+
+| Member  | Variable                         | Value                                                                                                                                                                                                 |
+|---------|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 0       | ETCD_NAME                        | etcd-0                                                                                                                                                                                                |
+| 0       | ETCD_INITIAL_ADVERTISE_PEER_URLS | http://etcd-0.etcd-headless.default.svc.cluster.local:2380                                                                                                                                            |
+|---------|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1       | ETCD_NAME                        | etcd-1                                                                                                                                                                                                |
+| 1       | ETCD_INITIAL_ADVERTISE_PEER_URLS | http://etcd-1.etcd-headless.default.svc.cluster.local:2380                                                                                                                                            |
+|---------|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 2       | ETCD_NAME                        | etcd-2                                                                                                                                                                                                |
+| 2       | ETCD_INITIAL_ADVERTISE_PEER_URLS | http://etcd-2.etcd-headless.default.svc.cluster.local:2380                                                                                                                                            |
+|---------|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *       | ETCD_INITIAL_CLUSTER_STATE       | new                                                                                                                                                                                                   |
+| *       | ETCD_INITIAL_CLUSTER_TOKEN       | etcd-cluster-k8s                                                                                                                                                                                      |
+| *       | ETCD_INITIAL_CLUSTER             | etcd-0=http://etcd-0.etcd-headless.default.svc.cluster.local:2380,etcd-1=http://etcd-1.etcd-headless.default.svc.cluster.local:2380,etcd-2=http://etcd-2.etcd-headless.default.svc.cluster.local:2380 |
+
+The probes (readiness & liveness) are delayed 60 seconds by default, to give the etcd replicas time to start and find each other. After that period, the `etcdctl endpoint health` command is used to periodically perform health checks on every replica.
+
+#### Scalability
+
+The etcd chart uses etcd reconfiguration operations to add/remove members of the cluster during scaling.
+
+When scaling down, a "pre-stop" lifecycle hook is used to ensure that the `etcdctl member remove` command is executed. The hook stores the output of this command in the persistent volume attached to the etcd pod. This hook is also executed when the pod is manually removed using the `kubectl delete pod` command or rescheduled by Kubernetes for any reason. This implies that the cluster can be scaled up/down without human intervention.
+
+Here is an example to explain how this works:
+
+1. An etcd cluster with three members running on a three-nodes Kubernetes cluster is bootstrapped.
+2. After a few days, the cluster administrator decides to upgrade the kernel on one of the cluster nodes. To do so, the administrator drains the node. Pods running on that node are rescheduled to a different one.
+3. During the pod eviction process, the "pre-stop" hook removes the etcd member from the cluster. Thus, the etcd cluster is scaled down to only two members.
+4. Once the pod is scheduled on another node and initialized, the etcd member is added again to the cluster using the `etcdctl member add` command. Thus, the etcd cluster is scaled up to three replicas.
+
+If, for whatever reason, the "pre-stop" hook fails at removing the member, the initialization logic is able to detect that something went wrong by checking the `etcdctl member remove` command output that was stored in the persistent volume. It then uses the `etcdctl member update` command to add back the member. In this case, the cluster isn't automatically scaled down/up while the pod is recovered. Therefore, when other members attempt to connect to the pod, it may cause warnings or errors like the one below:
+
+```
+E | rafthttp: failed to dial XXXXXXXX on stream Message (peer XXXXXXXX failed to find local node YYYYYYYYY)
+I | rafthttp: peer XXXXXXXX became inactive (message send to peer failed)
+W | rafthttp: health check for peer XXXXXXXX could not connect: dial tcp A.B.C.D:2380: i/o timeout
+```
+
+Learn more about [etcd runtime configuration](https://etcd.io/docs/current/op-guide/runtime-configuration/) and how to safely drain a Kubernetes node](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/).
+
+#### Cluster updates
+
+When updating the etcd StatefulSet (such as when upgrading the chart version via the `helm upgrade` command), every pod must be replaced following the StatefulSet update strategy.
+
+The chart uses a "RollingUpdate" strategy by default and with default Kubernetes values. In other words, it updates each Pod, one at a time, in the same order as Pod termination (from the largest ordinal to the smallest). It will wait until an updated Pod is "Running" and "Ready" prior to updating its predecessor.
+
+Learn more about [StatefulSet update strategies](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies).
+
+#### Disaster recovery
+
+If, for whatever reason, (N-1)/2 members of the cluster fail and the "pre-stop" hooks also fail at removing them from the cluster, the cluster disastrously fails, irrevocably losing quorum. Once quorum is lost, the cluster cannot reach consensus and therefore cannot continue accepting updates. Under this circumstance, the only possible solution is usually to restore the cluster from a snapshot.
+
+> IMPORTANT: All members should restore using the same snapshot.
+
+The etcd chart solves this problem by optionally offering a Kubernetes cron job that periodically snapshots the keyspace and stores it in a RWX volume. In case the cluster disastrously fails, the pods will automatically try to restore it using the last avalable snapshot.
+
+Enable this feature with the following parameters:
+
+```
+persistence.enabled=true
+disasterRecovery.enabled=true
+disasterRecovery.pvc.size=2Gi
+disasterRecovery.pvc.storageClassName=nfs
+```
+
+If the `startFromSnapshot.*` parameters are used at the same time as the `disasterRecovery.*` parameters, the PVC provided via the `startFromSnapshot.existingClaim` parameter will be used to store the periodical snapshots.
+
+> NOTE: The disaster recovery feature requires volumes with ReadWriteMany access mode.
+
+The chart also sets by default a "soft" Pod AntiAffinity to reduce the risk of the cluster failing disastrously.
+
+Learn more about [etcd recovery](https://etcd.io/docs/current/op-guide/recovery), [Kubernetes cron jobs](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) and [pod affinity and anti-affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
 
 ### Persistence
 
@@ -357,17 +435,119 @@ The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/stora
 
 If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
+### Enable TLS and other security features
+
+The following sections describe the options available for improving the security of your etcd deployment.
+
+#### Configure RBAC
+
+In order to enable Role-Based Access Control for etcd, set the following parameters:
+
+```
+auth.rbac.enabled=true
+auth.rbac.rootPassword=ETCD_ROOT_PASSWORD
+```
+
+These parameters create a *root* user with an associate *root* role with access to everything. The remaining users will use the *guest* role and won't have permissions to do anything.
+
+#### Configure TLS for server-to-server communications
+
+In order to enable secure transport between peer nodes deploy the helm chart with these options:
+
+```
+auth.peer.secureTransport=true
+auth.peer.useAutoTLS=true
+```
+
+#### Configure certificates for client communication
+
+In order to enable secure transport between client and server, create a secret containing the certificate and key files and the CA used to sign the client certificates. In this case, create the secret and then deploy the chart with these options:
+
+```
+auth.client.secureTransport=true
+auth.client.enableAuthentication=true
+auth.client.existingSecret=etcd-client-certs
+```
+
+Learn more about the [etcd security model](https://etcd.io/) and how to [generate self-signed certificates for etcd](https://coreos.com/os/docs/latest/generate-self-signed-certificates.html).
+
+### Scale the cluster
+
+To scale the etcd cluster, two options are available:
+
+- Scale the StatefulSet using the `kubectl scale` command. For instance, to remove a member, use the commands below. Replace the MY-RELEASE placeholder with the release name.
+
+```
+$ CURRENT_REPLICAS=$(kubectl get statefulset/MY-RELEASE-etcd -o=jsonpath='{.status.replicas}')
+$ kubectl scale --replicas=$((CURRENT_REPLICAS-1)) statefulset/MY-RELEASE-etcd
+```
+
+- Upgrade the StatefulSet by providing the total number of etcd members required in the etcd cluster as a parameter to the `helm upgrade` command. For instance, to remove two members, use the commands below:
+
+```
+$ CURRENT_REPLICAS=$(kubectl get statefulset/MY-RELEASE-etcd -o=jsonpath='{.status.replicas}')
+$ helm upgrade MY-RELEASE bitnami/etcd \
+  --set auth.rbac.rootPassword=ETCD_ROOT_PASSWORD \
+  --set replicaCount=$((CURRENT_REPLICAS-2))
+```
+
+> NOTE: Replace the placeholder `ETCD_ROOT_PASSWORD` with the correct password for the etcd administrator account. If the password was generated automatically, obtain the auto-generated paassword from the post-deployment instructions.
+
 ### Backup and restore the etcd keyspace
 
 The Bitnami etcd chart provides mechanisms to bootstrap the etcd cluster restoring an existing snapshot before initializing.
 
-[Learn more about backup/restore features in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/etcd/administration/backup-restore/).
+Two different approaches are available to back up and restore the etcd Helm chart deployments on Kubernetes:
+
+- Back up the data from the source deployment and restore it in a new deployment using etcd's built-in backup/restore tools.
+- Back up the persistent volumes from the source deployment and attach them to a new deployment using Velero, a Kubernetes backup/restore tool.
+
+#### Method 1: Backup and restore data using etcd's built-in tools
+
+This method involves the following steps:
+
+- Use the `etcdctl` tool to create a snapshot of the data in the source cluster.
+- Make the snapshot available in a Kubernetes PersistentVolumeClaim (PVC) that supports ReadWriteMany access (for example, a PVC created with the NFS storage class)
+- Restore the data snapshot in a new cluster using the `startFromSnapshot.existingClaim` and `startFromSnapshot.snapshotFilename` parameters to define the source PVC and source filename for the snapshot.
+
+> NOTE: Under this approach, it is important to create the new deployment on the destination cluster using the same credentials as the original deployment on the source cluster.
+
+#### Method 2: Back up and restore persistent data volumes
+
+This method involves copying the persistent data volumes for the etcd nodes and reusing them in a new deployment with [Velero](https://velero.io/), an open source Kubernetes backup/restore tool. This method is only suitable when:
+
+- The Kubernetes provider is [supported by Velero](https://velero.io/docs/latest/supported-providers/).
+- Both clusters are on the same Kubernetes provider, as this is a requirement of [Velero's native support for migrating persistent volumes](https://velero.io/docs/latest/migration-case/).
+- The restored deployment on the destination cluster will have the same name, namespace, topology and credentials as the original deployment on the source cluster.
+
+This method involves the following steps:
+
+- Install Velero on the source and destination clusters.
+- Use Velero to back up the PersistentVolumes (PVs) used by the etcd deployment on the source cluster.
+- Use Velero to restore the backed-up PVs on the destination cluster.
+- Create a new etcd deployment on the destination cluster with the same deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
+
+Refer to our detailed [tutorial on backing up and restoring etcd chart deployments on Kubernetes](https://docs.bitnami.com/tutorials/backup-restore-data-etcd-kubernetes/), which covers both these approaches, for more information.
 
 ### Exposing etcd metrics
 
 The metrics exposed by etcd can be exposed to be scraped by Prometheus. This can be done by adding the required annotations for Prometheus to discover the metrics endpoints or creating a PodMonitor entry if you are using the Prometheus Operator.
 
-[Learn more about exposing metrics in the chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/etcd/administration/enable-metrics/).
+To export Prometheus metrics, set the `metrics.enabled` parameter to *true* when deploying the chart. Refer to the chart parameters for the default port number.
+
+Metrics can be scraped from within the cluster using any of the following approaches:
+
+- Adding the required annotations for Prometheus to discover the metrics endpoints, as in the example below:
+
+        podAnnotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/path: "/metrics/cluster"
+          prometheus.io/port: "9000"
+
+- Creating a ServiceMonitor or PodMonitor entry (when the Prometheus Operator is available in the cluster)
+- Using something similar to the [example Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml).
+
+If metrics are to be scraped from outside the cluster, the Kubernetes API proxy can be utilized to access the endpoint.
 
 ### Using custom configuration
 
@@ -403,19 +583,30 @@ autoCompactionRetention=10m
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as the etcd app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Here is an example:
 
 ```yaml
 sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-       containerPort: 1234
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
 ```
 
-Similarly, you can add extra init containers using the `initContainers` parameter.
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+...
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
 
 ```yaml
 initContainers:
@@ -427,17 +618,50 @@ initContainers:
         containerPort: 1234
 ```
 
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
+
 ### Deploying extra resources
 
 There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
 
-### Setting Pod's affinity
+### Pod affinity
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `*.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `*.podAffinityPreset`, `*.podAntiAffinityPreset`, or `*.nodeAffinityPreset` parameters.
+
+### Ingress
+
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
+
+To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host.
+
+In general, to enable Ingress integration, set the `*.ingress.enabled` parameter to *true*.
+
+The most common scenario is to have one host name mapped to the deployment. In this case, the `*.ingress.hostname` property can be used to set the host name. The `*.ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `*.ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `*.ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `*.ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ## Troubleshooting
+
+Sometimes, due to unexpected issues, installations can become corrupted and get stuck in a *CrashLoopBackOff* restart loop. In these situations, it may be necessary to access the containers and perform manual operations to troubleshoot and fix the issues. To ease this task, the chart has a "Diagnostic mode" that will deploy all the containers with all probes and lifecycle hooks disabled. In addition to this, it will override all commands and arguments with `sleep infinity`.
+
+To activate the "Diagnostic mode", upgrade the release with the following comman. Replace the `MY-RELEASE` placeholder with the release name:
+```console
+$ helm upgrade MY-RELEASE --set diagnosticMode.enabled=true
+```
+It is also possible to change the default `sleep infinity` command by setting the `diagnosticMode.command` and `diagnosticMode.args` values.
+
+Once the chart has been deployed in "Diagnostic mode", access the containers by executing the following command and replacing the `MY-CONTAINER` placeholder with the container name:
+```console
+$ kubectl exec -ti MY-CONTAINER -- bash
+```
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
@@ -485,9 +709,28 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ### To 5.0.0
 
-[On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+[On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). Subsequently, a major version of the chart was released to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/etcd/administration/upgrade-helm3/).
+### Changes introduced
+
+- Previous versions of this Helm chart used *apiVersion: v1* (installable by both Helm v2 and v3). This Helm chart was updated to *apiVersion: v2* (installable by Helm v3 only). [Learn more about the *apiVersion* field](https://helm.sh/docs/topics/charts/#the-apiversion-field).
+- The different fields present in the *Chart.yaml* file were reordered alphabetically in a homogeneous way.
+- Dependency information was transferred from the *requirements.yaml* to the *Chart.yaml* file.
+- After running *helm dependency update*, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock* file.
+
+### Upgrade considerations
+
+- No issues should be encountered when upgrading to this version of the chart from a previous one installed with Helm v3.
+- Upgrading to this version of the chart using Helm v2 is not supported any longer.
+- For chart versions installed with Helm v2 and subsequently requiring upgrade with Helm v3,  refer to the [official Helm documentation about migrating from Helm v2 to v3](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases).
+
+### Useful links
+
+If you encounter difficulties when upgrading the chart due to the different versions of Helm, refer to the following links for possible explanations and solutions:
+
+- [https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/)
+- [https://helm.sh/docs/topics/v2_v3_migration/](https://helm.sh/docs/topics/v2_v3_migration/)
+- [https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/)
 
 ### To 4.4.14
 

@@ -7,7 +7,7 @@ Cert Manager is a Kubernetes add-on to automate the management and issuance of T
 [Overview of Cert Manager](https://github.com/jetstack/cert-manager)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -307,7 +307,7 @@ $ helm install my-release -f values.yaml bitnami/cert-manager
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -327,19 +327,30 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as the Cert Manager app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Here is an example:
 
 ```yaml
 sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-       containerPort: 1234
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
 ```
 
-Similarly, you can add extra init containers using the `initContainers` parameter.
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+...
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
 
 ```yaml
 initContainers:
@@ -351,17 +362,189 @@ initContainers:
         containerPort: 1234
 ```
 
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
+
 ### Deploying extra resources
 
 There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
 
-### Setting Pod's affinity
+### Pod affinity
 
-This chart allows you to set your custom affinity using the `controller.affinity`, `cainjector.affinity` or `webhook.affinity` parameters. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `*.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can make use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `controller.podAffinityPreset`, `cainjector.podAffinityPreset`, `webhook.podAffinityPreset`, `controller.podAntiAffinityPreset`, `cainjector.podAntiAffinityPreset`, `webhook.podAntiAffinityPreset`, `controller.nodeAffinityPreset`, `cainjector.nodeAffinityPreset` or `webhook.nodeAffinityPreset` parameters.
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `*.podAffinityPreset`, `*.podAntiAffinityPreset`, or `*.nodeAffinityPreset` parameters.
+
+## Generate TLS certificates using ACME Issuers
+
+Cert Manager supports issuing certificates through different Issuers. For instance, you can use a public ACME (Automated Certificate Management Environment) server to issue the certificates.
+
+> NOTE: Find the list of available Issuers in the [Cert Manager official documentation](https://cert-manager.io/docs/configuration/#supported-issuer-types).
+
+To configure Cert Manager, create an Issuer object. The structure of this object differs depending on the Issuer type. For ACME, it is necessary to include the information for a single account registered in the ACME Certificate Authority server.
+
+Once Cert Manager is configured to use ACME, it will verify that you are the owner of the domains for which certificates are being requested. Cert Manager uses two different challenges to verify that you are the owner of your domain: HTTP01 or DNS01. [Learn more about ACME challenges](https://cert-manager.io/docs/concepts/acme-orders-challenges/#challenge-scheduling).
+
+> NOTE: Learn more about the process to solve challenges in the [official documentation](https://cert-manager.io/docs/configuration/acme/#solving-challenges).
+
+To create a ACME issuer for use with Let's Encrypt, declare an Issuer as shown below:
+
+```yaml
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    # You must replace this email address with your own.
+    # Let's Encrypt will use this to contact you about expiring
+    # certificates, and issues related to your account.
+    # Replace the EMAIL-ADDRESS placeholder with the correct email account
+    email: EMAIL-ADDRESS
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    # Add a single challenge solver, HTTP01 using nginx
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+```
+
+Next, use the ClusterIssuer to generate certificates for the applications in your Kubernetes cluster.
+
+After the Ingress resource is ready, Cert Manager verifies the domain using HTTP01/DNS01 challenges. During this verification process, the controller log can be used to check the status, as shown below:
+
+```console
+$ kubectl get certificates
+NAME                     READY   SECRET                   AGE
+letencrypt-ca            False   letencrypt-ca             X
+```
+
+The status remains *False* whilst verification is in progress. This status will change to *True* when the HTTP01 verification is completed successfully.
+
+```console
+$ kubectl get certificates
+NAME                     READY   SECRET                   AGE
+letencrypt-ca            True    letencrypt-ca             X
+
+$ kubectl get secrets
+NAME                                  TYPE                                  DATA   AGE
+letencrypt-ca                      kubernetes.io/tls                        3      Xm
+```
+
+## Generate TLS certificates using Self Signed Issuers
+
+Cert Manager supports issuing certificates through different Issuers. For instance, you can use a Self Signed Issuer to issue the certificates.
+
+The Self Signed issuer doesn't represent a certificate authority as such, but instead denotes that certificates will "sign themselves" using a given private key.
+
+> NOTE: Find the list of available Issuers in the [Cert Manager official documentation](https://cert-manager.io/docs/configuration/#supported-issuer-types).
+
+To configure Cert Manager, create an Issuer object. The structure of this object differs depending on the Issuer type. Self Signed issuer are really easy to configure.
+
+To create a self signed issuer to generate a self signed certificate, declare an Issuer, a ClusterIssuer and a Certificate, as shown below:
+
+```yaml
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-ca
+  namespace: sandbox
+spec:
+  ca:
+    secretName: letsencrypt-ca
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: letsencrypt-ca
+  namespace: sandbox
+spec:
+  isCA: true
+  commonName: osm-system
+  secretName: letsencrypt-ca
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+    group: cert-manager.io
+```
+
+Next, use the ClusterIssuer to generate certificates for the applications in your Kubernetes cluster.
+
+After the Ingress resource is ready, Cert Manager will create a secret. This secret contains the generated TLS certificate. This can be checked as shown below:
+
+```console
+$ kubectl get secret --namespace=sandbox
+NAME                  TYPE                                  DATA   AGE
+letsencrypt-ca        kubernetes.io/tls                     3      Xs
+```
+
+## Secure Ingress resources with Cert Manager
+
+Once you configure an Issuer for Cert Manager (either a Self-Signed Issuer or an ACME Issuer), Cert Manager will make use of this Issuer to create a TLS secret containing the certificates. Cert Manager can only create this secret if the application is already exposed. One way to do this is with an Ingress Resource which exposes the application and includes the corresponding annotations for Cert Manager.
+
+There are two options to expose your application through an Ingress Controller using Cert Manager to manage the TLS certificates:
+
+- Deploy another Helm chart which supports exposing the application through an Ingress controller. For instance, use the [Helm Chart for WordPress](https://github.com/bitnami/charts/tree/master/bitnami/wordpress) and [configure its Ingress. To enable the integration with CertManager, add the annotations below to the `ingress.annotations` parameter:
+
+```yaml
+# Set up your ingress.class below (in this example, we are using nginx ingress controller)
+kubernetes.io/ingress.class: nginx
+cert-manager.io/cluster-issuer: letsencrypt-prod
+```
+
+- Create your own Ingress resource as shown in the example below:
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-test
+  annotations:
+    # Set up your ingress.class below (in this example, we are using nginx ingress controller)
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/issuer: "letsencrypt-prod"
+spec:
+  tls:
+  # Replace the DOMAIN placeholder with the correct domain name
+  - hosts:
+    - DOMAIN
+    secretName: letsencrypt-ca
+  rules:
+  # Replace the DOMAIN placeholder with the correct domain name
+  - host: DOMAIN
+    http:
+      paths:
+      - path: /
+        pathType: Exact
+        backend:
+          service:
+            name: ingress-test
+            port:
+              number: 80
+```
 
 ## Troubleshooting
+
+Sometimes, due to unexpected issues, installations can become corrupted and get stuck in a *CrashLoopBackOff* restart loop. In these situations, it may be necessary to access the containers and perform manual operations to troubleshoot and fix the issues. To ease this task, the chart has a "Diagnostic mode" that will deploy all the containers with all probes and lifecycle hooks disabled. In addition to this, it will override all commands and arguments with `sleep infinity`.
+
+To activate the "Diagnostic mode", upgrade the release with the following comman. Replace the `MY-RELEASE` placeholder with the release name:
+```console
+$ helm upgrade MY-RELEASE --set diagnosticMode.enabled=true
+```
+It is also possible to change the default `sleep infinity` command by setting the `diagnosticMode.command` and `diagnosticMode.args` values.
+
+Once the chart has been deployed in "Diagnostic mode", access the containers by executing the following command and replacing the `MY-CONTAINER` placeholder with the container name:
+```console
+$ kubectl exec -ti MY-CONTAINER -- bash
+```
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 

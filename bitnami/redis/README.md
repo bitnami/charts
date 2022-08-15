@@ -34,7 +34,7 @@ The main features of each chart are the following:
 |--------------------------------------------------------|------------------------------------------------------------------------|
 | Supports multiple databases                            | Supports only one database. Better if you have a big dataset           |
 | Single write point (single master)                     | Multiple write points (multiple masters)                               |
-| ![Redis&reg; Topology](img/redis-topology.png) | ![Redis&reg; Cluster Topology](img/redis-cluster-topology.png) |
+| ![Redis&reg; Topology](../images/redis-topology.png)   | ![Redis&reg; Cluster Topology](../images/redis-cluster-topology.png)   |
 
 ## Prerequisites
 
@@ -525,17 +525,26 @@ $ helm install my-release -f values.yaml bitnami/redis
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Differences between the Redis Cluster and Redis Helm charts
+
+There are two different ways to deploy a Redis Cluster, using the [Redis Helm chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) or the [Redis Cluster Helm chart](https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster). Both solutions provide a simply and reliable way to run Redis in a production enevironment. Keep reading to discover the differences between them and check which one better suits your needs.
+
+- The Redis Cluster Helm chart configures a cluster with six nodes by default with multiple writing points (three masters) and three slave nodes. The Redis Helm chart deploys three nodes by default in which there is only one writing point (one master) and two nodes for replicas (slaves).
+- The Redis Cluster Helm chart will deploy a Redis Cluster topology with [sharding](https://dzone.com/articles/redis-replication-vs-sharding) while the Redis Cluster will deploy a master-slave cluster using [Redis Sentinel](https://redis.io/topics/sentinel).
+- The Redis Cluster supports only one database - indicated if you have a big dataset - and Redis supports multiple databases.
+- The Redis Cluster client must support redirection, while the client used for Redis doesn't need it.
+- The topology of the Redis Cluster Helm chart allows users to access the cluster both externally and internally and you can both scale up and scale down the cluster in both accesses.
+- The Redis Cluster Helm chart also includes an additional feature: disaster recovery and failover. If the master node or even all the nodes are down, the cluster is automatically recovered and new master nodes are promoted to maintain the balance of the cluster and ensure that read/write operations continue without interruption.
+
+![Diagram](../images/redis-rediscluster.png)
+
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Use a different Redis&reg; version
-
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/redis/configuration/change-image-version/).
 
 ### Bootstrapping with an External Cluster
 
@@ -573,10 +582,10 @@ useExternalDNS:
 
 On a cluster where the name of the Helm release is `a`, the hostname of a Pod is generated as: `a-redis-node-0.a-redis.prod.example.org`. The IP of that FQDN will match that of the associated Pod. This modifies the following parameters of the Redis/Sentinel configuration using this new FQDN:
 
-* `replica-announce-ip`
-* `known-sentinel`
-* `known-replica`
-* `announce-ip`
+- `replica-announce-ip`
+- `known-sentinel`
+- `known-replica`
+- `announce-ip`
 
 :warning: This requires a working installation of `external-dns` to be fully functional. :warning:
 
@@ -634,19 +643,44 @@ It's recommended to only change `master.count` if you know what you are doing.
 
 To use a password file for Redis&reg; you need to create a secret containing the password and then deploy the chart using that secret.
 
-Refer to the chart documentation for more information on [using a password file for Redis&reg;](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/use-password-file/).
+- Create the secret with the password. It is important that the file with the password must be called *redis-password*.
+```console
+$ kubectl create secret generic redis-password-secret --from-file=redis-password.yaml
+```
 
-### Securing traffic using TLS
+- Deploy the Helm Chart using the secret name as parameter:
+```
+usePassword=true
+usePasswordFile=true
+existingSecret=redis-password-secret
+sentinels.enabled=true
+metrics.enabled=true
+```
+
+### Enable TLS
 
 TLS support can be enabled in the chart by specifying the `tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the chart:
 
-- `tls.enabled`: Enable TLS support. Defaults to `false`
-- `tls.existingSecret`: Name of the secret that contains the certificates. No defaults.
+- `tls.enabled`: Enable TLS support. Defaults to false
+- `tls.certificatesSecret`: Name of the secret that contains the certificates. No defaults.
 - `tls.certFilename`: Certificate filename. No defaults.
 - `tls.certKeyFilename`: Certificate key filename. No defaults.
 - `tls.certCAFilename`: CA Certificate filename. No defaults.
 
-Refer to the chart documentation for more information on [creating the secret and a TLS deployment example](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-tls/).
+For example:
+
+- Create the secret with the certificate files:
+```console
+$ kubectl create secret generic certificates-tls-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
+```
+- Deploy the chart with the following parameters:
+```
+tls.enabled="true"
+tls.certificatesSecret="certificates-tls-secret"
+tls.certFilename="cert.pem"
+tls.certKeyFilename="cert.key"
+tls.certCAFilename="ca.pem"
+```
 
 ### Metrics
 
@@ -666,7 +700,70 @@ tls-ca-cert-file
 
 Redis&reg; may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages.
 
-Refer to the chart documentation for more information on [configuring host kernel settings with an example](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/configure-kernel-settings/).
+To do so, you can set up a privileged `initContainer` with the `sysctlImage` config values, for example:
+
+```yaml
+sysctlImage:
+  enabled: true
+  mountHostSys: true
+  command:
+    - /bin/sh
+    - -c
+    - |-
+      install_packages procps
+      sysctl -w net.core.somaxconn=10000
+      echo never > /host-sys/kernel/mm/transparent_hugepage/enabled
+```
+
+Alternatively, for Kubernetes 1.12+ you can set `securityContext.sysctls` which will configure `sysctls` for master and slave pods. Example:
+
+```yaml
+securityContext:
+  sysctls:
+  - name: net.core.somaxconn
+    value: "10000"
+```
+
+Note that this will not disable transparent huge tables.
+
+### Sidecars and Init Containers
+
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Here is an example:
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+...
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ## Persistence
 
@@ -684,21 +781,132 @@ $ helm install my-release --set master.persistence.existingClaim=PVC_NAME bitnam
 
 ## Backup and restore
 
-Refer to the chart documentation for more information on [backing up and restoring Redis&reg; deployments](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/backup-restore/).
+To backup and restore Redis&reg; deployments on Kubernetes, you will need to create a snapshot of the data in the source cluster, and later restore it in a new cluster with the new parameters. Follow the instructions below:
+
+### Step 1: Backup the deployment
+
+- Connect to one of the nodes and start the Redis&reg; CLI tool. Then, run the commands below:
+```console
+$ kubectl exec -it my-redis-master-0 bash
+$ redis-cli
+127.0.0.1:6379> auth your_current_redis_password
+OK
+127.0.0.1:6379> save
+OK
+```
+
+- Copy the dump file from the Redis&reg; node:
+```console
+$ kubectl cp my-redis-master-0:/data/dump.rdb dump.rdb -c redis
+```
+
+### Step 2: Restore the data on the destination cluster
+
+To restore the data in a new cluster, you will need to create a PVC and then upload the *dump.rdb* file to the new volume.
+
+Follow the following steps:
+
+- In the [*values.yaml*](https://github.com/bitnami/charts/blob/ae086acff0dd7c4f4b3101ebf1a7328e6a8ddcf5/bitnami/redis/values.yaml#L131) file set the *appendonly* parameter to *no*. You can skip this step if it is already configured as *no*
+```yaml
+commonConfiguration: |-
+   # Enable AOF https://redis.io/topics/persistence#append-only-file
+   appendonly no
+   # Disable RDB persistence, AOF persistence already enabled.
+   save ""
+```
+    > *Note that the `Enable AOF` comment belongs to the original config file and what you're actually doing is disabling it. This change will only be neccessary for the temporal cluster you're creating to upload the dump.*
+
+- Start the new cluster to create the PVCs. Use the command below as an example:
+```console
+$ helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+```
+- Now that the PVC were created, stop it and copy the *dump.rdp* file on the persisted data by using a helping pod.
+```console
+$ helm delete new-redis
+
+$ kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+"name": "redisvolpod"
+    },
+    "spec": {
+"containers": [{
+   "command": [
+"tail",
+"-f",
+"/dev/null"
+   ],
+   "image": "bitnami/minideb",
+   "name": "mycontainer",
+   "volumeMounts": [{
+       "mountPath": "/mnt",
+       "name": "redisdata"
+    }]
+}],
+"restartPolicy": "Never",
+"volumes": [{
+    "name": "redisdata",
+    "persistentVolumeClaim": {
+"claimName": "redis-data-new-redis-master-0"
+    }
+}]
+    }
+}' --image="bitnami/minideb"
+
+$ kubectl cp dump.rdb redisvolpod:/mnt/dump.rdb
+$ kubectl delete pod volpod
+```
+- Restart the cluster:
+
+> **INFO:** The *appendonly* parameter can be safely restored to your desired value.
+```console
+$ helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+```
 
 ## NetworkPolicy
 
-To enable network policy for Redis&reg;, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
+To enable network policy for Redis&reg;, install a [networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/#before-you-begin), and set *networkPolicy.enabled* to *true*.
 
-Refer to the chart documenation for more information on [enabling the network policy in Redis&reg; deployments](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-network-policy/).
+For Kubernetes v1.5 & v1.6, you must also turn on NetworkPolicy by setting the DefaultDeny namespace annotation. Note: this will enforce policy for all pods in the namespace:
+```console
+$ kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
+```
 
-### Setting Pod's affinity
+With NetworkPolicy enabled, only pods with the generated client label will be able to connect to Redis&reg;. This label will be displayed in the output after a successful install.
 
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+With `networkPolicy.ingressNSMatchLabels` pods from other namespaces can connect to Redis&reg;. Set `networkPolicy.ingressNSPodMatchLabels` to match pod labels in matched namespace. For example, for a namespace labeled `redis=external` and pods in that namespace labeled `redis-client=true` the fields should be set:
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+```yaml
+networkPolicy:
+  enabled: true
+  ingressNSMatchLabels:
+    redis: external
+  ingressNSPodMatchLabels:
+    redis-client: true
+```
+
+### Pod affinity
+
+This chart allows you to set your custom affinity using the `*.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `*.podAffinityPreset`, `*.podAntiAffinityPreset`, or `*.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
+
+Sometimes, due to unexpected issues, installations can become corrupted and get stuck in a *CrashLoopBackOff* restart loop. In these situations, it may be necessary to access the containers and perform manual operations to troubleshoot and fix the issues. To ease this task, the chart has a "Diagnostic mode" that will deploy all the containers with all probes and lifecycle hooks disabled. In addition to this, it will override all commands and arguments with `sleep infinity`.
+
+To activate the "Diagnostic mode", upgrade the release with the following comman. Replace the `MY-RELEASE` placeholder with the release name:
+```console
+$ helm upgrade MY-RELEASE --set diagnosticMode.enabled=true
+```
+It is also possible to change the default `sleep infinity` command by setting the `diagnosticMode.command` and `diagnosticMode.args` values.
+
+Once the chart has been deployed in "Diagnostic mode", access the containers by executing the following command and replacing the `MY-CONTAINER` placeholder with the container name:
+```console
+$ kubectl exec -ti MY-CONTAINER -- bash
+```
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
@@ -741,7 +949,7 @@ The Redis&reg; sentinel exporter was removed in this version because the upstrea
     - The term *slave* has been replaced by the term *replica*. Therefore, parameters prefixed with `slave` are now prefixed with `replicas`.
     - Credentials parameter are reorganized under the `auth` parameter.
     - `cluster.enabled` parameter is deprecated in favor of `architecture` parameter that accepts two values: `standalone` and `replication`.
-    - `securityContext.*` is deprecated in favor of `XXX.podSecurityContext` and `XXX.containerSecurityContext`.
+    - `securityContext.*` is deprecated in favor of `*.podSecurityContext` and `*.containerSecurityContext`.
     - `sentinel.metrics.*` parameters are deprecated in favor of `metrics.sentinel.*` ones.
 - New parameters to add custom command, environment variables, sidecars, init containers, etc. were added.
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
@@ -772,18 +980,18 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/

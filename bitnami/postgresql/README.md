@@ -7,7 +7,7 @@ PostgreSQL (Postgres) is an open source object-relational database known for rel
 [Overview of PostgreSQL](http://www.postgresql.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```bash
@@ -479,9 +479,22 @@ helm install my-release -f values.yaml bitnami/postgresql
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
+## Differences between the PostgreSQL-HA and PostgreSQL Helm charts
+
+There are two different ways to deploy a PostgreSQL cluster, using the PostgreSQL Helm chart or the PostgreSQL High Availability (HA) Helm chart. Both solutions provide a simply and reliable way to run PostgreSQL in a production environment. Keep reading to discover the differences between them and check which one better suits your needs.
+
+-  Both the PostgreSQL HA and the PostgreSQL chart configures a cluster with a master-slave topology. The master node has writing permissions while replication is on the slaves nodes which have reading-only permissions.
+-  The PostgreSQL HA Helm chart deploys a cluster with three nodes by default, one for pgpool, and one master and one slave for PostgreSQL. The PostgreSQL chart configures a cluster with two nodes by default (one master and one slave).
+-  The PostgreSQL HA Helm chart uses pgpool to handle the connection to the nodes. pgpool is resposible to spread the queries among nodes.
+-  The PostgreSQL HA Helm chart includes a repmgr module that ensures high-availability thanks to automatic membership control. If the master is down, any of the slave nodes will be promoted as master to avoid data loss.
+
+The following diagram shows you the options you have for using Bitnami's PostgreSQL solutions in your deployments:
+
+![Diagram](../images/postgresqlha-postgresql.png)
+
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -490,10 +503,6 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Customizing primary and read replica services in a replicated configuration
 
 At the top level, there is a service object which defines the services for both primary and readReplicas. For deeper customization, there are service objects for both the primary and read types individually. This allows you to override the values in the top level service object so that the primary and read can be of different service types and with different clusterIPs / nodePorts. Also in the case you want the primary and read to be of type nodePort, you will need to set the nodePorts to different values to prevent a collision. The values that are deeper in the primary.service or readReplicas.service objects will take precedence over the top level service object.
-
-### Use a different PostgreSQL version
-
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/configuration/change-image-version/).
 
 ### postgresql.conf / pg_hba.conf files as configMap
 
@@ -540,30 +549,44 @@ For example:
 
   > Note TLS and VolumePermissions: PostgreSQL requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding kubernetes permissions and the use of `containerSecurityContext.runAsUser`, you must enable `volumePermissions` to ensure everything works as expected.
 
-### Sidecars
+### Sidecars and Init Containers
 
-If you need  additional containers to run within the same pod as PostgreSQL (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Here is an example:
 
 ```yaml
-# For the PostgreSQL primary
-primary:
-  sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-    - name: portname
-     containerPort: 1234
-# For the PostgreSQL replicas
-readReplicas:
-  sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-    - name: portname
-     containerPort: 1234
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
 ```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+...
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Metrics
 
@@ -632,7 +655,7 @@ To enable network policy for PostgreSQL, install [a networking plugin that imple
 
 For Kubernetes v1.5 & v1.6, you must also turn on NetworkPolicy by setting the DefaultDeny namespace annotation. Note: this will enforce policy for _all_ pods in the namespace:
 
-```bash
+```console
 kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
 ```
 
@@ -647,19 +670,242 @@ This label will be displayed in the output of a successful install.
 - The Bitnami PostgreSQL image is non-root by default. This requires that you run the pod with `securityContext` and updates the permissions of the volume with an `initContainer`. A key benefit of this configuration is that the pod follows security best practices and is prepared to run on Kubernetes distributions with hard security constraints like OpenShift.
 - For OpenShift, one may either define the runAsUser and fsGroup accordingly, or try this more dynamic option: volumePermissions.securityContext.runAsUser="auto",securityContext.enabled=false,containerSecurityContext.enabled=false,shmVolume.chmod.enabled=false
 
-### Setting Pod's affinity
+### Configure LDAP authentication
 
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+LDAP support can be enabled in the chart by specifying the `ldap.*` parameters while creating a release. The following parameters should be configured to properly enable the LDAP support in the chart.
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+- `ldap.enabled`: Enable LDAP support. Defaults to false.
+- `ldap.url`: LDAP URL beginning in the form ldap[s]://<hostname>:<port>. No defaults.
+- `ldap.server`: IP address or name of the LDAP server. No defaults.
+- `ldap.port`: Port number on the LDAP server to connect to. No defaults.
+- `ldap.basedn`: Root DN to begin the search for the user in. No defaults.
+- `ldap.binddn`: DN of user to bind to LDAP. No defaults.
+- `ldap.bind_password`: LDAP bind password. No defaults.
+
+For example:
+
+```
+ldap.enabled="true"
+ldap.url="ldap://my_ldap_server"
+ldap.basedn="dc=example\,dc=org"
+ldap.binddn="cn=admin\,dc=example\,dc=org"
+ldap.bind_password="admin"
+```
+
+Next, login to the PostgreSQL server using the psql client and add the PAM authenticated LDAP users.
+
+### Pod affinity
+
+This chart allows you to set your custom affinity using the `*.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `*.podAffinityPreset`, `*.podAntiAffinityPreset`, or `*.nodeAffinityPreset` parameters.
+
+### Backup and restore
+
+To back up and restore PostgreSQL Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool.
+
+These are the steps you will usually follow to back up and restore your PostgreSQL cluster data:
+- Install Velero on the source and destination clusters.
+- Use Velero to back up the PersistentVolumes (PVs) used by the deployment on the source cluster.
+- Use Velero to restore the backed-up PVs on the destination cluster.
+- Create a new deployment on the destination cluster with the same chart, deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
+
+Refer to our detailed [tutorial on backing up and restoring PostgreSQL deployments on Kubernetes](https://docs.bitnami.com/tutorials/migrate-data-bitnami-velero/) for more information.
 
 ## Troubleshooting
+
+Sometimes, due to unexpected issues, installations can become corrupted and get stuck in a *CrashLoopBackOff* restart loop. In these situations, it may be necessary to access the containers and perform manual operations to troubleshoot and fix the issues. To ease this task, the chart has a "Diagnostic mode" that will deploy all the containers with all probes and lifecycle hooks disabled. In addition to this, it will override all commands and arguments with `sleep infinity`.
+
+To activate the "Diagnostic mode", upgrade the release with the following comman. Replace the `MY-RELEASE` placeholder with the release name:
+```console
+$ helm upgrade MY-RELEASE --set diagnosticMode.enabled=true
+```
+It is also possible to change the default `sleep infinity` command by setting the `diagnosticMode.command` and `diagnosticMode.args` values.
+
+Once the chart has been deployed in "Diagnostic mode", access the containers by executing the following command and replacing the `MY-CONTAINER` placeholder with the container name:
+```console
+$ kubectl exec -ti MY-CONTAINER -- bash
+```
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/postgresql/administration/upgrade/).
+### To 11.0.0
+
+In this version the application version was bumped to *14.x* series. Also, this major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
+
+#### What changes were introduced in this major version?
+
+- `replication.enabled` parameter is deprecated in favor of `architecture` parameter that accepts two values: `standalone` and `replication`.
+- `replication.singleService` and `replication.uniqueServices` parameters are deprecated. When using replication, each statefulset (primary and read-only) has its own headless service & service allowing to connect to read-only replicas through the service (round-robin) or individually.
+- `postgresqlPostgresPassword`, `postgresqlUsername`, `postgresqlPassword`, `postgresqlDatabase`, `replication.user`, `replication.password`, and `existingSecret` parameters have been regrouped under the `auth` map. The `auth` map uses a new perspective to configure authentication, so please read carefully each sub-parameter description.
+- `extraEnv` has been deprecated in favor of `primary.extraEnvVars` and `readReplicas.extraEnvVars`.
+- `postgresqlConfiguration`, `pgHbaConfiguration`, `configurationConfigMap`, `postgresqlExtendedConf`, and `extendedConfConfigMap` have been deprecated in favor of `primary.configuration`, `primary.pgHbaConfiguration`, `primary.existingConfigmap`, `primary.extendedConfiguration`, and `primary.existingExtendedConfigmap`.
+- `postgresqlInitdbArgs`, `postgresqlInitdbWalDir`, `initdbScripts`, `initdbScriptsConfigMap`, `initdbScriptsSecret`, `initdbUser` and `initdbPassword` have been regrouped under the `primary.initdb` map.
+- `postgresqlMaxConnections`, `postgresqlPostgresConnectionLimit`, `postgresqlDbUserConnectionLimit`, `postgresqlTcpKeepalivesInterval`, `postgresqlTcpKeepalivesIdle`, `postgresqlTcpKeepalivesCount`, `postgresqlStatementTimeout` and `postgresqlPghbaRemoveFilters` parameters are deprecated. Use `XXX.extraEnvVars` instead.
+- `primaryAsStandBy` has been deprecated in favor of `primary.standby`.
+- `securityContext` and `containerSecurityContext` have been deprecated in favor of `primary.podSecurityContext`, `primary.containerSecurityContext`, `readReplicas.podSecurityContext`, and `readReplicas.containerSecurityContext`.
+- `livenessProbe` and `readinessProbe` maps have been deprecated in favor of `primary.livenessProbe`, `primary.readinessProbe`, `readReplicas.livenessProbe` and `readReplicas.readinessProbe` maps.
+- `persistence` map has been deprecated in favor of `primary.persistence` and `readReplicas.persistence` maps.
+- `networkPolicy` map has been completely refactored.
+- `service` map has been deprecated in favor of `primary.service` and `readReplicas.service` maps.
+- `metrics.service.port` has been regrouped under the `metrics.service.ports` map.
+- `serviceAccount.enabled` and `serviceAccount.autoMount` have been deprecated in favor of `serviceAccount.create` and `serviceAccount.automountServiceAccountToken`.
+
+#### Upgrading Instructions
+
+To upgrade to *11.0.0* from *10.x*, it should be done reusing the PVC(s) used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *postgresql*):
+
+> NOTE: Please, create a backup of your database before running any of these actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the PostgreSQL data on your current release:
+```console
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+2. Delete the PostgreSQL statefulset (notice the option `--cascade=false`) and secret:
+```console
+kubectl delete statefulsets.apps postgresql-postgresql --namespace default --cascade=false
+kubectl delete secret postgresql --namespace default
+```
+
+3. Upgrade your release using the same PostgreSQL version:
+```console
+CURRENT_VERSION=$(kubectl exec postgresql-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade postgresql bitnami/postgresql \
+  --set auth.postgresPassword=$POSTGRESQL_PASSWORD \
+  --set primary.persistence.existingClaim=$POSTGRESQL_PVC \
+  --set image.tag=$CURRENT_VERSION
+```
+
+4. You will have to delete the existing PostgreSQL pod and the new statefulset is going to create a new one
+```console
+kubectl delete pod postgresql-postgresql-0
+```
+
+5. Finally, you should see the lines below in PostgreSQL container logs:
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+...
+postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+...
+```
+> NOTE: the instructions above reuse the same PostgreSQL version you were using in your chart release. Otherwise, you will find an error such as the one below when upgrading since the new chart major version also bumps the application version. To workaround this issue you need to upgrade database, please refer to the [official PostgreSQL documentation](https://www.postgresql.org/docs/current/upgrading.html) for more information about this.
+
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,app.kubernetes.io/component=primary -o jsonpath="{.items[0].metadata.name}")
+    ...
+postgresql 08:10:14.72 INFO  ==> ** Starting PostgreSQL **
+2022-02-01 08:10:14.734 GMT [1] FATAL:  database files are incompatible with server
+2022-02-01 08:10:14.734 GMT [1] DETAIL:  The data directory was initialized by PostgreSQL version 11, which is not compatible with this version 14.1.
+```
+
+### To 10.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+#### What changes were introduced in this major version?
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Chart.
+- The term *master* has been replaced with *primary* and *slave* with *readReplicas* throughout the chart. Role names have changed from *master* and *slave* to *primary* and *read*.
+
+#### Considerations when upgrading to this version
+
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version does not support Helm v2 anymore.
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3.
+
+#### Useful links
+
+- [Bitnami Tutorial](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues)
+- [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
+- [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
+
+#### Upgrading Instructions
+
+To upgrade to *10.0.0* from *9.x*, it should be done reusing the PVC(s) used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *postgresql*):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the PostgreSQL data on your current release:
+```console
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+2. Delete the PostgreSQL statefulset (notice the option `--cascade=false``):
+```console
+kubectl delete statefulsets.apps postgresql-postgresql --namespace default --cascade=false
+```
+
+3. Upgrade your release using the same PostgreSQL version:
+```console
+helm upgrade postgresql bitnami/postgresql \
+  --set postgresqlPassword=$POSTGRESQL_PASSWORD \
+  --set persistence.existingClaim=$POSTGRESQL_PVC
+```
+
+4. Delete the existing PostgreSQL pod and the new statefulset will create a new one:
+```console
+kubectl delete pod postgresql-postgresql-0
+```
+
+5. Finally, you should see the lines below in PostgreSQL container logs:
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+...
+postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+...
+```
+
+### To 9.0.0
+
+In this version the chart was adapted to follow the [Helm standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
+
+#### What changes were introduced in this major version?
+
+- Some inmutable objects were modified to adopt Helm standard labels introducing backward incompatibilities.
+
+#### Upgrading Instructions
+
+To upgrade to *9.0.0* from *8.x*, it should be done reusing the PVC(s) used to hold the PostgreSQL data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *postgresql*):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the PostgreSQL data on your current release:
+```console
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+```
+
+2. Delete the PostgreSQL statefulset (notice the option `--cascade=false`):
+```console
+kubectl delete statefulsets.apps postgresql-postgresql --namespace default --cascade=false
+```
+
+3. Upgrade your release using the same PostgreSQL version:
+```console
+helm upgrade postgresql bitnami/postgresql \
+  --set postgresqlPassword=$POSTGRESQL_PASSWORD \
+  --set persistence.existingClaim=$POSTGRESQL_PVC
+```console
+
+4. Delete the existing PostgreSQL pod and the new statefulset will create a new one:
+```console
+kubectl delete pod postgresql-postgresql-0
+```
+
+5. Finally, you should see the lines below in PostgreSQL container logs:
+```console
+$ kubectl logs $(kubectl get pods -l app.kubernetes.io/instance=postgresql,app.kubernetes.io/name=postgresql,role=master -o jsonpath="{.items[0].metadata.name}")
+...
+postgresql 08:05:12.59 INFO  ==> Deploying PostgreSQL with persisted data...
+...
+```
 
 ## License
 

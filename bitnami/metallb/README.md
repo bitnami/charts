@@ -7,7 +7,7 @@ MetalLB is a load-balancer implementation for bare metal Kubernetes clusters, us
 [Overview of MetalLB](https://metallb.universe.tf/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -289,7 +289,7 @@ The above command sets the `readinessProbe.successThreshold` to `5`.
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -321,7 +321,95 @@ spec:
   - fc00:f853:0ccd:e799::/124
 ```
 
+### Sidecars and Init Containers
+
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Here is an example:
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+...
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
+
+### Pod affinity
+
+This chart allows you to set your custom affinity using the `*.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `*.podAffinityPreset`, `*.podAntiAffinityPreset`, or `*.nodeAffinityPreset` parameters.
+
+### Configure MetalLB in layer 2 mode
+
+The layer 2 mode is commonly used to make MetalLB behave as a load-balancer. When configuring MetalLB in layer 2 mode, all traffic for a service IP goes to one node. From there, *kube-proxy* spreads the traffic to all the service's pods.
+
+This mode doesn't implement a load-balancer, it is most likely a failover mechanism: when one node is down, is automatically detected and the rest of the nodes will take over the ownership of the failed node IP addresses.
+
+Find below an example of how to enable the layer 2 mode. Note that the IP addresses shown in the "addresses" section are part of a subset of the cluster available service IPs.
+
+```yaml
+configInline:
+  # The address-pools section lists the IP addresses that MetalLB is
+  # allowed to allocate, along with settings for how to advertise
+  # those addresses over BGP once assigned. You can have as many
+  # address pools as you want.
+  address-pools:
+  - # A name for the address pool. Services can request allocation
+    # from a specific address pool using this name, by listing this
+    # name under the 'metallb.universe.tf/address-pool' annotation.
+    name: generic-cluster-pool
+    # Protocol can be used to select how the announcement is done.
+    # Supported values are bgp and layer2.
+    protocol: layer2
+    # A list of IP address ranges over which MetalLB has
+    # authority. You can list multiple ranges in a single pool, they
+    # will all share the same settings. Each range can be either a
+    # CIDR prefix, or an explicit start-end range of IPs.
+    addresses:
+    - 10.27.50.30-10.27.50.35
+```
+
 ## Troubleshooting
+
+Sometimes, due to unexpected issues, installations can become corrupted and get stuck in a *CrashLoopBackOff* restart loop. In these situations, it may be necessary to access the containers and perform manual operations to troubleshoot and fix the issues. To ease this task, the chart has a "Diagnostic mode" that will deploy all the containers with all probes and lifecycle hooks disabled. In addition to this, it will override all commands and arguments with `sleep infinity`.
+
+To activate the "Diagnostic mode", upgrade the release with the following comman. Replace the `MY-RELEASE` placeholder with the release name:
+```console
+$ helm upgrade MY-RELEASE --set diagnosticMode.enabled=true
+```
+It is also possible to change the default `sleep infinity` command by setting the `diagnosticMode.command` and `diagnosticMode.args` values.
+
+Once the chart has been deployed in "Diagnostic mode", access the containers by executing the following command and replacing the `MY-CONTAINER` placeholder with the container name:
+```console
+$ kubectl exec -ti MY-CONTAINER -- bash
+```
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
@@ -347,7 +435,7 @@ Affected values:
 
 ### To 2.0.0
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - The `.Values.prometheus` section was moved into the components `.Values.controller.prometheus` and `.Values.speaker.prometheus`
 - The `prometheus.prometheusRule` which is used to toggle the deployment of the metallb alerts is moved under the root of the `.Values.prometheusRule`
@@ -355,7 +443,7 @@ Affected values:
   - `Values.controller.rbac.create` and `Values.controller.psp.create`
   - `Values.speaker.rbac.create` and `Values.speaker.psp.create`
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - Check if you used the `prometheus` section in you deployment.
 - If you do so, place the configuration you made into the sections `controller.prometheus` and `speaker.prometheus`.
@@ -365,18 +453,18 @@ Affected values:
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
 - https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
 - https://helm.sh/docs/topics/v2_v3_migration/

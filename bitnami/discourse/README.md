@@ -7,7 +7,7 @@ Discourse is an open source discussion platform with built-in moderation and gov
 [Overview of Discourse&reg;](http://www.discourse.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
@@ -329,8 +329,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.port`                      | Redis&reg; port number                                                     | `6379`           |
 | `externalRedis.username`                  | Redis&reg; username                                                        | `""`             |
 | `externalRedis.password`                  | Redis&reg; password                                                        | `""`             |
-| `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis&trade credentials | `""`             |
-| `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis&trade credentials      | `redis-password` |
+| `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis&reg credentials | `""`             |
+| `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis&reg credentials      | `redis-password` |
 
 
 The above parameters map to the env variables defined in [bitnami/discourse](https://github.com/bitnami/containers/tree/main/bitnami/discourse). For more information please refer to the [bitnami/discourse](https://github.com/bitnami/containers/tree/main/bitnami/discourse) image documentation.
@@ -357,7 +357,7 @@ $ helm install my-release -f values.yaml bitnami/discourse
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -401,9 +401,9 @@ persistence.storageClass=nfs
 postgresql.primary.persistence.storageClass=nfs
 ```
 
-### Sidecars
+### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as Discourse (e.g. metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Here is an example:
 
 ```yaml
 sidecars:
@@ -412,10 +412,10 @@ sidecars:
   imagePullPolicy: Always
   ports:
   - name: portname
-   containerPort: 1234
+    containerPort: 1234
 ```
 
-If these sidecars export extra ports, you can add extra port definitions using the `service.extraPorts` value:
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
 
 ```yaml
 service:
@@ -426,28 +426,46 @@ service:
     targetPort: 11311
 ```
 
-### Using an external database
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
 
-Sometimes you may want to have Discourse connect to an external database rather than installing one inside your cluster, e.g. to use a managed database service, or use run a single database server for all your applications. To do this, the chart allows you to specify credentials for an external database under the [`externalDatabase` parameter](#parameters). You should also disable the PostgreSQL installation with the `postgresql.enabled` option. For example with the following parameters:
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
 
-```console
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).targetPort: 11311
+```
+
+### Use an external database
+
+Sometimes, you may want to have the chart use an external database rather than using the one bundled with the chart. Common use cases include using a managed database service, or using a single database server for all your applications. This chart supports external databases through its `externalDatabase.*` parameters.
+
+When using these parameters, it is necessary to disable installation of the bundled PostgreSQL database using the `postgresql.enabled=false` parameter.
+
+An example of the parameters set when deploying the chart with an external database are shown below:
+```
 postgresql.enabled=false
 externalDatabase.host=myexternalhost
+externalDatabase.port=5432
 externalDatabase.user=myuser
 externalDatabase.password=mypassword
-externalDatabase.postgresUser=postgres
-externalDatabase.postgresPassword=rootpassword
 externalDatabase.database=mydatabase
-externalDatabase.port=5432
+externalDatabase.postgresqlPostgresUser=postgres
+externalDatabase.postgresqlPostgresPassword=rootpassword
 ```
 
 Note also that if you disable PostgreSQL per above you MUST supply values for the `externalDatabase` connection.
 
-In case the database already contains data from a previous Discourse installation, you need to set the `discourse.skipInstall` parameter to _true_. Otherwise, the container would execute the installation wizard and could modify the existing data in the database. This parameter force the container to not execute the Discourse installation wizard.
+In case the database already contains data from a previous Discourse installation, you need to set the `discourse.skipInstall` parameter to *true*. Otherwise, the container would execute the installation wizard and could modify the existing data in the database. This parameter forces the container to not execute the Discourse installation wizard.
 
-Similarly, you can specify an external Redis&reg; instance rather than installing one inside your cluster. First, you may disable the Redis&reg; installation with the `redis.enabled` option. As aforementioned, used the provided parameters to provide data about your instance:
+Similarly, you can specify an external Redis&reg; instance rather than installing one inside your cluster. First, you may disable the Redis&reg; installation with the `redis.enabled` option. As described previously, use the parameters below to provide data about your instance:
 
-```console
+```
 redis.enabled=false
 externalRedis.host=myexternalhost
 externalRedis.password=mypassword
@@ -456,19 +474,65 @@ externalRedis.port=5432
 
 ### Ingress
 
-This chart provides support for Ingress resources. If an Ingress controller, such as nginx-ingress or traefik, that Ingress controller can be used to serve Discourse.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/master/bitnami/contour) you can utilize the ingress controller to serve your application.
 
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/discourse/configuration/configure-ingress/).
+To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host.
+
+In general, to enable Ingress integration, set the `*.ingress.enabled` parameter to *true*.
+
+The most common scenario is to have one host name mapped to the deployment. In this case, the `*.ingress.hostname` property can be used to set the host name. The `*.ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `*.ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `*.ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `*.ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/discourse/administration/enable-tls-ingress/).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
 
-### Setting Pod's affinity
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart.
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+In the first two cases, a certificate and a key are needed. Files are expected in `*.pem` format.
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```console
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```console
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the *certificate* and *key* values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where `INGRESS_HOSTNAME` is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to *true*.
+
+### Pod affinity
+
+This chart allows you to set your custom affinity using the `*.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `*.podAffinityPreset`, `*.podAntiAffinityPreset`, or `*.nodeAffinityPreset` parameters.
 
 ## Persistence
 
@@ -479,11 +543,200 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ## Troubleshooting
 
+Sometimes, due to unexpected issues, installations can become corrupted and get stuck in a *CrashLoopBackOff* restart loop. In these situations, it may be necessary to access the containers and perform manual operations to troubleshoot and fix the issues. To ease this task, the chart has a "Diagnostic mode" that will deploy all the containers with all probes and lifecycle hooks disabled. In addition to this, it will override all commands and arguments with `sleep infinity`.
+
+To activate the "Diagnostic mode", upgrade the release with the following comman. Replace the `MY-RELEASE` placeholder with the release name:
+```console
+$ helm upgrade MY-RELEASE --set diagnosticMode.enabled=true
+```
+It is also possible to change the default `sleep infinity` command by setting the `diagnosticMode.command` and `diagnosticMode.args` values.
+
+Once the chart has been deployed in "Diagnostic mode", access the containers by executing the following command and replacing the `MY-CONTAINER` placeholder with the container name:
+```console
+$ kubectl exec -ti MY-CONTAINER -- bash
+```
+
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/apps/discourse/administration/upgrade/).
+### To 8.0.0
+
+This major update the Redis&reg; subchart to its newest major, 17.0.0, which updates Redis&reg; from its version 6.2 to the latest 7.0.
+
+### To 7.0.0
+
+This major upgrades the Discourse version to *2.8.0*.
+
+#### What changes were introduced in this major version?
+
+This version includes a breaking change in the *lazy-yt* plugin, and the recommendation is to remove it, or manually upgrade it.
+
+#### Upgrading Instructions
+
+To upgrade to *7.0.0* from *6.x*, follow these steps below:
+
+1. Upgrade to the latest version of the *bitnami/discourse* chart with Diagnostics mode:
+```console
+$ helm upgrade --set diagnosticMode.enabled=true [...] bitnami/discourse
+```
+
+2. Remove or upgrade the *lazy-yt* plugin. To remove it, execute the following command inside the *discourse* container's shell:
+```console
+$ rm -rf /bitnami/discourse/plugins/lazy-yt
+```
+
+3. Ensure that the initialization scripts work:
+```console
+$ /opt/bitnami/scripts/discourse/entrypoint.sh /opt/bitnami/scripts/discourse/setup.sh
+```
+
+4. Upgrade the Helm deployment without Diagnostics mode.
+
+### To 6.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository. Additionally updates the PostgreSQL & Redis subcharts to their newest major 11.x.x and 16.x.x, respectively, which contain similar changes.
+
+#### What changes were introduced in this major version?
+
+- `discourse.host` and `discourse.siteName` were renamed to `host` and `siteName`, respectively.
+- `discourse.username`, `discourse.email`, `discourse.password` and `discourse.existingSecret` were regrouped under the `discourse.auth` map.
+- `discourse.smtp` map has been renamed to `smtp`.
+- `service.port` and `service.nodePort` were regrouped under the `service.ports` and `service.nodePorts` maps, respectively.
+- `ingress` map is completely redefined.
+
+#### Upgrading Instructions
+
+To upgrade to *6.0.0* from *5.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *discourse* and the release namespace *default*):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+```console
+export DISCOURSE_PASSWORD=$(kubectl get secret --namespace default discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default discourse-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export REDIS_PASSWORD=$(kubectl get secret --namespace default discourse-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=discourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+2. Delete the PostgreSQL statefulset (notice the option *--cascade=false*) and secret:
+```console
+kubectl delete statefulsets.apps --cascade=false discourse-postgresql
+kubectl delete secret postgresql --namespace default
+```
+
+3. Upgrade your release using the same PostgreSQL version:
+```console
+CURRENT_PG_VERSION=$(kubectl exec discourse-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade discourse bitnami/discourse \
+  --set loadExamples=true \
+  --set web.baseUrl=http://127.0.0.1:8080 \
+  --set auth.password=$DISCOURSE_PASSWORD \
+  --set postgresql.image.tag=$CURRENT_VERSION \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
+  --set redis.password=$REDIS_PASSWORD
+```
+
+4. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+```console
+kubectl delete pod discourse-postgresql-0
+```
+
+### To 5.0.0
+
+This major update the Redis&reg; subchart to its newest major, 15.0.0. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis&reg; upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1500).
+
+### To 4.0.0
+
+#### What changes were introduced in this major version?
+
+The [Bitnami Discourse](https://github.com/bitnami/containers/tree/main/bitnami/discourse) image was refactored and now the source code is published in GitHub in the `rootfs` folder of the container image repository.
+
+#### Upgrading Instructions
+
+Upgrades from previous versions require to specify `--set volumePermissions.enabled=true` in order for all features to work properly:
+
+```console
+$ helm upgrade discourse bitnami/discourse \
+    --set discourse.host=$DISCOURSE_HOST \
+    --set discourse.password=$DISCOURSE_PASSWORD \
+    --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+    --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
+    --set volumePermissions.enabled=true
+```
+
+Full compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected aside from the ones mentioned above.
+
+### To 3.0.0
+
+This major updates the Redis&reg; subchart to it newest major, 14.0.0, which contains breaking changes. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis&reg; upgrade notes.](https://github.com/bitnami/charts/tree/master/bitnami/redis#to-1400).
+
+### To 2.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+#### What changes were introduced in this major version?
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running *helm dependency update*, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Chart.
+
+#### Considerations when upgrading to this version
+
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version does not support Helm v2 anymore.
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3.
+
+#### Useful links
+
+- [Bitnami Tutorial](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues)
+- [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
+- [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
+
+#### Upgrading Instructions
+
+To upgrade to *2.0.0* from *1.x*, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is *discourse* and the release namespace *default*):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+```console
+export DISCOURSE_PASSWORD=$(kubectl get secret --namespace default discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
+export DISCOURSE_FERNET_KEY=$(kubectl get secret --namespace default discourse -o jsonpath="{.data.discourse-fernetKey}" | base64 --decode)
+export DISCOURSE_SECRET_KEY=$(kubectl get secret --namespace default discourse -o jsonpath="{.data.discourse-secretKey}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default discourse-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export REDIS_PASSWORD=$(kubectl get secret --namespace default discourse-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=discourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+2. Delete the Airflow worker & PostgreSQL statefulset (notice the option *--cascade=false*):
+```console
+kubectl delete statefulsets.apps --cascade=false discourse-postgresql
+kubectl delete statefulsets.apps --cascade=false discourse-worker
+```
+
+3. Upgrade your release:
+
+> NOTE: Please remember to migrate all the values to its new path following the above notes, e.g: `discourse.loadExamples` -> `loadExamples` or `discourse.baseUrl=http://127.0.0.1:8080` -> `web.baseUrl=http://127.0.0.1:8080`.
+```console
+helm upgrade discourse bitnami/discourse \
+  --set loadExamples=true \
+  --set web.baseUrl=http://127.0.0.1:8080 \
+  --set auth.password=$DISCOURSE_PASSWORD \
+  --set auth.fernetKey=$DISCOURSE_FERNET_KEY \
+  --set auth.secretKey=$DISCOURSE_SECRET_KEY \
+  --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
+  --set redis.password=$REDIS_PASSWORD \
+  --set redis.cluster.enabled=true
+```
+
+4. Delete the existing Airflow worker & PostgreSQL pods and the new statefulset will create a new one:
+```console
+kubectl delete pod discourse-postgresql-0
+kubectl delete pod discourse-worker-0
+```
 
 ## Community supported solution
 
