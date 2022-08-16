@@ -10,9 +10,9 @@ command:
     owner: root
     group: root
     contains:
+    - log.dirs={{ .Vars.containerPorts.logsDirs }}
+    - super.users={{ .Vars.containerPorts.superUsers }}
     - listeners=INTERNAL://:{{ .Vars.containerPorts.internal }},CLIENT://:{{ .Vars.containerPorts.client }},EXTERNAL://:{{ .Vars.containerPorts.external }}
-    - log.dirs=/opt/bitnami/kafka/logs
-    - super.users=User:admin
 file:
   /var/run/secrets/kubernetes.io/serviceaccount:
     exists: true
