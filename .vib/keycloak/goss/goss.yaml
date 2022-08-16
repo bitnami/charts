@@ -6,7 +6,6 @@ file:
     contains:
     - /http-port.*{{ .Vars.containerPorts.http }}/
     - /log-console-output.*{{ .Vars.logging.output }}/
-    - /db-username.*{{ .Vars.postgresql.auth.username }}/
   /var/run/secrets/kubernetes.io/serviceaccount:
     mode: "3777"
     filetype: directory
