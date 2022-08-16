@@ -12,11 +12,9 @@ it('allows to create user', () => {
   cy.visit('/?module=UsersManager&showadduser=1');
   cy.fixture('users').then((user) => {
     cy.get('#user_login').type(`${user.newUser.username}-${random}`);
-    cy.get('#user_password').type(`${user.newUser.password}-${random}`);
-    cy.get('#user_password').type(`${user.newUser.password}-${random}`);
     cy.get('#user_email').type(`${random}_${user.newUser.email}`);
-    cy.get('input[value*="Create user"]').click();
-    cy.contains('changes have been saved');
+    cy.get('input[value*="Invite user"]').click();
+    cy.contains('Success!');
     cy.visit('/index.php?module=UsersManager');
     cy.contains('#userLogin', `${user.newUser.username}-${random}`);
   });
