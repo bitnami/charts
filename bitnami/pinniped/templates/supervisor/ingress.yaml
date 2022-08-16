@@ -31,7 +31,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.supervisor.ingress.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "https" "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "pinniped.supervisor.fullname" .) "servicePort" "https" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.supervisor.ingress.extraHosts }}
     - host: {{ .name | quote }}
@@ -41,7 +41,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "https" "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "pinniped.supervisor.fullname" $) "servicePort" "https" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.supervisor.ingress.extraRules }}
     {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.ingress.extraRules "context" $) | nindent 4 }}
