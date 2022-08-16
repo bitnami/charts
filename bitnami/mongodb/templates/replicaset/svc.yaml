@@ -28,6 +28,12 @@ metadata:
   {{- end }}
 spec:
   type: ClusterIP
+  {{- if .Values.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
   ports:
     - name: {{ $root.Values.service.portName | quote }}
       port: {{ $root.Values.service.ports.mongodb }}
