@@ -10,8 +10,8 @@ command:
     owner: root
     group: root
     contains:
-    - log.dirs={{ .Vars.containerPorts.logsDirs }}
-    - super.users={{ .Vars.containerPorts.superUsers }}
+    - log.dirs={{ .Vars.logsDirs }}
+    - super.users={{ .Vars.superUsers }}
     - listeners=INTERNAL://:{{ .Vars.containerPorts.internal }},CLIENT://:{{ .Vars.containerPorts.client }},EXTERNAL://:{{ .Vars.containerPorts.external }}
 file:
   /var/run/secrets/kubernetes.io/serviceaccount:
