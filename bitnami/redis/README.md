@@ -212,7 +212,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                  | `None`                   |
 | `master.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                           | `{}`                     |
 | `master.terminationGracePeriodSeconds`               | Integer setting the termination grace period for the redis-master pods                                | `30`                     |
-| `master.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                  | `true`                   |
+| `master.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                  | `false`                  |
 | `master.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                | `""`                     |
 | `master.serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                                       | `true`                   |
 | `master.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                  | `{}`                     |
@@ -317,7 +317,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.autoscaling.maxReplicas`                     | Maximum replicas for the pod autoscaling                                                                | `11`                     |
 | `replica.autoscaling.targetCPU`                       | Percentage of CPU to consider when autoscaling                                                          | `""`                     |
 | `replica.autoscaling.targetMemory`                    | Percentage of Memory to consider when autoscaling                                                       | `""`                     |
-| `replica.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                    | `true`                   |
+| `replica.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                    | `false`                  |
 | `replica.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                  | `""`                     |
 | `replica.serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                                         | `true`                   |
 | `replica.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                    | `{}`                     |
@@ -407,30 +407,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                    | Description                                                                                                                                 | Value   |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                                                  | `false` |
-| `networkPolicy.allowExternal`           | Don't require client label for connections                                                                                                  | `true`  |
-| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                                | `[]`    |
-| `networkPolicy.extraEgress`             | Add extra egress rules to the NetworkPolicy                                                                                                 | `[]`    |
-| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                                      | `{}`    |
-| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                                  | `{}`    |
-| `podSecurityPolicy.create`              | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
-| `podSecurityPolicy.enabled`             | Enable PodSecurityPolicy's RBAC rules                                                                                                       | `false` |
-| `rbac.create`                           | Specifies whether RBAC resources should be created                                                                                          | `false` |
-| `rbac.rules`                            | Custom RBAC rules to set                                                                                                                    | `[]`    |
-| `pdb.create`                            | Specifies whether a PodDisruptionBudget should be created                                                                                   | `false` |
-| `pdb.minAvailable`                      | Min number of pods that must still be available after the eviction                                                                          | `1`     |
-| `pdb.maxUnavailable`                    | Max number of pods that can be unavailable after the eviction                                                                               | `""`    |
-| `tls.enabled`                           | Enable TLS traffic                                                                                                                          | `false` |
-| `tls.authClients`                       | Require clients to authenticate                                                                                                             | `true`  |
-| `tls.autoGenerated`                     | Enable autogenerated certificates                                                                                                           | `false` |
-| `tls.existingSecret`                    | The name of the existing secret that contains the TLS certificates                                                                          | `""`    |
-| `tls.certificatesSecret`                | DEPRECATED. Use existingSecret instead.                                                                                                     | `""`    |
-| `tls.certFilename`                      | Certificate filename                                                                                                                        | `""`    |
-| `tls.certKeyFilename`                   | Certificate Key filename                                                                                                                    | `""`    |
-| `tls.certCAFilename`                    | CA Certificate filename                                                                                                                     | `""`    |
-| `tls.dhParamsFilename`                  | File containing DH params (in order to support DH based ciphers)                                                                            | `""`    |
+| Name                                          | Description                                                                                                                                 | Value   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.enabled`                       | Enable creation of NetworkPolicy resources                                                                                                  | `false` |
+| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                  | `true`  |
+| `networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                                                                | `[]`    |
+| `networkPolicy.extraEgress`                   | Add extra egress rules to the NetworkPolicy                                                                                                 | `[]`    |
+| `networkPolicy.ingressNSMatchLabels`          | Labels to match to allow traffic from other namespaces                                                                                      | `{}`    |
+| `networkPolicy.ingressNSPodMatchLabels`       | Pod labels to match to allow traffic from other namespaces                                                                                  | `{}`    |
+| `podSecurityPolicy.create`                    | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
+| `podSecurityPolicy.enabled`                   | Enable PodSecurityPolicy's RBAC rules                                                                                                       | `false` |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created                                                                                          | `false` |
+| `rbac.rules`                                  | Custom RBAC rules to set                                                                                                                    | `[]`    |
+| `serviceAccount.create`                       | Specifies whether a shared ServiceAccount should be created for master and replicas                                                         | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                      | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                                                                             | `true`  |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                        | `{}`    |
+| `pdb.create`                                  | Specifies whether a PodDisruptionBudget should be created                                                                                   | `false` |
+| `pdb.minAvailable`                            | Min number of pods that must still be available after the eviction                                                                          | `1`     |
+| `pdb.maxUnavailable`                          | Max number of pods that can be unavailable after the eviction                                                                               | `""`    |
+| `tls.enabled`                                 | Enable TLS traffic                                                                                                                          | `false` |
+| `tls.authClients`                             | Require clients to authenticate                                                                                                             | `true`  |
+| `tls.autoGenerated`                           | Enable autogenerated certificates                                                                                                           | `false` |
+| `tls.existingSecret`                          | The name of the existing secret that contains the TLS certificates                                                                          | `""`    |
+| `tls.certificatesSecret`                      | DEPRECATED. Use existingSecret instead.                                                                                                     | `""`    |
+| `tls.certFilename`                            | Certificate filename                                                                                                                        | `""`    |
+| `tls.certKeyFilename`                         | Certificate Key filename                                                                                                                    | `""`    |
+| `tls.certCAFilename`                          | CA Certificate filename                                                                                                                     | `""`    |
+| `tls.dhParamsFilename`                        | File containing DH params (in order to support DH based ciphers)                                                                            | `""`    |
 
 
 ### Metrics Parameters

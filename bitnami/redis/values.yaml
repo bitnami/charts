@@ -513,7 +513,7 @@ master:
   serviceAccount:
     ## @param master.serviceAccount.create Specifies whether a ServiceAccount should be created
     ##
-    create: true
+    create: false
     ## @param master.serviceAccount.name The name of the ServiceAccount to use.
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -930,7 +930,7 @@ replica:
   serviceAccount:
     ## @param replica.serviceAccount.create Specifies whether a ServiceAccount should be created
     ##
-    create: true
+    create: false
     ## @param replica.serviceAccount.name The name of the ServiceAccount to use.
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
@@ -1301,6 +1301,23 @@ rbac:
   ##       - list
   ##
   rules: []
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.automountServiceAccountToken Whether to auto mount the service account token
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
+  ##
+  automountServiceAccountToken: true
+  ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+  ##
+  annotations: {}
 ## Redis&reg; Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##

@@ -128,13 +128,28 @@ Return the path to the DH params file.
 {{- end -}}
 
 {{/*
+Create the name of the shared service account to use
+*/}}
+{{- define "redis.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create the name of the master service account to use
 */}}
 {{- define "redis.masterServiceAccountName" -}}
 {{- if .Values.master.serviceAccount.create -}}
     {{ default (printf "%s-master" (include "common.names.fullname" .)) .Values.master.serviceAccount.name }}
 {{- else -}}
-    {{ default "default" .Values.master.serviceAccount.name }}
+    {{- if .Values.serviceAccount.create -}}
+        {{ template "redis.serviceAccountName" . }}
+    {{- else -}}
+        {{ default "default" .Values.master.serviceAccount.name }}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -145,7 +160,11 @@ Create the name of the replicas service account to use
 {{- if .Values.replica.serviceAccount.create -}}
     {{ default (printf "%s-replica" (include "common.names.fullname" .)) .Values.replica.serviceAccount.name }}
 {{- else -}}
-    {{ default "default" .Values.replica.serviceAccount.name }}
+    {{- if .Values.serviceAccount.create -}}
+        {{ template "redis.serviceAccountName" . }}
+    {{- else -}}
+        {{ default "default" .Values.replica.serviceAccount.name }}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
