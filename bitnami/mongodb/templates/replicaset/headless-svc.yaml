@@ -21,7 +21,13 @@ metadata:
 spec:
   type: ClusterIP
   clusterIP: None
-  publishNotReadyAddresses: true
+  publishNotReadyAddresses: true  
+  {{- if $root.Values.service.sessionAffinity }}
+  sessionAffinity: {{ $root.Values.service.sessionAffinity }}
+  {{- end }}
+  {{- if $root.Values.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" $root.Values.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
   ports:
     - name: {{ .Values.service.portName | quote }}
       port: {{ .Values.service.ports.mongodb }}
