@@ -1761,6 +1761,9 @@ postgresql:
   primary:
     persistence:
       enabled: false
+  ## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
+  ##
+  architecture: standalone
   ## @param postgresql.securityContext.enabled Enabled PostgreSQL replicas pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
@@ -2104,45 +2107,70 @@ kubeappsapis:
 ## @section Redis&reg; chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
 ##
-## Redis will be enabled and installed if `packages.flux.enabled` is true.
+## Redis(R) will be enabled and installed if `packages.flux.enabled` is true.
 redis:
   ## @param redis.auth.enabled Enable password authentication
   ## @param redis.auth.password Redis&reg; password
   ## @param redis.auth.existingSecret The name of an existing secret with Redis&reg; credentials
+  ##
   auth:
     enabled: true
     password: ""
     existingSecret: ""
+  ## @param redis.architecture Redis(R) architecture (`standalone` or `replication`)
+  ##
+  architecture: standalone
   master:
     ## @param redis.master.extraFlags Array with additional command line flags for Redis&reg; master
+    ##
     extraFlags:
-      ## The maxmemory configuration directive is used in order to configure Redis to use a specified
+      ## The maxmemory configuration directive is used in order to configure Redis(R) to use a specified
       ## amount of memory for the data set. Setting maxmemory to zero results into no memory limits
       ## see https://redis.io/topics/lru-cache for more details
+      ##
       - "--maxmemory 200mb"
-      ## The exact behavior Redis follows when the maxmemory limit is reached is configured using the
+      ## The exact behavior Redis(R) follows when the maxmemory limit is reached is configured using the
       ## maxmemory-policy configuration directive
       ## allkeys-lru: evict keys by trying to remove the less recently used (LRU) keys first, in order
       ## to make space for the new data added
+      ##
       - "--maxmemory-policy allkeys-lru"
       ## ref https://stackoverflow.com/questions/22815364/flushall-and-flushdb-commands-on-redis-return-unk-command
       ## Redis official Helm chart by default disables FLUSHDB and FLUSHALL commands
-    ## @param redis.master.disableCommands Array with commands to deactivate on Redis&trade
+      ##
+    ## @param redis.master.disableCommands Array with commands to deactivate on Redis&reg;
     disableCommands: []
+    ## Redis(R) Master persistence configuration
+    #
+    persistence:
+      ## @param redis.master.persistence.enabled Enable Redis&reg; master data persistence using PVC
+      ##
+      enabled: false
   replica:
     ## @param redis.replica.replicaCount Number of Redis&reg; replicas to deploy
+    ##
     replicaCount: 1
     ## @param redis.replica.extraFlags Array with additional command line flags for Redis&reg; replicas
+    ##
     extraFlags:
-      ## The maxmemory configuration directive is used in order to configure Redis to use a specified
+      ## The maxmemory configuration directive is used in order to configure Redis(R) to use a specified
       ## amount of memory for the data set. Setting maxmemory to zero results into no memory limits
+      ##
       - "--maxmemory 200mb"
-      ## The exact behavior Redis follows when the maxmemory limit is reached is configured using the
+      ## The exact behavior Redis(R) follows when the maxmemory limit is reached is configured using the
       ## maxmemory-policy configuration directive
       ## allkeys-lru: evict keys by trying to remove the less recently used (LRU) keys first, in order
       ## to make space for the new data added
+      ##
       - "--maxmemory-policy allkeys-lru"
     ## ref https://stackoverflow.com/questions/22815364/flushall-and-flushdb-commands-on-redis-return-unk-command
-    ## Redis official Helm chart by default disables FLUSHDB and FLUSHALL commands
-    ## @param redis.replica.disableCommands Array with commands to deactivate on Redis&trade
+    ## Redis(R) official Helm chart by default disables FLUSHDB and FLUSHALL commands
+    ## @param redis.replica.disableCommands Array with commands to deactivate on Redis&reg;
+    ##
     disableCommands: []
+    ## Redis(R) Replica persistence configuration
+    ##
+    persistence:
+      ## @param redis.replica.persistence.enabled Enable Redis&reg; replica data persistence using PVC
+      ##
+      enabled: false
