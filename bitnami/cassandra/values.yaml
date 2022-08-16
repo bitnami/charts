@@ -142,7 +142,7 @@ existingConfiguration: ""
 ##
 cluster:
   name: cassandra
-  seedCount: 1
+  seedCount: 2
   numTokens: 256
   datacenter: dc1
   rack: rack1

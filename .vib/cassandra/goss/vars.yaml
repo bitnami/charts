@@ -1,0 +1,10 @@
+dbUser:
+  user: cassandra
+  password: "ComplicatedPassword123!4"
+persistence:
+  mountPath: /bitnami/cassandra
+containerPorts:
+  cql: 9042
+cluster:
+  seedCount: 3
+  numTokens: 256

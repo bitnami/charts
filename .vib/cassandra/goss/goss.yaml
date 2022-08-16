@@ -1,0 +1,27 @@
+file:
+  {{ .Vars.persistence.mountPath }}:
+    exists: true
+    filetype: directory
+    mode: "0777"
+    owner: root
+    group: root
+  /opt/bitnami/cassandra/conf/cassandra.yaml:
+    exists: true
+    filetype: file
+    mode: "0644"
+    owner: 1001
+    group: root
+    contains:
+      - /num_tokens.*{{ .Vars.cluster.numTokens }}/
+  /var/run/secrets/kubernetes.io/serviceaccount:
+    mode: "3777"
+    filetype: directory
+    exists: true
+command:
+  manage-keyspace:
+    exec: "cqlsh -u {{ .Vars.dbUser.user }} -p {{ .Vars.dbUser.password }} -e 'CREATE KEYSPACE test_one WITH REPLICATION = { $$class$$: $$SimpleStrategy$$, $$replication_factor$$ : 3 }; DROP KEYSPACE test_one;' cassandra {{ .Vars.containerPorts.cql }}"
+    exit-status: 0
+  cluster-size:
+    exec: if [ "$(nodetool status | grep {{ .Vars.cluster.numTokens }} | wc -l)" -ne {{ .Vars.cluster.seedCount }} ]; then exit 1; fi
+    exit-status: 0
+    timeout: 20000
